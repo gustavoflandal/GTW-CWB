@@ -17,6 +17,7 @@
 <%@page import="java.net.URLDecoder"%>
 <%@page import="muralha.digital.alerta.Alertas"%>
 <%@page import="muralha.digital.notificacao.ConfiguracaoSons"%>
+<%@page import="muralha.digital.acesso.SenhaService"%>
 <%
     Conexao conexao = Conexao.initConexao();
 
@@ -57,7 +58,18 @@
 	}
 	
 	Usuario usuario = usus.get(0);
+
+	// Verificar bloqueio antes de comparar senha
+	try {
+		String erroBloqueio = SenhaService.verificarBloqueio(sLogin);
+		if (erroBloqueio != null) {
+			new Mensagem(response).showErroMuralha(erroBloqueio, "../login/login.jsp");
+			return;
+		}
+	} catch (Exception eBloqueio) { /* falha silenciosa, não impede o login */ }
+
 	if (!usuario.comparaSenha(sSenha)) {
+		try { SenhaService.registrarFalha(sLogin); } catch (Exception eFalha) {}
 		new Mensagem(response).showErroMuralha("Usuário ou senha incorretos.", "../login/login.jsp");
 		return;
 	}
@@ -129,8 +141,10 @@
 		}
 		catch(Exception e) { }
 		
-	} else if (usuario.isAlterarSenha()) {
-		//Verificando se está marcado para alterar a senha...
+	// Zerar tentativas inválidas após login bem-sucedido
+	try { SenhaService.zerarTentativas(sLogin); } catch (Exception eZerar) {}
+
+	} else if (usuario.isAlterarSenha() || SenhaService.senhaExpirada(usuario.getId())) {
 		sRetUrl = "/login/login_change.jsp";
 	} else {
 		// Aqui fará uma validação final do bAlerta, se o valor recebido do banco for true,

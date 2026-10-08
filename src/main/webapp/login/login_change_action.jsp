@@ -16,6 +16,8 @@
 <%@page import="java.net.URLDecoder"%>
 <%@page import="java.sql.PreparedStatement"%>
 <%@page import="java.sql.SQLException"%>
+<%@page import="muralha.digital.acesso.SenhaService"%>
+<%@page import="muralha.digital.auditoria.AuditoriaService"%>
 <%
     Conexao conexao = Conexao.initConexao();
 
@@ -34,6 +36,19 @@
 	}
 	else if (!sSenhaNova.equals(sSenhaNovaConfirma)){
 		new Mensagem(response).showErroMuralha("Nova senha não é igual a confirmação!");
+		return;
+	}
+
+	// Validação de complexidade
+	String erroComplexidade = SenhaService.validarComplexidade(sSenhaNova);
+	if (erroComplexidade != null) {
+		new Mensagem(response).showErroMuralha(erroComplexidade);
+		return;
+	}
+
+	// Verificação de histórico de senhas
+	if (usu != null && SenhaService.jaUsouRecentemente(usu.getId(), sSenhaNova)) {
+		new Mensagem(response).showErroMuralha("Esta senha já foi usada recentemente. Escolha uma nova.");
 		return;
 	}
 	
@@ -58,9 +73,18 @@
 		
 		usuarioBean.setSenha(sSenhaNova);
 		usuarioBean.setAlterarSenha(false);
-		
+
 		usuario.setFromUsuarioBean(usuarioBean);
 		usuario.alteraUsuario();
+
+		// Atualiza hash SHA-256, histórico e zera tentativas na tabela complementar
+		try {
+			SenhaService.atualizarSenha(usuario.getId(), sSenhaNova);
+		} catch (Exception eSenha) {
+			System.out.println("SenhaService.atualizarSenha: " + eSenha.getMessage());
+		}
+		AuditoriaService.registrar(request, "Acesso", "troca-senha",
+			String.valueOf(usuario.getId()), "Senha alterada pelo usuário");
 
 		Connection conn = null;
 		PreparedStatement ps = null;
