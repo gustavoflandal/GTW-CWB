@@ -29,8 +29,10 @@ import com.consilux.infra.exception.ConexaoException;
 import com.consilux.lib.Conexao;
 import com.consilux.model.LogonLogoff;
 import com.consilux.model.Mensagem;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import muralha.digital.auditoria.AuditoriaService;
 import muralha.digital.util.RespostaRequisicaoXML;
 import muralha.digital.util.Utils;
 
@@ -58,8 +60,10 @@ public class UsuarioServlet extends HttpServlet
 	    		respostaXML.EnviarRespostaRequisicaoXML(response, false, msg);
 	    		return;
 	    	}  
-	    	if(strAcao.equals("obterListaUsuariosAtivos"))	    	
+	    	if(strAcao.equals("obterListaUsuariosAtivos"))
 	    		obterListaUsuariosAtivos(request, response);
+	    	else if (strAcao.equals("desbloquear"))
+	    		desbloquearUsuario(request, response);
     	}
     	
     	catch(Exception e)
@@ -923,6 +927,41 @@ public class UsuarioServlet extends HttpServlet
 		return menus;		
 	}
 	
+	private void desbloquearUsuario(HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+		response.setContentType("application/json; charset=UTF-8");
+		JsonObject resp = new JsonObject();
+		try {
+			String idStr = request.getParameter("id");
+			if (idStr == null || idStr.isEmpty()) {
+				resp.addProperty("ok", false);
+				resp.addProperty("erro", "id obrigatorio");
+				response.getWriter().print(new Gson().toJson(resp));
+				return;
+			}
+			int idAlvo = Integer.parseInt(idStr);
+			Connection conn = null;
+			try {
+				conn = Conexao.getConexao();
+				try (PreparedStatement ps = conn.prepareStatement(
+						"UPDATE dbo.sis_usuario SET tentativas_invalidas=0, bloqueado_ate=NULL WHERE id=?")) {
+					ps.setInt(1, idAlvo);
+					ps.executeUpdate();
+				}
+			} finally {
+				if (conn != null) try { conn.close(); } catch (Exception e2) {}
+			}
+			AuditoriaService.registrar(request, "Cadastro", "desbloquear-usuario",
+				String.valueOf(idAlvo), "Usuário desbloqueado por admin");
+			resp.addProperty("ok", true);
+		} catch (Exception e) {
+			logger.error("desbloquearUsuario: " + e.getMessage(), e);
+			resp.addProperty("ok", false);
+			resp.addProperty("erro", e.getMessage());
+		}
+		response.getWriter().print(new Gson().toJson(resp));
+	}
+
 	public static List<Usuario> obterListaUsuariosAtivos(HttpServletRequest request, HttpServletResponse response) 
 	{
 		Connection 			conn = null;
