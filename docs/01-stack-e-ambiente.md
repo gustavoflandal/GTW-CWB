@@ -1,85 +1,181 @@
-# 01 — Stack, Ambiente, Build e Execução
+# Stack e Ambiente de Desenvolvimento — GTW-CWB
 
-> **A stack de desenvolvimento é imutável.** Toda a stack vive em `.setup-gtw/` (pasta irmã deste projeto: `D:\GTW-CWB\.setup-gtw`). Nada ali pode ser alterado, atualizado ou substituído. Esta página documenta o que existe para que novos desenvolvimentos respeitem os limites.
+> **Versões são imutáveis.** Nenhuma ferramenta, dependência ou configuração desta pasta pode ser alterada sem aprovação explícita do responsável pelo projeto. Qualquer alteração em `.setup-gtw/` ou `pom.xml` é proibida por padrão (ver `CLAUDE.md`).
 
-> Documentação específica da stack também em `D:\GTW-CWB\.setup-gtw\STACK.md` (scripts, settings, restauração do ambiente).
+---
 
-## 1. Estrutura do workspace
+## Ferramentas do `.setup-gtw/`
 
-```
-D:\GTW-CWB\                      ← workspace (repositório git local sem commits; NÃO é o repositório do GitHub)
-├── .setup-gtw\                  ← STACK DE DESENVOLVIMENTO (NÃO ALTERAR; não vai para o GitHub)
-│   ├── jdk-13.0.1\              ← JDK usado por build e execução
-│   ├── apache-maven\            ← Maven 3.9.9
-│   ├── apache-tomcat-9.0.91\    ← Tomcat 9 standalone (deploy do WAR)
-│   ├── m2.7z                    ← cache de repositório Maven (artefatos legados/internos)
-│   ├── settings-legacy-archiva.xml  ← settings.xml do Maven (Central + Archiva legado HTTP + Jaspersoft)
-│   ├── setup-java-maven.ps1     ← define JAVA_HOME/PATH só na sessão
-│   ├── gtw.ps1  build.ps1  run.ps1  debug.ps1   ← wrappers (build / run / debug)
-│   └── README.md
-└── GTW-CWB\                     ← ESTE PROJETO (repositório git → github.com/gustavoflandal/GTW-CWB, branch main)
-    ├── pom.xml, src\, docs\, relatorios\, nginx-1.26.2\, ffmpeg\, target\ ...
-```
+Toda a stack de desenvolvimento está isolada em `D:\GTW-CWB\.setup-gtw\`. Os scripts configuram `JAVA_HOME` e `MAVEN_HOME` na sessão PowerShell antes de executar — não é necessário instalar nada globalmente.
 
-## 2. Versões e bibliotecas principais
+| Ferramenta | Versão | Localização em `.setup-gtw/` |
+|---|---|---|
+| **JDK** | **13.0.1** | `jdk-13.0.1/` |
+| **Apache Maven** | **3.9.9** | `apache-maven/` (baixado automaticamente se ausente) |
+| **Apache Tomcat** | **9.0.91** | `apache-tomcat-9.0.91/` |
+| **Maven settings legado** | — | `settings-legacy-archiva.xml` |
+| **Maven repository local** | — | `m2/.m2/repository/` |
 
-| Item | Versão / Observação |
-|---|---|
-| Java (build/run) | **JDK 13.0.1** (`maven-compiler-plugin` com `source/target 13`; propriedade `maven.compiler.*` = 14 é ignorada pelo plugin) |
-| Maven | instalado: 3.9.6 (scripts/README citam 3.9.9) com `settings-legacy-archiva.xml` — detalhes em `.setup-gtw\STACK.md` |
-| Servlet API | 4.0 (web.xml 4.0), JSP/JSTL 1.2, taglibs `c.tld/fmt.tld/fn.tld/sql.tld` locais |
-| Execução local | `tomcat7-maven-plugin 2.2` (`tomcat7:run`, porta **8080**, path `/`, URIEncoding UTF-8) |
-| Container de deploy | Tomcat 9.0.91 em `.setup-gtw` (a API `provided` do pom é `tomcat-servlet-api 7.0.52`) |
-| Banco | SQL Server (JDBC `mssql-jdbc 9.2.1.jre8` + `commons-dbcp 1.4` pool; SQL Server 2016 SP2 no DEV) |
-| Front legado | GWT 2.1.0 / GXT 2.2.1 (somente runtime compilado; **fontes GWT não estão neste repositório**) |
-| Front atual | Bootstrap 5.3.x + jQuery 3.6 + Font Awesome 5.15 + Bootstrap Icons 1.x + SweetAlert2 11 + bootstrap-select 1.14 + Tempus Dominus 6.7.7 + DataTables 1.11 + Chart.js + Google Maps JS / Leaflet 1.9 + SheetJS/jsPDF (exportação) |
-| JSON | Gson 2.8.8 (padrão nos servlets Muralha); Jackson 2.12.5 também presente |
-| Agendamento | Quartz 2.3.2 (RAMJobStore, 4 threads — `quartz.properties`) |
-| Relatórios | JasperReports 6.10.0 (`.jrxml` em `relatorios/`), iText 2.1.7, POI 4.1.1, JXL 2.6.12, JFreeChart 1.0.19 |
-| SOAP | Apache Axis 1.4 (`server-config.wsdd`) |
-| Log | log4j 1.2.17 (`src/main/resources/log4j.xml`) |
-| Mídia | FFmpeg (`ffmpeg/ffmpeg.exe`, ignorado no git), `jave-core 2.7.3`, `webp-imageio` |
-| Mensageria externa | Twilio 8.21.0, SendGrid 4.7.2, Facilita Móvel SDK, Unirest 1.4.9 |
-| Testes | TestNG 6.8.21, Mockito 1.10.19, HtmlUnit 2.36.0 (cobertura praticamente nula — 6 `.java` em `src/test`) |
-| Proxy de câmeras | nginx 1.26.2 em `nginx-1.26.2/` (porta 8185 → Tomcat 64000, proxy para câmeras RTSP-over-WebSocket) |
+### JDK 13.0.1
 
-> **Não adicionar** dependências novas ao `pom.xml` sem aprovação explícita; não migrar para Java > 13 nem para outro container; não introduzir frameworks de front (React/Vue/Angular) nem build de front (npm/webpack).
+- Caminho: `.setup-gtw\jdk-13.0.1\`
+- `JAVA_HOME` configurado por `setup-java-maven.ps1`
+- O `pom.xml` compila com `source=13` e `target=13` (maven-compiler-plugin 3.8.1)
+- **Não usar** JDK 14+ — o pom.xml tem propriedade `maven.compiler.source=14` comentada mas o plugin efetivo usa 13
 
-## 3. Como compilar, executar e depurar
+### Apache Maven 3.9.9
 
-Execute de dentro de `D:\GTW-CWB\GTW-CWB` (ou use `-ProjectName 'GTW-CWB'`). Os wrappers configuram `JAVA_HOME`/`PATH` apenas para a sessão.
+- Caminho: `.setup-gtw\apache-maven\`
+- Se a pasta não existir, `setup-java-maven.ps1` baixa e extrai automaticamente do Apache CDN
+- `MAVEN_HOME` configurado na sessão pelo mesmo script
+- Settings ativo: `.setup-gtw\settings-legacy-archiva.xml` (passado via `-s` em todo build)
+- O settings desabilita o HTTP-blocker do Maven 3.8+ para permitir o repositório HTTP legado da Consilux (`http://arquivos.consilux.com.br:8183/`)
+
+### Apache Tomcat 9.0.91
+
+- Caminho: `.setup-gtw\apache-tomcat-9.0.91\`
+- Porta HTTP: **8080** (definida em `conf/server.xml` e `pom.xml` → tomcat7-maven-plugin)
+- Porta de shutdown: **8005**
+- Contexto da aplicação: `/` (ROOT) — `<gtw.contexto>ROOT</gtw.contexto>` no pom.xml
+- Configuração de sessão: **240 minutos** de timeout (definido em `webapps/GTW-CWB/WEB-INF/web.xml`)
+- Contexto customizado: `webapps/GTW-CWB/META-INF/context.xml` (desabilita `Pragma: no-cache`)
+- **Os arquivos de configuração do Tomcat instalado em `.setup-gtw` NÃO são usados durante o `run.ps1`** — o Tomcat embutido do `tomcat7-maven-plugin` usa a configuração do `pom.xml` e o `src/main/webapp/`
+
+---
+
+## Scripts de build e execução
+
+Todos em `.setup-gtw\`. Devem ser chamados a partir da pasta `D:\GTW-CWB\` (ou com `-ProjectName GTW-CWB`).
+
+### `build.ps1` — compilar e gerar WAR
 
 ```powershell
-# Build (clean install, sem testes, sem exec-maven-plugin)
-..\.setup-gtw\build.ps1
-# Saída: target\GTW_MURALHA_DIGITAL\gtw-3.0-r<buildNumber>\ROOT.war
-
-# Run (tomcat7:run em foreground) → http://localhost:8080/
-..\.setup-gtw\run.ps1
-
-# Debug (JDWP porta 5005; -Suspend para esperar o debugger)
-..\.setup-gtw\debug.ps1 -ProjectName 'GTW-CWB' -DebugPort 5005
+# Da pasta D:\GTW-CWB\:
+..\.setup-gtw\build.ps1 -ProjectName 'GTW-CWB'
 ```
 
-Equivalente Maven: `mvn -s ..\.setup-gtw\settings-legacy-archiva.xml clean install -DskipTests -Dexec.skip=true -U -Dmaven.wagon.http.allowInsecure=true ...`.
+Executa: `mvn clean install -DskipTests -Dexec.skip=true -U -s settings-legacy-archiva.xml`  
+Resultado esperado: `BUILD SUCCESS`  
+WAR gerado em: `target\GTW_MURALHA_DIGITAL\<versao>\ROOT.war`
 
-Particularidades do build:
-- `buildnumber-maven-plugin` gera `${buildNumber}` na fase `validate` (`doCheck/doUpdate=false`) — o nome do WAR inclui o número.
-- `maven-antrun-plugin` e `exec-maven-plugin` (xdelta, gera `.xwar`) rodam na fase `install`; **sempre** use `-Dexec.skip=true` (o `xdelta` não existe no ambiente).
-- Dependências internas `gtw-widgets-muralha-digital:1.0.0` e `descarga-core:1.0.2` vêm do cache `.m2` (restaurado de `m2.7z`) / Archiva legado; sem elas o build falha.
-- Se um artefato quebrar: apagar `_remote.repositories` e `*.lastUpdated` do artefato em `%USERPROFILE%\.m2\repository` (ver README de `.setup-gtw`).
+### `run.ps1` — subir o servidor local
 
-## 4. Arquivos de configuração locais (não versionados)
+```powershell
+..\.setup-gtw\run.ps1 -ProjectName 'GTW-CWB'
+```
 
-| Arquivo | Para quê | Template versionado |
+Executa: `mvn tomcat7:run -Dexec.skip=true -e -X -s settings-legacy-archiva.xml`  
+URL: `http://localhost:8080/`  
+O servidor fica em foreground; `Ctrl+C` para parar.
+
+### `debug.ps1` — subir com depurador remoto
+
+```powershell
+..\.setup-gtw\debug.ps1 -ProjectName 'GTW-CWB' -DebugPort 5005
+# Com JVM suspensa (espera attach do IDE antes de iniciar):
+..\.setup-gtw\debug.ps1 -ProjectName 'GTW-CWB' -DebugPort 5005 -Suspend
+```
+
+Configura `MAVEN_OPTS` com JDWP: `-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005`  
+Conectar no IDE: Remote Debug → `localhost:5005`
+
+### `gtw.ps1` — orquestrador genérico (não chamar diretamente)
+
+Script interno chamado pelos três anteriores. Responsável por:
+1. Chamar `setup-java-maven.ps1` (configura `JAVA_HOME` e `MAVEN_HOME`)
+2. Localizar o `pom.xml` do projeto
+3. Montar os argumentos Maven e executar
+
+### `setup-java-maven.ps1` — configurar ambiente Java/Maven
+
+Chamado automaticamente pelo `gtw.ps1`. Configura `JAVA_HOME` e `PATH` para o JDK 13.0.1 e o Maven 3.9.9 da pasta local, sem alterar o sistema operacional.
+
+---
+
+## Configurações sensíveis — arquivos locais (não versionados)
+
+| Arquivo | Localização | Conteúdo |
 |---|---|---|
-| `src/main/webapp/WEB-INF/confGTW.xml` | Conexão SQL Server (host/db/user/senha), mapas, processamento, SMTP, grupos, remessas, etc. | `confGTW.xml.example` |
-| `src/main/webapp/WEB-INF/muralha-digital-config.xml` | Flags e credenciais do Muralha (SMS Twilio/Facilita/SmsDev/Comtele, Bitly, geocoding, diretórios FFmpeg, regras de consulta de placa, equipamentos/câmeras) | `muralha-digital-config.xml.example` |
-| Variáveis de ambiente | `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `SENDGRID_API_KEY`, `TWILIO_TEST_ACCOUNT_SID`, `TWILIO_TEST_AUTH_TOKEN` | — |
+| `confGTW.xml` | `WEB-INF/` (dentro do Tomcat ou do `src/main/webapp/WEB-INF/`) | Conexão com banco, parâmetros GTW clássico |
+| `muralha-digital-config.xml` | `WEB-INF/` | Parâmetros da Muralha Digital (SMS, e-mail, etc.) |
 
-Detalhes em `07-configuracao-e-segredos.md` (veja também `08-integracoes.md`).
+Esses arquivos estão no `.gitignore`. Use os arquivos `.example` correspondentes como template. Segredos reais (senhas, chaves de API) devem ser definidos via variáveis de ambiente — ver `docs/07-configuracao-e-segredos.md`.
 
-## 5. Ambiente de banco (DEV)
+---
 
-- Servidor `10.0.0.200`, banco `GTW_MURALHA_DEV`, usuário `consilux` (senha **não** documentada; está em `confGTW.xml` local).
-- Para consultas manuais: `sqlcmd` (ODBC 17) com `-C` (confia no certificado) e `SQLCMDPASSWORD` em variável de ambiente; ou `System.Data.SqlClient` no PowerShell (`TrustServerCertificate=True;Encrypt=False`).
+## Dependências principais do `pom.xml`
+
+> **Não alterar versões.** A lista abaixo é referência; o `pom.xml` é a fonte de verdade.
+
+| Dependência | Versão | Uso |
+|---|---|---|
+| `com.google.code.gson:gson` | **2.8.8** | Serialização JSON em todos os servlets |
+| `org.quartz-scheduler:quartz` | **2.3.2** | Jobs agendados (Agendador.java) |
+| `log4j:log4j` | **1.2.17** | Logging (Logger.getLogger) |
+| `com.microsoft.sqlserver:mssql-jdbc` | **9.2.1.jre8** | Driver JDBC SQL Server |
+| `commons-dbcp:commons-dbcp` | **1.4** | Pool de conexões (Conexao.getConexao()) |
+| `org.apache.commons:commons-pool2` | **2.4.3** | Pool subjacente ao DBCP |
+| `net.sf.jasperreports:jasperreports` | **6.10.0** | Relatórios |
+| `com.google.gwt:gwt-user` | **2.1.0** | GWT (GTW clássico — não usar em código novo) |
+| `com.extjs:gxt` | **2.2.1** | GXT (GTW clássico — não usar em código novo) |
+| `javax.websocket:javax.websocket-api` | **1.1** | WebSocket (Muralha Digital) |
+| `com.twilio.sdk:twilio` | **8.21.0** | SMS via Twilio |
+| `com.fasterxml.jackson.core:jackson-databind` | **2.12.5** | Jackson (usado pelo Twilio) |
+| `org.apache.httpcomponents:httpclient` | **4.5.10** | HTTP client interno |
+| `commons-fileupload:commons-fileupload` | **1.4** | Upload de arquivos |
+| `org.apache.poi:poi` | **4.1.1** | Manipulação XLS |
+| `org.apache.poi:poi-ooxml` | **4.1.1** | Manipulação XLSX |
+| `com.lowagie:itext` | **2.1.7** | Geração de PDF |
+| `commons-io:commons-io` | **2.6** | Utilitários de I/O |
+| `org.apache.commons:commons-lang3` | **3.9** | Utilitários de String/Object |
+| `org.apache.axis:axis` | **1.4** | Web Services SOAP (ConfigEquipApp) |
+| `javax.mail / com.sun.mail` | **1.6.2** | E-mail |
+| `ws.schild:jave-core` + `jave-nativebin-win64` | **2.7.3** | Conversão de vídeo (ffmpeg wrapper) |
+| `org.sejda.imageio:webp-imageio` | **0.1.6** | Suporte a imagens WebP |
+
+### Dependências internas Consilux (repositório privado Archiva)
+
+| Dependência | Versão | Uso |
+|---|---|---|
+| `com.consilux.gtw:gtw-widgets-muralha-digital` | **1.0.0** | Widgets GWT/GXT da Muralha |
+| `com.consilux.gtw:descarga-core` | **1.0.2** | Lógica de descarga de dados |
+| `facilita-movel-sdk:facilita-movel-sdk` | **1** | SDK SMS Facilita Móvel |
+
+> Essas dependências ficam no repositório privado `http://arquivos.consilux.com.br:8183/`. O `settings-legacy-archiva.xml` é necessário para que o Maven as baixe.
+
+---
+
+## Repositório Maven legado
+
+O projeto usa um repositório Archiva interno da Consilux via HTTP (não HTTPS). Por isso:
+
+- Os scripts passam `-Dmaven.wagon.http.allowInsecure=true` e flags relacionados
+- O `settings-legacy-archiva.xml` desabilita o HTTP-blocker padrão do Maven 3.8+
+- O repositório local fica em `.setup-gtw\m2\.m2\repository\` (não em `~/.m2/`)
+
+---
+
+## Propriedades do projeto (pom.xml)
+
+| Propriedade | Valor |
+|---|---|
+| `groupId` | `com.consilux.gtw` |
+| `artifactId` | `gtw` |
+| `version` | `3.0` |
+| `packaging` | `war` |
+| `gtw.contrato` | `GTW_MURALHA_DIGITAL` |
+| `gtw.contexto` | `ROOT` |
+| `maven.compiler.source/target` (efetivo) | `13` (via plugin, sobrescreve a propriedade 14) |
+| `tomcat7-maven-plugin` porta | `8080` |
+| `session-timeout` | `240` minutos |
+
+---
+
+## Restrições para subagentes
+
+1. **Nunca editar** `.setup-gtw/` — qualquer alteração quebra o ambiente de todos os desenvolvedores
+2. **Nunca editar** `pom.xml` sem aprovação — versões de dependências são congeladas
+3. **Nunca adicionar** novas dependências Maven — usar apenas o que já está no `pom.xml`
+4. **Usar apenas** APIs do JDK 13 e das bibliotecas listadas acima
+5. **Build de verificação** após qualquer alteração de código Java: `..\.setup-gtw\build.ps1 -ProjectName 'GTW-CWB'` deve terminar com `BUILD SUCCESS`
+6. **Não é necessário** instalar JDK, Maven ou Tomcat globalmente — tudo está em `.setup-gtw/`

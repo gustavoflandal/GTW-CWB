@@ -31,8 +31,7 @@ Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha 
 | [12-riscos-e-debitos-tecnicos.md](12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 746 tabelas, 821 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
-| [agentes/](agentes/AGENTS.md) | Guias de papéis e prompts para subagents |
-| `../../.setup-gtw/STACK.md` (fora do repositório) | Documentação da stack de desenvolvimento |
+| [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 
 ## Manutenção
 Regenerar inventários: `referencia/scripts/gerar-referencia.ps1`; catálogo do banco: `banco-de-dados/scripts/extrair-catalogo.ps1` (precisa de `GTW_DB_PASSWORD`). Procedimento: `agentes/prompts/regenerar-referencia.md`.
