@@ -108,6 +108,9 @@ public class Agendador extends HttpServlet {
 	
 	public static final String GRUPO_ENVIA_SMS_ALERTA_MURALHA = "Grupo Envia SMS de Alertas";
 	public static final String JOB_ENVIA_SMS_ALERTA_MURALHA = "Job Envia SMS de Alertas";
+
+	public static final String GRUPO_INTEGRIDADE = "Integridade";
+	public static final String JOB_SHA256_IMAGEM = "Calcula SHA-256 de Imagens";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -166,6 +169,7 @@ public class Agendador extends HttpServlet {
 			reajustaJobEnviaEmailsOcorrenciaMuralha();
 			reajustaJobEnviaSmsAlertaMuralha();
 			reajustaJobEnviaSmsOcorrenciaMuralha();
+			reajustaJobSha256Imagem();
 			
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -825,6 +829,21 @@ public class Agendador extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		response.sendError(HttpServletResponse.SC_FORBIDDEN);
-	}	
+	}
+
+	private static void reajustaJobSha256Imagem() throws SchedulerException {
+		if (!possuiJob(GRUPO_INTEGRIDADE, JOB_SHA256_IMAGEM)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.integridade.JobSha256Imagem.class)
+					.withIdentity(JOB_SHA256_IMAGEM, GRUPO_INTEGRIDADE)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_SHA256_IMAGEM, GRUPO_INTEGRIDADE)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job SHA-256 imagem agendada a cada 5 minutos.");
+		}
+	}
 
 }
