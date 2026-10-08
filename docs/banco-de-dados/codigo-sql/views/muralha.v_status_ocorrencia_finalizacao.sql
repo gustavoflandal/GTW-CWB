@@ -1,0 +1,6 @@
+CREATE VIEW [muralha].[v_status_ocorrencia_finalizacao]
+AS
+	SELECT id AS id_status,
+	       descricao
+	FROM   muralha.status_ocorrencia
+	WHERE  id IN ('ACAADE8A-2D4E-4E93-9F1F-0DE9185B576E', '9CE69C57-59D6-4611-AC1E-3690779FA68F', '0033D5BC-8E4F-4B10-BC5E-8119B768F566', '81038AD9-2206-4956-A34E-8C844C673A62')
