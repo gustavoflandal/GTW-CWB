@@ -16,7 +16,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @WebServlet("/MuralhaDigital/Auditoria")
 public class AuditoriaServlet extends HttpServlet {
@@ -95,7 +94,7 @@ public class AuditoriaServlet extends HttpServlet {
             }
             result.addProperty("ok", true);
             result.add("registros", rows);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             result.addProperty("ok", false);
             result.addProperty("erro", e.getMessage());
         } finally {
