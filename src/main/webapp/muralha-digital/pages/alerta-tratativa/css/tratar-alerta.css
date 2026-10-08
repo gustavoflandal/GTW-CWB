@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+.carousel-item {
+	text-align: center;
+	min-height: 280px;
+	/* Prevent carousel from being distorted if for some reason image doesn't load */
+}
+
+.seta-troca-imagem {
+	width: 100% !important;
+	height: 20% !important;
+}
+
+.espec-placa {
+	width: 16px;
+	height: 16px;
+	margin-left: 5px;
+}
+
+.controls {
+	margin-top: 20px;
+	display: flex;
+	justify-content: flex-start;
+	/* Adicionado: Alinha os sliders à esquerda */
+	gap: 20px;
+	align-items: center;
+	width: 100%;
+}
+
+.slider-container {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	/* Alterado: Alinha o texto e o slider à esquerda */
+}
+
+.label-outside {
+	position: absolute;
+	left: -135px; /* ajuste conforme necessário */
+	top: 50%;
+	transform: translateY(-50%);
+	white-space: nowrap;
+}

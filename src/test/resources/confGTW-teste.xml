@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<armazenamento>
+		<servidor_sql>
+			<host>CSX-SERVER-TEST</host>
+			<database>Consilux_GTW3</database>
+			<user>sa</user>
+			<password></password>
+		</servidor_sql>
+		
+		<importador_txt>
+			<diretorio>C:/Consilux/impTXT/dir_txt</diretorio>
+		</importador_txt>
+	</armazenamento>
+
+	<exporta_trafego>
+		<ativo>false</ativo>
+		<comando_logon></comando_logon>
+		<diretorio>C:/temp</diretorio>
+		<comando_logoff></comando_logoff>
+		<codigo_empresa></codigo_empresa>
+		<codigo_tipo_equipamento></codigo_tipo_equipamento>
+		<tipo_equipamento></tipo_equipamento>
+		<horario_job>00:51</horario_job>
+		<dias_retroativo_maximo>10</dias_retroativo_maximo>
+	</exporta_trafego>
+
+	<exporta_imagens>
+		<ativo>false</ativo>
+		<comando_logon></comando_logon>
+		<diretorio></diretorio>
+		<comando_logoff></comando_logoff>
+		<horario_job>23:00</horario_job>
+		<dias_retroativo_minimo>7</dias_retroativo_minimo>
+		<dias_retroativo_maximo>7</dias_retroativo_maximo>
+	</exporta_imagens>		
+	
+	<!--
+	Configuracoes para o modulo de mapa
+	-->
+	<mapa>
+		<centro>
+			<latitude>-25.4298</latitude>
+			<longitude>-49.2709</longitude>
+		</centro>
+		
+		<google_maps_key></google_maps_key>
+	</mapa>	
+	
+	<processamento>
+		<com_sugestao_placa>false</com_sugestao_placa>
+		<com_obliteracao>true</com_obliteracao>
+		<com_ajuste_imagem>false</com_ajuste_imagem>
+		<com_marca_processo>true</com_marca_processo>
+		<com_especie_processo>true</com_especie_processo>
+		<com_uf_validacao>false</com_uf_validacao>
+		<com_validacao_consistentes_agendamento>true</com_validacao_consistentes_agendamento>		
+		<confirma_obliteracao>false</confirma_obliteracao>
+		<alerta_velocidade>100</alerta_velocidade>
+		<alerta_isento>true</alerta_isento>
+		<tamanho_tarja>56</tamanho_tarja>
+	</processamento>
+	
+	<grupos>
+		<grupo codigo="DIG" id="4"/>
+		<grupo codigo="AUD" id="5"/>
+		<grupo codigo="TEC" id="7"/>
+		<grupo codigo="EEQ" id="9"/>
+		<grupo codigo="NEC" id="10"/>
+		<grupo codigo="DEV" id="16" descricao="Desenvolvedores"/>
+		<grupo codigo="GAU" id="21" descricao="Gerente Auditores"/>
+	</grupos>
+	
+	<config_chave_valor>
+		<chave_valor chave="nome_contrato" valor="TESTE"/>
+		<chave_valor chave="grupo_equipamento" valor="9"/>
+		<chave_valor chave="usuario_sistema" valor="16"/>
+		<chave_valor chave="grupo_supervisor" valor="6"/>
+		<chave_valor chave="identificacao_cliente" valor="CSX  Contrato: 999/0000"/>
+		<chave_valor chave="orgao_auditoria" valor="CSX/DEV"/>
+		<chave_valor chave="codigo_secundario" valor="Código Prodam"/>
+		<chave_valor chave="max_dias_veiculo_estatica_detalhado" valor="90" />
+		<chave_valor chave="id_inconsistencia_padrao_inibicao" valor="5"/>
+	</config_chave_valor>	
+	
+	<remessa>
+	
+		<gerador>com.consilux.model.remessa.RemessaFactoryURBS</gerador>	
+	
+		<tipos>
+			<tipo codigo="XV" descricao="Velocidade" id_processo="7" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Velocidade.jasper" sigla_cliente=""/>
+			<tipo codigo="XR" descricao="Rodizio" id_processo="8" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Outros.jasper" sigla_cliente=""/>
+			<tipo codigo="XZ" descricao="ZMRC" id_processo="9" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Outros.jasper" sigla_cliente=""/>
+			<tipo codigo="XF" descricao="ZMRF" id_processo="12" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Outros.jasper" sigla_cliente=""/>
+			<tipo codigo="CS1" descricao="Avanço Sinal" id_processo="13" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Avanco URBS.jasper" sigla_cliente=""/>
+			<tipo codigo="CS4" descricao="Conversão Proibida" id_processo="17" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Velocidade URBS.jasper" sigla_cliente=""/>
+			<tipo codigo="CS3" descricao="Retorno Proibido" id_processo="15" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Velocidade URBS.jasper" sigla_cliente=""/>
+			<tipo codigo="CS2" descricao="Parada Faixa" id_processo="14" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Avanco URBS.jasper" sigla_cliente=""/>
+		</tipos>
+	
+		<exportador>
+			<layout_prem>PREM_C006</layout_prem>
+			<logotipo_empresa>logo_consilux.jpg</logotipo_empresa>
+			<logotipo_empresa_vertical>logo_consilux_vertical.jpg</logotipo_empresa_vertical>
+			<implementacao>com.consilux.model.remessa.ExportaRemessaCET</implementacao>
+		</exportador>
+		
+	</remessa>
+	
+	<email>
+		<smtp_servers>
+			<smtp_server>
+				<host>smtp.consilux.com.br</host>
+				<user>gtw@consilux.com.br</user>
+				<password></password>
+				<mail>server.adm@consilux.com.br</mail>
+			</smtp_server>
+		</smtp_servers>
+		<assunto_veiculo_monitorado>[TESTE] - ALERTA - Veículo Monitorado</assunto_veiculo_monitorado>
+	</email>
+	
+	<webservice>
+		<wss>
+			<ws>
+				<nome_interface>IConfigEquipChange</nome_interface>
+				<endereco>WS018:8080</endereco>
+			</ws>
+			<ws>
+				<nome_interface>IWantedPlateListWS</nome_interface>
+				<endereco>WS018:8080</endereco>
+			</ws>
+		</wss>
+	</webservice>
+	
+	<descarga>
+		<ativo>false</ativo>
+		<app_jar>/tmp/verdescarga/ver-descarga-0.3.0-jar-with-dependencies.jar</app_jar>
+		<diretorio_saida>/tmp/verdescarga/dir_descargas</diretorio_saida>
+		<numero_maximo_dias_final_descarga>183</numero_maximo_dias_final_descarga> <!-- 6 meses -->
+		<tamanho_midia>4700372992</tamanho_midia> <!-- DVD+R -->
+		<arquivos_externos>
+			<arquivo>/tmp/verdescarga/autorun.inf</arquivo>
+			<arquivo>/tmp/verdescarga/VerDescarga.exe</arquivo>
+		</arquivos_externos>
+		<horario_job_exportacao>03:00</horario_job_exportacao>
+	</descarga>
+	
+</config>

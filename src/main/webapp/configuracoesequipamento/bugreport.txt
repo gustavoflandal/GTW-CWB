@@ -1,0 +1,424 @@
+date/time         : 2013-10-28, 14:31:57, 552ms
+computer name     : FELIPE-PC
+user name         : Felipe
+registered owner  : Windows User
+operating system  : Windows NT New x64 build 9200
+system language   : Portuguese
+system up time    : 6 hours 14 minutes
+program up time   : 13 seconds
+processors        : 4x Intel(R) Core(TM) i5 CPU M 480 @ 2.67GHz
+physical memory   : 4551/7861 MB (free/total)
+free disk space   : (C:) 7,13 GB
+display mode      : 1366x768, 32 bit
+process id        : $1b94
+allocated memory  : 43,91 MB
+executable        : configEquipApp.exe
+exec. date/time   : 2013-09-04 10:20
+version           : 1.0.6.88
+compiled with     : Delphi 2006/07
+madExcept version : 3.0l
+callstack crc     : $bc2bca9e, $e6d0390c, $e6d0390c
+count             : 2
+exception number  : 1
+exception class   : ESOAPHTTPException
+exception message : Bad Request (400) - 'http://189.51.5.31/services/ConfigEquipWS'.
+
+main thread ($1d0c):
+00530343 +0e3 configEquipApp.exe SOAPHTTPTrans          THTTPReqResp.Receive
+005314a1 +13d configEquipApp.exe SOAPHTTPTrans          THTTPReqResp.Execute
+0052914f +653 configEquipApp.exe Rio                    TRIO.Generic
+005a2abe +07a configEquipApp.exe frmConfigEquip 341 +10 TfrmConfigEquipApp.autenticacaoUsuario
+005a20e9 +019 configEquipApp.exe frmConfigEquip  87  +2 TfrmConfigEquipApp.BitBtn2Click
+004b2410 +064 configEquipApp.exe Controls               TControl.Click
+00492f52 +01e configEquipApp.exe StdCtrls               TButton.Click
+0053b13c +068 configEquipApp.exe Buttons        135  +0 TBitBtn.Click
+00493050 +00c configEquipApp.exe StdCtrls               TButton.CNCommand
+004b1f0b +2bb configEquipApp.exe Controls               TControl.WndProc
+004b5e12 +4fa configEquipApp.exe Controls               TWinControl.WndProc
+00492dfc +06c configEquipApp.exe StdCtrls               TButtonControl.WndProc
+004b1b98 +024 configEquipApp.exe Controls               TControl.Perform
+004b5f63 +023 configEquipApp.exe Controls               DoControlMsg
+004b692f +00b configEquipApp.exe Controls               TWinControl.WMCommand
+004b1f0b +2bb configEquipApp.exe Controls               TControl.WndProc
+004b5e12 +4fa configEquipApp.exe Controls               TWinControl.WndProc
+004b553c +02c configEquipApp.exe Controls               TWinControl.MainWndProc
+0047a654 +014 configEquipApp.exe Classes                StdWndProc
+7530ec57 +126 user32.dll                                SendMessageW
+7533054e +079 user32.dll                                CallWindowProcA
+004b5f0f +0d7 configEquipApp.exe Controls               TWinControl.DefaultHandler
+004b2830 +010 configEquipApp.exe Controls               TControl.WMLButtonUp
+004b1f0b +2bb configEquipApp.exe Controls               TControl.WndProc
+004b5e12 +4fa configEquipApp.exe Controls               TWinControl.WndProc
+00492dfc +06c configEquipApp.exe StdCtrls               TButtonControl.WndProc
+004b553c +02c configEquipApp.exe Controls               TWinControl.MainWndProc
+0047a654 +014 configEquipApp.exe Classes                StdWndProc
+753088b4 +00b user32.dll                                DispatchMessageA
+004cf49c +0fc configEquipApp.exe Forms                  TApplication.ProcessMessage
+004cf4d6 +00a configEquipApp.exe Forms                  TApplication.HandleMessage
+004cf72c +0cc configEquipApp.exe Forms                  TApplication.Run
+005a6dc1 +065 configEquipApp.exe configEquipApp  46 +10 initialization
+7583a55c +00c KERNEL32.DLL                              BaseThreadInitThunk
+
+thread $8f4:
+7583a55c +c KERNEL32.DLL  BaseThreadInitThunk
+
+thread $ec4:
+7583a55c +c KERNEL32.DLL  BaseThreadInitThunk
+
+thread $11b4:
+0045399d +0d configEquipApp.exe madExcept CallThreadProcSafe
+00453a07 +37 configEquipApp.exe madExcept ThreadExceptFrame
+7583a55c +0c KERNEL32.DLL                 BaseThreadInitThunk
+>> created by main thread ($1d0c) at:
+751ce71f +00 combase.dll
+
+thread $1500:
+7583a55c +c KERNEL32.DLL  BaseThreadInitThunk
+
+thread $1a64:
+7583a55c +c KERNEL32.DLL  BaseThreadInitThunk
+
+modules:
+00400000 configEquipApp.exe          1.0.6.88        C:\Coisas\Java\Teste\Workspace\GTW\src\main\webapp\configuracoesequipamento
+51fa0000 msxml3.dll                  8.110.9431.0    C:\WINDOWS\System32
+6c560000 msls31.dll                  3.10.349.0      C:\WINDOWS\SYSTEM32
+6c5a0000 RICHED20.dll                5.31.23.1230    C:\WINDOWS\SYSTEM32
+6e8b0000 RICHED32.DLL                6.3.9431.0      C:\WINDOWS\SYSTEM32
+706e0000 urlmon.dll                  11.0.9431.217   C:\WINDOWS\SYSTEM32
+709b0000 DNSAPI.dll                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+70a30000 dwmapi.dll                  6.3.9431.0      C:\WINDOWS\system32
+70a70000 WINNSI.DLL                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+70a80000 IPHLPAPI.DLL                6.3.9431.0      C:\WINDOWS\SYSTEM32
+70b10000 uxtheme.dll                 6.3.9431.0      C:\WINDOWS\system32
+70c50000 Secur32.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+70c60000 winhttp.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+70dc0000 ondemandconnroutehelper.dll 6.3.9431.0      C:\WINDOWS\SYSTEM32
+74040000 comctl32.dll                6.10.9431.0     C:\WINDOWS\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.9431.0_none_9407bfa1f2987267
+74760000 version.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+74770000 profapi.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+747b0000 iertutil.dll                11.0.9431.0     C:\WINDOWS\SYSTEM32
+74a00000 wininet.dll                 11.0.9431.217   C:\WINDOWS\SYSTEM32
+74be0000 mswsock.dll                 6.3.9431.0      C:\WINDOWS\system32
+74c30000 winspool.drv                6.3.9431.0      C:\WINDOWS\SYSTEM32
+74db0000 SHCORE.DLL                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+74e80000 bcrypt.dll                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+74ea0000 rsaenh.dll                  6.3.9431.0      C:\WINDOWS\system32
+74ed0000 CRYPTSP.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+74f20000 wsock32.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+74f30000 kernel.appcore.dll          6.3.9431.0      C:\WINDOWS\SYSTEM32
+74f70000 bcryptPrimitives.dll        6.3.9431.0      C:\WINDOWS\SYSTEM32
+74fd0000 CRYPTBASE.dll               6.3.9431.0      C:\WINDOWS\SYSTEM32
+74fe0000 SspiCli.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+75010000 RPCRT4.dll                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+75120000 IMM32.DLL                   6.3.9431.0      C:\WINDOWS\system32
+751a0000 combase.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+75300000 user32.dll                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+75600000 msvcrt.dll                  7.0.9431.0      C:\WINDOWS\SYSTEM32
+756d0000 gdi32.dll                   6.3.9431.0      C:\WINDOWS\SYSTEM32
+757e0000 sechost.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+75820000 KERNEL32.DLL                6.3.9431.0      C:\WINDOWS\SYSTEM32
+75ad0000 USP10.dll                   6.3.9431.0      C:\WINDOWS\SYSTEM32
+75af0000 MSCTF.dll                   6.3.9431.0      C:\WINDOWS\SYSTEM32
+75be0000 KERNELBASE.dll              6.3.9431.0      C:\WINDOWS\SYSTEM32
+75d40000 ole32.dll                   6.3.9431.0      C:\WINDOWS\SYSTEM32
+75eb0000 WS2_32.dll                  6.3.9431.0      C:\WINDOWS\SYSTEM32
+75f00000 shell32.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+77080000 advapi32.dll                6.3.9431.0      C:\WINDOWS\SYSTEM32
+77140000 NSI.dll                     6.3.9431.0      C:\WINDOWS\SYSTEM32
+772d0000 comdlg32.dll                6.3.9431.0      C:\WINDOWS\SYSTEM32
+77360000 clbcatq.dll                 2001.12.10361.0 C:\WINDOWS\SYSTEM32
+773e0000 SHLWAPI.dll                 6.3.9431.0      C:\WINDOWS\SYSTEM32
+77430000 oleaut32.dll                6.3.9431.0      C:\WINDOWS\SYSTEM32
+775a0000 ntdll.dll                   6.3.9431.0      C:\WINDOWS\SYSTEM32
+
+processes:
+0000 Idle                           0 0   0
+0004 System                         0 0   0
+01c4 smss.exe                       0 0   0
+025c csrss.exe                      0 0   0
+02a0 wininit.exe                    0 0   0
+02a8 csrss.exe                      1 0   0
+02e8 winlogon.exe                   1 0   0
+0308 services.exe                   0 0   0
+031c lsass.exe                      0 0   0
+036c svchost.exe                    0 0   0
+038c svchost.exe                    0 0   0
+0054 dwm.exe                        1 0   0
+017c gbpsv.exe                      0 0   0
+01e4 svchost.exe                    0 0   0
+03a0 svchost.exe                    0 0   0
+0258 svchost.exe                    0 0   0
+0438 svchost.exe                    0 0   0
+0504 svchost.exe                    0 0   0
+0524 svchost.exe                    0 0   0
+0600 spoolsv.exe                    0 0   0
+0624 svchost.exe                    0 0   0
+070c eEBSvc.exe                     0 0   0
+07a8 NetworkLicenseServer.exe       0 0   0
+07f0 schedul2.exe                   0 0   0
+04c4 armsvc.exe                     0 0   0
+0808 afcdpsrv.exe                   0 0   0
+085c agr64svc.exe                   0 0   0
+086c svchost.exe                    0 0   0
+087c Ath_CoexAgent.exe              0 0   0
+08c0 AdminService.exe               0 0   0
+0a74 itype.exe                      1 15  38  below normal
+0a7c ipoint.exe                     1 19  55  below normal
+0ab8 explorer.exe                   1 660 508 normal
+0ac4 taskhostex.exe                 1 13  17  normal
+09d8 TSVNCache.exe                  1 9   4   normal
+0cfc DCServce.exe                   0 0   0
+0d30 rsync.exe                      0 0   0
+0d40 conhost.exe                    0 0   0
+0d54 dasHost.exe                    0 0   0
+0d8c EPCP.exe                       0 0   0
+0db4 FileZilla server.exe           0 0   0
+0ddc HWDeviceService64.exe          0 0   0
+0dfc LMS.EXE                        0 0   0
+0e04 DCSHelper.exe                  1 13  15  normal       C:\ProgramData\DatacardService
+0e14 mqsvc.exe                      0 0   0
+0e8c sqlservr.exe                   0 0   0
+0ca8 SkyDrive.exe                   1 9   9   normal
+09f4 sqlwriter.exe                  0 0   0
+0d44 svchost.exe                    0 0   0
+0d84 TeamViewer_Service.exe         0 0   0
+0864 ouc.exe                        0 0   0
+03ec vmware-usbarbitrator64.exe     0 0   0
+0c28 svchost.exe                    0 0   0
+04ac escsvc64.exe                   0 0   0
+0ed4 vmms.exe                       0 0   0
+0bd4 SMSvcHost.exe                  0 0   0
+1158 SMSvcHost.exe                  0 0   0
+125c NisSrv.exe                     0 0   0
+135c SearchIndexer.exe              0 0   0
+146c SettingSyncHost.exe            1 9   8   below normal
+1510 svchost.exe                    0 0   0
+15f4 SynTPEnh.exe                   1 68  36  above normal
+1710 SynTPHelper.exe                1 0   0
+175c hkcmd.exe                      1 9   20  normal
+17d4 igfxpers.exe                   1 9   4   normal
+1468 schedhlp.exe                   1 9   4   normal
+0bdc Msgsrv.exe                     1 13  6   normal
+15e4 E_IATIIBE.EXE                  1 22  13  normal
+1740 E_IATIIBE.EXE                  1 22  13  normal
+0670 TrueImageMonitor.exe           1 190 107 normal       C:\Program Files (x86)\Acronis\TrueImageHome
+1864 TibMounterMonitor.exe          1 239 25  normal       C:\Program Files (x86)\Common Files\Acronis\TibMounter
+1880 EEventManager.exe              1 16  15  normal       C:\Program Files (x86)\EPSON Software\Event Manager
+18bc FileZilla Server Interface.exe 1 87  47  normal       C:\Program Files (x86)\FileZilla Server
+1968 dllhost.exe                    0 0   0
+0b6c IAStorDataMgrSvc.exe           0 0   0
+0c38 syncagentsrv.exe               0 0   0
+105c UNS.EXE                        0 0   0
+1090 wmpnetwk.exe                   0 0   0
+1a3c IELowutil.exe                  1 9   3   below normal C:\Program Files (x86)\Internet Explorer
+0488 firefox.exe                    1 165 82  normal       C:\Program Files (x86)\Mozilla Firefox
+05b0 thunderbird.exe                1 292 62  normal       C:\Program Files (x86)\Mozilla Thunderbird
+1ad4 plugin-container.exe           1 9   13  normal       C:\Program Files (x86)\Mozilla Firefox
+0ce4 googletalkplugin.exe           1 9   12  above normal C:\Users\Felipe\AppData\Local\Google\Google Talk Plugin
+0b4c MsMpEng.exe                    0 0   0
+0bb0 devenv.exe                     1 424 250 normal       C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE
+188c notepad++.exe                  1 334 309 normal       C:\Program Files (x86)\Notepad++
+0fd8 mmc.exe                        1 0   0
+156c EnviarDadosCSX.vshost.exe      1 4   2   idle         C:\Users\Felipe\documents\visual studio 2010\Projects\EnviarDadosCSX\EnviarDadosCSX\bin\Debug
+1b78 Ssms.exe                       1 301 148 normal       C:\Program Files (x86)\Microsoft SQL Server\110\Tools\Binn\ManagementStudio
+1320 WWAHost.exe                    1 19  56  normal
+0d0c RuntimeBroker.exe              1 40  6   normal
+1548 SearchProtocolHost.exe         0 0   0
+1d78 EnviarDadosCSX.exe             0 0   0
+1048 eclipse.exe                    1 689 377 normal       C:\Coisas\Java\Teste\eclipse
+1598 taskeng.exe                    1 9   3   normal
+12f8 audiodg.exe                    0 0   0
+168c SearchFilterHost.exe           0 0   0
+1b94 configEquipApp.exe             1 236 205 normal       C:\Coisas\Java\Teste\Workspace\GTW\src\main\webapp\configuracoesequipamento
+
+hardware:
++ {1860459d-4692-4825-b761-44a725991050}
+  - Acronis TIB Mounter (driver 4.3.0.2118)
++ {1ed2bbf9-11f0-4084-b21f-ad83a8e6dcdc}
+  - \\MARLENE-PC\Epson Stylus C67 Series (M)
+  - \\MARLENE-PC\EPSON XP-400 Series
+  - Enviar para o OneNote 2010
+  - EPSON Remote Print(XP-401)
+  - Fax
+  - Fila de Impressão da Raiz
+  - HP LaserJet 1022
+  - Microsoft XPS Document Writer
+  - PDFCreator
+  - SHARP AL-2040CS
+  - XP-400 Series(Rede)
++ {36fc9e60-c465-11cf-8056-444553540000}
+  - Generic USB Hub
+  - Generic USB Hub
+  - HUAWEI Mobile Connect - Bus Enumerate Device (driver 2.6.2.3129)
+  - Intel(R) 5 Series/3400 Series Chipset Family USB Enhanced Host Controller - 3B34 (driver 9.1.1.1020)
+  - Intel(R) 5 Series/3400 Series Chipset Family USB Enhanced Host Controller - 3B3C (driver 9.1.1.1020)
+  - Microsoft Mouse and Keyboard Detection Driver (USB)
+  - USB Composite Device
+  - USB Root Hub
+  - USB Root Hub
++ {4d36e965-e325-11ce-bfc1-08002be10318}
+  - HL-DT-ST DVDRAM GT32N
++ {4d36e966-e325-11ce-bfc1-08002be10318}
+  - PC com base em x64 ACPI
++ {4d36e967-e325-11ce-bfc1-08002be10318}
+  - Corsair Force 3 SSD
++ {4d36e968-e325-11ce-bfc1-08002be10318}
+  - Intel(R) HD Graphics (driver 8.15.10.2900)
++ {4d36e96a-e325-11ce-bfc1-08002be10318}
+  - Intel(R) 5 Series 4 Port SATA AHCI Controller (driver 9.6.0.1014)
++ {4d36e96b-e325-11ce-bfc1-08002be10318}
+  - Microsoft USB Dual Receiver Wireless Keyboard (Mouse and Keyboard Center)
+  - Teclado Padrão PS/2
++ {4d36e96c-e325-11ce-bfc1-08002be10318}
+  - Realtek High Definition Audio (driver 6.0.1.6101)
+  - Áudio do vídeo Intel(R) (driver 6.12.0.3047)
++ {4d36e96d-e325-11ce-bfc1-08002be10318}
+  - LSI HDA Modem (driver 2.2.98.0)
++ {4d36e96e-e325-11ce-bfc1-08002be10318}
+  - Monitor Genérico PnP
++ {4d36e96f-e325-11ce-bfc1-08002be10318}
+  - Microsoft USB Dual Receiver Wireless Mouse (Mouse and Keyboard Center)
+  - Synaptics PS/2 Port TouchPad (driver 15.0.14.0)
++ {4d36e972-e325-11ce-bfc1-08002be10318}
+  - Adaptador Ethernet Virtual Hyper-V #2
+  - Dispositivo Bluetooth (Rede Pessoal)
+  - Qualcomm Atheros AR9002WB-1NG Wireless Network Adapter (driver 10.0.0.260)
+  - Realtek PCIe GBE Family Controller
+  - VirtualBox Host-Only Ethernet Adapter (driver 4.2.16.0)
++ {4d36e97b-e325-11ce-bfc1-08002be10318}
+  - Controlador de Espaços de Armazenamento da Microsoft
++ {4d36e97d-e325-11ce-bfc1-08002be10318}
+  - Barramento Redirecionador de Dispositivos de Área de Trabalho Remota
+  - Botão de recurso fixo ACPI
+  - Botão ligar/desligar ACPI
+  - Botão Suspender ACPI
+  - CMOS do sistema/relógio em tempo real
+  - Complexo da Raiz de PCI Express
+  - Controlador de acesso direto à memória
+  - Controlador de High Definition Audio
+  - Controlador de interrupção programável
+  - Driver de Infraestrutura de Virtualização Microsoft Hyper-V
+  - Driver de Renderização Básico da Microsoft
+  - Driver de Vídeo Básico da Microsoft
+  - Enumerador de Adaptador de Rede Virtual NDIS
+  - Enumerador de Barramento de Composição
+  - Enumerador de Barramento de Raiz UMBus
+  - Enumerador de Dispositivos de Software Plug and Play
+  - Enumerador de Unidade Virtual Microsoft
+  - Enumerador UMBus
+  - Gerenciador de Volumes
+  - Intel(R) 5 Series/3400 Series Chipset Family PCI Express Root Port 1 - 3B42
+  - Intel(R) 5 Series/3400 Series Chipset Family PCI Express Root Port 2 - 3B44
+  - Intel(R) 5 Series/3400 Series Chipset Family PCI Express Root Port 3 - 3B46
+  - Intel(R) 5 Series/3400 Series Chipset Family PCI Express Root Port 4 - 3B48
+  - Intel(R) 5 Series/3400 Series Chipset Family SMBus Controller - 3B30
+  - Intel(R) 82801 PCI Bridge - 2448
+  - Intel(R) 82802 Firmware Hub Device
+  - Intel(R) HM55 Express Chipset LPC Interface Controller - 3B09
+  - Intel(R) Management Engine Interface (driver 6.0.0.1179)
+  - Intel(R) processor DRAM Controller - 0044 (driver 9.1.1.1022)
+  - Intel(R) Turbo Boost Technology Driver (driver 1.2.0.1002)
+  - Microsoft ACPI-Compliant Embedded Controller
+  - Microsoft ACPI-Compliant System
+  - Microsoft System Management BIOS Driver
+  - PCI bus
+  - Processador de dados numéricos
+  - Provedor de Barramento de Máquina Virtual Microsoft Hyper-V
+  - QPI Link 0 - 2D10 (driver 9.1.1.1022)
+  - QPI Physical 0 - 2D11 (driver 9.1.1.1022)
+  - QuickPath Architecture Generic Non-core Registers - 2C62 (driver 9.1.1.1022)
+  - QuickPath Architecture System Address Decoder - 2D01 (driver 9.1.1.1022)
+  - Recursos da placa-mãe
+  - Recursos da placa-mãe
+  - Recursos da placa-mãe
+  - Reserved - 2D12 (driver 9.1.1.1022)
+  - Reserved - 2D13 (driver 9.1.1.1022)
+  - Servidor de Disco Virtual Microsoft Hyper-V
+  - Servidor PCI do Microsoft Hyper-V
+  - Tampa ACPI
+  - Timer de eventos de alta precisão
+  - Timer do sistema
+  - Utility Program Component Driver (driver 1.0.2.0)
+  - Zona termal ACPI
++ {50127dc3-0f36-415e-a6cc-4cb3be910b65}
+  - Intel(R) Core(TM) i5 CPU       M 480  @ 2.67GHz
+  - Intel(R) Core(TM) i5 CPU       M 480  @ 2.67GHz
+  - Intel(R) Core(TM) i5 CPU       M 480  @ 2.67GHz
+  - Intel(R) Core(TM) i5 CPU       M 480  @ 2.67GHz
++ {533c5b84-ec70-11d2-9505-00c04f79deaf}
+  - Cópia de sombra de volume genérica
++ {62f9c741-b25a-46ce-b54c-9bccce08b6f2}
+  - Barramento do Adaptador de Transição IPv4 IPv6 da Microsoft
+  - Microsoft Device Association Root Enumerator
+  - Smart Card Device Enumeration Bus
++ {6bdd1fc6-810f-11d0-bec7-08002be2092f}
+  - USB2.0 UVC 1.3M WebCam
++ {72631e54-78a4-11d0-bcf7-00aa00b7b32a}
+  - Adaptador de CA da Microsoft
+  - Bateria de Método de Controle Compatível com ACPI da Microsoft
++ {745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+  - Controlador de sistema compatível com HID
+  - Dispositivo de Entrada USB
+  - Dispositivo definido pelo fornecedor compatível com HID
+  - Dispositivo HID Bluetooth
+  - HID-compliant consumer control device
+  - HID-compliant consumer control device
+  - HID-compliant consumer control device
+  - Mouse USB Microsoft Hardware
+  - Teclado USB Microsoft Hardware
++ {c166523c-fe0c-4a94-a586-f1a80cfbbf3e}
+  - Alto-falantes (Realtek High Definition Audio)
+  - Microfone (Realtek High Definition Audio)
++ {e0cbf06c-cd8b-4647-bb8a-263b43f0f974}
+  - BT Optical Mouse
+  - Enumerador Bluetooth da Microsoft
+  - Qualcomm Atheros AR3011 Bluetooth 3.0 (driver 8.0.1.240)
+
+cpu registers:
+eax = 01f85ee8
+ebx = 02012ca0
+ecx = 01f85ee8
+edx = 00530348
+esi = 00cc000c
+edi = 00cc000c
+eip = 00530348
+esp = 0018f2e8
+ebp = 0018f368
+
+stack dump:
+0018f2e8  48 03 53 00 de fa ed 0e - 01 00 00 00 07 00 00 00  H.S.............
+0018f2f8  fc f2 18 00 48 03 53 00 - e8 5e f8 01 a0 2c 01 02  ....H.S..^...,..
+0018f308  0c 00 cc 00 0c 00 cc 00 - 68 f3 18 00 18 f3 18 00  ........h.......
+0018f318  74 f3 18 00 40 4f 40 00 - 68 f3 18 00 02 00 00 00  t...@O@.h.......
+0018f328  f8 95 52 00 00 f7 52 00 - 00 00 00 00 a8 5e f8 01  ..R...R......^..
+0018f338  0b db 02 05 90 01 00 00 - 00 11 53 00 58 bb 00 02  ..........S.X...
+0018f348  0b 00 00 00 00 00 00 00 - 04 00 00 00 90 01 00 00  ................
+0018f358  00 00 00 00 0b 00 00 00 - b0 60 f8 01 00 00 00 00  .........`......
+0018f368  c4 f3 18 00 a4 14 53 00 - 00 00 00 00 80 f3 18 00  ......S.........
+0018f378  d7 50 40 00 c4 f3 18 00 - 8c f3 18 00 40 4f 40 00  .P@.........@O@.
+0018f388  c4 f3 18 00 cc f3 18 00 - 40 4f 40 00 c4 f3 18 00  ........@O@.....
+0018f398  02 00 00 00 f8 95 52 00 - 36 f6 52 00 00 00 00 00  ......R.6.R.....
+0018f3a8  bc f3 00 00 0c 00 cc 00 - b0 60 f8 01 10 64 f8 01  .........`...d..
+0018f3b8  a0 2c 01 02 00 00 00 00 - 00 00 00 00 c4 f4 18 00  .,..............
+0018f3c8  52 91 52 00 d8 f3 18 00 - 40 4f 40 00 c4 f4 18 00  R.R.....@O@.....
+0018f3d8  e4 f3 18 00 40 4f 40 00 - c4 f4 18 00 f0 f3 18 00  ....@O@.........
+0018f3e8  40 4f 40 00 c4 f4 18 00 - fc f3 18 00 40 4f 40 00  @O@.........@O@.
+0018f3f8  c4 f4 18 00 dc f4 18 00 - 40 4f 40 00 c4 f4 18 00  ........@O@.....
+0018f408  c4 f6 18 00 f0 24 fd 01 - 00 00 00 00 00 00 00 00  .....$..........
+0018f418  00 00 00 00 00 00 00 00 - 00 00 00 00 00 00 00 00  ................
+
+disassembling:
+[...]
+005a2ab1       mov     eax, esi
+005a2ab3       call    +$b0 ($5a2b68)         ; frmConfigEquip.TfrmConfigEquipApp.GetConfigEquip
+005a2ab8       mov     eax, [ebp-$c]
+005a2abb       push    eax
+005a2abc       mov     eax, [eax]
+005a2abe     > call    dword ptr [eax+$20]
+005a2ac1       mov     ebx, eax
+005a2ac3       mov     [esi+$3a4], bl
+005a2ac9 343   test    bl, bl
+005a2acb       jnz     loc_5a2aee
+005a2acd 345   lea     eax, [esi+$3a0]
+[...]
+

@@ -1,0 +1,391 @@
+@charset "UTF-8";
+
+/* ==========================================================================
+   --- ESTILOS GERAIS E DE FORMULÁRIO ---
+   ========================================================================== */
+
+.form-control,
+.form-control-lg,
+.input-group-text,
+.filter-option,
+.select2-container .select2-selection--multiple {
+    font-size: 14px;
+}
+
+.select2-container .select2-selection--multiple {
+    min-height: 38px;
+}
+
+/* ==========================================================================
+   --- GRAFO DE CORRELAÇÃO ---
+   ========================================================================== */
+
+#grafo-container {
+    position: relative; /* Essencial para posicionar elementos filhos */
+    width: 100%;
+    height: 650px;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+    overflow: hidden; /* Garante que o grafo não ultrapasse as bordas */
+    background-color: #f5f5f5; /* Fundo acinzentado claro */
+}
+
+#grafo {
+    width: 100%;
+    height: 100%;
+}
+
+/* --- Mensagem de Loading do Grafo --- */
+#grafo-loading {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.85);
+    z-index: 20; /* Z-index alto para ficar sobre o grafo */
+    border-radius: .375rem;
+}
+
+/* --- Botões de Controle do Grafo (Centralizar, Zoom, etc.) --- */
+#controls {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    z-index: 15; /* Abaixo do loading, mas acima do grafo */
+    display: flex;
+    gap: 8px; /* Espaçamento entre os botões */
+}
+
+.control-button {
+    background-color: #fff;
+    color: #495057;
+    border: 1px solid #ced4da;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: 500;
+    border-radius: .375rem; /* Mesma borda dos cards */
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.control-button:hover {
+    background-color: #f8f9fa; /* Levemente cinza ao passar o mouse */
+    border-color: #adb5bd;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.control-button:active {
+    background-color: #e9ecef;
+}
+
+/* --- Ícones de Ação Flutuantes (clique no nó) --- */
+.grafo-action-icon {
+    position: fixed;
+    width: 80px;
+    text-align: center;
+    background: white;
+    border: 1px solid #ccc;
+    padding: 5px 8px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    user-select: none;
+    z-index: 1055;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+/* ==========================================================================
+   --- MODAL E ABAS ---
+   ========================================================================== */
+
+/* Abas com altura fixa e scroll interno */
+#alertas-tab-pane.show.active,
+#boletimOcorrencia-tab-pane.show.active,
+#boletim-alerta-tab-pane.show.active,
+#proprietario-tab-pane.show.active {
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 0;
+}
+
+/* Container geral da tabela e paginação dentro das abas */
+.alertas-tabela-container,
+.boletim-tabela-container,
+.boletim-alerta-tabela-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.tabela-scroll {
+    flex-grow: 1; /* Ocupa o espaço disponível */
+    overflow-y: auto; /* Adiciona scroll vertical */
+}
+
+/* Paginação fixa no rodapé da aba */
+.paginacao-alertas,
+.paginacao-boletim,
+.paginacao-boletim-alerta {
+    flex-shrink: 0;
+    padding: 0.75rem 0;
+    border-top: 1px solid #dee2e6;
+    text-align: center;
+}
+
+/* Estrutura da aba "Proprietário" */
+.proprietario-info-container {
+    flex-shrink: 0;
+    padding: 1rem;
+}
+
+.antecedentes-scroll-container {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 0 1rem 1rem 1rem;
+}
+
+/* --- Modal de Link (iframe) --- */
+.link-modal-container {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+}
+
+.link-modal-content {
+    background-color: white;
+    width: 80%; height: 90%;
+    max-width: 1200px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+}
+
+.link-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.link-modal-body {
+    flex-grow: 1;
+    overflow: hidden;
+}
+
+#link-modal-iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* ==========================================================================
+   --- ESTILOS DE TOAST (AVISOS) ---
+   ========================================================================== */
+
+.toast-custom {
+    position: relative;
+    padding: 1rem;
+    color: #fff;
+    border-radius: .375rem;
+    width: 320px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    font-weight: 500;
+    opacity: 0.95 !important;
+    overflow: hidden;
+}
+
+.toast-custom .toast-body {
+    font-size: 15px;
+    word-break: break-word;
+    padding-right: 2rem;
+    font-weight: bold;
+}
+
+.toast-close {
+    position: absolute;
+    top: 8px; right: 8px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.toast-custom .toast-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 4px;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.7);
+    animation: progressBar 5s linear forwards;
+}
+
+.toast-sucesso { background-color: #198754; }
+.toast-alerta  { background-color: #ffc107; color: #000; }
+.toast-erro    { background-color: #dc3545; }
+.toast-alerta .toast-close { color: #000; }
+
+@keyframes progressBar {
+    from { width: 100%; }
+    to { width: 0%; }
+}
+
+#loading-overlay {
+    position: fixed !important;   
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    background-color: rgba(0, 0, 0, 0.6) !important; 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    cursor: wait;     
+}
+
+#loading-progress-text {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    min-height: 20px;
+}
+
+.loading-spinner {
+    width: 60px;
+    height: 60px;
+    border: 6px solid rgba(255, 255, 255, 0.3); 
+    border-top-color: #fff; 
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ==========================================================================
+   --- PASSAGENS CORRELACIONADAS ---
+   ========================================================================== */
+
+.dot-correlacao {
+    font-size: 0.75rem;
+    cursor: default;
+}
+
+.dot-correlacao.cor-placa-0 {
+    color: #0d6efd;
+}
+
+.dot-correlacao.cor-placa-1 {
+    color: #8b0000;
+}
+
+.dot-correlacao.cor-placa-2 {
+    color: #ff9100;
+}
+
+.badge-placa-0 {
+    background-color: #0d6efd !important;
+}
+
+.badge-placa-1 {
+    background-color: #8b0000 !important;
+}
+
+.badge-placa-2 {
+    background-color: #ff9100 !important;
+}
+
+/* ==========================================================================
+   --- LOADING OVERLAY DO MODAL ---
+   ========================================================================== */
+
+.modal-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1060;
+    border-radius: inherit;
+    cursor: wait;
+}
+
+/* ==========================================================================
+   --- FILTROS PÓS-ANÁLISE ---
+   ========================================================================== */
+
+.filtros-container {
+    display: none; /* Inicialmente oculto */
+}
+
+.filtros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px; /* Espaçamento entre os cards */
+}
+
+.filtro-card {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: .375rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filtro-card label {
+    font-weight: bold;
+    color: #495057;
+    margin-bottom: 0;
+}
+
+/* Backdrop mais escuro para os modais desta página */
+.modal-backdrop.show {
+    opacity: 0.75;
+}
+
+/* Escurece o modal de passagens quando o modal de correção de placa está aberto */
+#modalInfoVeiculo.modal-dimmed .modal-content {
+    position: relative;
+}
+#modalInfoVeiculo.modal-dimmed .modal-content::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: var(--bs-modal-inner-border-radius, 0.5rem);
+    pointer-events: all;
+    z-index: 1055;
+}

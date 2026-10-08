@@ -1,0 +1,91 @@
+@charset "ISO-8859-1";
+
+.input-error {
+    border-color: red !important;
+    position: relative;
+}
+
+/* Select2 - aplicar borda vermelha */
+.select2-container--bootstrap4 .select2-selection--single.input-error,
+.select2-container--bootstrap4 .select2-selection--multiple.input-error {
+    border-color: red !important;
+}
+
+/* Mensagem de erro */
+.error-message {
+    position: absolute;
+    color: red;
+    font-size: 0.75em;
+    margin-top: 2px;
+    margin-left: 2px;
+    z-index: 2;
+}
+
+/* Espaço reservado para não empurrar layout */
+.mb-3 {
+    position: relative;
+    min-height: 70px;
+}
+
+/* Campo de data-hora */
+.input-group.input-error .form-control {
+    border-color: red !important;
+}
+
+.modal-content {
+	max-height: 85vh;
+    overflow-y: auto;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	 margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
+}
+
+#grupoDataInicioModal.input-error .form-control {
+    border-color: red !important;
+}
+
+#grupoDataInicioModal .error-message {
+    position: absolute;
+    color: red;
+    font-size: 0.75em;
+    top: 100%;
+    left: 0;
+    margin-top: 2px;
+    margin-left: 2px;
+    z-index: 2;
+}
+
+#map {
+  height: 300px; 
+  width: 100%;
+}
+
+.modal-dialog {
+  height: 75%; 
+}
+
+.modal-content {
+  height: 100%; 
+}
+
+/* Garante que o texto dentro do dropdown do selectpicker quebre a linha */
+.bootstrap-select .dropdown-menu .text {
+    white-space: normal !important;
+}
+
+/* Opcional: define a largura máxima do dropdown */
+.bootstrap-select .dropdown-menu {
+    max-width: 300px; 
+    width: auto;
+}
+
+.verticalLine {
+  border-left: thick solid #ff0000;
+}

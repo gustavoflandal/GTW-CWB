@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SolicitacaoAuditoria" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.4019755979255728"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="DESTINO" class="java.lang.String"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Workspace_GTW\\GTW\\src\\main\\webapp\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_EMPRESA" class="java.lang.String"/>
+	<parameter name="IDENTIFICACAO" class="java.lang.String"/>
+	<parameter name="ID_PROCESSO_MEDICAO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	id_processo_medicao,
+	data_exportacao AS data_entrega,
+	periodo_ini as data_ini,
+	periodo_fim as data_fim,
+	u.nome AS responsavel
+FROM processo_medicao pm
+JOIN sis_usuario u ON u.id_usuario = pm.id_usuario_responsavel
+WHERE pm.id_processo_medicao = $P{ID_PROCESSO_MEDICAO}]]>
+	</queryString>
+	<field name="id_processo_medicao" class="java.lang.Integer"/>
+	<field name="data_entrega" class="java.sql.Timestamp"/>
+	<field name="data_ini" class="java.sql.Timestamp"/>
+	<field name="data_fim" class="java.sql.Timestamp"/>
+	<field name="responsavel" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="33" splitType="Stretch">
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" x="28" y="5" width="127" height="28"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+$P{LOGO_EMPRESA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-1" x="0" y="0" width="535" height="1"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-8" x="436" y="1" width="94" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Processo Nº]]></text>
+			</staticText>
+			<textField pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="436" y="17" width="94" height="16"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{ID_PROCESSO_MEDICAO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="575" splitType="Stretch">
+			<line>
+				<reportElement key="line-2" x="0" y="2" width="535" height="1"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-2" x="58" y="4" width="410" height="42"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="18" isBold="true" isStrikeThrough="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Entrega de Imagens para Comprovação de Funcionamento]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-3" x="0" y="48" width="535" height="1"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-8" x="2" y="74" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[A/C:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="2" y="95" width="98" height="17"/>
+				<textElement/>
+				<text><![CDATA[Data entrega:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="2" y="117" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[Data das imagens:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-11" x="2" y="138" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[Responsável:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="100" y="74" width="430" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{DESTINO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE, dd MMMMM yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="100" y="95" width="430" height="17"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{data_entrega}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="100" y="117" width="88" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{data_ini}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="100" y="138" width="430" height="16"/>
+				<textElement>
+					<font isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{responsavel}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-11" x="2" y="160" width="98" height="16"/>
+				<textElement/>
+				<text><![CDATA[Identificação:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-5" x="100" y="160" width="430" height="16"/>
+				<textElement>
+					<font isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IDENTIFICACAO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-10" x="188" y="117" width="47" height="16"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="236" y="117" width="88" height="16"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{data_fim}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="210" y="355" width="115" height="13"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Supervidor de CPI]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-1" x="168" y="340" width="201" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{responsavel}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-4" x="111" y="340" width="305" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

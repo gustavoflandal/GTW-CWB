@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Federated Login with Google</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-top: -60px;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light d-flex align-items-center" style="height: 100vh;">
+    <div class="container text-center" id="main-content">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow p-4" id="login-card">
+                    <h2 class="mb-4">Federated Login with Google</h2>
+                    <div id="error-message"></div>
+                    <button id="google-login-btn" class="btn btn-danger btn-lg w-100">
+                        <i class="bi bi-google"></i> Sign in with Google
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+    const GOOGLE_CLIENT_ID = '259896241090-3qh2c9u7d9tteku7pqf1h5l399ribi5p.apps.googleusercontent.com';
+    const REDIRECT_URI = 'http://localhost:8080/callback';
+    const SCOPE = 'openid email profile';
+    const RESPONSE_TYPE = 'code';
+
+    function setCookie(name, value, days) {
+        var expires = "";
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime() + (days*24*60*60*1000));
+            expires = "; expires=" + date.toUTCString();
+        }
+        document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+    }
+
+    document.getElementById('google-login-btn').onclick = function() {
+        const state = Math.random().toString(36).substring(2);
+        setCookie('oauth_state', state, 1); // Store state in cookie for 1 day
+        const url = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${encodeURIComponent(GOOGLE_CLIENT_ID)}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&response_type=${RESPONSE_TYPE}&scope=${encodeURIComponent(SCOPE)}&access_type=online&prompt=select_account&state=${state}`;
+        window.location.href = url;
+    };
+
+    // Show error messages if present in the URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('error')) {
+        let msg = params.get('error');
+        if (msg === 'InvalidState') msg = 'Invalid login session. Please try again.';
+        else if (msg === 'GoogleAuthFailed') msg = 'Google authentication failed.';
+        else if (msg === 'UserNotFound') msg = 'User not found in the system.';
+        else if (msg === 'NoCode') msg = 'No code received from Google.';
+        document.getElementById('error-message').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+    </script>
+</body>
+</html> 

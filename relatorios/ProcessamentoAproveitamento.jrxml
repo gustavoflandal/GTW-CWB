@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="ProcessamentoAproveitamento" pageWidth="595" pageHeight="842" whenNoDataType="BlankPage" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="dfddd838-c69d-4d04-b13d-f2b0d5035b77">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="21"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="C013"/>
+	<parameter name="DATA_INICIAL" class="java.sql.Timestamp"/>
+	<parameter name="DATA_FINAL" class="java.sql.Timestamp"/>
+	<parameter name="CONTRATO" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[DECLARE @data_inicial DATETIME
+DECLARE @data_final DATETIME
+
+-- periodo
+SET @data_inicial = $P{DATA_INICIAL}
+SET @data_final = $P{DATA_FINAL}
+
+DECLARE @imagens_recebidas_no_CPI INT
+DECLARE @imagens_consistentes_pela_empresa INT
+DECLARE @imagens_inconsistentes_pela_empresa INT
+DECLARE @consistente_validas INT
+DECLARE @consistente_invalidas INT
+DECLARE @inconsistente_validas INT
+DECLARE @inconsistente_invalidas INT
+DECLARE @consistente_invalidas_pnt INT
+DECLARE @inconsistente_invalidas_pnt INT
+DECLARE @invalido_pt INT
+
+
+/***************************************************
+ Quantidade de imagens recebidas no CPI:  (100%);
+***************************************************/
+
+	SELECT @imagens_recebidas_no_CPI = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+
+/***************************************************
+ Após avaliação da empresa:
+	(estado da liberação foi decisão da empresa)
+***************************************************/
+
+/***************************************************
+	quantidade de imagens consistentes:
+****************************************************/
+
+	SELECT @imagens_consistentes_pela_empresa = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) as id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) AS sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND ipc.id_inconsistencia = 0
+
+
+/***************************************************
+ quantidade de imagens inconsistentes:
+****************************************************/
+
+	SELECT @imagens_inconsistentes_pela_empresa = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela liberação
+		   AND ipc.id_inconsistencia > 0
+
+
+
+/***************************************************
+ Após auditoria da CET:
+***************************************************/
+
+/*********************************************************
+	Nas imagens consistentes
+**********************************************************/
+
+	/*********************************************************
+	válidas
+	**********************************************************/
+
+	SELECT @consistente_validas = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia = 0 -- validas
+		   AND ipc.id_inconsistencia = 0 -- consistentes pela consilux
+
+	/*********************************************************
+	inválidas
+	**********************************************************/
+
+	SELECT @consistente_invalidas = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia > 0 -- invalidas
+		   AND ipc.id_inconsistencia = 0 -- consistentes pela consilux
+
+
+/*********************************************************
+	Nas imagens inconsistentes
+**********************************************************/
+
+	/*********************************************************
+	válidas
+	**********************************************************/
+
+
+	SELECT @inconsistente_validas = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia = 0 -- validas
+		   AND ipc.id_inconsistencia > 0 -- inconsistentes pela consilux
+
+
+	/*********************************************************
+	inválidas
+	**********************************************************/
+
+	SELECT @inconsistente_invalidas = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia > 0 -- invalidas
+		   AND ipc.id_inconsistencia > 0 -- inconsistente pela consilux
+
+
+/*********************************************************
+Quantidade de imagens consistentes inválidas (exceto por problema técnico)
+**********************************************************/
+
+	SELECT @consistente_invalidas_pnt = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+		   JOIN inconsistencia inc (NOLOCK)
+				ON  inc.id_inconsistencia = inf.id_inconsistencia
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia > 0
+		   AND ipc.id_inconsistencia = 0
+		   AND inc.razao_tecnica <> 2
+
+
+/*********************************************************
+Quantidade de imagens inconsistentes inválidas (exceto por problema técnico)
+*********************************************************/
+
+	SELECT @inconsistente_invalidas_pnt = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_infracao,
+						   MAX(id_infracao_processo) AS id_infracao_processo
+					FROM   infracao_processo (NOLOCK)
+					WHERE  id_processo IN (1,2,24)
+					GROUP BY
+						   id_infracao
+		   ) sub
+				ON  sub.id_infracao = inf.id_infracao
+		   JOIN infracao_processo ipc (NOLOCK)
+				ON  sub.id_infracao_processo = ipc.id_infracao_processo
+		   JOIN inconsistencia inc (NOLOCK)
+				ON  inc.id_inconsistencia = inf.id_inconsistencia
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND ipc.id_processo IN (1,2,24) -- passaram pela digitação
+		   AND inf.id_inconsistencia > 0
+		   AND ipc.id_inconsistencia > 0
+		   AND inc.razao_tecnica <> 2
+
+/*********************************************************
+Quantidade de imagens descartadas por problema técnico:
+**********************************************************/
+	SELECT @invalido_pt = COUNT(*)
+	FROM   infracao inf (NOLOCK)
+		   JOIN inconsistencia inc (NOLOCK)
+				ON  inf.id_inconsistencia = inc.id_inconsistencia
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND inf.id_inconsistencia > 0
+		   AND inc.razao_tecnica = 2
+
+/*****************************************************************************************************
+Deverá ser inserida uma tabela contendo TODOS os motivos das inconsistências
+(descrever o motivo, a quantidade e a porcentagem da incidência sobre o total,
+citANDo tratar-se de problema técnico ou não). Juntar as Não-Técnicas e depois as Técnicas
+******************************************************************************************************/
+
+	SELECT [cod.] = inf.id_inconsistencia,
+		   motivo = inc.descricao,
+		   COUNT(*) as Quantidade,
+		   CONVERT(VARCHAR(6), CAST( CAST( COUNT(*) AS float ) / @imagens_recebidas_no_CPI * 100 AS DECIMAL(5,1))) AS [(%)],
+		   inc.Problema,
+		   @imagens_recebidas_no_CPI AS imagens_recebidas_no_CPI,
+		   @imagens_consistentes_pela_empresa AS imagens_consistentes_pela_empresa,
+		   @imagens_inconsistentes_pela_empresa AS imagens_inconsistentes_pela_empresa,
+		   @consistente_validas AS consistente_validas,
+		   @consistente_invalidas AS consistente_invalidas,
+		   @inconsistente_validas AS inconsistente_validas,
+		   @inconsistente_invalidas AS inconsistente_invalidas,
+		   @consistente_invalidas_pnt AS consistente_invalidas_pnt,
+		   @inconsistente_invalidas_pnt AS inconsistente_invalidas_pnt,
+		   @invalido_pt AS invalido_pt
+	FROM   infracao inf (NOLOCK)
+		   JOIN (
+					SELECT id_inconsistencia,
+						   descricao,
+						   (CASE WHEN razao_tecnica = 0 THEN 'Não-técnica'
+								 WHEN razao_tecnica = 2 THEN 'Técnica'
+								 WHEN razao_tecnica = 1 THEN 'Não-técnica *'
+								 ELSE NULL END) AS Problema
+					FROM   inconsistencia (NOLOCK)
+		   ) inc
+				ON  inf.id_inconsistencia = inc.id_inconsistencia
+	WHERE  inf.data >= @data_inicial AND inf.data <= @data_final -- periodo
+		   AND (inf.id_processo <> 99 AND inf.id_processo_concluido <> 99)
+		   AND id_enquadramento <> 1 -- ignora imagens teste
+		   AND inf.id_inconsistencia > 0
+	GROUP BY
+		   inf.id_inconsistencia,
+		   inc.descricao,
+		   inc.Problema
+	ORDER BY 5 ASC]]>
+	</queryString>
+	<field name="cod." class="java.lang.Integer"/>
+	<field name="motivo" class="java.lang.String"/>
+	<field name="Quantidade" class="java.lang.Integer"/>
+	<field name="(%)" class="java.lang.String"/>
+	<field name="Problema" class="java.lang.String"/>
+	<field name="imagens_recebidas_no_CPI" class="java.lang.Integer"/>
+	<field name="imagens_consistentes_pela_empresa" class="java.lang.Integer"/>
+	<field name="imagens_inconsistentes_pela_empresa" class="java.lang.Integer"/>
+	<field name="consistente_validas" class="java.lang.Integer"/>
+	<field name="consistente_invalidas" class="java.lang.Integer"/>
+	<field name="inconsistente_validas" class="java.lang.Integer"/>
+	<field name="inconsistente_invalidas" class="java.lang.Integer"/>
+	<field name="consistente_invalidas_pnt" class="java.lang.Integer"/>
+	<field name="inconsistente_invalidas_pnt" class="java.lang.Integer"/>
+	<field name="invalido_pt" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="44" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="16" uuid="aa3d8e3a-48fb-41fe-891f-2a87badd6ba2"/>
+				<text><![CDATA[Relatório de Aproveitamento de Imagens]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="16" width="45" height="11" uuid="970ecfce-7bfa-4d7f-ad1d-9d62d6ba8873"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Referência:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="27" width="35" height="11" uuid="1779c6fa-8426-4973-9623-3990d5e8188e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Contrato:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="45" y="16" width="90" height="11" uuid="e0fe96d1-1e72-4b6d-8827-b5d988e581c3"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_INICIAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy HH:mm:ss">
+				<reportElement x="153" y="16" width="90" height="11" uuid="70496f52-ba0f-4077-bce3-1734629fe4ce"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_FINAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="135" y="16" width="18" height="11" uuid="3d95b905-1ba1-407c-998f-9c1fa89223ed"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[até]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="35" y="27" width="196" height="11" uuid="c891c08f-4ed1-4c13-86a9-244c7188c9b7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{CONTRATO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="480" y="16" width="75" height="11" uuid="9b74ef9c-9786-4fe7-9d1f-e84c73d4618c"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="398" y="16" width="82" height="11" uuid="956f566b-7c9f-4475-ae70-88c545463cf8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Data de geração:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="192" splitType="Stretch">
+			<textField>
+				<reportElement x="209" y="0" width="161" height="11" uuid="bbc76449-64c2-4614-97f7-6cbd1db62180"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_recebidas_no_CPI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="22" width="161" height="11" uuid="7ada87d9-8a08-47de-a773-35eeae83fa3f"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_consistentes_pela_empresa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="66" width="161" height="11" uuid="a5024672-671e-4b72-b785-8cfefe6dd869"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_validas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="77" width="161" height="11" uuid="fb9f0085-0a92-411a-8b33-0d8d4f710fed"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_invalidas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="99" width="161" height="11" uuid="c3df0740-99b8-46e9-aa24-81ce880d500a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_validas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="110" width="161" height="11" uuid="d37d05ea-092b-4739-9756-16821596638d"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_invalidas}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="209" height="11" uuid="dc097af4-91e8-42f2-8a1f-1e4e21feb8d2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Quantidade de imagens recebidas no CAI:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="22" width="209" height="11" uuid="d1b39ad2-4015-49fa-b42a-b49843f94cd7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    - quantidade de imagens consistentes: ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="209" y="33" width="161" height="11" uuid="87f3a39e-fadb-419f-bffc-0a58201c0f16"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_inconsistentes_pela_empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="11" width="209" height="11" uuid="0582fb47-1dd4-4d64-a279-e682c5e9c1b7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ * Após avaliação da empresa: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="33" width="209" height="11" uuid="7effeb69-cb0c-414b-add4-522e74dc2d68"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    - quantidade de imagens inconsistentes: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="44" width="209" height="11" uuid="db3a901a-f4d0-42a6-a407-1cb044e75a73"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ * Após auditoria da CET:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="55" width="209" height="11" uuid="149e7931-aade-4a00-a218-0c7e7425a2e8"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[   * Nas imagens consistentes: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="66" width="209" height="11" uuid="f2646d03-f1c7-48d9-ad1e-6a8e8ede0404"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[      - válidas: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="77" width="209" height="11" uuid="30fb9413-c0d4-4c3f-9f5f-c9d00304e3fc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[      - inválidas: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="110" width="209" height="11" uuid="4a9f92e3-804c-4643-a044-8a03fab41938"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[      - inválidas: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="99" width="209" height="11" uuid="a4249403-9f3b-4dee-8985-43a3c09422b7"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[      - válidas: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="88" width="209" height="11" uuid="de2d46f5-cb8c-4a67-bf1d-a5be79ff0d47"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[   * Nas imagens inconsistentes: ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="121" width="135" height="11" uuid="82607e5e-f7a3-420a-96fd-73db2f07a998"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ * Aproveitamento Operacional:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="209" y="55" width="161" height="11" uuid="693b443d-490d-48fb-9dbb-71ab0fbf3e64"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_consistentes_pela_empresa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="176" width="241" height="11" uuid="3a6ee708-ee3a-4dba-a043-b512ea8d789a"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ * Quantidade de imagens descartadas por prob técnico:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="135" y="121" width="235" height="11" uuid="dc381e54-1049-4654-908f-b4f14e29fb22"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ (em relação ao total de imagens recebidas)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="132" width="209" height="11" uuid="ab233e28-5889-4fa2-a5ee-0bdcca7c347f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    * Quantidade de imagens consistentes válidas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="143" width="321" height="11" uuid="0a6522ff-8e52-4bed-b21b-cb412222878b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    * Quantidade de imagens consistentes inválidas (exceto prob. técnico):]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="154" width="209" height="11" uuid="7418eb8d-95f7-4e17-8515-55f1444f133b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    * Quantidade de imagens inconsistentes válidas:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="165" width="321" height="11" uuid="e56ee2da-55f8-4c12-b5a4-0bb96b127be6"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[    * Quantidade de imagens inconsistentes inválidas (exceto prob. técnico):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="209" y="132" width="161" height="11" uuid="3e52a233-abb2-4693-ad38-b97e4cbe2ac7"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_validas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="241" y="176" width="129" height="11" uuid="aba3d601-1eca-4049-bd38-e95b751250fd"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invalido_pt}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="321" y="165" width="49" height="11" uuid="8352f970-70cc-46ad-8961-d0c5413b9953"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_invalidas_pnt}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="398" y="0" width="44" height="11" uuid="b3d75b25-f990-42ca-a950-069561dd9eb2"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[100%]]></text>
+			</staticText>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="22" width="44" height="11" uuid="611e39b4-f040-4f48-9cf5-1437dd1c63b6"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_consistentes_pela_empresa} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="33" width="44" height="11" uuid="bb2c220f-7886-47f6-8ea2-7e4122e8a441"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_inconsistentes_pela_empresa} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="209" y="154" width="161" height="11" uuid="63d9145c-765d-4355-a1cc-d1680eb02a85"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_validas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="321" y="143" width="49" height="11" uuid="e43382a9-1d59-4f64-b81e-d0c5b26138d6"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_invalidas_pnt}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="121" width="44" height="11" uuid="41c7318d-4c7d-4fdc-9101-d0950a0308ac"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{consistente_validas} + $F{inconsistente_validas}) * 1f / ($F{imagens_recebidas_no_CPI} - $F{inconsistente_invalidas_pnt} - $F{consistente_invalidas_pnt})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="132" width="44" height="11" uuid="54fcfef6-ef8f-4a45-b736-18d9abdd738f"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_validas} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="143" width="44" height="11" uuid="b1f96be4-6898-4fd1-8710-fef38cc3767b"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_invalidas} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="154" width="44" height="11" uuid="99ae0620-83dd-4067-9bd9-81af51f969d8"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_validas} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="165" width="44" height="11" uuid="b32e14d9-f2dc-45af-ab69-f84938f90bef"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_invalidas_pnt} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="176" width="44" height="11" uuid="3bd7c086-5966-4701-b2db-3e91fd03a5a0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{invalido_pt} / (1f * $F{imagens_recebidas_no_CPI})]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="209" y="88" width="161" height="11" uuid="777387d4-80b9-4e6a-93ef-6f28ed595452"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{imagens_inconsistentes_pela_empresa}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="99" width="44" height="11" uuid="5c143722-1b2f-4998-bcc1-1d785326b596"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_validas} / (1f * $F{imagens_inconsistentes_pela_empresa})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="110" width="44" height="11" uuid="a869a7de-72f5-49bf-820a-c88aae1d9a78"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{inconsistente_invalidas} / (1f * $F{imagens_inconsistentes_pela_empresa})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="66" width="44" height="11" uuid="431adafb-c86e-4617-801f-626432b92182"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_validas} / (1f * $F{imagens_consistentes_pela_empresa})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0000%">
+				<reportElement x="398" y="77" width="44" height="11" uuid="b4e80493-1a22-489a-b2d9-0662e3da0cd6"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{consistente_invalidas} / (1f * $F{imagens_consistentes_pela_empresa})]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="12" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="1" width="35" height="11" uuid="78178100-3f2a-41ef-a939-7a96243c1448"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="35" y="1" width="319" height="11" uuid="7432cc97-90fe-4012-93fe-8760d280432c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Motivo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="354" y="1" width="64" height="11" uuid="0cfb0eac-0786-4ac6-85b6-4dd874dce6eb"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="1" width="37" height="11" uuid="99fe2924-4aa2-4db6-a584-76e48e5d9c20"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[(%)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="1" width="100" height="11" uuid="08719385-3f48-4b75-a568-ce3da3a4340a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="1.0" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Problema]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="11" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="35" height="11" uuid="b3bd9ea1-ca5d-47dc-9dfd-abad0abe2022"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod.}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="35" y="0" width="319" height="11" uuid="1a287757-4f29-406c-8f69-e45dfb8b9b00"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{motivo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="354" y="0" width="64" height="11" uuid="c2a7a6d4-def7-4079-9769-f279355a09be"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Quantidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="418" y="0" width="37" height="11" uuid="094c3638-5f22-46e3-9ec4-ce56c94248a3"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{(%)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="11" uuid="4247b522-62fe-445a-9b85-6f994e1a55a7"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Problema}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

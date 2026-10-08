@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://com.consilux.ws.server" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://com.consilux.ws.server" xmlns:intf="http://com.consilux.ws.server" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://com.consilux.ws.server" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="notificarVeiculoMonitorado">
+    <complexType/>
+   </element>
+   <element name="notificarVeiculoMonitoradoResponse">
+    <complexType/>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="notificarVeiculoMonitoradoResponse">
+
+      <wsdl:part element="impl:notificarVeiculoMonitoradoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="notificarVeiculoMonitoradoRequest">
+
+      <wsdl:part element="impl:notificarVeiculoMonitorado" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="VeiculoMonitoradoWS">
+
+      <wsdl:operation name="notificarVeiculoMonitorado">
+
+         <wsdl:input message="impl:notificarVeiculoMonitoradoRequest" name="notificarVeiculoMonitoradoRequest"/>
+
+         <wsdl:output message="impl:notificarVeiculoMonitoradoResponse" name="notificarVeiculoMonitoradoResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="VeiculoMonitoradoWSSoapBinding" type="impl:VeiculoMonitoradoWS">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="notificarVeiculoMonitorado">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="notificarVeiculoMonitoradoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="notificarVeiculoMonitoradoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="VeiculoMonitoradoWSService">
+
+      <wsdl:port binding="impl:VeiculoMonitoradoWSSoapBinding" name="VeiculoMonitoradoWS">
+
+         <wsdlsoap:address location="http://localhost/services/VeiculoMonitoradoWS"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

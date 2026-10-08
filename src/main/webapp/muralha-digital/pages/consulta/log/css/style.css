@@ -1,0 +1,27 @@
+#loading-overlay {
+    position: fixed;  /* Fixa o overlay na tela */
+    top: 0;  /* Alinha o overlay ao topo da tela */
+    left: 0;  /* Alinha o overlay � esquerda da tela */
+    width: 100%;  /* Define a largura do overlay para ocupar 100% da tela */
+    height: 100%;  /* Define a altura do overlay para ocupar 100% da tela */
+    background-color: rgba(0, 0, 0, 0.5);  /* Define a cor de fundo com transpar�ncia (50%) */
+    z-index: 1000;  /* Define a prioridade de empilhamento alta para o overlay */
+    display: flex;  /* Utiliza flexbox para centralizar o conte�do */
+    justify-content: center;  /* Centraliza horizontalmente o conte�do dentro do overlay */
+    align-items: center;  /* Centraliza verticalmente o conte�do dentro do overlay */
+}
+
+.loading-spinner {
+    border: 16px solid #f3f3f3;  /* Define a borda do spinner com cor #f3f3f3 */
+    border-top: 16px solid #3498db;  /* Define a borda superior do spinner com cor #3498db */
+    border-radius: 50%;  /* Define as bordas do spinner como um c�rculo */
+    width: 80px;  /* Define a largura do spinner */
+    height: 80px;  /* Define a altura do spinner */
+    animation: spin 2s linear infinite;  /* Aplica a anima��o de rota��o ao spinner */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }  /* Define o in�cio da anima��o (0 graus de rota��o) */
+	100% { transform: rotate(360deg); }  /* Define o fim da anima��o (360 graus de rota��o) */
+}
+

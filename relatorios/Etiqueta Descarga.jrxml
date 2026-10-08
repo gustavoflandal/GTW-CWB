@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AIT Avanco URBS" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.3286707500000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["c:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_EMPRESA" class="java.lang.String"/>
+	<parameter name="LOGO_EMPRESA_VERTICAL" class="java.lang.String"/>
+	<parameter name="ID_DESCARGA" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[SELECT top 1
+d.data_criacao AS DATA_DESCARGA,
+CAST(d.dia_inicio AS DATETIME) AS DATA_INICIO,
+CAST(d.dia_fim AS DATETIME) AS DATA_FIM,
+right('000000'+RTRIM(d.id_descarga), 6) AS ID_DESCARGA,
+right('000000'+RTRIM(d.total_imagens), 6) AS TOTAL_IMAGENS,
+RTRIM(d.identificacao_cliente) AS IDENTIFICACAO_CLIENTE
+FROM descarga_descarga d
+WHERE d.id_descarga = $P{ID_DESCARGA}]]>
+	</queryString>
+	<field name="DATA_DESCARGA" class="java.sql.Timestamp"/>
+	<field name="DATA_INICIO" class="java.sql.Timestamp"/>
+	<field name="DATA_FIM" class="java.sql.Timestamp"/>
+	<field name="ID_DESCARGA" class="java.lang.String"/>
+	<field name="TOTAL_IMAGENS" class="java.lang.String"/>
+	<field name="IDENTIFICACAO_CLIENTE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="611" splitType="Stretch">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="107" y="274" width="68" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="62" y="274" width="47" height="16"/>
+				<textElement/>
+				<text><![CDATA[Período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="175" y="274" width="27" height="16"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="203" y="274" width="68" height="16"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_FIM}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" x="487" y="24" width="37" height="200"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+$P{LOGO_EMPRESA_VERTICAL}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-15" x="439" y="70" width="16" height="108"/>
+				<textElement rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Data da Descarga:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="423" y="70" width="16" height="37"/>
+				<textElement textAlignment="Center" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="406" y="70" width="16" height="108"/>
+				<textElement rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Total de Imagens(s):]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="17" y="217" width="78" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DATA_DESCARGA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="439" y="200" width="16" height="68"/>
+				<textElement textAlignment="Right" rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DATA_DESCARGA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="423" y="110" width="16" height="68"/>
+				<textElement rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_INICIO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="423" y="200" width="16" height="68"/>
+				<textElement textAlignment="Right" rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_FIM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="240" y="217" width="78" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ID_DESCARGA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="406" y="200" width="16" height="68"/>
+				<textElement textAlignment="Center" rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TOTAL_IMAGENS}]]></textFieldExpression>
+			</textField>
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" x="76" y="44" width="189" height="62"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+$P{LOGO_EMPRESA}]]></imageExpression>
+			</image>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="457" y="70" width="16" height="215"/>
+				<textElement textAlignment="Center" rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{IDENTIFICACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000000&apos;.txt&apos;" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="175" y="290" width="81" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TOTAL_IMAGENS}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="478" y="26" width="1" height="305"/>
+			</line>
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" x="353" y="40" width="13" height="62"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+$P{LOGO_EMPRESA_VERTICAL}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-15" x="349" y="107" width="16" height="53"/>
+				<textElement textAlignment="Right" rotation="Right"/>
+				<text><![CDATA[Descarga:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="349" y="163" width="16" height="45"/>
+				<textElement rotation="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ID_DESCARGA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="349" y="257" width="16" height="68"/>
+				<textElement rotation="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DATA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="349" y="209" width="16" height="46"/>
+				<textElement textAlignment="Right" rotation="Right"/>
+				<text><![CDATA[Data ini.:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="17" y="186" width="78" height="31"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Data da Descarga
+
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="240" y="186" width="78" height="31"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Código da Descarga]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="81" y="290" width="94" height="16"/>
+				<textElement/>
+				<text><![CDATA[Total de Imagens:]]></text>
+			</staticText>
+			<textField pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="60" y="107" width="220" height="16"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Contrato: "+$F{IDENTIFICACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="423" y="178" width="16" height="22"/>
+				<textElement textAlignment="Center" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[até]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

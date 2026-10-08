@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration PUBLIC
+  "-//APACHE//DTD LOG4J 1.2//EN" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+debug="true">
+	<appender name="ASYNC" class="org.apache.log4j.AsyncAppender">
+		<appender-ref ref="info"/>
+		<appender-ref ref="error"/>
+		<!--appender-ref ref="mail"/-->
+		<appender-ref ref="debug"/>
+		<appender-ref ref="tudo"/>
+	</appender>
+
+	<appender name="tudo" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="TRACE"/>
+		<param name="Target" value="System.out"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss,SSS} %5p %c{1} - (%F:%L) %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="debug" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="DEBUG"/>
+		<param name="File" value="${catalina.base}/logs/GTW_MURALHA_DIGITAL-debug.log"/>
+		<param name="MaxFileSize" value="1000KB"/>
+		<param name="MaxBackupIndex" value="5"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss,SSS} %5p %c{1} - (%F:%L) %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="info" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO"/>
+		<param name="File" value="${catalina.base}/logs/GTW_MURALHA_DIGITAL-info.log"/>
+		<param name="MaxFileSize" value="1000KB"/>
+		<param name="MaxBackupIndex" value="5"/>
+		<layout class="org.apache.log4j.PatternLayout">
+  		     <param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss,SSS} %5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="error" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="ERROR"/>
+		<param name="File" value="${catalina.base}/logs/GTW_MURALHA_DIGITAL-error.log"/>
+		<param name="MaxFileSize" value="1000KB"/>
+		<param name="MaxBackupIndex" value="5"/>
+		<layout class="org.apache.log4j.PatternLayout">
+  		     <param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss,SSS} %5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+
+	<appender name="mail" class="org.apache.log4j.net.SMTPAppender">
+		<param name="Threshold" value="ERROR"/>
+		<param name="BufferSize" value="1"/>
+		<param name="SMTPHost" value="localhost"/>
+		<param name="From" value="server.adm@consilux.com.br"/>
+		<param name="To" value="sistemas@consilux.com.br"/>
+		<param name="Subject" value="[DEVEL] Falha no GTW"/>
+		<layout class="org.apache.log4j.PatternLayout">
+  		     <param name="ConversionPattern" value="%d{dd/MM/yyyy HH:mm:ss,SSS} %5p %c{1} - %m%n"/>
+		</layout>
+	</appender>
+
+	<root>
+		<appender-ref ref="ASYNC"/>
+		<!--appender-ref ref="tudo"/>
+		<appender-ref ref="debug"/-->
+	</root>
+</log4j:configuration>

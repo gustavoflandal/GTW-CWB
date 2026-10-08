@@ -1,0 +1,41 @@
+.container-sub-tittle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sub-tittle-modal-registroDeFato {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sub-diviver-modal-registroDeFato {
+  border-top: 2px solid #ccc;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+#txtAnotacao { resize: vertical; }
+#contadorAnotacao { font-weight: 600; }
+.table td { vertical-align: middle; }
+.anotacao-text { white-space: pre-wrap; word-break: break-word; max-height: 5.5rem; overflow: auto; }
+.btn-excluir-anotacao { padding: .25rem .5rem; font-size: .85rem; }
+
+.btn-add-anotacao {
+  min-width: 150px;       /* evita botão muito pequeno em telas grandes */
+}
+
+/* em telas pequenas, o botão fica full-width abaixo do textarea */
+@media (max-width: 767.98px) {
+  .btn-add-anotacao {
+    width: 100%;
+  }
+  /* se quiser espaço entre textarea e botão no mobile */
+  .row.mb-3 > .col-12.col-md-4 {
+    margin-top: .5rem;
+  }
+}
+
+/* mantém boa leitura do conteúdo da célula da tabela */
+.anotacao-text { white-space: pre-wrap; word-break: break-word; max-height: 5.5rem; overflow: auto; }

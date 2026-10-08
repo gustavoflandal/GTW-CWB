@@ -1,0 +1,2385 @@
+ <web-app xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+ 	xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+ 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
+	<display-name>Sistemas de Trânsito Consilux</display-name>
+	<welcome-file-list>
+		<welcome-file>login/index.jsp</welcome-file>
+		<welcome-file>login/login.jsp</welcome-file>
+	</welcome-file-list>   
+  
+	<!-- ************************************************************************************************************ -->
+	<!-- Tempo de login do sistema em minutos -->
+	<!-- ************************************************************************************************************ -->
+  	<session-config>
+    	<session-timeout>240</session-timeout>
+  	</session-config>
+	
+	<!-- ************************************************************************************************************ -->
+	<!-- Mapeamentos MIME -->
+	<!-- ************************************************************************************************************ -->
+	<mime-mapping>
+        <extension>manifest</extension>
+        <mime-type>text/cache-manifest</mime-type>
+    </mime-mapping>	
+	<mime-mapping>
+        <extension>css</extension>
+        <mime-type>text/css</mime-type>
+    </mime-mapping>
+	<mime-mapping>
+        <extension>html</extension>
+        <mime-type>text/html</mime-type>
+    </mime-mapping>    
+        
+	<!-- ************************************************************************************************************ -->
+	<!-- Listeners -->
+	<!-- ************************************************************************************************************ -->
+	<listener>
+		<listener-class>com.consilux.infra.SessoesAtivas</listener-class>
+	</listener>
+	<listener>
+		<listener-class>muralha.digital._ini.Inicializacao</listener-class>
+	</listener>
+	
+	<!-- ************************************************************************************************************ -->
+	<!-- Filtros -->
+	<!-- ************************************************************************************************************ -->
+	<filter>
+	  <filter-name>CacheFilter</filter-name>
+	  <filter-class>com.consilux.infra.CacheFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+	  <filter-name>CacheFilter</filter-name>
+	  <url-pattern>*.png</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CacheFilter</filter-name>
+	  <url-pattern>*.css</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CacheFilter</filter-name>
+	  <url-pattern>*.gif</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+	  <filter-name>CacheFilter</filter-name>
+	  <url-pattern>*.html</url-pattern>
+	</filter-mapping>	
+	
+	<!-- ************************************************************************************************************ -->
+	<!-- Servlets -->
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>LogServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.log.LogServlet</servlet-class>
+		<!-- ATENÇÃO...muito perigoso, pois caso tenha um appender sem linha corte, irá travar.!-->
+		<!--
+		<load-on-startup>0</load-on-startup>
+		-->
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>LogServlet</servlet-name>
+		<url-pattern>/LogServlet</url-pattern>
+	</servlet-mapping>
+	<!-- ***************************** ****************************************************************************** -->
+	<!-- SERVLET DISPATCHER DO REST-JERSEY  -->		
+	<servlet>
+	  <servlet-name>Jersey REST Service</servlet-name>
+	<servlet-class>
+	  com.sun.jersey.spi.container.servlet.ServletContainer
+	</servlet-class>
+	  <init-param>
+	    <param-name>com.sun.jersey.config.property.packages</param-name>
+	    <param-value>com.consilux.rest.resources</param-value>
+	  </init-param>
+		<!-- NÃO NECESSITA DE UMA ORDEM EXATA, MAS É BOM QUE SEJA APÓS O SERVLET DE LOG, PARA PODER LOGAR-->	  
+	  <load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+	  <servlet-name>Jersey REST Service</servlet-name>
+	  <url-pattern>/rest/*</url-pattern>
+	</servlet-mapping> 		
+	<!-- ***************************** ******************************************************************************* -->
+	<servlet>
+		<servlet-name>Configuracao</servlet-name>
+		<servlet-class>com.consilux.conf.ConfiguracaoServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>ConfiguracaoMuralha</servlet-name>
+		<servlet-class>muralha.digital._ini.Inicializacao</servlet-class>
+		<load-on-startup>3</load-on-startup>
+	</servlet>
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>Agendador</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.Agendador</servlet-class>
+		<init-param>
+		    <param-name>shutdown-on-unload</param-name>
+	    	<param-value>true</param-value>
+	  	</init-param>
+		<!-- ATENÇÃO: DEVE SER INICIALIZADO APÓS O SERVLET DE CONFIGURAÇÃO -->
+	  	<load-on-startup>4</load-on-startup>
+	</servlet>
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<servlet-name>CacheMediatorServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.CacheMediatorServlet</servlet-class>
+		<init-param>
+		    <param-name>shutdown-on-unload</param-name>
+	    	<param-value>true</param-value>
+	  	</init-param>
+	  	<load-on-startup>5</load-on-startup>
+	</servlet>		
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>DisplayChart</servlet-name>
+		<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DisplayChart</servlet-name>
+		<url-pattern>/graficos/MostraGrafico</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>Notificacao_PDF</display-name>
+		<servlet-name>NotificacaoPDF</servlet-name>
+		<servlet-class>com.consilux.servlet.notificacao.NotificacaoPDF</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>NotificacaoPDF</servlet-name>
+		<url-pattern>/notificacao/NotificacaoPDF</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>Teste</display-name>
+		<servlet-name>InfoInfracao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoInfracao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoInfracao</servlet-name>
+		<url-pattern>/ajax/InfoInfracao</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoInfracaoProcesso</display-name>
+		<servlet-name>InfoInfracaoProcesso</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoInfracaoProcesso</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoInfracaoProcesso</servlet-name>
+		<url-pattern>/ajax/InfoInfracaoProcesso</url-pattern>
+	</servlet-mapping>
+	
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+	    <description>
+	    </description>
+	    <display-name>ImagemAjusteController</display-name>
+	    <servlet-name>ImagemAjusteController</servlet-name>
+	    <servlet-class>com.consilux.servlet.ajax.ImagemAjusteController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>ImagemAjusteController</servlet-name>
+	    <url-pattern>/ajax/ImagemAjusteController</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+	    <description>
+	    </description>
+	    <display-name>ImagemMiniaturaController</display-name>
+	    <servlet-name>ImagemMiniaturaController</servlet-name>
+	    <servlet-class>com.consilux.servlet.ajax.ImagemMiniaturaController</servlet-class>
+	</servlet>
+	<servlet-mapping>
+	    <servlet-name>ImagemMiniaturaController</servlet-name>
+	    <url-pattern>/ajax/ImagemMiniaturaController</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImgVeiculo</display-name>
+		<servlet-name>ImgVeiculo</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ImgVeiculo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImgVeiculo</servlet-name>
+		<url-pattern>/ajax/ImgVeiculo</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>Processar</display-name>
+		<servlet-name>Processar</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.processamento.Processar</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Processar</servlet-name>
+		<url-pattern>/ajax/processamento/Processar</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description></description>
+		<display-name>Versao</display-name>
+		<servlet-name>Versao</servlet-name>
+		<servlet-class>com.consilux.conf.Versao</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>IniciarProcesso</display-name>
+		<servlet-name>IniciarProcesso</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.IniciarProcesso</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>IniciarProcesso</servlet-name>
+		<url-pattern>/processo/IniciarProcesso</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ajax/InfoCadastro</display-name>
+		<servlet-name>InfoCadastro</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoCadastro</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoCadastro</servlet-name>
+		<url-pattern>/ajax/InfoCadastro</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ajax/InfoInfracaoCompleta</display-name>
+		<servlet-name>InfoInfracaoCompleta</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoInfracaoCompleta</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoInfracaoCompleta</servlet-name>
+		<url-pattern>/ajax/InfoInfracaoCompleta</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>processo/FinalizarProcesso</display-name>
+		<servlet-name>processo/FinalizarProcesso</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.FinalizarProcesso</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>processo/FinalizarProcesso</servlet-name>
+		<url-pattern>/processo/FinalizarProcesso</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>remessa/ReprovarRemessa</display-name>
+		<servlet-name>remessa/ReprovarRemessa</servlet-name>
+		<servlet-class>com.consilux.servlet.remessa.ReprovarRemessa</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>remessa/ReprovarRemessa</servlet-name>
+		<url-pattern>/remessa/ReprovarRemessa</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoInconsistencia</display-name>
+		<servlet-name>InfoInconsistencia</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoInconsistencia</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoInconsistencia</servlet-name>
+		<url-pattern>/ajax/InfoInconsistencia</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoVeiculoImagem</display-name>
+		<servlet-name>InfoVeiculoImagem</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoVeiculoImagem</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoVeiculoImagem</servlet-name>
+		<url-pattern>/ajax/InfoVeiculoImagem</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<display-name>Apache-Axis Servlet</display-name>
+		<servlet-name>AxisServlet</servlet-name>
+		<servlet-class>org.apache.axis.transport.http.AxisServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>/servlet/AxisServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>*.jws</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AxisServlet</servlet-name>
+		<url-pattern>/services/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<display-name>Axis Admin Servlet</display-name>
+		<servlet-name>AdminServlet</servlet-name>
+		<servlet-class>org.apache.axis.transport.http.AdminServlet</servlet-class>
+		<load-on-startup>100</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AdminServlet</servlet-name>
+		<url-pattern>/servlet/AdminServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>AguardaStatusEquipamento</display-name>
+		<servlet-name>AguardaStatusEquipamento</servlet-name>
+		<servlet-class>
+			com.consilux.servlet.ajax.binding.AguardaStatusEquipamento</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AguardaStatusEquipamento</servlet-name>
+		<url-pattern>/ajax/AguardaStatusEquipamento</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>teste</display-name>
+		<servlet-name>teste</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.binding.teste</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>teste</servlet-name>
+		<url-pattern>/teste</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>AITPDF</display-name>
+		<servlet-name>AITPDF</servlet-name>
+		<servlet-class>com.consilux.servlet.ait.AITPDF</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AITPDF</servlet-name>
+		<url-pattern>/ait/AITPDF</url-pattern>
+	</servlet-mapping>
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>SolicitacaoAuditoriaServlet</display-name>
+		<servlet-name>SolicitacaoAuditoriaServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.SolicitacaoAuditoriaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SolicitacaoAuditoriaServlet</servlet-name>
+		<url-pattern>/processo/SolicitacaoAuditoriaServlet</url-pattern>
+	</servlet-mapping>
+
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>GerarRemessa</display-name>
+		<servlet-name>GerarRemessa</servlet-name>
+		<servlet-class>com.consilux.servlet.remessa.GerarRemessa</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>GerarRemessa</servlet-name>
+		<url-pattern>/remessa/GerarRemessa</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoInfracaoObliteracao</display-name>
+		<servlet-name>InfoInfracaoObliteracao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoInfracaoObliteracao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoInfracaoObliteracao</servlet-name>
+		<url-pattern>/ajax/InfoInfracaoObliteracao</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		Servlet responsável por criar um ZIP com amostras de imagens dos equipamentos.</description>
+		<display-name>ExportaAmostras</display-name>
+		<servlet-name>ExportaAmostras</servlet-name>
+		<servlet-class>com.consilux.servlet.medicao.ExportaAmostrasServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportaAmostras</servlet-name>
+		<url-pattern>/ExportaAmostras</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>AcidentePDF</display-name>
+		<servlet-name>AcidentePDF</servlet-name>
+		<servlet-class>com.consilux.servlet.ait.AcidentePDF</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AcidentePDF</servlet-name>
+		<url-pattern>/acidente/AcidentePDF</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarRemessa</display-name>
+		<servlet-name>ExportarRemessa</servlet-name>
+		<servlet-class>com.consilux.servlet.remessa.ExportarRemessa</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportarRemessa</servlet-name>
+		<url-pattern>/remessa/ExportarRemessa</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExcluirRemessa</display-name>
+		<servlet-name>ExcluirRemessa</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ExcluirRemessa</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExcluirRemessa</servlet-name>
+		<url-pattern>/ajax/remessa/ExcluirRemessa</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>PREM</display-name>
+		<servlet-name>PREM</servlet-name>
+		<servlet-class>com.consilux.servlet.remessa.PREM</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>PREM</servlet-name>
+		<url-pattern>/remessa/PREM</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessarDireto</display-name>
+		<servlet-name>ProcessarDireto</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.ProcessarDireto</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProcessarDireto</servlet-name>
+		<url-pattern>/processo/ProcessarDireto</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoVeiculo</display-name>
+		<servlet-name>InfoVeiculo</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoVeiculo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoVeiculo</servlet-name>
+		<url-pattern>/ajax/InfoVeiculo</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoClasse</display-name>
+		<servlet-name>InfoClasse</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoClasse</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>InfoClasse</servlet-name>
+		<url-pattern>/ajax/InfoClasse</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarPlanilhaInfracoes</display-name>
+		<servlet-name>ExportarPlanilhaInfracoes</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ExportarPlanilhaInfracoes</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportarPlanilhaInfracoes</servlet-name>
+		<url-pattern>/relatorio/ExportarPlanilhaInfracoes</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarPlanilhaFluxoXTempo</display-name>
+		<servlet-name>ExportarPlanilhaFluxoXTempo</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ExportarPlanilhaFluxoXTempo</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportarPlanilhaFluxoXTempo</servlet-name>
+		<url-pattern>/relatorio/ExportarPlanilhaFluxoXTempo</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>EnviarArquivoImpTxt</display-name>
+		<servlet-name>EnviarArquivoImpTxt</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.ImpTxt</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EnviarArquivoImpTxt</servlet-name>
+		<url-pattern>/ferramentas/ImpTxt</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<!-- Servlets do GTW Widgets -->
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>ManutencaoService</servlet-name>
+		<servlet-class>com.consilux.ui.server.ManutencaoServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ManutencaoService</servlet-name>
+		<url-pattern>/GtwWidgets/ManutencaoService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>ListaConfiguracoesEquipamentoService</servlet-name>
+		<servlet-class>
+			com.consilux.ui.server.ListaConfiguracoesEquipamentoServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ListaConfiguracoesEquipamentoService</servlet-name>
+		<url-pattern>/GtwWidgets/ListaConfiguracoesEquipamentoService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>UsuarioService</servlet-name>
+		<servlet-class>com.consilux.ui.server.UsuarioServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UsuarioService</servlet-name>
+		<url-pattern>/GtwWidgets/UsuarioService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>EventosPesquisaService</servlet-name>
+		<servlet-class>com.consilux.ui.server.EventosPesquisaServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>EventosPesquisaService</servlet-name>
+		<url-pattern>/GtwWidgets/EventosPesquisaService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+  		</description>
+		<display-name>FinalizarJanelaProcessamento</display-name>
+		<servlet-name>FinalizarJanelaProcessamento</servlet-name>
+		<servlet-class>
+			com.consilux.servlet.processamento.FinalizarJanelaProcessamento</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FinalizarJanelaProcessamento</servlet-name>
+		<url-pattern>/FinalizarJanelaProcessamento</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>monitoramentoMapServiceImpl</servlet-name>
+		<servlet-class>com.consilux.ui.server.MonitoramentoMapServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>monitoramentoMapServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/MonitoramentoMapService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>menuServiceImpl</servlet-name>
+		<servlet-class>com.consilux.menu.server.MenuServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>menuServiceImpl</servlet-name>
+		<url-pattern>/GtwMenu/MenuService</url-pattern>
+	</servlet-mapping>
+		<servlet-mapping>
+		<servlet-name>menuServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/MenuService</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>veiculosMonitoradosServiceImpl</servlet-name>
+		<servlet-class>com.consilux.ui.server.VeiculosMonitoradosServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>veiculosMonitoradosServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/VeiculosMonitoradosService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>AproveitamentoImagens</display-name>
+		<servlet-name>AproveitamentoImagens</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.AproveitamentoImagens</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AproveitamentoImagens</servlet-name>
+		<url-pattern>/relatorio/AproveitamentoImagens</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		RelatorioPlacas</display-name>
+		<servlet-name>RelatorioPlacas</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.relatorio.RelatorioPlacas</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RelatorioPlacas</servlet-name>
+		<url-pattern>/relatorio/RelatorioPlacas</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		RelatorioAproveitaveis</display-name>
+		<servlet-name>RelatorioAproveitaveis</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.relatorio.RelatorioAproveitaveis</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RelatorioAproveitaveis</servlet-name>
+		<url-pattern>/relatorio/RelatorioAproveitaveis</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		VelocidadeTodosVeiculos</display-name>
+		<servlet-name>VelocidadeTodosVeiculos</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.relatorio.VelocidadeTodosVeiculos</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>VelocidadeTodosVeiculos</servlet-name>
+		<url-pattern>/relatorio/VelocidadeTodosVeiculos</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>ImpTxtService</servlet-name>
+		<servlet-class>com.consilux.ui.server.ImpTxtServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImpTxtService</servlet-name>
+		<url-pattern>/GtwWidgets/ImpTxtService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		CriarPreRelatorioServlet</display-name>
+		<servlet-name>CriarPreRelatorioServlet</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.CriarPreRelatorioServlet</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>CriarPreRelatorioServlet</servlet-name>
+		<url-pattern>/CriarPreRelatorioServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>
+		AcessoRemotoPolling</display-name>
+		<servlet-name>AcessoRemotoPolling</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ajax.AcessoRemotoPolling</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AcessoRemotoPolling</servlet-name>
+		<url-pattern>/AcessoRemotoPolling</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>analiseAutuacoesServiceImpl</servlet-name>
+		<servlet-class>com.consilux.ui.server.AnaliseAutuacoesServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>analiseAutuacoesServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/AnaliseAutuacoesService</url-pattern>
+	</servlet-mapping>
+
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioManutencao</display-name>
+		<servlet-name>RelatorioManutencao</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioManutencao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RelatorioManutencao</servlet-name>
+		<url-pattern>/RelatorioManutencao</url-pattern>
+	</servlet-mapping>
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoIsento</display-name>
+		<servlet-name>InfoIsento</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ajax.InfoIsento</servlet-class>
+	</servlet>		
+	<servlet-mapping>
+		<servlet-name>InfoIsento</servlet-name>
+		<url-pattern>/ajax/InfoIsento</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>CadastrarFiltroServlet</display-name>
+		<servlet-name>CadastrarFiltroServlet</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.CadastrarFiltroServlet</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>CadastrarFiltroServlet</servlet-name>
+		<url-pattern>/ferramenta/CadastrarFiltroServlet</url-pattern>
+	</servlet-mapping>
+	<!-- ************************************************************************************************************ -->
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>MoverInfracoesServlet</display-name>
+		<servlet-name>MoverInfracoesServlet</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.MoverInfracoesServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MoverInfracoesServlet</servlet-name>
+		<url-pattern>/ferramenta/MoverInfracoesServlet</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>MoverInfracoesRemoverListaServlet</display-name>
+		<servlet-name>MoverInfracoesRemoverListaServlet</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.MoverInfracoesRemoverListaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MoverInfracoesRemoverListaServlet</servlet-name>
+		<url-pattern>/MoverInfracoesRemoverListaServlet</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>AmostraImagemServiceImpl</servlet-name>
+		<servlet-class>com.consilux.ui.server.AmostraImagemServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AmostraImagemServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/AmostraImagemService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImgVeiculoThumb</display-name>
+		<servlet-name>ImgVeiculoThumb</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ImgVeiculoThumb</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImgVeiculoThumb</servlet-name>
+		<url-pattern>/ajax/ImgVeiculoThumb</url-pattern>
+	</servlet-mapping>	
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ListarVeiculosQualquer</display-name>
+		<servlet-name>ListarVeiculosQualquer</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ListarVeiculosQualquer</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>ListarVeiculosQualquer</servlet-name>
+		<url-pattern>/ferramentas/ListarVeiculosQualquer</url-pattern>
+	</servlet-mapping>
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioValidasEnquadramento</display-name>
+		<servlet-name>RelatorioValidasEnquadramento</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioValidasEnquadramento</servlet-class>
+	</servlet>	
+	<servlet-mapping>
+		<servlet-name>RelatorioValidasEnquadramento</servlet-name>
+		<url-pattern>/relatorio/RelatorioValidasEnquadramento</url-pattern>
+	</servlet-mapping>	
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>DesabilitaFiltroServlet</display-name>
+		<servlet-name>DesabilitaFiltroServlet</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.DesabilitaFiltroServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DesabilitaFiltroServlet</servlet-name>
+		<url-pattern>/ferramenta/DesabilitaFiltroServlet</url-pattern>
+	</servlet-mapping>
+		
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImgLocalPistaCroqui</display-name>
+		<servlet-name>ImgLocalPistaCroqui</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ajax.ImgLocalPistaCroqui</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ImgLocalPistaCroqui</servlet-name>
+		<url-pattern>/ajax/ImgLocalPistaCroqui</url-pattern>
+	</servlet-mapping>
+		
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>IniciarReposicionamento</display-name>
+		<servlet-name>IniciarReposicionamento</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.IniciarReposicionamento</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>IniciarReposicionamento</servlet-name>
+		<url-pattern>/processo/IniciarReposicionamento</url-pattern>
+	</servlet-mapping>
+		
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>FinalizarReposicionamento</display-name>
+		<servlet-name>FinalizarReposicionamento</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.processamento.FinalizarReposicionamento</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FinalizarReposicionamento</servlet-name>
+		<url-pattern>/processo/FinalizarReposicionamento</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ReposicionarInfracoes</display-name>
+		<servlet-name>ReposicionarInfracoes</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.ReposicionarInfracoes</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ReposicionarInfracoes</servlet-name>
+		<url-pattern>/processo/ReposicionarInfracoes</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessamentoAproveitamento</display-name>
+		<servlet-name>ProcessamentoAproveitamento</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ProcessamentoAproveitamento</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ProcessamentoAproveitamento</servlet-name>
+		<url-pattern>/relatorio/ProcessamentoAproveitamento</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioVencimentoAfericoes</display-name>
+		<servlet-name>RelatorioVencimentoAfericoes</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioVencimentoAfericoes</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>PerfilVeiculo</display-name>
+		<servlet-name>PerfilVeiculo</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.PerfilVeiculo</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>VeiculoTarget</display-name>
+		<servlet-name>VeiculoTarget</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.ferramentas.VeiculoTarget</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioVencimentoAfericoes</servlet-name>
+		<url-pattern>/relatorio/RelatorioVencimentoAfericoes</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PerfilVeiculo</servlet-name>
+		<url-pattern>/servlet/PerfilVeiculo</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>VeiculoTarget</servlet-name>
+		<url-pattern>/servlet/VeiculoTarget</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>RelatorioDinamicoServiceImpl</servlet-name>
+		<servlet-class>com.consilux.ui.server.RelatorioDinamicoServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>RelatorioDinamicoServiceImpl</servlet-name>
+		<url-pattern>/GtwWidgets/RelatorioDinamicoService</url-pattern>
+	</servlet-mapping>
+	
+	<!-- ************************************************************************************************************ -->	
+	<servlet>
+		<servlet-name>DownloadRelatorio</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.DownloadRelatorio</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioImagensTeste</display-name>
+		<servlet-name>RelatorioImagensTeste</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.relatorio.RelatorioImagensTesteServlet</servlet-class>
+	</servlet>
+	
+	<!-- ************************************************************************************************************ -->
+	<servlet-mapping>
+		<servlet-name>DownloadRelatorio</servlet-name>
+		<url-pattern>/ferramentas/DownloadRelatorio</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioImagensTeste</servlet-name>
+		<url-pattern>/relatorio/RelatorioImagensTeste</url-pattern>
+	</servlet-mapping>
+
+	<!-- ************************************************************************************************************ -->
+	<servlet>
+		<servlet-name>TempoProcessamentoServiceImpl</servlet-name>
+		<servlet-class>com.consilux.log.server.TempoProcessamentoServiceImpl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>EtiquetaRemessa</display-name>
+		<servlet-name>EtiquetaRemessa</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.remessa.EtiquetaRemessa</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarTXTRemessa</display-name>
+		<servlet-name>ExportarTXTRemessa</servlet-name>
+		<servlet-class>
+		com.consilux.servlet.remessa.ExportarTXTRemessa</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>GerarDescarga</display-name>
+		<servlet-name>GerarDescarga</servlet-name>
+		<servlet-class>com.consilux.servlet.descarga.GerarDescargaServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarDescarga</display-name>
+		<servlet-name>ExportarDescarga</servlet-name>
+		<servlet-class>com.consilux.servlet.descarga.ExportarDescargaServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>DownloadDescarga</display-name>
+		<servlet-name>DownloadDescarga</servlet-name>
+		<servlet-class>com.consilux.servlet.descarga.DownloadDescargaServlet</servlet-class>
+	</servlet>			
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioSegurancaTransito</display-name>
+		<servlet-name>RelatorioSegurancaTransito</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioSegurancaTransito</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioFuncionamento</display-name>
+		<servlet-name>RelatorioFuncionamento</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioFuncionamento</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>CadAgendaEstatico</display-name>
+		<servlet-name>CadAgendaEstatico</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.CadAgendaEstatico</servlet-class>
+	</servlet>
+<!-- 	<servlet> -->
+<!-- 		<description> -->
+<!-- 		</description> -->
+<!-- 		<display-name>CadValidacaoMassa</display-name> -->
+<!-- 		<servlet-name>CadValidacaoMassa</servlet-name> -->
+<!-- 		<servlet-class>com.consilux.servlet.ferramentas.CadValidacaoMassa</servlet-class> -->
+<!-- 	</servlet> -->
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatoriosMedicao_CAV_CAI</display-name>
+		<servlet-name>RelatoriosMedicao_CAV_CAI</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatoriosMedicao_CAV_CAI</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioOcorrencia</display-name>
+		<servlet-name>RelatorioOcorrencia</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioOcorrencia</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioTotalInfracoes</display-name>
+		<servlet-name>RelatorioTotalInfracoes</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioTotalInfracoes</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioInfracoesConsistentes</display-name>
+		<servlet-name>RelatorioInfracoesConsistentes</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioInfracoesConsistentes</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio4Minutos</display-name>
+		<servlet-name>Relatorio4Minutos</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.Relatorio4Minutos</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioEquipamentoInconsistencias</display-name>
+		<servlet-name>RelatorioEquipamentoInconsistencias</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioEquipamentoInconsistencias</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioEnquadramentoHabilitadoEfetivo</display-name>
+		<servlet-name>RelatorioEnquadramentoHabilitadoEfetivo</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioEnquadramentoHabilitadoEfetivo</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioJustificativaFalhas</display-name>
+		<servlet-name>RelatorioJustificativaFalhas</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioJustificativaFalhas</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioDivergenciaCAI_CAV</display-name>
+		<servlet-name>RelatorioDivergenciaCAI_CAV</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioDivergenciaCAI_CAV</servlet-class>
+	</servlet>
+	
+		<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioProdutividadeAuditoria</display-name>
+		<servlet-name>RelatorioProdutividadeAuditoria</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioProdutividadeAuditoria</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioImagensAtrasadas</display-name>
+		<servlet-name>RelatorioImagensAtrasadas</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioImagensAtrasadas</servlet-class>
+	</servlet>
+
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioErrosValidacao</display-name>
+		<servlet-name>RelatorioErrosValidacao</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioErrosValidacao</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioLotesReprovados</display-name>
+		<servlet-name>RelatorioLotesReprovados</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioLotesReprovados</servlet-class>
+	</servlet>
+			
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioVolumeDia</display-name>
+		<servlet-name>RelatorioVolumeDia</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioVolumeDia</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>GerarSolicitacaoAuditoria</display-name>
+		<servlet-name>GerarSolicitacaoAuditoria</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.GerarSolicitacaoAuditoria</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ListarSolicitacaoAuditoria</display-name>
+		<servlet-name>ListarSolicitacaoAuditoria</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.ListarSolicitacaoAuditoria</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AlterarAlertaManutencao</display-name>
+		<servlet-name>AlterarAlertaManutencao</servlet-name>
+		<servlet-class>com.consilux.servlet.manutencao.AlterarAlertaManutencao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ConfirmarDescarga</display-name>
+		<servlet-name>ConfirmarDescarga</servlet-name>
+		<servlet-class>com.consilux.servlet.descarga.ConfirmarDescarga</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>FixarAmostra</display-name>
+		<servlet-name>FixarAmostra</servlet-name>
+		<servlet-class>com.consilux.servlet.medicao.FixarAmostra</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportaComprovacaoImagens</display-name>
+		<servlet-name>ExportaComprovacaoImagens</servlet-name>
+		<servlet-class>com.consilux.servlet.medicao.ExportaComprovacaoImagensServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>CartaImagensComprovacao</display-name>
+		<servlet-name>CartaImagensComprovacao</servlet-name>
+		<servlet-class>com.consilux.servlet.medicao.CartaImagensComprovacao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ListarProcessoMedicao</display-name>
+		<servlet-name>ListarProcessoMedicao</servlet-name>
+		<servlet-class>com.consilux.servlet.medicao.ListarProcessoMedicao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>EtiquetaDescarga</display-name>
+		<servlet-name>EtiquetaDescarga</servlet-name>
+		<servlet-class>com.consilux.servlet.descarga.EtiquetaDescarga</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AnexarDoc</display-name>
+		<servlet-name>AnexarDoc</servlet-name>
+		<servlet-class>com.consilux.servlet.documentos.AnexarDoc</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AtualizaProcessoMedicao</display-name>
+		<servlet-name>AtualizaProcessoMedicao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.AtualizaProcessoMedicao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>CadastrarInibicaoServlet</display-name>
+		<servlet-name>CadastrarInibicaoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.CadastrarInibicaoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AjustarAlertasManutencao</display-name>
+		<servlet-name>AjustarAlertasManutencao</servlet-name>
+		<servlet-class>com.consilux.servlet.manutencao.AjustarAlertasManutencao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ListarInibicaoServlet</display-name>
+		<servlet-name>ListarInibicaoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.ListarInibicaoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>VisualizarInibicaoServlet</display-name>
+		<servlet-name>VisualizarInibicaoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.VisualizarInibicaoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>DesativarInibicaoServlet</display-name>
+		<servlet-name>DesativarInibicaoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.DesativarInibicaoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImgVeiculoMonitorado</display-name>
+		<servlet-name>ImgVeiculoMonitorado</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ImgVeiculoMonitorado</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>UpImgVeiculoServlet</display-name>
+		<servlet-name>UpImgVeiculoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.UpImgVeiculoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarImagensServlet</display-name>
+		<servlet-name>ExportarImagensServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.ExportarImagensServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ContaInfracaoDisponivelUsuario</display-name>
+		<servlet-name>ContaInfracaoDisponivelUsuario</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ContaInfracaoDisponivelUsuario</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoProgresso</display-name>
+		<servlet-name>InfoProgresso</servlet-name>
+		<servlet-class>com.consilux.infra.InfoProgresso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessarObliteracao</display-name>
+		<servlet-name>ProcessarObliteracao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.processamento.ProcessarObliteracao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>VerVideo</display-name>
+		<servlet-name>VerVideo</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.VerVideo</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarTrafegoServlet</display-name>
+		<servlet-name>ExportarTrafegoServlet</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.ExportarTrafegoServlet</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioValidacao</display-name>
+		<servlet-name>RelatorioValidacao</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioValidacao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioAlteracaoConfigEquip</display-name>
+		<servlet-name>RelatorioAlteracaoConfigEquip</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioAlteracaoConfigEquip</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioFormacaoLote</display-name>
+		<servlet-name>RelatorioFormacaoLote</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioFormacaoLote</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>LiberarMovimentosLote</display-name>
+		<servlet-name>LiberarMovimentosLote</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.LiberarMovimentosLote</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Inconsistencias</display-name>
+		<servlet-name>Inconsistencias</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.Inconsistencias</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>InconsistirImagensForaEscala</display-name>
+		<servlet-name>InconsistirImagensForaEscala</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.InconsistirImagensForaEscala</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioInfracoesCAV</display-name>
+		<servlet-name>RelatorioInfracoesCAV</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.RelatorioInfracoesCAV</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>CadastrarEventoManual</display-name>
+		<servlet-name>CadastrarEventoManual</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.CadastrarEventoManual</servlet-class>
+	</servlet>
+		<servlet>
+		<description>
+		</description>
+		<display-name>ReposicionarLoteReprovado</display-name>
+		<servlet-name>ReposicionarLoteReprovado</servlet-name>
+		<servlet-class>com.consilux.servlet.processamento.ReposicionarLoteReprovado</servlet-class>
+	</servlet>
+		<servlet>
+			<description>
+			</description>
+			<display-name>CadastroManutencao</display-name>
+			<servlet-name>CadastroManutencao</servlet-name>
+			<servlet-class>com.consilux.servlet.manutencao.CadastroManutencao</servlet-class>
+		</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ArquivoLaudo</display-name>
+		<servlet-name>ArquivoLaudo</servlet-name>
+		<servlet-class>com.consilux.model.ArquivoLaudo</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ArquivoVideo</display-name>
+		<servlet-name>ArquivoVideo</servlet-name>
+		<servlet-class>com.consilux.model.ArquivoVideo</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatoriosFluxoVeicular</display-name>
+		<servlet-name>RelatoriosFluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.RelatoriosFluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioFluxoVeicularPorHora</display-name>
+		<servlet-name>RelatorioFluxoVeicularPorHora</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.RelatorioFluxoVeicularPorHora</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio1FluxoVeicular</display-name>
+		<servlet-name>Relatorio1FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio1FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio2FluxoVeicular</display-name>
+		<servlet-name>Relatorio2FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio2FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio3FluxoVeicular</display-name>
+		<servlet-name>Relatorio3FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio3FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio4FluxoVeicular</display-name>
+		<servlet-name>Relatorio4FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio4FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio5FluxoVeicular</display-name>
+		<servlet-name>Relatorio5FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio5FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio6FluxoVeicular</display-name>
+		<servlet-name>Relatorio6FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio6FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio7FluxoVeicular</display-name>
+		<servlet-name>Relatorio7FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio7FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio8FluxoVeicular</display-name>
+		<servlet-name>Relatorio8FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio8FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio9FluxoVeicular</display-name>
+		<servlet-name>Relatorio9FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio9FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio10FluxoVeicular</display-name>
+		<servlet-name>Relatorio10FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio10FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio11FluxoVeicular</display-name>
+		<servlet-name>Relatorio11FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio11FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio12FluxoVeicular</display-name>
+		<servlet-name>Relatorio12FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio12FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio13FluxoVeicular</display-name>
+		<servlet-name>Relatorio13FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio13FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio14FluxoVeicular</display-name>
+		<servlet-name>Relatorio14FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio14FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio15FluxoVeicular</display-name>
+		<servlet-name>Relatorio15FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio15FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio16FluxoVeicular</display-name>
+		<servlet-name>Relatorio16FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio16FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio17FluxoVeicular</display-name>
+		<servlet-name>Relatorio17FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio17FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio18FluxoVeicular</display-name>
+		<servlet-name>Relatorio18FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio18FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio19FluxoVeicular</display-name>
+		<servlet-name>Relatorio19FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio19FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio20FluxoVeicular</display-name>
+		<servlet-name>Relatorio20FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio20FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio21FluxoVeicular</display-name>
+		<servlet-name>Relatorio21FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio21FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio22FluxoVeicular</display-name>
+		<servlet-name>Relatorio22FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio22FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio24FluxoVeicular</display-name>
+		<servlet-name>Relatorio24FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio24FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio25FluxoVeicular</display-name>
+		<servlet-name>Relatorio25FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio25FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio26FluxoVeicular</display-name>
+		<servlet-name>Relatorio26FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio26FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio27FluxoVeicular</display-name>
+		<servlet-name>Relatorio27FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio27FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio28FluxoVeicular</display-name>
+		<servlet-name>Relatorio28FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio28FluxoVeicular</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio29FluxoVeicular</display-name>
+		<servlet-name>Relatorio29FluxoVeicular</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio29FluxoVeicular</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatoriosTempoPercurso</display-name>
+		<servlet-name>RelatoriosTempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.RelatoriosTempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio1TempoPercurso</display-name>
+		<servlet-name>Relatorio1TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio1TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio2TempoPercurso</display-name>
+		<servlet-name>Relatorio2TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio2TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio3TempoPercurso</display-name>
+		<servlet-name>Relatorio3TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio3TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio4TempoPercurso</display-name>
+		<servlet-name>Relatorio4TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio4TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio5TempoPercurso</display-name>
+		<servlet-name>Relatorio5TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio5TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio6TempoPercurso</display-name>
+		<servlet-name>Relatorio6TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio6TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio7TempoPercurso</display-name>
+		<servlet-name>Relatorio7TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio7TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio8TempoPercurso</display-name>
+		<servlet-name>Relatorio8TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio8TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio9TempoPercurso</display-name>
+		<servlet-name>Relatorio9TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio9TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Relatorio10TempoPercurso</display-name>
+		<servlet-name>Relatorio10TempoPercurso</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.Relatorio10TempoPercurso</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>DownloadInfracao</display-name>
+		<servlet-name>DownloadInfracao</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.DownloadInfracao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessamentoAproveitamentoControl</display-name>
+		<servlet-name>ProcessamentoAproveitamentoControl</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ProcessamentoAproveitamentoControl</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessamentoAproveitamentoPorLocal</display-name>
+		<servlet-name>ProcessamentoAproveitamentoPorLocal</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ProcessamentoAproveitamentoPorLocal</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ProcessamentoAproveitamentoPorFaixa</display-name>
+		<servlet-name>ProcessamentoAproveitamentoPorFaixa</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.ProcessamentoAproveitamentoPorFaixa</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarArquivoDT</display-name>
+		<servlet-name>ExportarArquivoDT</servlet-name>
+		<servlet-class>com.consilux.servlet.ferramentas.ExportarArquivoDT</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>AtualizaInfracaoPerfilInvalido</display-name>
+		<servlet-name>AtualizaInfracaoPerfilInvalido</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.AtualizaInfracaoPerfilInvalido</servlet-class>
+	</servlet>
+	
+	
+	
+	<servlet-mapping>
+		<servlet-name>ExportarArquivoDT</servlet-name>
+		<url-pattern>/ferramentas/ExportarArquivoDT</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>ExportarOcorrenciaManutencao</display-name>
+		<servlet-name>ExportarOcorrenciaManutencao</servlet-name>
+		<servlet-class>com.consilux.servlet.manutencao.ExportarOcorrenciaManutencao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>ExportarOcorrenciaManutencao</servlet-name>
+		<url-pattern>/manutencao/ExportarOcorrenciaManutencao</url-pattern>
+	</servlet-mapping>
+		
+	<servlet-mapping>
+		<servlet-name>ArquivoLaudo</servlet-name>
+		<url-pattern>/ferramenta/ArquivoLaudo</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>TempoProcessamentoServiceImpl</servlet-name>
+		<url-pattern>/GtwClientLogger/TempoProcessamentoService</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EtiquetaRemessa</servlet-name>
+		<url-pattern>/remessa/EtiquetaRemessa</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportarTXTRemessa</servlet-name>
+		<url-pattern>/remessa/ExportarTXTRemessa</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>GerarDescarga</servlet-name>
+		<url-pattern>/descarga/GerarDescarga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportarDescarga</servlet-name>
+		<url-pattern>/ferramenta/ExportarDescarga</url-pattern>
+	</servlet-mapping>	
+	<servlet-mapping>
+		<servlet-name>RelatorioSegurancaTransito</servlet-name>
+		<url-pattern>/relatorio/RelatorioSegurancaTransito</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DownloadDescarga</servlet-name>
+		<url-pattern>/descarga/DownloadDescarga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioFuncionamento</servlet-name>
+		<url-pattern>/relatorio/RelatorioFuncionamento</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CadAgendaEstatico</servlet-name>
+		<url-pattern>/Ferramentas/CadAgendaEstatico</url-pattern>
+	</servlet-mapping>
+<!-- 	<servlet-mapping> -->
+<!-- 		<servlet-name>CadValidacaoMassa</servlet-name> -->
+<!-- 		<url-pattern>/Ferramentas/CadValidacaoMassa</url-pattern> -->
+<!-- 	</servlet-mapping> -->
+	<servlet-mapping>
+		<servlet-name>RelatoriosMedicao_CAV_CAI</servlet-name>
+		<url-pattern>/relatorio/RelatoriosMedicao_CAV_CAI</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioOcorrencia</servlet-name>
+		<url-pattern>/relatorio/RelatorioOcorrencia</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioTotalInfracoes</servlet-name>
+		<url-pattern>/relatorio/RelatorioTotalInfracoes</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioInfracoesConsistentes</servlet-name>
+		<url-pattern>/relatorio/RelatorioInfracoesConsistentes</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>Relatorio4Minutos</servlet-name>
+		<url-pattern>/relatorio/Relatorio4Minutos</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioEquipamentoInconsistencias</servlet-name>
+		<url-pattern>/relatorio/RelatorioEquipamentoInconsistencias</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioEnquadramentoHabilitadoEfetivo</servlet-name>
+		<url-pattern>/relatorio/RelatorioEnquadramentoHabilitadoEfetivo</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioJustificativaFalhas</servlet-name>
+		<url-pattern>/relatorio/RelatorioJustificativaFalhas</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioDivergenciaCAI_CAV</servlet-name>
+		<url-pattern>/relatorio/RelatorioDivergenciaCAI_CAV</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioProdutividadeAuditoria</servlet-name>
+		<url-pattern>/relatorio/RelatorioProdutividadeAuditoria</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioImagensAtrasadas</servlet-name>
+		<url-pattern>/relatorio/RelatorioImagensAtrasadas</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatorioErrosValidacao</servlet-name>
+		<url-pattern>/relatorio/RelatorioErrosValidacao</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>RelatorioLotesReprovados</servlet-name>
+		<url-pattern>/relatorio/RelatorioLotesReprovados</url-pattern>
+	</servlet-mapping>	
+	
+		<servlet-mapping>
+		<servlet-name>RelatorioVolumeDia</servlet-name>
+		<url-pattern>/relatorio/RelatorioVolumeDia</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>GerarSolicitacaoAuditoria</servlet-name>
+		<url-pattern>/processo/GerarSolicitacaoAuditoria</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ListarSolicitacaoAuditoria</servlet-name>
+		<url-pattern>/processo/ListarSolicitacaoAuditoria</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AlterarAlertaManutencao</servlet-name>
+		<url-pattern>/manutencao/AlterarAlertaManutencao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ConfirmarDescarga</servlet-name>
+		<url-pattern>/descarga/ConfirmarDescarga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>FixarAmostra</servlet-name>
+		<url-pattern>/medicao/FixarAmostra</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportaComprovacaoImagens</servlet-name>
+		<url-pattern>/medicao/ExportaComprovacaoImagens</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CartaImagensComprovacao</servlet-name>
+		<url-pattern>/medicao/CartaImagensComprovacao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ListarProcessoMedicao</servlet-name>
+		<url-pattern>/medicao/ListarProcessoMedicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EtiquetaDescarga</servlet-name>
+		<url-pattern>/descarga/EtiquetaDescarga</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AnexarDoc</servlet-name>
+		<url-pattern>/documentos/AnexarDoc</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AtualizaProcessoMedicao</servlet-name>
+		<url-pattern>/ajax/AtualizaProcessoMedicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CadastrarInibicaoServlet</servlet-name>
+		<url-pattern>/ferramenta/CadastrarInibicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AjustarAlertasManutencao</servlet-name>
+		<url-pattern>/manutencao/AjustarAlertasManutencao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ListarInibicaoServlet</servlet-name>
+		<url-pattern>/ferramenta/ListarInibicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>VisualizarInibicaoServlet</servlet-name>
+		<url-pattern>/ferramenta/VisualizarInibicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DesativarInibicaoServlet</servlet-name>
+		<url-pattern>/ferramenta/DesativarInibicao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImgVeiculoMonitorado</servlet-name>
+		<url-pattern>/ajax/ImgVeiculoMonitorado</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>UpImgVeiculoServlet</servlet-name>
+		<url-pattern>/servlet/UpImgVeiculo</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportarImagensServlet</servlet-name>
+		<url-pattern>/ferramenta/ExportarImagens</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ContaInfracaoDisponivelUsuario</servlet-name>
+		<url-pattern>/ajax/ContaInfracaoDisponivelUsuario</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InfoProgresso</servlet-name>
+		<url-pattern>/ajax/InfoProgresso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProcessarObliteracao</servlet-name>
+		<url-pattern>/ajax/processamento/ProcessarObliteracao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>VerVideo</servlet-name>
+		<url-pattern>/servlet/VerVideo</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ExportarTrafegoServlet</servlet-name>
+		<url-pattern>/ferramenta/ExportarTrafegoServlet</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioValidacao</servlet-name>
+		<url-pattern>/relatorio/RelatorioValidacao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioAlteracaoConfigEquip</servlet-name>
+		<url-pattern>/relatorio/RelatorioAlteracaoConfigEquip</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioFormacaoLote</servlet-name>
+		<url-pattern>/relatorio/RelatorioFormacaoLote</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>LiberarMovimentosLote</servlet-name>
+		<url-pattern>/processo/LiberarMovimentosLote</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Inconsistencias</servlet-name>
+		<url-pattern>/ajax/Inconsistencias</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InconsistirImagensForaEscala</servlet-name>
+		<url-pattern>/processo/InconsistirImagensForaEscala</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioInfracoesCAV</servlet-name>
+		<url-pattern>/relatorio/RelatorioInfracoesCAV</url-pattern>
+	</servlet-mapping>
+		<servlet-mapping>
+		<servlet-name>CadastrarEventoManual</servlet-name>
+		<url-pattern>/ferramentas/CadastrarEventoManual</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ReposicionarLoteReprovado</servlet-name>
+		<url-pattern>/processo/ReposicionarLoteReprovado</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>CadastroManutencao</servlet-name>
+		<url-pattern>/manutencao/CadastroManutencao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ArquivoVideo</servlet-name>
+		<url-pattern>/ferramenta/ArquivoVideo</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatoriosFluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/RelatoriosFluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioFluxoVeicularPorHora</servlet-name>
+		<url-pattern>/relatorio/rj/RelatorioFluxoVeicularPorHora</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio1FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio1FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio2FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio2FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio3FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio3FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio4FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio4FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio5FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio5FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio6FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio6FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio7FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio7FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio8FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio8FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio9FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio9FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio10FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio10FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio11FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio11FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio12FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio12FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio13FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio13FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio14FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio14FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio15FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio15FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio16FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio16FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio17FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio17FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio18FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio18FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio19FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio19FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio20FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio20FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio21FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio21FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio22FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio22FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio24FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio24FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio25FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio25FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio26FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio26FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio27FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio27FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio28FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio28FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio29FluxoVeicular</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio29FluxoVeicular</url-pattern>
+	</servlet-mapping>
+	
+	<servlet-mapping>
+		<servlet-name>RelatoriosTempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/RelatoriosTempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio1TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio1TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio2TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio2TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio3TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio3TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio4TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio4TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio5TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio5TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio6TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio6TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio7TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio7TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio8TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio8TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio9TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio9TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Relatorio10TempoPercurso</servlet-name>
+		<url-pattern>/relatorio/rj/Relatorio10TempoPercurso</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>DownloadInfracao</servlet-name>
+		<url-pattern>/infracao/DownloadInfracao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProcessamentoAproveitamentoControl</servlet-name>
+		<url-pattern>/relatorio/ProcessamentoAproveitamentoControl</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProcessamentoAproveitamentoPorLocal</servlet-name>
+		<url-pattern>/relatorio/ProcessamentoAproveitamentoPorLocal</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ProcessamentoAproveitamentoPorFaixa</servlet-name>
+		<url-pattern>/relatorio/ProcessamentoAproveitamentoPorFaixa</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>AtualizaInfracaoPerfilInvalido</servlet-name>
+		<url-pattern>/ajax/AtualizaInfracaoPerfilInvalido</url-pattern>
+	</servlet-mapping>
+
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>corredorBRS</display-name>
+		<servlet-name>corredorBRS</servlet-name>
+		<servlet-class>com.consilux.servlet.corredorBRS.corredorBRS</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>PlanilhaAcompanhamento</display-name>
+		<servlet-name>PlanilhaAcompanhamento</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.PlanilhaAcompanhamento</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioFuncionamentoRJ</display-name>
+		<servlet-name>RelatorioFuncionamentoRJ</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.RelatorioFuncionamentoRJ</servlet-class>
+	</servlet>
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>InfoTrafego</display-name>
+		<servlet-name>InfoTrafego</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.InfoTrafego</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ImgSinalizacao</display-name>
+		<servlet-name>ImgSinalizacao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ImgSinalizacao</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>RelatorioSinalizacao</display-name>
+		<servlet-name>RelatorioSinalizacao</servlet-name>
+		<servlet-class>com.consilux.servlet.relatorio.rj.RelatorioSinalizacao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>corredorBRS</servlet-name>
+		<url-pattern>/corredorBRS/corredorBRS</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>PlanilhaAcompanhamento</servlet-name>
+		<url-pattern>/relatorio/rj/PlanilhaAcompanhamento</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioFuncionamentoRJ</servlet-name>
+		<url-pattern>/relatorio/rj/RelatorioFuncionamentoRJ</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>InfoTrafego</servlet-name>
+		<url-pattern>/ajax/InfoTrafego</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ImgSinalizacao</servlet-name>
+		<url-pattern>/ajax/ImgSinalizacao</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>RelatorioSinalizacao</servlet-name>
+		<url-pattern>/relatorio/rj/RelatorioSinalizacao</url-pattern>
+	</servlet-mapping>	
+	
+	<servlet>
+		<description>
+		</description>
+		<display-name>AITPDFDownload</display-name>
+		<servlet-name>AITPDFDownload</servlet-name>
+		<servlet-class>com.consilux.servlet.ait.AITPDFDownload</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>ArquivoIntegracao</display-name>
+		<servlet-name>ArquivoIntegracao</servlet-name>
+		<servlet-class>com.consilux.servlet.ajax.ArquivoIntegracao</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AITPDFDownload</servlet-name>
+		<url-pattern>/ait/AITPDFDownload</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>ArquivoIntegracao</servlet-name>
+		<url-pattern>/Integracao/ArquivoIntegracao</url-pattern>
+	</servlet-mapping>	
+	
+	<servlet>
+	    <servlet-name>PerfilComportamental</servlet-name>
+	    <servlet-class>muralha.digital.perfilcomportamental.PerfilComportamentalServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+	    <servlet-name>PerfilComportamental</servlet-name>
+	    <url-pattern>/perfilcomportamental/PerfilComportamentalServlet</url-pattern>
+	</servlet-mapping>	
+	    	      
+</web-app>
+

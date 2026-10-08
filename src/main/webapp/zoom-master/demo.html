@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset='utf-8'/>
+	<title>jQuery Zoom Demo</title>
+	<style>
+		.zoom {
+			border: 	0; 
+			margin: 	0; 
+			padding: 	0;
+			display: 	inline-block;
+			position: 	relative;
+		}
+		.zoom img {
+			display: 	block;
+		}
+		.zoom img::selection { background-color: transparent; }
+	</style>
+	<script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js'></script>
+	<script src='jquery.zoom.js'></script>
+	<script>
+	
+	function habilita_zoom() {
+		$('#ex2').zoom();
+	}
+	
+// 		$(document).ready(function(){
+//  			$('#ex2').zoom();
+// 		});
+	</script>
+</head>
+<body>
+<!-- 	<span class='zoom' id='ex1'> -->
+<!-- 		<img src='daisy.jpg' width='555' height='320' alt='Daisy on the Ohoopee'/> -->
+<!-- 	</span> -->
+	<span class='zoom' id='ex2' >
+		<img src='/ajax/ImgVeiculo?id_imagem=449&zoom=3' width='640' height='480' />
+	</span>
+<!-- 	<span class='zoom' id='ex3'> -->
+<!-- 		<img src='daisy.jpg' width='555' height='320' alt='Daisy on the Ohoopee'/> -->
+<!-- 	</span> -->
+<!-- 	<span class='zoom' id='ex4'> -->
+<!-- 		<img src='roxy.jpg' width='290' height='320' alt='Roxy on the Ohoopee'/> -->
+<!-- 	</span> -->
+
+<br />
+<br />
+<input type="button" onclick="habilita_zoom();" value="Habilitar Zoom">
+
+</body>
+</html>

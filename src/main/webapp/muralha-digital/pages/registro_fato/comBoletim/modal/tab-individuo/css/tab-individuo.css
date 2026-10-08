@@ -1,0 +1,17 @@
+.container-sub-tittle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sub-tittle-modal-comBoletim {
+  margin: 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.sub-diviver-modal-comBoletim {
+  border-top: 2px solid #ccc;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+}

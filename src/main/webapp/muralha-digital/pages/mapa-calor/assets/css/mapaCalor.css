@@ -1,0 +1,35 @@
+@charset "ISO-8859-1";
+
+html { height: 100% }
+body { height: 100%; margin: 0; padding: 0; font-family:sans-serif; }
+#map-canvas { height: 85vh; }
+#map-wrapper { position: relative; }
+#heatmap {
+  background: linear-gradient(to right, #0597ff 0%, #0597ff 50%, #fff 50%, #fff 100%);
+  border: solid 1px #0597ff;
+  border-radius: 8px;
+  height: 10px;
+  outline: none;
+  transition: background 450ms ease-in;
+  -webkit-appearance: none;
+}
+
+.input-overlay {
+  position: absolute;
+  top: 10px;
+  right: 150px;
+  background-color: rgba(255, 255, 255);
+  padding: 8px 12px;
+  border-radius: 8px;
+  z-index: 10;
+  box-shadow: 0px 2px 6px rgba(0,0,0,0.2);
+}
+
+.input-overlay label {
+  display: block;
+  margin-bottom: 4px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.input-overlay input[type="range"] { width: 200px; }

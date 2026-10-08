@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="209"/>
+	<subDataset name="conta_infracao_dia">
+		<parameter name="COD_PISTA" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="DATA_INI" class="java.util.Date"/>
+		<parameter name="DATA_FIM" class="java.util.Date"/>
+		<queryString>
+			<![CDATA[DECLARE @DATA_INI DATE = $P{DATA_INI}
+DECLARE @DATA_FIM DATE = $P{DATA_FIM}
+DECLARE @COD_PISTA INT = $P{COD_PISTA}
+SELECT SUM(v.trafego) as trafego, SUM(i.conta) as conta_infracao, v.dia FROM local_vigente lv
+JOIN configuracao_equipamento_pista cp ON cp.id_configuracao_equipamento = lv.id_configuracao_equipamento
+JOIN (
+SELECT sum(vs.trafego) as trafego, DAY(vs.data) as dia, vs.id_local, vs.pista
+FROM veiculo_sumarizado vs WITH (NOLOCK)
+WHERE
+vs.data BETWEEN @DATA_INI AND @DATA_FIM
+GROUP BY DAY(vs.data), vs.id_local, vs.pista
+) as v ON v.id_local = lv.id_local AND v.pista = cp.id_pista
+LEFT JOIN (
+SELECT count(i.id_infracao) as conta, DAY(data) as dia, i.id_local, i.pista
+FROM infracao i
+WHERE
+CAST(i.data AS DATE) BETWEEN @DATA_INI AND @DATA_FIM AND i.id_enquadramento IN (74550, 74630, 74710)
+GROUP BY DAY(data), i.id_local, i.pista
+) as i ON i.id_local = lv.id_local AND i.pista = cp.id_pista AND i.dia = v.dia
+WHERE
+cp.cod_pista = @COD_PISTA
+GROUP BY v.dia, v.id_local
+ORDER BY v.dia]]>
+		</queryString>
+		<field name="trafego" class="java.lang.Integer"/>
+		<field name="conta_infracao" class="java.lang.Integer"/>
+		<field name="dia" class="java.lang.Integer"/>
+	</subDataset>
+	<subDataset name="conta_infracao_semana">
+		<parameter name="COD_PISTA" class="java.lang.Integer">
+			<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		</parameter>
+		<parameter name="DATA_INI" class="java.util.Date"/>
+		<parameter name="DATA_FIM" class="java.util.Date"/>
+		<queryString>
+			<![CDATA[DECLARE @DATA_INI DATE = $P{DATA_INI}
+DECLARE @DATA_FIM DATE = $P{DATA_FIM}
+DECLARE @COD_PISTA INT = $P{COD_PISTA}
+SELECT count(i.id_infracao) as conta_infracao, datepart(dw,i.data) as dia_semana FROM
+infracao i
+JOIN local_vigente lv ON lv.id_local = i.id_local
+JOIN configuracao_equipamento_pista cp ON cp.id_configuracao_equipamento = lv.id_configuracao_equipamento AND cp.id_pista = i.pista
+WHERE
+cast(i.data as date) BETWEEN @DATA_INI AND @DATA_FIM AND i.id_enquadramento IN (74550, 74630, 74710)
+AND cp.cod_pista = @COD_PISTA
+GROUP BY datepart(dw,i.data)
+ORDER BY 2]]>
+		</queryString>
+		<field name="conta_infracao" class="java.lang.Integer"/>
+		<field name="dia_semana" class="java.lang.Integer"/>
+	</subDataset>
+	<parameter name="ANO" class="java.lang.Integer"/>
+	<parameter name="MES" class="java.lang.Integer"/>
+	<parameter name="IDENTIFICACAO_CLIENTE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[DECLARE @MES INT = $P{MES}
+DECLARE @ANO INT = $P{ANO}
+DECLARE @DATA_INI DATE = STR(@ANO)+'-'+STR(@MES)+'-01'
+DECLARE @DATA_FIM DATE = DATEADD(s,-1,DATEADD(mm, DATEDIFF(m,0,@DATA_INI)+1,0))
+SELECT DISTINCT /*TOP 1*/ (CASE WHEN lv.data_inicio > @DATA_INI THEN lv.data_inicio ELSE @DATA_INI END) as data_ini, @DATA_FIM as data_fim, cp.cod_pista, RTRIM(cp.nome_pista) as nome_pista
+FROM local_vigente lv
+JOIN configuracao_equipamento_pista cp ON cp.id_configuracao_equipamento = lv.id_configuracao_equipamento
+WHERE lv.data_inicio < @DATA_FIM
+ORDER BY cp.cod_pista]]>
+	</queryString>
+	<field name="data_ini" class="java.util.Date"/>
+	<field name="data_fim" class="java.util.Date"/>
+	<field name="cod_pista" class="java.lang.Integer"/>
+	<field name="nome_pista" class="java.lang.String"/>
+	<group name="pista" isStartNewPage="true">
+		<groupExpression><![CDATA[$F{cod_pista}]]></groupExpression>
+		<groupHeader>
+			<band height="40">
+				<textField>
+					<reportElement x="0" y="11" width="555" height="20"/>
+					<textElement textAlignment="Center">
+						<font fontName="Calibri" size="11" isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{cod_pista}+" - "+$F{nome_pista}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band/>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="20"/>
+				<textElement markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["RELATÓRIO MENSAL DE SEGURANÇA NO TRÂNSITO"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="67" height="20"/>
+				<textElement/>
+				<text><![CDATA[CONTRATO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="67" height="20"/>
+				<textElement/>
+				<text><![CDATA[PERÍODO:]]></text>
+			</staticText>
+			<textField pattern="MMMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="67" y="40" width="488" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date($P{ANO} - 1900, $P{MES} - 1, 1)]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="20" width="488" height="20"/>
+				<textElement markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IDENTIFICACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="665" splitType="Stretch">
+			<barChart>
+				<chart customizerClass="com.consilux.infra.CsxBarChartCustomizer">
+					<reportElement x="0" y="30" width="555" height="200"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="conta_infracao_dia">
+							<datasetParameter name="COD_PISTA">
+								<datasetParameterExpression><![CDATA[$F{cod_pista}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_INI">
+								<datasetParameterExpression><![CDATA[$F{data_ini}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_FIM">
+								<datasetParameterExpression><![CDATA[$F{data_fim}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Excesso de Velocidade"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{conta_infracao}]]></valueExpression>
+						<labelExpression><![CDATA[$F{conta_infracao}.toString()]]></labelExpression>
+					</categorySeries>
+					<categorySeries>
+						<seriesExpression><![CDATA["Tráfego de Veículos"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[$F{trafego}]]></valueExpression>
+						<labelExpression><![CDATA[$F{trafego}.toString()]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true">
+					<plot/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF">
+						<font size="5"/>
+					</itemLabel>
+					<categoryAxisLabelExpression><![CDATA["Dia do Mês"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="true" axisLineColor="#000000">
+							<labelFont/>
+							<tickLabelFont>
+								<font size="9"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Tráfego"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<staticText>
+				<reportElement x="0" y="0" width="555" height="25"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de infrações/volume de tráfego por Dia]]></text>
+			</staticText>
+			<barChart>
+				<chart isShowLegend="false" customizerClass="com.consilux.infra.CsxBarChartCustomizer" renderType="draw">
+					<reportElement x="0" y="280" width="555" height="170"/>
+					<box topPadding="0"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="conta_infracao_semana">
+							<datasetParameter name="COD_PISTA">
+								<datasetParameterExpression><![CDATA[$F{cod_pista}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_INI">
+								<datasetParameterExpression><![CDATA[$F{data_ini}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_FIM">
+								<datasetParameterExpression><![CDATA[$F{data_fim}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Excesso de Velocidade"]]></seriesExpression>
+						<categoryExpression><![CDATA[new DateFormatSymbols().getShortWeekdays()[$F{dia_semana}]]]></categoryExpression>
+						<valueExpression><![CDATA[$F{conta_infracao}]]></valueExpression>
+						<labelExpression><![CDATA[$F{conta_infracao}.toString()]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true">
+					<plot/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF">
+						<font size="5"/>
+					</itemLabel>
+					<categoryAxisLabelExpression><![CDATA["Dia da Semana"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="true" axisLineColor="#000000">
+							<labelFont>
+								<font size="10"/>
+							</labelFont>
+							<tickLabelFont>
+								<font size="10"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Quantidade de Infrações"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+			<staticText>
+				<reportElement x="0" y="250" width="555" height="25"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de infrações por dia da Semana]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="460" width="555" height="25"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Índice de Desrespeito a Velocidade Regulamentada por dia ]]></text>
+			</staticText>
+			<barChart>
+				<chart isShowLegend="false" customizerClass="com.consilux.infra.CsxBarChartCustomizer">
+					<reportElement x="0" y="490" width="555" height="170"/>
+					<box topPadding="0"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend position="Bottom"/>
+				</chart>
+				<categoryDataset>
+					<dataset>
+						<datasetRun subDataset="conta_infracao_dia">
+							<datasetParameter name="COD_PISTA">
+								<datasetParameterExpression><![CDATA[$F{cod_pista}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_INI">
+								<datasetParameterExpression><![CDATA[$F{data_ini}]]></datasetParameterExpression>
+							</datasetParameter>
+							<datasetParameter name="DATA_FIM">
+								<datasetParameterExpression><![CDATA[$F{data_fim}]]></datasetParameterExpression>
+							</datasetParameter>
+						</datasetRun>
+					</dataset>
+					<categorySeries>
+						<seriesExpression><![CDATA["Índice de Desrespeito"]]></seriesExpression>
+						<categoryExpression><![CDATA[$F{dia}]]></categoryExpression>
+						<valueExpression><![CDATA[($F{conta_infracao}.doubleValue()/$F{trafego}.doubleValue())*100.0]]></valueExpression>
+						<labelExpression><![CDATA[new DecimalFormat("##0.00 '%'").format(($F{conta_infracao}.doubleValue()/$F{trafego}.doubleValue())*100.0)]]></labelExpression>
+					</categorySeries>
+				</categoryDataset>
+				<barPlot isShowLabels="true" isShowTickLabels="true" isShowTickMarks="true">
+					<plot labelRotation="0.0"/>
+					<itemLabel color="#000000" backgroundColor="#FFFFFF">
+						<font size="5"/>
+					</itemLabel>
+					<categoryAxisLabelExpression><![CDATA["Dia do Mês"]]></categoryAxisLabelExpression>
+					<categoryAxisFormat labelRotation="0.0">
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="true" axisLineColor="#000000">
+							<labelFont/>
+							<tickLabelFont>
+								<font size="9"/>
+							</tickLabelFont>
+						</axisFormat>
+					</categoryAxisFormat>
+					<valueAxisLabelExpression><![CDATA["Percentual"]]></valueAxisLabelExpression>
+					<valueAxisFormat>
+						<axisFormat labelColor="#000000" tickLabelColor="#000000" verticalTickLabels="false" axisLineColor="#000000">
+							<labelFont/>
+							<tickLabelFont/>
+						</axisFormat>
+					</valueAxisFormat>
+				</barPlot>
+			</barChart>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

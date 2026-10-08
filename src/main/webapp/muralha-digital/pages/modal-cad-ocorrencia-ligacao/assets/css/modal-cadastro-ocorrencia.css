@@ -1,0 +1,33 @@
+@charset "ISO-8859-1";
+
+.input-error {
+    border-color: red !important;
+    position: relative;
+}
+
+/* Select2 - aplicar borda vermelha */
+.select2-container--bootstrap4 .select2-selection--single.input-error,
+.select2-container--bootstrap4 .select2-selection--multiple.input-error {
+    border-color: red !important;
+}
+
+/* Mensagem de erro */
+.error-message {
+    position: absolute;
+    color: red;
+    font-size: 0.75em;
+    margin-top: 2px;
+    margin-left: 2px;
+    z-index: 2;
+}
+
+/* Espaço reservado para não empurrar layout */
+.mb-3 {
+    position: relative;
+    min-height: 70px;
+}
+
+/* Campo de data-hora */
+.input-group.input-error .form-control {
+    border-color: red !important;
+}

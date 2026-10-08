@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AIT Avanco URBS" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.9453068450750035"/>
+	<property name="ireport.x" value="10"/>
+	<property name="ireport.y" value="69"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["c:"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	dbo.DAC_AIT(r.tipo,ir.serie,ir.auto) AS DAC_AUTO,
+	ir.auto AS AUTO,
+	RTRIM(ir.serie) AS SERIE,
+	r.tipo AS TIPO_REMESSA,
+	i.placa AS PLACA,
+	RTRIM(COALESCE(cmcet2.descricao, cmcet.descricao, cm.descricao)) AS MARCA,
+	RTRIM(COALESCE(ce2.descricao, ce.descricao)) AS ESPECIE,
+	'BRASIL' AS PAIS,
+	RTRIM(COALESCE(cp.nome_pista, l.nome)) AS LOCAL,
+	i.data AS DATA_HORA,
+	u.cod_agente AS AGENTE,
+	e.id_enquadramento,
+	RTRIM(e.descricao) AS ENQUADRAMENTO,
+	i.segundos_tolerancia AS SEGUNDOS_TOLERANCIA,
+	v.segundos AS SEGUNDOS,
+	RTRIM(cast(cequip.serie_equipamento AS varchar(11))) + ' - ' + RTRIM(p.modelo) AS IDENTIFICACAO_EQUIPAMENTO,
+	i.id_imagem_local AS NUMERO_IMAGEM,
+	a.data AS DATA_AFERICAO,
+	RTRIM(COALESCE(ir.sigla_infracao_cliente,'RAD')) + ' - FIXO' AS SIGLA_INFRACAO_CLIENTE,
+	img_obj.imagem as imagem_obj,
+	img_pan.imagem as imagem_pan,
+	img_pan2.imagem as imagem_pan2,
+	img_cro.imagem as imagem_cro
+FROM infracao i
+	JOIN #lista_infracoes li on li.id_infracao = i.id_infracao
+	JOIN veiculo v ON v.id_veiculo = i.id_veiculo
+	JOIN infracao_remessa ir ON ir.id_infracao = i.id_infracao
+	JOIN remessa r ON r.id_remessa = ir.id_remessa
+	LEFT JOIN infracao_imagem ii ON ii.id_infracao = i.id_infracao
+	LEFT JOIN cad_veiculo cv ON cv.placa = i.placa
+	LEFT JOIN cad_marca cm ON cm.id_marca = cv.id_marca
+	LEFT JOIN cad_marca_cet cmcet ON cmcet.id_marca_cet = cv.id_marca_cet
+	LEFT JOIN cad_marca_cet_processo cmcetp ON cmcetp.placa = i.placa
+	LEFT JOIN cad_marca_cet cmcet2 ON cmcet2.id_marca_cet = cmcetp.id_marca_cet
+	LEFT JOIN cad_especie ce ON ce.id_especie = cv.id_especie
+	LEFT JOIN cad_especie_processo cep ON cep.placa = i.placa
+	LEFT JOIN cad_especie ce2 ON ce2.id_especie = cep.id_especie
+	JOIN local l ON l.id_local = v.id_local AND l.sequencia_local = v.sequencia_local
+	JOIN enquadramento e ON e.id_enquadramento = i.id_enquadramento
+	LEFT JOIN sis_usuario u ON u.id_usuario = i.id_usuario_final
+	JOIN configuracao_equipamento cequip ON cequip.id_configuracao_equipamento = l.id_configuracao_equipamento
+	JOIN configuracao_equipamento_pista cp ON cp.id_configuracao_equipamento = cequip.id_configuracao_equipamento AND cp.id_pista = i.pista
+	LEFT JOIN produto p ON p.id_produto = cequip.id_produto
+	LEFT JOIN configuracao_equipamento_afericao a ON a.id_configuracao_equipamento = l.id_configuracao_equipamento AND a.id_pista = i.pista
+	JOIN imagem_info iimg_obj on iimg_obj.id_imagem = ii.id_imagem_obj
+	JOIN imagem img_obj on img_obj.id_imagem = iimg_obj.id_imagem
+	JOIN imagem_info iimg_pan on iimg_pan.id_imagem = ii.id_imagem_pan
+	JOIN imagem img_pan on img_pan.id_imagem = iimg_pan.id_imagem
+	JOIN imagem_info iimg_pan2 on iimg_pan2.id_imagem = ii.id_imagem_pan2
+	JOIN imagem img_pan2 on img_pan2.id_imagem = iimg_pan2.id_imagem
+	LEFT JOIN local_pista_croqui img_cro on img_cro.id_local = i.id_local and img_cro.pista = i.pista
+ORDER BY li.ordem]]>
+	</queryString>
+	<field name="DAC_AUTO" class="java.lang.Short"/>
+	<field name="AUTO" class="java.lang.Integer"/>
+	<field name="SERIE" class="java.lang.String"/>
+	<field name="TIPO_REMESSA" class="java.lang.String"/>
+	<field name="PLACA" class="java.lang.String"/>
+	<field name="MARCA" class="java.lang.String"/>
+	<field name="ESPECIE" class="java.lang.String"/>
+	<field name="PAIS" class="java.lang.String"/>
+	<field name="LOCAL" class="java.lang.String"/>
+	<field name="DATA_HORA" class="java.sql.Timestamp"/>
+	<field name="AGENTE" class="java.lang.Integer"/>
+	<field name="ID_ENQUADRAMENTO" class="java.lang.String"/>
+	<field name="ENQUADRAMENTO" class="java.lang.String"/>
+	<field name="SEGUNDOS_TOLERANCIA" class="java.math.BigDecimal"/>
+	<field name="SEGUNDOS" class="java.math.BigDecimal"/>
+	<field name="IDENTIFICACAO_EQUIPAMENTO" class="java.lang.String"/>
+	<field name="NUMERO_IMAGEM" class="java.lang.Integer"/>
+	<field name="DATA_AFERICAO" class="java.sql.Timestamp"/>
+	<field name="SIGLA_INFRACAO_CLIENTE" class="java.lang.String"/>
+	<field name="imagem_obj" class="java.io.InputStream"/>
+	<field name="imagem_pan" class="java.io.InputStream"/>
+	<field name="imagem_pan2" class="java.io.InputStream"/>
+	<field name="imagem_cro" class="java.io.InputStream"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-2" x="43" y="0" width="0" height="0"/>
+				<textElement/>
+				<text><![CDATA[Texto Estático]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="77" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-1" x="7" y="0" width="524" height="76"/>
+			</rectangle>
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" mode="Transparent" x="115" y="7" width="78" height="60"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+"curitiba_brasao.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-1" x="197" y="29" width="226" height="18"/>
+				<textElement textAlignment="Left">
+					<font size="12" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[PREFEITURA MUNICIPAL DE CURITIBA
+]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="717" splitType="Stretch">
+			<rectangle radius="4">
+				<reportElement key="rectangle-2" x="6" y="9" width="524" height="26"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-3" mode="Opaque" x="29" y="6" width="59" height="7"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ ORGÃO AUTUADOR ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" mode="Opaque" x="9" y="17" width="98" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[275350]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" x="114" y="9" width="1" height="26"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-6" mode="Opaque" x="131" y="13" width="269" height="18"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[AUTO DE INFRAÇÃO DE TRÂNSITO]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-2" x="410" y="9" width="1" height="26"/>
+			</line>
+			<rectangle radius="4">
+				<reportElement key="rectangle-3" x="6" y="44" width="524" height="26"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-7" mode="Opaque" x="445" y="6" width="51" height="7"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ NÚMERO DO AIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" mode="Opaque" x="8" y="36" width="85" height="7"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[IDENTIFICAÇÃO DO VEÍCULO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" mode="Opaque" x="11" y="46" width="21" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[PLACA]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-3" x="114" y="44" width="1" height="26"/>
+			</line>
+			<line>
+				<reportElement key="line-4" x="438" y="44" width="1" height="26"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-1" x="27" y="54" width="61" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PLACA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-10" mode="Opaque" x="121" y="46" width="21" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[MARCA]]></text>
+			</staticText>
+			<image onErrorType="Icon">
+				<reportElement key="image-2" x="337" y="575" width="190" height="142"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$F{imagem_pan2}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-11" mode="Opaque" x="304" y="46" width="23" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[ESPÉCIE]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="121" y="54" width="172" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{MARCA}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-3" x="304" y="54" width="132" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ESPECIE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="444" y="54" width="74" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{PAIS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-12" mode="Opaque" x="444" y="46" width="19" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[PAÍS]]></text>
+			</staticText>
+			<rectangle radius="4">
+				<reportElement key="rectangle-4" x="6" y="79" width="524" height="27"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-14" mode="Opaque" x="11" y="81" width="21" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[LOCAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-13" mode="Opaque" x="8" y="71" width="71" height="7"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DADOS DA INFRAÇÃO]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-6" x="359" y="79" width="1" height="27"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-5" x="9" y="88" width="250" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{LOCAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-17" mode="Opaque" x="272" y="81" width="21" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[DATA]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-6" x="272" y="89" width="69" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_HORA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-8" x="266" y="79" width="1" height="27"/>
+			</line>
+			<textField isStretchWithOverflow="true" pattern="HH:mm:ss" isBlankWhenNull="false">
+				<reportElement key="textField-7" x="365" y="89" width="71" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.sql.Timestamp"><![CDATA[$F{DATA_HORA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-18" mode="Opaque" x="365" y="81" width="23" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[HORA]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-9" x="438" y="79" width="1" height="27"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-19" mode="Opaque" x="444" y="81" width="63" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[AGENTE DE TRÂNSITO]]></text>
+			</staticText>
+			<rectangle radius="4">
+				<reportElement key="rectangle-5" x="6" y="116" width="524" height="54"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-20" mode="Opaque" x="8" y="108" width="77" height="7"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[TIPIFICAÇÃO DA INFRAÇÃO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-21" mode="Opaque" x="11" y="118" width="82" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[CÓD.ENQUADRAMENTO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-8" x="142" y="125" width="377" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ENQUADRAMENTO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-10" x="6" y="143" width="524" height="1"/>
+			</line>
+			<line>
+				<reportElement key="line-12" x="410" y="143" width="1" height="27"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-23" mode="Opaque" x="419" y="145" width="55" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[TIPO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-13" x="9" y="152" width="391" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{IDENTIFICACAO_EQUIPAMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-26" mode="Opaque" x="9" y="145" width="98" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[IDENTIFICAÇÃO DO EQUIPAMENTO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="true">
+				<reportElement key="textField-16" x="445" y="89" width="75" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{AGENTE}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-18" x="447" y="16" width="62" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{AUTO}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-20" x="430" y="16" width="17" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SERIE}]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Icon">
+				<reportElement key="image-2" x="7" y="177" width="520" height="390"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$F{imagem_obj}]]></imageExpression>
+			</image>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-21" x="419" y="153" width="100" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SIGLA_INFRACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+			<ellipse>
+				<reportElement key="ellipse-1" x="486" y="184" width="0" height="0"/>
+			</ellipse>
+			<line>
+				<reportElement key="line-16" x="113" y="116" width="1" height="27"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-28" mode="Opaque" x="121" y="118" width="98" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[DESCRIÇÃO ENQUADRAMENTO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField-22" x="9" y="126" width="96" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[String.valueOf($F{ID_ENQUADRAMENTO}).substring(0,3)+ "-"+ String.valueOf($F{ID_ENQUADRAMENTO}).substring(String.valueOf($F{ID_ENQUADRAMENTO}).length()-2)]]></textFieldExpression>
+			</textField>
+			<image onErrorType="Icon">
+				<reportElement key="image-2" x="7" y="575" width="190" height="142" backcolor="#FFFFFF"/>
+				<imageExpression class="java.io.InputStream"><![CDATA[$F{imagem_pan}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-5" x="296" y="43" width="1" height="27"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

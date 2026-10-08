@@ -1,0 +1,6 @@
+@charset "UTF-8";
+.table-wrapper {
+  max-height: 600px;
+  overflow: auto;
+/*   display:inline-block; */
+}

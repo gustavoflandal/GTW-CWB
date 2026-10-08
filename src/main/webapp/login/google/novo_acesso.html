@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Acesso - Cadastro de Usuário</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .form-container {
+            max-width: 500px;
+            margin: 60px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light">    
+    <!-- Topo do sistema -->
+    <div class="container-fluid" style="background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0; margin-bottom: 30px;">
+        <div class="row align-items-center" style="min-height: 70px;">
+            <div class="col-md-8 col-7">
+                <span style="font-size: 2.5rem; font-weight: bold; color: #5a6e96; line-height: 70px; margin-left: 10px;">Sistemas GCT</span>
+            </div>
+            <div class="col-md-2 col-2 text-end">
+                <button id="btn-pagina-inicial" class="btn btn-outline-primary mt-2 mb-2">Página inicial</button>
+            </div>
+        </div>
+    </div>
+    <div class="form-container">
+        <h2 class="mb-4 text-center">Cadastro de Novo Usuário</h2>
+        <form id="form-novo-acesso">
+            <div class="mb-3">
+                <label for="nome" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="nome" name="nome" value="João da Silva" required>
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">E-mail</label>
+                <input type="email" class="form-control" id="email" name="email" value="joao.silva@gmail.com" required>
+            </div>
+            <div class="mb-3">
+                <label for="usuario" class="form-label">Usuário</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" value="joao.silva" required>
+            </div>
+            <div class="mb-3">
+                <label for="telefone" class="form-label">Telefone (celular)</label>
+                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="(99) 99999-9999" required>
+            </div>
+            <div class="d-grid">
+                <button type="submit" class="btn btn-success">Salvar</button>
+            </div>
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+    <script>
+    // Variável oculta para guardar o ID do Google
+    let googleIdOculto = '';
+
+    // Preencher campos automaticamente com dados do Google, se existirem
+    window.onload = function() {
+        try {
+            const dadosStr = localStorage.getItem('novoUsuarioGoogle');
+            if (dadosStr) {
+                const dados = JSON.parse(dadosStr);
+                if (dados.nome) document.getElementById('nome').value = dados.nome;
+                if (dados.email) {
+                    document.getElementById('email').value = dados.email;
+                    // Preencher usuário automaticamente
+                    const usuario = dados.email.split('@')[0];
+                    document.getElementById('usuario').value = usuario;
+                }
+                if (dados.googleId) googleIdOculto = dados.googleId;
+                localStorage.removeItem('novoUsuarioGoogle');
+            }
+        } catch(e) { /* ignora erros */ }
+    };
+
+    // Máscara para telefone brasileiro
+    $(document).ready(function(){
+        $('#telefone').mask('(00) 00000-0000');
+    });
+
+    // Ao submeter o formulário, envia os dados por AJAX para o backend
+    document.getElementById('form-novo-acesso').onsubmit = function(e) {
+        e.preventDefault();
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const usuario = document.getElementById('usuario').value;
+        let telefone = document.getElementById('telefone').value;
+        // Limpar telefone para conter apenas números
+        telefone = telefone.replace(/\D/g, '');
+        // Limites do banco
+        if (usuario.length > 25) {
+            Swal.fire({ icon: 'warning', title: 'Usuário muito longo', text: 'O campo Usuário deve ter no máximo 25 caracteres.' });
+            return;
+        }
+        if (nome.length > 60) {
+            Swal.fire({ icon: 'warning', title: 'Nome muito longo', text: 'O campo Nome deve ter no máximo 60 caracteres.' });
+            return;
+        }
+        if (email.length > 50) {
+            Swal.fire({ icon: 'warning', title: 'E-mail muito longo', text: 'O campo E-mail deve ter no máximo 50 caracteres.' });
+            return;
+        }
+        if (telefone.length > 11) {
+            Swal.fire({ icon: 'warning', title: 'Telefone muito longo', text: 'O campo Telefone deve ter no máximo 11 dígitos (apenas números).' });
+            return;
+        }
+        if (googleIdOculto.length > 255) {
+            Swal.fire({ icon: 'warning', title: 'ID do Google muito longo', text: 'O campo ID do Google deve ter no máximo 255 caracteres.' });
+            return;
+        }
+        // Envia por AJAX para /callback
+        const dados = { nome, email, usuario, telefone, googleId: googleIdOculto };
+        fetch('/callback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(dados)
+        })
+        .then(response => response.json())
+        .then(resp => {
+            if (resp && resp.resultado) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Usuário cadastrado com sucesso!',
+                    text: 'Você será redirecionado para a página inicial em 10 segundos.',
+                    timer: 10000,
+                    timerProgressBar: true,
+                    showConfirmButton: false
+                });
+                setTimeout(function() {
+                    window.location.href = location.origin;
+                }, 5000);
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Erro ao cadastrar usuário!',
+                    text: 'Ocorreu um problema ao salvar o usuário. Tente novamente.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        })
+        .catch(() => Swal.fire({
+            icon: 'error',
+            title: 'Erro ao cadastrar usuário!',
+            text: 'Ocorreu um problema ao salvar o usuário. Tente novamente.',
+            confirmButtonText: 'OK'
+        }));
+    };
+
+    // Clique no logo ou no botão retorna para a página inicial
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('logo-consilux').onclick = function() {
+            window.location.href = location.origin;
+        };
+        document.getElementById('btn-pagina-inicial').onclick = function() {
+            window.location.href = location.origin;
+        };
+    });
+    </script>
+</body>
+</html>

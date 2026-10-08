@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Veiculo Irregular" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="f71a5e2b-cf61-409b-9e7c-0531e369a214">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.464100000000005"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="[DEV] GTW-MURALHA-DIGITAL"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="javax.imageio.ImageIO"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<import value="org.apache.commons.codec.binary.Base64"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Documents and Settings\\fos\\workspace\\GTW\\src\\main\\webapp\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="IMGS_INFRACAO" class="java.util.List" isForPrompting="false"/>
+	<queryString>
+		<![CDATA[SELECT id,
+		   placa,
+		   data,
+		   velocidade,
+		   id_local,
+		   nome_local,
+		   nome,
+		   id_pista,
+		   faixa,
+		   tipo_alerta,
+		   nome_monitorado,
+		   placa_monitorada,
+		   data_alerta,
+		   status_alerta,
+		   (SELECT img_obj AS '*' FOR XML PATH('')) AS imagem_b64
+	FROM   (
+				SELECT vtr.id,
+					   vtr.placa,
+					   vtr.data,
+					   vtr.velocidade,
+					   vtr.id_local,
+					   lpv.nome_local,
+					   RTRIM(lpv.nome) AS nome,
+					   vtr.id_pista,
+					   lpv.cod_pista_alternativo AS faixa,
+					   tao.tipo AS tipo_alerta,
+					   cev.nome AS nome_monitorado,
+					   cev.placa AS placa_monitorada,
+					   a.data AS data_alerta,
+					   s.descricao AS status_alerta,
+					   CAST(vtri.imagem AS VARBINARY(MAX)) AS img_obj
+				FROM   muralha.veiculo_tempo_real vtr (NOLOCK)
+					   INNER JOIN local_pista_vigente lpv
+							ON  lpv.id_local = vtr.id_local
+								AND lpv.id_pista = vtr.id_pista
+					   INNER JOIN muralha.alerta_veiculo av
+							ON  av.id_veiculo_tempo_real = vtr.id
+					   INNER JOIN muralha.alerta a
+							ON  a.id = av.id_alerta
+					   INNER JOIN muralha.cad_veiculo_monitorado cev
+							ON  cev.id = a.id_cad_veiculo_monitorado
+					   INNER JOIN muralha.tipo_alerta_ocorrencia tao
+							ON  tao.id = a.id_tipo_alerta_ocorrencia
+					   INNER JOIN muralha.status_alerta s
+							ON  s.id = a.id_status_alerta
+					   INNER JOIN muralha.veiculo_tempo_real_imagem vtri
+							ON  vtri.id_veiculo_tempo_real = vtr.id
+				WHERE  vtr.id = 'C0BAA434-C84B-4929-B2CC-EFB1D1C3E177' --webp
+				--WHERE  vtr.id = 'B2068360-9284-47CF-B5AF-29D2159F4C5F'
+					   AND vtri.indice_imagem = 0
+		   ) a
+	ORDER BY
+		   data,
+		   data_alerta]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+	</field>
+	<field name="placa" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="placa"/>
+	</field>
+	<field name="data" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="data"/>
+	</field>
+	<field name="velocidade" class="java.lang.Short">
+		<property name="com.jaspersoft.studio.field.label" value="velocidade"/>
+	</field>
+	<field name="id_local" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id_local"/>
+	</field>
+	<field name="nome_local" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome_local"/>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome"/>
+	</field>
+	<field name="id_pista" class="java.lang.Short">
+		<property name="com.jaspersoft.studio.field.label" value="id_pista"/>
+	</field>
+	<field name="faixa" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="faixa"/>
+	</field>
+	<field name="tipo_alerta" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="tipo_alerta"/>
+	</field>
+	<field name="nome_monitorado" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="nome_monitorado"/>
+	</field>
+	<field name="placa_monitorada" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="placa_monitorada"/>
+	</field>
+	<field name="data_alerta" class="java.sql.Timestamp">
+		<property name="com.jaspersoft.studio.field.label" value="data_alerta"/>
+	</field>
+	<field name="status_alerta" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="status_alerta"/>
+	</field>
+	<field name="imagem_b64" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="imagem_b64"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="136" splitType="Stretch">
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" x="4" y="0" width="525" height="110" uuid="47ded632-7723-4a40-811d-9f3fe8a7b648">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-12" mode="Opaque" x="26" y="2" width="480" height="33" uuid="94f07639-307a-4e99-b736-bedda41c1cdb">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BLITZ ELETRÔNICA - VEICULO IRREGULAR]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" x="4" y="35" width="525" height="26" backcolor="#DEDEDE" uuid="1017ff65-58f8-477e-9b23-8c788c47b47e"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-12" mode="Opaque" x="25" y="40" width="481" height="18" backcolor="#DEDEDE" uuid="304997c6-6d88-478b-a256-30c04190989f"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VEÍCULO]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="48" y="66" width="76" height="13" uuid="e9130a4d-9a76-427a-b047-eedca5dec507"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{placa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="6" y="66" width="38" height="13" uuid="a744dc39-5ad8-433e-bf41-dc1288705cab">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<box>
+					<topPen lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLACA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="140" y="66" width="32" height="13" uuid="9b6f4ff4-4fa2-4efe-bca3-5d47893f6464">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="176" y="66" width="100" height="13" uuid="2c1a2d1d-1731-4afb-8abf-65d58ac9dead"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="290" y="66" width="69" height="13" uuid="bcdbba06-0407-4d4b-b082-7d44b1fb9b3c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[VELOCIDADE:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="362" y="66" width="18" height="13" uuid="5966b011-5310-4852-8492-0405e7c25b26">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{velocidade}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="440" y="66" width="35" height="13" uuid="0c0104e6-4ea6-44c9-b204-656b07a42387">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[FAIXA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="480" y="66" width="43" height="13" uuid="d02060e7-79a5-4b73-8311-a951fcb99e5e"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{faixa}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="6" y="91" width="42" height="13" uuid="d8281a95-7202-44b7-b700-00239defbc89">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LOCAL:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="48" y="91" width="475" height="13" uuid="be58cd88-fd45-41cb-9471-1609eea02a88"/>
+				<textElement textAlignment="Left" verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="4" y="85" width="525" height="1" uuid="8aa63e5d-354e-46b9-88bd-e2ba16908d66">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="133" y="61" width="1" height="24" uuid="1e1c923c-f5de-4bb7-8419-e4559808eb1c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="284" y="61" width="1" height="24" uuid="fc9c6d79-eb12-44bc-a450-2dc4899a470c">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+			<line>
+				<reportElement x="434" y="61" width="1" height="24" uuid="bdb4c0c9-850f-412e-8ae4-2a20e1ce5c4d">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="380" y="66" width="50" height="13" uuid="421a3ada-8bcf-4d6c-889f-a60f0796613e"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[ km/h]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" x="4" y="110" width="525" height="26" backcolor="#DEDEDE" uuid="ca7f9d0c-2061-47ee-b51a-8f45bfdc7251">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="pixel"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-12" mode="Opaque" x="26" y="115" width="481" height="18" backcolor="#DEDEDE" uuid="95b05217-29ed-4376-af8a-99362dea32d6">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ALERTAS]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="141" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-7" x="4" y="-2" width="525" height="143" backcolor="#F7F5F5" uuid="5d229b70-c5a5-44c7-83a9-d8310fadbfb8">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="209" y="24" width="112" height="13" backcolor="#F7F5F5" uuid="cacb837f-f090-4e69-847e-a80d4c152ae8">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TIPO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="321" y="24" width="200" height="13" uuid="b3704b92-c7a4-4bcb-9caa-c262a9b3f945">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo_alerta}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="209" y="44" width="112" height="13" backcolor="#F7F5F5" uuid="397a8627-1913-4eab-8f89-9355971b2397">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NOME:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="321" y="44" width="200" height="13" uuid="0bb31993-89d5-420d-9e5b-3a2f333c3837"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_monitorado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="209" y="64" width="112" height="13" backcolor="#F7F5F5" uuid="1f1393a2-c4db-4616-996c-090efd59c35e">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PLACA MONITORADA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="321" y="64" width="200" height="13" uuid="29c54dc6-7db4-456b-9315-2d94b40a9010"/>
+				<textElement verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{placa_monitorada}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="209" y="84" width="112" height="13" backcolor="#F7F5F5" uuid="b88e93fa-1819-4b2e-96e7-1c821b51a063">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DATA ALERTA:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="321" y="84" width="200" height="13" uuid="5505bc48-6b79-45a9-9ce9-073dc594b1f6">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data_alerta}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="193" y="-2" width="1" height="142" uuid="86e92807-238a-4c4f-b953-ce3a3e8a495a">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+			</line>
+			<staticText>
+				<reportElement key="staticText-15" mode="Opaque" x="209" y="104" width="112" height="13" backcolor="#F7F5F5" uuid="5168b21a-72f4-4b54-8613-a7b83efecdc0">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[STATUS:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="321" y="104" width="200" height="13" uuid="372d0408-b7ed-4452-b716-0b60da684ebf">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement verticalAlignment="Bottom">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{status_alerta}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" onErrorType="Blank">
+				<reportElement x="25" y="5" width="147" height="125" backcolor="#333333" uuid="5bba6862-26ab-4026-9ebd-305b89b898c7"/>
+				<imageExpression><![CDATA[new java.io.ByteArrayInputStream(java.util.Base64.getDecoder().decode($F{imagem_b64}))]]></imageExpression>
+			</image>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="7" splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="20" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

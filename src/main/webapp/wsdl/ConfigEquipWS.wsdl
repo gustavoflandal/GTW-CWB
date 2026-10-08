@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://server.ws.consilux.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://server.ws.consilux.com" xmlns:intf="http://server.ws.consilux.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://server.ws.consilux.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="buscaDataModificacaoConfigEquip">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="idEquipamento" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscaDataModificacaoConfigEquipResponse">
+    <complexType>
+     <sequence>
+      <element name="buscaDataModificacaoConfigEquipReturn" type="xsd:double"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscaUsuarioConfigEquip">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="idEquipamento" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscaUsuarioConfigEquipResponse">
+    <complexType>
+     <sequence>
+      <element name="buscaUsuarioConfigEquipReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscarConfigEquip">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="idEquipamento" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="buscarConfigEquipResponse">
+    <complexType>
+     <sequence>
+      <element name="buscarConfigEquipReturn" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setEmOperacao">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="idEquipamento" type="xsd:int"/>
+      <element name="operando" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="setEmOperacaoResponse">
+    <complexType/>
+   </element>
+   <element name="incluirConfigEquip">
+    <complexType>
+     <sequence>
+      <element name="loginUsuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="xmlConfigEquip" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="incluirConfigEquipResponse">
+    <complexType/>
+   </element>
+   <element name="validarUsuario">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="validarUsuarioResponse">
+    <complexType>
+     <sequence>
+      <element name="validarUsuarioReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="setEmOperacaoRequest">
+
+      <wsdl:part element="impl:setEmOperacao" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscaUsuarioConfigEquipRequest">
+
+      <wsdl:part element="impl:buscaUsuarioConfigEquip" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscaDataModificacaoConfigEquipResponse">
+
+      <wsdl:part element="impl:buscaDataModificacaoConfigEquipResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="setEmOperacaoResponse">
+
+      <wsdl:part element="impl:setEmOperacaoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="incluirConfigEquipResponse">
+
+      <wsdl:part element="impl:incluirConfigEquipResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscaUsuarioConfigEquipResponse">
+
+      <wsdl:part element="impl:buscaUsuarioConfigEquipResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarConfigEquipRequest">
+
+      <wsdl:part element="impl:buscarConfigEquip" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="validarUsuarioResponse">
+
+      <wsdl:part element="impl:validarUsuarioResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="validarUsuarioRequest">
+
+      <wsdl:part element="impl:validarUsuario" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscaDataModificacaoConfigEquipRequest">
+
+      <wsdl:part element="impl:buscaDataModificacaoConfigEquip" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="buscarConfigEquipResponse">
+
+      <wsdl:part element="impl:buscarConfigEquipResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="incluirConfigEquipRequest">
+
+      <wsdl:part element="impl:incluirConfigEquip" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="ConfigEquipWS">
+
+      <wsdl:operation name="buscaDataModificacaoConfigEquip">
+
+         <wsdl:input message="impl:buscaDataModificacaoConfigEquipRequest" name="buscaDataModificacaoConfigEquipRequest"/>
+
+         <wsdl:output message="impl:buscaDataModificacaoConfigEquipResponse" name="buscaDataModificacaoConfigEquipResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscaUsuarioConfigEquip">
+
+         <wsdl:input message="impl:buscaUsuarioConfigEquipRequest" name="buscaUsuarioConfigEquipRequest"/>
+
+         <wsdl:output message="impl:buscaUsuarioConfigEquipResponse" name="buscaUsuarioConfigEquipResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarConfigEquip">
+
+         <wsdl:input message="impl:buscarConfigEquipRequest" name="buscarConfigEquipRequest"/>
+
+         <wsdl:output message="impl:buscarConfigEquipResponse" name="buscarConfigEquipResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmOperacao">
+
+         <wsdl:input message="impl:setEmOperacaoRequest" name="setEmOperacaoRequest"/>
+
+         <wsdl:output message="impl:setEmOperacaoResponse" name="setEmOperacaoResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="incluirConfigEquip">
+
+         <wsdl:input message="impl:incluirConfigEquipRequest" name="incluirConfigEquipRequest"/>
+
+         <wsdl:output message="impl:incluirConfigEquipResponse" name="incluirConfigEquipResponse"/>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="validarUsuario">
+
+         <wsdl:input message="impl:validarUsuarioRequest" name="validarUsuarioRequest"/>
+
+         <wsdl:output message="impl:validarUsuarioResponse" name="validarUsuarioResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="ConfigEquipWSSoapBinding" type="impl:ConfigEquipWS">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="buscaDataModificacaoConfigEquip">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscaDataModificacaoConfigEquipRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscaDataModificacaoConfigEquipResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscaUsuarioConfigEquip">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscaUsuarioConfigEquipRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscaUsuarioConfigEquipResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="buscarConfigEquip">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="buscarConfigEquipRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="buscarConfigEquipResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="setEmOperacao">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="setEmOperacaoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="setEmOperacaoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="incluirConfigEquip">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="incluirConfigEquipRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="incluirConfigEquipResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+      <wsdl:operation name="validarUsuario">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="validarUsuarioRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="validarUsuarioResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="ConfigEquipWSService">
+
+      <wsdl:port binding="impl:ConfigEquipWSSoapBinding" name="ConfigEquipWS">
+
+         <wsdlsoap:address location="http://localhost/services/ConfigEquipWS"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

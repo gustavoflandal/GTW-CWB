@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="RelatorioAproveitaveis"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="DATA_INI" isForPrompting="true" class="java.sql.Timestamp"/>
+	<parameter name="DATA_FIM" isForPrompting="true" class="java.sql.Timestamp"/>
+	<parameter name="LOCAL" isForPrompting="true" class="java.lang.Integer"/>
+	<parameter name="DIR_IMAGENS" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["C:\\workspace\\GTW_URBS\\src\\main\\webapp\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[SELECT
+
+	convert(char(10), ic.data_veiculo, 120) as Data,
+	convert(varchar(2),DATEPART(HOUR, ic.data_veiculo)) + ':00' as Hora,
+	--convert(varchar(2),DATEPART(HOUR, ic.data_veiculo)) + ':00' as Hora,
+	ic.pista,
+	ic.id_local,
+	e.descricao,
+	COUNT(*) as Total
+FROM
+	infracao_completa ic with (nolock)
+	join enquadramento e with (nolock) on ic.id_enquadramento = e.id_enquadramento
+where
+	ic.aproveitavel = 1
+	and
+	ic.id_local = $P{LOCAL}
+	and
+	ic.data_veiculo >= $P{DATA_INI}
+	and
+	ic.data_veiculo <= $P{DATA_FIM}
+group by
+	convert(char(10), ic.data_veiculo, 120),
+	DATEPART(HOUR, ic.data_veiculo),
+	ic.id_local, 
+	ic.pista, 
+	e.descricao]]></queryString>
+
+	<field name="Data" class="java.lang.String"/>
+	<field name="Hora" class="java.lang.String"/>
+	<field name="pista" class="java.lang.Short"/>
+	<field name="id_local" class="java.lang.Integer"/>
+	<field name="descricao" class="java.lang.String"/>
+	<field name="Total" class="java.lang.Integer"/>
+
+	<variable name="TOTALGERAL" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{Total}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="1"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="75"  isSplitAllowed="true" >
+				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="163"
+						height="49"
+						key="image-1"/>
+					<box></box>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+"\\consilux.jpg"]]></imageExpression>
+				</image>
+				<staticText>
+					<reportElement
+						x="163"
+						y="0"
+						width="371"
+						height="75"
+						key="staticText-7"/>
+					<box></box>
+					<textElement>
+						<font size="12"/>
+					</textElement>
+				<text><![CDATA[Rua João Tschannerl, 707 - Vista Alegre - 80820-010 CURITIBA - PARANÁ - BRASIL - Tel: ++55 41 3240 7707. Relatório de todas as placas.]]></text>
+				</staticText>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="2"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="30"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="58"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-1"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Data]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="58"
+						y="0"
+						width="34"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-2"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Hora]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="502"
+						y="0"
+						width="32"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-3"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Total]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="141"
+						y="0"
+						width="22"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-4"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Pista]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="92"
+						y="0"
+						width="49"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-5"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Local]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="163"
+						y="0"
+						width="339"
+						height="15"
+						backcolor="#CCCCCC"
+						key="staticText-6"/>
+					<box>					<pen lineWidth="1.25" lineColor="#000000"/>
+					<topPen lineWidth="1.25" lineColor="#000000"/>
+					<leftPen lineWidth="1.25" lineColor="#000000"/>
+					<bottomPen lineWidth="1.25" lineColor="#000000"/>
+					<rightPen lineWidth="1.25" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Descrição]]></text>
+				</staticText>
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="15"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="58"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Data}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="58"
+						y="0"
+						width="34"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{Hora}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="92"
+						y="0"
+						width="49"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{id_local}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="141"
+						y="0"
+						width="22"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Short"><![CDATA[$F{pista}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="163"
+						y="0"
+						width="339"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement verticalAlignment="Top">
+						<font size="8"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descricao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="502"
+						y="0"
+						width="32"
+						height="15"
+						key="textField"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{Total}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="2"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="10"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<lastPageFooter>
+			<band height="15"  isSplitAllowed="true" >
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="460"
+						y="0"
+						width="74"
+						height="15"
+						key="textField-1"/>
+					<box>					<pen lineWidth="0.5" lineColor="#000000"/>
+					<topPen lineWidth="0.5" lineColor="#000000"/>
+					<leftPen lineWidth="0.5" lineColor="#000000"/>
+					<bottomPen lineWidth="0.5" lineColor="#000000"/>
+					<rightPen lineWidth="0.5" lineColor="#000000"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{TOTALGERAL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="163"
+						y="0"
+						width="297"
+						height="15"
+						key="staticText-8"/>
+					<box></box>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Total Geral: ]]></text>
+				</staticText>
+			</band>
+		</lastPageFooter>
+		<summary>
+			<band height="1"  isSplitAllowed="true" >
+			</band>
+		</summary>
+		<noData>
+			<band height="1"  isSplitAllowed="true" >
+			</band>
+		</noData>
+</jasperReport>

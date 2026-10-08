@@ -1,0 +1,19 @@
+.sub-tittle-modal-boletim {
+	margin-bottom: 0px;
+}
+
+.sub-diviver-modal-boletim {
+	margin-top: 0px;
+}
+
+.tab-overflow-y
+{
+  max-height: 100vh;
+  overflow-y: auto;
+}
+.container-sub-tittle
+{
+	display: flex;
+	align-items:center;
+	column-gap: 10px;
+}

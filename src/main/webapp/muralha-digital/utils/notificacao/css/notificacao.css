@@ -1,0 +1,108 @@
+
+#toast-container > .toast {
+    background-image: none !important;
+}
+
+#toast-container > .toast .notificacao-alerta-miniatura {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: 120px;
+    object-fit: contain;
+    margin: 0 auto 8px;
+}
+
+#toast-container > .toast:before {
+    position: fixed;
+    font-family: FontAwesome;
+    font-size: 24px;
+    line-height: 18px;
+    float: left;
+    color: #fff;
+    padding-right: 0.5em;
+    margin: auto 0.5em auto -1.5em;
+}        
+#toast-container > .toast-warning:before {
+    content: "\f003";
+}
+#toast-container > .toast-error:before {
+    content: "\f001";
+}
+#toast-container > .toast-info:before {
+    content: "\f005";
+}
+#toast-container > .toast-success:before {
+    content: "\f002";
+}
+#toast-container > .toast-dark-red:before {
+    content: "\f071";
+    font-family: FontAwesome;
+}
+
+.toast-success {
+    background-color: #28a745 !important; /* Verde Bootstrap */
+    color: #fff !important;
+}
+
+.toast-error {
+    background-color: #dc3545 !important; /* Vermelho Bootstrap */
+    color: #fff !important;
+}
+
+.toast-warning {
+    background-color: #ffc107 !important; /* Amarelo Bootstrap */
+    color: #fff !important;
+}
+
+.toast-info {
+    background-color: #17a2b8 !important; /* Azul Bootstrap */
+    color: #fff !important;
+}
+
+.toast-orange {
+    background-color: orange !important;
+    color: #fff !important;
+}
+
+.toast-purple {
+    background-color: purple !important;
+    color: #fff !important;
+}
+
+.toast-brown {
+    background-color: #795548 !important;
+    color: #fff !important;
+}
+
+.toast-pink {
+    background-color: #e83e8c !important;
+    color: #fff !important;
+}
+
+/* Aqui abaixo foi feito a classe do toast-dark-red para quando vier um alerta que deva ter um B.O., ele venha sem o B.O. */
+.toast-dark-red {
+    font-size: 18px !important;
+    border: 10px outset #D35400;
+    border-radius: 10px;
+
+    animation: blink 1s infinite;
+}
+
+/* Aqui abaixo é feito a classe do keyframes para animação, piscando o border entre as cores laranja e amarelo. */
+@keyframes blink {
+    0% {
+        border-color: #D35400;
+    }
+    50% {
+        border-color: #8b0000;
+    }
+    100% {
+        border-color: #D35400;
+    }
+}
+
+/* Aqui abaixo é feito um width com margin para o button do toast. */
+.margin-button-alert {
+    width: 90% !important;
+    margin: 5px !important;
+}

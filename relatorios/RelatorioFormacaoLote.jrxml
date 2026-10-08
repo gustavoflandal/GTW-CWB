@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="RelatorioFormacaoLote" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6efcec96-3afd-42d8-845d-9c06a1be22da">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["C:\\Coisas\\Java\\Teste\\Workspace\\GTW\\src\\main\\webapp\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DESCRICAO_LOTE" class="java.lang.String"/>
+	<parameter name="ID_REMESSA" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT  ir.sequencia, p.nome AS processo, su.nome AS usuario, CONVERT(DATE,ip.data) AS data,
+sub2.min_data, sub2.max_data
+FROM infracao i (NOLOCK)
+JOIN (SELECT id_infracao, MAX(id_infracao_processo) AS id_infracao_processo
+FROM infracao_processo WHERE id_processo IN (1,2) GROUP BY id_infracao) AS sub1
+	ON i.id_infracao = sub1.id_infracao
+JOIN infracao_processo ip (NOLOCK) ON sub1.id_infracao_processo = ip.id_infracao_processo
+JOIN sis_usuario su (NOLOCK) ON ip.id_usuario = su.id_usuario
+JOIN processo p (NOLOCK) ON p.id_processo = ip.id_processo
+JOIN infracao_remessa ir (NOLOCK) ON i.id_infracao = ir.id_infracao
+
+JOIN (SELECT infracao_remessa.id_remessa,
+MIN(infracao.data) AS min_data, MAX(infracao.data) AS max_data
+FROM infracao (NOLOCK) JOIN infracao_remessa (NOLOCK)
+ON infracao.id_infracao = infracao_remessa.id_infracao
+GROUP BY infracao_remessa.id_remessa) AS sub2 ON sub2.id_remessa = ir.id_remessa
+
+WHERE ir.id_remessa = $P{ID_REMESSA}
+
+ORDER BY 1]]>
+	</queryString>
+	<field name="sequencia" class="java.lang.String"/>
+	<field name="processo" class="java.lang.String"/>
+	<field name="usuario" class="java.lang.String"/>
+	<field name="data" class="java.util.Date"/>
+	<field name="min_data" class="java.sql.Timestamp"/>
+	<field name="max_data" class="java.sql.Timestamp"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="64" splitType="Stretch">
+			<image>
+				<reportElement stretchType="RelativeToTallestObject" x="0" y="0" width="200" height="48" uuid="7202fce4-6d52-4c67-b217-a9e50e0034fa"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGENS}+"\\consilux.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="200" y="0" width="355" height="48" uuid="01e47706-fc77-45eb-92f6-0a688c14b33e"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de Formação do Lote]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="40" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="153" height="20" uuid="7045ffb1-5c53-483b-808a-9a7416b56ba9"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Identificação do Lote:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="153" y="0" width="152" height="20" uuid="067e62c0-a90d-402a-acbe-33619f59fcef"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DESCRICAO_LOTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="153" height="20" uuid="ff717940-c5da-4770-98b2-793dad4f1268"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Início da Formação do Lote:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="434" y="20" width="121" height="20" uuid="cf766fa4-19d7-4033-b277-84aec7f9bb5e"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{max_data}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="277" y="20" width="157" height="20" uuid="27a2bcd7-748a-4c4e-8be9-78191b401f72"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Término da Formação do Lote:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yy HH:mm:ss" isBlankWhenNull="true">
+				<reportElement x="153" y="20" width="124" height="20" uuid="a5bd2622-dcf4-453b-aae8-9588c6048af8"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{min_data}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="530954ca-f8fb-462c-bbeb-74a92ae8af50"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Sequência]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="20" uuid="37c8c1e9-2375-4303-8cc4-6e0b3de3b00d"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Processo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="200" y="0" width="152" height="20" uuid="a232356e-1abc-455a-9de8-fe5f8e371f9b"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Usuário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="352" y="0" width="100" height="20" uuid="6c6c2fb3-83a8-4ab1-9dc5-6dc830b41c45"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[Data]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="a8c90a30-895e-4d85-9131-3cfdd4a5a874"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{sequencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="20" uuid="3ad94fe7-0b8a-48f6-a398-3cd533a3905c"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{processo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="152" height="20" uuid="d4eef68a-8853-44e3-9879-7b506a992917"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{usuario}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="352" y="0" width="100" height="20" uuid="61776e32-c3de-4c1d-981d-0fa82fa9d7a3"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{data}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="424" y="0" width="91" height="20" uuid="dfc73397-cf74-4576-b7e5-89dbb11cc74d"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página "+$V{PAGE_NUMBER}+" de"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="515" y="0" width="40" height="20" uuid="a9044e71-5def-4928-8ebd-9ad60cab3235"/>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

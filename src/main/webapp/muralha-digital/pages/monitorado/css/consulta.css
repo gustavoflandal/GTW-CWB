@@ -1,0 +1,69 @@
+@charset "UTF-8";
+.input-group-text {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 0.75rem !important;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: center;
+  white-space: nowrap;
+  background-color: #e9ecef;
+  border: 1px solid #ced4da;
+  border-radius: 0.25rem;
+}
+
+.btn-toolbar-acoes .btn {
+    margin-right: 5px !important;
+}
+.btn-toolbar-acoes .btn:last-child {
+    margin-right: 0 !important;
+}
+
+#loading-overlay {
+    position: absolute;  /* Fixa o overlay na tela */
+    top: 0;  /* Alinha o overlay ao topo da tela */
+    left: 0;  /* Alinha o overlay � esquerda da tela */
+    width: 100%;  /* Define a largura do overlay para ocupar 100% da tela */
+    height: 100%;  /* Define a altura do overlay para ocupar 100% da tela */
+    background-color: rgba(0, 0, 0, 0.5);  /* Define a cor de fundo com transpar�ncia (50%) */
+    z-index: 11055;  /* Define a prioridade de empilhamento alta para o overlay */
+    display: flex;  /* Utiliza flexbox para centralizar o conte�do */
+    justify-content: center;  /* Centraliza horizontalmente o conte�do dentro do overlay */
+    align-items: center;  /* Centraliza verticalmente o conte�do dentro do overlay */
+}
+
+.loading-spinner {
+    border: 16px solid #f3f3f3;  /* Define a borda do spinner com cor #f3f3f3 */
+    border-top: 16px solid #3498db;  /* Define a borda superior do spinner com cor #3498db */
+    border-radius: 50%;  /* Define as bordas do spinner como um c�rculo */
+    width: 80px;  /* Define a largura do spinner */
+    height: 80px;  /* Define a altura do spinner */
+    animation: spin 2s linear infinite;  /* Aplica a anima��o de rota��o ao spinner */
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }  /* Define o in�cio da anima��o (0 graus de rota��o) */
+	100% { transform: rotate(360deg); }  /* Define o fim da anima��o (360 graus de rota��o) */
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25em 0.4em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: 0.25rem;
+    color: white;
+    background-color: red;
+    position: relative;
+    top: -1px;
+}
+
+.badge:hover{
+	cursor: pointer;
+}

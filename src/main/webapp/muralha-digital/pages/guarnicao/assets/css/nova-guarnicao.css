@@ -1,0 +1,12 @@
+.modal-content{
+	padding: 6px;
+}
+
+.space-full{
+	width: 100% !important;
+}
+
+.select-guarnicao{
+    border: 1px #e3e3e3 solid;
+    border-radius: 5px;
+}

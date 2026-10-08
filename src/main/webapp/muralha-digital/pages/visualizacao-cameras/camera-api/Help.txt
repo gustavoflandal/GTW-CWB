@@ -1,0 +1,26 @@
+Caso precise renomear camera-api ou utilizar em outro local se atentar para modificar as referências dentro dos javaScript, jsp e html:
+ 
+camera-api\module\PlayerControl.js
+	Linha 16552:         return new Worker("camera-api/module/videoWorker.worker.js")
+	Linha 16556:         return new Worker("camera-api/module/audioWorker.worker.js")
+	Linha 17540:         return new Worker("camera-api/module/audioTalkWorker.worker.js")
+	Linha 17697:         return new Worker("camera-api/module/videoWorkerTrain.worker.js")
+
+camera-api\module\videoWorkerTrain.worker.js
+	Linha 301:     importScripts("camera-api/module/ffmpegasm.js"), addEventListener("message", function(e) {	
+
+camera-api\controles-original.js
+	Linha 1545:     fetch('./camera-api/lang/' + curLang + '.txt')
+	
+camera-api\controles.js
+	Linha 1545:     fetch('./camera-api/lang/' + curLang + '.txt')
+	
+visualizacao-cameras-original.html
+	Linha   8: <link rel="stylesheet" href="camera-api/css/visualizacao-cameras-original.css"></head>
+	Linha 209: 	<script src="camera-api/module/PlayerControl.js"></script>
+	Linha 210: 	<script src="camera-api/controles-original.js"></script>
+	
+visualizacao-cameras.jsp
+	Linha  15:       <link rel="stylesheet" href="camera-api/css/visualizacao-cameras.css">
+	Linha 151:       <script src="camera-api/module/PlayerControl.js"></script>
+	Linha 152:       <script src="camera-api/controles.js"></script>	

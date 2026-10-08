@@ -1,0 +1,21 @@
+@charset "ISO-8859-1";
+
+.modal-dialog-mapa-passagens,
+.modal-content-mapa-passagens
+{
+    height: 95%;
+}
+
+.modal-body-mapa-passagens
+{
+    max-height: calc(100% - 120px);
+/*     overflow-y: scroll; */
+}
+
+#map { height: 85%; width: 100%; }
+
+.table-wrapper-modal {
+  max-height: 335px;
+  overflow: auto;
+/*   display:inline-block; */
+}

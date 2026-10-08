@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://server.ws.consilux.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://server.ws.consilux.com" xmlns:intf="http://server.ws.consilux.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://server.ws.consilux.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <element name="statusAlterado">
+    <complexType>
+     <sequence>
+      <element name="idEquipamento" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="statusAlteradoResponse">
+    <complexType/>
+   </element>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="statusAlteradoRequest">
+
+      <wsdl:part element="impl:statusAlterado" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="statusAlteradoResponse">
+
+      <wsdl:part element="impl:statusAlteradoResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="StatusEquipamento">
+
+      <wsdl:operation name="statusAlterado">
+
+         <wsdl:input message="impl:statusAlteradoRequest" name="statusAlteradoRequest"/>
+
+         <wsdl:output message="impl:statusAlteradoResponse" name="statusAlteradoResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="StatusEquipamentoSoapBinding" type="impl:StatusEquipamento">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="statusAlterado">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="statusAlteradoRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="statusAlteradoResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="StatusEquipamentoService">
+
+      <wsdl:port binding="impl:StatusEquipamentoSoapBinding" name="StatusEquipamento">
+
+         <wsdlsoap:address location="http://localhost/services/StatusEquipamento"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

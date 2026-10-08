@@ -1,0 +1,457 @@
+/* ==========================================================================
+   1. CONFIGURA��O E VARI�VEIS GLOBAIS (ROOT)
+   ========================================================================== */
+:root {
+    --color-primary: #0d6efd;
+    --color-secondary: #6c757d;
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-border: #dee2e6;
+    --color-text-primary: #212529;
+    --color-text-secondary: #495057;
+    --color-focus-glow: rgba(13, 110, 253, 0.25);
+
+    --font-family-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    --font-weight-normal: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --spacing-md: 20px;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+    --transition-fast: all 0.2s ease-in-out;
+}
+
+
+/* ==========================================================================
+   2. ESTILOS GERAIS E RESET
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    margin: 0;
+    padding: 0; 
+    font-size: 16px;
+}
+
+.hidden {
+    display: none !important;
+}
+
+
+/* ==========================================================================
+   3. LAYOUT PRINCIPAL
+   ========================================================================== */
+.container {
+    max-width: 1400px;
+    /* CORRE��O 2: Adicionada margem para separar o conte�do do cabe�alho */
+    margin: var(--spacing-md) auto; 
+    background-color: var(--color-surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md);
+    border: 1px solid var(--color-border);
+}
+
+header h1 {
+    text-align: center;
+    font-size: 1.75rem;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 15px;
+    margin: 0 0 var(--spacing-md) 0;
+}
+
+.message-container {
+    text-align: center;
+    padding: 60px 20px;
+    background-color: #f8f9fa;
+    border: 1px dashed var(--color-border);
+    border-radius: var(--radius-md);
+    margin: var(--spacing-md) 0;
+}
+
+
+/* ==========================================================================
+   4. SE��O DE FILTROS
+   ========================================================================== */
+.filters-section {
+    padding-bottom: var(--spacing-md);
+    border-bottom: 1px solid var(--color-border);
+    
+}
+.filters-section > .d-flex {
+    gap: 30px; 
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 0.25rem var(--color-focus-glow);
+    outline: 0;
+}
+/* Ajuste de tamanho para os bot�es de filtro */
+.filters-section #btn-limpar,
+.filters-section #btn-analisar {
+    padding-left: 50px;  /* 32px */
+    padding-right: 50px; /* 32px */
+}
+
+/* Card de informa��es do ve�culo */
+.vehicle-info {
+    flex-grow: 1;
+    position: relative; /* Essencial para o posicionamento absoluto do bot�o */
+}
+
+/* Novo estilo para o bot�o de a��o no canto do card */
+.card-action-button {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    border: 1px solid var(--color-border); /* Borda sutil */
+    background-color: #6c757d
+}
+/* ==========================================================================
+   5. CARDS E CONTE�DO PRINCIPAL
+   ========================================================================== */
+.top-section, .dashboard {
+    display: flex;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+}
+
+.top-section {
+    align-items: stretch;
+}
+
+.dashboard {
+    flex-wrap: wrap;
+}
+
+.card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-md);
+    display: flex;
+    flex-direction: column;
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-fast);
+}
+.card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+
+.card.full-width-card {
+    width: 100%;
+    margin-top: var(--spacing-md);
+}
+
+.card h3 {
+    margin-top: 0;
+    font-size: 1.2rem;
+    font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 10px;
+    margin-bottom: var(--spacing-md);
+}
+
+.vehicle-info {
+    flex-grow: 1;
+    position: relative; /* Essencial para o posicionamento absoluto do bot�o */
+}
+
+.vehicle-info-body {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    flex-grow: 1; 
+}
+
+.vehicle-image-container img {
+    max-width: 450px;
+    height: auto;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+}
+
+.vehicle-details-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px 30px;
+    width: 100%;
+    font-size: 25px;
+}
+
+.vehicle-info-buttons {
+    position: absolute;
+    bottom: var(--spacing-md);
+    right: var(--spacing-md);
+    display: flex;
+    gap: 10px; 
+}
+
+.vehicle-info-button {
+    display: flex; 
+    justify-content: center;
+    align-items: center; 
+    width: 40px; 
+    height: 40px; 
+    padding: 0; 
+}
+
+.card-action-button {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    border: 1px solid var(--color-border); 
+    background-color: #6c757d
+}
+
+.dwell-time-display {
+    justify-content: center;
+    text-align: center;
+    flex-basis: 220px;
+    flex-shrink: 0;
+}
+
+.dwell-time-display .time {
+    font-size: 3.5rem;
+    font-weight: var(--font-weight-bold);
+    margin: auto 0;
+}
+
+.dashboard > .card {
+    flex: 1;
+    min-width: 400px;
+}
+
+
+/* ==========================================================================
+   6. GR�FICOS E MAPAS
+   ========================================================================== */
+.chart-container {
+    position: relative;
+    height: 280px;
+    width: 100%;
+}
+
+#map-canvas {
+    height: 450px;
+    width: 100%;
+    border-radius: var(--radius-md);
+}
+
+.heatmap-wrapper {
+    display: flex;
+    align-items: stretch;
+    gap: 15px;
+}
+
+#probabilidade-heatmap-container {
+    flex-grow: 1;
+    overflow-x: auto;
+}
+
+
+/* ==========================================================================
+   7. TABELAS E GRADES
+   ========================================================================== */
+.table-container {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.pcl-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.pcl-table th, .pcl-table td {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.pcl-table thead th {
+    background-color: #f8f9fa;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.heatmap-grid {
+    border-collapse: collapse;
+    width: 100%;
+    height: 100%;
+}
+
+.heatmap-grid th, .heatmap-grid td {
+    border: 1px solid var(--color-border);
+    padding: 0;
+    font-size: 12px;
+    text-align: center;
+}
+
+.heatmap-grid th, .heatmap-grid td.day-label {
+    font-weight: var(--font-weight-semibold);
+    background-color: #f8f9fa;
+    padding: 8px 5px;
+}
+
+.heatmap-grid td.data-cell {
+    width: 3.5%;
+    height: 35px;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.heatmap-grid td.data-cell:hover {
+    transform: scale(1.15);
+    border: 2px solid var(--color-text-primary);
+    z-index: 10;
+    position: relative;
+}
+
+
+/* ==========================================================================
+   8. LEGENDA DO GR�FICO DE CALOR (REFEITA)
+   ========================================================================== */
+#heatmap-legend-container {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100px;
+    flex-shrink: 0;
+}
+
+.legend-title {
+    text-align: center;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-secondary);
+}
+
+.legend-content {
+    flex-grow: 1;
+    display: flex;
+    gap: 8px;
+}
+
+.legend-color-bar {
+    width: 20px;
+    background: linear-gradient(to top, 
+        rgb(255, 255, 204), 
+        rgb(253, 141, 60),  
+        rgb(177, 0, 38)
+    );
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.legend-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 12px;
+    padding: 2px 0;
+    color: var(--color-text-secondary);
+}
+
+
+/* ==========================================================================
+   9. RESPONSIVIDADE
+   ========================================================================== */
+@media (max-width: 992px) {
+    .dashboard > .card {
+        min-width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    body { padding: 10px; }
+    .container { 
+        padding: 15px; 
+        margin-top: 15px; /* Ajuste de margem para telas menores */
+    }
+    header h1 { font-size: 1.5rem; }
+
+    .filters-section .row > [class*="col-"] {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .top-section, .vehicle-info-body {
+        flex-direction: column;
+    }
+    
+    .vehicle-details-container {
+        grid-template-columns: 1fr;
+    }
+
+    .heatmap-wrapper {
+        flex-direction: column;
+    }
+
+    #heatmap-legend-container {
+        flex-direction: row;
+        flex-basis: auto;
+        margin-top: 15px;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .legend-title {
+       order: 1;
+       margin-bottom: 0;
+    }
+    
+    .legend-content {
+        order: 2;
+        flex-grow: 1;
+    }
+    
+    .legend-color-bar {
+        height: 20px;
+        flex-grow: 1;
+        background: linear-gradient(to right, rgb(255, 255, 204), rgb(253, 141, 60), rgb(177, 0, 38));
+    }
+    
+    .legend-labels {
+        flex-direction: row;
+        width: 100%;
+    }    
+}
+
+/* ==========================================================================
+   10. ESTILOS DE COMPONENTES ESPEC�FICOS (MODALS)
+   ========================================================================== */
+#manchaMonitoradaDialog {
+    max-width: 90vw; /* O modal ter� no m�ximo 90% da largura da tela */
+}
+
+/* ==========================================================================
+   11. ESTILOS ADICIONAIS
+   ========================================================================== */
+.spot-filter-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}

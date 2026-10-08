@@ -1,0 +1,211 @@
+html, body { /*Estilo padrão para o corpo.*/
+	font-family: verdana, serif;
+	margin: 0px;
+	font-size: 15px;
+	color: #000000;
+	background-color: #FFFFFF;
+	font-weight: normal;
+	height: 100%;
+}
+input[type="button"], button {
+	font-family: verdana, serif;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #eAeAeA;
+	border: #b5b5b5 1pt solid;
+}
+
+button[disabled="disabled"] {
+	color: #959595;
+}
+.botao_enfase {
+    font-weight: bold;
+}
+input[type="text"], input[type="password"], textarea, select {
+	font-family: verdana, serif;
+	font-size: 11px;
+	font-weight: normal;
+	width: 100%;
+	color: #6b81a6;
+	background-color: #ffffff;
+	border: #b5b5b5 1pt solid;
+}
+input[disabled="disabled"] {
+	color: #959595;
+}
+input[type="checkbox"] {
+	font-family: verdana, serif;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	border: #b5b5b5 1pt solid;
+	width: 15px;
+	height: 15px;
+}
+a:link, a:visited {
+	font-family: verdana, serif;
+	color: #000000;
+	text-decoration: none;
+}
+a:hover {
+	text-decoration: underline;
+}
+table {
+    border: 0px;
+    padding: 0px;
+}
+th {
+    font-family: verdana, serif;
+    font-weight: bold;
+    font-size: 12px;
+    color: #6b81a6;
+    background-color: #dadada;
+    text-align: center;
+}
+.tabela_branca {	/*Tabela branca para campos soltos.*/
+	border: 0px;
+	padding: 0px;
+}
+.tabela_lista {	/*Tabela tipo lista.*/
+	border: #dadada 1px solid;
+	padding: 0px;
+}
+.tabela_grid {	/*Tabela tipo lista.*/
+	border: #dadada 1px solid;
+	padding: 0px;
+	border-collapse: collapse;
+}
+.label_campo {	/*Campos para formulários...alinhamento esquerdo.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	text-align: left;
+}
+.head_tabela {	/*Cabeçalho para tabelas.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 12px;
+	color: #6b81a6;
+	background-color: #dadada;
+	text-align: center;
+}
+.head_tabela_grid {	/*Cabeçalho para tabelas.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 12px;
+	color: #6b81a6;
+	background-color: #dadada;
+	text-align: center;
+	border: #ffffff 1px solid;
+}
+.dado_lista_tabela_claro {	/*Dado para listas fundo branco.*/
+	font-family: verdana, serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #6b81a6;
+	background-color: #ffffff;
+	padding-left: 2px;
+	vertical-align: middle;
+}
+.dado_lista_tabela_vermelho {	/*Dado para listas fundo branco.*/
+	font-family: verdana, serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #FF0000;
+	background-color: #ffffff;
+	padding-left: 2px;
+	vertical-align: middle;
+}
+.dado_lista_tabela_escuro {	/*Dado para listas fundo escuro.*/
+	font-family: verdana, serif;
+	font-size: 11px;
+	font-weight: normal;
+	color: #6b81a6;
+	background-color: #eAeAeA;
+	padding-left: 2px;
+	vertical-align: middle;
+}
+.dado_lista_tabela_grid {	/*Dado para listas fundo branco.*/
+	font-family: verdana, serif;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	vertical-align: middle;
+	border: #dadada 1px solid;
+}
+.corpo_mensagem {	/*Padrão para textos de mensagem.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	text-align: center;
+	padding-top: 10px;
+	padding-right: 2px;
+}
+.valor_campo {	/*Tabela branca para campos soltos.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	text-align: left;
+	padding-right: 2px;
+}
+.visualiza_campo {	/*Tabela branca para campos soltos.*/
+	font-family: verdana, serif;
+	font-weight: bold;
+	font-size: 11px;
+	color: #000000;
+	background-color: #ffffff;
+	text-align: left;
+	padding-right: 2px;
+}
+.box_botoes {	/*Espaço para botões.*/
+	padding-top: 15px;
+	text-align: center;
+}
+.link_td:link, .link_td:visited, .link_td:active {
+	text-decoration: none;
+	font-family: verdana, serif;
+	font-size: 11px;
+	color: #6b81a6;
+}
+.link_td:hover {
+	text-decoration: underline;
+	font-family: verdana, serif;
+	font-size: 11px;
+	font-weight : bold;
+	color: #6b81a6;
+	cursor: pointer;
+}
+.div_popup {	
+	border: #dadada 1px solid;
+	padding: 4px;
+	position: absolute;
+	background-color: #ffffff;
+}
+.texto_pequeno {
+	font-family: verdana, serif;
+	font-weight: normal;
+	font-size: 9px;
+	color: #6b81a6;
+	background-color: #ffffff;
+	text-align: center;
+}
+.zoom {
+	border: 	0; 
+	margin: 	0; 
+	padding: 	0;
+	display: 	inline-block;
+	position: 	relative;
+}
+.zoom img {
+	display: 	block;
+}
+.zoom img::selection { 
+	background-color: transparent; 
+}
+

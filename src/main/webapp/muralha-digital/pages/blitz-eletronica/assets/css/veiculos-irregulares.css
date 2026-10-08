@@ -1,0 +1,21 @@
+@charset "ISO-8859-1";
+
+.imgMaior { max-width: 100% }
+.imgMaior2 { width: 130%;}
+
+.thumbnail.fundo{
+     border:10px !important;
+     background: #D3D8E1 !important;
+     box-shadow:#ffe6e6 !important;
+}
+  
+.col-container {
+  display: table;
+}
+.col {
+  display: table-cell;
+}
+
+.bg-light-custom {
+  background-color: var(--bs-gray-200) !important;
+}

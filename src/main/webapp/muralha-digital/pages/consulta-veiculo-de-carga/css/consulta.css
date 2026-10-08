@@ -1,0 +1,17 @@
+@charset "UTF-8";
+.btn-toolbar-acoes .btn {
+    margin-right: 5px !important;
+}
+.btn-toolbar-acoes .btn:last-child {
+    margin-right: 0 !important;
+}
+.bottom-distance {
+    margin-bottom: 1.3rem;
+}
+#tabela th, #tabela td {
+    white-space: normal;
+    word-wrap: break-word;
+}
+.table-responsive {
+    overflow-x: visible;
+}

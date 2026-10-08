@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="SolicitacaoAuditoria" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="88"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="VERIFICADOR" class="java.lang.String"/>
+	<parameter name="DATA_INICIO" class="java.util.Date"/>
+	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="TOTAL_IMAGENS" class="java.lang.Integer"/>
+	<parameter name="LOGO_EMPRESA" class="java.lang.String"/>
+	<parameter name="TOTAL_IMAGENS_VERIFICADAS" class="java.lang.Integer"/>
+	<parameter name="TOTAL_PISTAS" class="java.lang.Integer"/>
+	<parameter name="PERC_PISTAS_VERIFICADAS" class="java.lang.Double"/>
+	<parameter name="PERC_PISTAS_COMPLETAS" class="java.lang.Double"/>
+	<parameter name="DATA_RELATORIO" class="java.sql.Timestamp"/>
+	<parameter name="ID_PROCESSO" class="java.lang.Integer"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Workspace_GTW\\GTW\\src\\main\\webapp\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+	lv.serie_equipamento,
+	lv.data_inicio,
+	cp.nome_pista,
+	cp.cod_pista_alternativo AS cod_pista,
+	inc.id_inconsistencia,
+	RTRIM(inc.descricao) AS inconsistencia,
+	count(i.id_infracao) AS conta
+FROM
+	configuracao_equipamento_pista cp
+	JOIN local_vigente lv ON lv.id_configuracao_equipamento = cp.id_configuracao_equipamento
+	LEFT JOIN infracao i ON i.id_local = lv.id_local AND i.pista = cp.id_pista
+		AND CAST(i.data AS DATE) BETWEEN $P{DATA_INICIO} AND $P{DATA_FIM}
+	LEFT JOIN infracao_processo_concluido ic ON ic.id_infracao = i.id_infracao AND ic.id_processo = $P{ID_PROCESSO}
+	LEFT JOIN infracao _i ON _i.id_infracao = ic.id_infracao
+	LEFT JOIN inconsistencia inc ON inc.id_inconsistencia = _i.id_inconsistencia
+		AND (inc.id_inconsistencia IS NULL OR inc.razao_tecnica = 2)
+WHERE
+	i.id_infracao IS NULL OR (
+		$P{ID_PROCESSO} IN (ic.id_processo,i.id_processo)
+	)
+GROUP BY
+	lv.serie_equipamento,
+	lv.data_inicio,
+	cp.nome_pista,
+	cp.cod_pista_alternativo,
+	case when (inc.id_inconsistencia is null) then 1 else 0 end,
+	inc.descricao,
+	inc.id_inconsistencia
+ORDER BY case when (inc.id_inconsistencia is null) then 1 else 0 end, count(i.id_infracao) desc, lv.serie_equipamento]]>
+	</queryString>
+	<field name="serie_equipamento" class="java.lang.Integer"/>
+	<field name="data_inicio" class="java.sql.Timestamp"/>
+	<field name="nome_pista" class="java.lang.String"/>
+	<field name="cod_pista" class="java.lang.Integer"/>
+	<field name="id_inconsistencia" class="java.lang.Integer"/>
+	<field name="inconsistencia" class="java.lang.String"/>
+	<field name="conta" class="java.lang.Integer"/>
+	<variable name="CONTA_PISTA" class="java.lang.Integer" resetType="Group" resetGroup="serie" calculation="Count">
+		<variableExpression><![CDATA[$F{cod_pista}]]></variableExpression>
+	</variable>
+	<variable name="SOMA_CONTA" class="java.lang.Integer" resetType="Group" resetGroup="serie" calculation="Sum">
+		<variableExpression><![CDATA[$F{conta}]]></variableExpression>
+	</variable>
+	<filterExpression><![CDATA[$F{conta} == 0 || ($F{conta} > 0 && $F{id_inconsistencia} > 0)]]></filterExpression>
+	<group name="serie" isStartNewPage="true">
+		<groupExpression><![CDATA[new Boolean($F{inconsistencia} == null)]]></groupExpression>
+		<groupHeader>
+			<band height="60">
+				<staticText>
+					<reportElement key="staticText-3" x="0" y="35" width="55" height="25"/>
+					<box>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma"/>
+					</textElement>
+					<text><![CDATA[N/S]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-4" x="55" y="35" width="215" height="25"/>
+					<box>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma"/>
+					</textElement>
+					<text><![CDATA[Local/Faixa]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-5" x="270" y="35" width="34" height="25"/>
+					<box>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma"/>
+					</textElement>
+					<text><![CDATA[Fx]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-6" x="304" y="35" width="159" height="25"/>
+					<box>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma"/>
+					</textElement>
+					<text><![CDATA[Motivo]]></text>
+				</staticText>
+				<staticText>
+					<reportElement key="staticText-7" x="463" y="35" width="71" height="25"/>
+					<box>
+						<pen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+						<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma"/>
+					</textElement>
+					<text><![CDATA[Qtd.]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="0" y="7" width="534" height="20"/>
+					<textElement textAlignment="Center">
+						<font isBold="true"/>
+					</textElement>
+					<textFieldExpression class="java.lang.String"><![CDATA[$F{inconsistencia} == null ? "Faixas sem Imagem"
+: "Faixas que necessitam de manutenção"]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupHeader>
+		<groupFooter>
+			<band height="19">
+				<staticText>
+					<reportElement key="staticText-18" x="363" y="0" width="100" height="18">
+						<printWhenExpression><![CDATA[$V{SOMA_CONTA} > 0]]></printWhenExpression>
+					</reportElement>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Total de Imagens:]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-7" x="463" y="0" width="71" height="18">
+						<printWhenExpression><![CDATA[$V{SOMA_CONTA} > 0]]></printWhenExpression>
+					</reportElement>
+				</rectangle>
+				<textField isBlankWhenNull="false">
+					<reportElement key="textField-7" x="463" y="0" width="71" height="18">
+						<printWhenExpression><![CDATA[$V{SOMA_CONTA} > 0]]></printWhenExpression>
+					</reportElement>
+					<box>
+						<pen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_CONTA}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement key="staticText-18" x="170" y="1" width="100" height="18"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle"/>
+					<text><![CDATA[Número de faixas:]]></text>
+				</staticText>
+				<rectangle>
+					<reportElement key="rectangle-7" x="270" y="0" width="34" height="18"/>
+				</rectangle>
+				<textField isBlankWhenNull="true">
+					<reportElement key="textField-7" x="270" y="1" width="34" height="18"/>
+					<box>
+						<pen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+						<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Tahoma" size="8"/>
+					</textElement>
+					<textFieldExpression class="java.lang.Integer"><![CDATA[$V{CONTA_PISTA}]]></textFieldExpression>
+				</textField>
+			</band>
+		</groupFooter>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="229" splitType="Stretch">
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" x="28" y="5" width="127" height="28"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+$P{LOGO_EMPRESA}]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-1" x="0" y="0" width="535" height="1"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-2" x="57" y="33" width="410" height="41"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Relatório de Imagens Teste para Manutenção]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="92" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Verificador:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="1" y="204" width="125" height="16"/>
+				<textElement/>
+				<text><![CDATA[Data do relatório:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="92" width="300" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{VERIFICADOR}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd &apos;de&apos; MMMMM &apos;de&apos; yyyy &apos;às&apos; HH:mm" isBlankWhenNull="false">
+				<reportElement key="textField-4" x="134" y="204" width="300" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{DATA_RELATORIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="108" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Período verificado:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="108" width="70" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{DATA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="204" y="108" width="20" height="15"/>
+				<textElement/>
+				<text><![CDATA[até]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="224" y="108" width="89" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{DATA_FIM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="140" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Imagens verificadas:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="140" width="300" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{TOTAL_IMAGENS_VERIFICADAS}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="124" width="300" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{TOTAL_IMAGENS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="124" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Imagens disponíveis:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="188" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Fx. Verificadas (líquido):]]></text>
+			</staticText>
+			<textField pattern="#,##0.0 %" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="188" width="50" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{PERC_PISTAS_VERIFICADAS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="156" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Qtd. de Faixas:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="156" width="300" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{TOTAL_PISTAS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="1" y="172" width="125" height="15"/>
+				<textElement/>
+				<text><![CDATA[Fx. Verificadas (bruto):]]></text>
+			</staticText>
+			<textField pattern="#,##0.0 %" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="134" y="172" width="50" height="16"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{PERC_PISTAS_COMPLETAS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-8" x="184" y="173" width="201" height="15"/>
+				<textElement/>
+				<text><![CDATA[(total imagens teste)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="184" y="189" width="201" height="15"/>
+				<textElement/>
+				<text><![CDATA[(mínimo de uma noturna e uma diurna)]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-3" x="0" y="225" width="535" height="1"/>
+			</line>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch">
+			<line>
+				<reportElement key="line-2" x="-1" y="-198" width="535" height="1"/>
+			</line>
+			<line>
+				<reportElement key="line-3" x="-1" y="-153" width="535" height="1"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="18" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-5" x="463" y="0" width="71" height="18"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-4" x="304" y="0" width="159" height="18"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-3" x="55" y="0" width="215" height="18"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-1" x="0" y="0" width="55" height="18"/>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="0" y="0" width="57" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[String.valueOf($F{serie_equipamento})+($F{data_inicio} == null || $F{data_inicio}.getTime() > (new Date()).getTime() ? "*" : "")]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="56" y="0" width="215" height="18"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{nome_pista}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="305" y="0" width="157" height="18"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Left" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{conta} == 0 ? "Sem Imagem" : (
+$F{inconsistencia} == null ? "Não digitada"
+: $F{inconsistencia}
+)]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="463" y="0" width="71" height="18"/>
+				<box>
+					<pen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#333333"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{conta}]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement key="rectangle-6" x="270" y="0" width="34" height="18"/>
+			</rectangle>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="271" y="0" width="33" height="18"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Tahoma" size="8"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{cod_pista}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="10" splitType="Stretch">
+			<staticText>
+				<reportElement key="staticText-10" x="11" y="0" width="159" height="10"/>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<text><![CDATA[* Equipamentos que não estão em operação.]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+</jasperReport>

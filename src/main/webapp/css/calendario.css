@@ -1,0 +1,203 @@
+/* Default attributes of table container for entire calendar */
+
+
+
+
+.table-style {
+    background-color : #dadada;
+	border: 0px;
+    font-family : arial;
+    font-size : 11px;
+  }
+
+/* Default attributes of DIV containing table container for entire calendar.
+ * You probably don't want to alter this style.
+ */
+
+
+
+
+.div-style {
+    z-index: +999;
+    position: absolute;
+    visibility: hidden;
+  }
+
+/* Default attributes used in calendar title (month and year columns).*/
+
+
+
+
+.title-style { /* Titulo meses */
+    color : #6b81a6;
+    font-family : verdana, arial, helvetica, sans-serif;
+    font-size : 11px;
+    padding-bottom : 2px;
+    padding-left : 2px;
+    padding-right : 2px;
+    padding-top : 2px;
+  }
+
+/* Default attributes used in calendar title background.*/
+
+
+
+
+.title-background-style {
+    background-color : #ffffff;
+  }
+
+/* Normal appearance of controls in calendar title. */
+/* Note: The right, left and down icons are images, which must be edited if you need to change them. */
+
+
+
+
+.title-control-normal-style {
+	border: 0px;
+    cursor: pointer;
+  }
+
+/* Moused-over (selected) appearance of controls in calendar title. */
+
+
+
+
+.title-control-select-style {
+    cursor: pointer;
+	color: #000000;
+}
+
+/* Default attributes of drop down lists (month and year). */
+
+
+
+
+.dropdown-style {
+    background-color : #ffffff;
+    color : #6b81a6;
+	border: #dadada 1px solid;
+    cursor : pointer;
+    font-family : arial;
+    font-size : 11px;
+  }
+
+/* Default attributes selected (mouse-over) item in drop down lists (month and year). */
+
+
+
+
+.dropdown-select-style {
+    background-color: #6b81a6;
+	color: #ffffff;
+}
+
+/* Default attributes unselected (mouse-off) item in drop down lists (month and year). */
+
+
+
+.dropdown-normal-style {
+     background-color : #ffffff;
+}
+
+/* Default attributes of calendar body (weekday titles and numbers). */
+
+
+
+
+.body-style {
+    background-color : #ffffff;
+	font-family : verdana, arial, helvetica, sans-serif;
+    font-size : 10px;
+    padding-bottom : 5px;
+    padding-left : 5px;
+    padding-right : 5px;
+    padding-top : 5px;
+  }
+
+/* Attributes of current day in calendar body. */
+
+
+
+
+.current-day-style {
+    color: #0000ff;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+/* Attributes of end-of-week days (Sundays) in calendar body. */
+
+
+
+
+.end-of-weekday-style {
+    color: #ff0000;
+    text-decoration: none;
+  }
+
+/* Attributes of all other days in calendar body. */
+
+
+.week-day-name-style {
+	color: #6b81a6;
+    text-decoration: bold;
+  }
+
+
+.normal-day-style {
+	color: #6b81a6;
+    text-decoration: none;
+  }
+
+/* Attributes of border around selected day in calendar body. */
+
+
+
+
+.selected-day-style {
+    border-style: solid;
+    border-width: 1px;
+    border-color: #dadada;
+  }
+
+/* Default attributes of designated holidays. */
+
+
+
+
+.holiday-style {
+    color : #dadada;
+  }
+
+/* Attributes of today display at bottom on calendar */
+
+
+
+
+.today-style {
+	font-family : verdana, arial, helvetica, sans-serif;
+    background-color : #ffffff;
+    color : #6b81a6;
+    padding-bottom : 0px;
+    padding-left : 0px;
+    padding-right : 0px;
+    padding-top : 0px;
+    text-align : center;
+    text-decoration : none;
+  }
+
+/* Attributes of week number division (divider.gif) */
+
+
+
+
+.weeknumber-div-style {
+	font-family : verdana, arial, helvetica, sans-serif;
+    background-color : #ffff00;
+    padding-bottom : 0px;
+    padding-left : 0px;
+    padding-right : 0px;
+    padding-top : 0px;
+  }
+

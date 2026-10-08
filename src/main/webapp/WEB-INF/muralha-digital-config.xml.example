@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE xml>
+
+<consilux>
+   
+    <Alertas>
+    	<ativo>1</ativo>
+    </Alertas>
+    
+    <VeiculoTempoReal>
+    	<ativo>1</ativo>
+    </VeiculoTempoReal>
+    
+    <BlitzEletronica>
+    	<ativo>0</ativo>
+    </BlitzEletronica>
+
+	<BlitzDigital>
+		<ativo>1</ativo>
+		<diretorio_documentos>C:\Consilux\Documentos_abordagem</diretorio_documentos>
+		<diretorio_imagens>C:\Consilux\Imagens_abordagem</diretorio_imagens>
+		<api_key_geocoding></api_key_geocoding>
+	</BlitzDigital>
+    
+    <NotificacaoMuralha>
+    	<EmailAtivo>0</EmailAtivo>
+    	<SmsAtivo>0</SmsAtivo>
+    	<IntervaloExecucaoEmailMinutos>5</IntervaloExecucaoEmailMinutos>
+    	<IntervaloExecucaoSmsMinutos>30</IntervaloExecucaoSmsMinutos>
+    	<LinkPaginaDetalheNotificacao>http://muralha-dev.ddns.net:8095/muralha-digital/pages/alerta-tratativa/tratar-alerta.jsp</LinkPaginaDetalheNotificacao>
+    </NotificacaoMuralha>
+    
+    <IntegracaoSMS>
+    	<Twilio>
+    		<AccountSID></AccountSID>
+    		<AuthToken></AuthToken>
+    		<MessagingServiceSID></MessagingServiceSID>
+    		<NotifyServiceSID></NotifyServiceSID>
+    	</Twilio>
+    	<FacilitaMovel>
+    		<FacilitaMovelUser></FacilitaMovelUser>
+    		<FacilitaMovelPassword></FacilitaMovelPassword>
+    	</FacilitaMovel>
+    	<SmsDev>
+    		<SmsDevKey></SmsDevKey>
+    	</SmsDev>
+    	<Comtele>
+	    	<ComteleEndpoint>https://sms.comtele.com.br/api/v2/send</ComteleEndpoint>
+	    	<ComteleAuthKey></ComteleAuthKey>
+	    </Comtele>
+    </IntegracaoSMS>
+    
+    <BitlyUrlShortener>
+    	<BitlyShortenEndpoint>https://api-ssl.bitly.com/v4/shorten</BitlyShortenEndpoint>
+    	<BitlyToken></BitlyToken>
+    	<BitlyDomain>bit.ly</BitlyDomain>
+    	<BitlyGroupGuid></BitlyGroupGuid>
+    </BitlyUrlShortener>
+    
+    <VideosMonitoramento>
+    	<TempoMaximoConsultaEmMinutos>20</TempoMaximoConsultaEmMinutos>
+    	<DirFFMPEG>E:\Consilux\MuralhaDigital\ffmpeg</DirFFMPEG>
+    	<DirExeFFMPEG>E:\Consilux\MuralhaDigital\ffmpeg\ffmpeg.exe</DirExeFFMPEG>
+    	<DirTemporarioVideos>E:\Consilux\MuralhaDigital\ffmpeg\temp</DirTemporarioVideos>
+    	<FormatoVideoTemp>ogv</FormatoVideoTemp>
+    </VideosMonitoramento>
+    
+    <ConsultaVeiculos>
+    	<LimiteConsultaAtivo>0</LimiteConsultaAtivo>
+    	<LimiteConsultaEmSegundos>432000</LimiteConsultaEmSegundos>
+    	<TamanhoMinimoPlaca>3</TamanhoMinimoPlaca>
+    	<ExigirPlacaCompleta>0</ExigirPlacaCompleta>
+    	<QtdeMaxCaracterEspecialPlaca>2</QtdeMaxCaracterEspecialPlaca>
+    </ConsultaVeiculos>
+    
+    <VeiculoMonitorado>
+    	<ExportarCadMonitorado>0</ExportarCadMonitorado>
+    	<QtdeMaxCaracterEspecialPlacaCadMon>4</QtdeMaxCaracterEspecialPlacaCadMon>
+    </VeiculoMonitorado>
+    
+    <equipamentos>
+    	<equipamento idLocal="95" serieEquipamento="3300001" nome="Equipamento Teste 1">
+    		<monitoramento ip="10.0.9.26" iplocal="10.0.9.26" qualidade="30" framerate="15" resolution="320x240" tp="pumatronix" pista="n">PAN 1</monitoramento>
+    		<monitoramento ip="189.42.79.131:1002" iplocal="192.168.2.12" qualidade="30" framerate="15" resolution="320x240" tp="pumatronix" pista="n">PAN 2</monitoramento>
+    	</equipamento>
+    	<equipamento idLocal="2" serieEquipamento="3300002" nome="Equipamento Teste 2">
+    		<monitoramento ip="189.42.79.131:2001" iplocal="192.168.2.21" qualidade="30" framerate="15" resolution="320x240" tp="pumatronix" pista="n">PAN 1</monitoramento>
+    		<monitoramento ip="189.42.79.131:2002" iplocal="192.168.2.22" qualidade="30" framerate="15" resolution="320x240" tp="pumatronix" pista="n">PAN 2</monitoramento>
+    	</equipamento>
+    </equipamentos>
+    
+</consilux>

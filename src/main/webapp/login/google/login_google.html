@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Federated Login with Google</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-top: -60px;
+            border: 5px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body class="bg-light" style="min-height: 100vh;">
+    <!-- Topo do sistema -->
+    <header class="container-fluid" style="background: #fff; border-bottom: 1px solid #e0e0e0; padding: 0; position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;">
+        <div class="row align-items-center" style="min-height: 70px;">
+            <div class="col-md-8 col-7">
+                <span style="font-size: 2.5rem; font-weight: bold; color: #5a6e96; line-height: 70px; margin-left: 10px;">Sistemas GCT</span>
+            </div>
+            <div class="col-md-2 col-2 text-end">
+                <button id="btn-pagina-inicial" class="btn btn-outline-primary mt-2 mb-2">Página inicial</button>
+            </div>
+        </div>
+    </header>
+    <!-- Espaço para o header fixo -->
+    <div style="height: 80px;"></div>
+    <!-- Conteúdo centralizado -->
+    <main class="d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 80px);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-8 col-lg-6">
+                    <div class="card shadow p-4" id="login-card">
+                        <h2 class="mb-4">Login com o google</h2>
+                        <div id="error-message"></div>
+                        <br>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6 mb-2 mb-md-0">
+                                <button id="google-login-btn" class="btn btn-danger btn-lg w-100">
+                                    <i class="bi bi-google"></i> Tentar novamente
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button id="criar-acesso-btn" class="btn btn-primary btn-lg w-100">
+                                    <i class="bi bi-google"></i> Criar acesso
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="/login/assets/js/login.js"></script>
+    <script>
+
+    document.getElementById('google-login-btn').onclick = function() {
+        window.location.href = location.origin;
+    };
+
+    document.getElementById('criar-acesso-btn').onclick = function(e) {
+        e.preventDefault();
+        logar_com_google('novo_acesso');
+    };
+
+    // Show error messages if present in the URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('error')) {
+        let msg = params.get('error');
+        if (msg === 'InvalidState') msg = 'Erro ao acessar o sistema. Motivo: Sessão invalida.';
+        else if (msg === 'GoogleAuthFailed') msg = 'Erro ao acessar o sistema. Motivo: Autenticação do google falhou.';
+        else if (msg === 'UserNotFound') msg = 'Erro ao acessar o sistema. Motivo: Usuário não encontrado no sistema.';
+        else if (msg === 'NoCode') msg = 'Erro ao acessar o sistema. Motivo: Nenhum codigo recebido do google.';
+        document.getElementById('error-message').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+
+    // Clique no logo ou no botão retorna para a página inicial
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('logo-consilux').onclick = function() {
+            window.location.href = location.origin;
+        };
+        document.getElementById('btn-pagina-inicial').onclick = function() {
+            window.location.href = location.origin;
+        };
+    });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,53 @@
+body {
+	background: #f4f6f9;
+}
+
+#chartPlacas {
+	max-width: 100%;
+	overflow-x: auto;
+	display: block;
+}
+
+#notificacoesContainer .list-group-item {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+#listaPercentuais .list-group-item {
+	display: flex;
+	justify-content: space-between;
+	/* percentual à esquerda, nome à direita */
+	align-items: center;
+	white-space: nowrap; /* não quebra linha */
+	overflow: hidden; /* corta excesso de texto */
+	text-overflow: ellipsis; /* adiciona "..." se o texto for grande */
+	padding-left: 0.5rem; /* espaço interno */
+	padding-right: 0.5rem;
+}
+
+#listaPercentuais .camera-percentual {
+	font-weight: bold;
+	margin-right: 1rem; /* distância entre % e nome */
+}
+
+#listaPercentuais .camera-nome {
+	flex: 1; /* ocupa o restante do espaço */
+}
+
+.loading-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(255, 255, 255, 0.8);
+	z-index: 10;
+	display: none;
+}
+
+.loading-overlay.active {
+	display: flex;
+}
+.card-title
+{
+	font-size: 12px
+}

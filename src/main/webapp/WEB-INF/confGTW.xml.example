@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config>
+
+	<armazenamento>
+	
+		<servidor_sql>
+			<host>10.0.0.200</host>
+			<database>GTW_MURALHA_DEV</database>
+			<user>consilux</user>
+			<password></password>
+		</servidor_sql>
+		
+		<importador_txt>
+			<diretorio></diretorio>
+		</importador_txt>
+	
+	</armazenamento>
+
+	<exporta_trafego>
+		<ativo>false</ativo>
+		<comando_logon>pwd</comando_logon>
+		<diretorio>/tmp</diretorio>
+		<comando_logoff>/tmp/teste.sh</comando_logoff>
+		<codigo_empresa>04</codigo_empresa>
+		<codigo_tipo_equipamento>3</codigo_tipo_equipamento>
+		<tipo_equipamento>ZM</tipo_equipamento>
+		<horario_job>13:21</horario_job>
+		<dias_retroativo_maximo>260</dias_retroativo_maximo>
+	</exporta_trafego>
+			
+	<exporta_imagens>
+		<ativo>false</ativo>
+		<comando_logon>pwd</comando_logon>
+		<diretorio>/tmp/teste_cet</diretorio>
+		<comando_logoff>/tmp/teste.sh</comando_logoff>
+		<horario_job>16:42</horario_job>
+		<dias_retroativo_minimo>20</dias_retroativo_minimo>
+		<dias_retroativo_maximo>200</dias_retroativo_maximo>
+	</exporta_imagens>		
+	
+	<!--
+	Configuracoes para o modulo de mapa
+	-->
+	<mapa>
+		<centro>
+			<latitude>-19.47206400842364</latitude>
+			<longitude>-42.55245406292123</longitude>
+		</centro>
+		
+		<google_maps_key></google_maps_key>
+	</mapa>	
+	
+	<processamento>
+		<com_sugestao_placa>false</com_sugestao_placa>
+		<com_obliteracao>true</com_obliteracao>
+		<com_ajuste_imagem>true</com_ajuste_imagem>
+		<com_marca_processo>true</com_marca_processo>
+		<com_especie_processo>true</com_especie_processo>
+		<com_uf_validacao>true</com_uf_validacao>
+		<com_validacao_consistentes_agendamento>true</com_validacao_consistentes_agendamento>
+		<confirma_obliteracao>false</confirma_obliteracao>
+		<alerta_velocidade>100</alerta_velocidade>
+		<tamanho_tarja>56</tamanho_tarja>
+	</processamento>
+	
+	<grupos>
+		<grupo codigo="DIG" id="4"/>
+		<grupo codigo="AUD" id="5"/>
+		<grupo codigo="TEC" id="7"/>
+		<grupo codigo="EEQ" id="9"/>
+		<grupo codigo="NEQ" id="10"/>
+		<grupo codigo="DEV" id="16" descricao="Desenvolvedores"/>
+		<grupo codigo="GAU" id="21" descricao="Gerente Auditores"/>
+	</grupos>
+	
+	<config_chave_valor>
+	
+	    <chave_valor chave="endereco_integracao_sinesp"     valor="http://10.0.0.113:8086/consulta/placa/"/>	
+		<chave_valor chave="autos_por_pdf"                  valor="250"/>	
+		<chave_valor chave="tabela_pmesp"                   valor="estatistica_tempo_real_2019_12"/>	    
+	    <chave_valor chave="cabecalho" 						valor="cabecalho_kopp.png"/>
+	    <chave_valor chave="cabecalho_gmw" 					valor="cabecalho_gmw_kopp.png"/>	    
+	    <chave_valor chave="diretorio_videos"               valor="E:/Videos_Sin"/>	    
+	    <chave_valor chave="nome_contrato_remessa"          valor="DER-ES 001/2024"/>	    
+	    <chave_valor chave="numero_contrato" 				valor="001"/>
+	    <chave_valor chave="ano_contrato" 					valor="2024"/>
+	    <chave_valor chave="lote_contrato" 					valor="2"/>
+	    <chave_valor chave="codigo_agente"                  valor="13"/>
+		<chave_valor chave="matricula_agente"               valor="/91.124-8"/>
+	    <chave_valor chave="numero_autuante" 				valor="15514897"/>
+	    <chave_valor chave="codigo_orgao_autuador" 			valor="119200" />
+	    <chave_valor chave="codigo_municipio" 				valor="5705" />
+	    <chave_valor chave="nome_municipio" 				valor="DER/ES" />
+	    <chave_valor chave="sigla_contratada" 				valor="KP01" />
+	    <chave_valor chave="id_arquivo_antigo" 				valor="P59" />
+	    <chave_valor chave="emissao_notificacao_detran" 	valor="N" />
+	    
+	    <chave_valor chave="habilitar_funcionalidade_cav" 	valor="0"/>
+		<chave_valor chave="habilitar_agendador" 			valor="1"/>
+		<chave_valor chave="codigo_empresa" 				valor="L4"/>
+		<chave_valor chave="diretorio_movimento_lote"   	valor="/DF"/>
+		<chave_valor chave="diretorio_apait"   				valor="/INT/PROCESSAR"/> 
+		<chave_valor chave="diretorio_apait_vm"             valor="/VM/INT/PROCESSAR@[xxx111:xxx222]10.0.0.113"/>
+		<chave_valor chave="diretorio_cad_monitorado"		valor="/MURALHA_DIGITAL/CADASTROS"/>
+		<chave_valor chave="nome_arquivo_cad_monitorado"	valor="cad_monitorado_ativo.json"/> 
+		<chave_valor chave="intervalo_envio_apait"          valor="120"/>
+		<chave_valor chave="tipo_servidor"  				valor="ftp"/> <!-- Valores possíveis: ftp, sftp, smb, dir -->
+		<chave_valor chave="endereco_ftp" 					valor="10.0.0.113:21"/>
+		<chave_valor chave="usuario_ftp" 					valor="teste"/>
+		<chave_valor chave="senha_ftp" 						valor="teste"/>
+		<chave_valor chave="dominio_smb" 					valor=""/>
+		<chave_valor chave="usuario_smb" 					valor=""/>
+		<chave_valor chave="senha_smb" 						valor=""/>
+		<chave_valor chave="cript_chave" 					valor="FBD9BE5495173418068B732DA71C9EBC"/>
+		<chave_valor chave="cript_iv" 						valor="7E68E12AF0B7C01CD361B52F7231D25A"/>
+		<chave_valor chave="grupo_desoblitera_imagens" 		valor="21"/>
+		<chave_valor chave="nivel_inspecao" 				valor="II"/>
+		<chave_valor chave="nqa" 							valor="0.4"/>
+		<chave_valor chave="nome_contrato"     				valor="DER-ES"/>
+		<chave_valor chave="grupo_equipamento" 				valor="9"/>
+		<chave_valor chave="usuario_sistema"   				valor="2"/>
+		<chave_valor chave="grupo_supervisor"  				valor="6"/>
+		<chave_valor chave="identificacao_cliente" 			valor="DER-ES"/>
+		<chave_valor chave="orgao_auditoria"   				valor="DTEC - GDEN"/>
+		<chave_valor chave="codigo_secundario" 				valor="Código Prodam"/>
+		<chave_valor chave="id_inconsistencia_padrao_imagem_teste" valor="8" />
+		<chave_valor chave="id_inconsistencia_padrao_inibicao"     valor="35"/>
+		<chave_valor chave="id_inconsistencia_padrao_validacao"     valor="50"/>
+		<chave_valor chave="max_dias_veiculo_estatica_detalhado"   valor="90" />
+		<chave_valor chave="auto_inicial_serie_W" 			valor="0" />
+		<chave_valor chave="auto_inicial_serie_S" 			valor="0" />
+		<chave_valor chave="auto_inicial_serie_P" 			valor="0" />
+		<chave_valor chave="auto_inicial_serie_R" 			valor="0" />		
+		<chave_valor chave="auto_inicial_serie_K" 			valor="0" />
+		
+		<!-- Configuração para relatórios de fluxo -->
+		<chave_valor chave="dir_logo_rel_fluxo" 			valor="imagens/logo_ipatinga_mg.png" />
+		<chave_valor chave="titulo_1_rel_fluxo"				valor="" />
+		<chave_valor chave="titulo_2_rel_fluxo"				valor="RELATÓRIO DE FLUXO MENSAL POR CLASSIFICAÇÃO" />
+		<chave_valor chave="titulo_3_rel_fluxo"				valor="" />
+		<chave_valor chave="sub_titulo_rel_fluxo"			valor="Veículos fiscalizados por radares" />
+		<chave_valor chave="nome_coluna_faixa_rel_fluxo"	valor="Faixa" />
+	</config_chave_valor>
+		
+	<remessa>
+		<tipos>
+			<tipo codigo="TV" descricao="Geral" id_processo="4" auto_inicial="0" auto_final="999999" serie_inicial="A1" serie_final="A9" modelo_ait="AIT Outros CET.jasper" sigla_cliente=""/>
+	
+		</tipos>	
+
+		<gerador>com.consilux.model.remessa.RemessaFactoryCET</gerador>
+	
+		<exportador>
+			<layout_prem>PREM_C006</layout_prem>
+			<logotipo_empresa>logo_consilux.jpg</logotipo_empresa>
+			<logotipo_empresa_vertical>logo_consilux_vertical.jpg</logotipo_empresa_vertical>
+			<implementacao>com.consilux.model.remessa.ExportaRemessaCET</implementacao>
+		</exportador>
+		
+	</remessa>
+	
+	<email>
+		<smtp_servers>
+			<smtp_server>
+				<host>smtp.gmail.com</host>
+				<port>587</port>
+				<user>admin@consilux.com.br</user>
+				<password></password>
+				<mail>admin@consilux.com.br</mail>
+			</smtp_server>		
+		</smtp_servers>
+		<assunto_veiculo_monitorado>[MURALHA DIGITAL] ALERTA - Veículo Monitorado</assunto_veiculo_monitorado>
+	</email>
+	
+	<webservice>
+		<wss>
+			<ws>
+				<nome_interface>IConfigEquipChange</nome_interface>
+				<endereco>127.0.0.1:9999</endereco>
+			</ws>
+			<ws>
+				<nome_interface>IWantedPlateListWS</nome_interface>
+				<endereco>127.0.0.1:9999</endereco>
+			</ws>
+		</wss>
+	</webservice>
+	
+	<descarga>
+		<ativo>false</ativo>
+		<app_jar>C:/Coisas/Descarga/ver-descarga-0.3.0-jar-with-dependencies.jar</app_jar>
+		<diretorio_saida>C:/Coisas/Descarga</diretorio_saida>
+		<numero_maximo_dias_final_descarga>183</numero_maximo_dias_final_descarga> <!-- 6 meses -->
+		<tamanho_midia>4700372992</tamanho_midia> <!-- DVD+R -->
+		<arquivos_externos>
+			<arquivo>C:/Coisas/Descarga/autorun.inf</arquivo>
+			<arquivo>C:/Coisas/Descarga/VerDescarga.exe</arquivo>
+		</arquivos_externos>
+		<horario_job_exportacao>12:12</horario_job_exportacao>
+	</descarga>
+	
+</config>

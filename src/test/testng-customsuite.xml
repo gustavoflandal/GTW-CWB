@@ -1,0 +1,14 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="GTW by groups">
+  <test verbose="10" name="GRP-completo" annotations="JDK">
+    <groups>
+      <run>
+        <include name="completo"/>
+      </run>
+    </groups>
+    <classes>
+<!--       <class name="GTWServletsTest"/> -->
+      <!-- <class name="ExportaRemessaTest"/>  -->
+    </classes>
+  </test>
+</suite>

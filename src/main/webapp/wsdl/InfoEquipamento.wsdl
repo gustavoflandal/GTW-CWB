@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://server.ws.consilux.com" xmlns:apachesoap="http://xml.apache.org/xml-soap" xmlns:impl="http://server.ws.consilux.com" xmlns:intf="http://server.ws.consilux.com" xmlns:tns1="http://beans.model.consilux.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<!--WSDL created by Apache Axis version: 1.4
+Built on Apr 22, 2006 (06:55:48 PDT)-->
+ <wsdl:types>
+  <schema elementFormDefault="qualified" targetNamespace="http://server.ws.consilux.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <import namespace="http://beans.model.consilux.com"/>
+   <element name="getLocaisVigente">
+    <complexType>
+     <sequence>
+      <element name="usuario" type="xsd:string"/>
+      <element name="senha" type="xsd:string"/>
+      <element name="idGrupo" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="getLocaisVigenteResponse">
+    <complexType>
+     <sequence>
+      <element maxOccurs="unbounded" name="getLocaisVigenteReturn" type="tns1:LocalVigenteBean"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  <schema elementFormDefault="qualified" targetNamespace="http://beans.model.consilux.com" xmlns="http://www.w3.org/2001/XMLSchema">
+   <complexType name="LocalVigenteBean">
+    <sequence>
+     <element name="idConfiguracaEquipamento" nillable="true" type="xsd:int"/>
+     <element name="idLocal" nillable="true" type="xsd:int"/>
+     <element name="nome" nillable="true" type="xsd:string"/>
+     <element name="serieEquipamento" nillable="true" type="xsd:int"/>
+    </sequence>
+   </complexType>
+  </schema>
+ </wsdl:types>
+
+   <wsdl:message name="getLocaisVigenteResponse">
+
+      <wsdl:part element="impl:getLocaisVigenteResponse" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:message name="getLocaisVigenteRequest">
+
+      <wsdl:part element="impl:getLocaisVigente" name="parameters"/>
+
+   </wsdl:message>
+
+   <wsdl:portType name="InfoEquipamento">
+
+      <wsdl:operation name="getLocaisVigente">
+
+         <wsdl:input message="impl:getLocaisVigenteRequest" name="getLocaisVigenteRequest"/>
+
+         <wsdl:output message="impl:getLocaisVigenteResponse" name="getLocaisVigenteResponse"/>
+
+      </wsdl:operation>
+
+   </wsdl:portType>
+
+   <wsdl:binding name="InfoEquipamentoSoapBinding" type="impl:InfoEquipamento">
+
+      <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+      <wsdl:operation name="getLocaisVigente">
+
+         <wsdlsoap:operation soapAction=""/>
+
+         <wsdl:input name="getLocaisVigenteRequest">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:input>
+
+         <wsdl:output name="getLocaisVigenteResponse">
+
+            <wsdlsoap:body use="literal"/>
+
+         </wsdl:output>
+
+      </wsdl:operation>
+
+   </wsdl:binding>
+
+   <wsdl:service name="InfoEquipamentoService">
+
+      <wsdl:port binding="impl:InfoEquipamentoSoapBinding" name="InfoEquipamento">
+
+         <wsdlsoap:address location="http://localhost/services/InfoEquipamento"/>
+
+      </wsdl:port>
+
+   </wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,515 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PREM_C008" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="116"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="ID_REMESSA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(1)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIR_IMAGENS" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Documents and Settings\\fos\\workspace\\GTW\\WebContent\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+distinct
+getDate() AS DATA_EXPEDICAO,
+r.data AS DATA_MOVIMENTO,
+CAST(r.codigo_externo AS INTEGER) AS NUMERO_LOTE,
+r.total_infracao AS TOTAL_AIT,
+RTRIM(r.serie_inicial) AS SERIE_AIT_INI,
+r.auto_inicial AS NUMERO_AIT_INI,
+dbo.DAC_AIT(r.tipo,r.serie_inicial,r.auto_inicial) AS DAC_AIT_INI,
+RTRIM(r.serie_final) AS SERIE_AIT_FIM,
+r.auto_final AS NUMERO_AIT_FIM,
+dbo.DAC_AIT(r.tipo,r.serie_final,r.auto_final) AS DAC_AIT_FIM,
+r.tipo AS TIPO,
+CAST(CONVERT(date, i.data, 120) AS DATE) AS DATA_INFRACAO
+FROM remessa r
+JOIN infracao_remessa ir ON ir.id_remessa = r.id_remessa
+JOIN infracao i ON i.id_infracao = ir.id_infracao
+WHERE r.id_remessa = $P{ID_REMESSA}]]>
+	</queryString>
+	<field name="DATA_EXPEDICAO" class="java.sql.Timestamp"/>
+	<field name="DATA_MOVIMENTO" class="java.sql.Timestamp"/>
+	<field name="NUMERO_LOTE" class="java.lang.Integer"/>
+	<field name="TOTAL_AIT" class="java.lang.Integer"/>
+	<field name="SERIE_AIT_INI" class="java.lang.String"/>
+	<field name="NUMERO_AIT_INI" class="java.lang.Integer"/>
+	<field name="DAC_AIT_INI" class="java.lang.Short"/>
+	<field name="SERIE_AIT_FIM" class="java.lang.String"/>
+	<field name="NUMERO_AIT_FIM" class="java.lang.Integer"/>
+	<field name="DAC_AIT_FIM" class="java.lang.Short"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="DATA_INFRACAO" class="java.util.Date"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="412" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-12" mode="Transparent" x="-1" y="397" width="536" height="15"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-9" mode="Transparent" x="326" y="297" width="64" height="13"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-8" mode="Transparent" x="194" y="297" width="65" height="14"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" mode="Transparent" x="190" y="15" width="180" height="44"/>
+				<imageExpression class="java.lang.String"><![CDATA[$P{DIR_IMAGENS}+"logo_consilux.JPG"]]></imageExpression>
+			</image>
+			<rectangle radius="1">
+				<reportElement key="rectangle-2" x="5" y="-98" width="524" height="26"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-2" mode="Opaque" x="26" y="-102" width="52" height="8"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ ORGÃO AUTUADOR ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" mode="Opaque" x="8" y="-96" width="21" height="8"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[CÓDIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="46" y="-86" width="0" height="0"/>
+				<textElement/>
+				<text><![CDATA[Texto Estático]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" mode="Opaque" x="39" y="-91" width="33" height="13"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[271070]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" x="106" y="-98" width="1" height="27"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-6" mode="Opaque" x="146" y="-94" width="242" height="18"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[AUTO DE INFRAÇÃO DE TRÂNSITO]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-2" x="427" y="-98" width="1" height="27"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-7" mode="Opaque" x="457" y="-102" width="44" height="8"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ NÚMERO DO AIT]]></text>
+			</staticText>
+			<rectangle radius="0">
+				<reportElement key="rectangle-3" mode="Opaque" x="-1" y="89" width="536" height="24" forecolor="#000000" backcolor="#000000"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-10" x="41" y="4" width="0" height="0"/>
+				<textElement/>
+				<text><![CDATA[Texto Estático]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-12" mode="Transparent" x="132" y="92" width="270" height="18" forecolor="#FFFFFF" backcolor="#000000"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PROTOCOLO DE REMESSA À PRODAM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-44" x="7" y="120" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[REMETENTE:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-45" x="276" y="150" width="127" height="15"/>
+				<textElement/>
+				<text><![CDATA[CÓDIGO DO SISTEMA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-46" x="7" y="150" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[NOME DO SISTEMA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-47" x="7" y="181" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[DATA EXPEDIÇÃO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-23" x="154" y="181" width="111" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_EXPEDICAO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-48" x="7" y="219" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[DATA MOVIMENTO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-24" x="154" y="219" width="111" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_MOVIMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-49" x="7" y="258" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[QUANTIDADE DE MÍDIAS:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-50" x="276" y="258" width="127" height="15"/>
+				<textElement/>
+				<text><![CDATA[TIPO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-51" x="7" y="297" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[REMESSA:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-10" mode="Transparent" x="461" y="297" width="64" height="13"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="2.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-52" x="153" y="297" width="37" height="15"/>
+				<textElement/>
+				<text><![CDATA[ÚNICA:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-53" x="275" y="297" width="47" height="15"/>
+				<textElement/>
+				<text><![CDATA[PARCIAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-54" x="403" y="296" width="53" height="15"/>
+				<textElement/>
+				<text><![CDATA[REENVIO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-55" x="7" y="332" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[LOTE Nº:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-30" x="154" y="332" width="104" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUMERO_LOTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-56" x="275" y="331" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[TOTAL DE AIT´s :]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-31" x="414" y="331" width="98" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{TOTAL_AIT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-57" x="7" y="368" width="59" height="15"/>
+				<textElement/>
+				<text><![CDATA[Nº DE AIT´s:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-58" x="122" y="369" width="17" height="15"/>
+				<textElement/>
+				<text><![CDATA[DE]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-32" x="191" y="369" width="34" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUMERO_AIT_INI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-59" x="279" y="368" width="23" height="15"/>
+				<textElement/>
+				<text><![CDATA[ATÉ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-60" x="0" y="396" width="535" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[DATAS DAS INFRAÇÕES CONTIDAS NO MOVIMENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-69" x="154" y="120" width="134" height="15"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CONSILUX TECNOLOGIA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-70" x="154" y="150" width="52" height="15"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[APAIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-71" x="420" y="150" width="81" height="15"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[APAITSP1643]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-72" x="154" y="258" width="111" height="15"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[1]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-73" x="420" y="258" width="70" height="15"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[CD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-75" x="225" y="368" width="5" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-40" x="154" y="369" width="26" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-41" x="230" y="369" width="26" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Short"><![CDATA[$F{DAC_AIT_INI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-42" x="175" y="369" width="17" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SERIE_AIT_INI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-43" x="352" y="368" width="36" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUMERO_AIT_FIM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-76" x="386" y="367" width="5" height="15"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[-]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-44" x="315" y="368" width="26" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-45" x="391" y="368" width="26" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Short"><![CDATA[$F{DAC_AIT_FIM}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-46" x="336" y="368" width="17" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SERIE_AIT_FIM}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-13" mode="Transparent" x="-1" y="0" width="536" height="15"/>
+				<graphicElement fill="Solid">
+					<pen lineWidth="1.0" lineStyle="Solid"/>
+				</graphicElement>
+			</rectangle>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-34" x="212" y="2" width="111" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{DATA_INFRACAO}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="237" splitType="Stretch">
+			<rectangle>
+				<reportElement key="rectangle-19" mode="Transparent" x="-2" y="217" width="357" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<textField pattern="00000" isBlankWhenNull="false">
+				<reportElement key="textField-36" x="235" y="218" width="37" height="13"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUMERO_LOTE}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-38" x="214" y="218" width="27" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["C"+$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-61" x="-1" y="16" width="535" height="16"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true" isUnderline="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[PARA PREENCHIMENTO DA PRODAM]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-62" x="-1" y="38" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[PROCESSADO EM:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-63" x="-1" y="66" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[DEVOLVIDO EM:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-64" x="-1" y="97" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[RESPONSÁVEL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-65" x="274" y="97" width="134" height="15"/>
+				<textElement/>
+				<text><![CDATA[TELEFONE:]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-14" mode="Transparent" x="-1" y="123" width="536" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-66" x="-1" y="123" width="535" height="15"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[OBSERVAÇÕES]]></text>
+			</staticText>
+			<rectangle>
+				<reportElement key="rectangle-15" mode="Transparent" x="-1" y="138" width="536" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-16" mode="Transparent" x="-1" y="153" width="536" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-17" mode="Transparent" x="-1" y="168" width="536" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-18" mode="Transparent" x="-2" y="202" width="357" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-20" mode="Transparent" x="-2" y="202" width="208" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<rectangle>
+				<reportElement key="rectangle-21" mode="Transparent" x="-2" y="217" width="141" height="15"/>
+				<graphicElement fill="Solid"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-67" x="0" y="202" width="206" height="15"/>
+				<textElement/>
+				<text><![CDATA[NÚMERO DO LOTE NA ETIQUETA DO CD:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-35" x="267" y="202" width="77" height="13"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{NUMERO_LOTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-68" x="0" y="217" width="142" height="15"/>
+				<textElement/>
+				<text><![CDATA[NOME DO ARQUIVO TEXTO:]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-37" x="230" y="202" width="36" height="13"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{TIPO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-74" x="267" y="218" width="28" height="15"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[.txt]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="7" splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="6" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,2908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Relatorio_Funcionamento" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="NoDataSection" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Empty" uuid="d611e1d9-b149-4cf2-8ae4-b53f92513177">
+	<property name="ireport.zoom" value="2.5937424601000036"/>
+	<property name="ireport.x" value="587"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="C011"/>
+	<subDataset name="dataset1" uuid="2d62ff7d-2ff9-4a29-ad05-b30af13725f4"/>
+	<parameter name="IDENTIFICACAO_CLIENTE" class="java.lang.String"/>
+	<parameter name="DATA_INI" class="java.util.Date"/>
+	<parameter name="DATA_FIM" class="java.util.Date"/>
+	<parameter name="VALOR_FAIXA_DIA" class="java.lang.Double"/>
+	<parameter name="NUMERO_DIAS" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[31]]></defaultValueExpression>
+	</parameter>
+	<parameter name="COD_AGENTE" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[--	drop table #Enquadramentos
+
+SET NOCOUNT ON
+
+Declare @Ano		decimal(4,0) = (select year($P{DATA_INI}))
+Declare @Mes		decimal(2,0) = (select month($P{DATA_INI}))
+Declare @Dia		decimal(2,0)
+Declare @Data_Ini	varchar(10)
+Declare @Data_Fim	varchar(10)
+Declare @Dias_Mes	decimal(2,0)
+
+CREATE TABLE #Enquadramentos (
+	Cod_Pista				INT, 
+	Cod_Pista_Alternativo	INT,
+	Tipo					VARCHAR(100), 
+	Descricao				VARCHAR(250)	
+)
+
+DECLARE @Cod_Pista				INT, 
+		@Cod_Pista_Alternativo INT,
+		@Tipo					CHAR(2), 
+		@Descricao				VARCHAR(100),
+		@Cod_Pista_1			INT, 
+		@Cod_Pista_2			INT, 
+		@Tipo_1					VARCHAR(100)='',
+		@Descricao_1			VARCHAR(250)=''
+
+DECLARE Cursor_TipoInfracao CURSOR 
+FOR 
+SELECT distinct 
+	cep.cod_pista, 
+	CASE 
+		WHEN cep.cod_pista_prodam = 0
+			THEN cep.cod_pista_alternativo
+		ELSE
+			cep.cod_pista_prodam
+	END AS cod_pista_alternativo, 
+	ceri.tipo, 
+	eri.descricao_apait --, cep.cod_pista_alternativo, ceri.id_pista
+FROM configuracao_equipamento_pista cep (nolock)
+        INNER JOIN configuracao_equipamento ce (nolock)
+            ON cep.id_configuracao_equipamento = ce.id_configuracao_equipamento
+        INNER JOIN configuracao_equipamento_regra_infracao ceri (nolock)
+            ON ceri.id_configuracao_equipamento = ce.id_configuracao_equipamento
+            and isnull(ceri.id_pista,cep.cod_pista_alternativo) = cep.cod_pista_alternativo
+        INNER JOIN enquadramento_regra_infracao eri (nolock)
+            ON eri.tipo = ceri.tipo
+WHERE ce.ativo = 1
+        AND cep.cod_pista > 0
+        AND eri.tipo not in ('TS','MT')
+ORDER BY cep.cod_pista
+
+
+OPEN Cursor_TipoInfracao
+
+FETCH NEXT FROM Cursor_TipoInfracao
+INTO 
+	@Cod_Pista, 
+	@Cod_Pista_Alternativo, 
+	@Tipo, 
+	@Descricao
+
+SET @Cod_Pista_1 = @Cod_Pista
+SET @Cod_Pista_2 = @Cod_Pista_Alternativo
+
+WHILE @@FETCH_STATUS = 0
+
+	BEGIN
+
+		IF @Cod_Pista_1 <> @Cod_Pista or @Cod_Pista_2 <> @Cod_Pista_Alternativo
+
+			BEGIN
+						
+				INSERT INTO	#Enquadramentos values (@Cod_Pista_1, @Cod_Pista_2, @Tipo_1, @Descricao_1)
+
+				SET @Tipo_1			= ''
+				SET @Descricao_1	= ''
+				SET @Cod_Pista_1	= @Cod_Pista
+				SET @Cod_Pista_2	= @Cod_Pista_Alternativo
+
+			END
+
+		IF @Tipo is not null
+
+			BEGIN
+
+				SET @Tipo_1 = @Tipo_1 + ' ' + @Tipo + ' '
+				SET	@Descricao_1 = @Descricao_1 + '- ' + @Descricao + ' '
+
+			END
+
+		FETCH NEXT FROM Cursor_TipoInfracao 
+		INTO 
+			@Cod_Pista, 
+			@Cod_Pista_Alternativo, 
+			@Tipo, 
+			@Descricao
+
+	END
+			
+	INSERT INTO	#Enquadramentos values (@Cod_Pista_1,  @Cod_Pista_2, @Tipo_1, @Descricao_1)
+
+CLOSE Cursor_TipoInfracao
+DEALLOCATE Cursor_TipoInfracao
+
+If @Mes not between 1 and 12
+	begin
+		Print 'Mês Inválido'
+		return
+	end
+
+If @Ano not between 2000 and year(getdate())
+	begin
+		Print 'Ano Inválido'
+		return
+	end
+
+set @Data_Ini = cast(@Ano as varchar)+'-'+cast(@Mes as varchar)+'-01'
+set @Dias_Mes = day(dateadd(mm,1,@Data_Ini)-day(dateadd(mm,1,@Data_Ini)))
+set @Data_Fim = cast(@Ano as varchar)+'-'+cast(@Mes as varchar)+'-'+cast(@Dias_Mes as varchar)
+
+SELECT *
+FROM (	SELECT
+			CASE
+				WHEN lpa.metrologica = 1 
+				AND (cr.conta_regra_nao_metro = 0 OR e.tipo_info_especifica = 'V' OR it.RN % 2 = 0) --considera imagens teste pares para metrologicas se a pista fiscalizar tanto metro como não metro
+				THEN 1
+				WHEN lpa.metrologica = 0 
+				AND (cr.conta_regra_metro = 0 OR e.tipo_info_especifica NOT IN ('V','T') OR it.RN % 2 = 1) --considera imagens teste impares para metrologicas se a pista fiscalizar tanto metro como não metro
+				THEN 1
+			END AS conta,
+			serie_equipamento,
+			nome_pista,
+			cr.cod_pista,
+			cod_pista_prodam,
+			cod_pista_alternativo,
+			day(i.data) as dia,
+			lpa.metrologica,
+			cr.Tipo as enquadramentos,
+			cr.id_produto as Produto
+		FROM
+
+		fcn_ListaPistasAmostra ($P{DATA_INI},$P{DATA_FIM}) lpa
+	  LEFT JOIN infracao i ON i.id_local = lpa.id_local AND i.pista = lpa.id_pista AND CAST(i.data AS DATE) BETWEEN $P{DATA_INI} AND $P{DATA_FIM}
+
+			LEFT JOIN enquadramento e (nolock) 
+				ON e.id_enquadramento = i.id_enquadramento
+
+			LEFT JOIN (	SELECT 
+							irn.id_infracao, 
+							ROW_NUMBER() OVER (PARTITION BY CAST(data AS DATE), id_local, pista ORDER BY id_infracao) AS RN
+						FROM infracao irn (nolock)
+						WHERE irn.id_enquadramento = 1) it 
+				ON it.id_infracao = i.id_infracao
+			LEFT JOIN  (SELECT 
+							lv.id_local, 
+							cep.id_pista,
+							cep.cod_pista,
+							tmp.Tipo,
+							ce.id_produto,
+							ce.data_inicio,
+							(select COUNT(*) 
+								from 
+									local_regra_infracao_vigente (nolock)
+								where	id_local = lv.id_local 
+									and id_pista = cep.id_pista
+									and tipo NOT IN ('VL','MT','TS')) as conta_regra_nao_metro,
+							(select COUNT(*) 
+								from 
+									local_regra_infracao_vigente (nolock)
+								where	id_local = lv.id_local 
+									and id_pista = cep.id_pista
+									and tipo = 'VL') as conta_regra_metro
+						FROM local_vigente lv (nolock)
+							INNER JOIN configuracao_equipamento_pista cep (nolock) 
+								ON cep.id_configuracao_equipamento = lv.id_configuracao_equipamento
+							LEFT JOIN configuracao_equipamento ce 
+								ON ce.id_configuracao_equipamento = lv.id_configuracao_equipamento
+							LEFT JOIN #Enquadramentos tmp
+								ON tmp.Cod_Pista = cep.cod_pista
+								and tmp.Cod_Pista_Alternativo = CASE 
+																	WHEN cep.cod_pista_prodam = 0
+																		THEN cep.cod_pista_alternativo
+																	ELSE
+																		cep.cod_pista_prodam
+																END) cr 
+				
+				ON cr.id_local = lpa.id_local AND cr.id_pista = lpa.id_pista
+
+				WHERE lpa.cod_pista > 0	
+				and cr.id_produto in (1,2)
+				and i.data >= cr.data_inicio 
+		) as contagem
+PIVOT
+	(
+		 COUNT(contagem.conta)
+		 FOR dia IN ([1],[2],[3],[4],[5],[6],[7],[8],[9],[10],[11],[12],[13],[14],[15],[16],[17],[18],[19],[20],[21],[22],[23],[24],[25],[26],[27],[28],[29],[30],[31])
+	) AS contagem_dia
+ORDER BY
+	cod_pista,
+	cod_pista_prodam,
+    Metrologica
+
+drop table #Enquadramentos]]>
+	</queryString>
+	<field name="serie_equipamento" class="java.lang.Integer"/>
+	<field name="nome_pista" class="java.lang.String"/>
+	<field name="cod_pista" class="java.lang.Integer"/>
+	<field name="cod_pista_prodam" class="java.lang.Integer"/>
+	<field name="cod_pista_alternativo" class="java.lang.Integer"/>
+	<field name="metrologica" class="java.lang.Integer"/>
+	<field name="1" class="java.lang.Integer"/>
+	<field name="2" class="java.lang.Integer"/>
+	<field name="3" class="java.lang.Integer"/>
+	<field name="4" class="java.lang.Integer"/>
+	<field name="5" class="java.lang.Integer"/>
+	<field name="6" class="java.lang.Integer"/>
+	<field name="7" class="java.lang.Integer"/>
+	<field name="8" class="java.lang.Integer"/>
+	<field name="9" class="java.lang.Integer"/>
+	<field name="10" class="java.lang.Integer"/>
+	<field name="11" class="java.lang.Integer"/>
+	<field name="12" class="java.lang.Integer"/>
+	<field name="13" class="java.lang.Integer"/>
+	<field name="14" class="java.lang.Integer"/>
+	<field name="15" class="java.lang.Integer"/>
+	<field name="16" class="java.lang.Integer"/>
+	<field name="17" class="java.lang.Integer"/>
+	<field name="18" class="java.lang.Integer"/>
+	<field name="19" class="java.lang.Integer"/>
+	<field name="20" class="java.lang.Integer"/>
+	<field name="21" class="java.lang.Integer"/>
+	<field name="22" class="java.lang.Integer"/>
+	<field name="23" class="java.lang.Integer"/>
+	<field name="24" class="java.lang.Integer"/>
+	<field name="25" class="java.lang.Integer"/>
+	<field name="26" class="java.lang.Integer"/>
+	<field name="27" class="java.lang.Integer"/>
+	<field name="28" class="java.lang.Integer"/>
+	<field name="29" class="java.lang.Integer"/>
+	<field name="30" class="java.lang.Integer"/>
+	<field name="31" class="java.lang.Integer"/>
+	<field name="enquadramentos" class="java.lang.String"/>
+	<variable name="ITEM" class="java.lang.Integer" resetType="None" calculation="Count">
+		<variableExpression><![CDATA[$V{ITEM}]]></variableExpression>
+		<initialValueExpression><![CDATA[1]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_1" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{1} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_2" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{2} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_3" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{3} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_4" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{4} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_5" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{5} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_6" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{6} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_7" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{7} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_8" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{8} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_9" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{9} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_10" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{10} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_11" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{11} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_12" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{12} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_13" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{13} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_14" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{14} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_15" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{15} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_16" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{16} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_17" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{17} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_18" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{18} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_19" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{19} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_20" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{20} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_21" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{21} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_22" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{22} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_23" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{23} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_24" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{24} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_25" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{25} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_26" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{26} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_27" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{27} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_28" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{28} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_29" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{29} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_30" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{30} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_31" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[($F{31} > 0 ? 1 : null)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_DIA" class="java.lang.Integer">
+		<variableExpression><![CDATA[($F{1} != 0 ? 1 : 0) +
+($F{2} != 0 ? 1 : 0) +
+($F{3} != 0 ? 1 : 0) +
+($F{4} != 0 ? 1 : 0) +
+($F{5} != 0 ? 1 : 0) +
+($F{6} != 0 ? 1 : 0) +
+($F{7} != 0 ? 1 : 0) +
+($F{8} != 0 ? 1 : 0) +
+($F{9} != 0 ? 1 : 0) +
+($F{10} != 0 ? 1 : 0) +
+($F{11} != 0 ? 1 : 0) +
+($F{12} != 0 ? 1 : 0) +
+($F{13} != 0 ? 1 : 0) +
+($F{14} != 0 ? 1 : 0) +
+($F{15} != 0 ? 1 : 0) +
+($F{16} != 0 ? 1 : 0) +
+($F{17} != 0 ? 1 : 0) +
+($F{18} != 0 ? 1 : 0) +
+($F{19} != 0 ? 1 : 0) +
+($F{20} != 0 ? 1 : 0) +
+($F{21} != 0 ? 1 : 0) +
+($F{22} != 0 ? 1 : 0) +
+($F{23} != 0 ? 1 : 0) +
+($F{24} != 0 ? 1 : 0) +
+($F{25} != 0 ? 1 : 0) +
+($F{26} != 0 ? 1 : 0) +
+($F{27} != 0 ? 1 : 0) +
+($F{28} != 0 ? 1 : 0) +
+($F{29} != 0 ? 1 : 0) +
+($F{30} != 0 ? 1 : 0) +
+($F{31} != 0 ? 1 : 0)]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_FAIXA" class="java.lang.Integer" calculation="Count">
+		<variableExpression><![CDATA[$F{cod_pista_prodam}]]></variableExpression>
+	</variable>
+	<variable name="SOMA_TOTAL" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$V{CONTA_DIA}]]></variableExpression>
+	</variable>
+	<variable name="IF_TOTAL" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{SOMA_TOTAL}/Double.valueOf($V{CONTA_FAIXA}*$P{NUMERO_DIAS})]]></variableExpression>
+	</variable>
+	<variable name="PERDA_TOTAL" class="java.lang.Double">
+		<variableExpression><![CDATA[($P{NUMERO_DIAS}*$V{CONTA_FAIXA}-$V{SOMA_TOTAL})*$P{VALOR_FAIXA_DIA}]]></variableExpression>
+	</variable>
+	<variable name="DIA_1" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},1-$P{DATA_INI}.getDate())]]></variableExpression>
+		<initialValueExpression><![CDATA[]]></initialValueExpression>
+	</variable>
+	<variable name="DIA_2" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},2-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_3" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},3-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_4" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},4-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_5" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},5-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_6" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},6-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_7" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},7-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_8" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},8-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_9" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},9-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_10" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},10-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_11" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},11-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_12" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},12-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_13" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},13-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_14" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},14-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_15" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},15-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_16" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},16-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_17" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},17-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_18" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},18-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_19" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},19-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_20" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},20-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_21" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},21-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_22" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},22-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_23" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},23-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_24" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},24-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_25" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},25-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_26" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},26-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_27" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},27-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_28" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},28-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_29" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},29-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_30" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},30-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="DIA_31" class="java.util.Date" resetType="None">
+		<variableExpression><![CDATA[org.apache.commons.lang.time.DateUtils.addDays($P{DATA_INI},31-$P{DATA_INI}.getDate())]]></variableExpression>
+	</variable>
+	<variable name="CONTA_DATA" class="java.lang.Integer" resetType="Page">
+		<variableExpression><![CDATA[$V{CONTA_DATA}+1]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="CONTA_FAIXA_1" class="java.lang.Integer" calculation="DistinctCount">
+		<variableExpression><![CDATA[$F{cod_pista_prodam}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="85" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="24" width="67" height="20" uuid="7f74bd5e-aa15-4003-b462-826927613a7e"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[CONTRATO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="44" width="67" height="20" uuid="e2ba2abf-75c6-4e7a-a4aa-44c993d5365f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[PERÍODO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="65" width="24" height="20" uuid="bf50b722-b015-422f-8188-c7c7f77cb27b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Local]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="95" y="65" width="185" height="20" uuid="29ce4b98-3c30-46d6-abca-d0bf79e0c20e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Local]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="326" y="65" width="20" height="20" uuid="5480d16e-07e0-48d2-a40e-993c073f3530"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Faixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="65" width="15" height="20" uuid="93745b70-b1a2-417f-8472-8de94c963e45"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="15" y="65" width="35" height="20" uuid="045a59a6-ef4c-4f25-ba38-51410a98238e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de Série]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="65" width="22" height="20" uuid="cdc779df-ef51-4a87-b1aa-144a046b7b2b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Faixa]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="67" y="44" width="60" height="20" uuid="3854bca6-e875-4096-b572-b40c30b9ed55"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_INI}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="24" width="162" height="20" uuid="b0d77542-f30e-481d-ba12-e5e1742cc9e2"/>
+				<textElement markup="none">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{IDENTIFICACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="127" y="44" width="25" height="20" uuid="f44432eb-23fd-4f43-b0fa-65609555d686"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[ATÉ]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="152" y="44" width="60" height="20" uuid="816074cd-5290-4272-b5d4-1290f53d1d66"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{DATA_FIM}]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="368" y="65" width="12" height="20" uuid="d82b3393-ab1a-47ee-b5b0-152c5564cd1f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_1}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_1}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_1} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="380" y="65" width="12" height="20" uuid="68591216-2333-4c8c-a023-2310477bbe97"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_2}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_2}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_2} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="392" y="65" width="12" height="20" uuid="40c73f19-e702-487c-8567-f7b8623be0cb"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_3}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_3}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_3} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="404" y="65" width="12" height="20" uuid="98b00f77-6a52-4728-a6e6-0c16c0397e23"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_4}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_4}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_4} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="416" y="65" width="12" height="20" uuid="db69afec-e7ed-473b-ba3b-01e0adf943fb"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_5}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_5}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_5} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="428" y="65" width="12" height="20" uuid="3c1e0873-4d5c-48f1-9376-4a326698ca10"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_6}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_6}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_6} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="440" y="65" width="12" height="20" uuid="4adcfe6c-66fd-4286-80a4-1c9b2525ed37"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_7}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_7}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_7} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="452" y="65" width="12" height="20" uuid="23b586b5-6c1e-4fa7-89a7-c132dff2a8e8"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_8}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_8}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_8} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="464" y="65" width="12" height="20" uuid="f36c146e-96f7-4f02-a2c6-05ad05c33823"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_9}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_9}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_9} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="476" y="65" width="12" height="20" uuid="5233509b-8186-4d67-a073-9078b722f545"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_10}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_10}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_10} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="488" y="65" width="12" height="20" uuid="7dcb292d-82d8-4b5c-9ae0-ec5385b13aad"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_11}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_11}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_11} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="500" y="65" width="12" height="20" uuid="20d84ba0-0934-4597-9313-0a575c9fae77"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_12}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_12}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_12} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="512" y="65" width="12" height="20" uuid="b3bbff70-6f34-4a49-9622-46202bf875b4"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_13}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_13}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_13} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="524" y="65" width="12" height="20" uuid="7e91a960-99a1-41c1-8660-3fd1897a6eee"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_14}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_14}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_14} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="536" y="65" width="12" height="20" uuid="53d1361f-cead-4b05-9a69-49d8ad97419a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_15}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_15}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_15} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="548" y="65" width="12" height="20" uuid="d18799d6-4aab-4516-b890-3351166979a1"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_16}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_16}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_16} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="560" y="65" width="12" height="20" uuid="9b8beb8c-aaa0-4216-b109-d026b04043b7"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_17}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_17}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_17} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="572" y="65" width="12" height="20" uuid="a17efda6-e539-478e-87a2-edaf3e1844de"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_18}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_18}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_18} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="584" y="65" width="12" height="20" uuid="e4f7bb5c-82e3-49a1-a92b-dea610ecaaf4"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_19}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_19}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_19} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="596" y="65" width="12" height="20" uuid="212fc53c-17db-45f5-b63b-f77233934c83"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_20}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_20}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_20} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="608" y="65" width="12" height="20" uuid="2098941a-b689-4bd4-aa13-a04275b39301"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_21}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_21}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_21} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="620" y="65" width="12" height="20" uuid="2560bf11-953f-4b5f-91cb-85b51b06404e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_22}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_22}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_22} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="632" y="65" width="12" height="20" uuid="4e226d1f-f88e-41b6-8856-bf5dd29f13ee"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_23}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_23}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_23} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="644" y="65" width="12" height="20" uuid="a51a8f77-5302-4e12-987c-c4e6b8726d75"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_24}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_24}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_24} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="656" y="65" width="12" height="20" uuid="994352f3-b503-406d-86da-07394c6830e5"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_25}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_25}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_25} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="668" y="65" width="12" height="20" uuid="8c7824fd-9b82-4844-9548-bfeb288ca7ac"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_26}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_26}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_26} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="680" y="65" width="12" height="20" uuid="c3f2329f-c9df-4d8b-ab4d-7cb6b6c2464c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_27}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_27}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_27} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="692" y="65" width="12" height="20" uuid="c149a326-c34e-4f00-8f37-fbd69df04201"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_28}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_28}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_28} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="704" y="65" width="12" height="20" uuid="dbdd706e-d30f-44b9-a52a-1f214889dbd5"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_29}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_29}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_29} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="716" y="65" width="12" height="20" uuid="383f072c-b5ea-4c57-9f9e-d0f58020abd4"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_30}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_30}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_30} : null]]></textFieldExpression>
+			</textField>
+			<textField pattern=" dd EEE" isBlankWhenNull="true">
+				<reportElement x="728" y="65" width="12" height="20" uuid="17971ec1-9d63-4cfa-9e00-4789b78d2bce"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{DIA_31}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_31}.getTime() <= $P{DATA_FIM}.getTime() ? $V{DIA_31} : null]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="4" width="802" height="20" uuid="853b0287-8038-495b-a113-d9a1c9b035c5"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RELATÓRIO DE FUNCIONAMENTO - Equipamento Fixo e Barreira Eletrônica]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="740" y="65" width="20" height="20" uuid="2bb8f088-d839-4a0b-b4e2-2dd5fd3c262b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[D.FUNC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="760" y="65" width="20" height="20" uuid="0a411312-b50f-4f6c-a997-e3cef30eb708"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="229" y="24" width="75" height="20" uuid="5758b8b1-7805-49bf-bbee-354ef7124ef2"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[VALOR FX. DIA:]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="304" y="24" width="96" height="20" uuid="b3477b1d-d67f-4140-975a-44b32f9e1deb"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{VALOR_FAIXA_DIA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="400" y="44" width="75" height="20" uuid="1acec2cb-441d-41d4-a5d7-8a8a4ab6f80e"/>
+				<textElement>
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[IF:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="¤ #,##0.00" isBlankWhenNull="true">
+				<reportElement x="621" y="44" width="95" height="20" uuid="556d98dd-7818-4f59-bca8-d4a88c77783c"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PERDA_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="571" y="44" width="50" height="20" uuid="77564fa7-1af3-4f41-8a7f-476d6ee3be3b"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8" isBold="false"/>
+				</textElement>
+				<text><![CDATA[PERDA:]]></text>
+			</staticText>
+			<textField evaluationTime="Report" pattern="###0.0000" isBlankWhenNull="true">
+				<reportElement x="476" y="44" width="95" height="20" uuid="8f7a3b0f-8577-4ae5-ba5b-b1cdf385df44"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IF_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="229" y="44" width="75" height="20" uuid="b32afe27-ae83-4ca9-a1f8-55b45dbbbbfc"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[GERAÇÃO:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
+				<reportElement x="304" y="44" width="96" height="20" uuid="55111d4e-f094-4e60-a752-a5097f1e8866"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="346" y="65" width="22" height="20" uuid="c60985aa-8b1a-4b97-a586-396874cc60cc"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Metro?]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="50" y="65" width="45" height="20" uuid="c569e521-bc82-4733-8ec1-6e6cb875247d"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Enquadramento]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="10" splitType="Stretch">
+			<rectangle>
+				<reportElement x="368" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="087356f3-d68c-4317-9fa2-166f3b825b8e"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="380" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="77c2b741-31fb-4420-99ba-d82ee06f4607"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="392" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="4ce15e90-0478-4ab3-803d-e9ec60511ff0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="404" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="de121dcc-26b9-48d3-83a8-f782c4fc73ed"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="416" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="8d4f5280-59a1-492d-8f5e-7c49578e3d72"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="428" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="abfec5cf-2293-41a8-929e-bda6d58b97b0"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="440" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="8fbb64cd-a97c-41ec-b38e-7c040af4066b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="452" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="fa2fee0f-d9e9-4497-bf0f-5b16aa91c748"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="464" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="0a61ecae-45e8-4c77-96ce-d1344dd84ac1"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="476" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="796928bc-0a2e-464b-aa48-6a0d2290db44"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="488" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="2ecfce85-4afe-430b-8d3b-0a8942577a18"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="500" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="a9fbb0ab-642c-4097-827b-02959d714366"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="512" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="1b23cc13-659c-466a-a99b-a0dba46c260d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="524" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="43e67e86-a7ff-4d0e-8b7c-11f31ff74569"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="536" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="19e34305-d625-4f8b-a1d9-83f8d220675d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="548" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="b034d5ff-0b9b-429b-b931-56d57f149eca"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="560" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="2188ff7f-8c7d-4a6e-b1ff-58120accfc21"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="572" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="5922867d-1844-442a-87b4-cef8ee2c448d"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="584" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="70ae7e96-09ae-4e27-b69e-fad5b0e61c01"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="596" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="768b7237-bc81-490c-a7c3-3e4569915bec"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="608" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="3f0df285-0b28-4a14-b0a9-8f35f52fe94c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="620" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="1cd294df-4b96-42da-be03-0b4ea6b9471c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="632" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="5142355a-255e-42b7-9a5c-3b88a4a8731b"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="644" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="eaca882f-e590-4f8f-95d1-6d80dd2505fc"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="656" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="090948ca-face-41e4-aef9-5f95327b274c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="668" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="6358e813-c1ef-4e2e-8246-7347eac74590"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="680" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="17215e70-6a78-4907-a967-feda06e063f7"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="692" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="ed17b077-1a39-4f95-b9be-d26ba591b25c"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="704" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="18d537b0-3d78-45ff-8048-5fa96fa7cad9"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="716" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="a56249a4-607e-408f-af87-31e0459775a3"/>
+			</rectangle>
+			<rectangle>
+				<reportElement x="728" y="0" width="12" height="10" forecolor="#000000" backcolor="#FF3300" uuid="0355f1c5-17b3-4356-940a-f3c1f9f1131d"/>
+			</rectangle>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="368" y="0" width="12" height="10" uuid="f0c1fa25-e7a4-45aa-b3d0-8357d0e797be">
+					<printWhenExpression><![CDATA[$F{1} > 0 || !($V{DIA_1}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_1}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{1} > 0 ? $F{1} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="536" y="0" width="12" height="10" uuid="ee6ac647-9bda-465c-8725-412b30f33bbe">
+					<printWhenExpression><![CDATA[$F{15} > 0 || !($V{DIA_15}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_15}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{15} > 0 ? $F{15} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="428" y="0" width="12" height="10" uuid="61ff60d3-be78-4f45-8240-615ba590dd31">
+					<printWhenExpression><![CDATA[$F{6} > 0 || !($V{DIA_6}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_6}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{6} > 0 ? $F{6} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="548" y="0" width="12" height="10" uuid="4c0878d6-8775-4dd6-b1cf-39fcb7a2fd81">
+					<printWhenExpression><![CDATA[$F{16} > 0 || !($V{DIA_16}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_16}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{16} > 0 ? $F{16} : null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="15" y="0" width="35" height="10" uuid="8e72e7c2-89db-4079-aab7-f49f41a3bb05"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{serie_equipamento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="560" y="0" width="12" height="10" uuid="101f7d6b-06c1-4f3d-b591-d8bbf2af91a9">
+					<printWhenExpression><![CDATA[$F{17} > 0 || !($V{DIA_17}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_17}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{17} > 0 ? $F{17} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="440" y="0" width="12" height="10" uuid="43697f82-1b21-48c8-ac8d-b1e0e70c579f">
+					<printWhenExpression><![CDATA[$F{7} > 0 || !($V{DIA_7}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_7}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{7} > 0 ? $F{7} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="572" y="0" width="12" height="10" uuid="25ca15d3-eec2-4cd1-8744-97c24019c29d">
+					<printWhenExpression><![CDATA[$F{18} > 0 || !($V{DIA_18}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_18}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{18} > 0 ? $F{18} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="380" y="0" width="12" height="10" uuid="6100b211-a78f-4ecf-b0e1-768923d65e07">
+					<printWhenExpression><![CDATA[$F{2} > 0 || !($V{DIA_2}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_2}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{2} > 0 ? $F{2} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="584" y="0" width="12" height="10" uuid="31132d01-fd94-406b-a4b7-1abced4d7244">
+					<printWhenExpression><![CDATA[$F{19} > 0 || !($V{DIA_19}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_19}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{19} > 0 ? $F{19} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="452" y="0" width="12" height="10" uuid="bc49955c-ab21-453b-8b09-47cdc0fc46ec">
+					<printWhenExpression><![CDATA[$F{8} > 0 || !($V{DIA_8}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_8}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{8} > 0 ? $F{8} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="596" y="0" width="12" height="10" uuid="14dfb258-3ac6-4ac0-91b3-8c795943720d">
+					<printWhenExpression><![CDATA[$F{20} > 0 || !($V{DIA_20}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_20}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{20} > 0 ? $F{20} : null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="24" height="10" uuid="ae60e559-2afb-49a9-8419-946785318a10"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_pista}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="608" y="0" width="12" height="10" uuid="3af696d8-8f8d-4914-b8ba-18ffbf0ab0cf">
+					<printWhenExpression><![CDATA[$F{21} > 0 || !($V{DIA_21}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_21}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{21} > 0 ? $F{21} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="464" y="0" width="12" height="10" uuid="7812b629-171e-44bb-bd03-a2586aa93dc4">
+					<printWhenExpression><![CDATA[$F{9} > 0 || !($V{DIA_9}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_9}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{9} > 0 ? $F{9} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="620" y="0" width="12" height="10" uuid="ed989f05-4787-4310-b2b3-b620b4462319">
+					<printWhenExpression><![CDATA[$F{22} > 0 || !($V{DIA_22}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_22}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{22} > 0 ? $F{22} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="392" y="0" width="12" height="10" uuid="6a9abf28-951f-4f8f-8c5f-de705229ee9f">
+					<printWhenExpression><![CDATA[$F{3} > 0 || !($V{DIA_3}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_3}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{3} > 0 ? $F{3} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="632" y="0" width="12" height="10" uuid="35d277b2-1a0d-4397-be2e-686f5c0c47df">
+					<printWhenExpression><![CDATA[$F{23} > 0 || !($V{DIA_23}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_23}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{23} > 0 ? $F{23} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="476" y="0" width="12" height="10" uuid="0cf73053-af66-49aa-bedc-ce8fbb2aecf0">
+					<printWhenExpression><![CDATA[$F{10} > 0 || !($V{DIA_10}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_10}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{10} > 0 ? $F{10} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="644" y="0" width="12" height="10" uuid="de535569-446e-46f8-a338-655fcce47773">
+					<printWhenExpression><![CDATA[$F{24} > 0 || !($V{DIA_24}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_24}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{24} > 0 ? $F{24} : null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="304" y="0" width="22" height="10" uuid="4da194bb-f19a-485b-918d-dd5a61c6638b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_pista_prodam}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="656" y="0" width="12" height="10" uuid="457c341a-97fd-48ea-9f4b-10ea82d250d8">
+					<printWhenExpression><![CDATA[$F{25} > 0 || !($V{DIA_25}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_25}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{25} > 0 ? $F{25} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="488" y="0" width="12" height="10" uuid="be37181e-85af-40ba-8b40-1985bf8ad171">
+					<printWhenExpression><![CDATA[$F{11} > 0 || !($V{DIA_11}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_11}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{11} > 0 ? $F{11} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="668" y="0" width="12" height="10" uuid="1aaefb44-531f-4d37-ac8b-5fee4d5a3647">
+					<printWhenExpression><![CDATA[$F{26} > 0 || !($V{DIA_26}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_26}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{26} > 0 ? $F{26} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="404" y="0" width="12" height="10" uuid="3da7a5ca-e764-4d71-9095-49ae32ab834f">
+					<printWhenExpression><![CDATA[$F{4} > 0 || !($V{DIA_4}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_4}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{4} > 0 ? $F{4} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="680" y="0" width="12" height="10" uuid="8c85f39f-0737-4236-9031-b48a52015f29">
+					<printWhenExpression><![CDATA[$F{27} > 0 || !($V{DIA_27}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_28}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{27} > 0 ? $F{27} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="500" y="0" width="12" height="10" uuid="b03daede-07db-4cff-8615-56bb4a047139">
+					<printWhenExpression><![CDATA[$F{12} > 0 || !($V{DIA_12}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_12}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{12} > 0 ? $F{12} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="692" y="0" width="12" height="10" uuid="958d4ad5-74e0-4674-8198-89a912278449">
+					<printWhenExpression><![CDATA[$F{28} > 0 || !($V{DIA_28}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_28}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{28} > 0 ? $F{28} : null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="326" y="0" width="20" height="10" uuid="ccb17728-55ef-4cf0-acc0-d5eadca83210"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cod_pista_alternativo}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="704" y="0" width="12" height="10" uuid="f03feecc-4229-4217-ab07-09f4b878506b">
+					<printWhenExpression><![CDATA[$F{29} > 0 || !($V{DIA_29}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_29}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{29} > 0 ? $F{29} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="512" y="0" width="12" height="10" uuid="48dc88b8-8b73-4986-8dfd-5a4ea02c8b24">
+					<printWhenExpression><![CDATA[$F{13} > 0 || !($V{DIA_13}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_13}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{13} > 0 ? $F{13} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="716" y="0" width="12" height="10" uuid="2b6b5f98-6882-4d3d-a3fa-12f73a0cf07a">
+					<printWhenExpression><![CDATA[$F{30} > 0 || !($V{DIA_30}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_30}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{30} > 0 ? $F{30} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="416" y="0" width="12" height="10" uuid="b3f2f518-733e-4ec4-a20c-bb3b4c715821">
+					<printWhenExpression><![CDATA[$F{5} > 0 || !($V{DIA_5}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_5}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{5} > 0 ? $F{5} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="728" y="0" width="12" height="10" uuid="793b26b7-b208-4fce-b3fb-72d73d3d712b">
+					<printWhenExpression><![CDATA[$F{31} > 0 || !($V{DIA_31}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_31}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{31} > 0 ? $F{31} : null]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Opaque" x="524" y="0" width="12" height="10" uuid="601f8e6e-a209-4131-bd0c-a1c0a014a959">
+					<printWhenExpression><![CDATA[$F{14} > 0 || !($V{DIA_14}.getTime() >= $P{DATA_INI}.getTime() && $V{DIA_14}.getTime() <= $P{DATA_FIM}.getTime())]]></printWhenExpression>
+				</reportElement>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{14} > 0 ? $F{14} : null]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="740" y="0" width="20" height="10" uuid="e9c251d9-e3c0-4545-b118-964333576bff"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_DIA}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.0 %">
+				<reportElement x="760" y="0" width="20" height="10" uuid="590dd679-4aae-4ed6-9291-2ea938b3cced"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($V{CONTA_DIA}/Double.valueOf($P{NUMERO_DIAS}))]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="15" height="10" uuid="4a808d85-5570-4980-ba8a-c9b9056894fd"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{ITEM}+1]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="0" width="185" height="10" uuid="d97b8097-a924-422b-8e93-f9bd7260a80e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nome_pista}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="346" y="0" width="22" height="10" uuid="c3857b8e-d7df-4825-8614-b8b8dc2be045"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{metrologica} == 1 ? "Sim" : "Não"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="50" y="0" width="45" height="10" uuid="7498937c-2255-41bc-b6fa-53671be0e0bf"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{enquadramentos}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band/>
+	</lastPageFooter>
+	<summary>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="368" y="0" width="12" height="10" uuid="b94e2e93-1343-4826-8ef6-3804923ecf65"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_1}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="15" y="0" width="35" height="10" uuid="9d1fc3f8-030b-43e4-b56c-2883cede6595"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="0" width="12" height="10" uuid="db7841ee-ac82-4049-bb72-65e7fc302a1a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="404" y="0" width="12" height="10" uuid="e11efd99-2323-4ac9-aeda-c427bcd1ed3a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_4}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="392" y="0" width="12" height="10" uuid="5fc64d2f-8b44-41f4-b222-8e8390ab1d3a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="440" y="0" width="12" height="10" uuid="45309983-0003-42ff-9f7e-d979497abdd6"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_7}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="452" y="0" width="12" height="10" uuid="e5e57cda-becc-43a9-a090-03c2c465bd6b"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_8}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="428" y="0" width="12" height="10" uuid="1874a0a1-f55d-4a69-9fd2-0daa6d7bd978"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_6}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="416" y="0" width="12" height="10" uuid="1dce4bc8-0d5b-43dd-9b52-30cae131d89a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_5}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="476" y="0" width="12" height="10" uuid="59390827-8cde-4de2-b259-f87d4d8db4a1"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_10}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="500" y="0" width="12" height="10" uuid="2160dbc6-f253-4d85-b729-9f182353dc6e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_12}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="512" y="0" width="12" height="10" uuid="16a4e943-6290-405a-a838-36825359d18f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_13}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="548" y="0" width="12" height="10" uuid="38284b41-a868-4cca-b60f-76d20a95579c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_16}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="572" y="0" width="12" height="10" uuid="2f75a805-a157-4964-9c00-33412de945e7"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_18}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="536" y="0" width="12" height="10" uuid="1ed4e3a3-733e-4b9f-92e7-81746e094a28"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_15}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="0" width="12" height="10" uuid="c0f8df90-3cb7-4e60-9550-1232dea75bb7"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_17}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="488" y="0" width="12" height="10" uuid="b3ec48c0-64f3-45e8-b89a-0d39beb070b6"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_11}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="524" y="0" width="12" height="10" uuid="eb62cf22-72bd-43a8-b3bd-2551d56f5b62"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_14}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="584" y="0" width="12" height="10" uuid="dba617f9-96ee-44cc-9910-4bb5436c75d2"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_19}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="464" y="0" width="12" height="10" uuid="949979e1-f89b-4fe9-a788-89915ad5a493"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_9}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="692" y="0" width="12" height="10" uuid="f69b045d-4e65-4475-9fab-20da134f2eae"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_28}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="656" y="0" width="12" height="10" uuid="17bd5cff-5cd4-4f58-a363-7efbd094d372"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_25}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="632" y="0" width="12" height="10" uuid="d41bfc44-ba6b-49cd-a0f2-042719f8ab17"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_23}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="620" y="0" width="12" height="10" uuid="1aff0445-c586-42df-898d-eeb368049399"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_22}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="668" y="0" width="12" height="10" uuid="8bb5182a-4197-417f-9185-5b424b6fd76a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_26}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="644" y="0" width="12" height="10" uuid="8df80473-5dc5-4d06-8ed3-9321913970fb"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_24}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="680" y="0" width="12" height="10" uuid="2f80fd2c-b9c1-46aa-a07a-20a310b4f8ba"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_27}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="596" y="0" width="12" height="10" uuid="a7a2ffe3-a121-4618-81ed-38f79ecf5cde"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_20}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="608" y="0" width="12" height="10" uuid="60b996f2-10a8-443c-82bb-0e0767254c8f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_21}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="704" y="0" width="12" height="10" uuid="6c6c37ce-2720-4289-bb95-2f1404c8be0e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_29}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="716" y="0" width="12" height="10" uuid="78734eb4-8f0d-423a-b436-5938cfafecb1"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_30}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="728" y="0" width="12" height="10" uuid="f35e3002-1a7b-40e1-abea-ee5b42d47bf3"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_31}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="15" y="10" width="35" height="10" uuid="473b13f5-4295-4813-978b-7dbed4090761"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[%]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="346" y="0" width="22" height="10" uuid="7a53b305-80c3-4c6b-b1d5-f1b3c7a5ad0c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_FAIXA_1}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="380" y="10" width="12" height="10" uuid="e0baee46-7c01-477d-9a35-130a1a5552e8"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_2}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="536" y="10" width="12" height="10" uuid="9d075e93-e07e-4b51-baf4-cbd6b3699028"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_15}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="572" y="10" width="12" height="10" uuid="b0d8235a-42fa-4e0f-a3a4-d1094a521945"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_18}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="596" y="10" width="12" height="10" uuid="197c94aa-81e4-48d5-b709-01636011be55"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_20}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="392" y="10" width="12" height="10" uuid="0a23d353-1f20-48a6-aa3a-7d09d17a0460"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_3}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="464" y="10" width="12" height="10" uuid="bad15dbe-3637-485d-8728-472efb4755cc"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_9}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="512" y="10" width="12" height="10" uuid="3af447f2-265e-4756-a7f6-2a29c0ec0cb4"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_13}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="668" y="10" width="12" height="10" uuid="0797aee4-3af0-4afc-bf0e-20e98af1a360"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_26}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="656" y="10" width="12" height="10" uuid="2e3a2d6d-144e-4b78-b376-8e4cb3ac6db4"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_25}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="428" y="10" width="12" height="10" uuid="30d26409-66f5-4778-9889-bedf176a5e2c"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_6}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="716" y="10" width="12" height="10" uuid="8f8765b1-f3a9-4eaf-b792-3cd00e85e150"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_30}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="704" y="10" width="12" height="10" uuid="637ef559-72e9-42b4-a2a3-1fd6b7bd114a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_29}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="452" y="10" width="12" height="10" uuid="585cac65-c92d-4b55-8531-74726625a6bc"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_8}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="644" y="10" width="12" height="10" uuid="72632c65-afee-4175-b954-4a638bc8eb87"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_24}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="500" y="10" width="12" height="10" uuid="999be34f-d695-4cf7-bd27-dd7f8cb9d5cf"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_12}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="620" y="10" width="12" height="10" uuid="bc793cf9-c979-47db-b7dd-a3401a071a47"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_22}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="632" y="10" width="12" height="10" uuid="09328744-6a6b-4d04-8c25-052777e1a565"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_23}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="416" y="10" width="12" height="10" uuid="c8c0cfc3-60cc-4ee2-973c-9da36788ab81"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_5}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="548" y="10" width="12" height="10" uuid="31bbda9f-7cb8-4399-b2e1-293a87a9e5a0"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_16}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="440" y="10" width="12" height="10" uuid="6d2506e4-2831-46a6-8b0b-aa04fa3df50f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_7}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="524" y="10" width="12" height="10" uuid="147c786f-03c2-4dc5-9deb-da76f2411e7e"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_14}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="692" y="10" width="12" height="10" uuid="39ac3815-b164-4507-95bb-8edead616330"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_28}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %">
+				<reportElement x="368" y="10" width="12" height="10" uuid="9e2b2027-2ac6-4951-b354-7098cebeff57"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_1}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="404" y="10" width="12" height="10" uuid="5785b919-e5b4-4e97-ae87-8bed1a9fdc27"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_4}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="608" y="10" width="12" height="10" uuid="81f1a3c8-9df4-442e-b60d-1d0d72095832"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_21}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="680" y="10" width="12" height="10" uuid="8bad4431-fe5c-4762-aef3-7c1df3ce9487"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_27}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="560" y="10" width="12" height="10" uuid="686ba9f9-a2bc-44fe-944f-960555d8eda8"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_17}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="476" y="10" width="12" height="10" uuid="9ce22c72-222c-4805-b58f-80fd713bd22f"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_10}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="488" y="10" width="12" height="10" uuid="c29f047d-1e64-473a-90a9-6f0ce90e7525"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_11}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="728" y="10" width="12" height="10" uuid="60aeb525-4d01-4c7d-961e-423ba6f3449a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_31}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="584" y="10" width="12" height="10" uuid="d792bf26-aec9-4d53-a85b-97469a1ed831"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{CONTA_19}/Double.valueOf($V{CONTA_FAIXA})]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="740" y="0" width="20" height="10" uuid="41b796cf-a143-422b-bd25-2b96c22dfeb6"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOMA_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="740" y="10" width="20" height="10" uuid="77ab7635-323b-4a6e-a009-1548f817f7e8"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{IF_TOTAL}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="10" width="318" height="10" uuid="39d45d83-6bf9-4102-99d5-02cbc78c5279"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+			<textField pattern="#,##0 %" isBlankWhenNull="false">
+				<reportElement x="760" y="0" width="20" height="10" uuid="e30450f2-7a37-49a9-8af7-3a22054d640a"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{SOMA_TOTAL}/Double.valueOf($V{CONTA_FAIXA}*$P{NUMERO_DIAS})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="50" y="0" width="296" height="10" uuid="2d53342b-71fd-441f-80e1-0bb5493c2957"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

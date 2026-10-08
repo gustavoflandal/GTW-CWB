@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="AIT Avanco URBS" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="fbadf0a6-2462-4cf5-be75-b3c8a9e12b3c">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.3286707500000023"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="GTW_RIO"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="ID_REMESSA" class="java.lang.Integer"/>
+	<parameter name="DIR_IMAGENS" class="java.lang.String">
+		<defaultValueExpression><![CDATA["c:"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_EMPRESA" class="java.lang.String">
+		<parameterDescription><![CDATA[]]></parameterDescription>
+	</parameter>
+	<parameter name="LOGO_EMPRESA_VERTICAL" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT top(1) 
+r.data AS DATA_MOVIMENTO,
+REPLACE(CONVERT(VARCHAR(8), r.data, 3), '/', '') AS DATA_MOVIMENTO_FORMATADA,
+RTRIM(r.tipo) AS TIPO_REMESSA,
+right('000000'+RTRIM(r.codigo_externo), 6) AS NUMERO_REMESSA,
+RTRIM(r.serie_inicial) AS SERIE_INI,
+right('00000000'+RTRIM(r.auto_inicial), 8) AS AUTO_INI,
+dbo.DAC_AIT(r.tipo,r.serie_inicial,r.auto_inicial) AS DINI,
+RTRIM(r.serie_final) AS SERIE_FIM,
+right('00000000'+RTRIM(r.auto_final), 8) AS AUTO_FIM,
+dbo.DAC_AIT(r.tipo,r.serie_final,r.auto_final) AS DFIM,
+right('000000'+RTRIM(r.total_infracao), 6) AS CONTA_AIT,
+total_infracao AS NUMERO_IMAGENS,
+CONVERT(VARCHAR, data_inicial, 3) AS DATA_INICIO,
+CONVERT(VARCHAR, data_final, 3) AS DATA_FIM,
+(SELECT valor FROM chave_valor (NOLOCK) WHERE chave = 'nome_contrato_remessa') AS NOME_CONTRATO
+FROM remessa r
+WHERE r.id_remessa = $P{ID_REMESSA}]]>
+	</queryString>
+	<field name="DATA_MOVIMENTO" class="java.sql.Timestamp"/>
+	<field name="TIPO_REMESSA" class="java.lang.String"/>
+	<field name="NUMERO_REMESSA" class="java.lang.String"/>
+	<field name="SERIE_INI" class="java.lang.String"/>
+	<field name="AUTO_INI" class="java.lang.String"/>
+	<field name="DINI" class="java.lang.Short"/>
+	<field name="SERIE_FIM" class="java.lang.String"/>
+	<field name="AUTO_FIM" class="java.lang.String"/>
+	<field name="DFIM" class="java.lang.Short"/>
+	<field name="CONTA_AIT" class="java.lang.String"/>
+	<field name="NUMERO_IMAGENS" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_INICIO" class="java.lang.String"/>
+	<field name="DATA_FIM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NOME_CONTRATO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_MOVIMENTO_FORMATADA" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="611" splitType="Stretch">
+			<image isUsingCache="true" isLazy="true">
+				<reportElement key="image-1" x="120" y="40" width="134" height="62" uuid="fd5205ad-42ff-4cff-958a-e90029a0de86"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGENS}+"CET-RIO.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-15" x="10" y="187" width="82" height="16" uuid="3f488d1d-82bb-4289-b9c8-be1e19d4e2f4"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Data do Envio
+
+]]></text>
+			</staticText>
+			<image scaleImage="FillFrame" isUsingCache="true" isLazy="true">
+				<reportElement key="image-1" x="410" y="72" width="47" height="128" uuid="9fae4da4-e366-4288-a9f4-431e8853191b"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGENS}+"CET-RIO_vertical.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-15" x="490" y="72" width="16" height="50" uuid="d2e1ffcf-9651-4420-8ef0-682dbe54907e"/>
+				<textElement textAlignment="Left" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Sequência:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="458" y="72" width="16" height="209" uuid="8f63fd5d-5d79-4f17-8e46-c53c662cf6c9"/>
+				<textElement textAlignment="Left" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Dados]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="10" y="203" width="82" height="16" uuid="ab9fe9f7-68e0-4c2a-b660-afeaf4d04a62"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_MOVIMENTO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="490" y="122" width="16" height="159" uuid="f463a274-16a3-4ac5-aa3d-caea107020b2"/>
+				<textElement rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_INI}+" - "+$F{AUTO_INI}+" - "+$F{AUTO_FIM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,###.###;(#,###.###-)" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="474" y="122" width="16" height="159" uuid="d65dd077-c255-41ea-bc08-c4a98ddad7f8"/>
+				<textElement textAlignment="Left" rotation="Right">
+					<font size="9" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_IMAGENS}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="55" y="290" width="212" height="16" uuid="9d0c5bac-397e-4b71-ae08-2d24bbca24cb">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_INI}+" - "+$F{AUTO_INI}+" - "+$F{AUTO_FIM}]]></textFieldExpression>
+			</textField>
+			<textField pattern="000000&apos;.txt&apos;" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="140" y="276" width="81" height="16" uuid="82fbc496-8af0-48d3-b389-652063d730d0"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_INI}+$F{NUMERO_REMESSA}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="FillFrame" isUsingCache="true" isLazy="true">
+				<reportElement key="image-1" x="355" y="40" width="13" height="40" uuid="80a1a3d4-4307-4bdb-ba77-5399933fbb31">
+					<property name="local_mesure_unitheight" value="pixel"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="local_mesure_unitx" value="pixel"/>
+				</reportElement>
+				<imageExpression><![CDATA[$P{DIR_IMAGENS}+"CET-RIO_vertical.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement key="staticText-15" x="353" y="100" width="16" height="24" uuid="04732816-5d27-4d5c-9af3-5d3c3c688ebb">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Right" rotation="Right"/>
+				<text><![CDATA[Lote:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="353" y="126" width="16" height="134" uuid="13201f26-4390-4b76-9237-53359dac3617">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement rotation="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_INI}+$F{NUMERO_REMESSA}+" "+$F{CONTA_AIT}+" Imagens"]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="353" y="260" width="16" height="61" uuid="02697843-e353-452c-b874-3ef178300f95">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement rotation="Right">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_MOVIMENTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="250" y="160" width="82" height="44" uuid="235f2663-38e8-41d6-a69e-86c5e4cb3b3c">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="local_mesure_unity" value="pixel"/>
+				</reportElement>
+				<textElement textAlignment="Left"/>
+				<text><![CDATA[Conteúdo do CD:
+1. Fotos Web;
+2. Dados
+]]></text>
+			</staticText>
+			<textField pattern="000000&apos;.txt&apos;" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="120" y="260" width="120" height="16" uuid="94b9af7e-de52-4073-9930-60e59d5bbe80"/>
+				<textElement>
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NOME_CONTRATO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="10" y="152" width="82" height="18" uuid="b1d42ad9-cd98-4a17-80ca-90b0c7d7c876"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Lote nº]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="10" y="170" width="82" height="16" uuid="0791941f-67ec-48fb-aae8-532bf5e58ac2"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_MOVIMENTO_FORMATADA}+$F{NUMERO_REMESSA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-15" x="506" y="72" width="16" height="209" uuid="1b5077cb-3fc4-45ec-963e-44b9b351850f"/>
+				<textElement textAlignment="Left" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fotos Radar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-15" x="474" y="72" width="16" height="50" uuid="65dc71dc-0fa7-4bd6-949e-72aaf5182908"/>
+				<textElement textAlignment="Left" rotation="Right">
+					<font size="9"/>
+				</textElement>
+				<text><![CDATA[Fotos Web:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,11 @@
+.aviso-permissao {
+    color: #b02a37;
+    font-weight: bold;
+    font-size: 0.78rem;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.aviso-permissao.show {
+    opacity: 1;
+}

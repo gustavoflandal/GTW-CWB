@@ -1,0 +1,14 @@
+@charset "UTF-8";
+.btn-disabled {
+  background-color: #cccccc !important;
+  border-color: #cccccc !important;
+  color: #000000 !important;
+}
+.btn-disabled:hover,
+btn-disabled:active,
+btn-disabled:visited,
+btn-disabled:focus {
+  background-color: #cccccc !important;
+  border-color: #cccccc !important;
+  color: #000000 !important;
+}

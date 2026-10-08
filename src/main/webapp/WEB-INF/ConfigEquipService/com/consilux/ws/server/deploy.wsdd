@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from ConfigEquipService WSDL service -->
+
+  <service name="ConfigEquip" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+      <parameter name="wsdlServiceElement" value="ConfigEquipService"/>
+      <parameter name="schemaQualified" value="http://server.ws.consilux.com"/>
+      <parameter name="wsdlServicePort" value="ConfigEquip"/>
+      <parameter name="className" value="com.consilux.ws.server.ConfigEquipWS"/>
+      <parameter name="wsdlPortType" value="ConfigEquip"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://server.ws.consilux.com" xmlns:retNS="http://server.ws.consilux.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="buscaDataModificacaoConfigEquip" qname="operNS:buscaDataModificacaoConfigEquip" returnQName="retNS:buscaDataModificacaoConfigEquipReturn" returnType="rtns:double" soapAction="">
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:usuario" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:idEquipamento" type="tns:int"/>
+      </operation>
+      <operation xmlns:operNS="http://server.ws.consilux.com" xmlns:retNS="http://server.ws.consilux.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="buscarConfigEquip" qname="operNS:buscarConfigEquip" returnQName="retNS:buscarConfigEquipReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:usuario" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:idEquipamento" type="tns:int"/>
+      </operation>
+      <operation xmlns:operNS="http://server.ws.consilux.com" name="setEmOperacao" qname="operNS:setEmOperacao" soapAction="">
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:usuario" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:idEquipamento" type="tns:int"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:operando" type="tns:boolean"/>
+      </operation>
+      <operation xmlns:operNS="http://server.ws.consilux.com" name="incluirConfigEquip" qname="operNS:incluirConfigEquip" soapAction="">
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:loginUsuario" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:xmlConfigEquip" type="tns:string"/>
+      </operation>
+      <operation xmlns:operNS="http://server.ws.consilux.com" xmlns:retNS="http://server.ws.consilux.com" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="validarUsuario" qname="operNS:validarUsuario" returnQName="retNS:validarUsuarioReturn" returnType="rtns:boolean" soapAction="">
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:usuario" type="tns:string"/>
+        <parameter xmlns:pns="http://server.ws.consilux.com" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:senha" type="tns:string"/>
+      </operation>
+      <parameter name="allowedMethods" value="validarUsuario setEmOperacao incluirConfigEquip buscarConfigEquip buscaDataModificacaoConfigEquip"/>
+
+  </service>
+</deployment>

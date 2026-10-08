@@ -1,0 +1,35 @@
+function initMap() 
+{	
+	var myLatlng = LatLngPadraoEunapolis;
+
+  	var map = new google.maps.Map(document.getElementById('map'), {zoom: ZOOM_PADRAO_EUNAPOLIS, center: myLatlng});
+
+  	// Create the initial InfoWindow.
+ 	var infoWindow = new google.maps.InfoWindow({
+    	content: 'Clique no mapa para marcar o local do Ponto de Interesse',
+    	position: myLatlng
+  	});
+  	infoWindow.open(map);
+
+  	var marker;
+
+  	// Configure the click listener.
+  	map.addListener('click', function(mapsMouseEvent) 
+	{
+	    // Close the current InfoWindow.
+	    infoWindow.close();
+	
+	    if (marker && marker.setPosition)
+	      marker.setPosition(mapsMouseEvent.latLng);
+	    else
+	      marker = new google.maps.Marker({
+	        position: mapsMouseEvent.latLng,
+	        map: map,
+	        icon: "http://maps.google.com/mapfiles/ms/micons/blue.png"
+	      });
+	
+	    //Show latitude and longtitude on the site
+	    var l = mapsMouseEvent.latLng.toString();
+	    document.getElementById("latlng").innerHTML = "Localização Lat/Long: " + l;
+  });
+}

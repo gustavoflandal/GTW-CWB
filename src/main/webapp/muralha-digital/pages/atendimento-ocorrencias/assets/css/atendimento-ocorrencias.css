@@ -1,0 +1,22 @@
+@charset "ISO-8859-1";
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: white;
+    background-color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.calledopen {
+	display: flex;
+    flex-direction: row-reverse;
+    padding: 16px;
+    margin-right: 48px;
+}

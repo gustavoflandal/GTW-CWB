@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="AnaliseAutuacoes"
+		 columnCount="1"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="1190"
+		 pageHeight="842"
+		 columnWidth="1130"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="DIGITADOR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["Todos"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DATA_INICIAL" isForPrompting="true" class="java.sql.Timestamp"/>
+	<parameter name="DATA_FINAL" isForPrompting="true" class="java.sql.Timestamp"/>
+	<parameter name="LOCAL" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["Todos"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_LOCAL" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="PISTA" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_GRUPO_DIGITADOR" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[4]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DIGITADOR" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="AUDITOR" isForPrompting="false" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["Todos"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_AUDITOR" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[0]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_GRUPO_AUDITOR" isForPrompting="false" class="java.lang.Integer">
+		<defaultValueExpression ><![CDATA[5]]></defaultValueExpression>
+	</parameter>
+	<queryString><![CDATA[select 
+	id_enquadramento,
+	nome as processo,
+	estado,
+	sum(total) as total
+from 
+(
+	select
+		case 
+			when t.id_processo = 1 then 1
+			when t.id_processo = 2 then 2
+			when t.id_processo = 11 then 3
+			when t.id_processo = 3 then 4
+		end as ordem_processo,
+		t.id_processo,
+		id_enquadramento,
+		p.nome,
+		estado,
+		ordem_estado,
+		sum(total) as total
+	from 
+		(
+			select
+				i.id_infracao,
+				i.id_enquadramento,
+				'inconsistidas' as estado,
+				2 as ordem_estado,
+				1 as total,
+				ipc.id_processo
+			from
+				infracao i with (NOLOCK)
+				left join infracao_processo_concluido ipc with (NOLOCK) on (ipc.id_infracao = i.id_infracao)
+				left join processo p with (NOLOCK) on (p.id_processo = ipc.id_processo)
+				
+			where
+				p.ativo = 'True' and
+				ipc.data_conclusao between $P{DATA_INICIAL} and $P{DATA_FINAL} and
+				($P{ID_LOCAL} = 0 or i.id_local = $P{ID_LOCAL}) and
+				($P{PISTA} = 0 or i.pista = $P{PISTA}) and
+				(ipc.id_processo in (1,2,3,11) ) and
+				ipc.id_inconsistencia <> 0
+				and i.id_infracao in (
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_DIGITADOR} = 0 or id_usuario = $P{ID_DIGITADOR} )
+								INTERSECT
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_AUDITOR} = 0 or id_usuario = $P{ID_AUDITOR} )
+								group by
+									id_infracao
+								)
+			UNION
+			select
+				i.id_infracao,
+				i.id_enquadramento,
+				'consistidas' as estado,
+				1 as ordem_estado,
+				1 as total,
+				ipc.id_processo
+			from
+				infracao i with (NOLOCK)
+				left join infracao_processo_concluido ipc with (NOLOCK) on (ipc.id_infracao = i.id_infracao)
+				left join processo p with (NOLOCK) on (p.id_processo = ipc.id_processo)
+				
+			where
+				p.ativo = 'True' and
+				ipc.data_conclusao between $P{DATA_INICIAL} and $P{DATA_FINAL} and
+				($P{ID_LOCAL} = 0 or i.id_local = $P{ID_LOCAL}) and
+				($P{PISTA} = 0 or i.pista = $P{PISTA}) and
+				(ipc.id_processo in (1,2,3,11) ) and
+				(ipc.id_inconsistencia = 0 or ipc.id_inconsistencia is null)
+				and i.id_infracao in (
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_DIGITADOR} = 0 or id_usuario = $P{ID_DIGITADOR} )
+								INTERSECT
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_AUDITOR} = 0 or id_usuario = $P{ID_AUDITOR} )
+								group by
+									id_infracao
+								)
+			UNION
+			select
+				i.id_infracao,
+				i.id_enquadramento,
+				'divergencias' as estado,
+				3 as ordem_estado,
+				1 as total,
+				ipc.id_processo
+			from
+				infracao i with (NOLOCK)
+				left join infracao_processo_concluido ipc with (NOLOCK) on (ipc.id_infracao = i.id_infracao)
+				left join processo p with (NOLOCK) on (p.id_processo = ipc.id_processo)
+			where
+				p.ativo = 'True' and
+				ipc.data_conclusao between $P{DATA_INICIAL} and $P{DATA_FINAL} and
+				($P{ID_LOCAL} = 0 or i.id_local = $P{ID_LOCAL}) and
+				($P{PISTA} = 0 or i.pista = $P{PISTA}) and
+				(ipc.id_processo in (1,2,3,11) ) and
+				(select id_inconsistencia from infracao_processo_concluido where id_infracao = i.id_infracao and id_processo = p.id_processo_anterior) <> ipc.id_inconsistencia
+				and i.id_infracao in (
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_DIGITADOR} = 0 or id_usuario = $P{ID_DIGITADOR} )
+								INTERSECT
+								select 
+									id_infracao 
+								from 
+									infracao_processo with (NOLOCK)
+								where 
+									( $P{ID_AUDITOR} = 0 or id_usuario = $P{ID_AUDITOR} )
+								group by
+									id_infracao
+								)
+		) as t 
+		left join processo p with (NOLOCK) on (p.id_processo = t.id_processo)
+	group by
+		id_enquadramento,
+		t.id_processo,
+		p.nome,
+		estado,
+		ordem_estado
+	UNION
+	select 
+		case 
+			when id_processo = 1 then 1
+			when id_processo = 2 then 2
+			when id_processo = 11 then 3
+			when id_processo = 3 then 4
+		end as ordem_processo,
+		id_processo,
+		id_enquadramento, 
+		nome,
+		estado,
+		ordem_estado,
+		total
+	from
+	(
+		select 
+			id_processo,
+			e.id_enquadramento, 
+			p.nome,
+			'consistidas' as estado,
+			1 as ordem_estado,
+			0 as total
+		from 
+			processo p with (NOLOCK), enquadramento e with (NOLOCK)
+
+		UNION
+		select 
+			id_processo,
+			e.id_enquadramento, 
+			p.nome,
+			'inconsistidas' as estado,
+			2 as ordem_estado,
+			0 as total
+		from 
+			processo p with (NOLOCK), enquadramento e with (NOLOCK)
+			
+		UNION
+		select 
+			id_processo,
+			e.id_enquadramento, 
+			p.nome,
+			'divergencias' as estado,
+			3 as ordem_estado,
+			0 as total
+		from 
+			processo p with (NOLOCK), enquadramento e with (NOLOCK)
+	) as t
+	
+) as t
+where
+	id_processo in (1,2,3,11)
+group by
+	id_enquadramento,
+	ordem_processo,
+	ordem_estado,
+	nome,
+	estado
+order by
+	id_enquadramento,
+	ordem_processo]]></queryString>
+
+	<field name="id_enquadramento" class="java.lang.Integer"/>
+	<field name="processo" class="java.lang.String"/>
+	<field name="estado" class="java.lang.String"/>
+	<field name="total" class="java.lang.Integer"/>
+
+	<variable name="DATA_ATUAL" class="java.util.Date" resetType="Report" calculation="System">
+		<initialValueExpression><![CDATA[new Date()]]></initialValueExpression>
+	</variable>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="225"  isSplitAllowed="true" >
+				<staticText>
+					<reportElement
+						x="0"
+						y="0"
+						width="370"
+						height="24"
+						key="staticText-2"/>
+					<box></box>
+					<textElement>
+						<font pdfFontName="Helvetica-Bold" size="14" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Totalização das autuações (analisadas e auditadas)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="189"
+						width="109"
+						height="18"
+						key="staticText-3"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Consulta realizada em:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="65"
+						width="85"
+						height="18"
+						key="staticText-4"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Usuário digitador:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="89"
+						width="54"
+						height="18"
+						key="staticText-5"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Período de:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="115"
+						width="32"
+						height="18"
+						key="staticText-6"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Local: ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="109"
+						y="89"
+						width="9"
+						height="18"
+						key="staticText-7"/>
+					<box></box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[a]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="164"
+						width="32"
+						height="18"
+						key="staticText-8"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Pista:]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="0"
+						y="139"
+						width="68"
+						height="18"
+						key="staticText-9"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Código Local:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="85"
+						y="65"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{DIGITADOR}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="MM/dd/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="54"
+						y="89"
+						width="55"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$P{DATA_INICIAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="123"
+						y="89"
+						width="85"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.sql.Timestamp"><![CDATA[$P{DATA_FINAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="32"
+						y="115"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{LOCAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="68"
+						y="139"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$P{ID_LOCAL}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="32"
+						y="164"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$P{PISTA}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="109"
+						y="189"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[$V{DATA_ATUAL}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="0"
+						y="39"
+						width="77"
+						height="18"
+						key="staticText-10"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Usuário auditor:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="77"
+						y="39"
+						width="100"
+						height="18"
+						key="textField"/>
+					<box></box>
+					<textElement verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{AUDITOR}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="50"  isSplitAllowed="true" >
+				<crosstab >
+					<reportElement
+						x="0"
+						y="0"
+						width="1130"
+						height="31"
+						key="crosstab-1"/>
+					<crosstabHeaderCell>						<cellContents mode="Transparent">
+					<box></box>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="25"
+						width="100"
+						height="25"
+						backcolor="#718E7D"
+						key="staticText-3"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<text><![CDATA[Enquadramento]]></text>
+				</staticText>
+						</cellContents>
+					</crosstabHeaderCell>					<rowGroup name="id_enquadramento" width="100" totalPosition="End">
+						<bucket>
+							<bucketExpression class="java.lang.Integer"><![CDATA[$F{id_enquadramento}]]></bucketExpression>
+						</bucket>
+						<crosstabRowHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="100"
+						height="30"
+						backcolor="#718E7D"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{id_enquadramento}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+						</crosstabRowHeader>
+						<crosstabTotalRowHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="100"
+						height="30"
+						backcolor="#718E7D"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Total"]]></textFieldExpression>
+				</textField>
+						</cellContents>
+						</crosstabTotalRowHeader>
+					</rowGroup>
+					<columnGroup name="processo" height="25" totalPosition="End" headerPosition="Stretch">
+						<bucket>
+							<bucketExpression class="java.lang.String"><![CDATA[$F{processo}]]></bucketExpression>
+							<comparatorExpression><![CDATA[new java.text.RuleBasedCollator("< T < D < L < V")]]></comparatorExpression>
+						</bucket>
+						<crosstabColumnHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="0"
+						y="0"
+						width="113"
+						height="25"
+						backcolor="#CCCCFF"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{processo}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+						</crosstabColumnHeader>
+						<crosstabTotalColumnHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+						</cellContents>
+						</crosstabTotalColumnHeader>
+					</columnGroup>
+					<columnGroup name="estado" height="25" totalPosition="End" headerPosition="Center">
+						<bucket>
+							<bucketExpression class="java.lang.String"><![CDATA[$F{estado}]]></bucketExpression>
+							<comparatorExpression><![CDATA[new java.text.RuleBasedCollator("< c < i < d")]]></comparatorExpression>
+						</bucket>
+						<crosstabColumnHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="63"
+						height="25"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$V{estado}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+						</crosstabColumnHeader>
+						<crosstabTotalColumnHeader>
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="50"
+						height="25"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["total"]]></textFieldExpression>
+				</textField>
+						</cellContents>
+						</crosstabTotalColumnHeader>
+					</columnGroup>
+
+					<measure name="total_Nothing" class="java.lang.Integer" calculation="Sum">
+						<measureExpression><![CDATA[$F{total}]]></measureExpression>
+					</measure>
+					<crosstabCell width="63" height="30">
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="63"
+						height="30"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{total_Nothing}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="50" height="30" columnTotalGroup="estado">
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="50"
+						height="30"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{total_Nothing}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="30" height="30" columnTotalGroup="processo">
+						<cellContents mode="Transparent">
+					<box></box>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="63" height="30" rowTotalGroup="id_enquadramento">
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="63"
+						height="30"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{total_Nothing}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="50" height="30" rowTotalGroup="id_enquadramento" columnTotalGroup="estado">
+						<cellContents mode="Transparent">
+					<box></box>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="0"
+						y="0"
+						width="50"
+						height="30"
+						key="textField"/>
+					<box>					<pen lineWidth="0.25" lineStyle="Solid"/>
+					<topPen lineWidth="0.25" lineStyle="Solid"/>
+					<leftPen lineWidth="0.25" lineStyle="Solid"/>
+					<bottomPen lineWidth="0.25" lineStyle="Solid"/>
+					<rightPen lineWidth="0.25" lineStyle="Solid"/>
+</box>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{total_Nothing}]]></textFieldExpression>
+				</textField>
+						</cellContents>
+					</crosstabCell>
+					<crosstabCell width="30" height="30" rowTotalGroup="id_enquadramento" columnTotalGroup="processo">
+						<cellContents mode="Transparent">
+					<box></box>
+						</cellContents>
+					</crosstabCell>
+					<whenNoDataCell>						<cellContents mode="Transparent">
+					<box></box>
+						</cellContents>
+					</whenNoDataCell>					</crosstab>
+			</band>
+		</summary>
+</jasperReport>

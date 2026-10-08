@@ -1,0 +1,129 @@
+:root {
+  --bs-card-height: 90% !important;
+}
+
+html, body {
+  height: 100vh;
+  margin: 0;
+  background-color: #f8f9fa;
+}
+
+.carousel,
+.carousel-inner,
+.carousel-item {
+  height: 100vh;
+}
+
+.carousel .row {
+  margin: 0 auto;
+  width: 90%;
+  align-items: stretch;
+}
+
+.carousel .col-6 {
+  padding: 10px;
+  display: flex;
+}
+
+.card {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  padding: 20px;
+  display: flex; 
+  flex-direction: column;
+  justify-content: space-between;
+  height: 80% !important;
+}
+
+.card-img-top {
+  height: 200px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.placas-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 25px;
+}
+
+.arrow {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #0d6efd;
+  margin-top: 22px;
+}
+
+.form-label {
+  font-weight: 600;
+  text-align: center;
+  display: block;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  background-size: 60% 60%;
+  filter: invert(1) grayscale(100);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  width: 5% !important;
+}
+
+.zoom-container {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  height: 242px;
+}
+
+.zoom-image {
+  width: 100%;
+  max-width: 260px;
+  max-height: 150px;
+  display: block;
+  cursor: crosshair;
+}
+
+.zoom-lens {
+  position: absolute;
+  border: 2px solid #000;
+  width: 150px;
+  height: 150px;
+  background-repeat: no-repeat;
+  background-size: 200%; 
+  pointer-events: none;
+  display: none;
+  z-index: 10;
+}
+.margin-bottom{
+	margin-bottom: -58px;
+}
+
+.btn-processar{
+	max-width: 100px !important;
+    margin-top: 3px !important;
+    margin-right: 16px !important;
+}
+
+.container-button-processar{
+    display: flex !important; 
+    justify-content: end !important;
+}
+
+.carousel,
+.carousel-inner,
+.carousel-item {
+  height: 100vh !important;
+}
+
+.carousel-item > .row {
+  display: flex;
+  align-items: stretch;
+}
+

@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.consilux.gtw</groupId>
+	<artifactId>gtw</artifactId>
+	<packaging>war</packaging>
+	<name>Gestão de Trânsito WEB</name>
+	<version>3.0</version>
+	<description>Projeto Principal</description>
+	<issueManagement>
+		<system>Bugzilla</system>
+		<url>http://csx-sede-cwb.no-ip.net/</url>
+	</issueManagement>
+	<ciManagement>
+	</ciManagement>
+	<developers>
+	    
+	    <developer>
+			<id>Amaral</id>
+			<name>Luiz Amaral</name>
+			<email>luiz.amaral@consilux.com.br</email>
+			<organization>Consilux Tecnologia</organization>
+			<organizationUrl>http://www.consilux.com.br</organizationUrl>
+		</developer>
+	    
+		<developer>
+			<id>Felipe</id>
+			<name>Felipe Rafailov</name>
+			<email>felipe.rafailov@consilux.com.br</email>
+			<organization>Consilux Tecnologia</organization>
+			<organizationUrl>http://www.consilux.com.br</organizationUrl>
+		</developer>
+		
+		<developer>
+			<id>Surgik</id>
+			<name>Thiago Surgik</name>
+			<email>thiago.surgik@consilux.com.br</email>
+			<organization>Consilux Tecnologia</organization>
+			<organizationUrl>http://www.consilux.com.br</organizationUrl>
+		</developer>
+		
+	</developers>
+	<scm>
+		<connection>scm:git:https://dev.azure.com/Consilux-Softwares/Muralha%20Digital%20DER-ES/_git/GTW</connection>
+		<developerConnection>scm:git:Consilux-Softwares@dev.azure.com/Consilux-Softwares/Muralha%20Digital%20DER-ES/_git/GTW</developerConnection>
+		<url>scm:git:https://dev.azure.com/Consilux-Softwares/Muralha%20Digital%20DER-ES/_git/GTW</url>
+	</scm>
+	<organization>
+		<name>Consilux Tecnologia</name>
+		<url>http://www.consilux.com.br</url>
+	</organization>
+
+	<properties>
+
+		<!-- variavel que define a versao do GWT -->
+		<gwt.version>2.1.0</gwt.version>
+
+		<!-- variavel que define a versao do GTW -->
+		<gtw.version>${project.artifactId}-${project.version}-r${buildNumber}</gtw.version>
+<!-- 		<gtw.version>${project.artifactId}-${project.version}</gtw.version> -->
+
+		<!-- variavel que define a versao do tomcat -->
+		<tomcat.version>7.0.52</tomcat.version>
+
+		<!-- variavel que define o contexto do GTW -->
+		<gtw.contexto>ROOT</gtw.contexto>
+
+		<!-- variavel que define o contrato do GTW -->
+		<gtw.contrato>GTW_MURALHA_DIGITAL</gtw.contrato>
+
+		<!-- variavel que o diretorio de src dos testes -->
+		<gtw.test.src>${basedir}/src/test/java</gtw.test.src>
+
+		<!-- variavel que define a versao do Java -->
+		<maven.compiler.source>14</maven.compiler.source>
+		<maven.compiler.target>14</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<finalName>${gtw.contrato}/${gtw.version}/${gtw.contexto}</finalName>
+		<testSourceDirectory>${gtw.test.src}</testSourceDirectory>
+		<testOutputDirectory>${basedir}/target/test</testOutputDirectory>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>gwt-maven-plugin</artifactId>
+					<version>2.4.0</version>
+					<configuration>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.eclipse.m2e</groupId>
+					<artifactId>lifecycle-mapping</artifactId>
+					<version>1.0.0</version>
+					<configuration>
+						<lifecycleMappingMetadata>
+							<pluginExecutions>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.apache.maven.plugins</groupId>
+										<artifactId>maven-antrun-plugin</artifactId>
+										<versionRange>[1.7,)</versionRange>
+										<goals>
+											<goal>run</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+								<pluginExecution>
+									<pluginExecutionFilter>
+										<groupId>org.codehaus.mojo</groupId>
+										<artifactId>buildnumber-maven-plugin</artifactId>
+										<versionRange>[1.2,)</versionRange>
+										<goals>
+											<goal>create</goal>
+										</goals>
+									</pluginExecutionFilter>
+									<action>
+										<ignore />
+									</action>
+								</pluginExecution>
+							</pluginExecutions>
+						</lifecycleMappingMetadata>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.8.1</version>
+				
+				<configuration>
+	                <source>13</source>
+	                <target>13</target>
+	            </configuration>
+	            
+				<!-- 
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<compilerId>javac</compilerId>
+					<fork>true</fork>
+					<meminitial>128m</meminitial>
+					<maxmem>256m</maxmem>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+				 -->
+				 
+			</plugin>
+
+<!-- XXX -->
+<plugin>
+  <groupId>org.apache.tomcat.maven</groupId>
+  <artifactId>tomcat7-maven-plugin</artifactId>
+  <version>2.2</version>
+  
+	<dependencies> 
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.6.2</version>
+		</dependency>
+		<dependency> 
+			<groupId>org.apache.tomcat.extras</groupId> 
+			<artifactId>tomcat-extras-juli</artifactId> 
+			<version>${tomcat.version}</version> 
+		</dependency> 
+		<dependency>
+		    <groupId>com.microsoft.sqlserver</groupId>
+		    <artifactId>mssql-jdbc</artifactId>
+		    <version>9.2.1.jre8</version>
+		</dependency>	
+		<!-- Apache AXIS usado para Web Services, ConfigEquipApp e Captura Server -->
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+	</dependencies> 
+	
+	<configuration>
+		<port>8080</port>
+		<path>/</path> 
+		<uriEncoding>UTF-8</uriEncoding> 
+	</configuration>
+	 
+</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<configuration>
+					<suiteXmlFiles>
+						<suiteXmlFile>${basedir}/src/test/testng-customsuite.xml</suiteXmlFile>
+					</suiteXmlFiles>
+					<argLine>-Xmx512m -XX:MaxPermSize=256m</argLine>
+				</configuration>
+			</plugin>
+			
+			<!-- FELIPE: Novo plugin buildnumber -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>false</doUpdate>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>3.2.3</version>
+				<configuration>
+					<archive>
+						<manifestEntries>
+							<Version>${project.version}</Version>
+							<Implementation-Build>${buildNumber}</Implementation-Build>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.12.1</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<configuration>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<version>1.6.0</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<executable>xdelta</executable>
+					<workingDirectory>/tmp</workingDirectory>
+					<arguments>
+						<argument>-e</argument>
+						<argument>-s</argument>
+						<argument>${basedir}/${gtw.contrato}/${project.artifactId}-${project.version}-r${gtw.version}/${gtw.contexto}.war</argument>
+						<argument>${basedir}/${project.build.finalName}.war</argument>
+						<argument>${gtw.contexto}-${gtw.contrato}-${gtw.version}-${buildNumber}.xwar</argument>
+					</arguments>
+				</configuration>
+			</plugin>
+		</plugins>
+
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-webdav</artifactId>
+				<version>1.0-beta-2</version>
+			</extension>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ssh-external</artifactId>
+				<version>2.4</version>
+			</extension>
+		</extensions>
+
+	</build>
+
+	<repositories>
+		<!-- Redireciona o repositorio central -->
+		<repository>
+			<id>archiva-repo</id>
+			<url>http://arquivos.consilux.com.br:8183/repository/internal</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>daily</updatePolicy>
+			</snapshots>
+			<name>Repositorio Consilux</name>
+		</repository>
+		
+	</repositories>
+
+	<distributionManagement>
+		<repository>
+			<id>${gtw.contrato}</id>
+			<url>file://c:\temp</url>
+		</repository>
+	</distributionManagement>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>archiva-repo</id>
+			<name>Repositorio Consilux</name>
+			<url>http://arquivos.consilux.com.br:8183/repository/internal</url>
+		</pluginRepository>
+	</pluginRepositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-user</artifactId>
+			<version>${gwt.version}</version>
+			<scope>provided</scope>
+<!-- 			<exclusions> -->
+<!-- 				<exclusion> -->
+<!-- 					<artifactId>gwt-user</artifactId> -->
+<!-- 					<groupId>com.google.gwt</groupId> -->
+<!-- 				</exclusion> -->
+<!-- 			</exclusions> -->
+		</dependency>
+		<dependency>
+			<groupId>com.github.stephenc.java-iso-tools</groupId>
+			<artifactId>jiic</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.jfree</groupId>
+		    <artifactId>jfreechart</artifactId>
+		    <version>1.0.19</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-servlet</artifactId>
+			<version>${gwt.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-dbcp</groupId>
+			<artifactId>commons-dbcp</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-pool2</artifactId>
+		    <version>2.4.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.10.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sf.jasperreports</groupId>
+		    <artifactId>jasperreports</artifactId>
+		    <version>6.10.0</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+    				<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- Apache AXIS usado para Web Services, ConfigEquipApp e Captura Server -->
+		<dependency>
+			<groupId>org.apache.axis</groupId>
+			<artifactId>axis</artifactId>
+			<version>1.4</version>
+		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.apache.axis</groupId> -->
+<!-- 			<artifactId>axis-jaxrpc</artifactId> -->
+<!-- 			<version>1.4</version> -->
+<!-- 		</dependency> -->
+		
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi</artifactId>
+		    <version>4.1.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.poi</groupId>
+		    <artifactId>poi-ooxml</artifactId>
+		    <version>4.1.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+    				<artifactId>xml-apis</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>stax</groupId>
+    				<artifactId>stax-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.w3c</groupId>
+	    			<artifactId>dom</artifactId>
+	    		</exclusion>
+			</exclusions>
+		</dependency>
+		
+		<dependency>
+			<groupId>jsptags</groupId>
+			<artifactId>pager-taglib</artifactId>
+			<version>2.0</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml.soap</groupId>
+			<artifactId>saaj-api</artifactId>
+			<version>1.3.5</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxrpc-api</artifactId>
+			<version>1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-discovery</groupId>
+			<artifactId>commons-discovery</artifactId>
+			<version>0.5</version>
+		</dependency>
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>javax.activation</artifactId>
+			<version>1.2.0</version>
+			</dependency>
+		<dependency>
+			<groupId>taglibs</groupId>
+			<artifactId>standard</artifactId>
+			<version>1.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>wsdl4j</groupId>
+			<artifactId>wsdl4j</artifactId>
+			<version>1.6.3</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.collections</groupId>
+			<artifactId>google-collections</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>jstl</artifactId>
+			<version>1.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.sun.mail</groupId>
+		    <artifactId>javax.mail</artifactId>
+		    <version>1.6.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.extjs</groupId>
+			<artifactId>gxt</artifactId>
+			<version>2.2.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.9</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>2.3.2</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-configuration2</artifactId>
+		    <version>2.6</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.apache.httpcomponents</groupId>
+		    <artifactId>httpclient</artifactId>
+		    <version>4.5.10</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>commons-net</groupId>
+		    <artifactId>commons-net</artifactId>
+		    <version>3.6</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>ws.schild</groupId>
+		    <artifactId>jave-core</artifactId>
+		    <version>2.7.3</version>
+		</dependency>
+		<dependency>
+		    <groupId>ws.schild</groupId>
+		    <artifactId>jave-nativebin-win64</artifactId>
+		    <version>2.7.3</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>com.jcraft</groupId>
+		    <artifactId>jsch</artifactId>
+		    <version>0.1.55</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.jexcelapi</groupId>
+			<artifactId>jxl</artifactId>
+			<version>2.6.12</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.8.21</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-core</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.mockito</groupId>
+		    <artifactId>mockito-all</artifactId>
+		    <version>1.10.19</version>
+		    <scope>test</scope>
+		</dependency>
+	    <dependency>
+	      	<groupId>com.consilux.gtw</groupId>
+	      	<artifactId>gtw-widgets-muralha-digital</artifactId>
+	      	<version>1.0.0</version>
+	    </dependency>
+		<dependency>
+			<groupId>com.consilux.gtw</groupId>
+			<artifactId>descarga-core</artifactId>
+			<version>1.0.2</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-servlet-api</artifactId>
+			<version>${tomcat.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>net.sourceforge.htmlunit</groupId>
+			<artifactId>htmlunit</artifactId>
+			<version>2.36.0</version>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>xml-apis</groupId>
+    				<artifactId>xml-apis</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat</groupId>
+			<artifactId>tomcat-catalina</artifactId>
+			<version>${tomcat.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-collections4</artifactId>
+		    <version>4.4</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.0.2.GA</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.xml.stream</groupId>
+    				<artifactId>stax-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+<!--		<dependency>-->
+<!--		    <groupId>com.lowagie</groupId>-->
+<!--		    <artifactId>itext</artifactId>-->
+<!--		    <version>4.2.2</version>-->
+<!--		</dependency>-->
+		<dependency>
+		    <groupId>com.lowagie</groupId>
+		    <artifactId>itext</artifactId>
+		    <version>2.1.7</version>
+		</dependency>
+		
+		
+		<!-- Muralha Digital -->
+		
+		<dependency>
+		    <groupId>javax.websocket</groupId>
+		    <artifactId>javax.websocket-api</artifactId>
+		    <version>1.1</version>
+		    <scope>provided</scope>
+		</dependency>		
+		
+		<!-- Muralha Digital - SMS -->
+		<!-- Twilio -->
+		<dependency>
+		    <groupId>com.twilio.sdk</groupId>
+		    <artifactId>twilio</artifactId>
+		    <version>8.21.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.12.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-annotations</artifactId>
+		    <version>2.12.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.12.5</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.datatype</groupId>
+		    <artifactId>jackson-datatype-jsr310</artifactId>
+		    <version>2.12.5</version>
+		</dependency>
+		
+		<!-- SMSDEV -->
+		<dependency>
+		    <groupId>com.mashape.unirest</groupId>
+		    <artifactId>unirest-java</artifactId>
+		    <version>1.4.9</version>
+		</dependency>
+		
+		<!-- Facilita Móvel -->
+	    <dependency>
+	      	<groupId>facilita-movel-sdk</groupId>
+	      	<artifactId>facilita-movel-sdk</artifactId>
+	      	<version>1</version>
+	    </dependency>
+		<!-- Muralha Digital - SMS -->
+		
+		<dependency>
+		  	<groupId>com.google.code.gson</groupId>
+		  	<artifactId>gson</artifactId>
+		  	<version>2.8.8</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>org.sejda.imageio</groupId>
+		    <artifactId>webp-imageio</artifactId>
+		    <version>0.1.6</version>
+		</dependency>
+
+
+		<dependency>
+			<groupId>com.sendgrid</groupId>
+			<artifactId>sendgrid-java</artifactId>
+			<version>4.7.2</version>
+		</dependency>
+	</dependencies>
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-changes-plugin</artifactId>
+				<version>2.12.1</version>
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>changes-report</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+		</plugins>
+	</reporting>
+	<dependencyManagement>
+		<dependencies>
+		</dependencies>
+	</dependencyManagement>
+</project>

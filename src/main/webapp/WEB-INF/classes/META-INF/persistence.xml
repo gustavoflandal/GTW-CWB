@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+	
+	<!-- ************************************************************************************************************************
+		Mapeamento das entidades JPA do GTW (SqlServer).
+	 -->
+	<persistence-unit name="DescargaGtwPersistence" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		
+		<class>com.consilux.model.descarga.beans.EnquadramentoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.InconsistenciaDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.UsuarioDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ObliteracaoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ImagemComBlobDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ImagemDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.VeiculoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.InfracaoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.DescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ClasseVeiculoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.PistaDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.CadastroVeiculoDescargaBean</class>
+		
+		<properties>
+			<property name="eclipselink.logging.level.sql" value="FINEST" />
+		</properties>		
+		
+	</persistence-unit>
+	
+	
+	<!-- ************************************************************************************************************************
+		Mapeamento das entidades JPA do GTW, para geração de descarga (Derby). 
+	 -->
+	<persistence-unit name="DescargaDerbyPersistence" transaction-type="RESOURCE_LOCAL">
+		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+		
+		<class>com.consilux.model.descarga.beans.EnquadramentoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.InconsistenciaDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.UsuarioDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ObliteracaoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ImagemDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.VeiculoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.InfracaoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.DescargaBean</class>
+		<class>com.consilux.model.descarga.beans.ClasseVeiculoDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.PistaDescargaBean</class>
+		<class>com.consilux.model.descarga.beans.CadastroVeiculoDescargaBean</class>
+				
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver" />
+			
+			<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>
+			<property name="eclipselink.ddl-generation.output-mode" value="both" />
+			<property name="eclipselink.create-ddl-jdbc-file-name" value="derby_ddl_create.sql"/>
+			<property name="eclipselink.drop-ddl-jdbc-file-name" value="derby_ddl_drop.sql"/>
+
+			</properties>
+		
+	</persistence-unit>
+	
+</persistence>

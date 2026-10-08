@@ -1,0 +1,303 @@
+#tabela-abordagem tbody tr {
+    cursor: pointer;
+}
+
+#tabela-abordagem tbody tr:hover {
+    background-color: #f5f5f5;
+}
+
+.badge-liberado {
+    background-color: #28a745;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.badge-cancelado {
+    background-color: #dc3545;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+}
+
+.btn-visualizar {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.is-invalid {
+    border-color: #dc3545 !important;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='none' stroke='%23dc3545' viewBox='0 0 12 12'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(.375em + .1875rem) center;
+    background-size: calc(.75em + .375rem) calc(.75em + .375rem);
+}
+
+.invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: .875em;
+    color: #dc3545;
+}
+
+.is-invalid ~ .invalid-feedback {
+    display: block;
+}
+
+.file-upload-container {
+    border: 1px solid #dee2e6;
+    border-radius: 5px;
+    padding: 15px;
+    background-color: #f8f9fa;
+}
+
+.file-upload-container .input-group {
+    margin-bottom: 10px;
+}
+
+.arquivo-preview {
+    padding: 10px;
+    background-color: #e9ecef;
+    border-radius: 5px;
+    border: 1px dashed #adb5bd;
+}
+
+.btn-selecionar-arquivo:hover {
+    background-color: #e9ecef;
+}
+
+.pessoa-card, .documento-card {
+    position: relative;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: #fff;
+    transition: all 0.3s ease;
+}
+
+.pessoa-card .is-invalid {
+    border-color: #dc3545;
+}
+
+.pessoa-card:hover, .documento-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-color: #86b7fe;
+}
+
+.pessoa-card .btn-remove, .documento-card .btn-remove {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    z-index: 10;
+}
+
+.pessoa-card .row, .documento-card .row {
+    padding-top: 5px;
+    padding-right: 35px;
+}
+
+.documento-card .file-upload-container {
+    position: relative;
+}
+
+.documento-card .btn-selecionar-arquivo {
+    z-index: 1;
+}
+
+.documento-card .input-group {
+    position: relative;
+}
+
+.arquivo-preview {
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 4px;
+    padding: 8px 12px;
+}
+
+.btn-remover-arquivo {
+    padding: 0;
+    text-decoration: none;
+}
+
+.btn-remover-arquivo:hover {
+    text-decoration: none;
+}
+
+.arquivo-nome {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.btn-historico-cpf, .btn-historico-placa {
+    width: 100%;
+    font-size: 0.85rem;
+}
+
+.btn-historico-cpf i, .btn-historico-placa i {
+    margin-right: 5px;
+}
+
+.pdf-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pdf-preview:hover {
+    background-color: #e9ecef !important;
+    border-color: #86b7fe !important;
+}
+
+.pdf-preview i {
+    margin-bottom: 5px;
+}
+
+.preview-arquivos-documento img,
+#previewImagensAbordagem img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    display: block;
+}
+
+.preview-arquivos-documento .btn-remover-imagem-documento,
+#previewImagensAbordagem .btn-remover-imagem-abordagem {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #dc3545;
+    color: white;
+    border: 2px solid white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    opacity: 0.9;
+    transition: all 0.2s ease;
+}
+
+.preview-arquivos-documento .btn-remover-imagem-documento:hover,
+#previewImagensAbordagem .btn-remover-imagem-abordagem:hover {
+    opacity: 1;
+    transform: scale(1.1);
+    background-color: #bb2d3b;
+}
+
+#btnCapturarPlaca {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.alert-success i {
+    margin-right: 8px;
+}
+
+.input-group > #btnCapturarPlaca {
+    position: relative;
+    flex: 0 0 auto;
+    width: auto;
+    max-width: 100%;
+}
+
+.preview-arquivos-documento .row,
+#previewImagensAbordagem .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -5px;
+    margin-left: -5px;
+}
+
+.preview-arquivos-documento .col-4,
+#previewImagensAbordagem .col-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+    padding-right: 5px;
+    padding-left: 5px;
+    margin-bottom: 10px;
+}
+
+.preview-arquivos-documento .position-relative,
+#previewImagensAbordagem .position-relative {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+#previewImagensAbordagem img {
+    width: 100%;
+    height: auto;
+}
+
+/* Se quiser deixar as imagens com tamanho padronizado:*/
+/* #previewImagensAbordagem img {
+    width: 100%;
+    height: 120px;
+    object-fit: contain;
+    background: #f8f9fa;
+} */
+
+@media (max-width: 576px) {
+    .header-abordagem-mobile {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .header-abordagem-mobile h2 {
+        text-align: left;
+    }
+
+    .header-abordagem-mobile > div {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .header-abordagem-mobile .btn {
+        width: 100%;
+    }
+
+    #acaoAbordagem {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    #acaoAbordagem .btn {
+        width: 100%;
+    }
+}

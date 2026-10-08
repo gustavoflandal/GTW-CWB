@@ -1,0 +1,49 @@
+@CHARSET "ISO-8859-1";
+
+table
+{
+    width: 100%;
+}
+
+table td
+{
+    border: 1.5px solid grey;
+   
+	
+}
+
+table.fixed
+{
+    table-layout:fixed;
+}
+
+table.auto
+{
+    table-layout:auto;
+}
+
+.bold{
+	 font-weight: bold;
+}
+
+.imagem{
+	width:100%; 
+	border:4px solid white; 
+	position: center; 
+	align: center"
+}
+
+.lineInf{
+	font-weight: bold;
+	font-color: red;
+}
+
+.line{
+	display: inline;
+}
+
+.font{
+	font-family: 'Russo One', sans-serif;
+	font-size: 60px;
+	color: #006064;
+}

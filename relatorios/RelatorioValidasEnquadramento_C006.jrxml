@@ -1,0 +1,870 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report1" pageWidth="1100" pageHeight="595" orientation="Landscape" columnWidth="1060" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<property name="ireport.zoom" value="1.3057748147409245"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<subDataset name="dataset1"/>
+	<parameter name="ANO" class="java.lang.Integer"/>
+	<parameter name="MES" class="java.lang.Integer"/>
+	<parameter name="VALIDAS" class="java.lang.Boolean"/>
+	<parameter name="IDENTIFICACAO_CLIENTE" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[WITH busca_faixas
+(SERIE_EQUIPAMENTO,COD_LOCAL,COD_FAIXA,ENDERECO,SENTIDO,FAIXA,ID_LOCAL,ID_PISTA)
+AS (
+	SELECT
+		lv.serie_equipamento AS SERIE_EQUIPAMENTO,
+		cep.cod_pista AS COD_LOCAL,
+		cep.cod_pista_prodam AS COD_FAIXA,
+		RTRIM(COALESCE(cep.nome_pista, '')) AS ENDERECO,
+		RTRIM(COALESCE(cep.sentido, '')) AS SENTIDO,
+		cep.cod_pista_alternativo AS FAIXA,
+		lv.id_local AS [ID_LOCAL],
+		cep.id_pista AS ID_PISTA
+	FROM
+		local_vigente lv
+		JOIN configuracao_equipamento_pista cep WITH (NOLOCK)
+			ON cep.id_configuracao_equipamento = lv.id_configuracao_equipamento
+	WHERE
+		(
+			(DATEPART(yy, lv.data_inicio) = $P{ANO}
+			AND DATEPART(mm, lv.data_inicio) <= $P{MES})
+	      OR (DATEPART(yy, lv.data_inicio) < $P{ANO})
+	      )
+),
+
+agrupa_infracoes(ID_LOCAL,ID_PISTA,ID_ENQUADRAMENTO,QTD)
+AS (
+    SELECT
+        inf.id_local AS ID_LOCAL,
+        inf.pista AS ID_PISTA,
+        inf.id_enquadramento AS ID_ENQUADRAMENTO,
+        COUNT(*) AS QTD
+    FROM
+        infracao inf WITH (NOLOCK)
+    WHERE
+        inf.id_enquadramento IN (57030, 56900, 57461, 57462, 57463, 74550, 74630, 74710)
+        AND DATEPART(mm, inf.data) = $P{MES}
+        AND DATEPART(yy, inf.data) = $P{ANO}
+        AND
+	(
+           ($P{VALIDAS} = 1 AND inf.id_inconsistencia = 0)
+		OR
+           ($P{VALIDAS} = 0 AND inf.id_inconsistencia > 0)
+        )
+
+    GROUP BY
+        inf.id_local,
+        inf.pista,
+        inf.id_enquadramento
+),
+
+totaliza_infracoes(ID_LOCAL,ID_PISTA,TOTAL)
+AS (
+    SELECT
+        ai.ID_LOCAL,
+        ai.ID_PISTA,
+        SUM(ai.QTD) AS [TOTAL]
+    FROM
+        agrupa_infracoes ai WITH (NOLOCK)
+    GROUP BY
+        ai.ID_LOCAL,
+        ai.ID_PISTA
+)
+
+SELECT
+    ROW_NUMBER() OVER (ORDER BY bf.COD_LOCAL, bf.COD_FAIXA, bf.ID_LOCAL, bf.ID_PISTA) AS [ITEM],
+    bf.SERIE_EQUIPAMENTO,
+    bf.COD_LOCAL,
+    bf.COD_FAIXA,
+    bf.ENDERECO,
+    bf.SENTIDO,
+    bf.FAIXA,
+
+    -- FAIXA PROIBIDA
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 57030
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [57030],
+
+    -- FAIXA EXCLUSIVA
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 56900
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [56900],
+
+    -- ZMRF
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 57461
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [57461],
+
+    -- RODIZIO
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 57462
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [57462],
+
+    -- ZMRC
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 57463
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [57463],
+
+    -- VELOCIDADE <= 20%
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 74550
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [74550],
+
+    -- VELOCIDADE 20-50%
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 74630
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [74630],
+
+    -- VELOCIDADE > 50%
+    COALESCE((SELECT QTD FROM agrupa_infracoes WHERE ID_ENQUADRAMENTO = 74710
+    AND bf.ID_LOCAL=ID_LOCAL AND bf.ID_PISTA=ID_PISTA), 0) AS [74710],
+    COALESCE(ti.TOTAL, 0) AS [TOTAL]
+FROM
+    busca_faixas AS bf
+    LEFT JOIN totaliza_infracoes ti
+        ON ti.ID_LOCAL = bf.ID_LOCAL
+        AND ti.ID_PISTA = bf.ID_PISTA
+ORDER BY
+    bf.COD_LOCAL, bf.COD_FAIXA, bf.ID_LOCAL, bf.ID_PISTA]]>
+	</queryString>
+	<field name="ITEM" class="java.lang.Long"/>
+	<field name="SERIE_EQUIPAMENTO" class="java.lang.Integer"/>
+	<field name="COD_LOCAL" class="java.lang.Integer"/>
+	<field name="COD_FAIXA" class="java.lang.Integer"/>
+	<field name="ENDERECO" class="java.lang.String"/>
+	<field name="SENTIDO" class="java.lang.String"/>
+	<field name="FAIXA" class="java.lang.Integer"/>
+	<field name="57030" class="java.lang.Integer"/>
+	<field name="56900" class="java.lang.Integer"/>
+	<field name="57461" class="java.lang.Integer"/>
+	<field name="57462" class="java.lang.Integer"/>
+	<field name="57463" class="java.lang.Integer"/>
+	<field name="74550" class="java.lang.Integer"/>
+	<field name="74630" class="java.lang.Integer"/>
+	<field name="74710" class="java.lang.Integer"/>
+	<field name="TOTAL" class="java.lang.Integer"/>
+	<variable name="SOMA_57030" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{57030}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_56900" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{56900}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_57461" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{57461}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_57662" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{57462}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_57463" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{57463}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_74550" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{74550}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_74630" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{74630}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_74710" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{74710}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="SOMA_TOTAL" class="java.lang.Integer" calculation="Sum">
+		<variableExpression><![CDATA[$F{TOTAL}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="110" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="1060" height="20"/>
+				<textElement markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA["RELATÓRIO MENSAL DE IMAGENS " + ($P{VALIDAS} ? "VÁLIDAS" : "INVÁLIDAS")]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="20" width="67" height="20"/>
+				<textElement/>
+				<text><![CDATA[CONTRATO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="67" height="31"/>
+				<textElement/>
+				<text><![CDATA[PERÍODO:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="67" y="71" width="37" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Prodam de Local]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="71" width="398" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Local]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="560" y="71" width="140" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sentido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="700" y="71" width="35" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Faixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="71" width="22" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Item]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="22" y="71" width="45" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nº de Série]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="104" y="71" width="58" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Cód. Prodam de Equipamento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="908" y="40" width="111" height="18"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Infrações metrológicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="735" y="40" width="173" height="18"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Infrações não-metrológicas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1019" y="71" width="41" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total por faixa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="769" y="71" width="34" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Fx. Excl.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="71" width="34" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ZMRF]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="837" y="71" width="34" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Rodízio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="871" y="71" width="37" height="39"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[ZMRC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="908" y="71" width="37" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Até 20%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="982" y="71" width="37" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Acima de 50%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="945" y="71" width="37" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[De 20% a 50%]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="769" y="58" width="34" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[56900]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="803" y="58" width="34" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[57461]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="837" y="58" width="34" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[57462]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="871" y="58" width="37" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[57463]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="908" y="58" width="37" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[74550]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="945" y="58" width="37" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[74630]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="982" y="58" width="37" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[74710]]></text>
+			</staticText>
+			<textField pattern="MMMM-yyyy" isBlankWhenNull="true">
+				<reportElement x="67" y="40" width="668" height="31"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[new Date($P{ANO} - 1900, $P{MES} - 1, 1)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="735" y="71" width="34" height="39"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Faixa Proíb.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="735" y="58" width="34" height="13"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[57030]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="67" y="20" width="1003" height="20"/>
+				<textElement markup="none"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{IDENTIFICACAO_CLIENTE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="22" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Long"><![CDATA[$F{ITEM}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="0" width="45" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{SERIE_EQUIPAMENTO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="67" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{COD_LOCAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="104" y="0" width="58" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{COD_FAIXA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="162" y="0" width="398" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{ENDERECO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="560" y="0" width="140" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{SENTIDO}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="700" y="0" width="35" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{FAIXA}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1019" y="0" width="41" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{56900}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="803" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{57461}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="837" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{57462}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="871" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{57463}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="908" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{74550}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="945" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{74630}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="982" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{74710}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="735" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$F{57030}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="945" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_74630}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="982" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_74710}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1019" y="0" width="41" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="908" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_74550}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="871" y="0" width="37" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_57463}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="837" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_57662}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="803" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_57461}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="769" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_56900}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="735" y="0" width="34" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0" lineStyle="Solid"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{SOMA_57030}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="700" y="0" width="35" height="16"/>
+				<box topPadding="1" leftPadding="1" bottomPadding="1" rightPadding="1">
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Calibri" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total]]></text>
+			</staticText>
+		</band>
+	</summary>
+</jasperReport>

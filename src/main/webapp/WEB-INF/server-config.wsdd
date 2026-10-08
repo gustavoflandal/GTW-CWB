@@ -1,0 +1,179 @@
+<ns1:deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java" xmlns:ns1="http://xml.apache.org/axis/wsdd/">
+ <ns1:globalConfiguration>
+  <ns1:parameter name="sendMultiRefs" value="true"/>
+  <ns1:parameter name="disablePrettyXML" value="true"/>
+  <ns1:parameter name="adminPassword" value="admin"/>
+  <ns1:parameter name="dotNetSoapEncFix" value="true"/>
+  <ns1:parameter name="enableNamespacePrefixOptimization" value="false"/>
+  <ns1:parameter name="sendXMLDeclaration" value="true"/>
+  <ns1:parameter name="attachments.implementation" value="org.apache.axis.attachments.AttachmentsImpl"/>
+  <ns1:parameter name="sendXsiTypes" value="true"/>
+  <ns1:requestFlow>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="session"/>
+   </ns1:handler>
+   <ns1:handler type="java:org.apache.axis.handlers.JWSHandler">
+    <ns1:parameter name="scope" value="request"/>
+    <ns1:parameter name="extension" value=".jwr"/>
+   </ns1:handler>
+  </ns1:requestFlow>
+ </ns1:globalConfiguration>
+ <ns1:handler name="URLMapper" type="java:org.apache.axis.handlers.http.URLMapper"/>
+ <ns1:handler name="LocalResponder" type="java:org.apache.axis.transport.local.LocalResponder"/>
+ <ns1:handler name="Authenticate" type="java:org.apache.axis.handlers.SimpleAuthenticationHandler"/>
+ <ns1:service name="InfoEquipamento" provider="java:RPC" style="wrapped" use="literal">
+  <ns3:operation name="getLocaisVigente" qname="ns1:getLocaisVigente" returnQName="ns1:getLocaisVigenteReturn" returnType="ns2:LocalVigenteBean" soapAction="" xmlns:ns1="http://server.ws.consilux.com" xmlns:ns2="http://beans.model.consilux.com" xmlns:ns3="http://xml.apache.org/axis/wsdd/">
+   <ns3:parameter qname="ns1:usuario" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:senha" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns3:parameter qname="ns1:idGrupo" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns3:operation>
+  <ns1:parameter name="allowedMethods" value="getLocaisVigente"/>
+  <ns1:parameter name="wsdlPortType" value="InfoEquipamento"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="schemaQualified" value="http://beans.model.consilux.com,http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServicePort" value="InfoEquipamento"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.InfoEquipamento"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="InfoEquipamentoService"/>
+  <ns1:typeMapping deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle="" qname="ns3:LocalVigenteBean" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" type="java:com.consilux.model.beans.LocalVigenteBean" xmlns:ns3="http://beans.model.consilux.com"/>
+ </ns1:service>
+ <ns1:service name="StatusEquipamento" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="statusAlterado" qname="ns4:statusAlterado" soapAction="" xmlns:ns4="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns4:idEquipamento" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="statusAlterado"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="StatusEquipamento"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.StatusEquipamento"/>
+  <ns1:parameter name="wsdlServicePort" value="StatusEquipamento"/>
+  <ns1:parameter name="schemaQualified" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="StatusEquipamentoService"/>
+ </ns1:service>
+ <ns1:service name="ConfigEquip" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="buscaDataModificacaoConfigEquip" qname="ns5:buscaDataModificacaoConfigEquip" returnQName="ns5:buscaDataModificacaoConfigEquipReturn" returnType="xsd:double" soapAction="" xmlns:ns5="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns5:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns5:senha" type="xsd:string"/>
+   <ns1:parameter qname="ns5:idEquipamento" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="buscarConfigEquip" qname="ns6:buscarConfigEquip" returnQName="ns6:buscarConfigEquipReturn" returnType="xsd:string" soapAction="" xmlns:ns6="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns6:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns6:senha" type="xsd:string"/>
+   <ns1:parameter qname="ns6:idEquipamento" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="setEmOperacao" qname="ns7:setEmOperacao" soapAction="" xmlns:ns7="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns7:usuario" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns7:senha" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns7:idEquipamento" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns7:operando" type="xsd:boolean" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="incluirConfigEquip" qname="ns8:incluirConfigEquip" soapAction="" xmlns:ns8="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns8:loginUsuario" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns8:senha" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns8:xmlConfigEquip" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="validarUsuario" qname="ns9:validarUsuario" returnQName="ns9:validarUsuarioReturn" returnType="xsd:boolean" soapAction="" xmlns:ns9="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns9:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns9:senha" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="validarUsuario setEmOperacao incluirConfigEquip buscarConfigEquip buscaDataModificacaoConfigEquip"/>
+  <ns1:parameter name="wsdlPortType" value="ConfigEquip"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="schemaQualified" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServicePort" value="ConfigEquip"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.ConfigEquipWS"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="ConfigEquipService"/>
+ </ns1:service>
+ <ns1:service name="CSXEventsWS" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="registrarEvento" qname="ns10:registrarEvento" soapAction="" xmlns:ns10="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns10:xmlCSXEvent" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="registrarEvento"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="CSXEventsWS"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.CSXEventsWS"/>
+  <ns1:parameter name="wsdlServicePort" value="CSXEventsWS"/>
+  <ns1:parameter name="schemaQualified" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="CSXEventsWSService"/>
+ </ns1:service>
+ <ns1:service name="AdminService" provider="java:MSG">
+  <ns1:parameter name="allowedMethods" value="AdminService"/>
+  <ns1:parameter name="enableRemoteAdmin" value="false"/>
+  <ns1:parameter name="className" value="org.apache.axis.utils.Admin"/>
+  <ns1:namespace>http://xml.apache.org/axis/wsdd/</ns1:namespace>
+ </ns1:service>
+ <ns1:service name="VeiculoMonitoradoWS" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="notificarVeiculoMonitorado" qname="ns11:notificarVeiculoMonitorado" soapAction="" xmlns:ns11="http://custom.namespace"/>
+  <ns1:parameter name="allowedMethods" value="notificarVeiculoMonitorado"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="wsdlPortType" value="VeiculoMonitoradoWS"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.VeiculoMonitoradoWS"/>
+  <ns1:parameter name="wsdlServicePort" value="VeiculoMonitoradoWS"/>
+  <ns1:parameter name="schemaQualified" value="http://custom.namespace"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://custom.namespace"/>
+  <ns1:parameter name="wsdlServiceElement" value="VeiculoMonitoradoWSService"/>
+ </ns1:service>
+ <ns1:service name="ConfigEquipWS" provider="java:RPC" style="wrapped" use="literal">
+  <ns1:operation name="buscaDataModificacaoConfigEquip" qname="ns12:buscaDataModificacaoConfigEquip" returnQName="ns12:buscaDataModificacaoConfigEquipReturn" returnType="xsd:double" soapAction="" xmlns:ns12="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns12:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns12:senha" type="xsd:string"/>
+   <ns1:parameter qname="ns12:idEquipamento" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="buscaUsuarioConfigEquip" qname="ns13:buscaUsuarioConfigEquip" returnQName="ns13:buscaUsuarioConfigEquipReturn" returnType="xsd:string" soapAction="" xmlns:ns13="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns13:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns13:senha" type="xsd:string"/>
+   <ns1:parameter qname="ns13:idEquipamento" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="buscarConfigEquip" qname="ns14:buscarConfigEquip" returnQName="ns14:buscarConfigEquipReturn" returnType="xsd:string" soapAction="" xmlns:ns14="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns14:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns14:senha" type="xsd:string"/>
+   <ns1:parameter qname="ns14:idEquipamento" type="xsd:int"/>
+  </ns1:operation>
+  <ns1:operation name="setEmOperacao" qname="ns15:setEmOperacao" soapAction="" xmlns:ns15="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns15:usuario" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:senha" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:idEquipamento" type="xsd:int" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns15:operando" type="xsd:boolean" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="incluirConfigEquip" qname="ns16:incluirConfigEquip" soapAction="" xmlns:ns16="http://server.ws.consilux.com">
+   <ns1:parameter qname="ns16:loginUsuario" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns16:senha" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+   <ns1:parameter qname="ns16:xmlConfigEquip" type="xsd:string" xmlns:xsd="http://www.w3.org/2001/XMLSchema"/>
+  </ns1:operation>
+  <ns1:operation name="validarUsuario" qname="ns17:validarUsuario" returnQName="ns17:validarUsuarioReturn" returnType="xsd:boolean" soapAction="" xmlns:ns17="http://server.ws.consilux.com" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <ns1:parameter qname="ns17:usuario" type="xsd:string"/>
+   <ns1:parameter qname="ns17:senha" type="xsd:string"/>
+  </ns1:operation>
+  <ns1:parameter name="allowedMethods" value="validarUsuario setEmOperacao incluirConfigEquip buscaUsuarioConfigEquip buscarConfigEquip buscaDataModificacaoConfigEquip"/>
+  <ns1:parameter name="wsdlPortType" value="ConfigEquipWS"/>
+  <ns1:parameter name="typeMappingVersion" value="1.2"/>
+  <ns1:parameter name="schemaQualified" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServicePort" value="ConfigEquipWS"/>
+  <ns1:parameter name="className" value="com.consilux.ws.server.ConfigEquipWS"/>
+  <ns1:parameter name="wsdlTargetNamespace" value="http://server.ws.consilux.com"/>
+  <ns1:parameter name="wsdlServiceElement" value="ConfigEquipWSService"/>
+ </ns1:service>
+ <ns1:service name="Version" provider="java:RPC">
+  <ns1:parameter name="allowedMethods" value="getVersion"/>
+  <ns1:parameter name="className" value="org.apache.axis.Version"/>
+ </ns1:service>
+ <ns1:transport name="http">
+  <ns1:requestFlow>
+   <ns1:handler type="URLMapper"/>
+   <ns1:handler type="java:org.apache.axis.handlers.http.HTTPAuthHandler"/>
+  </ns1:requestFlow>
+  <ns1:parameter name="qs:list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs:wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+  <ns1:parameter name="qs.list" value="org.apache.axis.transport.http.QSListHandler"/>
+  <ns1:parameter name="qs.method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs:method" value="org.apache.axis.transport.http.QSMethodHandler"/>
+  <ns1:parameter name="qs.wsdl" value="org.apache.axis.transport.http.QSWSDLHandler"/>
+ </ns1:transport>
+ <ns1:transport name="local">
+  <ns1:responseFlow>
+   <ns1:handler type="LocalResponder"/>
+  </ns1:responseFlow>
+ </ns1:transport>
+</ns1:deployment>

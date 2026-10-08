@@ -1,0 +1,203 @@
+/* Estilos customizados para o Relatório de Placas Veiculares */
+
+.hidden {
+    display: none !important;
+}
+
+.message-container {
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.message-container.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.message-container.warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+}
+
+.message-container.loading {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #b6d4ea;
+}
+
+/* Melhorar espaçamento dos botões */
+.btn-group {
+    gap: 0.5rem;
+}
+
+/* Tabela com visual melhorado */
+
+.resultados-card {
+    border: 1px solid #e4e8ef;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+}
+
+.resultados-card__header {
+    background: linear-gradient(180deg, #f7f9fc 0%, #f1f4f9 100%);
+    border-bottom: 1px solid #e0e5ec;
+    font-weight: 600;
+    color: #2f3a4c;
+}
+
+.resultados-card__title {
+    font-size: 1.1rem;
+}
+
+.resultados-card__body {
+    background-color: #ffffff;
+}
+
+.table-responsive {
+    border: 1px solid #edf0f5;
+    border-radius: 0.75rem;
+    overflow: hidden;
+}
+
+.table thead th {
+    background-color: #f8f9fb;
+    color: #49505d;
+    font-weight: bold;
+    border-bottom: 1px solid #e6eaf0;
+}
+
+.table tbody td {
+    vertical-align: middle;
+    color: #3d4757;
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #fafbfd;
+}
+
+/* Spinner para loading */
+.spinner-border {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+/* Card header com ícone */
+.card-header i {
+    margin-right: 0.5rem;
+}
+
+.titulo-relatorio {
+     font-size: 1.5rem;
+     font-weight: 600;
+}
+
+.relatorio-label {
+     font-size: 1.05rem;
+     font-weight: normal;
+}
+
+/* Badge de contagem */
+.badge {
+    font-size: 0.875em;
+}
+
+#formRelatorio .form-control {
+    font-size: 0.9rem;
+    color: #4f4f4f;
+}
+
+#formRelatorio .form-control::placeholder {
+    color: #a1a7af;
+    opacity: 1;
+}
+
+#formRelatorio .form-control:-ms-input-placeholder {
+    color: #a1a7af;
+}
+
+#formRelatorio .form-control::-ms-input-placeholder {
+    color: #a1a7af;
+}
+
+.resultados-scroll {
+    max-height: 420px;
+    overflow-y: auto;
+}
+
+.pagination-controls .btn {
+    min-width: 36px;
+}
+
+#infoPaginacao {
+    min-height: 1.5rem;
+}
+
+.export-buttons .btn {
+    min-width: 140px;
+}
+
+.export-buttons .btn-outline-danger:hover,
+.export-buttons .btn-outline-success:hover {
+    color: #ffffff;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    min-width: 300px;
+}
+
+.loading-content .spinner-border {
+    width: 2rem;
+    height: 2rem;
+    margin-bottom: 1rem;
+}
+
+.loading-content p {
+    margin: 0;
+    font-weight: 500;
+    color: #495057;
+}
+
+/* Seletor de paginação */
+.pagination-size-selector {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #6c757d;
+}
+
+.pagination-size-selector select {
+    font-size: 0.875rem;
+    padding: 0.25rem 0.5rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+    background-color: white;
+}
+
+.pagination-size-selector select:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+    outline: 0;
+}

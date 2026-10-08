@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version last-->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PREM_C012" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="20" bottomMargin="20" uuid="7a6c7d1c-5390-48f5-bed0-becd7af4e99d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="116"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="C013"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="ID_REMESSA" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[new Integer(1)]]></defaultValueExpression>
+	</parameter>
+	<parameter name="DIR_IMAGENS" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Documents and Settings\\fos\\workspace\\GTW\\WebContent\\WEB-INF\\img"]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select
+TOP(1) 
+CONVERT(VARCHAR,getDate(),3) AS DATA_EXPEDICAO,
+r.data AS DATA_MOVIMENTO,
+CAST(r.codigo_externo AS INTEGER) AS NUMERO_LOTE,
+right('000000'+RTRIM(r.codigo_externo), 6) AS NUMERO_REMESSA,
+r.total_infracao AS TOTAL_AIT,
+RTRIM(r.serie_inicial) AS SERIE_AIT_INI,
+r.auto_inicial AS NUMERO_AIT_INI,
+dbo.DAC_AIT(r.tipo,r.serie_inicial,r.auto_inicial) AS DAC_AIT_INI,
+RTRIM(r.serie_final) AS SERIE_AIT_FIM,
+r.auto_final AS NUMERO_AIT_FIM,
+dbo.DAC_AIT(r.tipo,r.serie_final,r.auto_final) AS DAC_AIT_FIM,
+RTRIM(r.tipo) AS TIPO,
+CAST(CONVERT(date, i.data, 120) AS DATE) AS DATA_INFRACAO,
+total_infracao AS NUMERO_IMAGENS,
+CONVERT(VARCHAR, data_inicial, 3) AS DATA_INICIO,
+CONVERT(VARCHAR, data_final, 3) AS DATA_FIM,
+(SELECT valor FROM chave_valor (NOLOCK) WHERE chave = 'nome_contato_remessa') AS NOME_CONTATO,
+(SELECT valor FROM chave_valor (NOLOCK) WHERE chave = 'matricula_remessa') AS MATRICULA_CONTATO,
+(SELECT RIGHT('000' + LTRIM(RTRIM(valor)), 3) AS numero_contrato FROM chave_valor WHERE chave = 'numero_contrato') AS NUMERO_CONTRATO,
+(SELECT RIGHT('0000' + LTRIM(RTRIM(valor)), 4) AS ano_contrato FROM chave_valor WHERE chave = 'ano_contrato') AS ANO_CONTRATO
+FROM remessa r
+JOIN infracao_remessa ir ON ir.id_remessa = r.id_remessa
+JOIN infracao i ON i.id_infracao = ir.id_infracao
+WHERE r.id_remessa = $P{ID_REMESSA}]]>
+	</queryString>
+	<field name="DATA_EXPEDICAO" class="java.lang.String"/>
+	<field name="DATA_MOVIMENTO" class="java.sql.Timestamp"/>
+	<field name="NUMERO_LOTE" class="java.lang.Integer"/>
+	<field name="TOTAL_AIT" class="java.lang.Integer"/>
+	<field name="SERIE_AIT_INI" class="java.lang.String"/>
+	<field name="NUMERO_AIT_INI" class="java.lang.Integer"/>
+	<field name="DAC_AIT_INI" class="java.lang.Short"/>
+	<field name="SERIE_AIT_FIM" class="java.lang.String"/>
+	<field name="NUMERO_AIT_FIM" class="java.lang.Integer"/>
+	<field name="DAC_AIT_FIM" class="java.lang.Short"/>
+	<field name="TIPO" class="java.lang.String"/>
+	<field name="DATA_INFRACAO" class="java.sql.Date"/>
+	<field name="NUMERO_REMESSA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NUMERO_IMAGENS" class="java.lang.Integer"/>
+	<field name="NOME_CONTATO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="MATRICULA_CONTATO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_INICIO" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="DATA_FIM" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="NUMERO_CONTRATO" class="java.lang.String"/>
+	<field name="ANO_CONTRATO" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="412" splitType="Stretch">
+			<image isUsingCache="true" isLazy="true" onErrorType="Icon">
+				<reportElement key="image-1" mode="Transparent" x="181" y="10" width="180" height="44" uuid="5509d5b9-635d-4ef5-a0da-16aa0e4b3d6a"/>
+				<imageExpression><![CDATA[$P{DIR_IMAGENS}+"logo_consilux.jpg"]]></imageExpression>
+			</image>
+			<rectangle radius="1">
+				<reportElement key="rectangle-2" x="5" y="-98" width="524" height="26" uuid="bc6df036-05b5-4474-a49c-e4f7c7b07665"/>
+			</rectangle>
+			<staticText>
+				<reportElement key="staticText-2" mode="Opaque" x="26" y="-102" width="52" height="8" uuid="1a89e59f-ff50-4b61-85d0-8eea95e03d2d"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ ORGÃO AUTUADOR ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" mode="Opaque" x="8" y="-96" width="21" height="8" uuid="258e8d6a-46a2-478c-9360-a829e761fa95"/>
+				<textElement>
+					<font size="5" isBold="false" pdfFontName="Helvetica"/>
+				</textElement>
+				<text><![CDATA[CÓDIGO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-4" x="46" y="-86" width="0" height="0" uuid="6ee40210-8167-4033-af6e-3763a55adfe4"/>
+				<text><![CDATA[Texto Estático]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-5" mode="Opaque" x="39" y="-91" width="33" height="13" uuid="6164a123-c3ad-44bd-b6ce-73d33240f5c3"/>
+				<textElement>
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[271070]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-1" x="106" y="-98" width="1" height="27" uuid="eec0d5f0-d3dd-4879-a2ec-fb69724110c4"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-6" mode="Opaque" x="146" y="-94" width="242" height="18" uuid="7ff0c511-fd98-451b-8ae1-04c04158f05c"/>
+				<textElement>
+					<font size="14" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[AUTO DE INFRAÇÃO DE TRÂNSITO]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-2" x="427" y="-98" width="1" height="27" uuid="925ca644-6b88-4a68-a8cd-0cf55800a507"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-7" mode="Opaque" x="457" y="-102" width="44" height="8" uuid="96b6d5a9-7fea-45df-bb19-a7662ec3e93f"/>
+				<textElement>
+					<font size="5" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[ NÚMERO DO AIT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-10" x="41" y="4" width="0" height="0" uuid="eda7bd5e-f276-42e2-ad42-11ab8616634d"/>
+				<text><![CDATA[Texto Estático]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-47" x="5" y="120" width="220" height="15" uuid="4b709dec-d9a3-4cf4-9948-2d26ef67692a"/>
+				<text><![CDATA[Ref.: Envio de registros de infração]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="dd/MM/yyyy" isBlankWhenNull="false">
+				<reportElement key="textField-23" x="6" y="179" width="53" height="13" uuid="1f3cb892-1dba-411b-9158-2aa31e5d3464"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_AIT_INI}+$F{NUMERO_REMESSA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-48" x="6" y="135" width="527" height="35" uuid="d585959c-beb0-490d-b397-db3a3b8e8e65"/>
+				<text><![CDATA[Segue, via portador, 2 CD's contendo 1 lote de infrações registradas pelos equipamentos eletrônicos, instalados através do contrato ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-49" x="4" y="208" width="144" height="15" uuid="55978efc-729a-465f-a4e9-6d1e8a459dc2"/>
+				<text><![CDATA[Total de Registros:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-57" x="3" y="226" width="145" height="15" uuid="00e8ad9a-6f55-4cc8-940d-37b5339e0614"/>
+				<text><![CDATA[Conteúdo do Arquivo (De/Até):]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="00000000" isBlankWhenNull="false">
+				<reportElement key="textField-32" x="180" y="227" width="54" height="13" uuid="954aa1bf-f6ae-4694-b40f-d58fad6446eb"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_AIT_INI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-40" x="155" y="227" width="26" height="13" uuid="a8ead378-ced3-4196-93cd-64352d09e93d"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_AIT_INI}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="00000000" isBlankWhenNull="false">
+				<reportElement key="textField-43" x="276" y="227" width="60" height="14" uuid="925f9a25-f753-4e6c-9643-ba077e4f0e80"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_AIT_FIM}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField-44" x="250" y="227" width="26" height="14" uuid="4a33ed79-9651-4481-9d48-f3fc9f09e6ad"/>
+				<textElement textAlignment="Right">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{SERIE_AIT_FIM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="143" y="320" width="239" height="20" uuid="9251f7f7-68d8-4a7e-a0a5-8fa13e17c8d1"/>
+				<text><![CDATA[______________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="237" y="227" width="13" height="16" uuid="5b4ab903-ec15-4ea6-be50-fa40df382a0e"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="300" y="90" width="70" height="20" uuid="7bc5d4ee-2b58-4671-b7bb-52866c0c3e2d"/>
+				<text><![CDATA[Rio de Janeiro, ]]></text>
+			</staticText>
+			<textField pattern="d &apos;de&apos; MMMM &apos;de&apos; yyyy">
+				<reportElement x="380" y="90" width="149" height="20" uuid="e1591df0-dd49-4686-a59d-efe51804facc"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-32" x="170" y="250" width="44" height="13" uuid="6366a88b-125b-4115-adf2-be4eca119419"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_INICIO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="221" y="249" width="13" height="16" uuid="e8bc5cfb-6244-4ac3-8064-d106030a3d75"/>
+				<text><![CDATA[/]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="000000" isBlankWhenNull="false">
+				<reportElement key="textField-43" x="250" y="250" width="50" height="14" uuid="012d4fc1-cb7e-4a26-9640-25cf5633da6b"/>
+				<textElement textAlignment="Center">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{DATA_FIM}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-57" x="3" y="249" width="145" height="15" uuid="fe0c4399-3659-4586-a754-877b84badbef"/>
+				<text><![CDATA[Período:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="357" width="239" height="20" uuid="66a8db50-682d-4e8c-adf1-9a0d15099ee0"/>
+				<text><![CDATA[______________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="143" y="387" width="149" height="16" uuid="5431ecef-2129-4fdf-904c-344e7e80a3aa"/>
+				<text><![CDATA[Supervisor de Operações]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" pattern="#,##0.###;(#,##0.###-)" isBlankWhenNull="false">
+				<reportElement key="textField-43" x="170" y="208" width="60" height="14" uuid="a5829413-2ade-4adf-97ef-24ced3976049"/>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_IMAGENS}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" pattern="" isBlankWhenNull="false">
+				<reportElement key="textField-63" x="95" y="148" width="53" height="13" uuid="5018e448-5e2a-4419-8cb5-f65c13dd586a">
+					<property name="local_mesure_unitx" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="local_mesure_unity" value="pixel"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font size="10" isBold="false" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{NUMERO_CONTRATO}+"/"+$F{ANO_CONTRATO}+"."]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="330" splitType="Stretch">
+			<staticText>
+				<reportElement x="240" y="158" width="261" height="19" uuid="8bd571e3-ceb0-4997-99a8-72c8b2a6cdd5"/>
+				<text><![CDATA[Declaro que recebi o serviço acima discriminado]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="177" width="261" height="16" uuid="14b95580-be3e-4333-9a02-2667d3ecac8a"/>
+				<text><![CDATA[Data:  ___/___/______]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="210" width="239" height="20" uuid="46a9356d-a5ca-4a64-8c12-06b835bd8117"/>
+				<text><![CDATA[______________________________]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="230" width="168" height="20" uuid="790ef6d5-e390-49d5-ab54-e2c3ea9a52e7"/>
+				<text><![CDATA[Assinatura do Responsável]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="8" y="80" width="299" height="57" uuid="f321fba5-78d1-420a-8d17-e7aca64959bd"/>
+				<text><![CDATA[Ilustríssima Senhora
+Dra. Cláudia Baptista de Souza
+PREFEITURA DA CIDADE DO RIO DE JANEIRO
+Companhia de Engenharia de Tráfego - CET/RIO]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="7" splitType="Stretch"/>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="6" splitType="Stretch"/>
+	</lastPageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>
