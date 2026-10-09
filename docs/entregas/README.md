@@ -9,7 +9,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 01 | Log de Auditoria Centralizado | 2026-10-08 | ✅ Entregue | [01-log-auditoria.md](01-log-auditoria.md) |
 | 02 | Hash SHA-256 de Integridade | 2026-10-08 | ✅ Entregue | [02-sha256-integridade.md](02-sha256-integridade.md) |
 | 03 | Política de Senhas | 2026-10-08 | ✅ Entregue¹ | [03-politica-senhas.md](03-politica-senhas.md) |
-| 04 | MFA/TOTP | — | 🔧 Em desenvolvimento | — |
+| 04 | MFA/TOTP | 2026-10-08 | ✅ Entregue¹ | [04-mfa-totp.md](04-mfa-totp.md) |
 | 05 | Dupla Análise | — | ⏳ Pendente | — |
 | 06 | Obliteração de Imagens | — | ⏳ Pendente | — |
 | 07 | SLA de Latência | — | ⏳ Pendente | — |
