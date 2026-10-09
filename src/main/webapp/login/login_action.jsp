@@ -74,6 +74,41 @@
 		return;
 	}
 	else {
+		// Verificar se usuário tem MFA habilitado antes de criar a sessão definitiva
+		boolean mfaHabilitado = false;
+		String totpSegredo = null;
+		{
+			java.sql.Connection mfaConn = null;
+			try {
+				mfaConn = Conexao.getConexao();
+				try (java.sql.PreparedStatement mfaPs = mfaConn.prepareStatement(
+						"SELECT totp_habilitado, totp_secret FROM dbo.sis_usuario WHERE id=?")) {
+					mfaPs.setInt(1, usuario.getId());
+					try (java.sql.ResultSet mfaRs = mfaPs.executeQuery()) {
+						if (mfaRs.next()) {
+							mfaHabilitado = mfaRs.getBoolean("totp_habilitado");
+							totpSegredo   = mfaRs.getString("totp_secret");
+						}
+					}
+				}
+			} catch (Exception eMfa) { /* coluna pode não existir ainda — MFA não aplicado */ }
+			finally { if (mfaConn != null) try { mfaConn.close(); } catch (Exception e2) {} }
+		}
+
+		if (mfaHabilitado && totpSegredo != null) {
+			HttpSession sAntiga = request.getSession();
+			SessaoFinalizaManager.removeSessaoFinaliza(sAntiga);
+			sAntiga.invalidate();
+			HttpSession sTemp = request.getSession(true);
+			sTemp.setMaxInactiveInterval(300); // 5 min para completar o MFA
+			sTemp.setAttribute("mfa_pendente_usuario", usuario);
+			sTemp.setAttribute("mfa_pendente_segredo", totpSegredo);
+			sTemp.setAttribute("mfa_pendente_sip", sIP);
+			sTemp.setAttribute("mfa_pendente_retUrl", request.getParameter("retUrl"));
+			response.sendRedirect("mfa_codigo.jsp");
+			return;
+		}
+
 		//Cria a sessão aqui porque esta pagina só deve criar uma sessão depois que a autenticação estiver ok:
 		HttpSession sessaoAntiga = request.getSession();
 		SessaoFinalizaManager.removeSessaoFinaliza(sessaoAntiga); //Garante que os listeners de finalização da sessão antiga seja executado.
