@@ -7,9 +7,9 @@
 
 Dashboard de KPIs configuráveis com thresholds de alerta personalizáveis, CRUD de configuração e atualização automática.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.13 — KPIs configuráveis: dashboard com indicadores operacionais configuráveis por administrador, com thresholds de alerta e atualização periódica.
+- Plano [`15-kpis-configuráveis.md`](../planos-salvador/15-kpis-configuráveis.md) — KPIs Configuráveis
 
 ## Arquivos produzidos
 

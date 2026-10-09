@@ -7,9 +7,9 @@
 
 Exportação da localização dos equipamentos de monitoramento em GeoJSON e KML, com mapa interativo via Leaflet.js para visualização inline.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.14 — Exportação GIS: visualização geoespacial de equipamentos com contagem de passagens, exportação em formatos abertos (GeoJSON/KML) para integração com QGIS e Google Earth.
+- Plano [`16-exportacao-gis.md`](../planos-salvador/16-exportacao-gis.md) — Exportação GIS (GeoJSON/KML)
 
 ## Arquivos produzidos
 

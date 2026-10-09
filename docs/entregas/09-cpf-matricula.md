@@ -7,9 +7,10 @@
 
 Tela administrativa para gerenciar CPF e matrícula dos usuários do sistema, com validação de CPF (dígitos verificadores) no servidor e persistência via tabela complementar `dbo.sis_usuario_complemento` (sem ALTER TABLE em `dbo.sis_usuario`).
 
-## Requisito do TR atendido
+## Origem
 
-- §5.1 — Controle de acesso com identificação funcional dos operadores: vinculação de CPF e matrícula ao cadastro, garantindo rastreabilidade individualizada.
+- Plano [`09-cpf-matricula.md`](../planos-salvador/09-cpf-matricula.md) — CPF e Matrícula no Cadastro de Usuários
+- Checklist pré-PoC §5.1 em [`00-gaps-criticos.md`](../planos-salvador/00-gaps-criticos.md): "Login com usuário vinculado a CPF ou matrícula"
 
 ## Arquivos produzidos
 

@@ -7,9 +7,9 @@
 
 Agrupamento de infrações pré-aprovadas em lotes para encaminhamento ao DETRAN/DENATRAN, com ciclo de vida RASCUNHO → ENVIADO → CONFIRMADO/CANCELADO.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.12 — Gestão de lotes de infrações: criação, visualização de itens, envio e acompanhamento de status de lotes para órgão autuador.
+- Plano [`14-gestao-lotes.md`](../planos-salvador/14-gestao-lotes.md) — Gestão de Lotes de Infrações
 
 ## Arquivos produzidos
 

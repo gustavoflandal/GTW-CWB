@@ -7,9 +7,9 @@
 
 Exportação de passagens em CSV, XLS e PDF com filtros por período, local e status. CSV server-side com hash SHA-256 de integridade; XLS e PDF client-side via SheetJS e jsPDF (já existentes no projeto).
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.8 — Relatórios gerenciais e operacionais: exportação padronizada de dados em formatos abertos (CSV, XLS, PDF), com cabeçalho institucional e rodapé de integridade.
+- Plano [`11-exportacao-padronizada.md`](../planos-salvador/11-exportacao-padronizada.md) — Exportação Padronizada (PDF/CSV/XLS)
 
 ## Arquivos produzidos
 

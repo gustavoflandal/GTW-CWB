@@ -7,10 +7,9 @@
 
 Monitoramento do prazo de 72 horas entre a captura de uma passagem e sua pré-classificação. Job Quartz horário grava snapshots de aging; servlet e painel exibem situação atual e histórico.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.5.2 — Prazo máximo de 72 horas para pré-processamento das imagens capturadas, com controle operacional e indicadores de cumprimento.
-- §5.5.3 — Indicadores de controle operacional: aging de fila por equipamento/local, registros acima do SLA.
+- Plano [`10-sla-preprocessamento.md`](../planos-salvador/10-sla-preprocessamento.md) — SLA de Pré-processamento 72h
 
 ## Arquivos produzidos
 
