@@ -22,11 +22,15 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 14 | Gestão de Lotes | 2026-10-08 | ✅ Entregue⁴ | [14-gestao-lotes.md](14-gestao-lotes.md) |
 | 15 | KPIs Configuráveis | 2026-10-08 | ✅ Entregue⁴ | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
 | 16 | Exportação GIS | 2026-10-08 | ✅ Entregue | [16-exportacao-gis.md](16-exportacao-gis.md) |
+| 17 | Time-lapse de Passagens | 2026-10-08 | ✅ Entregue | [17-timelapse.md](17-timelapse.md) |
+| 18 | Disponibilidade dos Equipamentos | 2026-10-08 | ✅ Entregue⁵ | [18-disponibilidade.md](18-disponibilidade.md) |
+| 19 | Sensores Externos (Waze/SAMU) | 2026-10-08 | ✅ Entregue⁵ | [19-sensores-externos.md](19-sensores-externos.md) |
 
 ¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
 ² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).  
 ³ Migração `20261008_retencao_anonimizacao.sql` pendente de execução manual (expurgo_log + view anonimizada).  
-⁴ Migração `20261008_lotes_kpis.sql` pendente de execução manual (lote_infracao + kpi_config).
+⁴ Migração `20261008_lotes_kpis.sql` pendente de execução manual (lote_infracao + kpi_config).  
+⁵ Migração `20261008_disponibilidade_incidentes.sql` pendente de execução manual (disponibilidade + incidentes).
 
 ## Referências cruzadas
 

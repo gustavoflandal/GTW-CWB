@@ -118,6 +118,11 @@ public class Agendador extends HttpServlet {
 
 	public static final String GRUPO_RETENCAO = "Retencao";
 	public static final String JOB_RETENCAO = "Verifica Retenção de Dados";
+
+	public static final String JOB_DISPONIBILIDADE = "Monitora Disponibilidade Equipamentos";
+
+	public static final String GRUPO_INTEGRACAO = "Integracao";
+	public static final String JOB_INCIDENTE_IMPORT = "Importa Incidentes Waze";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -180,6 +185,8 @@ public class Agendador extends HttpServlet {
 			reajustaJobSlaLatencia();
 			reajustaJobSlaPreprocessamento();
 			reajustaJobRetencao();
+			reajustaJobDisponibilidade();
+			reajustaJobIncidenteImport();
 
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -898,6 +905,36 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job Retenção de Dados agendada a cada 24 horas.");
+		}
+	}
+
+	private static void reajustaJobDisponibilidade() throws SchedulerException {
+		if (!possuiJob(GRUPO_MONITORAMENTO, JOB_DISPONIBILIDADE)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.disponibilidade.DisponibilidadeJob.class)
+					.withIdentity(JOB_DISPONIBILIDADE, GRUPO_MONITORAMENTO)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_DISPONIBILIDADE, GRUPO_MONITORAMENTO)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(10))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Disponibilidade Equipamentos agendada a cada 10 minutos.");
+		}
+	}
+
+	private static void reajustaJobIncidenteImport() throws SchedulerException {
+		if (!possuiJob(GRUPO_INTEGRACAO, JOB_INCIDENTE_IMPORT)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.sensores.IncidenteImportJob.class)
+					.withIdentity(JOB_INCIDENTE_IMPORT, GRUPO_INTEGRACAO)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_INCIDENTE_IMPORT, GRUPO_INTEGRACAO)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Importação Incidentes Waze agendada a cada 30 minutos.");
 		}
 	}
 
