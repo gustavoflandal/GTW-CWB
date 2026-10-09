@@ -79,20 +79,24 @@
 		String totpSegredo = null;
 		{
 			java.sql.Connection mfaConn = null;
+			java.sql.PreparedStatement mfaPs = null;
+			java.sql.ResultSet mfaRs = null;
 			try {
 				mfaConn = Conexao.getConexao();
-				try (java.sql.PreparedStatement mfaPs = mfaConn.prepareStatement(
-						"SELECT totp_habilitado, totp_secret FROM dbo.sis_usuario WHERE id=?")) {
-					mfaPs.setInt(1, usuario.getId());
-					try (java.sql.ResultSet mfaRs = mfaPs.executeQuery()) {
-						if (mfaRs.next()) {
-							mfaHabilitado = mfaRs.getBoolean("totp_habilitado");
-							totpSegredo   = mfaRs.getString("totp_secret");
-						}
-					}
+				mfaPs = mfaConn.prepareStatement(
+						"SELECT totp_habilitado, totp_secret FROM dbo.sis_usuario WHERE id=?");
+				mfaPs.setInt(1, usuario.getId());
+				mfaRs = mfaPs.executeQuery();
+				if (mfaRs.next()) {
+					mfaHabilitado = mfaRs.getBoolean("totp_habilitado");
+					totpSegredo   = mfaRs.getString("totp_secret");
 				}
 			} catch (Exception eMfa) { /* coluna pode não existir ainda — MFA não aplicado */ }
-			finally { if (mfaConn != null) try { mfaConn.close(); } catch (Exception e2) {} }
+			finally {
+				if (mfaRs != null) try { mfaRs.close(); } catch (Exception e2) {}
+				if (mfaPs != null) try { mfaPs.close(); } catch (Exception e2) {}
+				if (mfaConn != null) try { mfaConn.close(); } catch (Exception e2) {}
+			}
 		}
 
 		if (mfaHabilitado && totpSegredo != null) {
