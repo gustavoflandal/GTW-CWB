@@ -1,3 +1,5 @@
+-- *** OBSOLETO — substituído por 20261008_complementar.sql ***
+-- Este script usa ALTER TABLE (proibido). NÃO EXECUTAR.
 -- Plano 06: Obliteração de Imagens (LGPD)
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;

@@ -10,15 +10,16 @@
 
 ### Banco de dados
 - Tabela `muralha.infracao_analise` com constraint `UNIQUE (id_infracao, id_usuario)` garantindo que o mesmo operador nunca analisa duas vezes
-- Coluna `status_analise VARCHAR(25)` em `muralha.veiculo_tempo_real` com valor default `'AGUARDANDO_ANALISE'`
-- Script: [`docs/banco-de-dados/migracoes/20261008_dupla_analise.sql`](../banco-de-dados/migracoes/20261008_dupla_analise.sql)
+- Tabela complementar `muralha.vtr_status_analise` (PK: `id_veiculo_tempo_real UNIQUEIDENTIFIER`) com coluna `status_analise VARCHAR(25)` — abordagem sem ALTER TABLE em `veiculo_tempo_real`
+- Script principal: [`20261008_dupla_analise.sql`](../banco-de-dados/migracoes/20261008_dupla_analise.sql) (cria `infracao_analise`)
+- Script complementar: [`20261008_complementar.sql`](../banco-de-dados/migracoes/20261008_complementar.sql) (cria `vtr_status_analise` e demais tabelas dos planos 06/07)
 
-> **Correção em relação ao plano original:** `id_infracao` é `UNIQUEIDENTIFIER` (não `BIGINT`), pois `muralha.veiculo_tempo_real.id` é `uniqueidentifier`. Colunas de consulta também corrigidas: `data` (não `dt_passagem`), `id_local` (não `id_equipamento`), `id_pista` (não `faixa`).
+> **Decisão arquitetural:** em vez de `ALTER TABLE muralha.veiculo_tempo_real ADD status_analise`, criamos tabela complementar `vtr_status_analise` com LEFT JOIN + COALESCE para default `'AGUARDANDO_ANALISE'`. Isso evita lock exclusivo na tabela principal (~8M linhas).
 
 ### Back-end
 | Arquivo | Responsabilidade |
 |---|---|
-| `muralha/digital/processamento/InfracaoAnaliseDAO.java` | Consulta fila (excluindo infrações já analisadas pelo usuário), registra análise em transação, determina novo status, retorna indicadores |
+| `muralha/digital/processamento/InfracaoAnaliseDAO.java` | Consulta fila via LEFT JOIN com `vtr_status_analise`; MERGE para atualizar status; indicadores da tabela complementar |
 | `muralha/digital/processamento/InfracaoAnaliseServlet.java` | `GET ?acao=proximaFila\|indicadores` e `POST` para registrar análise; auditoria integrada |
 
 ### Front-end
@@ -51,7 +52,7 @@ DESEMPATE          → (3ª análise) → PRE_APROVADA ou REPROVADA
 | 4 | Segunda análise diferente da primeira → DESEMPATE | ✅ |
 | 5 | Terceira análise determina resultado final | ✅ |
 | 6 | Todo ato de análise gera registro em `sis_log_auditoria` | ✅ |
-| 7 | Transação garante consistência entre INSERT e UPDATE de status | ✅ |
+| 7 | Transação garante consistência entre INSERT e MERGE de status | ✅ |
 | 8 | Indicadores de fila disponíveis em tempo real | ✅ |
 
 ---

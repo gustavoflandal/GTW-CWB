@@ -8,9 +8,10 @@
 
 ## Pré-requisito
 
-Execute a migração:
+Execute as migrações:
 ```powershell
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_dupla_analise.sql"
+sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_complementar.sql"
 ```
 
 ---
@@ -19,8 +20,8 @@ sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-d
 
 ```sql
 SELECT TOP 1 * FROM muralha.infracao_analise;
-SELECT TOP 1 status_analise FROM muralha.veiculo_tempo_real;
--- Esperado: sem erro; status_analise = 'AGUARDANDO_ANALISE' para todos os registros existentes
+SELECT TOP 1 * FROM muralha.vtr_status_analise;
+-- Esperado: sem erro; vtr_status_analise inicialmente vazia (preenchida sob demanda via MERGE)
 ```
 
 **Resultado:** pendente execução da migração
@@ -34,6 +35,8 @@ GET /MuralhaDigital/InfracaoAnalise?acao=proximaFila
 -- Esperado: {"ok":true,"infracao":{"id":"...","placa":"...","data":"...",...}}
 -- OU: {"ok":true,"filaVazia":true} se não houver registros
 ```
+
+> A query usa `LEFT JOIN muralha.vtr_status_analise` + `COALESCE(..., 'AGUARDANDO_ANALISE')` — registros sem linha em `vtr_status_analise` são tratados como aguardando análise.
 
 **Resultado:** pendente teste manual
 
@@ -50,8 +53,8 @@ SELECT id_infracao, id_usuario, sequencia, classificacao
 FROM muralha.infracao_analise ORDER BY id DESC;
 -- Esperado: 1 linha com sequencia=1, classificacao='VALIDA'
 
-SELECT id, status_analise FROM muralha.veiculo_tempo_real
-WHERE id = '<id_da_infracao>';
+SELECT * FROM muralha.vtr_status_analise
+WHERE id_veiculo_tempo_real = '<id_da_infracao>';
 -- Esperado: status_analise = 'PRIMEIRA_ANALISE'
 ```
 
@@ -93,7 +96,7 @@ Usuário A tenta acessar `fila.jsp` novamente → a infração já analisada NÃ
 
 ```
 GET /MuralhaDigital/InfracaoAnalise?acao=indicadores
--- Esperado: array com contagens por status
+-- Esperado: array com contagens por status (consulta na tabela vtr_status_analise)
 ```
 
 **Resultado:** pendente teste manual
@@ -104,4 +107,5 @@ GET /MuralhaDigital/InfracaoAnalise?acao=indicadores
 
 - A constraint `UNIQUE (id_infracao, id_usuario)` garante exclusividade no banco — não depende apenas da aplicação
 - O endpoint de imagem `VeiculoTempoReal?acao=obterImagem&id=...` pode não existir — neste caso a imagem não carrega mas o fluxo de análise funciona
+- Status é persistido em `muralha.vtr_status_analise` (tabela complementar) via MERGE — sem ALTER TABLE em `veiculo_tempo_real`
 - Necessário cadastrar o menu no banco via INSERT em `dbo.sis_menu_infos`

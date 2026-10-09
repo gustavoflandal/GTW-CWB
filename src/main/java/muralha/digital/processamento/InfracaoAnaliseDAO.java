@@ -13,19 +13,18 @@ public final class InfracaoAnaliseDAO {
 
     private InfracaoAnaliseDAO() {}
 
-    /**
-     * Retorna a próxima infração disponível para análise pelo usuário informado.
-     * Exclui: já analisadas por este usuário; status PRE_APROVADA/REPROVADA.
-     */
     public static JsonObject obterProxima(int idUsuario) throws Exception {
         String sql =
-            "SELECT TOP 1 vtr.id, vtr.placa, vtr.data, vtr.status_analise, " +
+            "SELECT TOP 1 vtr.id, vtr.placa, vtr.data, " +
+            "  COALESCE(vsa.status_analise, 'AGUARDANDO_ANALISE') AS status_analise, " +
             "  vtr.id_local, vtr.id_pista, " +
             "  (SELECT TOP 1 vi.id FROM muralha.veiculo_tempo_real_imagem vi " +
-            "   WHERE vi.id_veiculo_tempo_real = vtr.id AND vi.obliterada = 0 " +
+            "   WHERE vi.id_veiculo_tempo_real = vtr.id " +
             "   ORDER BY vi.id DESC) AS id_imagem " +
             "FROM muralha.veiculo_tempo_real vtr " +
-            "WHERE vtr.status_analise IN ('AGUARDANDO_ANALISE','PRIMEIRA_ANALISE','DESEMPATE') " +
+            "LEFT JOIN muralha.vtr_status_analise vsa ON vsa.id_veiculo_tempo_real = vtr.id " +
+            "WHERE COALESCE(vsa.status_analise, 'AGUARDANDO_ANALISE') " +
+            "      IN ('AGUARDANDO_ANALISE','PRIMEIRA_ANALISE','DESEMPATE') " +
             "  AND vtr.id NOT IN (" +
             "    SELECT id_infracao FROM muralha.infracao_analise WHERE id_usuario = ?" +
             "  ) " +
@@ -57,10 +56,6 @@ public final class InfracaoAnaliseDAO {
         }
     }
 
-    /**
-     * Grava a análise do operador e avança o status da infração conforme a lógica de negócio.
-     * Retorna o novo status da infração.
-     */
     public static String registrarAnalise(String idInfracao, int idUsuario,
             String classificacao, String justificativa) throws Exception {
 
@@ -69,7 +64,6 @@ public final class InfracaoAnaliseDAO {
             conn = Conexao.getConexao();
             conn.setAutoCommit(false);
 
-            // Verificar que não é re-análise
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT 1 FROM muralha.infracao_analise WHERE id_infracao=? AND id_usuario=?")) {
                 ps.setString(1, idInfracao);
@@ -79,7 +73,6 @@ public final class InfracaoAnaliseDAO {
                 }
             }
 
-            // Determinar sequência
             int sequencia;
             try (PreparedStatement ps = conn.prepareStatement(
                     "SELECT COUNT(*) FROM muralha.infracao_analise WHERE id_infracao = ?")) {
@@ -87,7 +80,6 @@ public final class InfracaoAnaliseDAO {
                 try (ResultSet rs = ps.executeQuery()) { rs.next(); sequencia = rs.getInt(1) + 1; }
             }
 
-            // Inserir análise
             try (PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO muralha.infracao_analise " +
                     "(id_infracao, id_usuario, sequencia, classificacao, justificativa) " +
@@ -100,14 +92,18 @@ public final class InfracaoAnaliseDAO {
                 ps.executeUpdate();
             }
 
-            // Determinar novo status
             String novoStatus = determinarNovoStatus(conn, idInfracao, sequencia, classificacao);
 
-            // Atualizar status na infração
+            // MERGE na tabela complementar (sem ALTER TABLE na veiculo_tempo_real)
             try (PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE muralha.veiculo_tempo_real SET status_analise=? WHERE id=?")) {
-                ps.setString(1, novoStatus);
-                ps.setString(2, idInfracao);
+                    "MERGE muralha.vtr_status_analise AS alvo " +
+                    "USING (SELECT CAST(? AS UNIQUEIDENTIFIER) AS id) AS src " +
+                    "ON alvo.id_veiculo_tempo_real = src.id " +
+                    "WHEN MATCHED THEN UPDATE SET status_analise = ? " +
+                    "WHEN NOT MATCHED THEN INSERT (id_veiculo_tempo_real, status_analise) VALUES (src.id, ?);")) {
+                ps.setString(1, idInfracao);
+                ps.setString(2, novoStatus);
+                ps.setString(3, novoStatus);
                 ps.executeUpdate();
             }
 
@@ -149,12 +145,12 @@ public final class InfracaoAnaliseDAO {
 
     public static JsonArray obterIndicadores() throws Exception {
         String sql =
-            "SELECT status_analise, COUNT(*) qtde " +
-            "FROM muralha.veiculo_tempo_real " +
-            "GROUP BY status_analise " +
-            "HAVING status_analise IN ('AGUARDANDO_ANALISE','PRIMEIRA_ANALISE'," +
-            "                          'DESEMPATE','PRE_APROVADA','REPROVADA') " +
-            "ORDER BY status_analise";
+            "SELECT vsa.status_analise, COUNT(*) qtde " +
+            "FROM muralha.vtr_status_analise vsa " +
+            "WHERE vsa.status_analise IN ('AGUARDANDO_ANALISE','PRIMEIRA_ANALISE'," +
+            "                             'DESEMPATE','PRE_APROVADA','REPROVADA') " +
+            "GROUP BY vsa.status_analise " +
+            "ORDER BY vsa.status_analise";
         JsonArray arr = new JsonArray();
         Connection conn = null;
         try {

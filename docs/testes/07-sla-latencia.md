@@ -4,7 +4,7 @@ Data: 2026-10-08
 
 ## Pré-requisitos
 
-- Migração `20261008_sla_latencia.sql` executada no banco GTW_MURALHA_DEV
+- Migração `20261008_complementar.sql` executada no banco GTW_MURALHA_DEV
 - Servidor rodando em `http://localhost:8080/`
 - Usuário autenticado
 
@@ -14,17 +14,13 @@ Data: 2026-10-08
 
 **Procedimento:** Executar no SSMS:
 ```sql
-SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME='veiculo_tempo_real'
-  AND COLUMN_NAME='latencia_ms';
-
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME='alerta_sla';
 
 SELECT valor FROM muralha.config_chave_valor WHERE chave='sla_latencia_threshold_ms';
 ```
 
-**Resultado esperado:** Coluna `latencia_ms` retornada; tabela `alerta_sla` existente; `valor='4000'`.
+**Resultado esperado:** Tabela `alerta_sla` existente; `valor='4000'`.
 
 **Status:** ⏳ Aguarda execução da migração
 
@@ -49,7 +45,7 @@ SELECT valor FROM muralha.config_chave_valor WHERE chave='sla_latencia_threshold
 GET /MuralhaDigital/SlaLatencia?acao=atual
 ```
 
-**Resultado esperado:** JSON `{"ok":true,"total":N,"media":M,"maximo":X}` onde valores refletem passagens dos últimos 5 min com `data_importado IS NOT NULL`.
+**Resultado esperado:** JSON `{"ok":true,"total":N,"media":M,"maximo":X}` onde valores refletem passagens dos últimos 5 min com `data_importado IS NOT NULL`. Latência calculada em runtime via `DATEDIFF(MILLISECOND, data, data_importado)`.
 
 **Status:** ⏳ Aguarda teste manual
 
@@ -80,7 +76,7 @@ UPDATE muralha.config_chave_valor SET valor='1' WHERE chave='sla_latencia_thresh
 2. Aguardar próxima execução do job (≤5 min)
 3. Recarregar o painel
 
-**Resultado esperado:** Card "Status SLA" exibe "⚠️ Violado" com borda vermelha; linha aparece na tabela de violações.
+**Resultado esperado:** Card "Status SLA" exibe "Violado" com borda vermelha; linha aparece na tabela de violações.
 
 4. Restaurar threshold:
 ```sql

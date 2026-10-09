@@ -7,7 +7,7 @@
 
 ## Escopo
 
-Monitora a latência entre o momento de passagem do veículo (`data`) e a importação no servidor (`data_importado`). Um job Quartz executa a cada 5 minutos, calcula o percentil 95 e registra alerta em `muralha.alerta_sla` com flag de violação quando P95 > threshold. O painel exibe indicadores em tempo real e histórico com gráfico.
+Monitora a latência entre o momento de passagem do veículo (`data`) e a importação no servidor (`data_importado`). A latência é calculada em runtime via `DATEDIFF(MILLISECOND, data, data_importado)` — sem coluna adicional na tabela principal. Um job Quartz executa a cada 5 minutos, calcula o percentil 95 e registra alerta em `muralha.alerta_sla` com flag de violação quando P95 > threshold. O painel exibe indicadores em tempo real e histórico com gráfico.
 
 ---
 
@@ -15,11 +15,13 @@ Monitora a latência entre o momento de passagem do veículo (`data`) e a import
 
 | Ação | Arquivo |
 |---|---|
-| Criar | `docs/banco-de-dados/migracoes/20261008_sla_latencia.sql` |
+| Criar | `docs/banco-de-dados/migracoes/20261008_complementar.sql` (tabela `alerta_sla` + config `sla_latencia_threshold_ms`) |
 | Criar | `src/main/java/muralha/digital/sla/SlaLatenciaJob.java` |
 | Criar | `src/main/java/muralha/digital/sla/SlaLatenciaServlet.java` |
 | Criar | `src/main/webapp/muralha-digital/pages/monitoramento/sla-latencia/index.jsp` |
 | Modificar | `src/main/java/com/consilux/servlet/ferramentas/Agendador.java` |
+
+> Migração antiga `20261008_sla_latencia.sql` marcada como OBSOLETA (usava ALTER TABLE proibido).
 
 ---
 
@@ -27,7 +29,7 @@ Monitora a latência entre o momento de passagem do veículo (`data`) e a import
 
 | # | Critério | Status |
 |---|---|---|
-| 1 | Latência calculada de dados existentes (data → data_importado) | ✅ |
+| 1 | Latência calculada em runtime de dados existentes (data → data_importado), sem coluna adicional | ✅ |
 | 2 | Job Quartz a cada 5 min registra P95 em alerta_sla | ✅ |
 | 3 | Threshold configurável via muralha.config_chave_valor | ✅ |
 | 4 | Painel Bootstrap com gráfico Chart.js e tabela de violações | ✅ |
@@ -37,25 +39,18 @@ Monitora a latência entre o momento de passagem do veículo (`data`) e a import
 
 ## Decisões técnicas
 
-- **Colunas existentes:** `veiculo_tempo_real` não tem `dt_captura_equipamento`; a latência é calculada como `DATEDIFF(MILLISECOND, data, data_importado)` — diferença entre captura e importação no servidor. Filtro: 0–600.000 ms para excluir valores absurdos.
+- **Sem coluna `latencia_ms`:** em vez de ALTER TABLE em `veiculo_tempo_real` (~8M linhas), a latência é computada em runtime como `DATEDIFF(MILLISECOND, data, data_importado)`. Filtro: 0–600.000 ms para excluir valores absurdos.
 - **`muralha.config_chave_valor`** usado em vez de `muralha.configuracao` (inexistente).
 - **`id_local`** usado nos top locais em vez de `equipamento` (coluna inexistente).
-- **Correção Plan 06 (junto a este commit):** `veiculo_tempo_real_imagem.id` é `uniqueidentifier` — corrigida a migração (`id_original UNIQUEIDENTIFIER`), `ObliteracaoService` (ids como String/UUID) e `InfracaoAnaliseDAO` (idImagem como String).
+- **Tabelas novas apenas:** `alerta_sla` e config INSERT — nenhuma tabela existente é alterada.
 
 ---
 
 ## Pendências
 
-- Migração `20261008_sla_latencia.sql` pendente de execução manual:
+- Migração `20261008_complementar.sql` pendente de execução manual:
   ```powershell
-  sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "consiluxsql263" -i "docs\banco-de-dados\migracoes\20261008_sla_latencia.sql"
-  ```
-- Coluna `latencia_ms` pode ser preenchida retroativamente em passagens antigas:
-  ```sql
-  UPDATE muralha.veiculo_tempo_real
-  SET latencia_ms = DATEDIFF(MILLISECOND, data, data_importado)
-  WHERE latencia_ms IS NULL AND data_importado IS NOT NULL
-    AND DATEDIFF(MILLISECOND, data, data_importado) BETWEEN 0 AND 600000;
+  sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_complementar.sql"
   ```
 
 ---

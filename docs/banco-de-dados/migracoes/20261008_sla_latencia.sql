@@ -1,3 +1,5 @@
+-- *** OBSOLETO — substituído por 20261008_complementar.sql ***
+-- Este script usa ALTER TABLE (proibido). NÃO EXECUTAR.
 -- Plano 07: SLA de Latência
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;

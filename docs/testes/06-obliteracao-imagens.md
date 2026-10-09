@@ -4,7 +4,7 @@ Data: 2026-10-08
 
 ## Pré-requisitos
 
-- Migração `20261008_obliteracao.sql` executada no banco GTW_MURALHA_DEV
+- Migração `20261008_complementar.sql` executada no banco GTW_MURALHA_DEV
 - Servidor rodando em `http://localhost:8080/`
 - Usuário autenticado com acesso à fila de análise
 - Ao menos uma infração com imagem disponível na fila
@@ -15,15 +15,11 @@ Data: 2026-10-08
 
 **Procedimento:** Executar no SSMS:
 ```sql
-SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS
-WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME='veiculo_tempo_real_imagem'
-  AND COLUMN_NAME IN ('obliterada','id_original');
-
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES
-WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME='infracao_imagem_obliteracao';
+WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME IN ('vtr_imagem_obliterada','infracao_imagem_obliteracao');
 ```
 
-**Resultado esperado:** 2 colunas retornadas na primeira query; 1 tabela na segunda.
+**Resultado esperado:** 2 tabelas retornadas.
 
 **Status:** ⏳ Aguarda execução da migração
 
@@ -61,15 +57,15 @@ WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME='infracao_imagem_obliteracao';
 2. Clicar "Aplicar" → confirmar no SweetAlert2
 3. Verificar no banco:
 ```sql
-SELECT id, obliterada, id_original
-FROM muralha.veiculo_tempo_real_imagem
-ORDER BY id DESC;
+SELECT id, id_imagem_original, id_veiculo_tempo_real, dt_criacao
+FROM muralha.vtr_imagem_obliterada
+ORDER BY dt_criacao DESC;
 
 SELECT * FROM muralha.infracao_imagem_obliteracao ORDER BY id DESC;
 ```
 
 **Resultado esperado:**
-- Nova linha com `obliterada=1` e `id_original` preenchido
+- Nova linha em `vtr_imagem_obliterada` com `id_imagem_original` preenchido
 - Registro em `infracao_imagem_obliteracao` com `tipo='M'` e `revertida=0`
 - Alert de sucesso na tela
 
@@ -80,15 +76,14 @@ SELECT * FROM muralha.infracao_imagem_obliteracao ORDER BY id DESC;
 ## T05 — Original intacto após obliteração
 
 **Procedimento:**
-1. Após T04, verificar linha original no banco:
+1. Após T04, verificar que a imagem original em `veiculo_tempo_real_imagem` não foi alterada:
 ```sql
-SELECT id, obliterada FROM muralha.veiculo_tempo_real_imagem
-WHERE obliterada = 0 AND id = <id_original>;
+SELECT id, DATALENGTH(imagem) AS tamanho
+FROM muralha.veiculo_tempo_real_imagem
+WHERE id = '<id_original>';
 ```
-2. Carregar imagem original pelo endpoint:
-`GET /MuralhaDigital/VeiculoTempoReal?acao=obterImagem&id=<uuid>`
 
-**Resultado esperado:** Linha original permanece com `obliterada=0`; bytes não alterados.
+**Resultado esperado:** Linha original permanece inalterada; tamanho da imagem igual ao anterior.
 
 **Status:** ⏳ Aguarda teste manual
 
@@ -129,6 +124,6 @@ ORDER BY dt_evento DESC;
 `GET /MuralhaDigital/InfracaoAnalise?acao=proximaFila`
 2. Checar presença do campo `idImagem` no objeto `infracao`
 
-**Resultado esperado:** JSON contém `"idImagem": <número>` quando a infração possui imagem.
+**Resultado esperado:** JSON contém `"idImagem":"<uuid>"` quando a infração possui imagem.
 
 **Status:** ⏳ Aguarda teste manual

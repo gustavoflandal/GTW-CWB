@@ -10,14 +10,15 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 02 | Hash SHA-256 de Integridade | 2026-10-08 | ✅ Entregue | [02-sha256-integridade.md](02-sha256-integridade.md) |
 | 03 | Política de Senhas | 2026-10-08 | ✅ Entregue¹ | [03-politica-senhas.md](03-politica-senhas.md) |
 | 04 | MFA/TOTP | 2026-10-08 | ✅ Entregue¹ | [04-mfa-totp.md](04-mfa-totp.md) |
-| 05 | Dupla Análise | 2026-10-08 | ✅ Entregue¹ | [05-dupla-analise.md](05-dupla-analise.md) |
-| 06 | Obliteração de Imagens | 2026-10-08 | ✅ Entregue¹ | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
-| 07 | SLA de Latência | 2026-10-08 | ✅ Entregue¹ | [07-sla-latencia.md](07-sla-latencia.md) |
+| 05 | Dupla Análise | 2026-10-08 | ✅ Entregue² | [05-dupla-analise.md](05-dupla-analise.md) |
+| 06 | Obliteração de Imagens | 2026-10-08 | ✅ Entregue² | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
+| 07 | SLA de Latência | 2026-10-08 | ✅ Entregue² | [07-sla-latencia.md](07-sla-latencia.md) |
 | 08 | Painel de Assertividade | — | ⏳ Pendente | — |
 | 09 | CPF/Matrícula | — | ⏳ Pendente | — |
 | 10 | SLA Pré-processamento | — | ⏳ Pendente | — |
 
-¹ Migração SQL do Plano 03 pendente de execução manual no banco.
+¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
+² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).
 
 ## Referências cruzadas
 

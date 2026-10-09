@@ -17,14 +17,6 @@ public final class ObliteracaoService {
 
     private ObliteracaoService() {}
 
-    /**
-     * Aplica obliteração e persiste cópia obliterada + registro de auditoria.
-     *
-     * @param idImagemOriginal UUID (String) da linha em veiculo_tempo_real_imagem
-     * @param coordenadasJson  JSON array: [{"x":int,"y":int,"w":int,"h":int},...]
-     * @param idUsuario        quem aplicou
-     * @return UUID da imagem obliterada criada
-     */
     public static String aplicar(String idImagemOriginal, String coordenadasJson, int idUsuario)
             throws Exception {
 
@@ -41,16 +33,16 @@ public final class ObliteracaoService {
         try {
             String idVeiculo = buscarIdVeiculo(conn, idImagemOriginal);
 
-            // Inserir cópia obliterada (id gerado pelo DEFAULT newid())
+            // Inserir cópia obliterada na tabela complementar (não altera veiculo_tempo_real_imagem)
             String idObliterada;
             try (PreparedStatement ps = conn.prepareStatement(
-                    "INSERT INTO muralha.veiculo_tempo_real_imagem " +
-                    "(id_veiculo_tempo_real, imagem, obliterada, id_original) " +
+                    "INSERT INTO muralha.vtr_imagem_obliterada " +
+                    "(id_imagem_original, id_veiculo_tempo_real, imagem) " +
                     "OUTPUT INSERTED.id " +
-                    "VALUES (?,?,1,?)")) {
-                ps.setString(1, idVeiculo);
-                ps.setBytes(2, bytesObliterados);
-                ps.setString(3, idImagemOriginal);
+                    "VALUES (?,?,?)")) {
+                ps.setString(1, idImagemOriginal);
+                ps.setString(2, idVeiculo);
+                ps.setBytes(3, bytesObliterados);
                 try (ResultSet rs = ps.executeQuery()) {
                     rs.next();
                     idObliterada = rs.getString(1);
@@ -94,9 +86,9 @@ public final class ObliteracaoService {
                 ps.setString(3, idImagemOriginal);
                 ps.executeUpdate();
             }
+            // Remover da tabela complementar (não toca em veiculo_tempo_real_imagem)
             try (PreparedStatement ps = conn.prepareStatement(
-                    "DELETE FROM muralha.veiculo_tempo_real_imagem " +
-                    "WHERE id_original=? AND obliterada=1")) {
+                    "DELETE FROM muralha.vtr_imagem_obliterada WHERE id_imagem_original=?")) {
                 ps.setString(1, idImagemOriginal);
                 ps.executeUpdate();
             }
@@ -113,8 +105,7 @@ public final class ObliteracaoService {
     private static byte[] buscarBytesImagem(String id) throws Exception {
         Connection conn = Conexao.getConexao();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT imagem FROM muralha.veiculo_tempo_real_imagem " +
-                "WHERE id=? AND obliterada=0")) {
+                "SELECT imagem FROM muralha.veiculo_tempo_real_imagem WHERE id=?")) {
             ps.setString(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getBytes("imagem");

@@ -1,10 +1,12 @@
+-- *** OBSOLETO — substituído por 20261008_complementar.sql ***
+-- As tabelas aqui (vtr_complemento, vtr_imagem_complemento) foram
+-- redesenhadas como tabelas focadas (vtr_status_analise, vtr_imagem_obliterada).
+-- Se já executou este script, rode:
+--   DROP TABLE IF EXISTS muralha.vtr_complemento;
+--   DROP TABLE IF EXISTS muralha.vtr_imagem_complemento;
 -- ============================================================
--- Migração: Tabelas complementares para o PoC TRANSALVADOR
+-- Migração ORIGINAL: Tabelas complementares para o PoC TRANSALVADOR
 -- Data: 2026-10-08
--- Autor: gustavoflandal
--- Rollback: DROP TABLE muralha.vtr_complemento,
---                      muralha.vtr_imagem_complemento,
---                      dbo.sis_usuario_complemento;
 -- ============================================================
 
 -- ── 1. Complemento de veiculo_tempo_real ────────────────────

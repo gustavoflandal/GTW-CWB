@@ -1,3 +1,5 @@
+-- *** OBSOLETO — substituído por 20261008_complementar.sql ***
+-- Este script usa ALTER TABLE (proibido). NÃO EXECUTAR.
 -- Fix: executa apenas o ALTER TABLE que falhou no script principal
 -- (CREATE TABLE infracao_analise e seus índices já foram criados)
 SET QUOTED_IDENTIFIER ON;
