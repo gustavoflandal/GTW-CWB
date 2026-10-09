@@ -17,7 +17,15 @@ public final class ObliteracaoService {
 
     private ObliteracaoService() {}
 
-    public static long aplicar(long idImagemOriginal, String coordenadasJson, int idUsuario)
+    /**
+     * Aplica obliteração e persiste cópia obliterada + registro de auditoria.
+     *
+     * @param idImagemOriginal UUID (String) da linha em veiculo_tempo_real_imagem
+     * @param coordenadasJson  JSON array: [{"x":int,"y":int,"w":int,"h":int},...]
+     * @param idUsuario        quem aplicou
+     * @return UUID da imagem obliterada criada
+     */
+    public static String aplicar(String idImagemOriginal, String coordenadasJson, int idUsuario)
             throws Exception {
 
         byte[] bytesOriginais = buscarBytesImagem(idImagemOriginal);
@@ -31,20 +39,21 @@ public final class ObliteracaoService {
         Connection conn = Conexao.getConexao();
         conn.setAutoCommit(false);
         try {
-            long idVeiculo = buscarIdVeiculo(conn, idImagemOriginal);
+            String idVeiculo = buscarIdVeiculo(conn, idImagemOriginal);
 
-            long idObliterada;
+            // Inserir cópia obliterada (id gerado pelo DEFAULT newid())
+            String idObliterada;
             try (PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO muralha.veiculo_tempo_real_imagem " +
-                    "(id_veiculo_tempo_real, imagem, obliterada, id_original) VALUES (?,?,1,?)",
-                    Statement.RETURN_GENERATED_KEYS)) {
-                ps.setLong(1, idVeiculo);
+                    "(id_veiculo_tempo_real, imagem, obliterada, id_original) " +
+                    "OUTPUT INSERTED.id " +
+                    "VALUES (?,?,1,?)")) {
+                ps.setString(1, idVeiculo);
                 ps.setBytes(2, bytesObliterados);
-                ps.setLong(3, idImagemOriginal);
-                ps.executeUpdate();
-                try (ResultSet keys = ps.getGeneratedKeys()) {
-                    keys.next();
-                    idObliterada = keys.getLong(1);
+                ps.setString(3, idImagemOriginal);
+                try (ResultSet rs = ps.executeQuery()) {
+                    rs.next();
+                    idObliterada = rs.getString(1);
                 }
             }
 
@@ -52,8 +61,8 @@ public final class ObliteracaoService {
                     "INSERT INTO muralha.infracao_imagem_obliteracao " +
                     "(id_imagem_original, id_imagem_obliterada, tipo, coordenadas_json, id_usuario_aplicou) " +
                     "VALUES (?,?,'M',?,?)")) {
-                ps.setLong(1, idImagemOriginal);
-                ps.setLong(2, idObliterada);
+                ps.setString(1, idImagemOriginal);
+                ps.setString(2, idObliterada);
                 ps.setString(3, coordenadasJson);
                 ps.setInt(4, idUsuario);
                 ps.executeUpdate();
@@ -70,7 +79,7 @@ public final class ObliteracaoService {
         }
     }
 
-    public static void reverter(long idImagemOriginal, int idUsuario, String justificativa)
+    public static void reverter(String idImagemOriginal, int idUsuario, String justificativa)
             throws Exception {
         Connection conn = Conexao.getConexao();
         conn.setAutoCommit(false);
@@ -82,13 +91,13 @@ public final class ObliteracaoService {
                     "WHERE id_imagem_original=? AND revertida=0")) {
                 ps.setInt(1, idUsuario);
                 ps.setString(2, justificativa);
-                ps.setLong(3, idImagemOriginal);
+                ps.setString(3, idImagemOriginal);
                 ps.executeUpdate();
             }
             try (PreparedStatement ps = conn.prepareStatement(
                     "DELETE FROM muralha.veiculo_tempo_real_imagem " +
                     "WHERE id_original=? AND obliterada=1")) {
-                ps.setLong(1, idImagemOriginal);
+                ps.setString(1, idImagemOriginal);
                 ps.executeUpdate();
             }
             conn.commit();
@@ -101,11 +110,12 @@ public final class ObliteracaoService {
         }
     }
 
-    private static byte[] buscarBytesImagem(long id) throws Exception {
+    private static byte[] buscarBytesImagem(String id) throws Exception {
         Connection conn = Conexao.getConexao();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT imagem FROM muralha.veiculo_tempo_real_imagem WHERE id=? AND obliterada=0")) {
-            ps.setLong(1, id);
+                "SELECT imagem FROM muralha.veiculo_tempo_real_imagem " +
+                "WHERE id=? AND obliterada=0")) {
+            ps.setString(1, id);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getBytes("imagem");
             }
@@ -115,12 +125,12 @@ public final class ObliteracaoService {
         return null;
     }
 
-    private static long buscarIdVeiculo(Connection conn, long idImagem) throws Exception {
+    private static String buscarIdVeiculo(Connection conn, String idImagem) throws Exception {
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT id_veiculo_tempo_real FROM muralha.veiculo_tempo_real_imagem WHERE id=?")) {
-            ps.setLong(1, idImagem);
+            ps.setString(1, idImagem);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getLong(1);
+                if (rs.next()) return rs.getString(1);
             }
         }
         throw new IllegalArgumentException("Imagem sem veiculo associado: " + idImagem);

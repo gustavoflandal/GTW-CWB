@@ -28,16 +28,16 @@ public class ObliteracaoServlet extends HttpServlet {
             int idUsuario = usu.getId();
 
             if ("aplicar".equals(acao)) {
-                long idImagem = Long.parseLong(req.getParameter("idImagem"));
+                String idImagem = req.getParameter("idImagem");
                 String coords = req.getParameter("coordenadas");
-                long idObliterada = ObliteracaoService.aplicar(idImagem, coords, idUsuario);
+                String idObliterada = ObliteracaoService.aplicar(idImagem, coords, idUsuario);
                 AuditoriaService.registrar(req, "Imagem", "obliterar",
-                    String.valueOf(idImagem), "Obliteração aplicada → id_obliterada=" + idObliterada);
+                    idImagem, "Obliteração aplicada → id_obliterada=" + idObliterada);
                 r.addProperty("ok", true);
                 r.addProperty("idObliterada", idObliterada);
 
             } else if ("reverter".equals(acao)) {
-                long idImagem = Long.parseLong(req.getParameter("idImagem"));
+                String idImagem = req.getParameter("idImagem");
                 String justif = req.getParameter("justificativa");
                 if (justif == null || justif.trim().isEmpty()) {
                     r.addProperty("ok", false);

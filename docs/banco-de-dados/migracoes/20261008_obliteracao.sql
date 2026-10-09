@@ -6,12 +6,12 @@ SET ANSI_NULLS ON;
 
 ALTER TABLE muralha.veiculo_tempo_real_imagem ADD
     obliterada  BIT   NOT NULL DEFAULT 0,
-    id_original BIGINT NULL;   -- NULL para imagens originais; preenchido para cópias obliteradas
+    id_original UNIQUEIDENTIFIER NULL;   -- NULL para imagens originais; preenchido para cópias obliteradas
 
 CREATE TABLE muralha.infracao_imagem_obliteracao (
-    id                     BIGINT       IDENTITY(1,1) PRIMARY KEY,
-    id_imagem_original     BIGINT       NOT NULL,
-    id_imagem_obliterada   BIGINT       NULL,   -- preenchido após gerar a cópia
+    id                     BIGINT           IDENTITY(1,1) PRIMARY KEY,
+    id_imagem_original     UNIQUEIDENTIFIER NOT NULL,
+    id_imagem_obliterada   UNIQUEIDENTIFIER NULL,   -- preenchido após gerar a cópia
     tipo                   CHAR(1)      NOT NULL,  -- 'M'=manual, 'A'=automática
     coordenadas_json       VARCHAR(MAX) NOT NULL,  -- [{"x":10,"y":20,"w":50,"h":30},...]
     dt_aplicacao           DATETIME2(3) NOT NULL DEFAULT SYSDATETIME(),

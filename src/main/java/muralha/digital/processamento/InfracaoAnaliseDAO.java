@@ -45,8 +45,8 @@ public final class InfracaoAnaliseDAO {
                         r.addProperty("statusAnalise", rs.getString("status_analise"));
                         r.addProperty("idLocal",     rs.getInt("id_local"));
                         r.addProperty("pista",       rs.getInt("id_pista"));
-                        long idImg = rs.getLong("id_imagem");
-                        if (!rs.wasNull()) r.addProperty("idImagem", idImg);
+                        String idImg = rs.getString("id_imagem");
+                        if (idImg != null) r.addProperty("idImagem", idImg);
                         return r;
                     }
                     return null;

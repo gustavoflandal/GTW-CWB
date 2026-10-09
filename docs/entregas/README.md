@@ -12,7 +12,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 04 | MFA/TOTP | 2026-10-08 | ✅ Entregue¹ | [04-mfa-totp.md](04-mfa-totp.md) |
 | 05 | Dupla Análise | 2026-10-08 | ✅ Entregue¹ | [05-dupla-analise.md](05-dupla-analise.md) |
 | 06 | Obliteração de Imagens | 2026-10-08 | ✅ Entregue¹ | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
-| 07 | SLA de Latência | — | ⏳ Pendente | — |
+| 07 | SLA de Latência | 2026-10-08 | ✅ Entregue¹ | [07-sla-latencia.md](07-sla-latencia.md) |
 | 08 | Painel de Assertividade | — | ⏳ Pendente | — |
 | 09 | CPF/Matrícula | — | ⏳ Pendente | — |
 | 10 | SLA Pré-processamento | — | ⏳ Pendente | — |
