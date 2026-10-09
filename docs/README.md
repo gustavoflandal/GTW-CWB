@@ -17,7 +17,7 @@ Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha 
 
 Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pelo GitHub):
 
-➡️ **[`arquitetura-sistema.md`](arquitetura-sistema.md)** — camadas, módulos PoC, jobs Quartz, schema do banco e módulos legados.
+➡️ **[`arquitetura-sistema.md`](diagrama-arquitetura/arquitetura-sistema.md)** — camadas, módulos PoC, jobs Quartz, schema do banco e módulos legados.
 
 ## Índice
 | Documento | Conteúdo |
