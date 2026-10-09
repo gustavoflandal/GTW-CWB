@@ -32,10 +32,16 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 ⁴ Migração `20261008_lotes_kpis.sql` pendente de execução manual (lote_infracao + kpi_config).  
 ⁵ Migração `20261008_disponibilidade_incidentes.sql` pendente de execução manual (disponibilidade + incidentes).
 
-## Referências cruzadas
+## Documentos de apoio
 
 - **Análise de aderência (fonte primária):** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — status de cada requisito TR com links para artefatos de resolução
+- **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (39% → 62%)
+- **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
+- **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 117 testes consolidados em trilha sequencial
 - **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste
-- Testes manuais: [`docs/testes/`](../testes/README.md)
+
+## Referências
+
+- Testes individuais detalhados: [`docs/testes/`](../testes/README.md)
 - Planos de implementação: [`docs/planos-salvador/`](../planos-salvador/)
 - Migrações de banco: [`docs/banco-de-dados/migracoes/`](../banco-de-dados/migracoes/)
