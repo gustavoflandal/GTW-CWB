@@ -43,6 +43,9 @@ src/test/ui-tests/test-results/
 # ffmpeg.exe excede o limite de 100MB do GitHub
 ffmpeg/ffmpeg.exe
 
+# Setup local (JDK, Maven, Tomcat — 3GB+)
+.setup-gtw/
+
 # Configuracoes locais com credenciais (usar os .example como modelo)
 src/main/webapp/WEB-INF/muralha-digital-config.xml
 src/main/webapp/WEB-INF/confGTW.xml
