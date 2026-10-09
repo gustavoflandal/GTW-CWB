@@ -19,10 +19,14 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 11 | Exportação Padronizada | 2026-10-08 | ✅ Entregue² | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
 | 12 | Retenção de Dados | 2026-10-08 | ✅ Entregue³ | [12-retencao-dados.md](12-retencao-dados.md) |
 | 13 | Anonimização de Placas (LGPD) | 2026-10-08 | ✅ Entregue³ | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 14 | Gestão de Lotes | 2026-10-08 | ✅ Entregue⁴ | [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 15 | KPIs Configuráveis | 2026-10-08 | ✅ Entregue⁴ | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 16 | Exportação GIS | 2026-10-08 | ✅ Entregue | [16-exportacao-gis.md](16-exportacao-gis.md) |
 
 ¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
 ² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).  
-³ Migração `20261008_retencao_anonimizacao.sql` pendente de execução manual (expurgo_log + view anonimizada).
+³ Migração `20261008_retencao_anonimizacao.sql` pendente de execução manual (expurgo_log + view anonimizada).  
+⁴ Migração `20261008_lotes_kpis.sql` pendente de execução manual (lote_infracao + kpi_config).
 
 ## Referências cruzadas
 
