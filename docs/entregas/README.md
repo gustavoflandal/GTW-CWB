@@ -10,7 +10,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 02 | Hash SHA-256 de Integridade | 2026-10-08 | ✅ Entregue | [02-sha256-integridade.md](02-sha256-integridade.md) |
 | 03 | Política de Senhas | 2026-10-08 | ✅ Entregue¹ | [03-politica-senhas.md](03-politica-senhas.md) |
 | 04 | MFA/TOTP | 2026-10-08 | ✅ Entregue¹ | [04-mfa-totp.md](04-mfa-totp.md) |
-| 05 | Dupla Análise | — | ⏳ Pendente | — |
+| 05 | Dupla Análise | 2026-10-08 | ✅ Entregue¹ | [05-dupla-analise.md](05-dupla-analise.md) |
 | 06 | Obliteração de Imagens | — | ⏳ Pendente | — |
 | 07 | SLA de Latência | — | ⏳ Pendente | — |
 | 08 | Painel de Assertividade | — | ⏳ Pendente | — |
