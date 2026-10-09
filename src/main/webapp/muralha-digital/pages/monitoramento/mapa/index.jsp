@@ -7,6 +7,10 @@
   <div class="d-flex align-items-center mb-3 gap-2 flex-wrap">
     <h4 class="mb-0"><i class="bi bi-map me-2"></i>Mapa de Equipamentos</h4>
     <div class="ms-auto d-flex gap-2">
+      <div class="form-check form-switch d-flex align-items-center me-2">
+        <input class="form-check-input" type="checkbox" id="chkIncidentes" checked>
+        <label class="form-check-label ms-1" for="chkIncidentes">Incidentes</label>
+      </div>
       <a href="<%= request.getContextPath() %>/MuralhaDigital/Gis?formato=geojson"
          class="btn btn-sm btn-outline-primary">
         <i class="bi bi-download me-1"></i>GeoJSON
@@ -62,4 +66,44 @@ fetch(ctx + '/MuralhaDigital/Gis?formato=geojson&inline=1')
   .catch(function(err) {
     Swal.fire('Erro', 'Falha ao carregar dados GIS: ' + err.message, 'error');
   });
+
+var incidentesLayer = null;
+var coresIncidente = {
+  ACCIDENT: '#dc3545', JAM: '#fd7e14', HAZARD: '#ffc107', ALERT: '#17a2b8'
+};
+
+function carregarIncidentes() {
+  if (!document.getElementById('chkIncidentes').checked) {
+    if (incidentesLayer) { map.removeLayer(incidentesLayer); incidentesLayer = null; }
+    return;
+  }
+  fetch(ctx + '/MuralhaDigital/Incidente?acao=geojson')
+    .then(function(r) { return r.json(); })
+    .then(function(gj) {
+      if (incidentesLayer) map.removeLayer(incidentesLayer);
+      if (!gj.features || gj.features.length === 0) return;
+      incidentesLayer = L.geoJSON(gj, {
+        pointToLayer: function(feature, latlng) {
+          var cor = coresIncidente[feature.properties.tipo] || '#6c757d';
+          return L.circleMarker(latlng, {
+            radius: 8, fillColor: cor, color: '#fff',
+            weight: 1.5, opacity: 0.9, fillOpacity: 0.75
+          });
+        },
+        onEachFeature: function(feature, layer) {
+          var p = feature.properties;
+          layer.bindPopup(
+            '<strong>' + p.tipo + '</strong><br>' +
+            (p.desc || '') + '<br>' +
+            'Severidade: ' + p.sev + '<br>' +
+            '<small>' + p.dt + '</small>'
+          );
+        }
+      }).addTo(map);
+    });
+}
+
+document.getElementById('chkIncidentes').addEventListener('change', carregarIncidentes);
+carregarIncidentes();
+setInterval(carregarIncidentes, 300000);
 </script>
