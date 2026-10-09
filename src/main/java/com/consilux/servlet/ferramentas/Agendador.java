@@ -115,6 +115,9 @@ public class Agendador extends HttpServlet {
 	public static final String GRUPO_MONITORAMENTO = "Monitoramento";
 	public static final String JOB_SLA_LATENCIA = "Monitora SLA de Latência";
 	public static final String JOB_SLA_PREPROC = "Monitora SLA Pré-processamento 72h";
+
+	public static final String GRUPO_RETENCAO = "Retencao";
+	public static final String JOB_RETENCAO = "Verifica Retenção de Dados";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -176,6 +179,7 @@ public class Agendador extends HttpServlet {
 			reajustaJobSha256Imagem();
 			reajustaJobSlaLatencia();
 			reajustaJobSlaPreprocessamento();
+			reajustaJobRetencao();
 
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -879,6 +883,21 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job SLA Pré-processamento agendada a cada 60 minutos.");
+		}
+	}
+
+	private static void reajustaJobRetencao() throws SchedulerException {
+		if (!possuiJob(GRUPO_RETENCAO, JOB_RETENCAO)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.retencao.RetencaoJob.class)
+					.withIdentity(JOB_RETENCAO, GRUPO_RETENCAO)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_RETENCAO, GRUPO_RETENCAO)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1440))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Retenção de Dados agendada a cada 24 horas.");
 		}
 	}
 
