@@ -25,6 +25,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 17 | Time-lapse de Passagens | 2026-10-08 | ✅ Entregue | [17-timelapse.md](17-timelapse.md) |
 | 18 | Disponibilidade dos Equipamentos | 2026-10-08 | ✅ Entregue | [18-disponibilidade.md](18-disponibilidade.md) |
 | 19 | Sensores Externos (Waze/SAMU) | 2026-10-08 | ✅ Entregue | [19-sensores-externos.md](19-sensores-externos.md) |
+| 20 | Registro dos Modulos no Menu | 2026-10-09 | ✅ Entregue | [20-menu-modulos.md](20-menu-modulos.md) |
 
 > ✅ Todas as 10 migrações SQL executadas em 2026-10-09 (ver [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md)).
 
