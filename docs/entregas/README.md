@@ -26,18 +26,18 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 18 | Disponibilidade dos Equipamentos | 2026-10-08 | ✅ Entregue⁵ | [18-disponibilidade.md](18-disponibilidade.md) |
 | 19 | Sensores Externos (Waze/SAMU) | 2026-10-08 | ✅ Entregue⁵ | [19-sensores-externos.md](19-sensores-externos.md) |
 
-¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
-² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).  
-³ Migração `20261008_retencao_anonimizacao.sql` pendente de execução manual (expurgo_log + view anonimizada).  
-⁴ Migração `20261008_lotes_kpis.sql` pendente de execução manual (lote_infracao + kpi_config).  
-⁵ Migração `20261008_disponibilidade_incidentes.sql` pendente de execução manual (disponibilidade + incidentes).
+¹ ✅ Migração SQL do Plano 03 executada em 2026-10-09.  
+² ✅ Migração `20261008_complementar.sql` executada em 2026-10-09.  
+³ ✅ Migração `20261008_retencao_anonimizacao.sql` executada em 2026-10-09.  
+⁴ ✅ Migração `20261008_lotes_kpis.sql` executada em 2026-10-09.  
+⁵ ✅ Migração `20261008_disponibilidade_incidentes.sql` executada em 2026-10-09.
 
 ## Documentos de apoio
 
 - **Análise de aderência (fonte primária):** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — status de cada requisito TR com links para artefatos de resolução
 - **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (39% → 62%)
 - **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
-- **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 117 testes consolidados em trilha sequencial
+- **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 121 testes consolidados em trilha sequencial (13/121 aceitos)
 - **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste
 
 ## Referências
