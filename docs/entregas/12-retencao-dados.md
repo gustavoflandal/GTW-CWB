@@ -7,9 +7,9 @@
 
 Política configurável de retenção de dados com job Quartz para verificação periódica, painel administrativo e log de execuções.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.10 — Política de retenção e expurgo de dados: configuração do período de retenção, estimativa de registros elegíveis, job automatizado com log de execução.
+- Plano [`12-retencao-dados.md`](../planos-salvador/12-retencao-dados.md) — Política de Retenção de Dados
 
 ## Arquivos produzidos
 

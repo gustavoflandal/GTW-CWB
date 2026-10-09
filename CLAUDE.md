@@ -22,5 +22,9 @@ Sistema legado Java/JSP (Tomcat, SQL Server) da Consilux: **GTW clássico** + **
 - Legado (só correções pontuais): `com.consilux.*`, `webapp/{cadastro,processo,relatorio,…}`, `gxt/`, `GtwMenu/`, `GtwWidgets/` (saída GWT compilada).
 - Índices: `docs/referencia/` (servlets, módulos, telas, pacotes, menus); banco: `docs/banco-de-dados/`.
 
+## Documentação de entregas
+- Cada entrega em `docs/entregas/` deve ter seção **"## Origem"** apontando para o plano correspondente em `docs/planos-salvador/` (link relativo).
+- **Nunca inventar referências** a documentos que não existem no repositório (ex.: §5.2.10 de um TR inexistente). Referenciar apenas arquivos reais.
+
 ## Git
 Repositório do projeto = esta pasta (`origin` → github.com/gustavoflandal/GTW-CWB, branch `main`). O push é bloqueado pelo secret scanning se houver segredo — não usar bypass. Commits em português, imperativo.

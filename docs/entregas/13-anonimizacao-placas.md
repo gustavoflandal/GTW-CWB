@@ -7,9 +7,9 @@
 
 View SQL para anonimização de placas veiculares e tela de consulta com toggle de anonimização, em conformidade com a LGPD.
 
-## Requisito do TR atendido
+## Origem
 
-- §5.2.11 — Anonimização de dados pessoais (LGPD): mascaramento de placas veiculares em consultas, view dedicada com lógica de ofuscação, controle de exibição por configuração.
+- Plano [`13-anonimizacao-placas.md`](../planos-salvador/13-anonimizacao-placas.md) — Anonimização de Placas (View LGPD)
 
 ## Arquivos produzidos
 
