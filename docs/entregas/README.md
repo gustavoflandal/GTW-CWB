@@ -17,9 +17,12 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 09 | CPF/Matrícula | 2026-10-08 | ✅ Entregue² | [09-cpf-matricula.md](09-cpf-matricula.md) |
 | 10 | SLA Pré-processamento | 2026-10-08 | ✅ Entregue² | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
 | 11 | Exportação Padronizada | 2026-10-08 | ✅ Entregue² | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
+| 12 | Retenção de Dados | 2026-10-08 | ✅ Entregue³ | [12-retencao-dados.md](12-retencao-dados.md) |
+| 13 | Anonimização de Placas (LGPD) | 2026-10-08 | ✅ Entregue³ | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 
 ¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
-² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).
+² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).  
+³ Migração `20261008_retencao_anonimizacao.sql` pendente de execução manual (expurgo_log + view anonimizada).
 
 ## Referências cruzadas
 
