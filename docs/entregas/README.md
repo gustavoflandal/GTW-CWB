@@ -31,7 +31,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 
 ## Documentos de apoio
 
-- **Diagrama de arquitetura:** [`arquitetura-sistema.md`](../arquitetura-sistema.md) — camadas, módulos PoC, jobs Quartz, schema ER e módulos legados (Mermaid)
+- **Diagrama de arquitetura:** [`arquitetura-sistema.md`](../diagrama-arquitetura/arquitetura-sistema.md) — camadas, módulos PoC, jobs Quartz, schema ER e módulos legados (Mermaid)
 - **Análise de aderência (fonte primária):** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — status de cada requisito TR com links para artefatos de resolução
 - **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (39% → 62%)
 - **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
