@@ -10,6 +10,8 @@ Player de time-lapse que exibe sequencia animada de imagens de passagens de um m
 ## Origem
 
 - Plano [`17-timelapse.md`](../planos-salvador/17-timelapse.md) — Time-lapse de Passagens por Equipamento
+- **Requisitos TR:** §5.2.4.1–2 (interface de análise de imagens em alta resolução), §5.7.7 (vídeos operacionais time-lapse)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2 e §7
 
 ## Arquivos produzidos
 

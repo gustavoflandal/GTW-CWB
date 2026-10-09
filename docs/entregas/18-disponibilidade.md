@@ -10,6 +10,8 @@ Monitoramento automatico da disponibilidade dos equipamentos de captura, com det
 ## Origem
 
 - Plano [`18-disponibilidade.md`](../planos-salvador/18-disponibilidade.md) — Auditoria de Disponibilidade dos Equipamentos
+- **Requisitos TR:** §5.2.7.1–3 (telemetria operacional de equipamentos), §5.4.2.3.e (disponibilidade da solução), §5.8.2.1 (disponibilidade mínima 99,5%)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2, §4 e §8
 
 ## Arquivos produzidos
 

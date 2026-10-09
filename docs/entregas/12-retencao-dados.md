@@ -10,6 +10,8 @@ Política configurável de retenção de dados com job Quartz para verificação
 ## Origem
 
 - Plano [`12-retencao-dados.md`](../planos-salvador/12-retencao-dados.md) — Política de Retenção de Dados
+- **Requisitos TR:** §5.1.8 (retenção de logs durante vigência), §5.5.4.6 (retenção por 5 anos pós-contrato), §5.7.5.3 (retenção do histórico LAP)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1, §5 e §7
 
 ## Arquivos produzidos
 

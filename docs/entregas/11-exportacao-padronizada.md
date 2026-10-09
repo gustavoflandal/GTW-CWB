@@ -10,6 +10,8 @@ Exportação de passagens em CSV, XLS e PDF com filtros por período, local e st
 ## Origem
 
 - Plano [`11-exportacao-padronizada.md`](../planos-salvador/11-exportacao-padronizada.md) — Exportação Padronizada (PDF/CSV/XLS)
+- **Requisitos TR:** §5.1.10 (exportação de logs), §5.2.8.3 (relatórios com exportação PDF/CSV/XLS)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1 e §2
 
 ## Arquivos produzidos
 

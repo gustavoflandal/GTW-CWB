@@ -10,6 +10,8 @@ Agrupamento de infrações pré-aprovadas em lotes para encaminhamento ao DETRAN
 ## Origem
 
 - Plano [`14-gestao-lotes.md`](../planos-salvador/14-gestao-lotes.md) — Gestão de Lotes de Infrações
+- **Requisitos TR:** §5.2.5.1–5 (gestão de lotes, validação, bloqueio de envio sem validação)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
 
 ## Arquivos produzidos
 

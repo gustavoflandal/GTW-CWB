@@ -5,6 +5,12 @@
 
 ---
 
+## Origem
+
+- Plano [`07-sla-latencia.md`](../planos-salvador/07-sla-latencia.md) — SLA de Latência
+- **Requisitos TR:** §5.2.7.1–3 (telemetria operacional, monitoramento de equipamentos), §5.6.2.3 (tempo máximo 4s para eventos críticos), §5.7.9.1 (latência LAP→alerta)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2, §6 e §7
+
 ## Escopo
 
 Monitora a latência entre o momento de passagem do veículo (`data`) e a importação no servidor (`data_importado`). A latência é calculada em runtime via `DATEDIFF(MILLISECOND, data, data_importado)` — sem coluna adicional na tabela principal. Um job Quartz executa a cada 5 minutos, calcula o percentil 95 e registra alerta em `muralha.alerta_sla` com flag de violação quando P95 > threshold. O painel exibe indicadores em tempo real e histórico com gráfico.

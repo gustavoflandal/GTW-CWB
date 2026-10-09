@@ -5,6 +5,12 @@
 
 ---
 
+## Origem
+
+- Plano [`06-obliteracao-imagens.md`](../planos-salvador/06-obliteracao-imagens.md) — Obliteração de Imagens (LGPD)
+- **Requisitos TR:** §5.2.4.3–4 (obliteração automática e manual de imagens, reversão com justificativa)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
+
 ## Escopo
 
 Permite a obliteração manual de áreas sensíveis (rostos, ocupantes) em imagens de infrações, em conformidade com a LGPD. O arquivo original nunca é modificado; uma cópia com retângulos pretos é armazenada em tabela complementar separada (`muralha.vtr_imagem_obliterada`). A reversão exige justificativa e gera log de auditoria.

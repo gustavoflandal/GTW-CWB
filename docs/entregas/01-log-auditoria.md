@@ -6,6 +6,12 @@
 
 ---
 
+## Origem
+
+- Plano [`01-log-auditoria.md`](../planos-salvador/01-log-auditoria.md) — Log de Auditoria Centralizado
+- **Requisitos TR:** §5.1.3 (rastreabilidade), §5.1.7 (log automático inviolável), §5.1.9 (conteúdo mínimo do log), §5.1.10 (consulta com filtros e exportação), §5.4.7.1–7 (repositório central de logs)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1 e §4
+
 ## O que foi entregue
 
 ### Banco de dados

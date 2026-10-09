@@ -10,7 +10,8 @@ Tela administrativa para gerenciar CPF e matrícula dos usuários do sistema, co
 ## Origem
 
 - Plano [`09-cpf-matricula.md`](../planos-salvador/09-cpf-matricula.md) — CPF e Matrícula no Cadastro de Usuários
-- Checklist pré-PoC §5.1 em [`00-gaps-criticos.md`](../planos-salvador/00-gaps-criticos.md): "Login com usuário vinculado a CPF ou matrícula"
+- **Requisitos TR:** §5.1.5.a (identificação vinculada a CPF/matrícula)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
 
 ## Arquivos produzidos
 

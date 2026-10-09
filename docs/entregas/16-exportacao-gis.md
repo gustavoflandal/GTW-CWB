@@ -10,6 +10,8 @@ Exportação da localização dos equipamentos de monitoramento em GeoJSON e KML
 ## Origem
 
 - Plano [`16-exportacao-gis.md`](../planos-salvador/16-exportacao-gis.md) — Exportação GIS (GeoJSON/KML)
+- **Requisitos TR:** §5.4.4.1–4 (análise espacial e exportação GIS), §5.3.7.7 (mapas, gráficos, indicadores visuais)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §3 e §4
 
 ## Arquivos produzidos
 

@@ -10,6 +10,8 @@ Monitoramento do prazo de 72 horas entre a captura de uma passagem e sua pré-cl
 ## Origem
 
 - Plano [`10-sla-preprocessamento.md`](../planos-salvador/10-sla-preprocessamento.md) — SLA de Pré-processamento 72h
+- **Requisitos TR:** §5.5.2.1 (prazo máximo 72h por lote de pré-processamento)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §5
 
 ## Arquivos produzidos
 

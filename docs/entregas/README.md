@@ -34,6 +34,8 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 
 ## Referências cruzadas
 
+- **Análise de aderência (fonte primária):** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — status de cada requisito TR com links para artefatos de resolução
+- **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste
 - Testes manuais: [`docs/testes/`](../testes/README.md)
 - Planos de implementação: [`docs/planos-salvador/`](../planos-salvador/)
 - Migrações de banco: [`docs/banco-de-dados/migracoes/`](../banco-de-dados/migracoes/)

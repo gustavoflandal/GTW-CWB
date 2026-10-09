@@ -9,7 +9,9 @@ Importacao periodica de incidentes de trafego de fontes externas (Waze for Citie
 
 ## Origem
 
-- Plano [`19-sensores-externos.md`](../planos-salvador/19-sensores-externos.md) — Integracao com Sensores Externos (Waze/SAMU)
+- Plano [`19-sensores-externos.md`](../planos-salvador/19-sensores-externos.md) — Integração com Sensores Externos (Waze/SAMU)
+- **Requisitos TR:** §5.3.7.1–3 (integração com sensores externos e Waze)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §3
 
 ## Arquivos produzidos
 
