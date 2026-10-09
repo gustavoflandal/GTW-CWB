@@ -6,6 +6,12 @@
 
 ---
 
+## Origem
+
+- Plano [`02-sha256-integridade.md`](../planos-salvador/02-sha256-integridade.md) — Hash SHA-256 de Integridade
+- **Requisitos TR:** §5.2.1.2 (verificação de integridade SHA-256 na recepção)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
+
 ## O que foi entregue
 
 ### Banco de dados

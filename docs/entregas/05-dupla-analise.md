@@ -6,6 +6,12 @@
 
 ---
 
+## Origem
+
+- Plano [`05-dupla-analise.md`](../planos-salvador/05-dupla-analise.md) — Dupla Análise Independente
+- **Requisitos TR:** §5.2.3.1–5 (dupla análise obrigatória, desempate, segregação de operadores), §5.5.1.2.g (dupla análise no pré-processamento)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2 e §5
+
 ## O que foi entregue
 
 ### Banco de dados

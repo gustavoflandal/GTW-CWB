@@ -6,6 +6,12 @@
 
 ---
 
+## Origem
+
+- Plano [`03-politica-senhas.md`](../planos-salvador/03-politica-senhas.md) — Política de Senhas
+- **Requisitos TR:** §5.1.5.c (política parametrizável de senhas), §5.1.5.d (encerramento de sessão por inatividade)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
+
 ## O que foi entregue
 
 ### Banco de dados

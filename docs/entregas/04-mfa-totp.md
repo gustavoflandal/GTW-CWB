@@ -6,6 +6,12 @@
 
 ---
 
+## Origem
+
+- Plano [`04-mfa-totp.md`](../planos-salvador/04-mfa-totp.md) — MFA/TOTP
+- **Requisitos TR:** §5.1.5.e (autenticação multifator nativa)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
+
 ## O que foi entregue
 
 ### Banco de dados

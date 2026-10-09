@@ -10,6 +10,8 @@ View SQL para anonimização de placas veiculares e tela de consulta com toggle 
 ## Origem
 
 - Plano [`13-anonimizacao-placas.md`](../planos-salvador/13-anonimizacao-placas.md) — Anonimização de Placas (View LGPD)
+- **Requisitos TR:** §5.4.1.2.g (anonimização LGPD), §5.7.8 (anonimização de placas para fins estatísticos)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §4 e §7
 
 ## Arquivos produzidos
 

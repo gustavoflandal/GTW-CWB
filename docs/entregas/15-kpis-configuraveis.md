@@ -10,6 +10,8 @@ Dashboard de KPIs configuráveis com thresholds de alerta personalizáveis, CRUD
 ## Origem
 
 - Plano [`15-kpis-configuráveis.md`](../planos-salvador/15-kpis-configuráveis.md) — KPIs Configuráveis
+- **Requisitos TR:** §5.2.8.4 (dashboards analíticos em tempo real), §5.4.2.1–6 (dashboards interativos), §5.4.6.1–3 (indicadores parametrizáveis com metas e alertas)
+- **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2 e §4
 
 ## Arquivos produzidos
 
