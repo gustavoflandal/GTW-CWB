@@ -2,6 +2,7 @@
 
 Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–19.
 
+> ✅ **Todas as 10 migrações foram executadas com sucesso em 2026-10-09** via `sqlcmd` no banco GTW_MURALHA_DEV.  
 > **Atenção:** todas as migrações usam `IF NOT EXISTS` / `IF COL_LENGTH(...) IS NULL` — podem ser reexecutadas com segurança (idempotentes).  
 > **Nenhuma migração faz ALTER TABLE** em tabelas existentes do sistema legado.
 
@@ -11,18 +12,18 @@ Relação completa de todas as ações manuais necessárias no banco `GTW_MURALH
 
 Executar na ordem abaixo. Cada script é independente, mas a ordem respeita dependências lógicas.
 
-| # | Script | Planos | Objetos criados | Pré-requisito |
+| # | Script | Planos | Objetos criados | Status |
 |---|---|---|---|---|
-| 1 | [`20261008_log_auditoria.sql`](../banco-de-dados/migracoes/20261008_log_auditoria.sql) | 01 | Tabela `dbo.sis_log_auditoria` + índices | — |
-| 2 | [`20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql) | 03 | Tabela `dbo.sis_senha_config` (8 parâmetros), colunas em `dbo.sis_usuario` | — |
-| 3 | [`20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql) | 04 | Colunas `totp_secret`, `totp_habilitado` em `dbo.sis_usuario` | #2 |
-| 4 | [`20261008_dupla_analise.sql`](../banco-de-dados/migracoes/20261008_dupla_analise.sql) | 05 | Tabela `muralha.infracao_analise` + constraint UNIQUE | — |
-| 5 | [`20261008_tabelas_complementares.sql`](../banco-de-dados/migracoes/20261008_tabelas_complementares.sql) | 02, 09, 11 | `muralha.vtr_imagem_complemento`, `dbo.sis_usuario_complemento` | — |
-| 6 | [`20261008_complementar.sql`](../banco-de-dados/migracoes/20261008_complementar.sql) | 05, 06, 07 | `muralha.vtr_status_analise`, `muralha.vtr_imagem_obliterada`, `muralha.infracao_imagem_obliteracao`, `muralha.alerta_sla`, config `sla_latencia_threshold_ms` | — |
-| 7 | [`20261008_sla_preproc.sql`](../banco-de-dados/migracoes/20261008_sla_preproc.sql) | 10 | Tabela `muralha.alerta_sla_preproc` | — |
-| 8 | [`20261008_retencao_anonimizacao.sql`](../banco-de-dados/migracoes/20261008_retencao_anonimizacao.sql) | 12, 13 | `muralha.expurgo_log`, VIEW `muralha.v_vtr_anonimizado`, config `retencao_anos`, `anonimizar_placa_padrao` | — |
-| 9 | [`20261008_lotes_kpis.sql`](../banco-de-dados/migracoes/20261008_lotes_kpis.sql) | 14, 15 | `muralha.lote_infracao`, `muralha.lote_infracao_item`, `muralha.kpi_config` (4 KPIs padrão) | — |
-| 10 | [`20261008_disponibilidade_incidentes.sql`](../banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql) | 18, 19 | `muralha.equipamento_disponibilidade`, `muralha.incidente_externo` + constraint UNIQUE, configs | — |
+| 1 | [`20261008_log_auditoria.sql`](../banco-de-dados/migracoes/20261008_log_auditoria.sql) | 01 | Tabela `dbo.sis_log_auditoria` + índices | ✅ Executado |
+| 2 | [`20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql) | 03 | Tabela `dbo.sis_senha_config` (9 parâmetros), colunas em `dbo.sis_usuario` | ✅ Executado |
+| 3 | [`20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql) | 04 | Colunas `totp_secret`, `totp_habilitado` em `dbo.sis_usuario` | ✅ Executado |
+| 4 | [`20261008_dupla_analise.sql`](../banco-de-dados/migracoes/20261008_dupla_analise.sql) | 05 | Tabela `muralha.infracao_analise` + constraint UNIQUE | ✅ Executado |
+| 5 | [`20261008_tabelas_complementares.sql`](../banco-de-dados/migracoes/20261008_tabelas_complementares.sql) | 02, 09, 11 | `muralha.vtr_imagem_complemento`, `dbo.sis_usuario_complemento` | ✅ Executado |
+| 6 | [`20261008_complementar.sql`](../banco-de-dados/migracoes/20261008_complementar.sql) | 05, 06, 07 | `muralha.vtr_status_analise`, `muralha.vtr_imagem_obliterada`, `muralha.infracao_imagem_obliteracao`, `muralha.alerta_sla`, config `sla_latencia_threshold_ms` | ✅ Executado |
+| 7 | [`20261008_sla_preproc.sql`](../banco-de-dados/migracoes/20261008_sla_preproc.sql) | 10 | Tabela `muralha.alerta_sla_preproc` | ✅ Executado |
+| 8 | [`20261008_retencao_anonimizacao.sql`](../banco-de-dados/migracoes/20261008_retencao_anonimizacao.sql) | 12, 13 | `muralha.expurgo_log`, VIEW `muralha.vw_passagem_anonimizada`, config `retencao_anos`, `anonimizar_placa_padrao` | ✅ Executado |
+| 9 | [`20261008_lotes_kpis.sql`](../banco-de-dados/migracoes/20261008_lotes_kpis.sql) | 14, 15 | `muralha.lote_infracao`, `muralha.lote_infracao_item`, `muralha.kpi_config` (4 KPIs padrão) | ✅ Executado |
+| 10 | [`20261008_disponibilidade_incidentes.sql`](../banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql) | 18, 19 | `muralha.equipamento_disponibilidade`, `muralha.incidente_externo` + constraint UNIQUE, configs | ✅ Executado |
 
 ### Comando de execução
 
@@ -116,7 +117,9 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 
 ## 6. Verificação Pós-Migração
 
-Após executar todos os scripts, validar com:
+> ✅ Verificação realizada em 2026-10-09. Todos os objetos confirmados: 16 tabelas, 1 view, 6 configs, 4 KPIs.
+
+Validar com:
 
 ```sql
 -- Tabelas criadas (esperado: 14 resultados)
@@ -134,7 +137,7 @@ ORDER BY TABLE_SCHEMA, TABLE_NAME;
 
 -- View criada
 SELECT TABLE_SCHEMA + '.' + TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-WHERE TABLE_NAME = 'v_vtr_anonimizado';
+WHERE TABLE_NAME = 'vw_passagem_anonimizada';
 
 -- Configs inseridas
 SELECT chave, valor FROM muralha.config_chave_valor
