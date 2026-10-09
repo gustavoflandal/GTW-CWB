@@ -16,6 +16,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 08 | Painel de Assertividade | 2026-10-08 | ✅ Entregue² | [08-painel-assertividade.md](08-painel-assertividade.md) |
 | 09 | CPF/Matrícula | 2026-10-08 | ✅ Entregue² | [09-cpf-matricula.md](09-cpf-matricula.md) |
 | 10 | SLA Pré-processamento | 2026-10-08 | ✅ Entregue² | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
+| 11 | Exportação Padronizada | 2026-10-08 | ✅ Entregue² | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
 
 ¹ Migração SQL do Plano 03 pendente de execução manual no banco.  
 ² Migração `20261008_complementar.sql` pendente de execução manual (tabelas complementares — sem ALTER TABLE).
