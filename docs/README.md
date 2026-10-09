@@ -13,6 +13,12 @@ Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha 
 | Vai mexer em banco | `banco-de-dados/README.md` → `agentes/agente-banco-de-dados.md` |
 | Subagent | **`agentes/AGENTS.md`** e o guia do seu papel |
 
+## Diagrama de Arquitetura
+
+Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pelo GitHub):
+
+➡️ **[`arquitetura-sistema.md`](arquitetura-sistema.md)** — camadas, módulos PoC, jobs Quartz, schema do banco e módulos legados.
+
 ## Índice
 | Documento | Conteúdo |
 |---|---|
