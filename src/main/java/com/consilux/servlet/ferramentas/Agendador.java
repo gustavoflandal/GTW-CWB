@@ -114,6 +114,7 @@ public class Agendador extends HttpServlet {
 
 	public static final String GRUPO_MONITORAMENTO = "Monitoramento";
 	public static final String JOB_SLA_LATENCIA = "Monitora SLA de Latência";
+	public static final String JOB_SLA_PREPROC = "Monitora SLA Pré-processamento 72h";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -174,7 +175,8 @@ public class Agendador extends HttpServlet {
 			reajustaJobEnviaSmsOcorrenciaMuralha();
 			reajustaJobSha256Imagem();
 			reajustaJobSlaLatencia();
-			
+			reajustaJobSlaPreprocessamento();
+
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
 				reajustaJobExportaMovimentoValidado();
@@ -862,6 +864,21 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job SLA Latência agendada a cada 5 minutos.");
+		}
+	}
+
+	private static void reajustaJobSlaPreprocessamento() throws SchedulerException {
+		if (!possuiJob(GRUPO_MONITORAMENTO, JOB_SLA_PREPROC)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.sla.SlaPreprocessamentoJob.class)
+					.withIdentity(JOB_SLA_PREPROC, GRUPO_MONITORAMENTO)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_SLA_PREPROC, GRUPO_MONITORAMENTO)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(60))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job SLA Pré-processamento agendada a cada 60 minutos.");
 		}
 	}
 
