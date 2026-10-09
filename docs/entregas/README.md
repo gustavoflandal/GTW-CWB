@@ -11,7 +11,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 03 | Política de Senhas | 2026-10-08 | ✅ Entregue¹ | [03-politica-senhas.md](03-politica-senhas.md) |
 | 04 | MFA/TOTP | 2026-10-08 | ✅ Entregue¹ | [04-mfa-totp.md](04-mfa-totp.md) |
 | 05 | Dupla Análise | 2026-10-08 | ✅ Entregue¹ | [05-dupla-analise.md](05-dupla-analise.md) |
-| 06 | Obliteração de Imagens | — | ⏳ Pendente | — |
+| 06 | Obliteração de Imagens | 2026-10-08 | ✅ Entregue¹ | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
 | 07 | SLA de Latência | — | ⏳ Pendente | — |
 | 08 | Painel de Assertividade | — | ⏳ Pendente | — |
 | 09 | CPF/Matrícula | — | ⏳ Pendente | — |

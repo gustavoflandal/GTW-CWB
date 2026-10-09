@@ -29,6 +29,18 @@
           <i class="bi bi-arrow-counterclockwise"></i> Resetar
         </button>
       </div>
+      <div class="mt-2 border-top pt-2 d-flex gap-2 flex-wrap">
+        <button class="btn btn-sm btn-warning" onclick="iniciarObliteracao('imgInfracao')">
+          <i class="bi bi-square me-1"></i>Iniciar Obliteração
+        </button>
+        <button class="btn btn-sm btn-danger"
+                onclick="confirmarObliteracao(infracaoAtual && infracaoAtual.idImagem)">
+          <i class="bi bi-eye-slash me-1"></i>Aplicar
+        </button>
+        <button class="btn btn-sm btn-outline-secondary" onclick="cancelarObliteracao()">
+          Cancelar
+        </button>
+      </div>
     </div>
 
     <!-- Coluna de dados e classificação -->
@@ -78,4 +90,5 @@
 </div>
 
 <script src="/muralha-digital/assets/js/processamento/dupla-analise.js"></script>
+<script src="/muralha-digital/assets/js/processamento/obliteracao.js"></script>
 <%@ include file="/includes/rodape.jsp" %>

@@ -20,7 +20,10 @@ public final class InfracaoAnaliseDAO {
     public static JsonObject obterProxima(int idUsuario) throws Exception {
         String sql =
             "SELECT TOP 1 vtr.id, vtr.placa, vtr.data, vtr.status_analise, " +
-            "  vtr.id_local, vtr.id_pista " +
+            "  vtr.id_local, vtr.id_pista, " +
+            "  (SELECT TOP 1 vi.id FROM muralha.veiculo_tempo_real_imagem vi " +
+            "   WHERE vi.id_veiculo_tempo_real = vtr.id AND vi.obliterada = 0 " +
+            "   ORDER BY vi.id DESC) AS id_imagem " +
             "FROM muralha.veiculo_tempo_real vtr " +
             "WHERE vtr.status_analise IN ('AGUARDANDO_ANALISE','PRIMEIRA_ANALISE','DESEMPATE') " +
             "  AND vtr.id NOT IN (" +
@@ -42,6 +45,8 @@ public final class InfracaoAnaliseDAO {
                         r.addProperty("statusAnalise", rs.getString("status_analise"));
                         r.addProperty("idLocal",     rs.getInt("id_local"));
                         r.addProperty("pista",       rs.getInt("id_pista"));
+                        long idImg = rs.getLong("id_imagem");
+                        if (!rs.wasNull()) r.addProperty("idImagem", idImg);
                         return r;
                     }
                     return null;

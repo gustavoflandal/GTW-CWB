@@ -1,4 +1,6 @@
 -- Plano 03: Política de Senhas
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 -- ROLLBACK:
 -- DROP TABLE dbo.sis_senha_config;
 -- ALTER TABLE dbo.sis_usuario DROP COLUMN senha_hash, senha_historico, tentativas_invalidas,

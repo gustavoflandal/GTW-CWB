@@ -1,4 +1,6 @@
 -- Plano 05: Dupla Análise Independente de Infrações
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 -- ROLLBACK:
 -- DROP TABLE muralha.infracao_analise;
 -- ALTER TABLE muralha.veiculo_tempo_real DROP COLUMN status_analise;

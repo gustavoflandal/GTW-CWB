@@ -1,4 +1,6 @@
 -- Plano 04: MFA/TOTP
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 -- ROLLBACK:
 -- ALTER TABLE dbo.sis_usuario DROP COLUMN totp_secret, totp_habilitado;
 -- DELETE FROM dbo.sis_senha_config WHERE chave = 'mfa_obrigatorio';
