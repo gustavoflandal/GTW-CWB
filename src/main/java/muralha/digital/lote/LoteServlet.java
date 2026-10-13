@@ -6,7 +6,7 @@ import com.consilux.model.Acesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
-import muralha.digital.acessos.Usuario;
+import com.consilux.model.Usuario;
 import muralha.digital.auditoria.AuditoriaService;
 
 import javax.servlet.annotation.WebServlet;
@@ -107,7 +107,7 @@ public class LoteServlet extends HttpServlet {
             conn = Conexao.getConexao();
             String acao = req.getParameter("acao");
             Usuario usu = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-            int idUsuario = usu.getIdUsuario();
+            int idUsuario = usu.getId();
 
             if ("criar".equals(acao)) {
                 String codigo = "LOTE-" + LocalDateTime.now()
