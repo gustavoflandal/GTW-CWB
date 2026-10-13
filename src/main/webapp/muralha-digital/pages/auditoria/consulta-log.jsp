@@ -1,23 +1,11 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ include file="/muralha-digital/utils/credenciais/cabecalho_bootstrap_simples.jsp"%>
+<%@ page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ include file="/muralha-digital/utils/credenciais/cabecalho_bootstrap_simples.jsp" %>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Log de Auditoria</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-    <style>
-        .navbar { background-color: #0d75bf !important; }
-        .table th { white-space: nowrap; }
-        .table td { font-size: .85rem; }
-    </style>
-</head>
-<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+    .table th { white-space: nowrap; }
+    .table td { font-size: .85rem; }
+</style>
 
 <div class="container-fluid py-3">
     <h4 class="mb-3"><i class="bi bi-shield-lock me-2"></i>Log de Auditoria</h4>
@@ -27,15 +15,21 @@
             <div class="row g-2">
                 <div class="col-md-2">
                     <label class="form-label form-label-sm">Login</label>
-                    <input id="fLogin" class="form-control form-control-sm" placeholder="usuário">
+                    <select id="fLogin" class="form-select form-select-sm">
+                        <option value="">Todos</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label form-label-sm">Funcionalidade</label>
-                    <input id="fFunc" class="form-control form-control-sm">
+                    <select id="fFunc" class="form-select form-select-sm">
+                        <option value="">Todas</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label form-label-sm">Operação</label>
-                    <input id="fOper" class="form-control form-control-sm">
+                    <select id="fOper" class="form-select form-select-sm">
+                        <option value="">Todas</option>
+                    </select>
                 </div>
                 <div class="col-md-2">
                     <label class="form-label form-label-sm">De</label>
@@ -82,6 +76,4 @@
     <div id="paginacao" class="d-flex gap-2 mt-2"></div>
 </div>
 
-<script src="/muralha-digital/assets/js/auditoria/consulta-log.js"></script>
-</body>
-</html>
+<script src="/muralha-digital/assets/js/auditoria/consulta-log.js?v=2"></script>

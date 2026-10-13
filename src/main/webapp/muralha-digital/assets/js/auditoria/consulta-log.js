@@ -1,6 +1,34 @@
 let paginaAtual = 1;
 let ultimaResposta = [];
 
+$(function() {
+    carregarFiltros();
+});
+
+function carregarFiltros() {
+    $.getJSON('/MuralhaDigital/Auditoria', { acao: 'listarFiltros' })
+     .done(function(data) {
+        if (!data || !data.ok) { console.warn('listarFiltros: resposta inválida', data); return; }
+        preencherSelect('#fLogin', data.logins);
+        preencherSelect('#fFunc',  data.funcionalidades);
+        preencherSelect('#fOper',  data.operacoes);
+     })
+     .fail(function(jqXHR, status, err) {
+        console.error('Erro ao carregar filtros:', status, err);
+     });
+}
+
+function preencherSelect(seletor, valores) {
+    var sel = $(seletor);
+    var textoDefault = sel.find('option:first').text();
+    sel.empty().append('<option value="">' + textoDefault + '</option>');
+    if (valores) {
+        valores.forEach(function(v) {
+            sel.append('<option value="' + v + '">' + v + '</option>');
+        });
+    }
+}
+
 function buscar(pag) {
     paginaAtual = pag || 1;
     $.get('/MuralhaDigital/Auditoria', {

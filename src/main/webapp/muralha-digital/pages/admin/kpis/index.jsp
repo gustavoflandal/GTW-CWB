@@ -19,7 +19,7 @@
           <thead>
             <tr>
               <th>Ordem</th><th>Nome</th><th>Unidade</th>
-              <th>Thresh. OK</th><th>Thresh. Warn</th><th>Ativo</th><th></th>
+              <th>Limite Ideal</th><th>Limite Alerta</th><th>Exibição</th><th>Cor</th><th>Ativo</th><th></th>
             </tr>
           </thead>
           <tbody id="tblKpis"></tbody>
@@ -45,7 +45,7 @@
       <input id="kpiDescricao" class="form-control form-control-sm">
     </div>
     <div class="mb-2">
-      <label class="form-label small">SQL (deve retornar coluna "valor")</label>
+      <label class="form-label small">Consulta (deve retornar coluna "valor")</label>
       <textarea id="kpiSql" class="form-control form-control-sm font-monospace" rows="4"></textarea>
     </div>
     <div class="row mb-2">
@@ -60,13 +60,33 @@
     </div>
     <div class="row mb-2">
       <div class="col">
-        <label class="form-label small">Threshold OK</label>
+        <label class="form-label small">Limite Ideal</label>
         <input type="number" step="any" id="kpiThOk" class="form-control form-control-sm">
       </div>
       <div class="col">
-        <label class="form-label small">Threshold Warn</label>
+        <label class="form-label small">Limite Alerta</label>
         <input type="number" step="any" id="kpiThWarn" class="form-control form-control-sm">
       </div>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small">Exibição no Dashboard</label>
+      <select id="kpiTipoVisual" class="form-select form-select-sm">
+        <option value="card">Card (número grande)</option>
+        <option value="compacto">Compacto (em linha)</option>
+        <option value="medidor">Medidor (gauge)</option>
+        <option value="progresso">Barra de Progresso</option>
+      </select>
+    </div>
+    <div class="mb-2">
+      <label class="form-label small">Cor Personalizada</label>
+      <div class="d-flex align-items-center gap-2">
+        <input type="color" id="kpiCorValor" class="form-control form-control-sm form-control-color" value="#0d75bf" title="Cor do KPI" style="width:48px;height:34px">
+        <select id="kpiCorModo" class="form-select form-select-sm">
+          <option value="">Automática (baseada nos limites)</option>
+          <option value="fixa">Cor fixa escolhida</option>
+        </select>
+      </div>
+      <small class="text-muted">Automática: verde/amarelo/vermelho conforme os limites. Fixa: usa sempre a cor escolhida.</small>
     </div>
     <div class="mb-3 form-check">
       <input type="checkbox" class="form-check-input" id="kpiAtivo" checked>
@@ -79,6 +99,7 @@
 <script>
 var ctx = '<%= request.getContextPath() %>';
 var kpiData = [];
+var LABEL_VISUAL = {card:'Card',compacto:'Compacto',medidor:'Medidor',progresso:'Progresso'};
 
 async function carregar() {
   var r = await fetch(ctx + '/MuralhaDigital/Kpi?acao=listarConfig');
@@ -96,6 +117,10 @@ async function carregar() {
         '<td>' + (c.unidade || '') + '</td>' +
         '<td>' + c.thOk + '</td>' +
         '<td>' + c.thWarn + '</td>' +
+        '<td>' + (LABEL_VISUAL[c.tipoVisual] || 'Card') + '</td>' +
+        '<td>' + (c.corPersonalizada
+          ? '<span class="d-inline-block rounded-circle" style="width:16px;height:16px;background:' + c.corPersonalizada + '"></span> Fixa'
+          : '<span class="text-muted">Auto</span>') + '</td>' +
         '<td><span class="badge bg-' + (c.ativo ? 'success' : 'secondary') + '">' +
           (c.ativo ? 'Sim' : 'Não') + '</span></td>' +
         '<td><button class="btn btn-xs btn-outline-primary" onclick="abrirForm(' + idx + ')">' +
@@ -115,6 +140,9 @@ function abrirForm(idx) {
   document.getElementById('kpiOrdem').value = c ? c.ordem : 0;
   document.getElementById('kpiThOk').value = c ? c.thOk : '';
   document.getElementById('kpiThWarn').value = c ? c.thWarn : '';
+  document.getElementById('kpiTipoVisual').value = c ? (c.tipoVisual || 'card') : 'card';
+  document.getElementById('kpiCorModo').value = c && c.corPersonalizada ? 'fixa' : '';
+  document.getElementById('kpiCorValor').value = c && c.corPersonalizada ? c.corPersonalizada : '#0d75bf';
   document.getElementById('kpiAtivo').checked = c ? c.ativo : true;
   new bootstrap.Offcanvas(document.getElementById('ocKpi')).show();
 }
@@ -130,6 +158,8 @@ async function salvar() {
     ordem: document.getElementById('kpiOrdem').value,
     thOk: document.getElementById('kpiThOk').value,
     thWarn: document.getElementById('kpiThWarn').value,
+    tipoVisual: document.getElementById('kpiTipoVisual').value,
+    corPersonalizada: document.getElementById('kpiCorModo').value === 'fixa' ? document.getElementById('kpiCorValor').value : '',
     ativo: document.getElementById('kpiAtivo').checked
   });
   var r = await fetch(ctx + '/MuralhaDigital/Kpi', { method: 'POST', body: body });
