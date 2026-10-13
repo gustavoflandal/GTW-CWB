@@ -26,7 +26,9 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 	  	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 	  	<link rel="stylesheet" href="/muralha-digital/utils/credenciais/assets/css/muralha_abertura_bootstrap.css">
-	  
+	  	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+	  	<link rel="stylesheet" href="/muralha-digital/assets/css/modo-escuro-overrides.css">
+
   		<script type="text/javascript" src="/muralha-digital/assets/jquery/jquery-3.6.0.min.js"></script>
   		<script type="text/javascript" src="/muralha-digital/assets/bootstrap5/js/popper.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -34,7 +36,8 @@
     	<script type="text/javascript" src="/login/assets/js/login_logout.js"></script>
     	<script type="text/javascript" src="/muralha-digital/utils/credenciais/assets/js/notificacoes_nao_tratadas.js"></script>
     	
-<!--     	<script type="text/javascript" src="/muralha-digital/assets/js/modo-escuro.js"></script> -->
+    	<script type="text/javascript" src="/muralha-digital/assets/js/modo-escuro.js"></script>
+    	<script type="text/javascript" src="/muralha-digital/assets/js/ajuda-contexto.js"></script>
 	</head>
 	
 	<%
@@ -202,9 +205,18 @@
 				    </ul>
 				    <div class="pe-3 mb-2 mb-lg-0"><%@ include file="/muralha-digital/pages/pesquisa-rapida/dropdown-pesquisa-rapida.jsp" %></div>
 				    <div id="status_notificacoes" class="text-warning"></div>
-	      			
-				    			    
+
 			    	<ul class="navbar-nav ml-auto nav-flex-icons">
+			    		<li class="nav-item">
+			    			<a class="nav-link" id="btnAjuda" href="/muralha-digital/pages/ajuda/index.jsp" title="Ajuda" style="color:white;">
+			    				<i class="bi bi-question-circle"></i>
+			    			</a>
+			    		</li>
+			    		<li class="nav-item">
+			    			<button class="btn nav-link" id="btnTema" title="Modo Escuro" style="color:white;">
+			    				<i class="bi bi-moon-stars"></i>
+			    			</button>
+			    		</li>
 			      		
 		      		    <li class="nav-item dropdown">
 					        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:orange;">

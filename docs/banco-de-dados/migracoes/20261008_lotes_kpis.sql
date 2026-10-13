@@ -85,7 +85,7 @@ BEGIN
 
     ('Pré-aprovadas (7d)',
      'Passagens pré-aprovadas nos últimos 7 dias',
-     'SELECT CAST(COUNT(*) AS NUMERIC) AS valor FROM muralha.vtr_status_analise WHERE status_analise = ''PRE_APROVADA'' AND dt_status >= DATEADD(DAY, -7, SYSDATETIME())',
+     'SELECT CAST(COUNT(*) AS NUMERIC) AS valor FROM muralha.vtr_status_analise vsa WHERE vsa.status_analise = ''PRE_APROVADA'' AND EXISTS (SELECT 1 FROM muralha.infracao_analise ia WHERE ia.id_infracao = vsa.id_veiculo_tempo_real AND ia.dt_analise >= DATEADD(DAY, -7, SYSDATETIME()))',
      'registros', 0, 0, 3),
 
     ('Equipamentos Ativos (24h)',

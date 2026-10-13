@@ -35,7 +35,7 @@ public class KpiServlet extends HttpServlet {
                 JsonArray configs = new JsonArray();
                 try (PreparedStatement ps = conn.prepareStatement(
                         "SELECT id, nome, descricao, query_sql, unidade, " +
-                        "threshold_ok, threshold_warn, ordem, ativo " +
+                        "threshold_ok, threshold_warn, ordem, ativo, tipo_visual, cor_personalizada " +
                         "FROM muralha.kpi_config ORDER BY ordem");
                      ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -49,6 +49,8 @@ public class KpiServlet extends HttpServlet {
                         c.addProperty("thWarn", rs.getDouble("threshold_warn"));
                         c.addProperty("ordem", rs.getInt("ordem"));
                         c.addProperty("ativo", rs.getBoolean("ativo"));
+                        c.addProperty("tipoVisual", rs.getString("tipo_visual"));
+                        c.addProperty("corPersonalizada", rs.getString("cor_personalizada"));
                         configs.add(c);
                     }
                 }
@@ -59,7 +61,7 @@ public class KpiServlet extends HttpServlet {
                 JsonArray kpis = new JsonArray();
                 try (PreparedStatement ps = conn.prepareStatement(
                         "SELECT id, nome, descricao, query_sql, unidade, " +
-                        "threshold_ok, threshold_warn FROM muralha.kpi_config " +
+                        "threshold_ok, threshold_warn, tipo_visual, cor_personalizada FROM muralha.kpi_config " +
                         "WHERE ativo = 1 ORDER BY ordem");
                      ResultSet rs = ps.executeQuery()) {
                     while (rs.next()) {
@@ -68,6 +70,8 @@ public class KpiServlet extends HttpServlet {
                         kpi.addProperty("nome", rs.getString("nome"));
                         kpi.addProperty("descricao", rs.getString("descricao"));
                         kpi.addProperty("unidade", rs.getString("unidade"));
+                        kpi.addProperty("tipoVisual", rs.getString("tipo_visual"));
+                        kpi.addProperty("corPersonalizada", rs.getString("cor_personalizada"));
                         double thOk = rs.getDouble("threshold_ok");
                         double thWarn = rs.getDouble("threshold_warn");
                         kpi.addProperty("thOk", thOk);
@@ -132,11 +136,16 @@ public class KpiServlet extends HttpServlet {
                 }
 
                 String idStr = req.getParameter("id");
+                String tipoVisual = req.getParameter("tipoVisual");
+                if (tipoVisual == null || tipoVisual.isEmpty()) tipoVisual = "card";
+                String corPersonalizada = req.getParameter("corPersonalizada");
+                if (corPersonalizada != null && corPersonalizada.isEmpty()) corPersonalizada = null;
+
                 if (idStr != null && !idStr.isEmpty()) {
                     try (PreparedStatement ps = conn.prepareStatement(
                             "UPDATE muralha.kpi_config SET nome = ?, descricao = ?, query_sql = ?, " +
-                            "unidade = ?, threshold_ok = ?, threshold_warn = ?, ordem = ?, ativo = ? " +
-                            "WHERE id = ?")) {
+                            "unidade = ?, threshold_ok = ?, threshold_warn = ?, ordem = ?, ativo = ?, " +
+                            "tipo_visual = ?, cor_personalizada = ? WHERE id = ?")) {
                         ps.setString(1, req.getParameter("nome"));
                         ps.setString(2, req.getParameter("descricao"));
                         ps.setString(3, sql);
@@ -145,13 +154,16 @@ public class KpiServlet extends HttpServlet {
                         ps.setDouble(6, Double.parseDouble(req.getParameter("thWarn")));
                         ps.setInt(7, Integer.parseInt(req.getParameter("ordem")));
                         ps.setBoolean(8, "true".equals(req.getParameter("ativo")));
-                        ps.setInt(9, Integer.parseInt(idStr));
+                        ps.setString(9, tipoVisual);
+                        ps.setString(10, corPersonalizada);
+                        ps.setInt(11, Integer.parseInt(idStr));
                         ps.executeUpdate();
                     }
                 } else {
                     try (PreparedStatement ps = conn.prepareStatement(
                             "INSERT INTO muralha.kpi_config (nome, descricao, query_sql, unidade, " +
-                            "threshold_ok, threshold_warn, ordem) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
+                            "threshold_ok, threshold_warn, ordem, tipo_visual, cor_personalizada) " +
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
                         ps.setString(1, req.getParameter("nome"));
                         ps.setString(2, req.getParameter("descricao"));
                         ps.setString(3, sql);
@@ -159,6 +171,8 @@ public class KpiServlet extends HttpServlet {
                         ps.setDouble(5, Double.parseDouble(req.getParameter("thOk")));
                         ps.setDouble(6, Double.parseDouble(req.getParameter("thWarn")));
                         ps.setInt(7, Integer.parseInt(req.getParameter("ordem")));
+                        ps.setString(8, tipoVisual);
+                        ps.setString(9, corPersonalizada);
                         ps.executeUpdate();
                     }
                 }

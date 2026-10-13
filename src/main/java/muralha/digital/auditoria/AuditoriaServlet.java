@@ -37,9 +37,43 @@ public class AuditoriaServlet extends HttpServlet {
 
         if ("consultar".equals(acao)) {
             out.print(consultar(req));
+        } else if ("listarFiltros".equals(acao)) {
+            out.print(listarFiltros());
         } else {
             resp.sendError(400, "acao invalida");
         }
+    }
+
+    private String listarFiltros() {
+        JsonObject result = new JsonObject();
+        Connection conn = null;
+        try {
+            conn = Conexao.getConexao();
+            result.add("logins", buscarDistintos(conn, "login"));
+            result.add("funcionalidades", buscarDistintos(conn, "funcionalidade"));
+            result.add("operacoes", buscarDistintos(conn, "operacao"));
+            result.addProperty("ok", true);
+        } catch (Exception e) {
+            result.addProperty("ok", false);
+            result.addProperty("erro", e.getMessage());
+        } finally {
+            if (conn != null) try { conn.close(); } catch (Exception e2) {}
+        }
+        return gson.toJson(result);
+    }
+
+    private JsonArray buscarDistintos(Connection conn, String coluna) throws Exception {
+        JsonArray arr = new JsonArray();
+        String sql = "SELECT DISTINCT " + coluna + " FROM dbo.sis_log_auditoria "
+                   + "WHERE " + coluna + " IS NOT NULL AND " + coluna + " <> '' "
+                   + "ORDER BY " + coluna;
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                arr.add(rs.getString(1));
+            }
+        }
+        return arr;
     }
 
     private String consultar(HttpServletRequest req) {
@@ -56,7 +90,7 @@ public class AuditoriaServlet extends HttpServlet {
             "SELECT id, id_usuario, login, dt_operacao, ip_terminal, " +
             "funcionalidade, operacao, id_registro, descricao " +
             "FROM dbo.sis_log_auditoria WHERE 1=1 ");
-        if (login     != null && !login.isEmpty())     sql.append("AND login LIKE ? ");
+        if (login     != null && !login.isEmpty())     sql.append("AND login = ? ");
         if (funcional != null && !funcional.isEmpty()) sql.append("AND funcionalidade = ? ");
         if (operacao  != null && !operacao.isEmpty())  sql.append("AND operacao = ? ");
         if (dtInicio  != null && !dtInicio.isEmpty())  sql.append("AND dt_operacao >= ? ");
@@ -70,7 +104,7 @@ public class AuditoriaServlet extends HttpServlet {
             conn = Conexao.getConexao();
             try (PreparedStatement ps = conn.prepareStatement(sql.toString())) {
                 int i = 1;
-                if (login     != null && !login.isEmpty())     ps.setString(i++, "%" + login + "%");
+                if (login     != null && !login.isEmpty())     ps.setString(i++, login);
                 if (funcional != null && !funcional.isEmpty()) ps.setString(i++, funcional);
                 if (operacao  != null && !operacao.isEmpty())  ps.setString(i++, operacao);
                 if (dtInicio  != null && !dtInicio.isEmpty())  ps.setString(i++, dtInicio);

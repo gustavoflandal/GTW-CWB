@@ -1,0 +1,14 @@
+[data-bs-theme="dark"] .navbar { background-color: #0a3d5c !important; }
+[data-bs-theme="dark"] .hover-blur { border-color: #495057; }
+[data-bs-theme="dark"] .hover-blur p { color: #dee2e6; }
+[data-bs-theme="dark"] .card { border-color: #495057; }
+[data-bs-theme="dark"] .card-header { background-color: #2b3035; border-color: #495057; }
+[data-bs-theme="dark"] .card-footer { background-color: #2b3035 !important; border-color: #495057; }
+[data-bs-theme="dark"] .table { --bs-table-bg: #212529; }
+[data-bs-theme="dark"] .table-secondary { --bs-table-bg: #2b3035; }
+[data-bs-theme="dark"] .badge-custom { box-shadow: 0 0 3px rgba(255,255,255,0.3); }
+[data-bs-theme="dark"] .input-group-text { background-color: #2b3035; border-color: #495057; color: #dee2e6; }
+[data-bs-theme="dark"] .dropdown-menu-dark { background-color: #0a3d5c !important; }
+[data-bs-theme="dark"] .offcanvas { background-color: #212529; color: #dee2e6; }
+[data-bs-theme="dark"] .modal-content { background-color: #212529; border-color: #495057; }
+[data-bs-theme="dark"] .modal-header.bg-primary { background-color: #0a3d5c !important; }
