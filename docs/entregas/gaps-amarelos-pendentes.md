@@ -232,13 +232,15 @@
 
 ---
 
-### 13. §5.4.2.4a-b — Filtros dinâmicos com atualização simultânea
+### 13. §5.4.2.4a-b — Filtros dinâmicos com atualização simultânea ✅ *Endereçado pelo Plano 20*
 
 > *"Os dashboards deverão suportar: a) filtros dinâmicos por período, equipamento, localidade, faixa horária, tipo de infração e classificação veicular; b) atualização simultânea dos indicadores apresentados."*
 
 **Estado atual:** Filtros existem nos módulos PoC. A atualização simultânea (mudar um filtro e todos os gráficos/indicadores se atualizam) não é garantida em todos os dashboards.
 
-**Perguntas:**
+**Resolução planejada:** [Plano 20 — Dashboard Builder Self-Service](../../docs/planos-salvador/20-dashboard-builder.md). Cada widget terá filtros configuráveis por coluna do dataset, e o auto-refresh atualizará todos os widgets do painel simultaneamente.
+
+**Perguntas (pendentes de definição de escopo):**
 
 **a)** Quais dashboards específicos precisam desta melhoria? Todos os módulos PoC, ou apenas o dashboard de KPIs (Plano 15)?
 
@@ -250,21 +252,19 @@
 
 ---
 
-### 14. §5.4.2.5 — Dashboards customizáveis
+### 14. §5.4.2.5 — Dashboards customizáveis ✅ *Endereçado pelo Plano 20*
 
 > *"A CONTRATANTE poderá configurar dashboards personalizados, selecionando indicadores, filtros, visualizações e parâmetros operacionais."*
 
 **Estado atual:** KPIs configuráveis (Plano 15) permitem definir indicadores e metas. Sem drag-and-drop de painéis ou criação livre de dashboards.
 
-**Perguntas:**
+**Resolução planejada:** [Plano 20 — Dashboard Builder Self-Service](../../docs/planos-salvador/20-dashboard-builder.md). Builder visual com CSS Grid 12 colunas + HTML5 Drag API. Usuários autorizados criam painéis com widgets (CARD, CHART, TABLE, MAP), selecionando datasets pré-cadastrados. Painéis pessoais ou públicos, auto-refresh configurável.
 
-**a)** O TR pede que a CONTRATANTE "configure" dashboards. Uma tela onde o administrador seleciona quais KPIs/gráficos exibir (checkbox + ordenação) seria suficiente, ou precisa de um builder visual drag-and-drop?
+**Perguntas (respondidas via design):**
 
-> **Resposta:**
+**a)** Builder visual drag-and-drop (confirmado pelo design do Plano 20).
 
-**b)** Os dashboards customizados devem ser salvos por usuário ou são globais (visíveis para todos do mesmo perfil)?
-
-> **Resposta:**
+**b)** Painéis salvos por usuário, com opção de marcar como público (visível para todos, somente leitura).
 
 ---
 
