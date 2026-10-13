@@ -61,7 +61,10 @@ function renderizarPainel() {
     grid.style.display = 'grid';
     grid.innerHTML = '';
 
-    if (painelAtual.widgets && painelAtual.widgets.length > 0) {
+    var wCount = painelAtual.widgets ? painelAtual.widgets.length : 0;
+    document.getElementById('widgetCount').textContent = wCount + ' widget' + (wCount !== 1 ? 's' : '');
+
+    if (wCount > 0) {
         painelAtual.widgets.forEach(function(w) {
             var el = criarWidgetElement(w);
             grid.appendChild(el);

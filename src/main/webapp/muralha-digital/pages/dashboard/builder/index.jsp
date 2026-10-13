@@ -40,16 +40,22 @@
     <div class="db-main">
         <div class="db-toolbar" id="toolbar" style="display:none;">
             <h5 id="painelNome">-</h5>
+            <span class="badge bg-secondary" id="widgetCount" title="Widgets no painel"></span>
             <span class="db-refresh-indicator" id="refreshIndicator"></span>
-            <button class="btn btn-sm btn-outline-primary" onclick="abrirModalWidget()" title="Adicionar Widget">
-                <i class="bi bi-plus-circle me-1"></i> Widget
-            </button>
-            <button class="btn btn-sm btn-outline-secondary" onclick="editarPainel()" title="Configuracoes do Painel">
-                <i class="bi bi-gear"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-danger" onclick="excluirPainel()" title="Excluir Painel">
-                <i class="bi bi-trash"></i>
-            </button>
+            <div class="ms-auto d-flex gap-1">
+                <button class="btn btn-sm btn-outline-primary" onclick="abrirModalWidget()" title="Adicionar Widget">
+                    <i class="bi bi-plus-circle me-1"></i> Widget
+                </button>
+                <button class="btn btn-sm btn-outline-secondary" onclick="editarPainel()" title="Configuracoes do Painel">
+                    <i class="bi bi-gear"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-info" onclick="refreshAllWidgets()" title="Atualizar agora">
+                    <i class="bi bi-arrow-clockwise"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger" onclick="excluirPainel()" title="Excluir Painel">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
         </div>
         <div class="db-grid-area" id="gridArea">
             <div class="db-empty-state" id="emptyState">

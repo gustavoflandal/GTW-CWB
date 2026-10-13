@@ -246,3 +246,21 @@
     font-size: 0.7rem;
     color: #6c757d;
 }
+
+@media (max-width: 768px) {
+    .db-container {
+        flex-direction: column;
+        height: auto;
+    }
+    .db-sidebar {
+        width: 100%;
+        min-width: auto;
+        max-height: 200px;
+        border-right: none;
+        border-bottom: 1px solid #dee2e6;
+    }
+    .db-grid {
+        grid-template-columns: repeat(6, 1fr);
+        grid-auto-rows: 60px;
+    }
+}

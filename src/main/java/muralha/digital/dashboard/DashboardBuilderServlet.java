@@ -20,7 +20,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @WebServlet("/MuralhaDigital/DashboardBuilder")
@@ -511,6 +513,7 @@ public class DashboardBuilderServlet extends HttpServlet {
 
             Set<String> colunasValidas = extrairColunasValidas(colunasJsonStr);
             StringBuilder sql = new StringBuilder();
+            List<String> allParams = new ArrayList<>();
 
             if ("TABLE".equals(tipo)) {
                 sql.append("SELECT TOP 500 ");
@@ -521,7 +524,7 @@ public class DashboardBuilderServlet extends HttpServlet {
                         String col = c.trim();
                         if (!colunasValidas.contains(col)) continue;
                         if (!first) sql.append(", ");
-                        sql.append(col);
+                        sql.append("[").append(col).append("]");
                         first = false;
                     }
                 } else {
@@ -533,9 +536,9 @@ public class DashboardBuilderServlet extends HttpServlet {
                 sql.append("SELECT TOP 1000 ");
                 if (colunaLat != null && colunasValidas.contains(colunaLat)
                         && colunaLng != null && colunasValidas.contains(colunaLng)) {
-                    sql.append(colunaLat).append(", ").append(colunaLng);
+                    sql.append("[").append(colunaLat).append("], [").append(colunaLng).append("]");
                     if (colunaLabel != null && colunasValidas.contains(colunaLabel)) {
-                        sql.append(", ").append(colunaLabel);
+                        sql.append(", [").append(colunaLabel).append("]");
                     }
                 } else {
                     sql.append("*");
@@ -545,8 +548,8 @@ public class DashboardBuilderServlet extends HttpServlet {
             } else if ("CARD".equals(tipo)) {
                 if (colunaValor != null && colunasValidas.contains(colunaValor)
                         && !"NONE".equals(agregacao)) {
-                    sql.append("SELECT ").append(agregacao).append("(").append(colunaValor)
-                       .append(") AS valor FROM ").append(nomeView);
+                    sql.append("SELECT ").append(agregacao).append("([").append(colunaValor)
+                       .append("]) AS valor FROM ").append(nomeView);
                 } else {
                     sql.append("SELECT COUNT(*) AS valor FROM ").append(nomeView);
                 }
@@ -555,32 +558,39 @@ public class DashboardBuilderServlet extends HttpServlet {
                 if (colunaLabel != null && colunasValidas.contains(colunaLabel)
                         && colunaValor != null && colunasValidas.contains(colunaValor)
                         && !"NONE".equals(agregacao)) {
-                    sql.append("SELECT ").append(colunaLabel).append(" AS label, ")
-                       .append(agregacao).append("(").append(colunaValor).append(") AS valor")
+                    sql.append("SELECT [").append(colunaLabel).append("] AS label, ")
+                       .append(agregacao).append("([").append(colunaValor).append("]) AS valor")
                        .append(" FROM ").append(nomeView);
 
-                    String whereClause = buildWhereClause(filtrosJson, colunasValidas);
-                    if (whereClause != null) sql.append(" WHERE ").append(whereClause);
+                    WhereClause wc = buildWhereClause(filtrosJson, colunasValidas);
+                    if (wc != null) {
+                        sql.append(" WHERE ").append(wc.sql);
+                        allParams.addAll(wc.params);
+                    }
 
-                    sql.append(" GROUP BY ").append(colunaLabel)
-                       .append(" ORDER BY ").append(colunaLabel);
+                    sql.append(" GROUP BY [").append(colunaLabel).append("]")
+                       .append(" ORDER BY [").append(colunaLabel).append("]");
                 } else {
                     sql.append("SELECT TOP 100 * FROM ").append(nomeView);
                 }
             }
 
             if (!"CHART".equals(tipo)) {
-                String whereClause = buildWhereClause(filtrosJson, colunasValidas);
-                if (whereClause != null) {
+                WhereClause wc = buildWhereClause(filtrosJson, colunasValidas);
+                if (wc != null) {
                     if (sql.toString().contains(" WHERE ")) {
-                        sql.append(" AND ").append(whereClause);
+                        sql.append(" AND ").append(wc.sql);
                     } else {
-                        sql.append(" WHERE ").append(whereClause);
+                        sql.append(" WHERE ").append(wc.sql);
                     }
+                    allParams.addAll(wc.params);
                 }
             }
 
             ps = conn.prepareStatement(sql.toString());
+            for (int pi = 0; pi < allParams.size(); pi++) {
+                ps.setString(pi + 1, allParams.get(pi));
+            }
             rs = ps.executeQuery();
             ResultSetMetaData meta = rs.getMetaData();
             int colCount = meta.getColumnCount();
@@ -626,11 +636,21 @@ public class DashboardBuilderServlet extends HttpServlet {
         return validas;
     }
 
-    private String buildWhereClause(String filtrosJson, Set<String> colunasValidas) {
+    private static class WhereClause {
+        final String sql;
+        final List<String> params;
+        WhereClause(String sql, List<String> params) {
+            this.sql = sql;
+            this.params = params;
+        }
+    }
+
+    private WhereClause buildWhereClause(String filtrosJson, Set<String> colunasValidas) {
         if (filtrosJson == null || filtrosJson.isEmpty()) return null;
         try {
             JsonArray filtros = JsonParser.parseString(filtrosJson).getAsJsonArray();
             StringBuilder where = new StringBuilder();
+            List<String> params = new ArrayList<>();
             for (JsonElement el : filtros) {
                 JsonObject f = el.getAsJsonObject();
                 String col = f.get("coluna").getAsString();
@@ -640,10 +660,10 @@ public class DashboardBuilderServlet extends HttpServlet {
                 if (!op.matches("^(=|!=|<|>|<=|>=|LIKE)$")) continue;
 
                 if (where.length() > 0) where.append(" AND ");
-                where.append(col).append(" ").append(op).append(" '")
-                     .append(val.replace("'", "''")).append("'");
+                where.append("[").append(col).append("] ").append(op).append(" ?");
+                params.add(val);
             }
-            return where.length() > 0 ? where.toString() : null;
+            return where.length() > 0 ? new WhereClause(where.toString(), params) : null;
         } catch (Exception e) {
             return null;
         }
