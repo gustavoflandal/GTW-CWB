@@ -1,6 +1,6 @@
 # Referência — Inventário de pacotes Java
 
-Gerado por varredura de `src/main/java`. Total: 966 arquivos `.java`.
+Gerado por varredura de `src/main/java`. Total: ~1017 arquivos `.java`.
 
 ### com.abertura.sistemas (3)
 SistemaConsiluxItem, SistemasConsilux, SistemasServlet
@@ -271,4 +271,61 @@ Cliente, ClienteSessoes, ControleAcessoEnvio
 
 ### Utils.Interface (1)
 IExpValida
+
+### muralha.digital.acesso (3)
+MfaConfigServlet, SenhaService, TotpService
+
+### muralha.digital.anonimizacao (1)
+ConsultaAnonimizadaServlet
+
+### muralha.digital.assertividade (1)
+AssertividadeServlet
+
+### muralha.digital.auditoria (2)
+AuditoriaService, AuditoriaServlet
+
+### muralha.digital.dashboard (2)
+DashboardBuilderServlet, DatasetServlet
+
+### muralha.digital.dashboards (16)
+DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
+
+### muralha.digital.dashboards.consulta (8)
+ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta
+
+### muralha.digital.disponibilidade (2)
+DisponibilidadeJob, DisponibilidadeServlet
+
+### muralha.digital.exportacao (1)
+ExportacaoServlet
+
+### muralha.digital.gis (1)
+GisServlet
+
+### muralha.digital.imagem (2)
+ObliteracaoService, ObliteracaoServlet
+
+### muralha.digital.kpi (1)
+KpiServlet
+
+### muralha.digital.lote (1)
+LoteServlet
+
+### muralha.digital.processamento (2)
+InfracaoAnaliseDAO, InfracaoAnaliseServlet
+
+### muralha.digital.retencao (2)
+RetencaoJob, RetencaoServlet
+
+### muralha.digital.sensores (2)
+IncidenteImportJob, IncidenteServlet
+
+### muralha.digital.sla (4)
+SlaLatenciaJob, SlaLatenciaServlet, SlaPreprocessamentoJob, SlaPreprocessamentoServlet
+
+### muralha.digital.timelapse (1)
+TimelapseServlet
+
+### muralha.digital.usuario (2)
+UsuarioCpfMatriculaServlet, UsuarioCpfUtil
 

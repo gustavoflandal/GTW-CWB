@@ -13,8 +13,10 @@
 | 6 | Mapas → Cadastro Área Monitorada (mancha), Mapa Interativo, Mapa de Calor, Mapa de Equipamentos, Quantitativos em camadas | submenu (`menu_pai=7`) |
 | 7 | Análise de Dados → Perfil Comportamental, Análise de Correlacionamentos | submenu (`menu_pai=15`) |
 | 8 | Dashboards → Painel Informativo, Dashboards | submenu (`menu_pai=1`) |
+| — | Painéis de Análise → Painéis, Catálogo de Datasets | submenu (itens 376/377, infos 43/44 — Plano 20) |
 | 9 | Blitz Digital → Cadastro, Blitz Ostensiva, Abordagem | submenu (`menu_pai=29`) |
-| 99 | Cadastro e Configuração → Guarnição, Ponto de Interesse, Configuração | submenu (`menu_pai=16`) |
+| — | Catálogo de Dados (menu 378, info 45) | `analises/catalogo/index.jsp` (sob Cadastro e Configuração, menu_pai=16) |
+| 99 | Cadastro e Configuração → Guarnição, Ponto de Interesse, Configuração, Catálogo de Dados | submenu (`menu_pai=16`) |
 | — | **Relatórios** (menu separado, `sis_menu_relatorio_infos`, ~35 itens) e **Gráficos** (`sis_menu_graficos_infos`, 5 itens) | `pages/relatorios/*` |
 
 Home: `login/abertura-sistemas.jsp` → `login/muralha_principal.jsp?menu_info_pai=<id>` (cards por menu). A navbar (`cabecalho_bootstrap_simples.jsp`) mostra Processamento, Relatórios, Gráficos, GTW, Pesquisa Rápida, sino/envelope de alertas e menu do usuário.
@@ -68,7 +70,7 @@ Home: `login/abertura-sistemas.jsp` → `login/muralha_principal.jsp?menu_info_p
 
 ### 2.9 Notificação, configuração e acesso
 - **API:** `/Notificacao`, `/GrupoNotificacao`, `/TipoNotificacao`, `/ConfiguracaoTempo` (sons, alerta contínuo, prioridade), `/ConfiguracaoInatividade`, `/ConfiguracaoRadares`, `/ConfiguracaoTempoOcrBlitz`, `/PermissoesFuncionalidade`, `/Usuarios` (`login`, `out`, `login_google_token`, `acessoViaToken`, `obterListaUsuariosAtivos`).
-- **Pacotes:** `notificacao` (23: e-mail SendGrid/SMTP, SMS Twilio/Facilita/SmsDev/Comtele, Bitly, recuperação de senha), `acessos` (18).
+- **Pacotes:** `notificacao` (23: e-mail SendGrid/SMTP, SMS Twilio/Facilita/SmsDev/Comtele, Bitly, recuperação de senha), `acessos` (18). Adicionado na PoC: `muralha.digital.acesso` com política de senhas (complexidade, expiração, histórico) e MFA/TOTP — ver §5.3.
 - **Tabelas:** `muralha.config_chave_valor(_hist)`, `config_grupo_permissao` (277 linhas — permissões finas por grupo, ex.: quem vê tipos de alerta), `ocorrencia_notificacao*`, `alerta_notificacao`, `sis_usuario_recupera_senha`.
 
 ### 2.10 Utilidades
@@ -96,3 +98,132 @@ Home: `login/abertura-sistemas.jsp` → `login/muralha_principal.jsp?menu_info_p
 | Veículo/Consulta | Alto volume (8 M linhas) | Sempre filtrar por data/equipamento; usar `spu_*` existentes |
 | Relatórios | Médio | Seguir procedimento: motivo → servlet → procedure → JSP |
 | GTW clássico | Alto e pouco testado | Só correções pontuais |
+
+## 5. Módulos PoC TRANSALVADOR (Planos 01-16)
+
+Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `muralha.digital.*`. Todos seguem o padrão servlet + sessão/permissão + JDBC parametrizado (§2 de `06`). Migrações SQL em `docs/banco-de-dados/migracoes/`.
+
+### 5.1 Auditoria e rastreabilidade (Plano 01)
+- **Pacote:** `auditoria` (2 classes). **API:** `/MuralhaDigital/Auditoria` (`listar`, `exportar`).
+- **Telas:** `pages/auditoria/consulta-log.jsp`, `pages/relatorios/auditoria/auditoria.jsp`.
+- Registra ações do usuário com IP, sessão e timestamp; consulta com filtros por período, usuário e ação.
+
+### 5.2 Integridade SHA-256 (Plano 02)
+- **Pacote:** `integridade` (1 classe: `JobSha256Imagem`). Sem servlet — job batch Quartz.
+- Calcula hash SHA-256 de imagens de passagem e armazena em `veiculo_tempo_real_imagem.hash_sha256` para garantia de cadeia de custódia.
+
+### 5.3 Política de senhas e MFA/TOTP (Planos 03-04)
+- **Pacote:** `acesso` (3 classes: `SenhaService`, `TotpService`, `MfaConfigServlet`).
+- **API:** `/MuralhaDigital/MfaConfig` (`gerarSegredo`, `ativar`, `desativar`, `verificar`).
+- **Tela:** `pages/meu-perfil/configurar-mfa.jsp` (QR Code TOTP, ativação em dois passos).
+- Política de senhas: complexidade mínima, expiração, histórico e bloqueio por tentativas (integrado ao login existente via `SenhaService`). MFA opcional por usuário via TOTP (Google Authenticator, Authy).
+
+### 5.4 Dupla análise de infrações (Plano 05)
+- **Pacote:** `processamento` (2 classes). **API:** `/MuralhaDigital/InfracaoAnalise` (`listarFila`, `obter`, `analisar`, `estatisticas`).
+- **Telas:** `pages/processamento/dupla-analise/fila.jsp`, `analisar.jsp`.
+- Fluxo de revisão em duas etapas para infrações: primeiro analista confirma/rejeita, segundo valida. Rastreabilidade completa com registro de decisões.
+
+### 5.5 Obliteração de imagens (Plano 06)
+- **Pacote:** `imagem` (1 classe). **API:** `/MuralhaDigital/Obliteracao` (`obliterar`, `status`).
+- Sem tela — API para obliteração (borrar/mascarar) de imagens de passagem, atendendo requisitos de privacidade (LGPD).
+
+### 5.6 SLA de latência (Plano 07)
+- **Pacote:** `sla` (compartilhado com Plano 10). **API:** `/MuralhaDigital/SlaLatencia` (`resumo`, `detalhe`, `historico`).
+- **Tela:** `pages/monitoramento/sla-latencia/index.jsp`.
+- Painel de monitoramento de latência ponta-a-ponta (captura → processamento), com indicadores de conformidade ao SLA contratual.
+
+### 5.7 Painel de assertividade (Plano 08)
+- **Pacote:** `assertividade`. **API:** `/MuralhaDigital/Assertividade` (`resumo`, `porEquipamento`, `porPeriodo`, `exportar`).
+- **Tela:** `pages/monitoramento/assertividade/index.jsp`.
+- Métricas de acurácia do OCR e da detecção de infrações por equipamento e período; identifica equipamentos com desempenho abaixo do limiar.
+
+### 5.8 CPF e matrícula de operadores (Plano 09)
+- **Pacote:** `usuario`. **API:** `/MuralhaDigital/UsuarioCpfMatricula` (`listar`, `atualizar`, `validar`).
+- **Tela:** `pages/admin/cpf-matricula/index.jsp`.
+- Vinculação de CPF e matrícula funcional aos usuários do sistema; validação de formato e unicidade.
+
+### 5.9 SLA de pré-processamento (Plano 10)
+- **Pacote:** `sla` (compartilhado com Plano 07). **API:** `/MuralhaDigital/SlaPreprocessamento` (`resumo`, `detalhe`, `historico`).
+- **Tela:** `pages/monitoramento/sla-preproc/index.jsp`.
+- Indicadores de tempo entre captura e disponibilização da imagem processada; complementa o SLA de latência (Plano 07).
+
+### 5.10 Exportação padronizada (Plano 11)
+- **Pacote:** `exportacao`. **API:** `/MuralhaDigital/Exportacao` (`exportar`, `listarFormatos`, `status`).
+- **Tela:** `pages/relatorios/exportacao-passagens/index.jsp`.
+- Exportação de passagens e infrações em formatos padronizados (CSV, XLSX) com filtros por período, equipamento e tipo. Usa POI 4.1.1 (já presente no pom.xml).
+
+### 5.11 Retenção de dados (Plano 12)
+- **Pacote:** `retencao`. **API:** `/MuralhaDigital/Retencao` (`listarPoliticas`, `configurar`, `executar`, `historico`).
+- **Tela:** `pages/admin/retencao/index.jsp`.
+- Configuração de políticas de retenção e expurgo automático de dados antigos, com log de execução e prévia de volume afetado.
+
+### 5.12 Anonimização de placas (Plano 13)
+- **Pacote:** `anonimizacao`. **API:** `/MuralhaDigital/ConsultaAnonimizada` (`consultar`, `exportar`).
+- **Tela:** `pages/consulta/passagens-anonimizadas/index.jsp`.
+- Consulta de passagens com placas parcialmente mascaradas para perfis sem permissão de visualização completa (LGPD).
+
+### 5.13 Gestão de lotes (Plano 14)
+- **Pacote:** `lote`. **API:** `/MuralhaDigital/Lote` (`listar`, `obter`, `criar`, `fechar`, `reabrir`, `estatisticas`).
+- **Tela:** `pages/processamento/lotes/index.jsp`.
+- Agrupamento de infrações em lotes para processamento, conferência e envio; controle de status e rastreabilidade.
+
+### 5.14 KPIs configuráveis (Plano 15)
+- **Pacote:** `kpi`. **API:** `/MuralhaDigital/Kpi` (`listar`, `obter`, `cadastrar`, `atualizar`, `calcular`, `dashboard`).
+- **Telas:** `pages/admin/kpis/index.jsp` (cadastro), `pages/dashboard/kpis/index.jsp` (visualização).
+- Cadastro de indicadores de desempenho com fórmulas, metas e periodicidade configuráveis; painel de acompanhamento com gráficos ECharts.
+
+### 5.15 Exportação GIS (Plano 16)
+- **Pacote:** `gis`. **API:** `/MuralhaDigital/Gis` (`exportar`).
+- Sem tela — endpoint de download de dados georreferenciados (equipamentos, passagens) em formato compatível com ferramentas GIS.
+
+### Resumo dos Planos 01-16
+
+| Plano | Pacote | Servlet | Tela principal |
+|---|---|---|---|
+| 01 — Auditoria | `auditoria` | `/MuralhaDigital/Auditoria` | `auditoria/consulta-log.jsp` |
+| 02 — SHA-256 | `integridade` | — (job batch) | — |
+| 03 — Política de senhas | `acesso` | — (serviço interno) | — (regras no login) |
+| 04 — MFA/TOTP | `acesso` | `/MuralhaDigital/MfaConfig` | `meu-perfil/configurar-mfa.jsp` |
+| 05 — Dupla análise | `processamento` | `/MuralhaDigital/InfracaoAnalise` | `processamento/dupla-analise/fila.jsp` |
+| 06 — Obliteração | `imagem` | `/MuralhaDigital/Obliteracao` | — (API) |
+| 07 — SLA latência | `sla` | `/MuralhaDigital/SlaLatencia` | `monitoramento/sla-latencia/index.jsp` |
+| 08 — Assertividade | `assertividade` | `/MuralhaDigital/Assertividade` | `monitoramento/assertividade/index.jsp` |
+| 09 — CPF/matrícula | `usuario` | `/MuralhaDigital/UsuarioCpfMatricula` | `admin/cpf-matricula/index.jsp` |
+| 10 — SLA pré-proc. | `sla` | `/MuralhaDigital/SlaPreprocessamento` | `monitoramento/sla-preproc/index.jsp` |
+| 11 — Exportação | `exportacao` | `/MuralhaDigital/Exportacao` | `relatorios/exportacao-passagens/index.jsp` |
+| 12 — Retenção | `retencao` | `/MuralhaDigital/Retencao` | `admin/retencao/index.jsp` |
+| 13 — Anonimização | `anonimizacao` | `/MuralhaDigital/ConsultaAnonimizada` | `consulta/passagens-anonimizadas/index.jsp` |
+| 14 — Lotes | `lote` | `/MuralhaDigital/Lote` | `processamento/lotes/index.jsp` |
+| 15 — KPIs | `kpi` | `/MuralhaDigital/Kpi` | `admin/kpis/index.jsp` |
+| 16 — Exportação GIS | `gis` | `/MuralhaDigital/Gis` | — (download) |
+
+## 6. Planos 17-19 — Timelapse, disponibilidade e sensores
+
+- **`muralha.digital.timelapse`** (1 arquivo) — Timelapse de imagens de passagens. **API:** `/MuralhaDigital/Timelapse`. **Tela:** `pages/timelapse/index.jsp`.
+- **`muralha.digital.disponibilidade`** (2 arquivos) — Monitoramento de disponibilidade de equipamentos. **API:** `/MuralhaDigital/Disponibilidade`. **Tela:** `pages/monitoramento/disponibilidade/index.jsp`.
+- **`muralha.digital.sensores`** (2 arquivos) — Integração com sensores externos e incidentes. **API:** `/MuralhaDigital/SensorExterno`. **Tela:** `pages/monitoramento/sensores/index.jsp`.
+
+## 7. Construtor de Dashboards (Plano 20)
+
+Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
+
+**Servlets REST (prefixo `/api/dash/`):**
+- `DashCatalogoServlet` — CRUD do catálogo de tabelas/colunas/relações
+- `DatasetServlet` — CRUD de datasets com publicação (com validação de todos os campos) e versionamento
+- `DashConsultaServlet` — consultas dos widgets: valida permissão, monta SQL parametrizado a partir do catálogo, executa e audita
+- `DashPainelServlet` — CRUD de painéis e widgets
+- `WidgetServlet` — CRUD de widgets individuais
+- `ExportacaoDashboardServlet` — exportação CSV/XLSX
+- `HealthCheckServlet` — saúde do banco e estatísticas de consultas
+
+**Services:** DatasetService, PainelService, WidgetService, ExportacaoService, CompartilhamentoService, HistoricoVersaoService, PivotService, GramaticaCampoCalculado, ConsultaLogService.
+
+**Subpacote `consulta`:** ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta.
+
+**Frontend:** Telas em `analises/` (paineis/lista.jsp, paineis/index.jsp, datasets/index.jsp, datasets/editor.jsp, datasets/modelador.jsp, widgets/editor.jsp, catalogo/index.jsp). JavaScript em `static/js/dashboards/` (27 módulos ES, incluindo 4 do modelador visual em `modelador/`). Bibliotecas vendor: AntV X6 2.18.1 (canvas de grafos) e dagre 0.8.5 (auto-layout). CSS em `static/css/dashboards/print.css`.
+
+**Catálogo de Dados** (`analises/catalogo/index.jsp`, menu 378 sob Cadastro e Configuração): tela de gerenciamento do catálogo de metadados usado pelo construtor de dashboards. Três abas: Tabelas (listar/editar schema, nome físico, rótulo), Colunas (listar/editar tipo, papel sugerido — dimensão/medida/tempo/geo, flag sensível) e Relações (origem→destino, colunas de junção, cardinalidade, soft delete). API via `DashCatalogoServlet` (`/api/dash/catalogo`): GET `listarTabelas`, `listarColunas`, `listarRelacoes`, `importarSugestoes`; POST `salvarTabela`, `salvarColuna`, `salvarRelacao`, `excluirRelacao`.
+
+**Modelador Visual** (`datasets/modelador.jsp`): interface alternativa ao wizard para edição de datasets com canvas interativo (AntV X6). Arrastar tabelas do painel lateral para o canvas, criar relações por drag entre portas de colunas, sugestões automáticas (FKs, catálogo, nomes id_X), auto-layout dagre, undo/redo, seleção de campos com prévia de dados. API: GET `sugestoesRelacao`; POST `validarRelacao`, `verificarCardinalidade`, `salvarModelador`, `promoverRelacao`.
+
+**Schema:** `dash` (15 tabelas: catalogo_tabela, catalogo_coluna, catalogo_relacao, dataset, dataset_campo, dataset_tabela, dataset_relacao, dataset_modelador, dataset_filtro_fixo, dashboard, widget, compartilhamento, historico_versao, consulta_log, dataset_estatistica).

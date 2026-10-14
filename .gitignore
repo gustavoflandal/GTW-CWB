@@ -49,3 +49,6 @@ ffmpeg/ffmpeg.exe
 # Configuracoes locais com credenciais (usar os .example como modelo)
 src/main/webapp/WEB-INF/muralha-digital-config.xml
 src/main/webapp/WEB-INF/confGTW.xml
+
+# Variaveis de ambiente locais
+.env

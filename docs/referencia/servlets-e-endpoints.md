@@ -1,6 +1,6 @@
 # Referência — Servlets e endpoints HTTP
 
-Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 servlets em web.xml + 118 anotados.
+Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 servlets em web.xml + 145 anotados.
 
 ## 1. Servlets declarados em web.xml (`src/main/webapp/WEB-INF/web.xml`)
 
@@ -323,3 +323,29 @@ Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 se
 | `/relatorio/rj/RelatorioMensalClassificacaoDER` | `com.consilux.servlet.relatorio.rj.RelatorioMensalPorClassificacaoDER` |
 | `/Relatorio/TaxaOcupacaoVia` | `muralha.digital.relatorios.RelatorioTaxaOcupacaoVia` |
 | `/Relatorio/VelocidadeMedia` | `muralha.digital.relatorios.RelatorioVelocidadeMedia` |
+| `/MuralhaDigital/MfaConfig` | `muralha.digital.acesso.MfaConfigServlet` |
+| `/MuralhaDigital/ConsultaAnonimizada` | `muralha.digital.anonimizacao.ConsultaAnonimizadaServlet` |
+| `/MuralhaDigital/Assertividade` | `muralha.digital.assertividade.AssertividadeServlet` |
+| `/MuralhaDigital/Auditoria` | `muralha.digital.auditoria.AuditoriaServlet` |
+| `/MuralhaDigital/DashboardBuilder` | `muralha.digital.dashboard.DashboardBuilderServlet` |
+| `/MuralhaDigital/Dataset` | `muralha.digital.dashboard.DatasetServlet` |
+| `/api/dash/catalogo` | `muralha.digital.dashboards.DashCatalogoServlet` |
+| `/api/dash/consultas` | `muralha.digital.dashboards.DashConsultaServlet` |
+| `/api/dash/datasets` | `muralha.digital.dashboards.DatasetServlet` |
+| `/api/dash/exportar` | `muralha.digital.dashboards.ExportacaoDashboardServlet` |
+| `/api/dash/health` | `muralha.digital.dashboards.HealthCheckServlet` |
+| `/api/dash/paineis` | `muralha.digital.dashboards.DashPainelServlet` |
+| `/api/dash/widgets` | `muralha.digital.dashboards.WidgetServlet` |
+| `/MuralhaDigital/Disponibilidade` | `muralha.digital.disponibilidade.DisponibilidadeServlet` |
+| `/MuralhaDigital/Exportacao` | `muralha.digital.exportacao.ExportacaoServlet` |
+| `/MuralhaDigital/Gis` | `muralha.digital.gis.GisServlet` |
+| `/MuralhaDigital/Obliteracao` | `muralha.digital.imagem.ObliteracaoServlet` |
+| `/MuralhaDigital/Kpi` | `muralha.digital.kpi.KpiServlet` |
+| `/MuralhaDigital/Lote` | `muralha.digital.lote.LoteServlet` |
+| `/MuralhaDigital/InfracaoAnalise` | `muralha.digital.processamento.InfracaoAnaliseServlet` |
+| `/MuralhaDigital/Retencao` | `muralha.digital.retencao.RetencaoServlet` |
+| `/MuralhaDigital/Incidente` | `muralha.digital.sensores.IncidenteServlet` |
+| `/MuralhaDigital/SlaLatencia` | `muralha.digital.sla.SlaLatenciaServlet` |
+| `/MuralhaDigital/SlaPreprocessamento` | `muralha.digital.sla.SlaPreprocessamentoServlet` |
+| `/MuralhaDigital/Timelapse` | `muralha.digital.timelapse.TimelapseServlet` |
+| `/MuralhaDigital/UsuarioCpfMatricula` | `muralha.digital.usuario.UsuarioCpfMatriculaServlet` |
