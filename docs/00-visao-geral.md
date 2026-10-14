@@ -18,9 +18,9 @@ O WAR reúne **três gerações de software** que convivem no mesmo contexto web
 
 ## 2. Números do projeto (2026-10-08)
 
-- ~960 arquivos `.java`: `com.consilux.*` (≈529, legado/núcleo) + `muralha.*` (≈436, Muralha Digital) + `com.abertura` (1).
-- 194 servlets declarados em `web.xml` + 118 anotados com `@WebServlet` (+ 1 endpoint WebSocket + 8 serviços Axis SOAP + recurso Jersey REST).
-- ~1.100 arquivos de front-end em `webapp/muralha-digital` (≈ 44 diretórios de telas em `pages/`), ~480 arquivos GXT em `webapp/gxt`.
+- ~1017 arquivos `.java`: `com.consilux.*` (≈529, legado/núcleo) + `muralha.*` (≈487, Muralha Digital) + `com.abertura` (1).
+- 195 servlets declarados em `web.xml` + 145 anotados com `@WebServlet` (+ 1 endpoint WebSocket + 8 serviços Axis SOAP + recurso Jersey REST).
+- ~1.100 arquivos de front-end em `webapp/muralha-digital` (≈ 52 diretórios de telas em `pages/`), ~480 arquivos GXT em `webapp/gxt`.
 - Banco `GTW_MURALHA_DEV` (SQL Server 2016): **746 tabelas, 123 views, 388 procedures, 302 funções, 8 triggers, 636 FKs**, schemas `dbo`, `muralha`, `mobilidade` e `ia`.
 
 ## 3. Domínio em uma página
@@ -60,4 +60,4 @@ O WAR reúne **três gerações de software** que convivem no mesmo contexto web
 1. **A stack de desenvolvimento (`.setup-gtw/`, na pasta pai deste projeto) não pode ser alterada**: JDK 13.0.1, Maven 3.9.9, Tomcat 9.0.91 (scripts) e `tomcat7-maven-plugin` para execução. Não atualizar versões, não trocar bibliotecas base, não adicionar frameworks (Spring, JPA, React, etc.).
 2. **O padrão visual é obrigatório** (`05-padrao-visual.md`): paleta, fontes, ícones, componentes.
 3. **Nenhum segredo no repositório.** Credenciais ficam em arquivos locais ignorados pelo git (`confGTW.xml`, `muralha-digital-config.xml`) ou variáveis de ambiente.
-4. **Sem alterar o esquema do banco por conta própria**: mudanças de DDL exigem script versionado e aprovação (ver `agentes/agente-banco-de-dados.md`).
+4. **Sem alterar o esquema do banco por conta própria**: mudanças de DDL exigem script versionado e aprovação (ver `agentes/AGENTS.md`).

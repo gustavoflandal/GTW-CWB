@@ -8,6 +8,15 @@
 
 **Tech Stack:** Java 13 · `java.security.MessageDigest` (SHA-256 para hash da senha) · SQL Server · JSP/Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.5c | Política parametrizável de senha (complexidade, validade, histórico, bloqueio) |
+| §5.1.5d | Encerramento de sessão por inatividade configurável |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Hash de senha: SHA-256 hex — sem bcrypt (sem nova dependência)

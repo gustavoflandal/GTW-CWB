@@ -8,6 +8,17 @@
 
 **Tech Stack:** Java Servlet · SheetJS (já no projeto) · jsPDF (já no projeto) · SQL Server
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.10 | Consulta de log com filtros e exportação PDF/CSV/XLS (junto com [Plano 01](01-log-auditoria.md)) |
+| §5.2.8.3 | Relatórios com exportação PDF/CSV/XLS |
+| §5.3.6.4 | Histórico integral de alertas exportável (PDF/CSV/XLS) |
+| §5.4.2.4d | Exportação PDF/CSV/XLS/PNG dos dashboards |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Verificar se `iText` ou equivalente já está em `pom.xml` antes de usar; se não estiver, gerar PDF no cliente via `jsPDF`

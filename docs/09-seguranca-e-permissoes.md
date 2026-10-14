@@ -49,6 +49,6 @@ VALUES ('Minha Tela', '/muralha-digital/pages/minha-tela/minha-tela.jsp', 'U', 1
 -- 2) direito ao grupo
 INSERT INTO dbo.sis_menu_direitos (id_menu, id_grupo) VALUES (SCOPE_IDENTITY(), 42);
 -- 3) item de menu (se aparecer na navbar)
-INSERT INTO dbo.sis_menu_infos (id_menu, descricao, href, ordenacao, menu_pai) VALUES (...);
+INSERT INTO dbo.sis_menu_infos (id_infos, id_menu, src, descricao, href, descricao_detalhada, ordenacao, menu_pai) VALUES (...);
 ```
 (222 = nó pai "Anel de Segurança" (`nome_sistema='Muralha-Digital'`) em `sis_menu`; o grupo 42 é "Anel de Segurança - Supervisores". Confirmar IDs em `referencia/menus-e-permissoes.md`. Executar **somente com aprovação**, em DEV.)

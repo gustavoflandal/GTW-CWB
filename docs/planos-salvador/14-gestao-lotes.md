@@ -9,6 +9,16 @@
 
 **Tech Stack:** SQL Server · Java Servlet · Bootstrap 5.3 · SheetJS (já no projeto)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.5.1 | Gestão de lotes com parâmetros configuráveis |
+| §5.2.5.3 | Auditoria integral de qualquer lote |
+| §5.2.5.4-5 | Bloqueio lógico de envio sem validação da CONTRATANTE |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Infração só entra em lote se `status_analise = 'PRE_APROVADA'`

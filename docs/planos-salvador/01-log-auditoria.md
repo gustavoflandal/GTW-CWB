@@ -8,6 +8,18 @@
 
 **Tech Stack:** Java 13 · SQL Server · JDBC puro · Bootstrap 5.3 · SheetJS · jsPDF+autotable
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.7-8 | Log de auditoria automático e inviolável |
+| §5.1.9 | Log contendo: usuário, timestamp, IP, funcionalidade, operação, ID do registro |
+| §5.1.10 | Consulta de log com filtros e exportação PDF/CSV/XLS |
+| §5.4.7.1-7 | Repositório central de logs técnicos e operacionais |
+| §5.5.4.5 | Log completo de pré-processamento (operador, timestamp, ação) — parcial |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - `Conexao.getConexao()` para todas as conexões; fechar em `finally`

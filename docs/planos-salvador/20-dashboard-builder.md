@@ -1,5 +1,7 @@
 # Dashboard Builder Self-Service — Plano de Implementação
 
+> **Status: Implementado** — Entrega: [21-dashboard-builder.md](../entregas/21-dashboard-builder.md)
+>
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Permitir que qualquer usuario autorizado (grupos 41/42) crie dashboards dinamicos com widgets configuraveis (cards KPI, graficos Chart.js, tabelas, mapas Leaflet), selecionando dados de um catalogo de datasets (views SQL pre-cadastradas), sem escrever SQL.
@@ -7,6 +9,17 @@
 **Architecture:** Tres tabelas novas (`dashboard_dataset`, `dashboard_painel`, `dashboard_widget`) no schema `muralha`. Servlet unico (`DashboardBuilderServlet`) com CRUD de paineis/widgets e execucao de queries. Frontend com CSS Grid + HTML5 Drag API para posicionamento livre de widgets. Builder visual para configuracao de widgets (selecao de dataset, colunas, agregacao, tipo de grafico). Auto-refresh configuravel por painel.
 
 **Tech Stack:** Java Servlet · Bootstrap 5.3 · Chart.js (CDN existente) · Leaflet (CDN existente) · JavaScript puro · CSS Grid · HTML5 Drag API
+
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.4.2.4a-b | Filtros dinâmicos com atualização simultânea |
+| §5.4.2.5 | Configuração de dashboards personalizados pela CONTRATANTE (ver também [Plano 15](15-kpis-configuráveis.md)) |
+| §5.4.5 | Relatórios analíticos completos (tráfego, velocidade, infração) |
+| §5.5.3.1 | Painel de controle operacional do pré-processamento (ver também [Plano 10](10-sla-preprocessamento.md)) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
 
 ## Global Constraints
 
@@ -117,7 +130,7 @@ CREATE TABLE muralha.dashboard_widget (
 
 ### Tarefa 1: Migracao SQL
 
-- [ ] Criar script `20261010_dashboard_builder.sql` com:
+- [x] Criar script `20261010_dashboard_builder.sql` com:
   - CREATE TABLE `muralha.dashboard_dataset`
   - CREATE TABLE `muralha.dashboard_painel`
   - CREATE TABLE `muralha.dashboard_widget`
@@ -129,7 +142,7 @@ CREATE TABLE muralha.dashboard_widget (
 
 ### Tarefa 2: DatasetServlet (CRUD admin de datasets)
 
-- [ ] Criar `DatasetServlet.java` mapeado em `/MuralhaDigital/Dataset`
+- [x] Criar `DatasetServlet.java` mapeado em `/MuralhaDigital/Dataset`
   - `acao=listar` — lista datasets ativos (GET, JSON)
   - `acao=listarTodos` — lista todos incluindo inativos (GET, admin)
   - `acao=obterColunas&id=X` — retorna `colunas_json` de um dataset (GET)
@@ -138,7 +151,7 @@ CREATE TABLE muralha.dashboard_widget (
 
 ### Tarefa 3: DashboardBuilderServlet
 
-- [ ] Criar `DashboardBuilderServlet.java` mapeado em `/MuralhaDigital/DashboardBuilder`
+- [x] Criar `DashboardBuilderServlet.java` mapeado em `/MuralhaDigital/DashboardBuilder`
 
 **Acoes de painel:**
   - `acao=listarPaineis` — paineis do usuario + publicos (GET)
@@ -162,7 +175,7 @@ CREATE TABLE muralha.dashboard_widget (
 
 ### Tarefa 4: Frontend — Pagina builder (JSP)
 
-- [ ] Criar `index.jsp` com layout:
+- [x] Criar `index.jsp` com layout:
   - **Barra superior:** titulo do painel, botao salvar, seletor de refresh, botao compartilhar (publico)
   - **Sidebar esquerda:** lista de paineis (meus + publicos), botao "+ Novo Painel"
   - **Area central:** grid CSS 12 colunas onde widgets sao renderizados
@@ -172,27 +185,27 @@ Includes: `cabecalho_bootstrap_simples.jsp`, Chart.js CDN, Leaflet CDN
 
 ### Tarefa 5: Frontend — Grid drag-and-drop (`dashboard-grid.js`)
 
-- [ ] Implementar grid de 12 colunas com CSS Grid
-- [ ] Drag via HTML5 Drag API:
+- [x] Implementar grid de 12 colunas com CSS Grid
+- [x] Drag via HTML5 Drag API:
   - `dragstart`: armazena widget ID
   - `dragover`/`drop`: calcula posicao na grid (col/row)
   - Resize via handles nos cantos do widget
-- [ ] Funcao `salvarLayout()`: coleta posicoes de todos os widgets e envia batch para `acao=atualizarLayout`
-- [ ] Auto-save apos cada drag/resize
+- [x] Funcao `salvarLayout()`: coleta posicoes de todos os widgets e envia batch para `acao=atualizarLayout`
+- [x] Auto-save apos cada drag/resize
 
 ### Tarefa 6: Frontend — Renderizador de widgets (`widget-renderer.js`)
 
-- [ ] Funcao `renderWidget(widget, dados)` que despacha por tipo:
+- [x] Funcao `renderWidget(widget, dados)` que despacha por tipo:
   - **CARD**: numero grande + badge de status (verde/amarelo/vermelho via thresholds) + unidade
   - **CHART**: cria instancia Chart.js no canvas do widget (bar/line/pie/doughnut)
   - **TABLE**: tabela Bootstrap paginada com os dados retornados
   - **MAP**: mapa Leaflet com markers nos pontos (coluna_lat, coluna_lng)
-- [ ] Funcao `refreshDashboard()`: itera widgets, chama `executarWidget` para cada, re-renderiza
-- [ ] `setInterval(refreshDashboard, refresh_segundos * 1000)` configuravel
+- [x] Funcao `refreshDashboard()`: itera widgets, chama `executarWidget` para cada, re-renderiza
+- [x] `setInterval(refreshDashboard, refresh_segundos * 1000)` configuravel
 
 ### Tarefa 7: Frontend — Configuracao de widget (`widget-config.js`)
 
-- [ ] Modal Bootstrap com formulario:
+- [x] Modal Bootstrap com formulario:
   1. Selecionar dataset (dropdown carregado de `acao=listar`)
   2. Ao selecionar dataset, carregar colunas (de `acao=obterColunas`)
   3. Selecionar tipo de widget (CARD/CHART/TABLE/MAP)
@@ -207,7 +220,7 @@ Includes: `cabecalho_bootstrap_simples.jsp`, Chart.js CDN, Leaflet CDN
 
 ### Tarefa 8: Tela admin de datasets
 
-- [ ] Criar `admin/datasets/index.jsp`:
+- [x] Criar `admin/datasets/index.jsp`:
   - Tabela com datasets cadastrados (nome, view, status)
   - Offcanvas para criar/editar dataset
   - Campo para nome da view SQL
@@ -216,7 +229,7 @@ Includes: `cabecalho_bootstrap_simples.jsp`, Chart.js CDN, Leaflet CDN
 
 ### Tarefa 9: Views SQL iniciais
 
-- [ ] Criar views no script de migracao:
+- [x] Criar views no script de migracao:
 
 ```sql
 CREATE VIEW muralha.v_passagens_diarias AS

@@ -28,7 +28,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 20 | Registro dos Modulos no Menu | 2026-10-09 | ✅ Entregue | [20-menu-modulos.md](20-menu-modulos.md) |
 | 21 | Dashboard Builder Self-Service | 2026-10-13 | ✅ Entregue | [21-dashboard-builder.md](21-dashboard-builder.md) |
 
-> ✅ Todas as 10 migrações SQL executadas em 2026-10-09 (ver [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md)).
+> ✅ 16 migrações SQL executadas (10 em 2026-10-09, 6 em 2026-10-13) (ver [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md)).
 
 ## Documentos de apoio
 

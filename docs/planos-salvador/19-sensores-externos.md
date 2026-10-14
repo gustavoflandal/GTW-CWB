@@ -8,6 +8,16 @@
 
 **Tech Stack:** Java `HttpURLConnection` (sem lib HTTP nova) · SQL Server · Bootstrap 5.3 · Leaflet.js (cdnjs)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.3.7.1-2 | Integração com sensores meteorológicos, PMV, sensores de tráfego |
+| §5.3.7.3 | Integração com Google Maps/Waze para contextualização |
+| §5.3.7.7 | Mapas, gráficos, indicadores visuais (ver também [Plano 16](16-exportacao-gis.md)) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Sem nova dependência Maven (`HttpURLConnection` para HTTP, `javax.json` ou `com.google.gson` já no projeto)
@@ -21,7 +31,7 @@
 
 | Ação | Caminho |
 |---|---|
-| Criar | `docs/banco-de-dados/migracoes/20261008_incidentes.sql` |
+| Criar | `docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql` |
 | Criar | `src/main/java/muralha/digital/sensores/IncidenteImportJob.java` |
 | Criar | `src/main/java/muralha/digital/sensores/IncidenteServlet.java` |
 | Modificar | `src/main/webapp/muralha-digital/pages/monitoramento/mapa/index.jsp` (camada de incidentes) |
@@ -34,7 +44,7 @@
 - [ ] **Criar script**
 
 ```sql
--- docs/banco-de-dados/migracoes/20261008_incidentes.sql
+-- docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql
 -- ROLLBACK: DROP TABLE muralha.incidente_externo;
 
 CREATE TABLE muralha.incidente_externo (
@@ -58,13 +68,13 @@ CREATE INDEX ix_incidente_dt ON muralha.incidente_externo (dt_ocorrencia, ativo)
 - [ ] **Executar**
 
 ```powershell
-sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -i "docs\banco-de-dados\migracoes\20261008_incidentes.sql"
+sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -i "docs\banco-de-dados\migracoes\20261008_disponibilidade_incidentes.sql"
 ```
 
 - [ ] **Adicionar configuração da API**
 
 ```sql
-INSERT INTO muralha.configuracao (chave, valor, descricao) VALUES
+INSERT INTO muralha.config_chave_valor (chave, valor, descricao) VALUES
 ('waze_api_url', 'https://www.waze.com/row-partnerhub-api/partners/...', 'URL da API Waze for Cities'),
 ('waze_area_bbox', '-12.80,-38.60,-13.10,-38.30', 'Bounding box lat_max,lon_min,lat_min,lon_max para Salvador');
 ```
@@ -72,7 +82,7 @@ INSERT INTO muralha.configuracao (chave, valor, descricao) VALUES
 - [ ] **Commit**
 
 ```bash
-git add docs/banco-de-dados/migracoes/20261008_incidentes.sql
+git add docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql
 git commit -m "Cria tabela de incidentes externos e configurações da API Waze
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
@@ -183,7 +193,7 @@ public class IncidenteImportJob implements Job {
 
     private String obterConfig(Connection conn, String chave) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT valor FROM muralha.configuracao WHERE chave=?")) {
+                "SELECT valor FROM muralha.config_chave_valor WHERE chave=?")) {
             ps.setString(1, chave);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) return rs.getString("valor");

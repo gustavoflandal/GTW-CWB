@@ -211,6 +211,9 @@ Snapshot de 2026-10-08 de GTW_MURALHA_DEV. Modelo: `sis_menu` (funcionalidade/a�
 | 363 | Consultas                                                                                            |  |     | 0 |  | Consultas                                                                                            | 1 | GTW |
 | 364 | Consulta Log                                                                                         | /consulta/log/consulta_log.jsp                                                                                                                                                                                                                             | U   | 1 | 363 | Consulta Log                                                                                         | 1 | GTW |
 | 365 | Mapa de Dispositivos                                                                                 | /monitoramento/mapa-equipamento/mapa-dispositivos.jsp                                                                                                                                                                                                      | U   | 1 | 6 | Mapa de Dispositivos                                                                                 | 1 | GTW |
+| 376 | Painéis de Análise                                                                                   | /muralha-digital/pages/analises/paineis/lista.jsp                                                                                                                                                                                                          | U   | 1 | 222 | Painéis de Análise                                                                                   | 1 | Muralha-Digital |
+| 377 | Catálogo de Datasets                                                                                 | /muralha-digital/pages/analises/datasets/index.jsp                                                                                                                                                                                                         | U   | 1 | 222 | Catálogo de Datasets                                                                                 | 1 | Muralha-Digital |
+| 378 | Catalogo de Dados                                                                                    | /muralha-digital/pages/analises/catalogo/index.jsp                                                                                                                                                                                                         | U   | 1 | 222 | Catalogo de Dados                                                                                    | 1 | Muralha-Digital |
 
 
 ## sis_menu_infos (menu Processamento)
@@ -249,6 +252,9 @@ Snapshot de 2026-10-08 de GTW_MURALHA_DEV. Modelo: `sis_menu` (funcionalidade/a�
 | 30 | 341 | Cadastro | /muralha-digital/pages/blitz/listagem-blitz.jsp | 1 | 29 |
 | 31 | 342 | Blitz Ostensiva | /muralha-digital/pages/blitz-ostensiva/blitz-ostensiva.jsp | 2 | 29 |
 | 32 | 343 | Abordagem | /muralha-digital/pages/blitz-abordagem/listagem-abordagem.jsp | 3 | 29 |
+| 43 | 376 | Painéis de Análise | /muralha-digital/pages/analises/paineis/lista.jsp | 8 |  |
+| 44 | 377 | Catálogo de Datasets | /muralha-digital/pages/analises/datasets/index.jsp | 9 |  |
+| 45 | 378 | Catalogo de Dados | /muralha-digital/pages/analises/catalogo/index.jsp | 10 | 16 |
 
 
 ## sis_menu_relatorio_infos (menu Relatórios)

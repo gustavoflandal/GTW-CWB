@@ -42,7 +42,7 @@
 |---|---|
 | A tela é nova | `agentes/prompts/nova-tela.md` |
 | É um endpoint/ação nova | `agentes/prompts/novo-endpoint.md` |
-| Precisa de tabela/coluna/procedure | `agente-banco-de-dados.md` (gerar script, não aplicar) |
+| Precisa de tabela/coluna/procedure | `AGENTS.md` §6 + guia `10-guia-de-implementacao.md` §6 (gerar script, não aplicar) |
 | Precisa de permissão/menu | `10-guia-de-implementacao.md` §4 (gerar script de carga) |
 | Encontrou segredo/vulnerabilidade | Não corrija silenciosamente: reporte (`agente-revisor-seguranca.md`) |
 | Dúvida de regra de negócio | Procure na procedure (`codigo-sql/`) e no código; se ainda ambígua, **pergunte ao humano** |
@@ -64,12 +64,12 @@
 | Explorador (somente leitura) | `agente-explorador.md` | nada (relatório) |
 | Backend Java | `agente-backend-java.md` | `src/main/java/**` |
 | Frontend Muralha | `agente-frontend-muralha.md` | `src/main/webapp/muralha-digital/**`, JSPs novas |
-| Banco de Dados | `agente-banco-de-dados.md` | `docs/banco-de-dados/migracoes/**` (scripts) |
+| Banco de Dados | (ver `10-guia-de-implementacao.md` §6) | `docs/banco-de-dados/migracoes/**` (scripts) |
 | Revisor de Segurança | `agente-revisor-seguranca.md` | nada (relatório) |
 | QA / Testes | `agente-qa-testes.md` | `src/test/**`, roteiros em `docs/qa/` |
 | Documentação | `agente-documentacao.md` | `docs/**` |
 
-Prompts prontos em `agentes/prompts/`: `nova-tela.md`, `novo-endpoint.md`, `revisar-alteracao.md`, `regenerar-referencia.md`, `diagnosticar-bug.md`.
+Prompts prontos em `.claude/prompts/`: `novo-endpoint.md`. Scripts de regeneração em `docs/referencia/scripts/`.
 
 ## 7. Orquestração (quando o humano pedir uma feature completa)
 Ordem sugerida: **Explorador** (mapeia impacto) → **Banco** (script, se houver) → **Backend** → **Frontend** → **Revisor de Segurança** → **QA** → **Documentação**. Passe a cada subagent: objetivo, arquivos/módulos relevantes, links dos docs a ler, critérios de aceite e os limites da §2. Subagents não compartilham memória: inclua tudo no prompt.

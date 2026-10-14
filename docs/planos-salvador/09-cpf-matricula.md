@@ -8,6 +8,14 @@
 
 **Tech Stack:** Java 13 · SQL Server · Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.5a | Identificação vinculada a CPF/matrícula funcional |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - CPF armazenado sem pontos/traços (11 dígitos numéricos)

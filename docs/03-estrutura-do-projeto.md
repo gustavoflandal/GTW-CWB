@@ -1,11 +1,11 @@
 # 03 — Estrutura do Projeto e Onde Colocar Cada Coisa
 
-## 1. Raiz (`D:\GTW-CWB\GTW-CWB`)
+## 1. Raiz (`D:\GTW-CWB`)
 
 | Caminho | Conteúdo | Observação |
 |---|---|---|
 | `pom.xml` | Build Maven (`war`, `com.consilux.gtw:gtw:3.0`) | Não alterar sem aprovação |
-| `src/main/java` | Código Java (~960 arquivos) | ver §2 |
+| `src/main/java` | Código Java (~1017 arquivos) | ver §2 |
 | `src/main/resources` | `log4j.xml`, `quartz.properties`, `imagens/logo_*.png` (logos de clientes) | |
 | `src/main/webapp` | Raiz web (JSP, JS, CSS, imagens, WEB-INF) | ver §3 |
 | `src/test` | Testes (TestNG; 6 `.java`) | cobertura mínima |
@@ -29,7 +29,8 @@
 | `com.consilux.ui` | 14 | Implementações servidoras de GWT-RPC (`ui.server.*ServiceImpl`) |
 | `com.consilux.menu`, `.log`, `.exportalista`, `.rest`, `.Utils` | 1–3 cada | Menu GWT, log de tempo, exportação, recurso REST |
 | `com.abertura.sistemas` | 1 | `SistemasServlet` (`/Abertura/SistemasConsilux`) |
-| `muralha.digital.*` | ~436 | **Muralha Digital** — um subpacote por módulo (ver `04-modulos-funcionais.md`) |
+| `muralha.digital.*` | ~487 | **Muralha Digital** — um subpacote por módulo (ver `04-modulos-funcionais.md`) |
+| `muralha.digital.dashboards` | 19 | **Construtor de Dashboards** — catálogo, datasets, painéis, widgets, exportação, observabilidade |
 | `muralha.configuracaoequipamento` | — | Servlets de configuração de equipamento |
 
 Estrutura típica de um módulo Muralha (`muralha.digital.<modulo>`):
@@ -47,7 +48,7 @@ Inventário completo: `referencia/inventario-pacotes-java.md` e `referencia/modu
 
 | Caminho | Geração | Conteúdo |
 |---|---|---|
-| `muralha-digital/pages/<tela>/` | 2 | Telas do Muralha (44 diretórios). Cada uma: `*.jsp` (+ `modal-*.jsp`), `assets/js/`, `assets/css/` |
+| `muralha-digital/pages/<tela>/` | 2 | Telas do Muralha (52 diretórios, incluindo `analises/`, `dashboard/`, `admin/`, `ajuda/`, `auditoria/`, `configuracoes/`, `meu-perfil/`, `processamento/`, `monitoramento/`). Cada uma: `*.jsp` (+ `modal-*.jsp`), `assets/js/`, `assets/css/` |
 | `muralha-digital/assets/` | 2 | Bibliotecas locais (`MDB-Free`, `bootstrap5`, `datepicker` (Tempus Dominus/moment), `jquery`, `css`, `js`, `images`, `sounds`) |
 | `muralha-digital/utils/` | 2 | Cabeçalhos (`credenciais/cabecalho_*.jsp`), modais genéricos (`modal-info-alert`), notificações (`notificacao/` toastr), paginação (`paginacao/`), bootbox, `maps-config.js`, `export-table.js` |
 | `muralha-digital/relatorios/` | 2 | Páginas de relatórios Muralha |

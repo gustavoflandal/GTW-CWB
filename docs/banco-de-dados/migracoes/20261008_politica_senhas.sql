@@ -1,10 +1,15 @@
--- Plano 03: Política de Senhas
+-- *** OBSOLETO — substituído por 20261008_tabelas_complementares.sql ***
+-- O ALTER TABLE abaixo viola a regra de não alterar tabelas legadas.
+-- As colunas de senha/bloqueio ficam em dbo.sis_usuario_complemento.
+-- A tabela sis_senha_config permanece válida (não é ALTER em legada).
+-- NÃO EXECUTAR o ALTER TABLE deste script.
+-- ================================================================
+-- Plano 03: Política de Senhas (ORIGINAL)
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 -- ROLLBACK:
 -- DROP TABLE dbo.sis_senha_config;
--- ALTER TABLE dbo.sis_usuario DROP COLUMN senha_hash, senha_historico, tentativas_invalidas,
---   bloqueado_ate, dt_ultima_troca_senha, fl_troca_obrigatoria;
+-- As colunas agora ficam em dbo.sis_usuario_complemento
 
 CREATE TABLE dbo.sis_senha_config (
     chave     VARCHAR(50)  NOT NULL PRIMARY KEY,
@@ -22,10 +27,11 @@ INSERT INTO dbo.sis_senha_config (chave, valor, descricao) VALUES
 ('max_tentativas',   '5',  'Tentativas inválidas antes do bloqueio'),
 ('bloqueio_minutos', '30', 'Minutos de bloqueio; 0=bloqueio permanente (só admin desbloqueia)');
 
-ALTER TABLE dbo.sis_usuario ADD
-    senha_hash           VARCHAR(64)  NULL,
-    senha_historico      VARCHAR(MAX) NULL,
-    tentativas_invalidas TINYINT      NOT NULL DEFAULT 0,
-    bloqueado_ate        DATETIME2    NULL,
-    dt_ultima_troca_senha DATE        NULL,
-    fl_troca_obrigatoria  BIT         NOT NULL DEFAULT 0;
+-- OBSOLETO: usar dbo.sis_usuario_complemento (tabela complementar)
+-- ALTER TABLE dbo.sis_usuario ADD
+--     senha_hash           VARCHAR(64)  NULL,
+--     senha_historico      VARCHAR(MAX) NULL,
+--     tentativas_invalidas TINYINT      NOT NULL DEFAULT 0,
+--     bloqueado_ate        DATETIME2    NULL,
+--     dt_ultima_troca_senha DATE        NULL,
+--     fl_troca_obrigatoria  BIT         NOT NULL DEFAULT 0;
