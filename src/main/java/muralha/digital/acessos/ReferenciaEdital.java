@@ -34,7 +34,12 @@ public final class ReferenciaEdital {
             Map.entry(376, List.of("5.4.2.4a-b", "5.4.2.5", "5.4.5", "5.5.3.1")),
             // Plano 20 — Catalogos que permitem a CONTRATANTE configurar os paineis
             Map.entry(377, List.of("5.4.2.5")),
-            Map.entry(378, List.of("5.4.2.5"))
+            Map.entry(378, List.of("5.4.2.5")),
+            // Plano 22 — Sistema de Gerenciamento de Chamados (aba "Sist. Chamado")
+            Map.entry(379, List.of("7.2.3.a", "7.2.3.b", "7.2.3.c", "7.2.3.f", "7.2.4")),
+            Map.entry(380, List.of("7.2.3.b", "7.2.3.c", "7.2.3.e")),
+            Map.entry(381, List.of("7.2.3.d", "7.2.3.f")),
+            Map.entry(382, List.of("7.2.3.a"))
     );
 
     private ReferenciaEdital() {

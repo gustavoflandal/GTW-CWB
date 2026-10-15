@@ -277,3 +277,20 @@ Dos 46 itens não implementados, 25 são obrigações contratuais, operacionais 
 | 5.8.6.1 | Implementação Parcial — [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
 | 5.8.6.2 | [01-log-auditoria.md](01-log-auditoria.md), [18-disponibilidade.md](18-disponibilidade.md), [21-dashboard-builder.md](21-dashboard-builder.md) † |
 | 5.8.6.3 | Implementação Parcial — [18-disponibilidade.md](18-disponibilidade.md) † |
+
+## Capítulo 7 — Central de Suporte Técnico (aba Sist. Chamado)
+
+Itens da aba "Sist. Chamado" de [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx); o Capítulo 7 do TR não está no repositório. A entrega 22 está implementada, aguardando a execução da migração e os testes integrados.
+
+| Item do edital | Entrega |
+|---|---|
+| 7.2.1 | Fora do escopo de software ‡ (central 24x7 é obrigação de serviço) |
+| 7.2.2 | Não atendido por este plano (7.2.2.c e 7.2.2.d fora do escopo; 7.2.2.a é telefone) |
+| 7.2.3.a | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.3.b | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.3.c | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.3.d | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.3.e | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.3.f | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.4 | [22-sistema-chamados.md](22-sistema-chamados.md) |
+| 7.2.5 | Fora do escopo de software ‡ (preposto) |

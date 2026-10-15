@@ -14,6 +14,15 @@ public class ReferenciaEditalTest {
     }
 
     @Test
+    public void menusDoSistemaDeChamadosTemItensDoCapitulo7() {
+        for (int idMenu = 379; idMenu <= 382; idMenu++) {
+            assertFalse(ReferenciaEdital.itens(idMenu).isEmpty(), "id_menu " + idMenu + " sem referencia ao edital");
+        }
+        assertTrue(ReferenciaEdital.itens(379).contains("7.2.4"));
+        assertTrue(ReferenciaEdital.itens(381).contains("7.2.3.d"));
+    }
+
+    @Test
     public void menuLegadoNaoTemReferencia() {
         assertTrue(ReferenciaEdital.itens(1).isEmpty());
         assertEquals(ReferenciaEdital.titulo(1), "");

@@ -116,3 +116,4 @@ Os planos detalhados de implementação de cada requisito estão em [`docs/plano
 | 17 | Timelapse | [17-timelapse.md](../../docs/planos-salvador/17-timelapse.md) |
 | 18 | Disponibilidade | [18-disponibilidade.md](../../docs/planos-salvador/18-disponibilidade.md) |
 | 19 | Sensores Externos | [19-sensores-externos.md](../../docs/planos-salvador/19-sensores-externos.md) |
+| 22 | Sistema de Gerenciamento de Chamados | [22-sistema-chamados.md](../../docs/planos-salvador/22-sistema-chamados.md) |

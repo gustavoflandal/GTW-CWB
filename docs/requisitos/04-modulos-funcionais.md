@@ -227,3 +227,18 @@ Módulo self-service de painéis analíticos interativos. Pacote principal: `mur
 **Modelador Visual** (`datasets/modelador.jsp`): interface alternativa ao wizard para edição de datasets com canvas interativo (AntV X6). Arrastar tabelas do painel lateral para o canvas, criar relações por drag entre portas de colunas, sugestões automáticas (FKs, catálogo, nomes id_X), auto-layout dagre, undo/redo, seleção de campos com prévia de dados. API: GET `sugestoesRelacao`; POST `validarRelacao`, `verificarCardinalidade`, `salvarModelador`, `promoverRelacao`.
 
 **Schema:** `dash` (15 tabelas: catalogo_tabela, catalogo_coluna, catalogo_relacao, dataset, dataset_campo, dataset_tabela, dataset_relacao, dataset_modelador, dataset_filtro_fixo, dashboard, widget, compartilhamento, historico_versao, consulta_log, dataset_estatistica).
+
+## 8. Sistema de Chamados (Plano 22)
+
+Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [spec](../superpowers/specs/2026-10-15-sistema-chamados-design.md)). Pacote `muralha.digital.chamado` (26 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo`.
+
+| Item | Detalhe |
+|---|---|
+| Menus | 379 (Chamados), 380 (Detalhe do Chamado, sem card), 381 (Relatórios de Chamados), 382 (Configuração de Chamados) |
+| Telas (`pages/chamados/`) | `index.jsp` (lista, filtros, modal "Novo chamado", exportação), `detalhe.jsp` (histórico e ações), `relatorios.jsp` (indicadores e gráfico), `configuracao.jsp` (prioridades e categorias) |
+| Servlets | `/MuralhaDigital/Chamado`, `/MuralhaDigital/ChamadoRelatorio`, `/MuralhaDigital/ChamadoConfig` |
+| Jobs Quartz | `ChamadoSlaJob` (5 min: marcas de SLA e fechamento automático), `ChamadoEmailJob` (1 min: fila de e-mails) |
+| Tabelas (schema `muralha`) | `chamado_prioridade`, `chamado_categoria`, `chamado`, `chamado_historico`, `chamado_anexo`, `chamado_notificacao`, `chamado_protocolo` |
+| Parâmetros | chaves `chamado_*` em `muralha.config_chave_valor` (risco de SLA, fechamento automático, diretório e tamanho de anexos, e-mail ativo, IDs dos grupos) |
+
+**Status:** implementado; migração e seed (`20261015_sistema_chamados.sql` e `20261015_sistema_chamados_seed.sql`) ainda não executados no banco.
