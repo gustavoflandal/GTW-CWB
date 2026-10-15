@@ -38,6 +38,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 - **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
 - **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 121 testes consolidados em trilha sequencial (13/121 aceitos)
 - **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste
+- **Itens do edital × entregas:** [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md) — todos os 207 itens do Capítulo 5 do TR em ordem crescente, com a entrega de cada um ou a situação (parcial, já atendido pelo GTW, não implementado)
 
 ## Referências
 
