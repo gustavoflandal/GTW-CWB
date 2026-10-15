@@ -1,6 +1,6 @@
 # Tabelas — schema `muralha` — grupo `config`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## muralha.config_alarme
 
@@ -132,7 +132,7 @@ Linhas: ~2
 
 ## muralha.config_chave_valor
 
-Linhas: ~13
+Linhas: ~34
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -144,7 +144,7 @@ Linhas: ~13
 
 ## muralha.config_chave_valor_hist
 
-Linhas: ~63
+Linhas: ~68
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

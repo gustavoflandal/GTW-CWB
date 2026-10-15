@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `imagem`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.imagem
 
-Linhas: ~107771
+Linhas: ~110341
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -107,7 +107,7 @@ Linhas: ~63
 
 ## dbo.imagem_info
 
-Linhas: ~107771
+Linhas: ~110341
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

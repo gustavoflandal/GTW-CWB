@@ -1,6 +1,6 @@
 # Tabelas — schema `mobilidade` — grupo `sis`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## mobilidade.sis_bloqueio_categoria
 
@@ -38,7 +38,7 @@ Linhas: ~6
 
 ## mobilidade.sis_cidades
 
-Linhas: ~2
+Linhas: ~4
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -270,7 +270,7 @@ Linhas: ~1
 
 ## mobilidade.sis_estados
 
-Linhas: ~2
+Linhas: ~4
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -543,7 +543,7 @@ Linhas: ~2
 
 ## mobilidade.sis_grupos_cidades
 
-Linhas: ~3
+Linhas: ~7
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

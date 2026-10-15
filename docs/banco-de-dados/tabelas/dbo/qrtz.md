@@ -1,6 +1,6 @@
 # Tabelas — schema `dbo` — grupo `qrtz`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.qrtz_blob_triggers
 
@@ -84,10 +84,10 @@ Linhas: ~0
 - PK `PK_qrtz_job_details` (CLUSTERED): job_name, job_group
 
 **Referenciada por:**
-- dbo.qrtz_job_listeners.job_group
 - dbo.qrtz_job_listeners.job_name
-- dbo.qrtz_triggers.job_name
+- dbo.qrtz_job_listeners.job_group
 - dbo.qrtz_triggers.job_group
+- dbo.qrtz_triggers.job_name
 
 ## dbo.qrtz_job_listeners
 
@@ -103,8 +103,8 @@ Linhas: ~0
 - PK `PK_qrtz_job_listeners` (CLUSTERED): job_name, job_group, job_listener
 
 **FKs (saída):**
-- job_group → dbo.qrtz_job_details.job_group
 - job_name → dbo.qrtz_job_details.job_name
+- job_group → dbo.qrtz_job_details.job_group
 
 ## dbo.qrtz_locks
 
@@ -157,8 +157,8 @@ Linhas: ~0
 - PK `PK_qrtz_simple_triggers` (CLUSTERED): trigger_name, trigger_group
 
 **FKs (saída):**
-- trigger_group → dbo.qrtz_triggers.trigger_group
 - trigger_name → dbo.qrtz_triggers.trigger_name
+- trigger_group → dbo.qrtz_triggers.trigger_group
 
 ## dbo.qrtz_trigger_listeners
 
@@ -174,8 +174,8 @@ Linhas: ~0
 - PK `PK_qrtz_trigger_listeners` (CLUSTERED): trigger_name, trigger_group, trigger_listener
 
 **FKs (saída):**
-- trigger_name → dbo.qrtz_triggers.trigger_name
 - trigger_group → dbo.qrtz_triggers.trigger_group
+- trigger_name → dbo.qrtz_triggers.trigger_name
 
 ## dbo.qrtz_triggers
 
@@ -205,14 +205,14 @@ Linhas: ~0
 - PK `PK_qrtz_triggers` (CLUSTERED): trigger_name, trigger_group
 
 **FKs (saída):**
-- job_name → dbo.qrtz_job_details.job_name
 - job_group → dbo.qrtz_job_details.job_group
+- job_name → dbo.qrtz_job_details.job_name
 
 **Referenciada por:**
 - dbo.qrtz_cron_triggers.trigger_group
 - dbo.qrtz_cron_triggers.trigger_name
-- dbo.qrtz_simple_triggers.trigger_group
 - dbo.qrtz_simple_triggers.trigger_name
-- dbo.qrtz_trigger_listeners.trigger_name
+- dbo.qrtz_simple_triggers.trigger_group
 - dbo.qrtz_trigger_listeners.trigger_group
+- dbo.qrtz_trigger_listeners.trigger_name
 

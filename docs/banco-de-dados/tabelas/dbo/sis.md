@@ -1,6 +1,6 @@
 # Tabelas — schema `dbo` — grupo `sis`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.sis_documento
 
@@ -61,7 +61,7 @@ Linhas: ~9
 
 ## dbo.sis_grupo
 
-Linhas: ~27
+Linhas: ~35
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -118,7 +118,7 @@ Linhas: ~2
 
 ## dbo.sis_log
 
-Linhas: ~1078779
+Linhas: ~1094274
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -138,9 +138,31 @@ Linhas: ~1078779
 **Referenciada por:**
 - dbo.sis_log_detalhe.id_log
 
+## dbo.sis_log_auditoria
+
+Linhas: ~71
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_usuario | int | S |  |  |  |
+| 3 | login | varchar(50) | S |  |  |  |
+| 4 | dt_operacao | datetime2 | N |  | (sysdatetime()) |  |
+| 5 | ip_terminal | varchar(45) | S |  |  |  |
+| 6 | funcionalidade | varchar(100) | N |  |  |  |
+| 7 | operacao | varchar(50) | N |  |  |  |
+| 8 | id_registro | varchar(100) | S |  |  |  |
+| 9 | descricao | varchar(500) | S |  |  |  |
+
+**Índices/Chaves:**
+- IDX `IX_sla_dt` (NONCLUSTERED): dt_operacao
+- IDX `IX_sla_func` (NONCLUSTERED): funcionalidade
+- IDX `IX_sla_usuario` (NONCLUSTERED): id_usuario
+- PK `PK_sis_log_auditoria` (CLUSTERED): id
+
 ## dbo.sis_log_detalhe
 
-Linhas: ~1078779
+Linhas: ~1094274
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -155,7 +177,7 @@ Linhas: ~1078779
 
 ## dbo.sis_logon_logoff_usuario
 
-Linhas: ~8903
+Linhas: ~9097
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -174,7 +196,7 @@ Linhas: ~8903
 
 ## dbo.sis_menu
 
-Linhas: ~172
+Linhas: ~190
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -206,7 +228,7 @@ Linhas: ~172
 
 ## dbo.sis_menu_direitos
 
-Linhas: ~328
+Linhas: ~373
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -226,7 +248,7 @@ Linhas: ~328
 
 ## dbo.sis_menu_direitos_mobilidade
 
-Linhas: ~5
+Linhas: ~11
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -265,7 +287,7 @@ Linhas: ~5
 
 ## dbo.sis_menu_infos
 
-Linhas: ~32
+Linhas: ~49
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -382,9 +404,22 @@ Linhas: ~41
 - id_relatorio → dbo.sis_relatorio.id_relatorio
 - id_usuario → dbo.sis_usuario.id_usuario
 
+## dbo.sis_senha_config
+
+Linhas: ~9
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | chave | varchar(50) | N |  |  |  |
+| 2 | valor | varchar(200) | N |  |  |  |
+| 3 | descricao | varchar(300) | S |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK__sis_senh__52ACE05B23A0DE96` (CLUSTERED): chave
+
 ## dbo.sis_usuario
 
-Linhas: ~37
+Linhas: ~42
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -403,6 +438,14 @@ Linhas: ~37
 | 13 | google_id | varchar(255) | S |  |  |  |
 | 14 | federated_provider | varchar(50) | S |  |  |  |
 | 15 | google_id_token_temp | varchar(50) | S |  |  |  |
+| 16 | senha_hash | varchar(64) | S |  |  |  |
+| 17 | senha_historico | varchar(max) | S |  |  |  |
+| 18 | tentativas_invalidas | tinyint | N |  | ((0)) |  |
+| 19 | bloqueado_ate | datetime2 | S |  |  |  |
+| 20 | dt_ultima_troca_senha | date | S |  |  |  |
+| 21 | fl_troca_obrigatoria | bit | N |  | ((0)) |  |
+| 22 | totp_secret | varchar(200) | S |  |  |  |
+| 23 | totp_habilitado | bit | N |  | ((0)) |  |
 
 **Índices/Chaves:**
 - IDX `IX_sis_usuario_nome` (NONCLUSTERED): nome
@@ -415,6 +458,8 @@ Linhas: ~37
 - id_grupo_equipamento → dbo.grupo_equipamento.id_grupo_equipamento
 
 **Referenciada por:**
+- dash.dashboard.id_usuario
+- dash.dataset.id_usuario
 - dbo.agenda_estatico.id_usuario
 - dbo.agenda_estatico_item.id_usuario_alter
 - dbo.agenda_estatico_validacao.id_usuario
@@ -481,6 +526,7 @@ Linhas: ~37
 - muralha.config_monitoramento_ao_vivo.id_usuario
 - muralha.config_semelhanca_placa.id_usuario
 - muralha.config_semelhanca_placa.id_usuario_exclusao
+- muralha.dashboard_painel.id_usuario
 - muralha.fato.id_usuario
 - muralha.guarnicao.id_usuario_responsavel
 - muralha.guarnicao.id_usuario_criacao
@@ -497,6 +543,26 @@ Linhas: ~37
 - muralha.token_acesso_mobilidade_urbana.id_usuario
 - muralha.veiculo_tempo_real_correcao.id_usuario
 
+## dbo.sis_usuario_complemento
+
+Linhas: ~0
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_usuario | int | N |  |  |  |
+| 2 | senha_hash | varchar(64) | S |  |  |  |
+| 3 | senha_historico | varchar(max) | S |  |  |  |
+| 4 | tentativas_invalidas | int | N |  | ((0)) |  |
+| 5 | bloqueado_ate | datetime2 | S |  |  |  |
+| 6 | senha_trocada_em | datetime2 | S |  |  |  |
+| 7 | totp_secret | varchar(200) | S |  |  |  |
+| 8 | totp_habilitado | bit | N |  | ((0)) |  |
+| 9 | cpf | char(11) | S |  |  |  |
+| 10 | matricula | varchar(20) | S |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK_sis_usuario_complemento` (CLUSTERED): id_usuario
+
 ## dbo.sis_usuario_eventos_CAV
 
 Linhas: ~0
@@ -508,7 +574,7 @@ Linhas: ~0
 
 ## dbo.sis_usuario_grupo
 
-Linhas: ~192
+Linhas: ~203
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

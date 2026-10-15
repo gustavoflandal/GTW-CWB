@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `veiculo`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.veiculo
 
-Linhas: ~74459
+Linhas: ~75755
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -115,7 +115,7 @@ Linhas: ~0
 
 ## dbo.veiculo_estatistica
 
-Linhas: ~3130567
+Linhas: ~3264495
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -294,7 +294,7 @@ Linhas: ~0
 
 ## dbo.veiculo_imagem
 
-Linhas: ~107771
+Linhas: ~110341
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -633,7 +633,7 @@ Linhas: ~1482156
 
 ## dbo.veiculo_pesagem_eixo
 
-Linhas: ~66076
+Linhas: ~66084
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -675,7 +675,7 @@ Linhas: ~0
 
 ## dbo.veiculo_sumarizado
 
-Linhas: ~4146565
+Linhas: ~4151334
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -705,7 +705,7 @@ Linhas: ~4146565
 
 ## dbo.veiculo_sumarizado_faixa_velocidade
 
-Linhas: ~2409354
+Linhas: ~2412990
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -718,7 +718,7 @@ Linhas: ~2409354
 
 ## dbo.veiculo_sumarizado_relatorio
 
-Linhas: ~292372
+Linhas: ~292885
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -813,7 +813,7 @@ Linhas: ~4429155
 
 ## dbo.veiculo_video
 
-Linhas: ~11447
+Linhas: ~12743
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

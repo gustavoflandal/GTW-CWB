@@ -1,6 +1,6 @@
 # Tabelas — schema `dbo` — grupo `outros`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.agendamento_processamento
 
@@ -491,7 +491,7 @@ Linhas: ~0
 | 1 | stream_id | uniqueidentifier | N |  | (newsequentialid()) |  |
 | 2 | file_stream | varbinary(max) | S |  |  |  |
 | 3 | name | nvarchar(255) | N |  |  |  |
-| 4 | path_locator | hierarchyid | N |  | (convert(hierarchyid, '/' +     convert(varchar(20), convert(bigint, substring(convert(binary(16), newid()), 1, 6))) + '.' +     convert(varchar(20), convert(bigint, substring(convert(binary(16), newid()), 7, 6))) + '.' +     convert(varchar(20), convert(b |  |
+| 4 | path_locator | hierarchyid | N |  | (convert(hierarchyid, '/' +     convert(varchar(20), convert(bigint, substring(convert(binary(16), newid()), 1, 6))) + '.' +     convert(varchar(20), convert(bigint, substring(convert(binary(16), newid()), 7, 6))) + '.' +     convert(varchar(20), convert(bigint, substring(convert(binary(16), newid()), 13, 4))) + '/')) |  |
 | 5 | parent_path_locator | hierarchyid | S |  |  |  |
 | 6 | file_type | nvarchar(255) | S |  |  |  |
 | 7 | cached_file_size | bigint | S |  |  |  |
@@ -1231,7 +1231,7 @@ Linhas: ~0
 
 ## dbo.reindex
 
-Linhas: ~9
+Linhas: ~8
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -1436,7 +1436,7 @@ Linhas: ~0
 
 ## dbo.tempo_processamento
 
-Linhas: ~46774
+Linhas: ~46851
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

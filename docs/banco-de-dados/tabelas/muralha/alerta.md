@@ -1,6 +1,6 @@
 # Tabelas — schema `muralha` — grupo `alerta`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## muralha.alerta
 
@@ -121,6 +121,41 @@ Linhas: ~34
 
 **FKs (saída):**
 - id_questionario_alerta → muralha.alerta_questionario.id
+
+## muralha.alerta_sla
+
+Linhas: ~710
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | dt_alerta | datetime2 | N |  | (sysdatetime()) |  |
+| 3 | janela_inicio | datetime2 | N |  |  |  |
+| 4 | janela_fim | datetime2 | N |  |  |  |
+| 5 | total_passagens | int | N |  |  |  |
+| 6 | percentil95_ms | int | N |  |  |  |
+| 7 | threshold_ms | int | N |  |  |  |
+| 8 | violacao | bit | N |  |  |  |
+| 9 | locais_top | varchar(500) | S |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK__alerta_s__3213E83F218ABD35` (CLUSTERED): id
+
+## muralha.alerta_sla_preproc
+
+Linhas: ~89
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | dt_alerta | datetime2 | N |  | (sysdatetime()) |  |
+| 3 | total_pendentes | int | N |  |  |  |
+| 4 | acima_72h | int | N |  |  |  |
+| 5 | acima_48h | int | N |  |  |  |
+| 6 | acima_24h | int | N |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK__alerta_s__3213E83F72497446` (CLUSTERED): id
 
 ## muralha.alerta_usuario_visualiza
 

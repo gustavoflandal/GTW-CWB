@@ -31,7 +31,9 @@ graph TB
         subgraph Muralha["muralha.digital (Moderno)"]
             SERVLETS["@WebServlet<br/>/MuralhaDigital/*"]
             SERVICES["Services<br/>(Auditoria, Senha, TOTP,<br/>Obliteração, Assinatura)"]
-            JOBS["Quartz Jobs<br/>(10 jobs ativos)"]
+            JOBS["Quartz Jobs<br/>(12 jobs ativos)"]
+            CHAMADOS["Sistema de Chamados<br/>/MuralhaDigital/Chamado<br/>ChamadoRelatorio, ChamadoConfig<br/>ChamadoSlaJob, ChamadoEmailJob"]
+            DASHB["Construtor de Dashboards<br/>(datasets, painéis, widgets)"]
         end
 
         subgraph Infra["Infraestrutura"]
@@ -47,7 +49,9 @@ graph TB
 
     subgraph Banco["🗄️ SQL Server — GTW_MURALHA_DEV"]
         DBO["dbo.*<br/>(sistema, usuários, menus)"]
-        MUR["muralha.*<br/>(passagens, infrações,<br/>monitoramento)"]
+        MUR["muralha.*<br/>(passagens, infrações,<br/>monitoramento, chamado*, vtr_*)"]
+        DASH["dash.*<br/>(construtor de dashboards)"]
+        MOB["mobilidade.* · ia.*<br/>(Waze; IA de veículos)"]
         VIEWS["Views<br/>(vw_passagem_anonimizada)"]
     end
 
@@ -67,15 +71,23 @@ graph TB
     SERVLETS --> SERVICES
     SERVICES --> CONEXAO
     SERVLETS --> AUDIT
+    SERVLETS --> CHAMADOS
+    SERVLETS --> DASHB
     JOBS --> CONEXAO
+    CHAMADOS --> CONEXAO
+    DASHB --> CONEXAO
 
     CONEXAO --> DBO
     CONEXAO --> MUR
+    CONEXAO --> DASH
+    CONEXAO -.-> MOB
 
     JOBS --> WAZE
     JOBS --> EMAIL
     JOBS --> SMS
 ```
+
+O banco `GTW_MURALHA_DEV` (SQL Server 2016, ≈ 722 GB) tem **5 schemas e 788 tabelas** em 2026-10-15: `dbo` (436), `muralha` (148), `mobilidade` (183, não usado pelo Java deste projeto), `ia` (6) e `dash` (15, criado em 2026-10-13), além de 126 views, 390 procedures, 302 funções, 8 triggers e 666 chaves estrangeiras. O detalhe está em [`../banco-de-dados/README.md`](../banco-de-dados/README.md).
 
 ---
 
@@ -116,6 +128,11 @@ graph LR
         P18["18 Disponibilidade<br/>DisponibilidadeServlet<br/>equipamento_disponibilidade"]
         P19["19 Sensores<br/>IncidenteServlet<br/>incidente_externo"]
     end
+
+    subgraph Fase6["Fase 6 — Dashboards e Atendimento"]
+        P20["20/21 Construtor de Dashboards<br/>schema dash (15 tabelas)"]
+        P22["22 Sistema de Chamados<br/>ChamadoServlet · ChamadoRelatorioServlet<br/>ChamadoConfigServlet · muralha.chamado*"]
+    end
 ```
 
 ---
@@ -142,6 +159,10 @@ gantt
     SMS Alertas (5 min)               :b3, 0, 5
     SMS Ocorrências (5 min)           :b4, 0, 5
 
+    section Chamados
+    SLA dos Chamados (5 min)          :d1, 0, 5
+    E-mail dos Chamados (1 min)       :d2, 0, 1
+
     section Legado
     Processa Automático (10 min)      :c1, 0, 10
     Agendamento Infração (10 min)     :c2, 0, 10
@@ -150,6 +171,8 @@ gantt
 ---
 
 ## 4. Banco de Dados — Tabelas PoC
+
+Convenção: nos diagramas `erDiagram`, `schema.tabela` é escrito `schema_tabela` (o Mermaid não aceita ponto no nome). Os nomes sem prefixo abaixo estão em `muralha` (exceto `sis_*`, em `dbo`). Os atributos do diagrama a seguir são ilustrativos; as colunas reais estão em [`../banco-de-dados/tabelas/`](../banco-de-dados/tabelas/).
 
 ```mermaid
 erDiagram
@@ -294,6 +317,38 @@ erDiagram
     }
 ```
 
+### 4.1 Sistema de Chamados (Plano 22)
+
+```mermaid
+erDiagram
+    muralha_chamado_categoria ||--o{ muralha_chamado : "classifica"
+    muralha_chamado_prioridade ||--o{ muralha_chamado : "define SLA"
+    muralha_chamado ||--o{ muralha_chamado_historico : "eventos"
+    muralha_chamado ||--o{ muralha_chamado_anexo : "arquivos"
+    muralha_chamado ||--o{ muralha_chamado_notificacao : "fila de e-mail"
+    dbo_sis_usuario ||..o{ muralha_chamado : "solicitante e responsavel (logica)"
+    dbo_local ||..o{ muralha_chamado : "equipamento (logica)"
+    muralha_chamado_protocolo
+```
+
+Linha tracejada = relação lógica, sem FK. `ChamadoSlaJob` (5 min) recalcula os prazos/SLA e `ChamadoEmailJob` (1 min) envia as linhas pendentes de `chamado_notificacao`. Colunas completas e diagrama detalhado em [`../banco-de-dados/README.md`](../banco-de-dados/README.md) §6A.
+
+### 4.2 Construtor de Dashboards (schema `dash`)
+
+```mermaid
+erDiagram
+    dash_catalogo_tabela ||--o{ dash_catalogo_coluna : "colunas"
+    dash_catalogo_tabela ||--o{ dash_dataset : "tabela base"
+    dash_dataset ||--o{ dash_dataset_tabela : "tabelas"
+    dash_dataset ||--o{ dash_dataset_campo : "campos"
+    dash_dataset ||--o{ dash_dataset_relacao : "juncoes"
+    dash_dashboard ||--o{ dash_widget : "graficos"
+    dash_dataset ||--o{ dash_widget : "fonte de dados"
+    dbo_sis_usuario ||--o{ dash_dashboard : "autor"
+```
+
+Também fazem parte do schema `catalogo_relacao`, `dataset_filtro_fixo`, `dataset_modelador`, `dataset_estatistica`, `compartilhamento`, `historico_versao` e `consulta_log` (15 tabelas no total; ver [`../banco-de-dados/README.md`](../banco-de-dados/README.md) §5A e §6B).
+
 ---
 
 ## 5. Módulos Legados — Visão Geral
@@ -336,6 +391,6 @@ mindmap
     muralha.digital
       57 módulos
       108 servlets
-      10 Quartz jobs
+      12 Quartz jobs
       6 services
       WebSocket

@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `status`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.status_conexao
 
-Linhas: ~11314
+Linhas: ~11341
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -28,7 +28,7 @@ Linhas: ~11314
 
 ## dbo.status_div
 
-Linhas: ~189176
+Linhas: ~199326
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -57,7 +57,7 @@ Linhas: ~189176
 
 ## dbo.status_energia
 
-Linhas: ~464
+Linhas: ~467
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

@@ -1,10 +1,10 @@
 # Tabelas — schema `mobilidade` — grupo `alertas`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## mobilidade.alertas
 
-Linhas: ~5365
+Linhas: ~11076
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -48,7 +48,7 @@ Linhas: ~5365
 
 ## mobilidade.alertas_atual
 
-Linhas: ~0
+Linhas: ~1441
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

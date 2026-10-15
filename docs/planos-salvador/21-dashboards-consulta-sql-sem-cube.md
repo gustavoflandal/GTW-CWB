@@ -192,7 +192,7 @@ ORDER BY <ordem pedida, somente membros da consulta>
 | Alterar | `src/main/webapp/muralha-digital/pages/analises/datasets/index.jsp`, `datasets/modelador.jsp`, `analises/manual.jsp` (menções ao Cube) |
 | Criar | `docs/banco-de-dados/migracoes/<data>_dash_correcao_datasets_demo.sql` (se a validação da tarefa 7 apontar campos inválidos) |
 | Remover (tarefa 9) | `GeradorModeloCube.java`, `JwtService.java`, `DashInternoServlet.java`, `cube/`, `docker-compose.cube.yml` |
-| Atualizar | `docs/dashboards/construtor-dashboards-arquitetura.md`, `docs/manual-dashboard-builder.md`, `docs/entregas/21-dashboard-builder.md` |
+| Atualizar | `docs/dashboards/construtor-dashboards-arquitetura.md`, `docs/dashboards/manual-dashboard-builder.md`, `docs/entregas/21-dashboard-builder.md` |
 
 ---
 
@@ -281,7 +281,7 @@ ORDER BY <ordem pedida, somente membros da consulta>
 ### Tarefa 10: Documentação
 
 - [x] Atualizar `docs/dashboards/construtor-dashboards-arquitetura.md` (novo fluxo, sem Cube).
-- [x] Atualizar `docs/manual-dashboard-builder.md`.
+- [x] Atualizar `docs/dashboards/manual-dashboard-builder.md`.
 - [x] Atualizar `docs/entregas/21-dashboard-builder.md`, com seção **Origem** apontando para este plano.
 - [x] Atualizar `docs/referencia/servlets-e-endpoints.md` (remover `/api/dash/interno/*`).
 
@@ -291,7 +291,7 @@ ORDER BY <ordem pedida, somente membros da consulta>
 
 **Resultado:** tarefas 0 a 7, 9 e 10 concluídas; Tarefa 8 feita via HTTP (falta o roteiro no navegador).
 
-- **Correção da Tarefa 10:** a primeira checagem de menções ao Cube nos documentos usou um filtro que não casava com nenhum arquivo e concluiu, por engano, que `manual-dashboard-builder.md` e `referencia/*.md` estavam limpos. Na Tarefa 9 foram corrigidos de fato: `requisitos/04-modulos-funcionais.md`, `manual-dashboard-builder.md`, `referencia/servlets-e-endpoints.md`, `referencia/modulos-backend-muralha.md`, `referencia/inventario-pacotes-java.md` e `.gitignore`. Relatórios de sessão DASH, migrações já executadas e especificações antigas mantêm as menções como registro histórico.
+- **Correção da Tarefa 10:** a primeira checagem de menções ao Cube nos documentos usou um filtro que não casava com nenhum arquivo e concluiu, por engano, que `dashboards/manual-dashboard-builder.md` e `referencia/*.md` estavam limpos. Na Tarefa 9 foram corrigidos de fato: `requisitos/04-modulos-funcionais.md`, `dashboards/manual-dashboard-builder.md`, `referencia/servlets-e-endpoints.md`, `referencia/modulos-backend-muralha.md`, `referencia/inventario-pacotes-java.md` e `.gitignore`. Relatórios de sessão DASH, migrações já executadas e especificações antigas mantêm as menções como registro histórico.
 
 - **Testes:** 101 testes TestNG do pacote `dashboards` passando, incluindo `MontadorSqlTest` (35), `PeriodoRelativoTest` (10) e `ConsultaIntegracaoTest` (4, somente leitura no `GTW_MURALHA_DEV`). Para rodar a integração: definir `DASH_TESTE_JDBC_URL`, `DASH_TESTE_USUARIO` e `DASH_TESTE_SENHA` e passar o driver com `-Dmaven.test.additionalClasspath=<mssql-jdbc-9.2.1.jre8.jar>`, porque o driver não é dependência de teste no `pom.xml`.
 - **Desvio 1 — pré-agregação (não prevista):** agrupar `veiculo_tempo_real` (~8,2 milhões de linhas) pelo nome do equipamento levava 80 s no SQL Server 2016, mesmo com `HASH GROUP`. Agrupar antes pela chave `id_local` e só então juntar `local_vigente` leva 0,4 s. O `MontadorSql` passou a gerar essa subconsulta quando todas as medidas são da tabela base (`SUM`, `COUNT`, `MIN`, `MAX`, `AVG`) e todos os joins são N:1 ou 1:1. Medido pela aplicação: contagem por equipamento sem período, de erro após 30 s para 2,2 s; setembro por dia e equipamento, de 20 s para 2,3 s.

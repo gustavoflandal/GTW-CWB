@@ -1,6 +1,6 @@
 # Tabelas — schema `dbo` — grupo `cad`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.cad_arquivos_importados
 
@@ -506,7 +506,7 @@ Linhas: ~8
 
 ## dbo.cad_veiculo_monitorado
 
-Linhas: ~5
+Linhas: ~10
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
