@@ -104,11 +104,13 @@ export function renderizarBarras(elemento, widget, dados) {
         }
         chart.setOption(option, true);
 
-        // Redimensionar ao mudar tamanho da janela
-        const resizeObserver = new ResizeObserver(() => {
-            chart.resize();
-        });
-        resizeObserver.observe(elemento);
+        if (!elemento.__observadorResize) {
+            elemento.__observadorResize = new ResizeObserver(() => {
+                const c = echarts.getInstanceByDom(elemento);
+                if (c) c.resize();
+            });
+            elemento.__observadorResize.observe(elemento);
+        }
 
     } catch (e) {
         elemento.innerHTML = '<div style="color:var(--bs-danger);text-align:center;padding:1rem"><i class="bi bi-exclamation-triangle"></i> Erro: ' + e.message + '</div>';

@@ -88,7 +88,7 @@ export async function abrirPainel(id) {
     var breadcrumb = document.getElementById('breadcrumbPainel');
     if (breadcrumb) breadcrumb.textContent = r.painel.nome;
     document.getElementById('barraPainel').style.display = 'flex';
-    document.getElementById('placeholderVazio').style.display = 'none';
+    document.getElementById('placeholderVazio').classList.add('d-none');
     document.getElementById('areaGrid').style.display = 'block';
     document.getElementById('seletorRefresh').value = r.painel.refreshSeg || 0;
 
@@ -116,7 +116,8 @@ function inicializarFiltrosGlobaisUI(painel) {
 
 function inicializarGrid() {
     if (grid) {
-        grid.destroy(true);
+        grid.destroy(false);
+        grid = null;
     }
 
     var el = document.getElementById('gridStack');
@@ -130,7 +131,9 @@ function inicializarGrid() {
         float: false,
         animate: true,
         disableResize: false,
-        disableDrag: false
+        disableDrag: false,
+        handle: '.widget-header',
+        resizable: { handles: 'n,ne,e,se,s,sw,w,nw' }
     }, el);
 
     grid.on('change', function(items) {
@@ -140,8 +143,10 @@ function inicializarGrid() {
 
 function renderizarWidgetsNoGrid(widgets) {
     if (!grid) return;
+    Object.keys(chartsAtivos).forEach(function(id) { chartsAtivos[id].dispose(); });
     grid.removeAll(true);
     chartsAtivos = {};
+    sequenciaCarga = {};
 
     for (var i = 0; i < widgets.length; i++) {
         adicionarWidgetAoGrid(widgets[i]);
@@ -149,16 +154,19 @@ function renderizarWidgetsNoGrid(widgets) {
 }
 
 function adicionarWidgetAoGrid(w) {
-    var cardEl = criarCardWidget(w);
-
-    grid.addWidget({
-        id: String(w.id),
-        x: w.gridX || 0,
-        y: w.gridY || 0,
-        w: w.gridW || 4,
-        h: w.gridH || 3,
-        el: cardEl
-    });
+    var item = document.createElement('div');
+    item.className = 'grid-stack-item';
+    item.setAttribute('gs-id', String(w.id));
+    item.setAttribute('gs-x', w.gridX || 0);
+    item.setAttribute('gs-y', w.gridY || 0);
+    item.setAttribute('gs-w', w.gridW || 4);
+    item.setAttribute('gs-h', w.gridH || 3);
+    var conteudo = document.createElement('div');
+    conteudo.className = 'grid-stack-item-content';
+    conteudo.appendChild(criarCardWidget(w));
+    item.appendChild(conteudo);
+    grid.el.appendChild(item);
+    grid.makeWidget(item);
 
     carregarDadosWidget(w);
 }
@@ -171,6 +179,8 @@ function criarCardWidget(w) {
     card.innerHTML =
         '<div class="widget-header">' +
             '<span>' + escapeHtml(w.titulo || 'Widget') + '</span>' +
+            '<div class="d-flex align-items-center gap-2">' +
+            '<span class="widget-atualizando spinner-border spinner-border-sm text-secondary d-none" role="status" title="Atualizando"></span>' +
             '<div class="dropdown">' +
                 '<button class="btn btn-sm btn-link p-0 text-body-secondary" data-bs-toggle="dropdown">' +
                     '<i class="bi bi-three-dots-vertical"></i>' +
@@ -191,6 +201,7 @@ function criarCardWidget(w) {
                     '<li><a class="dropdown-item text-danger acao-remover" href="#" data-wid="' + w.id + '">' +
                         '<i class="bi bi-trash"></i> Remover</a></li>' +
                 '</ul>' +
+            '</div>' +
             '</div>' +
         '</div>' +
         '<div class="widget-body">' +
@@ -226,14 +237,29 @@ function criarCardWidget(w) {
     return card;
 }
 
+var sequenciaCarga = {};
+
 async function carregarDadosWidget(widget) {
     var inicio = performance.now();
     var graficoEl = document.getElementById('grafico-' + widget.id);
     var footerEl = document.getElementById('footer-' + widget.id);
-    var bodyEl = graficoEl ? graficoEl.closest('.widget-body') : null;
-    var loadingEl = bodyEl ? bodyEl.querySelector('.widget-loading') : null;
+    var cardEl = graficoEl ? graficoEl.closest('.widget-card') : null;
+    var loadingEl = cardEl ? cardEl.querySelector('.widget-loading') : null;
+    var atualizandoEl = cardEl ? cardEl.querySelector('.widget-atualizando') : null;
+    var seq = (sequenciaCarga[widget.id] || 0) + 1;
+    sequenciaCarga[widget.id] = seq;
 
-    if (loadingEl) loadingEl.style.display = 'flex';
+    // No refresh o conteudo atual continua visivel; so a primeira carga cobre o widget.
+    if (graficoEl && graficoEl.dataset.renderizado === '1') {
+        if (atualizandoEl) atualizandoEl.classList.remove('d-none');
+    } else if (loadingEl) {
+        loadingEl.style.display = 'flex';
+    }
+
+    function concluir() {
+        if (loadingEl) loadingEl.style.display = 'none';
+        if (atualizandoEl) atualizandoEl.classList.add('d-none');
+    }
 
     try {
         var consulta = widget.consulta || {};
@@ -260,6 +286,7 @@ async function carregarDadosWidget(widget) {
             datasetId: widget.idDataset,
             query: consulta
         });
+        if (seq !== sequenciaCarga[widget.id]) return;
 
         var tempoMs = Math.round(performance.now() - inicio);
         var cacheHit = r.cacheHit || false;
@@ -273,25 +300,27 @@ async function carregarDadosWidget(widget) {
             }
             footerEl.innerHTML = footerHtml;
         }
-        if (loadingEl) loadingEl.style.display = 'none';
+        concluir();
 
         if (!graficoEl) return;
 
         if (!r.ok) {
-            graficoEl.innerHTML = '<div class="widget-erro"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(r.erro || 'Erro') + '</div>';
+            substituirConteudo(widget.id, graficoEl, '<div class="widget-erro"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(r.erro || 'Erro') + '</div>');
             return;
         }
 
         if (!r.data || r.data.length === 0) {
-            graficoEl.innerHTML = '<div class="widget-vazio"><div class="text-center"><i class="bi bi-inbox" style="font-size:1.5rem"></i><div>Sem dados</div></div></div>';
+            substituirConteudo(widget.id, graficoEl, '<div class="widget-vazio"><div class="text-center"><i class="bi bi-inbox" style="font-size:1.5rem"></i><div>Sem dados</div></div></div>');
             return;
         }
 
-        graficoEl.innerHTML = '';
+        // Reaproveita a instancia do ECharts (setOption) para o grafico trocar sem piscar.
+        if (!echarts.getInstanceByDom(graficoEl)) graficoEl.innerHTML = '';
         renderizarWidget(graficoEl, widget, r.data);
+        graficoEl.dataset.renderizado = '1';
 
         var chart = echarts.getInstanceByDom(graficoEl);
-        if (chart) {
+        if (chart && chartsAtivos[widget.id] !== chart) {
             chartsAtivos[widget.id] = chart;
             filtroCruzado.registrarClique(widget.id, chart, widget);
             drillDown.registrar(widget.id, chart, widget);
@@ -300,11 +329,20 @@ async function carregarDadosWidget(widget) {
         gerarTabelaAuxiliar(widget.id, r.data);
 
     } catch (e) {
-        if (loadingEl) loadingEl.style.display = 'none';
+        if (seq !== sequenciaCarga[widget.id]) return;
+        concluir();
         if (graficoEl) {
-            graficoEl.innerHTML = '<div class="widget-erro"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(e.message) + '</div>';
+            substituirConteudo(widget.id, graficoEl, '<div class="widget-erro"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(e.message) + '</div>');
         }
     }
+}
+
+function substituirConteudo(widgetId, el, html) {
+    var chart = echarts.getInstanceByDom(el);
+    if (chart) chart.dispose();
+    delete chartsAtivos[widgetId];
+    el.innerHTML = html;
+    el.dataset.renderizado = '1';
 }
 
 function recarregarWidget(widgetId) {
@@ -375,14 +413,14 @@ function salvarLayoutDebounced() {
 
 async function salvarLayout() {
     if (!grid || !painelAtual) return;
-    var items = grid.getGridItems();
-    var widgets = items.map(function(item) {
+    var widgets = grid.getGridItems().map(function(el) {
+        var n = el.gridstackNode;
         return {
-            id: parseInt(item.id || item.el.querySelector('[data-widget-id]').dataset.widgetId),
-            gridX: item.x,
-            gridY: item.y,
-            gridW: item.w,
-            gridH: item.h
+            id: parseInt(n.id || el.querySelector('[data-widget-id]').dataset.widgetId),
+            gridX: n.x,
+            gridY: n.y,
+            gridW: n.w,
+            gridH: n.h
         };
     });
 

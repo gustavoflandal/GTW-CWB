@@ -64,7 +64,7 @@ export function renderizarHeatmap(elemento, widget, dados) {
         if (typeof echarts === 'undefined') { elemento.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ECharts nao carregado</div>'; return; }
         var chart = echarts.getInstanceByDom(elemento) || echarts.init(elemento);
         chart.setOption(option, true);
-        new ResizeObserver(function() { chart.resize(); }).observe(elemento);
+        if (!elemento.__observadorResize) { elemento.__observadorResize = new ResizeObserver(function() { var c = echarts.getInstanceByDom(elemento); if (c) c.resize(); }); elemento.__observadorResize.observe(elemento); }
     } catch (e) {
         elemento.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> Erro: ' + e.message + '</div>';
     }
