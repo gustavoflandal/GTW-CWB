@@ -27,6 +27,23 @@
 
 ---
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+Cada plano individual possui uma seção **"Referência ao Edital"** com os itens específicos do TR que endereça. A análise de aderência consolidada está em [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md).
+
+| Módulo TR | Seção | Planos que endereçam |
+|---|---|---|
+| Controle de Acesso | §5.1 | 01, 03, 04, 05, 09, 12 |
+| Gestão e Classificação de Infrações | §5.2 | 02, 05, 06, 07, 08, 10, 11, 14, 15, 17, 18 |
+| Alertas de Irregularidades | §5.3 | 07, 11, 16, 19 |
+| Inteligência de Dados | §5.4 | 01, 11, 13, 15, 16, 18, 20 |
+| Pré-processamento de Imagens | §5.5 | 05, 10, 12, 20 |
+| Infraestrutura de Comunicação | §5.6 | 07, 18 |
+| LAP | §5.7 | 07, 12, 13, 17 |
+| Datacenter / Disponibilidade | §5.8 | 07, 18 |
+
+---
+
 ## Ordem de Execução dos Planos
 
 Execute nesta ordem exata — cada plano é independente, mas os de auditoria e senhas devem vir antes dos outros:

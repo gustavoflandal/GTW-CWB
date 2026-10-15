@@ -23,7 +23,7 @@
 - Preserve a numeração `00–12` e os nomes de arquivo (outros docs apontam para eles).
 
 ## Regeneração de referências
-Siga `agentes/prompts/regenerar-referencia.md`. Depois confira: contagens do `00-visao-geral.md` §2, links quebrados (`Grep` por `](`), e se a data de geração foi atualizada.
+Use os scripts em `docs/referencia/scripts/`. Depois confira: contagens do `00-visao-geral.md` §2, links quebrados (`Grep` por `](`), e se a data de geração foi atualizada.
 
 ## Entrega
 Lista de arquivos de doc alterados, o que mudou e quais afirmações foram verificadas.

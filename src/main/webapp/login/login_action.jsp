@@ -84,7 +84,7 @@
 			try {
 				mfaConn = Conexao.getConexao();
 				mfaPs = mfaConn.prepareStatement(
-						"SELECT totp_habilitado, totp_secret FROM dbo.sis_usuario WHERE id=?");
+						"SELECT totp_habilitado, totp_secret FROM dbo.sis_usuario_complemento WHERE id_usuario=?");
 				mfaPs.setInt(1, usuario.getId());
 				mfaRs = mfaPs.executeQuery();
 				if (mfaRs.next()) {

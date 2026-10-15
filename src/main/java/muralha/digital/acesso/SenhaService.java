@@ -6,7 +6,6 @@ import com.google.gson.reflect.TypeToken;
 import muralha.digital.util.HashUtil;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
@@ -63,7 +62,7 @@ public final class SenhaService {
         try {
             conn = Conexao.getConexao();
             try (PreparedStatement ps = conn.prepareStatement(
-                    "SELECT senha_hash, senha_historico FROM dbo.sis_usuario WHERE id = ?")) {
+                    "SELECT senha_hash, senha_historico FROM dbo.sis_usuario_complemento WHERE id_usuario = ?")) {
                 ps.setInt(1, idUsuario);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -98,7 +97,7 @@ public final class SenhaService {
             String histJson = "[]";
             String hashAtual = null;
             try (PreparedStatement ps = conn.prepareStatement(
-                    "SELECT senha_hash, senha_historico FROM dbo.sis_usuario WHERE id = ?")) {
+                    "SELECT senha_hash, senha_historico FROM dbo.sis_usuario_complemento WHERE id_usuario = ?")) {
                 ps.setInt(1, idUsuario);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -115,12 +114,17 @@ public final class SenhaService {
             while (hist.size() > max) hist.remove(0);
 
             try (PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE dbo.sis_usuario SET senha_hash=?, senha_historico=?, " +
-                    "dt_ultima_troca_senha=CAST(SYSDATETIME() AS DATE), fl_troca_obrigatoria=0, " +
-                    "tentativas_invalidas=0, bloqueado_ate=NULL WHERE id=?")) {
-                ps.setString(1, novoHash);
-                ps.setString(2, new Gson().toJson(hist));
-                ps.setInt(3, idUsuario);
+                    "MERGE dbo.sis_usuario_complemento AS alvo " +
+                    "USING (SELECT ? AS id) AS src ON alvo.id_usuario = src.id " +
+                    "WHEN MATCHED THEN UPDATE SET senha_hash=?, senha_historico=?, " +
+                    "  senha_trocada_em=SYSDATETIME(), tentativas_invalidas=0, bloqueado_ate=NULL " +
+                    "WHEN NOT MATCHED THEN INSERT (id_usuario, senha_hash, senha_historico, senha_trocada_em) " +
+                    "  VALUES (src.id, ?, ?, SYSDATETIME());")) {
+                ps.setInt(1, idUsuario);
+                ps.setString(2, novoHash);
+                ps.setString(3, new Gson().toJson(hist));
+                ps.setString(4, novoHash);
+                ps.setString(5, new Gson().toJson(hist));
                 ps.executeUpdate();
             }
         } finally {
@@ -136,7 +140,9 @@ public final class SenhaService {
         try {
             conn = Conexao.getConexao();
             try (PreparedStatement ps = conn.prepareStatement(
-                    "SELECT bloqueado_ate FROM dbo.sis_usuario WHERE login=?")) {
+                    "SELECT suc.bloqueado_ate FROM dbo.sis_usuario u " +
+                    "INNER JOIN dbo.sis_usuario_complemento suc ON suc.id_usuario = u.id_usuario " +
+                    "WHERE u.login=?")) {
                 ps.setString(1, login);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
@@ -161,12 +167,18 @@ public final class SenhaService {
         try {
             conn = Conexao.getConexao();
             String sql = min > 0
-                ? "UPDATE dbo.sis_usuario SET tentativas_invalidas = tentativas_invalidas+1, " +
-                  "bloqueado_ate = CASE WHEN tentativas_invalidas+1 >= " + max +
-                  " THEN DATEADD(MINUTE," + min + ",SYSDATETIME()) ELSE bloqueado_ate END WHERE login=?"
-                : "UPDATE dbo.sis_usuario SET tentativas_invalidas = tentativas_invalidas+1, " +
-                  "bloqueado_ate = CASE WHEN tentativas_invalidas+1 >= " + max +
-                  " THEN CAST('9999-12-31' AS DATETIME2) ELSE bloqueado_ate END WHERE login=?";
+                ? "MERGE dbo.sis_usuario_complemento AS alvo " +
+                  "USING (SELECT id_usuario FROM dbo.sis_usuario WHERE login=?) AS src ON alvo.id_usuario = src.id_usuario " +
+                  "WHEN MATCHED THEN UPDATE SET tentativas_invalidas = alvo.tentativas_invalidas+1, " +
+                  "  bloqueado_ate = CASE WHEN alvo.tentativas_invalidas+1 >= " + max +
+                  "    THEN DATEADD(MINUTE," + min + ",SYSDATETIME()) ELSE alvo.bloqueado_ate END " +
+                  "WHEN NOT MATCHED THEN INSERT (id_usuario, tentativas_invalidas) VALUES (src.id_usuario, 1);"
+                : "MERGE dbo.sis_usuario_complemento AS alvo " +
+                  "USING (SELECT id_usuario FROM dbo.sis_usuario WHERE login=?) AS src ON alvo.id_usuario = src.id_usuario " +
+                  "WHEN MATCHED THEN UPDATE SET tentativas_invalidas = alvo.tentativas_invalidas+1, " +
+                  "  bloqueado_ate = CASE WHEN alvo.tentativas_invalidas+1 >= " + max +
+                  "    THEN CAST('9999-12-31' AS DATETIME2) ELSE alvo.bloqueado_ate END " +
+                  "WHEN NOT MATCHED THEN INSERT (id_usuario, tentativas_invalidas) VALUES (src.id_usuario, 1);";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setString(1, login);
                 ps.executeUpdate();
@@ -185,11 +197,11 @@ public final class SenhaService {
         try {
             conn = Conexao.getConexao();
             try (PreparedStatement ps = conn.prepareStatement(
-                    "SELECT dt_ultima_troca_senha FROM dbo.sis_usuario WHERE id=?")) {
+                    "SELECT senha_trocada_em FROM dbo.sis_usuario_complemento WHERE id_usuario=?")) {
                 ps.setInt(1, idUsuario);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        Date dt = rs.getDate("dt_ultima_troca_senha");
+                        Timestamp dt = rs.getTimestamp("senha_trocada_em");
                         if (dt == null) return true;
                         long dias = (System.currentTimeMillis() - dt.getTime()) / 86400000L;
                         return dias >= validade;
@@ -210,7 +222,10 @@ public final class SenhaService {
         try {
             conn = Conexao.getConexao();
             try (PreparedStatement ps = conn.prepareStatement(
-                    "UPDATE dbo.sis_usuario SET tentativas_invalidas=0, bloqueado_ate=NULL WHERE login=?")) {
+                    "UPDATE suc SET tentativas_invalidas=0, bloqueado_ate=NULL " +
+                    "FROM dbo.sis_usuario_complemento suc " +
+                    "INNER JOIN dbo.sis_usuario u ON u.id_usuario = suc.id_usuario " +
+                    "WHERE u.login=?")) {
                 ps.setString(1, login);
                 ps.executeUpdate();
             }

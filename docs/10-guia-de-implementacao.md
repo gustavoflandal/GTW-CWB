@@ -33,7 +33,7 @@ Referência: `consulta-veiculo/consulta.jsp`.
 ## 4. Registrar funcionalidade, menu e permissão
 1. `sis_menu` (funcionalidade protegida): `acao` = URL exata da JSP/servlet; `tipo='U'`; `nivel=1`; `id_pai_menu` = pai (ex.: 222 Anel de Segurança); `nome_sistema='Muralha-Digital'`; `Ativo=1`.
 2. `sis_menu_direitos`: uma linha por grupo (`id_grupo`) que pode usar.
-3. Navbar: item em `sis_menu_infos` (Processamento; `href`, `ordenacao`, `menu_pai` = id do submenu), `sis_menu_relatorio_infos` (Relatórios) ou `sis_menu_graficos_infos` (Gráficos).
+3. Navbar: item em `sis_menu_infos` (Processamento; colunas: `id_infos`, `id_menu`, `src` (imagem do card), `descricao`, `href`, `descricao_detalhada`, `ordenacao`, `menu_pai` = id do submenu), `sis_menu_relatorio_infos` (Relatórios) ou `sis_menu_graficos_infos` (Gráficos).
 4. Escopo fino (por tipo de alerta/notificação): `muralha.config_grupo_permissao`.
 5. Scripts de carga em `docs/banco-de-dados/migracoes/`; executar em DEV após aprovação.
 
@@ -52,7 +52,7 @@ Referência: `consulta-veiculo/consulta.jsp`.
 - Alterar procedures existentes: salvar a versão anterior em `codigo-sql/` (já é espelho do DEV) e anotar no PR; lembrar que há procedures consumidas por vários módulos (ver "Referencia" em `objetos-programaveis.md`).
 
 ## 7. Regenerar a documentação de referência
-Os arquivos de `docs/referencia/` e `docs/banco-de-dados/` foram **gerados por script** em 2026-10-08 (varredura de `web.xml`, `@WebServlet`, JSP/JS e `sys.*` do SQL Server). Ao final de mudanças relevantes, peça a um agente para regenerar (ver `agentes/prompts/regenerar-referencia.md`) ou ajustar manualmente a seção afetada.
+Os arquivos de `docs/referencia/` e `docs/banco-de-dados/` foram **gerados por script** em 2026-10-08 (varredura de `web.xml`, `@WebServlet`, JSP/JS e `sys.*` do SQL Server). Ao final de mudanças relevantes, peça a um agente para regenerar (ver `docs/referencia/scripts/`) ou ajustar manualmente a seção afetada.
 
 ## 8. Novo job agendado
 1. Classe `Job<Nome> implements org.quartz.Job` no módulo.

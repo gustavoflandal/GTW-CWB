@@ -4,7 +4,7 @@ Regenera os inventários de docs/referencia (servlets, módulos back-end, telas,
 
 .DESCRIPTION
 Somente LEITURA do código; escreve apenas em -Saida. Os arquivos gerados são heurísticos (regex) - confira no código-fonte.
-(menus-e-permissoes.md depende do banco: ver agentes/prompts/regenerar-referencia.md)
+(menus-e-permissoes.md depende do banco: atualizar manualmente apos mudancas)
 
 .EXAMPLE
 .\gerar-referencia.ps1                       # sobrescreve docs/referencia

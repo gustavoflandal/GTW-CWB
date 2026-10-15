@@ -9,10 +9,22 @@
 
 **Tech Stack:** Quartz Scheduler · SQL Server · Bootstrap 5.3 · Chart.js (cdnjs)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.7 | Telemetria operacional em tempo real (ver também [Plano 07](07-sla-latencia.md)) |
+| §5.4.2.3.e | Disponibilidade da solução |
+| §5.6.1.5 | Monitoramento de enlaces com alerta de degradação |
+| §5.8.2.1 | Disponibilidade mínima: 99,5% (sistema) / 99% (datacenter) — parcial |
+| §5.8.6.1 | Monitoramento contínuo da infraestrutura (ver também [Plano 07](07-sla-latencia.md)) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Quartz já no `pom.xml`; sem nova dependência
-- Threshold de inatividade: 15 minutos (configurável via `muralha.configuracao`)
+- Threshold de inatividade: 15 minutos (configurável via `muralha.config_chave_valor`)
 - Uptime calculado sobre janelas de 10 minutos: `(janelas_ativas / total_janelas) * 100`
 - Build: `..\.setup-gtw\build.ps1`
 
@@ -22,7 +34,7 @@
 
 | Ação | Caminho |
 |---|---|
-| Criar | `docs/banco-de-dados/migracoes/20261008_disponibilidade.sql` |
+| Criar | `docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql` |
 | Criar | `src/main/java/muralha/digital/disponibilidade/DisponibilidadeJob.java` |
 | Criar | `src/main/java/muralha/digital/disponibilidade/DisponibilidadeServlet.java` |
 | Criar | `src/main/webapp/muralha-digital/pages/monitoramento/disponibilidade/index.jsp` |
@@ -35,7 +47,7 @@
 - [ ] **Criar script**
 
 ```sql
--- docs/banco-de-dados/migracoes/20261008_disponibilidade.sql
+-- docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql
 -- ROLLBACK:
 --   DROP TABLE muralha.equipamento_disponibilidade;
 
@@ -51,7 +63,7 @@ CREATE TABLE muralha.equipamento_disponibilidade (
 CREATE INDEX ix_eq_disp_equip ON muralha.equipamento_disponibilidade (equipamento, dt_verificacao DESC);
 
 -- Configuração de threshold
-INSERT INTO muralha.configuracao (chave, valor, descricao)
+INSERT INTO muralha.config_chave_valor (chave, valor, descricao)
 VALUES ('disponibilidade_threshold_min', '15',
         'Minutos sem passagem para considerar equipamento offline');
 ```
@@ -59,13 +71,13 @@ VALUES ('disponibilidade_threshold_min', '15',
 - [ ] **Executar**
 
 ```powershell
-sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -i "docs\banco-de-dados\migracoes\20261008_disponibilidade.sql"
+sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -i "docs\banco-de-dados\migracoes\20261008_disponibilidade_incidentes.sql"
 ```
 
 - [ ] **Commit**
 
 ```bash
-git add docs/banco-de-dados/migracoes/20261008_disponibilidade.sql
+git add docs/banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql
 git commit -m "Adiciona tabela de disponibilidade de equipamentos para auditoria de uptime
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
@@ -158,7 +170,7 @@ public class DisponibilidadeJob implements Job {
 
     private int obterThreshold(Connection conn) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT valor FROM muralha.configuracao WHERE chave='disponibilidade_threshold_min'");
+                "SELECT valor FROM muralha.config_chave_valor WHERE chave='disponibilidade_threshold_min'");
              ResultSet rs = ps.executeQuery()) {
             if (rs.next()) return Integer.parseInt(rs.getString("valor"));
         }

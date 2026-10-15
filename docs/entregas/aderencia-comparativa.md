@@ -1,6 +1,6 @@
 # Aderência Comparativa — Antes e Após PoC TRANSALVADOR
 
-Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (após implementação dos 19 planos + Plano 20 planejado).
+Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (após implementação dos 20 planos).
 
 > **Fonte:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)  
 > **Data da análise:** 2026-10-08
@@ -19,7 +19,7 @@ Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salva
 | §5.6 Infraestrutura | 40% | **45%** | +5pp | 07, 18 |
 | §5.7 LAP | 45% | **65%** | +20pp | 07, 12, 13, 17 |
 | §5.8 Datacenter | 5% | **10%** | +5pp | 07, 18 |
-| **Global** | **39%** | **62%** | **+23pp** | **19 planos + Plano 20 (planejado)** |
+| **Global** | **39%** | **62%** | **+23pp** | **20 planos implementados** |
 
 ---
 
@@ -103,12 +103,12 @@ Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salva
 | 5.4.1.2-3 | LGPD (anonimização) | ⚠️ | ✅ | Plano 13 |
 | 5.4.2.1-2 | Dashboards interativos | ✅ | ✅ | Plano 15 |
 | 5.4.2.3.e | Disponibilidade | — | ✅ | Plano 18 |
-| 5.4.2.4a-b | Filtros dinâmicos | ⚠️ | ⚠️→🔧 | Plano 20 (Dashboard Builder) |
+| 5.4.2.4a-b | Filtros dinâmicos | ⚠️ | ✅ | Plano 20 (Dashboard Builder) |
 | 5.4.2.4d | Exportação dashboards | ⚠️ | ✅ | Plano 11 |
-| 5.4.2.5 | Dashboards customizáveis | ❌ | ⚠️→🔧 | Planos 15 + 20 (Dashboard Builder) |
+| 5.4.2.5 | Dashboards customizáveis | ❌ | ✅ | Planos 15 + 20 (Dashboard Builder) |
 | 5.4.4.1-3 | Análise espacial | ✅ | ✅ | Já existente |
 | 5.4.4.4 | Exportação GIS | ❌ | ✅ | Plano 16 |
-| 5.4.5 | Relatórios analíticos | ⚠️ | ⚠️→🔧 | Plano 20 (widgets TABLE) |
+| 5.4.5 | Relatórios analíticos | ⚠️ | ✅ | Plano 20 (widgets TABLE) |
 | 5.4.6.1-3 | KPIs com metas/alertas | ❌ | ✅ | Plano 15 |
 | 5.4.7.1-7 | Repositório de logs | ⚠️ | ✅ | Plano 01 |
 | 5.4.7.6 | Histórico de configurações | ⚠️ | ⚠️ | Audit trail parcial |
@@ -120,7 +120,7 @@ Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salva
 | 5.5.1.3 | 100% pré-processados | ⚠️ | ⚠️ | Sem garantia documentada |
 | 5.5.1.2g | Dupla análise | ❌ | ✅ | Plano 05 |
 | 5.5.2.1 | Prazo 72h | ❌ | ✅ | Plano 10 |
-| 5.5.3.1 | Painel operacional | ❌ | ⚠️→🔧 | Planos 10 + 20 (Dashboard Builder) |
+| 5.5.3.1 | Painel operacional | ❌ | ✅ | Planos 10 + 20 (Dashboard Builder) |
 | 5.5.3.3 | Relatório mensal | ❌ | ❌ | Gap remanescente |
 | 5.5.4.2 | Vedação alteração original | ✅ | ✅ | Já existente |
 | 5.5.4.5 | Log completo | ⚠️ | ⚠️ | Plano 01 (parcial) |

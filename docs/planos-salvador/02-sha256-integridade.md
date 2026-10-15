@@ -8,6 +8,14 @@
 
 **Tech Stack:** Java `MessageDigest.getInstance("SHA-256")` (sem dependência nova) · SQL Server · JDBC
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.1.2 | Verificação de integridade SHA-256 na recepção de registros |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Sem nova dependência no `pom.xml`; usar `java.security.MessageDigest`

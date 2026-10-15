@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/muralha-digital/utils/credenciais/cabecalho_bootstrap_simples.jsp"%>
 
-<link rel="stylesheet" href="/static/vendor/gridstack/gridstack.min.css">
+<link rel="stylesheet" href="/static/vendor/gridstack/gridstack.min.css?v=10.1.2">
 <link rel="stylesheet" href="/static/css/dashboards/print.css" media="print">
 <style>
     .dash-area {
@@ -72,6 +72,11 @@
     .view-tabela.active { display: block; }
     .view-grafico.hidden { display: none; }
     .grid-stack-item-content { padding: 0; }
+
+    /* Alcas de redimensionamento acima do canvas dos graficos */
+    .grid-stack-item > .ui-resizable-handle { z-index: 10; }
+    .grid-stack-item:hover .widget-card { border-color: var(--bs-primary-border-subtle); }
+    .grid-stack-item.ui-resizable-resizing .widget-card { border-color: var(--bs-primary); }
 </style>
 
 <div class="container-fluid mt-3">
@@ -98,9 +103,13 @@
         </div>
 
         <!-- Area principal -->
-        <div class="col-md-10 p-0">
+        <div class="col-md-10 p-0" id="areaPrincipal">
             <!-- Barra superior do painel -->
             <div class="d-flex align-items-center p-2 border-bottom bg-body-tertiary" id="barraPainel" style="display:none !important;">
+                <button class="btn btn-sm btn-outline-secondary me-2" id="btnAlternarLateral" type="button"
+                        title="Ocultar lista de paineis" aria-label="Ocultar lista de paineis" aria-controls="sidebar" aria-expanded="true">
+                    <i class="bi bi-layout-sidebar-inset"></i>
+                </button>
                 <h5 class="mb-0 me-3" id="tituloPainel">Selecione um painel</h5>
                 <span id="badgeAtualizado" class="badge bg-success-subtle text-success ms-2" style="display:none;"></span>
                 <div class="ms-auto d-flex gap-2 flex-wrap">
@@ -177,7 +186,7 @@
 
 <!-- Vendor -->
 <script src="/static/vendor/echarts/echarts.min.js"></script>
-<script src="/static/vendor/gridstack/gridstack-all.min.js"></script>
+<script src="/static/vendor/gridstack/gridstack-all.min.js?v=10.1.2"></script>
 <script src="/static/vendor/ag-grid/ag-grid-community.min.js"></script>
 
 <!-- Modulos do painel -->
@@ -253,6 +262,31 @@
     document.getElementById('seletorRefresh').addEventListener('change', function() {
         salvarPainel();
     });
+
+    var CHAVE_LATERAL = 'dash.lateralOculta';
+    function aplicarLateral(oculta) {
+        document.getElementById('sidebar').classList.toggle('d-none', oculta);
+        var principal = document.getElementById('areaPrincipal');
+        principal.classList.toggle('col-md-10', !oculta);
+        principal.classList.toggle('col-md-12', oculta);
+        var btn = document.getElementById('btnAlternarLateral');
+        var rotulo = oculta ? 'Mostrar lista de paineis' : 'Ocultar lista de paineis';
+        btn.title = rotulo;
+        btn.setAttribute('aria-label', rotulo);
+        btn.setAttribute('aria-expanded', String(!oculta));
+        btn.querySelector('i').className = oculta ? 'bi bi-layout-sidebar' : 'bi bi-layout-sidebar-inset';
+    }
+    document.getElementById('btnAlternarLateral').addEventListener('click', function() {
+        var oculta = !document.getElementById('sidebar').classList.contains('d-none');
+        aplicarLateral(oculta);
+        try { localStorage.setItem(CHAVE_LATERAL, oculta ? '1' : '0'); } catch (e) {}
+    });
+    // So recolhe ao abrir direto um painel; sem painel aberto a lista precisa estar visivel.
+    try {
+        if (new URLSearchParams(location.search).get('id') && localStorage.getItem(CHAVE_LATERAL) === '1') {
+            aplicarLateral(true);
+        }
+    } catch (e) {}
 
     inicializar();
 </script>

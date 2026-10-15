@@ -9,6 +9,14 @@
 
 **Tech Stack:** Java 13 `java.awt.Graphics2D` · SQL Server VARBINARY(MAX) · Bootstrap 5.3 · canvas HTML5
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.4.3-4 | Obliteração automática e manual de imagens (LGPD) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Original imutável — jamais fazer UPDATE no campo de imagem da linha original
