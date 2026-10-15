@@ -65,7 +65,7 @@
 
 <div class="modal fade" id="modalNovo" tabindex="-1" aria-labelledby="modalNovoTitulo">
   <div class="modal-dialog modal-lg">
-    <form class="modal-content" id="formNovo">
+    <form class="modal-content" id="formNovo" autocomplete="off">
       <div class="modal-header">
         <h5 class="modal-title" id="modalNovoTitulo"><i class="bi bi-plus-circle me-2"></i>Novo chamado</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>

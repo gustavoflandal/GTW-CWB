@@ -98,7 +98,12 @@
     selPri.addEventListener('change', mostrarPrazos);
     mostrarPrazos();
 
-    selCat.addEventListener('change', function () {
+    selCat.addEventListener('change', montarSubcategorias);
+    // O navegador pode restaurar a categoria sem disparar "change" (voltar a pagina, autopreenchimento):
+    // ao abrir o modal, monta as subcategorias da categoria que estiver selecionada.
+    document.getElementById('modalNovo').addEventListener('show.bs.modal', montarSubcategorias);
+
+    function montarSubcategorias() {
       selSub.innerHTML = '<option value="">Selecione</option>';
       var cat = opcoes.categorias.find(function (c) { return String(c.id) === selCat.value; });
       var filhas = opcoes.categorias.filter(function (c) { return String(c.idPai) === selCat.value; });
@@ -107,7 +112,7 @@
       var exige = cat && cat.exigeEquipamento;
       document.getElementById('divEquipamento').classList.toggle('d-none', !exige);
       document.getElementById('nEquipamento').required = !!exige;
-    });
+    }
   }
 
   function horas(min) { return min % 60 === 0 ? (min / 60) + ' h' : min + ' min'; }
