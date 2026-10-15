@@ -1,297 +1,71 @@
-<!-- Versão Markdown de Anexo_II_Especificacoes_Tecnicas_meta_clean.docx (edital de Curitiba), gerada em 2026-10-15 a partir do XML do documento. Texto, numeração e tabelas preservados; figuras e desenhos do original não foram convertidos — consulte o .docx para eles. -->
+# Anexo II — Especificações Técnicas (Curitiba) — Requisitos de Sistema
+
+> Extraído de Anexo_II_Especificacoes_Tecnicas_meta_clean.docx (edital de Curitiba), em 2026-10-15. Contém somente os requisitos de sistema (software), com a numeração original; equipamentos, instalação, quantitativos, cronograma e manutenção foram omitidos. Figuras do original não foram convertidas — consulte o .docx.
 
 **ANEXO II DO TERMO DE REFERÊNCIA**
 
-# ESPECIFICAÇÕES TÉCNICAS
-
-## 1. JUSTIFICATIVA
-
-A **Secretaria Municipal de Defesa Social e Trânsito – SMDT** foi criada pela Lei Municipal nº 15461, de 10/07/2019 (quarta-feira) - Publicada no Diário Oficial do Município - DOM de 10/07/2019 (quarta-feira), incorporando as competências e atribuições da Secretaria Municipal de Trânsito – SETRAN, criada pelo art. 1º da Lei nº 13.877, de 24/11/2011, portanto, como órgão executivo municipal de trânsito, responsável por realizar a gestão do trânsito no Município de Curitiba, com atribuições definidas na Lei Federal nº 9.503, de 23/09/1997 (Instituiu o Código de Trânsito Brasileiro – CTB), suas alterações e regulamentações.
-
-Assim como já ocorria desde o ano de 2011 no Município de Curitiba, quando a Secretaria Municipal de Trânsito – SETRAN substituiu a antiga Diretoria de Trânsito de Curitiba – DIRETRAN (órgão então ligado à URBS S/A), **a Secretaria Municipal de Defesa Social e Trânsito – SMDT continua fazendo parte da Administração Direta do Município de Curitiba**. De igual forma, **a monitoração eletrônica do sistema de trânsito, o gerenciamento das atividades inerentes ao Poder de Polícia da Administração, bem como a arrecadação proveniente do pagamento ao evento multa também continua fazendo parte da Administração Direta do Município de Curitiba**.
-
-Ressalta-se que os equipamentos de fiscalização eletrônica - EFE visam complementar a fiscalização do trânsito conforme as seguintes regulamentações: Resolução nº 798, de 02/09/2020 do CONTRAN (e suas sucedâneas); Portaria nº 158, de 31/03/2022 do INMETRO (e suas sucedâneas); Resolução nº 920, de 28/03/2022 do CONTRAN (e suas sucedâneas); Portaria nº 492, de 10/12/2021 do INMETRO (e suas sucedâneas); Portaria nº 016, de 21/09/2004 da SENATRAN (e suas alterações); Portaria nº 27, de 30/06/2005 da SENATRAN (e suas alterações); Portaria nº 263, de 28/11/2007 da SENATRAN (e suas alterações); Portaria nº 1.113, de 21/12/2011 da SENATRAN (e suas alterações); Portaria nº 100, de 30/07/2015 da SENATRAN (e suas alterações); Portaria nº 112, de 12/08/2015 da SENATRAN (e suas alterações); Portaria nº 354, de 31/03/2022 da SENATRAN (e suas alterações).
-
-A título de informação são utilizados atualmente no Município de Curitiba instrumentos medidores de velocidade com modo de instalação fixo (isto é, instrumento automático, instalado em local definido e em caráter permanente) e tecnologia Radar Doppler (isto é, instrumento que transmite e recebe ondas contínuas na faixa de micro-ondas, propiciando a medição da velocidade do veículo alvo através do efeito Doppler) sendo:
-
-- 80 (oitenta) equipamentos do Radar de Trecho, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 230 (duzentas e trinta) faixas de trânsito,
-
-- 224 (duzentos e vinte e quatro) equipamentos do Radar de Cruzamento, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 597 (quinhentas e noventa e sete) faixas de trânsito,
-
-- 54 (cinquenta e quatro) equipamentos do Barreira Eletrônica, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 85 (oitenta e cinco) faixas de trânsito
-
-- 4 (quatro) equipamentos do Radar de **Trecho** com Pesagem e Classificação de Veículos, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 12 (doze) faixas de trânsito
-
-Como qualquer outra cidade, o Município de Curitiba apresenta problemas de infraestrutura em decorrência do crescimento desordenado da capital e da região metropolitana e, do aumento expressivo em sua frota de veículos nos últimos anos, são mais de 1.800.000 veículos, como demonstrado nos Estudos Técnicos Preliminares – ETP.
-
-Estes problemas têm sido amenizados através de políticas públicas de trânsito intensas voltadas para redução de acidentes e óbitos no trânsito, atuando como um novo olhar para a fiscalização eletrônica de trânsito.
-
-Os medidores de velocidade e sistemas automáticos não metrológicos de fiscalização, nos termos do § 2º do artigo 280 do Código de Trânsito Brasileiro – CTB, utilizados em vias públicas para fins probatórios, tem como objetivo prover segurança aos moradores, transeuntes e condutores e promover atitudes responsáveis no trânsito tal como o respeito aos limites de velocidade e incentivar a atenção à sinalização em área de circulação intensa, definidos através de Levantamentos Técnicos (aplicáveis aos controladores de velocidade) e/ou Estudos Técnicos (aplicáveis aos redutores de velocidade), reduzindo-se assim o número de acidentes no trânsito.
-
-Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de trânsito:
-
-**- Combater a violência no trânsito** da cidade de Curitiba;
-
-- Esclarecer aos cidadãos que o **uso irrestrito do cinto de segurança** é, acima de tudo, uma demonstração de responsabilidade e respeito à vida;
-
-- Conscientizar os motoristas condutores de veículos acerca da importância do **respeito aos limites de velocidade** (isto é acerca da manutenção de velocidades dentro dos limites regulamentados pelo órgão ou entidade de trânsito com circunscrição sobre a via);
-
-- Incentivar motoristas condutores de veículos acerca da **atenção à sinalização**, principalmente, contudo não somente, o respeito à faixa de travessia de pedestres e faixa elevada para travessia de pedestres;
-
-- Sensibilizar os cidadãos acerca da **importância de ver e ser visto**;
-
-- Alertar os cidadãos sobre os **riscos de dirigir sob o efeito de álcool e drogas**;
-
-- Apresentar **níveis de segurança em pontos críticos**, de modo a reduzir-se o número de acidentes no trânsito (com vítimas), bem como os custos com acidentes no trânsito;
-
-**- Coletar dados que servirão de insumos para realização de estudos por parte desta Secretaria Municipal de Defesa Social e Trânsito (SMDT)** que possam contribuir com a fiscalização e planejamento viário da cidade de Curitiba;
-
-- Deste modo justifica-se a necessidade de contratação de apoio a Gestão de Trânsito na cidade de Curitiba – Estado do Paraná/PR, compreendendo a implantação, operação e manutenção de EQUIPAMENTO/SISTEMA FIXO com fiscalização automática de trânsito e fornecimento de dados de tráfego, de acordo com as especificações técnicas constantes no Edital e seus Anexos, definidas por esta **Secretaria Municipal de Defesa Social e Trânsito (SMDT);**
-
-- No que se refere ao **monitoramento da circulação de veículos em pontos estratégicos que figure como relevante para a coibição da criminalidade na cidade de Curitiba**, insta destacar que o uso de solução dispostas de câmeras e equipamentos de fiscalização eletrônica - EFE, com software de análise de vídeo em tempo real, leitura automática de placas veiculares (OCR), além de um centro de controle para gestão de trânsito, segurança e defesa civil, propiciará o controle gerencial de amplas áreas do município, destacando-se aquelas que se encontram nos circuitos de grande fluxo de pessoas e veículos. Por consequência, contribui-se na identificação de veículos envolvidos em ocorrências nas mais diversas regiões da cidade, possibilitando, de um lado a elaboração de estatísticas para análise de inteligência e por outro o acionamento de forma célere e eficiente do responsável pela ação, reduzindo-se o tempo de resposta das ações preventivas e repressivas de segurança pública a todos os órgãos parceiros integrados. As forças policiais locais valer-se-ão das imagens e informações integradas para o monitoramento das ocorrências criminais, p.ex., identificando os veículos irregulares e envolvidos em crimes, constantes dos bancos de dados das Polícias e dos organismos parceiros, com possibilidade de visualização em tempo real dos deslocamentos decorrentes de homicídios, roubos a bancos e estabelecimentos comerciais, sequestros relâmpagos, roubos e furtos de veículos e outras ocorrências, inclusive administrativas, nos trechos do território da cidade de Curitiba e Região Metropolitana, priorizados conforme indicadores, facilitando a atuação operacional, a identificação e prisão dos autores e de veículos, conforme o caso.
-
-- Atualização tecnológica e ampliação do parque de equipamentos para coleta de dados de tráfego e mobilidade, de maneira a modernizar e dinamizar a **Gestão de Tráfego em Tempo Real,** bem como integração com dados de outras fontes, incluindo aplicativos de mobilidade e órgãos terceiros por meio de convênios a serem firmados pela administração pública, trazendo uma maior gama de informações para os gestores da área.
-
-- Centralização de dados e sistemas para gestão de tráfego e de autos de infração, além da utilização de ferramentas tecnólogicas para **aumentar a segurança, imutabilidade, rastreabilidade e segurança dos dados coletados, processados e armazenados**.
-
-- Por fim, quanto a **escolha da tecnologia empregada para detecção dos veículos**, é importante frisar que para fins de preservação do investimento realizado no plano de pavimentação e recuperação do pavimento (sistema de fresa e recape) – a título de informação, entre os anos de 2017 a 2024, obras de requalificação do pavimento asfáltico na cidade de Curitiba aconteceram a partir do programa intitulado como “Asfalto Novo”, que assegurou mais de 1.000 km (um mil quilômetros) de pavimentação de qualidade nos bairros das 10 (dez) administrações regionais da cidade, onde durante a última gestão foram realizadas mais de 2000 (duas mil) ações de pavimentação em mais de 1.700 (um mil e setecentas) ruas da cidade de Curitiba (algumas ruas inclusive receberam mais de uma intervenção em diferentes trechos) - **todos os equipamentos a serem instalados, sem exceção, deverão obrigatoriamente fazer utilização de sensores não intrusivos ao pavimento**, portanto, sem corte do pavimento, a fim de evitar-se perda na efetivada na fiscalização de veículos em decorrência de problemas/ausência dos sensores de superfície (do tipo laço indutivo). Outrossim, os equipamentos que fazem utilização de sensores não intrusivos ao pavimento são menos susceptíveis a Intempéries climáticas (p.ex., chuvas torrenciais, tempestades, secas prolongadas, geadas e ondas de calor), possuem uma maior vida útil, além de ser uma tendência mercadológica de acordo com pesquisas realizadas pelo Traffic Research Board – TRB, bem como favorece uma maior dinamismo para remanejamento entre pontos devido a ausência da perfuração do pavimento para implantação dos sensores de superfície (do tipo laço indutivo).
-
-- Com base no exposto, justifica-se a ampliação do parque para os seguintes modelos e quantitativos a seguir:
-
-- 80 (oitenta) equipamento do Radar de Trecho, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 230 (duzentas e trinta) faixas de trânsito,
-
-- 224 (duzentos e vinte e quatro) equipamento do Radar de Cruzamento, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 597 (quinhentas e noventa e sete) faixas de trânsito,
-
-- 80 (oitenta) equipamento do Barreira Eletrônica, **definido no Estudos Técnicos Preliminares – ETP**, para a fiscalização de 137 (cento e trinta e sete) faixas de trânsito
-
-- 6 (seis) equipamento do Radar de **Trecho** com Pesagem e Classificação de Veículos, **definido no Estudos Técnicos Preliminares – ETP**, abrangendo 18 (dezoito) faixas de trânsito
-
-- 148 (cento e quarenta e oito) equipamento de Monitoramento de Tráfego em Trecho**, definido no Estudos Técnicos Preliminares – ETP**, abrangendo 365 (trezentas e sessenta e cinco) faixas de trânsito,
-
-- 48 (quarenta e oito) equipamento de Monitoramento de Tráfego em Cruzamento**, definido no Estudos Técnicos Preliminares – ETP**, abrangendo 134 (cento e trinta e quatro) faixas de trânsito,
-
-- **LOTE 1**
-
-| **RELAÇÃO DE ITENS** |  |  |  |  |
-|---|---|---|---|---|
-| **Item** | **Qtde** | **Ud.** | **Descrição** | **Modelo** |
-| **01** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - LOCAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **02** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - MANUTENÇÃO E OPERAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **03** | **365** | **FXS** | **Equipamentos de Monitoramento de Tráfego em Trecho - LOCAÇÃO** | **Ponto de Coleta Integrado Fixo Controlador** |
-| **04** | **365** | **FXS** | **Equipamentos de Monitoramento de Tráfego em Trecho - MANUTENÇÃO E OPERAÇÃO** | **Ponto de Coleta Integrado Fixo Controlador** |
-| **05** | **134** | **FXS** | **Equipamentos de Monitoramento de Tráfego em Cruzamento - LOCAÇÃO** | **Ponto de Coleta Integrado Controlador em Cruzamento** |
-| **06** | **134** | **FXS** | **Equipamentos de Monitoramento de Tráfego em Cruzamento - MANUTENÇÃO E OPERAÇÃO** | **Ponto de Coleta Integrado Controlador em Cruzamento** |
-| **07** | **1409** | **FXS** | **Fornecimento de Dados de Tráfego Online** | **Sistema** |
-| **08** | **1** | **SIST** | **Central de Processamento de Imagens – CPI - DISPONIBILIZAÇÃO** | **Sistema** |
-| **09** | **1409** | **FXS** | **Central de Processamento de Imagens – CPI - OPERAÇÃO, MANUTENÇÃO E FORNECIMENTO DE SOFTWARE** | **Sistema** |
-| **10** | **1** | **SIST** | **Fornecimento, instalação e manutenção de software de Sistema de Gestão de** **Dados de Tráfego em Tempo Real** | **Sistema** |
-|  |  |  |  |  |
-| **11** | **1** | **SIST** | **Fornecimento, instalação e manutenção de Sistema de Geração e Fornecimento de Relatórios** | **Sistema** |
-| **12** | **1.000** | **HRS/MÊS** | **Serviços de apoio à CONTRATANTE no desenvolvimento de softwares específicos ao longo do contrato** | **Serviço Desenvolvimento** |
-|  |  |  |  |  |
-|  |  |  |  |  |
-
-- LOTE 2
-
-| **RELAÇÃO DE ITENS** |  |  |  |  |
-|---|---|---|---|---|
-| **Item** | **Qtde** | **Ud.** | **Descrição** | **Modelo** |
-| **1** | **151** | **FXS** | **Equipamentos Radar de Trecho - LOCAÇÃO** | **Radar de Trecho** |
-| **2** | **151** | **FXS** | **Equipamentos Radar de Trecho - MANUTENÇÃO E OPERAÇÃO** | **Radar de Trecho** |
-| **3** | **41** | **FXS** | **Equipamentos Barreira Eletrônica - LOCAÇÃO** | **Barreira Eletrônica** |
-| **4** | **41** | **FXS** | **Equipamentos Barreira Eletrônica - MANUTENÇÃO E OPERAÇÃO** | **Barreira Eletrônica** |
-| **5** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - LOCAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **6** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - MANUTENÇÃO E OPERAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **7** | **260** | **FXS** | **Equipamentos Radar de Cruzamento - LOCAÇÃO** | **Radar de Cruzamento** |
-| **8** | **260** | **FXS** | **Equipamentos Radar de Cruzamento - MANUTENÇÃO E OPERAÇÃO** | **Radar de Cruzamento** |
-
-- LOTE 3
-
-| **RELAÇÃO DE ITENS** |  |  |  |  |
-|---|---|---|---|---|
-| **Item** | **Qtde** | **Ud.** | **Descrição** | **Modelo** |
-| **1** | **113** | **FXS** | **Equipamentos Radar de Trecho - LOCAÇÃO** | **Radar de Trecho** |
-| **2** | **113** | **FXS** | **Equipamentos Radar de Trecho - MANUTENÇÃO E OPERAÇÃO** | **Radar de Trecho** |
-| **3** | **37** | **FXS** | **Equipamentos Barreira Eletrônica - LOCAÇÃO** | **Barreira Eletrônica** |
-| **4** | **37** | **FXS** | **Equipamentos Barreira Eletrônica - MANUTENÇÃO E OPERAÇÃO** | **Barreira Eletrônica** |
-| **5** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - LOCAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **6** | **6** | **FXS** | **Equipamentos Radar de Trecho com Pesagem e Classificação de Veículos - MANUTENÇÃO E OPERAÇÃO** | **Radar de Trecho com Pesagem e Classificação de Veículos** |
-| **7** | **302** | **FXS** | **Equipamentos Radar de Cruzamento - LOCAÇÃO** | **Radar de Cruzamento** |
-| **8** | **302** | **FXS** | **Equipamentos Radar de Cruzamento - MANUTENÇÃO E OPERAÇÃO** | **Radar de Cruzamento** |
-
-## 2. ASPECTOS LEGAIS
-
-2.1. Todo EQUIPAMENTO/SISTEMA FIXO definido na alínea “A” da Seção “Requisitos Gerais” destas ESPECIFICAÇÕES TÉCNICAS a serem ofertados para presente contratação, quer seja nas aplicações metrológicas ou não-metrológicas, deverão atender integralmente durante toda a vigência do contrato, a todas as normas, as regulamentações e a legislação vigente e pertinente ao Código de Trânsito Brasileiro - CTB, ao Conselho Nacional de Trânsito - CONTRAN, a Secretaria Nacional de Trânsito - SENATRAN, assim como todos os regulamentos aplicáveis do Instituto Nacional de Metrologia e Tecnologia - INMETRO.
-
-2.1.1. Todas as legislações gerais e ou específicas que normatizam EQUIPAMENTO/SISTEMA FIXO devem ser atendidas, sob pena de desclassificação durante o processo licitatório ou de rescisão de contrato. O conhecimento dessas leis, regulamentações, decretos e dispositivos legais aderentes, são de inteira responsabilidade das LICITANTES e das futuras CONTRATADA.
-
-2.2. O EQUIPAMENTO/SISTEMA FIXO a ser ofertado encarregado de fiscalizar o “Desrespeitar a Velocidade Regulamentada”:
-
-2.2.1. Deve atender às seguintes normas e regulamentos (bem como suas atualizações):
-
-2.2.1.1. CONTRAN: Resolução nº 798, de 02/09/20 (e suas sucedâneas)
-
-2.2.1.2. INMETRO: Portaria nº 158, de 31/03/22 (e suas sucedâneas)
-
-2.2.2. Deverão ter modelo homologado pelo INMETRO com base na legislação metrológica em vigor.
-
-2.2.2.1. Para poder entrar em operação: deverão possuir Certificado de Comprovação de Aferição Individual para a fiscalização de velocidade emitido pelo INMETRO (e/ou por órgão a ele delegado).
-
-2.2.2.2. Erros máximos admitidos - EMA para a medição de velocidade deverão ser aqueles especificados pelo Regulamento Técnico Metrológico - RTM anexo à Portaria nº 158 de 31/03/22 do INMETRO (e suas sucedâneas).
-
-2.3. O EQUIPAMENTO/SISTEMA FIXO a ser ofertado encarregado de fiscalizar infrações de trânsito de caráter não-metrológicos (p.ex., “Desrespeitar o sinal vermelho no semáforo” e/ou “Parar sobre a faixa de travessia de pedestres na mudança de sinal luminoso”):
-
-2.3.1. Devem atender às seguintes normas e regulamentos (bem como suas atualizações):
-
-2.3.1.1. CONTRAN: Resolução nº 920, de 28/03/22 (e suas sucedâneas);
-
-2.3.1.2. SENATRAN: Portaria nº 16, de 21/09/04 (e suas alterações);
-
-2.3.1.3. SENATRAN: Portaria nº 27, de 30/06/05 (e suas alterações);
-
-2.3.1.4. SENATRAN: Portaria nº 263, de 28/11/07 (e suas alterações);
-
-2.3.1.5. SENATRAN: Portaria nº 1.113, de 21/12/11 (e suas alterações);
-
-2.3.1.6. SENATRAN: Portaria nº 100, de 30/07/15 (e suas alterações);
-
-2.3.1.7. SENATRAN: Portaria nº 112, de 12/08/15 (e suas alterações);
-
-2.3.1.8. SENATRAN: Portaria nº 354, de 31/03/22 (e suas alterações);
-
-2.3.1.9. INMETRO: Portaria nº 492, de 10/12/21 (e suas alterações)
-
-2.3.2. Deverão ter seu modelo com REGISTRO DE OBJETO concedido pelo INMETRO com base na legislação para avaliação da conformidade para Fornecedor de Sistemas Automáticos Não Metrológicos de Fiscalização de Trânsito em vigor.
-
-2.3.2.1. Para poder entrar em operação: o registro de objeto com publicidade dada pelo INMETRO em seu sítio eletrônico http://registro.inmetro.gov.br/consulta/ deverá estar status “ATIVO”.
-
-2.3.2.2. Caberá às CONTRATADAS responsabilizarem-se pelo envio desta informação para a CONTRATANTE anteriormente à entrada deste EQUIPAMENTO/SISTEMA FIXO em serviço.
-
-2.4. As LICITANTES deverão apresentar/anexar documentação técnica em língua portuguesa (Português do Brasil), quando da apresentação da PROPOSTA TÉCNICA COMERCIAL deste processo licitatório:
-
-2.4.1. DESCRITIVO TÉCNICO do produto ofertado (ou documento equivalente) de modo a indicar sua marca | modelo, fabricante e que permita ainda o exame de sua compatibilidade com o especificado nestas ESPECIFICAÇÕES TÉCNICAS;
-
-2.4.2. Para instrumentos fabricados no exterior deverá ser apresentada documentação comprobatória em língua portuguesa (Português do Brasil) de representante comercial no Brasil, autenticado pela repartição consular ou serviço consular brasileiro no país de origem de fabricação do equipamento;
-
-2.4.3. Portaria(s) de aprovação de modelo - PAM do instrumento medidor de velocidade de veículos automotores emitida pela Diretoria Metrologia Legal - DIMEL do INMETRO, em conformidade com a legislação metrológica em vigor, ou seja, Regulamento Técnico Metrológico - RTM para medidor de velocidade de veículos automotores anexo à Portaria nº 158, de 31/03/22, do INMETRO (e suas sucedâneas).
-
-2.4.4. Número do Registro Objeto do modelo de Sistema Automático Não-Metrológico de Fiscalização de Trânsito emitido pela Diretoria Avaliação da Conformidade - DCONF do INMETRO, em conformidade com a legislação em vigor, ou seja, Requisitos de Avaliação da Conformidade - RAC para fornecedor de SAnMFT anexo à Portaria nº 492, de 10/12/21, do INMETRO. (e suas sucedâneas).
-
-2.4.5. Será verificado no ato da sessão de habilitação a situação (status) do Registro de Objeto através de consulta ao sítio eletrônico do INMETRO, disponível para acesso em: http://registro.inmetro.gov.br/consulta/.
-
-2.5. Todos os Certificados deverão ser renovados na periodicidade e nas situações exigidas pela legislação vigente; a obtenção de todos os Certificados aplicáveis é de inteira responsabilidade das CONTRATADAS.
-
-2.6. Poderão as CONTRATADAS apresentarem tecnologias superiores aquelas contratadas para prestar serviços de fiscalização eletrônica do trânsito no município de Curitiba/PR desde que estejam regularizadas pela legislação vigente e se enquadrem e/ou substituam as tecnologias previstas nestas ESPECIFICAÇÕES TÉCNICAS, sendo a remuneração EQUIPAMENTO/SISTEMA FIXO de igual valor ao contratado sem ônus ao erário público.
+Itens marcados com *(misto)* tratam de software e equipamento ao mesmo tempo e foram mantidos por precaução.
+
+## Capítulos incluídos
+
+| Capítulo | Situação |
+|---|---|
+| 1. JUSTIFICATIVA | omitido |
+| 2. ASPECTOS LEGAIS | omitido |
+| 3. REQUISITOS GERAIS | parcial |
+| 4. REQUISITOS ESPECÍFICOS | parcial |
+| 5. INFRAESTRUTURA EQUIPAMENTO/SISTEMA FIXO | parcial |
+| 6. TRANSMISSÃO E ARMAZENAMENTO DE DADOS | parcial |
+| 7. SISTEMA DE RECONHECIMENTO ÓPTICO DE CARACTERES (OCR) | integral |
+| 8. SISTEMA DE RECONHECIMENTO DE PADRÕES POR IMAGEM (LOTE 1) | integral |
+| 9. SISTEMA DE CENTRAL DE PROCESSAMENTO DE IMAGENS – CPI (LOTE 1) | integral |
+| 10. SISTEMA DE FORNECIMENTO DE RELATÓRIOS (LOTE 1) | integral |
+| 11. ENTREGA DE ARQUIVOS DE NOTIFICAÇÃO À PLATAFORMA CORPORATIVA (LOTE 1) | integral |
+| 12. INTERFACE COM O PROCESSAMENTO CORPORATIVO DE INFRAÇÕES (LOTE 1) | integral |
+| 13. HORAS TÉCNICAS DE DESENVOLVIMENTO DE SISTEMAS (LOTE 1) | integral |
+| 14. SISTEMA GESTÃO DE TRÁFEGO E SEGURANÇA EM TEMPO REAL (ANÁLISE E MONITORAMENTO VIÁRIO E CERCO ELETRÔNICO – LOTE 1) | integral |
+| 15. QUANTITATIVOS DO OBJETO LICITADO | parcial |
+| 16. LOCAIS DE INSTALAÇÃO | omitido |
+| 17. CRONOGRAMA DE ENTREGA DO OBJETO | omitido |
+| 18. TESTE DE AMOSTRA | parcial |
+| 19. TESTES DE CONCEITO | parcial |
+| 20. MANUTENÇÃO | parcial |
 
 ## 3. REQUISITOS GERAIS
 
-3.1. Quanto à divisão de LOTES:
-
-3.1.1. O certame será divido em 3 (três) LOTES;
-
-3.1.2. Os LOTES 2 e 3 serão compostos por equipamentos Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento;
-
-3.1.3. O LOTE 1 será composto por equipamentos Radar de Trecho com Pesagem e Classificação de Veículos e pelos Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento), bem como Central de Processamento e Sistema de Gestão de Dados de Tráfego em Tempo Real e demais itens de objeto descritos conforme item 15 deste documento.
-
 3.2. Quanto à definição de EQUIPAMENTO/SISTEMA FIXO
 
-3.2.1. Para efeito destas ESPECIFICAÇÕES TÉCNICAS define-se como EQUIPAMENTO/SISTEMA FIXO o conjunto de todos os equipamentos, software, comunicação com a Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real, infraestrutura (inclusive sinalização viária), elementos sensores, instalações e acessórios necessários para detectar a passagem de veículo pela zona de medição, registrando-se imagens e gerando-se dados para monitorar o trânsito, fiscalizar infrações de trânsito estabelecidas pela Lei Federal nº 9.503, de 23/09/97 (e demais legislações complementares), fornecer dados de tráfego, de forma automática e simultânea, de uma seção de via (com um ou dois sentidos de tráfego) ou de um cruzamento (com aproximação semaforizada), disposta de uma ou mais faixas de trânsito.
+3.2.1. Para efeito destas ESPECIFICAÇÕES TÉCNICAS define-se como EQUIPAMENTO/SISTEMA FIXO o conjunto de todos os equipamentos, software, comunicação com a Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real, infraestrutura (inclusive sinalização viária), elementos sensores, instalações e acessórios necessários para detectar a passagem de veículo pela zona de medição, registrando-se imagens e gerando-se dados para monitorar o trânsito, fiscalizar infrações de trânsito estabelecidas pela Lei Federal nº 9.503, de 23/09/97 (e demais legislações complementares), fornecer dados de tráfego, de forma automática e simultânea, de uma seção de via (com um ou dois sentidos de tráfego) ou de um cruzamento (com aproximação semaforizada), disposta de uma ou mais faixas de trânsito. *(misto)*
 
 3.3. Quanto aos códigos de enquadramento a serem fiscalizados:
 
 3.3.1. O(A) CONTRATANTE determinará PARA CADA LOCAL DE INSTALAÇÃO os códigos de enquadramentos a serem fiscalizados por um determinado EQUIPAMENTO/SISTEMA FIXO por meio de Ordem de Serviço – OS.
 
-3.4. Quanto à estrutura física de um EQUIPAMENTO/SISTEMA FIXO:
-
-3.4.1. Possuir estrutura externa rígida, fixa, resistente a vandalismo e intempéries, inclusive dotada de dispositivos de vedação visando inibir entrada de poeira, umidade, bem como tratada contra oxidação galvânica e eletrolítica, e resistente às temperaturas ambientais entre -10ºC e +55ºC;
-
-3.4.2. Ser constituída por materiais resistentes estruturalmente, de modo a suportar esforços atuante das ações do vento e à vibrações externas provenientes do tráfego ou impacto, garantindo confiabilidade e segurança dos dados coletados e armazenados;
-
-3.4.3. Devem possuir estrutura externa que possibilite a sua visualização pelos motoristas condutores de veículos trafegantes na via monitorada a uma distância de pelo menos 80m (oitenta metros). Tal distância é justificada como medida de proteção a ocorrência de acidentes no trânsito decorrentes de eventuais manobras arriscadas (p.ex., frenagens bruscas) e atendimento à Resolução nº 798, de 02/09/20 do CONTRAN (e suas sucedâneas).
-
 3.5. Quanto à realização “teste automático” quando da inicialização EQUIPAMENTO/SISTEMA FIXO:
 
-3.5.1. Todo EQUIPAMENTO/SISTEMA FIXO a ser ofertado pelas LICITANTES deverão proceder com a realização de um teste automático, que pode ser iniciado ao se ligar o instrumento ou ainda acionado de forma manual por um operador, de forma a verificar-se o seu bom estado de funcionamento;
+3.5.1. Todo EQUIPAMENTO/SISTEMA FIXO a ser ofertado pelas LICITANTES deverão proceder com a realização de um teste automático, que pode ser iniciado ao se ligar o instrumento ou ainda acionado de forma manual por um operador, de forma a verificar-se o seu bom estado de funcionamento; *(misto)*
 
-3.5.2. O teste citado em (i) basicamente deverá avaliar as condições operacionais do instrumento a nível de hardware (entenda-se memória(s), mídia(s) de armazenamento, processador(es), demais placas internas, acessórios, dentre outros) e a nível de software (p.ex., sistemas de detecção e medição, de processamento, de armazenamento, de registro, de gerenciamento e transmissão) quando da inicialização deste; de modo a emitir para uma Central de Processamento de Imagens – CPI o resultado obtido. Além disso, deverá ser gerado um arquivo log de eventos (preferencialmente de forma automática) de modo a propiciar consultas posteriores;
+3.5.2. O teste citado em (i) basicamente deverá avaliar as condições operacionais do instrumento a nível de hardware (entenda-se memória(s), mídia(s) de armazenamento, processador(es), demais placas internas, acessórios, dentre outros) e a nível de software (p.ex., sistemas de detecção e medição, de processamento, de armazenamento, de registro, de gerenciamento e transmissão) quando da inicialização deste; de modo a emitir para uma Central de Processamento de Imagens – CPI o resultado obtido. Além disso, deverá ser gerado um arquivo log de eventos (preferencialmente de forma automática) de modo a propiciar consultas posteriores; *(misto)*
 
 3.5.3. Registros fotográficos (considera-se arquivo formado pela imagem do veículo infrator e informações relativas à infração) gerados durante realização do teste mencionado em (i) deverão identificar claramente essa situação.
 
 3.6. Quanto à operação do EQUIPAMENTO/SISTEMA FIXO:
 
-3.6.1. “MODO NOTURNO”:
-
-3.6.1.1. Todos instrumentos a serem ofertados deverão usar, obrigatoriamente, sistema próprio de iluminação para possibilitar o funcionamento no período noturno;
-
-3.6.1.2. O sistema próprio de iluminação deverá ser sincronizado com as câmeras, a fim de garantir-se um melhor desempenho no período noturno; e
-
-3.6.1.3. O sistema de iluminação próprio deverá utilizar, obrigatoriamente, luz não visível a olho nu.
-
 3.6.2. “REGIME 24X7”:
 
-3.6.2.1. Todos os instrumentos a serem ofertados deverão estar aptos a operar durante 24 (vinte e quatro) horas por dia, 07 (sete) dias por semana ou ainda de forma programada, ou seja, de acordo com os interesses do(a) CONTRATANTE.
+3.6.2.1. Todos os instrumentos a serem ofertados deverão estar aptos a operar durante 24 (vinte e quatro) horas por dia, 07 (sete) dias por semana ou ainda de forma programada, ou seja, de acordo com os interesses do(a) CONTRATANTE. *(misto)*
 
 3.6.2.2. “Para fins de MEDIÇÃO e de aplicação de SANÇÕES”:
 
-3.6.2.3. Somente será considerado “ATIVO”, ou “EM OPERAÇÃO”, aquele EQUIPAMENTO/SISTEMA FIXO que atender todos os critérios destas ESPECIFICAÇÕES TÉCNICAS, isto é, devidamente aferido pelo órgão metrológico competente segundo legislação em vigor e devidamente protocolado junto à Secretaria Municipal de Defesa Social e Trânsito (SMDT), energizado, transmitindo imagens | dados à Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real.
+3.6.2.3. Somente será considerado “ATIVO”, ou “EM OPERAÇÃO”, aquele EQUIPAMENTO/SISTEMA FIXO que atender todos os critérios destas ESPECIFICAÇÕES TÉCNICAS, isto é, devidamente aferido pelo órgão metrológico competente segundo legislação em vigor e devidamente protocolado junto à Secretaria Municipal de Defesa Social e Trânsito (SMDT), energizado, transmitindo imagens | dados à Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real. *(misto)*
 
 3.7. Quanto às características instalação elétrica de baixa tensão - BT do EQUIPAMENTO/SISTEMA FIXO:
 
-3.7.1. Obrigatoriamente na instalação deverá conter sistema de aterramento, conforme a norma ABNT NBR 5410:2004 Versão Corrigida:2008 (e suas sucedâneas), de modo a garantir-se um caminho seguro para a corrente de falta em direção à terra, evitando-se riscos choque elétrico ou queima de instrumentos devido a uma sobrecorrente;
+3.7.7. Os equipamentos/sistemas fixos deverão ser dotados de sistema que permita a manutenção do relógio interno e a recuperação dos dados e imagens quando da ocorrência de falta de energia na rede de alimentação (mesmo que tais eventos perdurem por períodos prolongados); *(misto)*
 
-3.7.2. Estar apto a funcionar com alimentação elétrica em corrente alternada, com uma frequência de 60Hz (padrão adotado pelo Brasil) e uma tensão de entrada de 127 e/ou 220 volts (níveis de tensão de fornecimento adotados nos municípios brasileiros, conforme regulação pela Agência Nacional de Energia Elétrica - ANEEL), com variações de 10% (dez por cento) para (+) ou de 15% (quinze por cento) para (-);
-
-3.7.3. Possuir dispositivo de proteção contra sobretensão ou sobrecorrente, na alimentação elétrica;
-
-3.7.4. Possuir circuito eletrônico de proteção contra descargas atmosféricas;
-
-3.7.5. Ser provido de circuito de proteção contra quaisquer interferências eletrostáticas;
-
-3.7.6. Instalação de conduítes para passagem da fiação elétrica necessária à ligação dos EQUIPAMENTOS/ SISTEMAS FIXOS deverá ser preferencialmente subterrânea, com a aplicação de material adequado;
-
-3.7.7. Os equipamentos/sistemas fixos deverão ser dotados de sistema que permita a manutenção do relógio interno e a recuperação dos dados e imagens quando da ocorrência de falta de energia na rede de alimentação (mesmo que tais eventos perdurem por períodos prolongados);
-
-3.7.8. Uma vez esgotado o tempo de autonomia de funcionamento do dispositivo: ainda na falta de energia elétrica, este deverá proceder com o seu desligamento completo de forma automática. O propósito da autonomia é tão somente de permitir que seja realizado os procedimentos necessários para um desligamento seguro do dispositivo, ou seja, de modo que nenhuma informação seja corrompida e que as infrações de trânsito detectadas pelo EQUIPAMENTO/SISTEMA FIXO anteriormente ao momento da detecção da ausência de energia elétrica comercial sejam devidamente registradas.
+3.7.8. Uma vez esgotado o tempo de autonomia de funcionamento do dispositivo: ainda na falta de energia elétrica, este deverá proceder com o seu desligamento completo de forma automática. O propósito da autonomia é tão somente de permitir que seja realizado os procedimentos necessários para um desligamento seguro do dispositivo, ou seja, de modo que nenhuma informação seja corrompida e que as infrações de trânsito detectadas pelo EQUIPAMENTO/SISTEMA FIXO anteriormente ao momento da detecção da ausência de energia elétrica comercial sejam devidamente registradas. *(misto)*
 
 3.7.9. Os EQUIPAMENTOS/SISTEMAS FIXOS deverão ser capazes de retornar a sua operação normal, de forma automática, ou seja, sem intervenção humana, em caso de ocorrência do desarme por interrupção de energia elétrica, mesmo que por períodos prolongados. Durante o período em que o dispositivo estiver sem conexão, deverá armazenar todos os dados | imagens dos veículos infratores e os enviá-los automaticamente para a Central de Processamento de Imagens – CPI tão breve a comunicação seja restabelecida.
-
-3.7.10. É de total responsabilidade das CONTRATADAS:
-
-3.7.10.1. O fornecimento dos EQUIPAMENTOS/SISTEMAS FIXOS devidamente energizados;
-
-3.7.10.2. Todos os custos e despesas relacionados à energização dos EQUIPAMENTOS/SISTEMAS FIXOS (p.ex., ligação, operação, aprovação nas concessionárias de energia elétrica, ou qualquer outro custo adicional).
-
-3.8. Quanto ao sistema de detecção e medição do EQUIPAMENTO/SISTEMA FIXO:
-
-3.8.1. Baseado em tecnologias NÃO-INTRUSIVAS AO PAVIMENTO (óptica, radar Doppler ou laser, admitidas tecnologias equivalentes ou superiores não intrusivas homologadas ou registradas pelo INMETRO, conforme a Portaria nº 158, de 31/03/22, e suas sucedâneas), tanto para captura dos veículos quanto para detecção e reconhecimento do estado de um semáforo de forma confiável, portanto, sendo vedada instalação de cabeamento entre colunas e câmeras de EQUIPAMENTOS/SISTEMAS FIXOS e Grupo Controlador Semafórico, através de corte MD no pavimento ou passeio;
-
-3.8.1.1. A interligação entre colunas e câmeras de um EQUIPAMENTO/SISTEMA FIXO deverá ser realizada por meio de método não destrutivo (MND) quando necessitar cruzar o pavimento, ou pelo passeio, quando realizado sem a necessidade de cruzar a via, desde que o cabeamento seja protegido e acondicionado em eletrodutos e a recomposição do piso seja realizada no mesmo padrão original;
-
-3.8.1.2. Não serão permitidas ligações aéreas, salvo quando aprovado pela CONTRATANTE devido à dificuldades locais e de vandalismo recorrente;
-
-3.8.2. Exceção ao EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos o qual contempla a funcionalidade de registro da massa do veículo** e para tal demandará da utilização de elementos sensores baseados em tecnologias INTRUSIVA AO PAVIMENTO (sensores piezo quartzo, o piezo cerâmico e o piezo polímero, dentre outros).
-
-3.8.2.1. A massa do veículo também conhecida como Peso Bruto Total - PBT é determinada por pesagem em movimento e refere-se à massa total da combinação de veículos incluindo-se todos os componentes conectados.
-
-3.8.3. Para efeito destas ESPECIFICAÇÕES TÉCNICAS define-se:
-
-3.8.3.1. Instrumento de medição da velocidade de veículos automotores do tipo “Ótico”: instrumentos que utilizam feixe de luz na região visível ou infravermelho do espectro eletromagnético, propiciando a medição de velocidade através do processamento da energia refletida no veículo alvo ou pela interrupção dos feixes provocados pela passagem de um veículo;
-
-3.8.3.2. Radares ou Instrumento de medição da velocidade de veículos automotores que utilizam “Sensor Doppler”: instrumentos que transmitem e recebem ondas contínuas na faixa de micro-ondas, de modo a propiciar a medição da velocidade do veículo alvo através do efeito Doppler.
-
-3.8.3.3. Zona de medição: área ou ponto da via na qual ocorre a detecção do veículo e sua respectiva medição de velocidade.
-
-3.8.3.4. Verificar a velocidade de todos os veículos trafegantes pela via monitorada, independente deste encontrar-se abaixo da velocidade máxima regulamentada para aquela determinada via;
-
-3.8.3.5. Abranger todas as faixas de trânsito a serem controladas pelo EQUIPAMENTO/SISTEMA FIXO
-
-3.9. Quanto ao atendimento aos tipos de pistas de tráfego:
-
-3.9.1. Para aplicação em vias de mão única com até 04 (quatro) faixas de trânsito;
-
-3.9.2. Para aplicação em vias de mão dupla com uma faixa de trânsito para cada sentido de tráfego;
-
-3.9.3. Para aplicação em vias de mão dupla com até duas faixas de trânsito para cada sentido de tráfego (dotadas ou não de canteiro central).
 
 3.10. Quanto ao atendimento à contagem volumétrica:
 
@@ -397,8 +171,6 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.1.3. O EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho deverá:
 
-4.1.3.1. Possuir controles eletrônicos através de microprocessador de alto desempenho;
-
 4.1.3.2. Gerar imagens digitais registrando na própria imagem (sem inserção posterior) todos dados exigidos na legislação vigente para emissão das Notificações da Autuação (NAT) e de Penalidade (NAP);
 
 4.1.3.3. Para cada uma das infrações registradas na alínea “A” desta Seção deve ser gerada obrigatoriamente uma imagem que possibilite a verificação de cada um dos itens listados na sequência:
@@ -439,9 +211,9 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.1.3.5. As CONTRATADAS deverão executar a transmissão on-line em tempo real dos dados dos registros de infrações e imagens capturadas para a Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real da CONTRATADA para o LOTE 1, utilizando-se de sistema de conexão de rede e procedimentos seguros que preservem a integridade das imagens capturadas, atendendo a legislação vigente ou norma que venha a dispor sobre a matéria mesmo durante a vigência do contrato;
 
-4.1.3.6. Ser capazes de captar imagens das placas dos veículos infratores pela dianteira ou pela traseira, conforme definido previamente pelo(a) CONTRATANTE;
+4.1.3.6. Ser capazes de captar imagens das placas dos veículos infratores pela dianteira ou pela traseira, conforme definido previamente pelo(a) CONTRATANTE; *(misto)*
 
-4.1.3.7. Gerar imagens digitalizadas dos veículos transitando em velocidade superior à máxima permitida, com o devido acréscimo de tolerância previsto pelo INMETRO;
+4.1.3.7. Gerar imagens digitalizadas dos veículos transitando em velocidade superior à máxima permitida, com o devido acréscimo de tolerância previsto pelo INMETRO; *(misto)*
 
 4.1.3.8. O EQUIPAMENTO/SISTEMA FIXO que mede velocidade dos veículos automotores controlado por software, deve garantir o atendimento aos seguintes requisitos:
 
@@ -459,7 +231,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.1.3.8.7. O resultado da medição (composto por identificador único do instrumento de medição; valor medição velocidade; instante de tempo de quando a medida foi realizada e registro fotográfico do veículo) deverá ser protegido contra mudanças intencionais e, permitir, a posteriori, remontar sua origem por meio de mecanismo de assinatura digital.
 
-4.1.3.9. Ser capaz de captar, no mínimo, duas imagens por segundo, inclusive motocicletas, a fim de captar infrações de veículos que trafegam em sequencia com distância entre si de um segundo;
+4.1.3.9. Ser capaz de captar, no mínimo, duas imagens por segundo, inclusive motocicletas, a fim de captar infrações de veículos que trafegam em sequencia com distância entre si de um segundo; *(misto)*
 
 4.1.3.10. O sistema adotado para a coleta de dados registrados pelos equipamentos/sistemas fixos deve permitir o envio via Web para a Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real da CONTRATADA para o LOTE 1, bem como disponibilizar coleta manual dos registros realizados em dispositivos de armazenamento de massa (pen drive, CD-ROM ou similares) para arquivamento;
 
@@ -517,40 +289,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.2.2.2. Realizar coleta e fornecimento de dados de tráfego referentes a todos os veículos que tiverem sido detectados, independentemente do cometimento de infração;
 
-4.2.2.3. O Display (painel indicador de velocidade) deverá ser instalado em todos equipamentos e possuir as seguintes características físicas:
-
-4.2.2.3.1. Estrutura física facilmente identificável e visível a uma distância mínima de 100 (cem) metros pelos condutores de veículos, tanto no período diurno como no noturno;
-
-4.2.2.3.2. Estrutura física com largura compatível com a Lei Municipal responsável pelo estabelecimento de normas para o uso e ocupação do solo no Município de Curitiba/PR e atendimento ao Decreto Específico que consolida os critérios para a padronização das calçadas e, entre outras, define critérios de instalação de mobiliário urbano e outras instalações no que se refere aos passeios públicos do Município de Curitiba/PR;
-
-4.2.2.3.3. Dispositivo luminoso com luz amarela intermitente indicadora de sua existência, visível aos condutores a, no mínimo, 100 (cem) metros de distância, tanto no período diurno como no noturno;
-
-4.2.2.3.4. Display com indicação luminosa da velocidade medida, em cor âmbar, no mínimo com 2 (dois) dígitos e com unidade de medida em km/h, abrangendo a passagem de veículos em uma faixa de rolamento, perfeitamente visível e legível pelo condutor do veículo (cuja velocidade está sendo medida) a pelo menos 10 (dez) metros de distância do painel, a qualquer hora e sob quaisquer condições climáticas.
-
-4.2.2.4. A indicação luminosa de velocidade deverá, na ausência de tráfego de veículo,permanecer apagada e, na passagem do veículo, indicar a velocidade medida do mesmo. Excepcionalmente para o caso do “display” fornecido possuir somente 2 (dois) dígitos a indicação luminosa de velocidade deverá permanecer apagada, também, quando da detecção de veículo com velocidade igual ou superior a 100 km/h (cem quilômetros por hora), não impedindo, porém, de ser registrada a infração.
-
-4.2.2.5. Deverá existir no corpo do Display um sinal R-19, obtido com placa de regulamentação ou equivalente (fundo: grau técnico; caracteres: alta intensidade) de 50cm (cinquenta centímetros) de diâmetro, com a indicação da velocidade regulamentada da via. A fiscalização deverá ser feita, obrigatoriamente, pela parte dianteira do veículo. Aceitar-se-á o registro de imagens traseiras do veículo infrator desde que, simultaneamente, seja realizado o registro de imagens dianteiras do veículo infrator.
-
-4.2.2.6. Deverá haver sensores que indicam o funcionamento e a operação do dispositivo do “display” com a indicação luminosa da velocidade medida, de forma que, quando do não funcionamento de um desses elementos, seja enviado alarme (sendo um para cada elemento) para a Central de Processamento de Imagens – CPI.
-
-4.2.2.7. Possibilitar a fiscalização simultânea das infrações de trânsito registradas no subitem 4.2.1.1 desta Seção em até 2 (duas) faixas de rolamento por sentido, conforme as categorias citadas a seguir:
-
-4.2.2.8. Deverão ser previstos 2 (dois) tipos de Display (Painéis indicadores de velocidade):
-
-4.2.2.8.1. FACE SIMPLES – O dispositivo luminoso com a luz amarela intermitente, o sinal R-19 e o indicador luminoso com o valor da velocidade medida estão instalados numa única face do painel.
-
-4.2.2.8.2. FACE DUPLA – O dispositivo luminoso com a luz amarela intermitente, o sinal R-19 e o indicador luminoso com o valor da velocidade medida estão instalados nas duas faces do painel.
-
-| **Identificação Categoria** | **Ilustração** **Categoria** | **Descrição Via** **Quantidade Display por Categoria** | **Observações** |
-|---|---|---|---|
-| **A** |  | Via de sentido único de direção com 1 (uma) faixa de rolamento. Total: 1 (um) Display Face Simples | O Display poderá ser locado em qualquer lado da via, conforme projeto. |
-| **B** |  | Via de sentido único de direção com 2 (duas) faixas de rolamento, sem ilha ou canteiro central. Total: 2 (dois) Display Face Simples | Cada Display deverá indicar a velocidade medida na faixa de trânsito adjacente à calçada. Quando não houver passagem de veículo numa das faixas, o Display correspondente deverá ficar apagado. |
-| **C** |  | Via de duplo sentido de direção, com 1 (uma) faixa de rolamento por sentido, sem ilha ou canteiro central, separado por linha dupla amarela. Total: 2 (dois) Display Face Simples | Cada Display deverá ter a sua face voltada para o correspondente sentido de tráfego. Se não houver passagem de veículo, o Display correspondente deverá ficar apagado. |
-| **D** |  | Via de duplo sentido de direção, com 1 (uma) faixa de rolamento por sentido, com ilha ou canteiro central. Total: 1 (um) Display Face Dupla | O Display locado no canteiro central deverá ser Face Dupla, onde cada face deverá estar voltada para o correspondente sentido de tráfego. Se não houver passagem de veículo num sentido de tráfego, o Display correspondente deverá ficar apagado. |
-| **E** |  | Via de duplo sentido de direção, com 2 (duas) faixa de rolamento por sentido, com ilha ou canteiro central estreito, mas com largura não menor que 1,90 m (um vírgula noventa metros). Total: 2 (dois) Display Face Simples e 1 (um) Display Face Dupla | O Display locado no canteiro central deverá ser Face Dupla, onde cada face deverá estar voltada para um sentido de tráfego, referente à faixa adjacente ao canteiro central. Cada Display Face Simples deverá ter a sua face voltada para o correspondente sentido de tráfego, na faixa adjacente à calçada. Se não houver passagem de veículo, o Display correspondente deverá ficar apagado. |
-| **F** |  | Via duplo sentido de direção, com 2 (duas) faixas de rolamento por sentido, com ilha ou canteiro central largo. Total: 4 (quatro) Display Face Simples | Cada Display Face Simples locado no canteiro central deverá indicar a velocidade para o sentido de tráfego, referente à faixa adjacente ao canteiro central. Cada Display Face Simples locado na calçada deverá ter a sua face voltada para o correspondente sentido de tráfego, na faixa adjacente à calçada. Se não houver passagem de veículo, o Display correspondente deverá ficar apagado. Os 4 (quatro) Display não precisam estar necessariamente alinhados como mostrado na Figura ao lado. |
-
-4.2.2.9. No caso em que o local de instalação escolhido não se adeque a nenhuma das 6 (seis) diferentes Categorias, definidas acima, caberá ao(a) CONTRATANTE determinar a categoria de equipamento/sistema fixo do tipo Barreira Eletrônica (com OCR) a ser utilizada no referido local, podendo inclusive utilizar-se de pórtico, semipórtico, que possam fazer uso de Display (Painel Indicador de Velocidade) em conformidade a resolução vigente.
+4.2.2.6. Deverá haver sensores que indicam o funcionamento e a operação do dispositivo do “display” com a indicação luminosa da velocidade medida, de forma que, quando do não funcionamento de um desses elementos, seja enviado alarme (sendo um para cada elemento) para a Central de Processamento de Imagens – CPI. *(misto)*
 
 4.3. Equipamentos do Radar de Cruzamento
 
@@ -708,7 +447,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.3.3.4. A configuração dos parâmetros de fiscalização de parada sobre a faixa de travessia de pedestres, isto é, (i) Código identificador do equipamentos/sistemas fixos e (ii) o Tempo de permanência - de 5 (cinco) a 12 (doze) segundos, conforme a legislação vigente somente poderá ser feita no equipamentos/sistemas fixos, não podendo ser feita remotamente.
 
-4.3.3.5. Os EQUIPAMENTOS/SISTEMAS FIXOS deverão detectar o status semafórico por meio de análise de imagem, não sendo permitido a conexão de cabos com o controlador ou grupo focal semafórico;
+4.3.3.5. Os EQUIPAMENTOS/SISTEMAS FIXOS deverão detectar o status semafórico por meio de análise de imagem, não sendo permitido a conexão de cabos com o controlador ou grupo focal semafórico; *(misto)*
 
 4.3.3.5.1. Os EQUIPAMENTOS/SISTEMAS FIXOS deverão detectar automaticamente, registrar em log e enviar essa informação ao CPI, das seguintes condições de erro do grupo semafórico:
 
@@ -722,9 +461,9 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.4. Equipamentos do Radar de Trecho com Pesagem e Classificação de Veículos
 
-4.4.1. Estas Especificações Técnicas estabelecem as funcionalidades dos equipamentos/sistemas fixos do Radar de Trecho, Barreira Eletrônica, Radar de Cruzamento, Radar de Trecho com Pesagem e Classificação de Veículos, no caso dos primeiros quanto ao sistema de detecção e medição a LICITANTE deverá seguir-se obrigatoriamente o disposto na alínea “G” da Seção “Requisitos Gerais” para a obtenção de dados de velocidade e de contagem de tráfego atrelada a esses equipamentos/sistemas fixos. No caso específico do EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos, onde ficará a cargo de cada LICITANTE a escolha da tecnologia a ser empregada, levando-se em conta os locais previstos para a implantação dos equipamentos, principalmente com relação ao estado de conservação dos pavimentos e quanto ao seu tipo, isto é, ou Concreto Betuminoso Usinado à Quente – CBUQ, ou Tratamento Superficial Duplo – TSD, ou Tratamento Superficial Simples - TSS ou concreto de cimento Portland; bem como a sua experiência materializada pelos resultados auferidos dos equipamentos dos quais se utiliza.
+4.4.1. Estas Especificações Técnicas estabelecem as funcionalidades dos equipamentos/sistemas fixos do Radar de Trecho, Barreira Eletrônica, Radar de Cruzamento, Radar de Trecho com Pesagem e Classificação de Veículos, no caso dos primeiros quanto ao sistema de detecção e medição a LICITANTE deverá seguir-se obrigatoriamente o disposto na alínea “G” da Seção “Requisitos Gerais” para a obtenção de dados de velocidade e de contagem de tráfego atrelada a esses equipamentos/sistemas fixos. No caso específico do EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos, onde ficará a cargo de cada LICITANTE a escolha da tecnologia a ser empregada, levando-se em conta os locais previstos para a implantação dos equipamentos, principalmente com relação ao estado de conservação dos pavimentos e quanto ao seu tipo, isto é, ou Concreto Betuminoso Usinado à Quente – CBUQ, ou Tratamento Superficial Duplo – TSD, ou Tratamento Superficial Simples - TSS ou concreto de cimento Portland; bem como a sua experiência materializada pelos resultados auferidos dos equipamentos dos quais se utiliza. *(misto)*
 
-4.4.2. O EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverá proceder com o levantamento estatístico e volumétrico de todos os veículos que passarem por sua área de abrangência. Os equipamentos devem ser do tipo FIXO, com sensores adequados (piezoelétricos, laços indutivos, dentre outros) intrusivos ao pavimento, fornecendo dados de tráfego de todos os veículos trafegando nos pontos monitorados, tais como:
+4.4.2. O EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverá proceder com o levantamento estatístico e volumétrico de todos os veículos que passarem por sua área de abrangência. Os equipamentos devem ser do tipo FIXO, com sensores adequados (piezoelétricos, laços indutivos, dentre outros) intrusivos ao pavimento, fornecendo dados de tráfego de todos os veículos trafegando nos pontos monitorados, tais como: *(misto)*
 
 4.4.2.1. Contagem volumétrica;
 
@@ -733,14 +472,6 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 4.4.2.3. Pesagem estatística de veículos pesados (por eixo e PBT)
 
 4.4.3. Deverá enviar ininterruptamente, isto é, regime 24x7 (24hrs/dia e 07 dias/semana) independentemente do tipo e período de fiscalização, os dados de tráfego de todos veículos detectados pelos equipamentos/sistemas fixos que estiverem em operação.
-
-4.4.4. A coleta de dados de tráfego deverá ser executada em todas as faixas de acordo com o local de instalação. O EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverá ter a capacidade de monitorar até 4 (quatro) faixas em simultâneo.
-
-4.4.5. O módulo de classificação, de identificação de eixos e de pesagem constantes do EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverá funcionar independentemente do tipo de pavimento e sua espessura, respeitando apenas as distâncias mínimas de trecho sem inclinação, curva, pontos de frenagem ou aceleração, definidos pelo manual do fabricante.
-
-4.4.6. As CONTRATADAS e a CONTRATANTE deverão realizar vistoria conjunta para definição dos trechos a serem instalados os EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos.
-
-4.4.7. O EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverá ser instalado sem que suas etapas de implantação, operação e manutenção afetem as funcionalidades dos equipamentos de medição de velocidade. Inclusive, neste contexto, é importante informar que os EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos deverão ser implantados, sempre, junto a equipamentos destinados aos medidores de velocidade metrológicos (ou seja, EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho, EQUIPAMENTO/SISTEMA FIXO do Barreira Eletrônica, EQUIPAMENTO/SISTEMA FIXO do Radar de Cruzamento).
 
 4.4.8. Os dados que deverão ser coletados são os seguintes:
 
@@ -752,15 +483,11 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.4.9. **Requisitos Técnicos Mínimos do** EQUIPAMENTO/SISTEMA FIXO do Radar de **Trecho** com Pesagem e Classificação de Veículos:
 
-4.4.9.1. Equipamento para coleta permanente de dados poderão ser novos ou usados, desde que as funcionalidades aqui descritas sejam integralmente atendidas.
-
-4.4.9.2. Para efeito de cálculo de capacidade de armazenagem, deve-se considerar como capacidade mínima de tráfego 2.000 (dois mil) veículos/hora por faixa para o horário de pico e 800 (oitocentos) veículos/hora em média, para um máximo de 4 (quatro) faixas de tráfego em uma mesma pista e/ou sentido.
+4.4.9.2. Para efeito de cálculo de capacidade de armazenagem, deve-se considerar como capacidade mínima de tráfego 2.000 (dois mil) veículos/hora por faixa para o horário de pico e 800 (oitocentos) veículos/hora em média, para um máximo de 4 (quatro) faixas de tráfego em uma mesma pista e/ou sentido. *(misto)*
 
 4.4.9.3. Cada equipamento deverá ser capaz de enviar automaticamente os dados coletados, mantendo a sua operação normal sem prejuízo da continuidade da pesquisa, durante a transmissão de dados.
 
 4.4.9.4. O sistema deverá ainda permitir a coleta manual junto ao equipamento/sistema fixo de armazenagem, realizada por técnicos habilitados.
-
-4.4.9.5. As instalações elétricas e de aterramento do conjunto deverão atender às recomendações da normas ABNT NBR 5410:2004 Versão Corrigida:2008 (e suas sucedâneas) e ABNT NBR 5419:2005 (e suas sucedâneas), bem como todas instalações que utilizem dutos e passagem de fios e/ou cabos, deverão estar compatíveis com as respectivas normas da ABNT.
 
 4.4.9.6. A utilização de coletas manuais de dados junto aos equipamentos só será permitida para aqueles locais onde não exista cobertura de rede de transmissão de dados disponíveis, seja pela ausência de redes de fibra óptica ou de tecnologia de rede sem fio como GPRS, 3G, 4G, 5G, dentre outras.
 
@@ -768,17 +495,11 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.4.9.8. Os dados coletados automaticamente e manualmente deverão ser transmitidos à Central de Processamento de Imagens - CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real da CONTRATADA para o LOTE 1, sem nenhum tratamento, mantendo suas características originais.
 
-4.4.9.9. No caso específico desse tipo de equipamento, haverá a necessidade de se implantar sensores na pista de rolamento (tipo intrusivo ao pavimento) e em função disso, esclarece-se que tais sensores serão considerados como sendo parte integrante da infraestrutura do equipamento e que, portanto, sua manutenção ou substituição serão de inteira responsabilidade das CONTRATADAS.
-
-4.4.9.10. Assim como é de inteira responsabilidade das CONTRATADAS fornecerem os equipamentos, bem como também todos os custos e despesas associados ao bom funcionamento dos mesmos, inclusive quaisquer necessidades em termos de recapeamentos asfálticos para atendimento das especificidades dos sensores que serão utilizados.
-
-4.4.9.11. Os equipamentos deverão ser capazes de detectar e registrar o peso estatístico (por eixo e PBT) de veículos pesados (ônibus e caminhões), a contagem volumétrica, a contagem classificatória de veículos, a velocidade instantânea, além de outras funcionalidades discriminadas nestas ESPECIFICAÇÕES TÉCNICAS, não importando o porte desses veículos, com exceção do peso, incluindo-se aqui as motocicletas e veículos de passeio (para o caso das contagens volumétricas e velocidade somente).
+4.4.9.11. Os equipamentos deverão ser capazes de detectar e registrar o peso estatístico (por eixo e PBT) de veículos pesados (ônibus e caminhões), a contagem volumétrica, a contagem classificatória de veículos, a velocidade instantânea, além de outras funcionalidades discriminadas nestas ESPECIFICAÇÕES TÉCNICAS, não importando o porte desses veículos, com exceção do peso, incluindo-se aqui as motocicletas e veículos de passeio (para o caso das contagens volumétricas e velocidade somente). *(misto)*
 
 4.4.10. **Quanto às CONTAGENS DE TRÁFEGO e a CLASSIFICAÇÃO DOS VEÍCULOS**
 
 4.4.10.1. Os equipamentos a serem instalados deverão ser capazes de executar a contagem volumétrica classificatória de todos os veículos que trafegam pela faixa monitorada, durante 24 horas por dia, durante todo o prazo de vigência do contrato;
-
-4.4.10.2. O equipamento de contagem permanente, deverá apresentar um erro menor que ±5% (mais ou menos cinco por cento) para os volumes medidos, por faixa, ou por conjunto de faixas até o número máximo de 4 (quatro) faixas, permitindo ainda que seja estabelecida uma variação de ±10% (mais ou menos dez por cento) do volume médio, para um intervalo de confiança de 95% (noventa e cinco por cento);
 
 4.4.10.3. Nas contagens classificatórias de veículos, o equipamento instalado deverá apresentar um erro de até 5% (cinco por cento), para um intervalo de confiança de 95% (noventa e cinco por cento), para as classes definidas pelas Resolução nº 882 do Conselho Nacional de Trânsito – CONTRAN e Portaria nº 268, de 14/03/22 da Secretaria Nacional de Trânsito – SENATRAN, e outras que vierem a substituí-las ou complementá-las, devendo obedecer às seguintes exigências quanto à classificação dos veículos e tabela apresentada a seguir:
 
@@ -879,10 +600,6 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.4.10.4.12. Placa dos veículos – frontal e traseira;
 
-4.4.10.5. Com relação à pesagem estatística (peso em movimento), será exigido do equipamento que o valor do peso bruto total e do peso por eixos apresentem erro máximo absoluto - EMA de ±15% mais ou menos quinze por cento) e de ±30% mais ou menos trinta por cento), respectivamente, medidos na velocidade máxima regulamentada para cada via (máximo de 80 km/h), para um intervalo de confiança de 95% (noventa e cinco por cento) dos veículos registrados;
-
-4.4.10.6. Com relação à velocidade pontual de operação, será exigido do instrumento que, ao medi-la dentro de faixas de 10 km, ela seja detectada com um erro máximo absoluto - EMA de ±7% mais ou menos sete por cento), para veículos trafegando com velocidades abaixo de 100 km/h e um erro máximo absoluto - EMA de ±10% mais ou menos dez por cento) para veículos trafegando com velocidade acima de 100 km/h;
-
 4.4.10.7. Com relação ao formato dos dados a serem transmitidos à CONTRATADA para o LOTE 1, informa-se que esse seguirá um padrão e layout a serem definidas por esta, em reunião a ser definida após as assinaturas dos contratos;
 
 4.4.10.8. A estrutura do arquivo que será definida pela CONTRATADA para o LOTE 1 possibilitará informar, no mínimo, os seguintes dados:
@@ -900,85 +617,15 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.4.10.10. A CONTRATADA para o LOTE 1 deverá fornecer sistema informatizado onde seja possível a extração de relatórios dos dados fornecidos a ser especificado pela CONTRATANTE.
 
-4.4.10.11. Quanto ao DESCRITIVO TÉCNICO detalhado da Solução:
-
-4.4.10.12. Quando da apresentação da PROPOSTA TÉCNICA COMERCIAL deste processo licitatório a LICITANTE deverá apresentar junto a esta um DESCRITIVO TÉCNICO detalhando sua solução técnica, juntamente com documentação comprobatória, que deve conter pelo menos os seguintes itens:
-
-4.4.10.12.1. Tecnologias e Metodologias Adotadas:
-
-4.4.10.12.1.1. Marca, modelo e fabricante dos equipamentos propostos;
-
-4.4.10.12.1.2. Tipos de sensores de detecção a serem adotados;
-
-4.4.10.12.1.3. Forma de alimentação de energia elétrica;
-
-4.4.10.12.1.4. Sistemas de proteção física (grau de proteção equipamentos, dispositivos anti vandalismo, etc.) e lógica (criptografia, assinatura digital, etc.)
-
-4.4.10.12.1.5. Sistema de funcionamento no período noturno;
-
-4.4.10.12.1.6. Esquema elétrico e de conectividade das instalações;
-
-4.4.10.12.1.7. Elementos de fixação dos equipamentos e acessórios em campo;
-
-4.4.10.12.1.8. Croqui de instalação de um sistema típico contendo:
-
-4.4.10.12.1.8.1. Colunas, braços e demais estruturas de fixação;
-
-4.4.10.12.1.8.2. Gabinetes;
-
-4.4.10.12.1.8.3. Sensores;
-
-4.4.10.12.1.8.4. Sistemas de energização;
-
-4.4.10.12.1.8.5. Detalhamento das instalações físicas (base de concreto, cercado de proteção, caixas de passagem, conexão com sensores, aterramento, sistema de alimentação, dispositivos anti vandalismo, dentre outros);
-
-4.4.10.12.1.9. Descrição da metodologia de calibração dos equipamentos;
-
-4.4.10.12.1.10. Cronograma de implantação de cada EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos.
-
-4.4.10.13. Quanto às ATIVIDADES DE CERTIFICAÇÃO:
-
-4.4.10.13.1. As atividades referentes à certificação dos EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos instalados serão de responsabilidade das CONTRATADAS, sendo, para tanto, necessária a apresentação de certificado de comprovação de cada verificação inicial e eventual.
-
-4.4.10.13.2. Essa atividade será realizada em 02 (duas) fases distintas, a saber:
-
-4.4.10.13.2.1. Verificação Inicial: As CONTRATADAS deverão apresentar Certificado de Verificação Inicial para cada EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos instalado, a ser emitido por empresa ou instituição capacitada para este fim.
-
-4.4.10.13.2.2. Verificação Eventual: As CONTRATADAS deverão apresentar um Certificado de Verificação Eventual a ser emitido por empresa ou instituição capacitada para este fim; em caso de manutenção devido à necessidade substituição dos sensores; e/ou quando solicitado pela CONTRATANTE, caso sejam detectados dados de pesos incompatíveis com os veículos registrados a partir de uma amostra mínima de 24 (vinte e quatro) horas e que estejam fora dos valores de EMA e intervalos de confiança definidos neste documento.
-
-4.4.10.13.3. Os procedimentos referentes à Verificação Inicial deverão ser formalizados da seguinte forma:
-
-4.4.10.13.3.1. Passo 1: As CONTRATADAS deverão executar os procedimentos para a Verificação Inicial no local onde será instalado EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos, certificado por empresa ou instituição capacitada para este fim, visando o atendimento de desempenho do posto de contagem de tráfego, constante nestas ESPECIFICAÇÕES TÉCNICAS, conforme descrito a seguir:
-
-4.4.10.13.3.1.1. Volumétrica e Classificatória:
-
-4.4.10.13.3.1.1.1. Para a verificação dos dados referentes a contagem volumétrica e classificatória, as CONTRATADAS deverão efetuar uma contagem manual para cada faixa de tráfego, registrada em formulário padrão, totalizando a cada 5 (cinco) minutos por um período de 15 (quinze) minutos de forma ininterrupta.
-
-4.4.10.13.3.1.1.2. As CONTRATADAS poderão realizar esta contagem por intermédio de análise de filmagem ininterrupta ou de forma manual localmente.
-
-4.4.10.13.3.1.2. Peso em Movimento:
-
-4.4.10.13.3.1.2.1. A aferição dos equipamentos destinados ao registro da pesagem em movimento, contará com auxílio de um veículo teste de referência, de dois ou três eixos, configurado e calibrado com peso conhecido de no mínimo 50% (cinquenta por cento) da sua capacidade máxima de tração; e vazio a ser obtido e certificado por balança homologada e certificada pelo INMETRO (e/ou órgão a ele delegado).
-
-4.4.10.13.3.1.2.2. O veículo não poderá ser do tipo VUC, caminhonete, furgão ou veículos de passeio, devendo ser obrigatoriamente classificado como um veículo pesado.
-
-4.4.10.13.3.1.2.3. Para a verificação dos dados referentes a pesagem em movimento, a empresa ou instituição capacitada para este fim deverá proceder à obtenção de uma amostra de 10 (dez) medições, sendo que 05 (cinco) medições corresponderão ao peso o veículo carregado e 05 (cinco) medições para o veículo vazio.
-
-4.4.10.13.3.1.2.4. Antes do início de qualquer um dos procedimentos descritos acima é expressamente necessária a compatibilização da hora configurada nos equipamentos utilizados nas coletas, com a hora de execução dos procedimentos de verificação.
-
-4.4.10.13.3.1.2.5. Os dados obtidos deverão ser confrontados com os produzidos pelos equipamentos automatizados, não sendo admitidos erros máximos - EMA superiores aos estipulados nestas ESPECIFICAÇÕES TÉCNICAS, de acordo com o intervalo de confiança estipulado
-
-4.4.10.13.3.1.2.6. Os procedimentos referentes à Verificação Eventual, deverão ser realizados por empresa ou instituição capacitada para este fim, visando o atendimento desempenho do EQUIPAMENTO/SISTEMA FIXO do Radar de Trecho com Pesagem e Classificação de Veículos e serão idênticos aos procedimentos descritos para a Verificação Inicial.
-
 4.5. Equipamentos de Monitoramento de Tráfego em Trecho
 
 4.5.1. O objetivo principal dos EQUIPAMENTOS/SISTEMAS FIXOS de Monitoramento de Tráfego em Trecho será a coleta de dados de identificação veiculares complementares à leitura da placa, bem como imagens de todos os veículos e possibilidade de acesso ao video das câmeras panorâmicas;
 
 4.5.2. A coleta de dados de tráfego enriquecida visa trazer um número maior de informações para monitoramento e gerenciamento do trânsito, de forma a permitir simulações e estudos mais próximos da realidade e com resposta mais rápida às interveções da Administração;
 
-4.5.3. Os EQUIPAMENTOS/SISTEMAS FIXOS de Monitoramento de Tráfego em Trecho devem possuir uma câmera de contexto adicional, a qual permita o acesso ao canal de vídeo através do Sistema de Gestão de Dados de Tráfego em Tempo Real, cuja resolução mínima deve ser de 2 MP (dois megapixels) e taxa de atualização de quadros de 25 (vinte e cinco) FPS;
+4.5.3. Os EQUIPAMENTOS/SISTEMAS FIXOS de Monitoramento de Tráfego em Trecho devem possuir uma câmera de contexto adicional, a qual permita o acesso ao canal de vídeo através do Sistema de Gestão de Dados de Tráfego em Tempo Real, cuja resolução mínima deve ser de 2 MP (dois megapixels) e taxa de atualização de quadros de 25 (vinte e cinco) FPS; *(misto)*
 
-4.5.4. A câmera de contexto mencionada acima pode ser a mesma utilizada para registro de infrações não metrológicas, quando aplicável e caso ela possua especificação igual ou superior;
+4.5.4. A câmera de contexto mencionada acima pode ser a mesma utilizada para registro de infrações não metrológicas, quando aplicável e caso ela possua especificação igual ou superior; *(misto)*
 
 4.5.5. ADICIONALMENTE ao disposto na Seção “Aspectos Legais”, “Requisitos Gerais” e “Requisitos Específicos dos equipamentos/sistemas fixos do Radar de Trecho”, os equipamentos/sistemas fixos de Monitoramento de Tráfego em Trecho ofertados TAMBÉM deverão atender a todos requisitos dispostos nesta Seção, sem exceções, devendo TAMBÉM registrar os mesmos eventos/enquadramentos de trânsito previstos para os equipamentos/sistemas fixos do Radar de Trecho;
 
@@ -992,8 +639,6 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.5.10. A CONTRATADA para o LOTE 1 deverá processar estas imagens teste e classificá-las em APROVEITÁVEIS ou NÃO APROVEITÁVEIS, respeitando os mesmos critérios de avaliação das infrações
 
-4.5.11. Os equipamentos/sistemas fixos de Monitoramento de Tráfego em Trecho serão objeto de fornecimento exclusivo da CONTRATADA para o LOTE 1;
-
 4.5.12. Os equipamentos/sistemas fixos de Monitoramento de Tráfego em Trecho deverão possuir os recursos de reconhecimento de padrões descritos no item **8** destas ESPECIFICAÇÕES TÉCNICAS de forma embarcada, não sendo possível a transmissão ou processamento de IA de forma remota em servidor.
 
 4.5.13. Fornecer registros de identificação veicular com datação que permitam a aferição de velocidade média de percurso entre pontos de medição da mesma via, para composição das estatísticas de tráfego.
@@ -1004,9 +649,9 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.6.2. A coleta de dados de tráfego enriquecida visa trazer um número maior de informações para monitoramento e gerenciamento do trânsito, de forma a permitir simulações e estudos mais próximos da realidade e com resposta mais rápida às interveções da Administração;
 
-4.6.3. Os EQUIPAMENTOS/SISTEMAS FIXOS de Monitoramento de Tráfego em Cruzamento devem possuir uma câmera de contexto adicional, a qual permita o acesso ao canal de vídeo através do Sistema de Gestão de Dados de Tráfego em Tempo Real, cuja resolução mínima deve ser de 2 MP (dois megapixels) e taxa de atualização de quadros de 25 (vinte e cinco) FPS;
+4.6.3. Os EQUIPAMENTOS/SISTEMAS FIXOS de Monitoramento de Tráfego em Cruzamento devem possuir uma câmera de contexto adicional, a qual permita o acesso ao canal de vídeo através do Sistema de Gestão de Dados de Tráfego em Tempo Real, cuja resolução mínima deve ser de 2 MP (dois megapixels) e taxa de atualização de quadros de 25 (vinte e cinco) FPS; *(misto)*
 
-4.6.4. A câmera de contexto mencionada acima pode ser a mesma utilizada para registro de infrações não metrológicas, quando aplicável e caso ela possua especificação igual ou superior;
+4.6.4. A câmera de contexto mencionada acima pode ser a mesma utilizada para registro de infrações não metrológicas, quando aplicável e caso ela possua especificação igual ou superior; *(misto)*
 
 4.6.5. ADICIONALMENTE ao disposto na Seção “Aspectos Legais”, “Requisitos Gerais” e “Requisitos Específicos dos equipamentos/sistemas fixos do Radar de Cruzamento”, os equipamentos/sistemas fixos de Monitoramento de Tráfego em Cruzamento ofertados TAMBÉM deverão atender a todos requisitos dispostos nesta Seção, sem exceções, devendo TAMBÉM registrar os mesmos eventos/enquadramentos de trânsito previstos para os equipamentos/sistemas fixos do Radar de Cruzamento;
 
@@ -1020,21 +665,13 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 4.6.10. A CONTRATADA para o LOTE 1 deverá processar estas imgens teste e classificá-las em APROVEITÁVEIS ou NÃO APROVEITÁVEIS, respeitando os mesmos critérios de avaliação das infrações
 
-4.6.11. Os equipamentos/sistemas fixos de Monitoramento de Tráfego em Cruzamento serão objeto de fornecimento exclusivo da CONTRATADA para o LOTE 1;
-
 4.6.12. Os equipamentos/sistemas fixos de Monitoramento de Tráfego em Cruzamento deverão possuir os recursos de reconhecimento de padrões descritos no item **8** destas ESPECIFICAÇÕES TÉCNICAS de forma embarcada, não sendo possível a transmissão ou processamento de IA de forma remota em servidor.
 
 4.6.13. Fornecer registros de identificação veicular com datação que permitam a aferição de velocidade média de percurso entre pontos de medição da mesma via, para composição das estatísticas de tráfego.
 
 ## 5. INFRAESTRUTURA EQUIPAMENTO/SISTEMA FIXO
 
-5.1. A infraestrutura para os equipamentos de fiscalização e monitoramento (EQUIPAMENTO/SISTEMA FIXOS), isto é, equipamentos/sistemas fixos Radar de Trecho, Barreira Eletrônica, Radar de Cruzamento e Radar de Trecho com Pesagem e Classificação de Veículos e os Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento); deverão atender as legislações metrológica e não metrológica vigente seja ela municipal, estadual ou federal ou norma que vier a dispor sobre a matéria mesmo durante a vigência do contrato, cabendo às CONTRATADAS a instalação e a manutenção dos equipamentos/sistemas fixos, de modo a garantir o seu pleno funcionamento.
-
-5.2. Tocará às CONTRATADAS promoverem a sinalização viária nos locais do município de Curitiba/PR escolhidos para instalação dos equipamentos/sistemas fixos, seguindo preceitos das normas municipais, estaduais e federais no que regem a matéria.
-
 5.3. Caberá às CONTRATADAS garantirem meios eficientes objetivando que a comunicação de dados oriunda dos equipamentos seja recebida/acessada em tempo real na Central de Processamento de Imagens – CPI e Sistema de Gestão de Dados de Tráfego em Tempo Real da CONTRATADA para o LOTE 1.
-
-5.4. Durante a vigência do contrato em casos de furto ou vandalismo dos equipamentos e/ou estrutura instalados, caberá às CONTRATADAS providenciarem o registro junto a autoridade policial e em até 05 (cinco) dias úteis promover o reparo e/ou substituição do item(s) furtado e/ou vandalizado.
 
 ## 6. TRANSMISSÃO E ARMAZENAMENTO DE DADOS
 
@@ -1526,15 +1163,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 ## 15. QUANTITATIVOS DO OBJETO LICITADO
 
-15.1. Para a fiscalização efetiva das vias públicas será necessária a contratação de um sistema integrado de equipamentos e softwares nas seguintes quantidades:
-
 15.1.1. LOTE 1
-
-15.1.1.1. 6 (seis) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Trecho com Pesagem e Classificação de Veículos;
-
-15.1.1.2. 365 (trezentas e sessenta e cinco) faixas de trânsito de EQUIPAMENTO/SISTEMA FIXO de Monitoramento de Tráfego em Trecho;
-
-15.1.1.3. 134 (cento e trinta e quatro) faixas de trânsito de EQUIPAMENTO/SISTEMA FIXO de Monitoramento de Tráfego em Cruzamento;
 
 15.1.1.4. 1 (uma) licença de uso do software do Centro de Processamento de Imagens - CPI;
 
@@ -1544,137 +1173,23 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 15.1.1.7. 1.000 (mil) horas/mês de Serviços de apoio à CONTRATANTE no desenvolvimento de softwares específicos ao longo do contrato;
 
-15.1.2. LOTE 2
-
-15.1.2.1. 151 (cento e cinquenta e uma) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Trecho;
-
-15.1.2.2. 41 (quarenta e uma) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Barreira Eletrônica;
-
-15.1.2.3. 260 (duzentas e sessenta) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Cruzamento;
-
-15.1.2.4. 6 (seis) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Trecho com Pesagem e Classificação de Veículos;
-
-15.1.3. LOTE 3
-
-15.1.3.1. 113 (cento e treze) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Trecho;
-
-15.1.3.2. 37 (trinta e sete) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Barreira Eletrônica;
-
-15.1.3.3. 302 (trezentas e duas) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Cruzamento;
-
-15.1.3.4. 6 (seis) faixas de trânsito de EQUIPAMENTOS/SISTEMAS FIXOS do Radar de Trecho com Pesagem e Classificação de Veículos;
-
-## 16. LOCAIS DE INSTALAÇÃO
-
-16.1. Locais de Instalação encontram-se dispostos no Anexo V - Locais Instalação EFE
-
-16.2. Observações:
-
-16.2.1. Os locais de instalação dos equipamentos de fiscalização eletrônica (equipamentos/sistemas fixos) são os constantes do Anexo V, admitido o remanejamento nos limites do Termo de Referência e precedida a ativação de cada ponto dos levantamentos e estudos técnicos do art. 6º da Resolução CONTRAN nº 798/2020.
-
-16.2.2. O número de faixas de trânsito controladas por equipamento é o indicado no Anexo V para cada local.
-
-## 17. CRONOGRAMA DE ENTREGA DO OBJETO
-
-17.1. A entrega definitiva do objeto da presente licitação dar-se-á quando da instalação e operação efetiva dos equipamentos obedecendo-se ao presente cronograma:
-
-17.1.1. 30 (trinta) dias: Instalação e operação dos Sistemas da Central de Processamento de Imagens - CPI, Sistema de Fornecimento de Relatórios e da interface com o processamento corporativo de infrações – Lote 1;
-
-17.1.2. 60 (sessenta) dias: Instalação e operação de 20% (vinte por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS;
-
-17.1.3. 60 (sessenta) dias: Instalação e operação de Sistema de Gestão de Dados de Tráfego em Tempo Real (Análise, Monitoramento Viário e Cerco Eletrônico) – Lote 1;
-
-17.1.4. 120 (cento e vinte) dias: Instalação e operação de 50% (cinquenta por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS;
-
-17.1.5. 180 (cento e oitenta) dias: Instalação e operação de 75% (setenta e cinco por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS;
-
-17.1.6. 240 (240) dias: Instalação e operação de 100% (cem por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS.
-
-17.2. Os prazos acima serão contados a partir da entrega das respectivas Ordens de Serviços - OS, e as CONTRATADAS deverão fornecer o objeto licitado em estrita conformidade com o cronograma acima, salvo motivo justificado e devidamente aceito pelos fiscais da Secretaria Municipal de Defesa Social e Trânsito (SMDT).
-
-17.3. Nenhum EQUIPAMENTO/SISTEMA FIXO poderá iniciar a sua operação sem que seja realizada a sua verificação pelo INMETRO (e/ou órgão a ele delegado), pela qual as CONTRATADAS serão as únicas responsáveis.
-
-17.4. Todos EQUIPAMENTOS/SISTEMAS FIXOS constantes deste Projeto Básico deverão ser requisitados às CONTRATADAS por meio de ordem de serviço - OS, devendo os pagamentos ser efetuados por meio de medições.
-
-17.5. A implementação da solução deverá ser efetuada inicialmente por intermédio de empresas especializadas na forma de prestação de serviços, obedecendo-se os seguintes aspectos.
-
-17.6. As CONTRATADAS serão responsáveis por preparar, nos prazos previstos no cronograma de implantação, os locais de instalação dos EQUIPAMENTOS/SISTEMAS FIXOS, executando todas as obras de infraestrutura necessária, bem como para a ligação à rede de energia elétrica de acordo com as especificações da concessionária local.
-
-17.7. Fica sob a responsabilidade do(a) CONTRATANTE a solicitação de ligação do equipamento à rede de energia elétrica junto a concessionária local.
-
-17.8. Os equipamentos e sistemas ofertados em sua proposta devem atender integralmente ao disposto no Edital e nestas ESPECIFICAÇÕES TÉCNICAS.
-
-17.1 O prazo total para a execução dos serviços está especificado no contrato do qual este termo é anexo, contados a partir da data de assinatura do Contrato, podendo ser prorrogado nos termos da lei;
-
-17.2 O prazo inicial de 30 (trinta) dias após a assinatura do contrato destina- se à tomada de providências preliminares, não cabendo nenhum ônus à relativamente àquele período;
-
-17.3 A Implantação do Sistema de Monitoramento dar-se-á a partir do primeiro dia da emissão da ordem de Serviço com conclusão em até 60 dias.
-
-17.4 Deverá ser cumprido o Cronograma mínimo de Implantação especificado abaixo, atendendo as indicações da SMDT.
-
-17.5 30 (trinta) dias: Instalação e operação dos Sistemas da Central de Processamento de Imagens - CPI, Sistema de Fornecimento de Relatórios e da interface com o processamento corporativo de infrações – Lote 1;
-
-17.6 60 (sessenta) dias: Instalação e operação de 20% (vinte por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS;
-
-17.7 60 (sessenta) dias: Instalação e operação de Sistema de Gestão de Dados de Tráfego em Tempo Real (Análise, Monitoramento Viário e Cerco Eletrônico) – Lote 1;
-
-17.8 120 (cento e vinte) dias: Instalação e operação de 50% (cinquenta por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)) conforme OS;
-
-17.9 180 (cento e oitenta) dias: Instalação e operação de 75% (setenta e cinco por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS;
-
-17.10 240 (240) dias: Instalação e operação de 100% (cem por cento) dos equipamentos/sistemas fixos (Radar de Trecho, Barreira Eletrônica, Radar de Trecho com Pesagem e Classificação de Veículos e Radar de Cruzamento e Equipamentos de Monitoramento de Tráfego (Trecho e Cruzamento)), conforme OS.
-
-17.11 Os quantitativos acima indicam a quantidade de faixas que devem estar aptas para operação, por tipo, até a data especificada em dias, decorridos a partir da emissão da ordem de serviço.
-
-17.12 O Município indicará os locais e a prioridade para a instalação dos equipamentos/sistema fixos, em conformidade com as quantidades descritas no item anterior;
-
-17.13 O não cumprimento dos prazos de instalação dos equipamentos/sistemas fixos, sem motivo que o justifique, será considerado como infração contratual, cabendo as sanções previstas no Contrato;
-
-17.14 No prazo de até 60 (sessenta) dias, contado da assinatura do Contrato, os equipamentos e sistemas do CPI (Centro de Processamento de Imagens) deverão atender integralmente ao estabelecido em item específico deste Termo de Referência.
-
-17.15 Deverá ser entregue ao Município os respectivos Certificados de Comprovação de Aferição Individual e os Certificados de Avaliação de conformidade (quando for o caso), conforme exigência do CONTRAN, em até 03 (três) dias úteis antes do início efetivo da operação dos equipamentos/sistema fixos.
-
-17.16 Os referidos Certificados deverão ser renovados, de acordo com a legislação vigente, e entregues ao Município que, por motivo relevante ou por recomendação do órgão regulador, poderá, também, exigir a citada renovação em prazo diferente ao definido neste item.
-
-17.17 O remanejamento de equipamentos para um novo local de fiscalização determinados pelo Município deverá ser efetuado num prazo de até 20 (vinte) dias corridos a partir da data da solicitação (incluindo o tempo necessário para aferição do INMETRO ou sua credenciada).
-
 ## 18. TESTE DE AMOSTRA
 
-18.1. As LICITANTES vencedoras deverão apresentar as amostras para avaliação da CONTRATANTE em um prazo máximo de 15 (quinze) dias corridos após convocação.
-
-18.2. Em caso de evento fortuito alheio à responsabilidade da LICITANTE, a mesma poderá solicitar prorrogação máxima de prazo para apresentação das amostras por período igual ao citado no subitem 18.1.
-
-18.3. As LICITANTES serão responsáveis por todos os componentes e infraestruturas de comunicação, energia, entre outros, de maneira a viabilizar a apresentação das amostras.
-
-18.4. A Prefeitura viabilizará a autorização da instalação das amostras na Secretaria de Obras.
-
 18.5. As amostras a serem apresentadas serão:
-
-18.5.1. Um equipamento do Radar de Cruzamento de até 2 (duas) faixas – LOTES 2 e 3
-
-18.5.2. Um equipamento do Barreira Eletrônica de até 2 (duas) faixas – LOTES 2 e 3
-
-18.5.3. Um equipamento de Monitoramento de Tráfego em Cruzamento de até 2 (duas) faixas – LOTE 1
 
 18.5.4. Sistema do Centro de Processamento de Imagens – LOTE 1
 
 18.5.5. Sistema de Gestão de Dados de Tráfego em Tempo Real – LOTE 1
 
-18.6. Os equipamentos instalados deverão funcionar por 48h (quarenta e oito horas).
+18.6. Os equipamentos instalados deverão funcionar por 48h (quarenta e oito horas). *(misto)*
 
-18.7. Será permitida a manutenção do equipamento em caso fortuito, desde que aprovada previamente pela comissão de avaliação da Prefeitura, cuja causa seja restrita a má funcionamento de componente e substituição por mesmo item, não sendo permitida a troca de software, adição de novo componente ou substiuição por outro modelo.
-
-18.8. A(s) manutenção(ões) previstas em 18.7 não poderão exceder a quantidade de 1 (uma) por dia, sendo o período de 48h (quarenta e oito) suspenso durante o(s) procedimento(s) e retomado após a conclusão, até que se totalize o período total previsto de 48 (quarenta e oito horas) de dados de tráfego e imagens.
-
-18.9. Todos os itens descritos neste termo para cada objeto poderão ser avaliados, incluindo o aproveitamento geral descrito em 20.1.22.3.
-
-18.10. Serão desclassificadas as LICITANTES que não atenderem a qualquer um dos itens avaliados, sendo convocadas as próximas colocadas.
+18.9. Todos os itens descritos neste termo para cada objeto poderão ser avaliados, incluindo o aproveitamento geral descrito em 20.1.22.3. *(misto)*
 
 ## 19. TESTES DE CONCEITO
 
 19.1 Requisitos Gerais
 
-19.1.1 Em conformidade com o art. 17, § 3º da Lei Federal nº 14.133/2021, após a classificação final da proposta, oriunda da fase de lances, a primeira colocada, deverá em um prazo máximo de xx (xx) horas, enviar em endereço a ser definido por SMDT, toda a documentação abaixo elencada, a fim de que a Comissão Técnica da Administração possa verificar a aderência da proposta ao instrumento convocatório.
+19.1.1 Em conformidade com o art. 17, § 3º da Lei Federal nº 14.133/2021, após a classificação final da proposta, oriunda da fase de lances, a primeira colocada, deverá em um prazo máximo de xx (xx) horas, enviar em endereço a ser definido por SMDT, toda a documentação abaixo elencada, a fim de que a Comissão Técnica da Administração possa verificar a aderência da proposta ao instrumento convocatório. *(misto)*
 
 - Manual e/ou Catálogos completo das soluções aqui apresentadas;
 
@@ -1684,29 +1199,13 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 - Outras documentações a serem definidas por SMDT
 
-19.1.2 A Secretaria Municipal de Defesa Social e Trânsito (SMDT) instituirá Comissão Especial responsável pela análise e avaliação na fase de apresentação de amostras.
-
-19.1.3 Após a emissão de parecer técnico devidamente fundamentado pela Comissão responsável, e confirmada a regularidade da documentação apresentada, será iniciada a fase de análise das amostras, incluindo a execução do teste de conceito.
-
-19.1.4 Constatada a desconformidade da documentação em relação às exigências previstas no edital, a licitante será desclassificada, procedendo-se à convocação da próxima classificada, obedecida a ordem de classificação.
-
-19.1.5 As amostras apresentadas deverão atender integralmente às especificações estabelecidas no instrumento convocatório, sob pena de desclassificação. A entrega deverá ser realizada no prazo máximo de 15 (quinze) dias, contados a partir da convocação, sendo admitida uma única prorrogação por igual período, desde que previamente solicitada pela licitante e devidamente justificada.
-
-19.1.6 A avaliação das amostras apresentadas, compreendendo equipamentos e softwares, tem como finalidade comprovar, para a Administração Municipal, o pleno atendimento às funcionalidades previstas e a eficiência técnica da solução ofertada. Para esse fim, serão realizados testes em condições reais de operação, incluindo a verificação do desempenho, da operacionalidade e dos resultados obtidos por meio de simulações em vias do Município, conforme roteiro estabelecido nos itens à frente.
-
-19.1.7 O procedimento de avaliação de amostras, no contexto do julgamento das propostas, destina-se a garantir que os itens ofertados pela licitante atendam integralmente às especificações técnicas e condições definidas no Edital de Licitação. A exigência de apresentação de amostras tem por objetivo reduzir riscos e proporcionar maior segurança à Administração quanto à efetiva aptidão da solução proposta para atender às demandas públicas, em conformidade com o disposto no art. 17, § 3º, da Lei Federal nº 14.133/2021
-
-19.1.8 Para a avaliação dos equipamentos, a licitante classificada em primeiro lugar na fase de lances deverá fornecer os seguintes itens:
-
-19.1.8.1 Equipamento de fiscalização eletrônica radar fixo, Radar de Trecho, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo;
-
-19.1.8.2 Equipamento de fiscalização eletrônica radar fixo, Barreira Eletrônica, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo
+19.1.6 A avaliação das amostras apresentadas, compreendendo equipamentos e softwares, tem como finalidade comprovar, para a Administração Municipal, o pleno atendimento às funcionalidades previstas e a eficiência técnica da solução ofertada. Para esse fim, serão realizados testes em condições reais de operação, incluindo a verificação do desempenho, da operacionalidade e dos resultados obtidos por meio de simulações em vias do Município, conforme roteiro estabelecido nos itens à frente. *(misto)*
 
 19.9 Os procedimentos que deverão ser adotados nos testes para os equipamentos previstos são os seguintes:
 
 19.9.1 Equipamento de fiscalização eletrônica radar fixo, Radar de Trecho, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo
 
-19.9.2 A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante:
+19.9.2 A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante: *(misto)*
 
 - Fiscalização por infrações por excesso de velocidade
 
@@ -1732,7 +1231,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 19.9.3 Equipamento de fiscalização eletrônica radar fixo, Barreira Eletrônica, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo
 
-19.9.3.1 A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante:
+19.9.3.1 A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante: *(misto)*
 
 - Fiscalização por infrações por excesso de velocidade
 
@@ -1744,7 +1243,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 19.9.4 Equipamento de fiscalização eletrônica radar fixo, Radar de Cruzamento, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo
 
-19.9.4.1 A empresa deverá instalar 1 (um) equipamento em local a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante:
+19.9.4.1 A empresa deverá instalar 1 (um) equipamento em local a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante: *(misto)*
 
 - Fiscalização de conversão proibida – à direita ou à esquerda:
 
@@ -1756,7 +1255,7 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 19.9.5 Equipamento de fiscalização eletrônica radar fixo, Radar de Cruzamento, dotado de tecnologia OCR/LPR, com sistema de detecção não intrusivo
 
-19.9.5.1 A empresa deverá instalar 1 (um) equipamento em local a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante:
+19.9.5.1 A empresa deverá instalar 1 (um) equipamento em local a ser definido pela SMDT visando detectar as seguintes infrações, a critério da Contratante: *(misto)*
 
 - Fiscalização por infrações por desrespeitar o sinal vermelho
 
@@ -1766,13 +1265,11 @@ Neste intuito pretende-se atingir por intermédio da fiscalização intensiva de
 
 - Parar sobre a faixa de pedestres na mudança de sinal luminoso – fiscalização eletrônica – Art. 183 do CTB: 567-32
 
-Radar de Trecho com Pesagem e Classificação de Veículos, dotado de sensores intrusivos de medição de peso e contagem de eixos e de tecnologia OCR/LPR, com medição de velocidade. A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT, visando validar a medição de velocidade, o registro de veículos em local e horário proibido e em faixa exclusiva, a leitura automática de placas e a coleta e classificação de dados de tráfego (contagem de eixos e classificação de veículos), cuja pesagem tem finalidade estatística e não metrológica, não se destinando à autuação por excesso de peso.
+Radar de Trecho com Pesagem e Classificação de Veículos, dotado de sensores intrusivos de medição de peso e contagem de eixos e de tecnologia OCR/LPR, com medição de velocidade. A empresa deverá instalar 1 (um) equipamento em trecho de via a ser definido pela SMDT, visando validar a medição de velocidade, o registro de veículos em local e horário proibido e em faixa exclusiva, a leitura automática de placas e a coleta e classificação de dados de tráfego (contagem de eixos e classificação de veículos), cuja pesagem tem finalidade estatística e não metrológica, não se destinando à autuação por excesso de peso. *(misto)*
 
-19.9.10 A licitante será responsável pela instalação dos equipamentos de fiscalização eletrônica nos locais previamente definidos, os quais deverão abranger, no mínimo, 02 (duas) faixas de tráfego, conforme indicação da Comissão de Avaliação. Para a correta implantação e operação da solução, caberá à licitante disponibilizar todos os elementos e acessórios necessários, incluindo estruturas de sustentação, sistemas de iluminação, sensores detectores e demais componentes indispensáveis.
+19.9.11 Os equipamentos de fiscalização eletrônica deverão operar de forma ininterrupta por um período mínimo de 48 (quarenta e oito) horas consecutivas, não sendo admitidas interrupções durante esse intervalo. *(misto)*
 
-19.9.11 Os equipamentos de fiscalização eletrônica deverão operar de forma ininterrupta por um período mínimo de 48 (quarenta e oito) horas consecutivas, não sendo admitidas interrupções durante esse intervalo.
-
-19.9.12 Para fins de realização dos testes, os equipamentos deverão ser configurados com velocidade limite de captura ajustada para 35 km/h, de modo a permitir a geração de um volume significativo de registros de infrações simuladas.
+19.9.12 Para fins de realização dos testes, os equipamentos deverão ser configurados com velocidade limite de captura ajustada para 35 km/h, de modo a permitir a geração de um volume significativo de registros de infrações simuladas. *(misto)*
 
 18.9.,13 Serão verificadas todas as funcionalidades, de equipamentos e softwares, descritas neste Termo de Referência, bem como aquelas previstas em seus anexos.
 
@@ -1788,21 +1285,11 @@ Radar de Trecho com Pesagem e Classificação de Veículos, dotado de sensores i
 
 ## 20. MANUTENÇÃO
 
-20.1. É obrigação das CONTRATADAS efetuarem, às suas expensas, as manutenções preventivas e corretivas necessárias aos equipamentos, bem como suas aferições e substituições, observadas as exigências da legislação em vigor, assim como cumprir todas as exigências das leis, normas de segurança e higiene de trabalho, segurança de trânsito, bem como fornecer dispositivos específicos e adequados de proteção a todos os que trabalham na instalação, operação e manutenção dos equipamentos.
-
-20.2. Para efeito destas ESPECIFICAÇÕES TÉCNICAS entende-se como:
-
-20.3. MANUTENÇÃO PREVENTIVA: uma série de procedimentos destinados a prevenir a ocorrência de quebras e defeitos dos equipamentos/sistemas fixos, conservando-os em perfeito estado de uso, de acordo com os manuais do fabricante e normas técnicas específicas, observando-se as características e quantidades elencadas nestas ESPECIFICAÇÕES TÉCNICAS, bem como nos termos básicos a seguir descritos: (i) Verificação de cabos e conexões; (ii) Análise de imagens em tempo real para verificação da qualidade das mesmas; (iii) Verificação da precisão dos instrumentos medidores de velocidade; (iv) Configuração padrão dos softwares não legalmente relevantes do instrumento; (v) Limpeza dos gabinetes e das caixas dos dispositivos de registro (câmeras e iluminadores auxiliares); (vi) Limpeza de câmeras e de lentes; (vii) Verificação de funcionamento dos elementos sensores.
-
-20.4. MANUTENÇÃO CORRETIVA: uma série de procedimentos destinados a colocar novamente os equipamentos/sistemas fixos em perfeitas condições de uso, compreendendo substituições de peças, reparos e ajustes necessários, de acordo com os manuais do fabricante e normas técnicas específicas, observando-se as características e quantidades elencadas nestas ESPECIFICAÇÕES TÉCNICAS, bem como nos termos básicos a seguir descritos: (i) Pronto atendimento aos chamados de suporte técnico feitos pela Secretaria Municipal de Defesa Social e Trânsito (SMDT); (ii) Visita “in loco” para análise do problema detectado; (iii) Adoção de medidas para a solução do problema, compostas por ajustes ou substituições de componentes e módulos do instrumento e soluções técnicas para eventuais necessidades de adequação ou correção no software; (iv) Se o reparo da deficiência constatada não demandar substituição de componentes, este deverá ser efetivado no ato da visita; (v) Alterações na programação (quando solicitadas) incluindo alterações de horário de verão (quando necessário); (vi) Prestação de assistência técnica de um modo geral, incluindo fornecimento de peças sobressalentes, mantendo disponível pessoal especializado e infraestrutura de veículos, instrumental e laboratório de reparos.
+20.4. MANUTENÇÃO CORRETIVA: uma série de procedimentos destinados a colocar novamente os equipamentos/sistemas fixos em perfeitas condições de uso, compreendendo substituições de peças, reparos e ajustes necessários, de acordo com os manuais do fabricante e normas técnicas específicas, observando-se as características e quantidades elencadas nestas ESPECIFICAÇÕES TÉCNICAS, bem como nos termos básicos a seguir descritos: (i) Pronto atendimento aos chamados de suporte técnico feitos pela Secretaria Municipal de Defesa Social e Trânsito (SMDT); (ii) Visita “in loco” para análise do problema detectado; (iii) Adoção de medidas para a solução do problema, compostas por ajustes ou substituições de componentes e módulos do instrumento e soluções técnicas para eventuais necessidades de adequação ou correção no software; (iv) Se o reparo da deficiência constatada não demandar substituição de componentes, este deverá ser efetivado no ato da visita; (v) Alterações na programação (quando solicitadas) incluindo alterações de horário de verão (quando necessário); (vi) Prestação de assistência técnica de um modo geral, incluindo fornecimento de peças sobressalentes, mantendo disponível pessoal especializado e infraestrutura de veículos, instrumental e laboratório de reparos. *(misto)*
 
 20. OBRIGAÇÕES DAS CONTRATADAS
 
 20.1. Constituem-se obrigações das CONTRATADAS:
-
-20.1.1. Manter durante todo período de vigência contratual, inclusive eventuais aditivos, a atualização tecnológica do sistema de detecção de infrações de trânsito, tanto do ponto de vista do hardware como do software. Manter os locais de instalação dos detectores veiculares em condições de permanente regularidade de modo que a capacidade de detecção de infração não seja alterada ao longo de todo o período de execução do contrato.
-
-20.1.2. As CONTRATADAS serão responsáveis por preparar nos prazos previstos no cronograma de implantação, os locais de instalação dos equipamentos, executando todas as obras de infraestrutura necessária, bem como para ligação à rede de energia elétrica de acordo com as especificações da concessionária local.
 
 20.1.3. As CONTRATADAS deverão apresentar mensalmente ou sempre que solicitado pela CONTRATANTE, relatórios de acompanhamento do contrato e das obras e serviços a ele relacionado, atendendo às exigências mínimas dos demais quesitos, os seguintes itens:
 
@@ -1814,49 +1301,13 @@ Radar de Trecho com Pesagem e Classificação de Veículos, dotado de sensores i
 
 20.1.3.4. Garantir que as informações cheguem com a qualidade necessária ao Centro de Processamento de Imagens - CPI da CONTRATADA para o LOTE 1 e disponíveis para avaliação do CONTRATANTE.
 
-20.1.4. Prestar assessoramento nos procedimentos burocráticos junto ao CONTRAN quando solicitado. Fornecer, às suas expensas, informações de tráfego e dados estatísticos adicionais coerentes com a disponibilidade dos equipamentos de sensoriamento, de acordo com a orientação da CONTRATANTE.
-
 20.1.5. Assessorar a CONTRATANTE na formação de um banco de dados com todas as imagens coletadas pelos equipamentos sensores de forma que, a qualquer momento, seja possível acessar cada uma delas de maneira inequívoca, rápida e eficiente.
-
-20.1.6. Responder pelos danos causados diretamente à Prefeitura ou a terceiros, decorrentes de sua culpa ou dolo na execução do contrato, não excluindo ou reduzindo essa responsabilidade decorrente da fiscalização ou acompanhamento pela CONTRATANTE.
-
-20.1.7. Responder pelos encargos trabalhistas, previdenciários, fiscais sindicais e comerciais resultantes da execução dos serviços, bem como por todas as despesas necessárias à realização e custos com fornecimento de equipamentos e materiais, mão-de-obra e demais despesas indiretas, respondendo pela sua inadimplência, caso ocorra, com relação aos encargos mencionados, obrigando-se pelo pagamento dos débitos inadimplentes.
-
-20.1.8. Manter, por si e por seus profissionais, durante e após o encerramento do prazo contratual, completo sigilo sobre dados, informações e detalhes obtidos através do sistema instalado, bem como aqueles fornecidos pela Prefeitura, também não divulgando a terceiros, ou quaisquer meios de comunicação, informações relacionadas com o objeto do contrato e seus anexos, sem prévia e expressa autorização por escrito da CONTRATANTE, respondendo civil e criminalmente pela inobservância dessas obrigações sob pena de imediata rescisão contratual.
-
-20.1.9. Permitir que a Prefeitura, a qualquer momento, realize inspeção e testes nos materiais a serem utilizados. Os materiais e peças necessários à prestação dos serviços deverão estar dentro das especificações solicitadas pela CONTRATANTE. Os materiais e peças que o representante da CONTRATANTE julgar inaceitáveis, em relação ao requerido, deverão ser substituídos independentemente se estes estejam ou não instalados. Estes materiais e peças deverão ser removidos imediatamente ou no prazo acordado.
-
-20.1.10. As CONTRATADAS deverão elaborar e executar Projetos de Sinalização de Trânsito para cada local de instalação dos equipamentos,conforme projetos básicos e especificações dos materiais constantes neste Projeto Básico.
-
-20.1.11. Os projetos elaborados antes de sua implantação deverão atender o estabelecido na Resolução nº 798, de 02/09/20 do CONTRAN (e suas sucedâneas) bem como as Leis Municipais que dispõe sobre a instalação, a operação e sinalização dos aparelhos, equipamentos ou quaisquer outros meios tecnológicos medidores de velocidade, fixos e estáticos, nas vias urbanas do município de Curitiba/PR.
-
-20.1.12. Caberá às CONTRATADAS, durante a implantação dos equipamentos tomar todas as medidas necessárias para garantir a segurança de pedestres e veículos nas áreas afetadas pelos trabalhos. Deverá ainda respeitar integralmente os procedimentos e legislações municipais exigidos nestes casos.
-
-20.1.13. Será de responsabilidade das CONTRATADAS proverem as obras e/ou equipamentos provisórios necessários para manter o trânsito de pedestres e veículos em condições de segurança e fluidez na área de abrangência dos serviços.
-
-20.1.14. As CONTRATADAS deverão manter a limpeza da via pública, assim como da área envolvida, retirando materiais, dejetos e estruturas temporárias utilizadas para a instalação e operação dos equipamentos.
-
-20.1.15. A Prefeitura poderá exigir medidas adicionais na área de abrangência dos serviços, como também poderá suspender os trabalhos temporariamente até que as medidas de segurança sejam consideradas suficientes.
-
-20.1.16. As CONTRATADAS deverão aferir os equipamentos/sistemas fixos de acordo com as diretrizes definidas pela Prefeitura quanto ao limite de velocidade e tolerância legal acima do qual serão registradas as infrações de trânsito e quanto ao tempo de retardo para a captação da infração de avanço do sinal vermelho do semáforo e tempo de permanência para a infração de parar sobre a faixa de travessia de pedestres na mudança do sinal luminoso, ambos nos termos da Portaria nº 16, de 21/09/04 da Senatran (e suas alterações);
-
-20.1.17. Determinar ao seu pessoal o uso de identificação e de uniformes quando em serviço externo à disposição da Prefeitura.
-
-20.1.18. Os materiais, peças e/ou equipamentos que não forem aceitos pelo representante da CONTRATANTE, não poderão ser reutilizados no contrato.
-
-20.1.19. As CONTRATADAS se obrigam a seguir procedimentos da CONTRATANTE no tocante à implantação dos equipamentos.
-
-20.1.20. As CONTRATADAS deverão elaborar Projetos Executivos de laços detectores, obras civis, instalações elétricas, rede, etc. de cada equipamento. Todos os custos pelos serviços citados acima, e que não estejam na planilha de preços serão de responsabilidade das CONTRATADAS.
 
 20.1.21. A CONTRATADA para o LOTE 1 deverá ainda proporcionar a comunicação de seus dados com outras bases de dados a pedido da CONTRATANTE.
 
 20.1.22. As CONTRATADAS deverão apresentar relatório contendo, no mínimo, as seguintes informações:
 
-20.1.22.1. Descrição detalhada das atividades realizadas no período mencionado e justificando eventuais causas paralisação e/ou atraso na prestação dos serviços.
-
-20.1.22.2. A quantificação e o orçamento dos serviços prestados no período, de acordo com a planilha orçamentária do contrato.
-
-20.1.22.3. Caso não seja alcançado o índice de aproveitamento mínimo de 90% (noventa por cento), haverá desconto nas seguintes proporções – relatório fornecido pelo LOTE 1:
+20.1.22.3. Caso não seja alcançado o índice de aproveitamento mínimo de 90% (noventa por cento), haverá desconto nas seguintes proporções – relatório fornecido pelo LOTE 1: *(misto)*
 
 | **APROVEITAMENTO DE IMAGENS** | **DESCONTO** |
 |---|---|
@@ -1865,38 +1316,4 @@ Radar de Trecho com Pesagem e Classificação de Veículos, dotado de sensores i
 | DE 75,00% A 79,99% | 15% (quinze por cento) sob o valor mensal da faixa |
 | DE 70,00% A 74,99% | 20% (vinte por cento) sob o valor mensal da faixa |
 
-20.1.23. Se houver reincidência no não atendimento ao aproveitamento geral mínimo, e este seja inferior a 90%, salvo se comprovado caso fortuito ou de força maior e devidamente aceito pelo fiscal de contrato, este Contrato poderá ser rescindido, sem prejuízos à Contratante.
-
-20.1.24. .Para efeitos de cálculo de aproveitamento geral mínimo dos equipamentos/sistemas fixos do LOTE 1, quando um equipamento operar em regime de monitoramento, serão consideradas suas imagens texte de contexto classficadas entre APROVEITÁVEIS e NÃO APROVEITÁVEIS para efeitos de cálculo.
-
-21. DO PAGAMENTO E DOS RECURSOS ORÇAMENTÁRIOS
-
-21.1. A Secretaria Municipal de Defesa Social e Trânsito (SMDT) procederá o pagamento de forma mensal. Caberá à CONTRATADA, mensalmente, proceder com a solicitação do pagamento através do registro de protocolo conforme a execução do serviço prestado, apresentando junto à Prefeitura de Curitiba/PR os seguintes documentos:
-
-21.1.1. Solicitação Pagamento (assinada e contendo dados bancários para depósito do pagamento);
-
-21.1.2. Nota Fiscal e negativas: Federal, Estadual, Municipal, FGTS e Trabalhista.
-
-21.2. A CONTRATADA deverá considerar o prazo de 20 (vinte) dias para que seja equipamentos/sistemas efetuado o pagamento pela Secretaria Municipal de Defesa Social e Trânsito (SMDT), desde a juntada de toda documentação prevista e ainda a depender da manifestação positiva da fiscalização do contrato.
-
-21.2.1. Esses documentos supracitados poderão ser enviados em formato digital a fiscalização do contrato, de acordo com a aceitação destes.
-
-22. VIGÊNCIA DO CONTRATO
-
-22.1. O prazo de vigência do contrato será de n (nº por extenso) meses contados da data de sua assinatura, podendo ser prorrogado se houver interesse da Administração Pública Municipal, limitando-se aos prazos máximos previstos Lei Federal nº 14.133, de 01/04/21, a Lei de Licitações e Contratos Administrativos, ou seja até 120 (cento e vinte) meses (vide Art. 107º).
-
-23. FISCALIZAÇÃO DO CONTRATO
-
-23.1. Nome do Servidor(a): (preencher)
-
-23.2. Matrícula do Servidor(a): (preencher)
-
-23.3. Nome do Servidor(a): (preencher)
-
-23.4. Matrícula do Servidor(a): (preencher)
-
-24. GESTOR DO CONTRATO
-
-24.1. Nome do Servidor(a): (preencher)
-
-24.2. Matrícula do Servidor(a): (preencher)
+20.1.24. .Para efeitos de cálculo de aproveitamento geral mínimo dos equipamentos/sistemas fixos do LOTE 1, quando um equipamento operar em regime de monitoramento, serão consideradas suas imagens texte de contexto classficadas entre APROVEITÁVEIS e NÃO APROVEITÁVEIS para efeitos de cálculo. *(misto)*

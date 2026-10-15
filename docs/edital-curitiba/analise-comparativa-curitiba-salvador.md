@@ -8,7 +8,7 @@
 
 | Documento | Uso |
 |---|---|
-| [Anexo II — Especificações Técnicas (Curitiba)](../../docs-editais/edital-curitiba/Anexo_II_Especificacoes_Tecnicas.md) | Requisitos de Curitiba (capítulos 3, 4, 6–14 e 18–20, só a parte de sistema) |
+| [Anexo II — Especificações Técnicas (Curitiba)](../../docs-editais/edital-curitiba/Anexo_II_Especificacoes_Tecnicas_Sistema.md) | Requisitos de sistema de Curitiba (capítulos 7–14 integrais; 3, 4, 6, 15, 18, 19 e 20 só nos itens de sistema) |
 | [Itens de sistema do edital de Salvador 2026](../../docs-editais/edital-salvador/edital-salvador-2026.md) | Lista de itens de Salvador indicada pelo responsável |
 | [TR Salvador — Sistema (Cap. 5)](../../docs-editais/edital-salvador/TR-Salvador-Sistema.md) | Texto integral dos itens 5.x de Salvador |
 | [TR Salvador — PoC (Cap. 21 e Anexo A)](../../docs-editais/edital-salvador/TR-Salvador-POC.md) | Itens da prova de conceito de Salvador |
