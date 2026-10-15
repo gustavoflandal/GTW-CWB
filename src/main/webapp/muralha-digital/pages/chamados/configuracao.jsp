@@ -40,10 +40,6 @@
     </div>
     <div class="tab-pane fade" id="abaPerfis">
       <div class="row g-3" id="cartoesPerfis"></div>
-      <div class="mt-4">
-        <h6><i class="bi bi-shield-lock me-1"></i>Administradores <span class="small text-muted">(somente leitura)</span></h6>
-        <ul class="list-group list-group-flush small" id="listaAdmin"></ul>
-      </div>
     </div>
     <div class="tab-pane fade" id="abaPri">
       <button class="btn btn-sm btn-primary mb-2" id="btnNovaPri"><i class="bi bi-plus-circle me-1"></i>Nova prioridade</button>

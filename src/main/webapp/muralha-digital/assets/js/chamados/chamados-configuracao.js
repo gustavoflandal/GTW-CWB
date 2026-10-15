@@ -135,10 +135,6 @@
           '" aria-label="Remover ' + esc(m.nome) + '"><i class="bi bi-trash"></i></button></li>';
       }).join('') : '<li class="list-group-item px-0 text-muted small">Nenhum usuário neste perfil.</li>';
     });
-    var admins = membros.filter(function (m) { return m.perfil === 'ADMIN'; });
-    document.getElementById('listaAdmin').innerHTML = admins.length ? admins.map(function (m) {
-      return '<li class="list-group-item px-0">' + esc(m.nome) + ' <span class="text-muted">(' + esc(m.login) + ')</span></li>';
-    }).join('') : '<li class="list-group-item px-0 text-muted">Nenhum administrador.</li>';
   }
 
   async function carregarPerfis() {
