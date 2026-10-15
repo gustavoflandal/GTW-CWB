@@ -1,5 +1,7 @@
 # Manual do Sistema de Chamados — Muralha Digital
 
+> Este conteúdo é publicado no sistema em `pages/chamados/manual.jsp` (botão Manual das telas de chamados); mantenha os dois iguais.
+
 Este manual explica, por perfil, como usar o Sistema de Chamados (central de suporte técnico) da Muralha Digital: abrir e acompanhar chamados, responder, avaliar o atendimento, consultar relatórios, exportar registros e, para o administrador, configurar o sistema.
 
 Para a arquitetura e as regras técnicas, veja [`sistema-chamados-arquitetura.md`](sistema-chamados-arquitetura.md). Para o roteiro de testes, veja [`../testes/22-sistema-chamados.md`](../testes/22-sistema-chamados.md).
@@ -30,8 +32,8 @@ O que você vê e pode fazer depende do perfil que o administrador atribuiu ao s
 | Perfil | Quem é | O que pode fazer |
 |---|---|---|
 | **Solicitante** | Usuário da contratante | Abrir chamados; ver, responder, avaliar, reabrir e exportar **apenas os próprios**; cancelar os próprios enquanto estiverem "Aberto" |
-| **Gestor do contrato** | Contratante | Tudo do solicitante, mais ver **todos** os chamados, relatórios e exportação geral |
-| **Equipe técnica** | Contratada | Ver todos os chamados; assumir, iniciar, aguardar, resolver, cancelar e reclassificar a prioridade; relatórios |
+| **Gestor do contrato** | Contratante | Abrir chamados; avaliar, reabrir e cancelar **os chamados que abriu**; responder em **qualquer chamado aguardando retorno**; ver **todos** os chamados; relatórios e exportação geral |
+| **Equipe técnica** | Contratada | Ver todos os chamados; assumir, iniciar, aguardar, resolver e reclassificar a prioridade; cancelar enquanto o chamado estiver aberto, em atendimento ou aguardando solicitante; relatórios |
 | **Administrador** | Administração do sistema | Configuração (parâmetros de SLA, perfis de acesso, prioridades, categorias, SMTP); ver todos os chamados e relatórios em **somente leitura** |
 
 O administrador, sozinho, não atende chamados: para isso precisa também do perfil de equipe técnica.
@@ -124,10 +126,10 @@ Na tela **Chamados**, os botões **CSV**, **XLS** e **PDF** exportam os chamados
 
 ## 4. Gestor do contrato
 
-O gestor tem tudo o que o solicitante tem (abrir, responder, avaliar, reabrir, cancelar), com estas diferenças:
+O gestor abre chamados como o solicitante e **avalia, reabre e cancela os chamados que abriu**, com estas diferenças:
 
 - Na tela **Chamados**, vê **todos** os chamados, não só os próprios, e pode filtrar e exportar o conjunto geral.
-- Pode **responder** a um chamado aguardando retorno mesmo que não tenha sido aberto por ele.
+- Pode **responder** a **qualquer chamado aguardando retorno**, mesmo que não tenha sido aberto por ele.
 - Tem acesso à tela **Relatórios**.
 
 ### Relatórios
@@ -192,7 +194,7 @@ A aba mostra três cartões: **Solicitantes**, **Gestores do contrato** e **Equi
 
 Os administradores aparecem numa lista de **somente leitura** no fim da aba; o grupo de administradores não é alterado por aqui.
 
-Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito.
+Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito sobre o acesso. Porém, as alterações de grupo feitas pela tela legada de usuários **não aparecem no log de auditoria do sistema de chamados**; só ficam registradas as feitas nesta aba (Perfis de acesso).
 
 ### 6.3 Prioridades e prazos
 
@@ -222,10 +224,12 @@ Define o servidor usado para enviar os e-mails dos chamados (confirmação de ab
 | **Usuário** | Em branco = sem autenticação |
 | **Senha** | Em branco = mantém a senha atual. Marque **Apagar a senha gravada** para removê-la. A senha nunca é exibida |
 | **E-mail do remetente** | Endereço que aparece como remetente |
-| **Usar STARTTLS** | Liga a criptografia STARTTLS |
+| **Usar STARTTLS** | Liga a criptografia STARTTLS (obrigatória nesse caso: se o servidor não oferecer, o envio falha). Desligado = sem criptografia. Só vale para o servidor configurado nesta tela |
 | **Enviar e-mails dos chamados** | Liga ou desliga todo o envio |
 
-A senha é gravada **cifrada** e depende de uma chave guardada no servidor (variável de ambiente `GTW_CHAMADO_CHAVE_SMTP`). Se a chave não estiver definida, a aba mostra um aviso e não é possível gravar uma senha nova; veja [`../requisitos/07-configuracao-e-segredos.md`](../requisitos/07-configuracao-e-segredos.md).
+São suportados apenas **STARTTLS** (normalmente porta 587) ou **sem criptografia**; a conexão SSL direta (porta 465) **não é suportada**. O interruptor STARTTLS só vale para o servidor configurado nesta tela: o servidor do `confGTW.xml` segue a sua própria configuração.
+
+A senha é gravada **cifrada** e depende de uma chave guardada no servidor (variável de ambiente `GTW_CHAMADO_CHAVE_SMTP`). Ao trocar servidor, porta ou usuário, é preciso digitar a senha novamente (a senha gravada não é reaproveitada em outro servidor). Se a chave não estiver definida, a aba mostra um aviso e não é possível gravar uma senha nova; veja [`../requisitos/07-configuracao-e-segredos.md`](../requisitos/07-configuracao-e-segredos.md).
 
 Depois de salvar, clique em **Enviar e-mail de teste**: o sistema envia uma mensagem, com a configuração gravada, para o e-mail cadastrado no seu usuário. Se houver falha, a mensagem do servidor é mostrada (sem a senha).
 

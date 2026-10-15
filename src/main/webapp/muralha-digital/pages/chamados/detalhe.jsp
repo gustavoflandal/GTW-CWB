@@ -11,7 +11,8 @@
   <div class="d-flex align-items-center gap-2 flex-wrap mb-3">
     <h4 class="mb-0" id="tTitulo"></h4>
     <span id="tStatus"></span>
-    <div class="ms-auto d-flex gap-2 flex-wrap" id="acoes"></div>
+    <a href="/muralha-digital/pages/chamados/manual.jsp" target="_blank" class="btn btn-outline-info btn-sm ms-auto" title="Manual do Sistema de Chamados"><i class="bi bi-book"></i> Manual</a>
+    <div class="d-flex gap-2 flex-wrap" id="acoes"></div>
   </div>
 
   <div class="row g-3">

@@ -6,6 +6,7 @@
   <div class="d-flex align-items-center mb-3 gap-2 flex-wrap">
     <h4 class="mb-0"><i class="bi bi-headset me-2"></i>Chamados</h4>
     <div class="ms-auto d-flex gap-2">
+      <a href="/muralha-digital/pages/chamados/manual.jsp" target="_blank" class="btn btn-outline-info btn-sm" title="Manual do Sistema de Chamados"><i class="bi bi-book"></i> Manual</a>
       <a id="lnkRelatorios" class="btn btn-sm btn-outline-secondary d-none" href="relatorios.jsp"><i class="bi bi-bar-chart me-1"></i>Relatórios</a>
       <a id="lnkConfig" class="btn btn-sm btn-outline-secondary d-none" href="configuracao.jsp"><i class="bi bi-gear me-1"></i>Configuração</a>
       <button id="btnNovo" class="btn btn-sm btn-primary d-none"><i class="bi bi-plus-circle me-1"></i>Novo chamado</button>

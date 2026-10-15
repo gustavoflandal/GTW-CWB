@@ -7,7 +7,10 @@
     <li class="breadcrumb-item"><a href="index.jsp">Chamados</a></li>
     <li class="breadcrumb-item active" aria-current="page">Configuração</li>
   </ol></nav>
-  <h4 class="mb-3"><i class="bi bi-gear me-2"></i>Configuração de Chamados</h4>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0"><i class="bi bi-gear me-2"></i>Configuração de Chamados</h4>
+    <a href="/muralha-digital/pages/chamados/manual.jsp" target="_blank" class="btn btn-outline-info btn-sm" title="Manual do Sistema de Chamados"><i class="bi bi-book"></i> Manual</a>
+  </div>
 
   <ul class="nav nav-tabs" role="tablist">
     <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#abaSla" type="button">Parâmetros de SLA</button></li>
