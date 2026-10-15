@@ -66,6 +66,28 @@ public class ExportacaoChamadosTest {
     }
 
     @Test
+    public void cabecalhoNaoQuebraLinhaComFiltrosMalicioso() {
+        JsonArray dados = linhas("x");
+        byte[] b = ExportacaoChamados.csv(CHAVES, ROTULOS, dados, "Chamados\n", "p\r\n=HYPERLINK(1)", "jo\rao", AGORA);
+        String texto = new String(b, 3, b.length - 3, StandardCharsets.UTF_8);
+        String bloco = "Protocolo;Título\r\nCH-2026-000001;x\r\n";
+        assertTrue(texto.startsWith("# Chamados  — p  =HYPERLINK(1) — 15/10/2026 10:30:00 — jo ao\r\n" + bloco), texto);
+        assertEquals(texto.split("\r\n").length, 5);
+        assertTrue(texto.endsWith("# SHA-256: " + HashUtil.sha256Hex(bloco.getBytes(StandardCharsets.UTF_8)) + "\r\n"));
+    }
+
+    @Test
+    public void metadadosDoXlsxNaoTemQuebraDeLinha() throws Exception {
+        byte[] b = ExportacaoChamados.xlsx(CHAVES, ROTULOS, linhas("x"), "T\r\nx", "f\n=1", "u\rv", AGORA);
+        try (XSSFWorkbook wb = new XSSFWorkbook(new ByteArrayInputStream(b))) {
+            for (int i = 0; i < 4; i++) {
+                String v = wb.getSheetAt(1).getRow(i).getCell(1).getStringCellValue();
+                assertFalse(v.contains("\r") || v.contains("\n"), v);
+            }
+        }
+    }
+
+    @Test
     public void xlsxTemAbaDeDadosEAbaDeMetadados() throws Exception {
         JsonArray dados = linhas("Câmera parada");
         byte[] b = ExportacaoChamados.xlsx(CHAVES, ROTULOS, dados, "Chamados", "todos", "joao", AGORA);

@@ -45,7 +45,8 @@ public final class ExportacaoChamados {
     public static byte[] csv(List<String> chaves, List<String> rotulos, JsonArray linhas,
                              String titulo, String filtros, String usuario, LocalDateTime agora) {
         String bloco = blocoDados(chaves, rotulos, linhas);
-        String texto = "# " + titulo + " — " + filtros + " — " + agora.format(FMT) + " — " + usuario + "\r\n"
+        String texto = "# " + umaLinha(titulo) + " — " + umaLinha(filtros) + " — " + agora.format(FMT) + " — "
+                + umaLinha(usuario) + "\r\n"
                 + bloco
                 + "# Total: " + linhas.size() + "\r\n"
                 + "# SHA-256: " + HashUtil.sha256Hex(bloco.getBytes(StandardCharsets.UTF_8)) + "\r\n";
@@ -80,10 +81,10 @@ public final class ExportacaoChamados {
 
             Sheet meta = wb.createSheet("Metadados");
             String[][] pares = {
-                    {"Relatório", titulo},
-                    {"Filtros", filtros},
+                    {"Relatório", umaLinha(titulo)},
+                    {"Filtros", umaLinha(filtros)},
                     {"Gerado em", agora.format(FMT)},
-                    {"Usuário", usuario},
+                    {"Usuário", umaLinha(usuario)},
                     {"Total de registros", String.valueOf(linhas.size())},
                     {"SHA-256 dos dados", hashDados(chaves, rotulos, linhas)}};
             for (int i = 0; i < pares.length; i++) {
@@ -117,6 +118,11 @@ public final class ExportacaoChamados {
             sb.append(celula(valores.get(i)));
         }
         return sb.append("\r\n").toString();
+    }
+
+    /** Texto de cabecalho/metadado nao pode abrir nova linha (injecao de linha/formula). */
+    private static String umaLinha(String v) {
+        return v == null ? "" : v.replace("\r", " ").replace("\n", " ");
     }
 
     private static String celula(String v) {

@@ -59,6 +59,15 @@ public class FiltroChamadosTest {
         assertEquals(params.get(1), Timestamp.valueOf("2026-11-01 00:00:00"));
     }
 
+    @Test
+    public void descricaoUsaProtocoloLimpo() {
+        FiltroChamados f = new FiltroChamados();
+        f.protocolo = "CH-1'%=\r\nX";
+        String d = f.descricao();
+        assertEquals(d, "protocolo CH-1X");
+        assertFalse(d.contains("'") || d.contains("%") || d.contains("=") || d.contains("\n") || d.contains("\r"));
+    }
+
     @Test(expectedExceptions = RegraChamadoException.class)
     public void statusInvalidoERejeitado() {
         FiltroChamados f = new FiltroChamados();

@@ -70,7 +70,8 @@ public class FiltroChamados {
     /** Texto legivel dos filtros, usado no cabecalho das exportacoes. */
     public String descricao() {
         List<String> partes = new ArrayList<>();
-        if (protocolo != null && !protocolo.isEmpty()) partes.add("protocolo " + protocolo);
+        String protocoloLimpo = protocolo == null ? "" : protocolo.replaceAll("[^A-Za-z0-9-]", "");
+        if (!protocoloLimpo.isEmpty()) partes.add("protocolo " + protocoloLimpo);
         if (status != null && !status.isEmpty()) partes.add("status " + status);
         if (idPrioridade != null) partes.add("prioridade #" + idPrioridade);
         if (idCategoria != null) partes.add("categoria #" + idCategoria);
