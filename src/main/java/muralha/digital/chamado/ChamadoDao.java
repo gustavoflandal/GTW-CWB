@@ -60,6 +60,10 @@ public final class ChamadoDao {
     }
 
     public static long inserir(Connection conn, Chamado c) throws SQLException {
+        // DATETIME2(3): truncar em milissegundos para o valor em memoria bater com o gravado
+        c.dtAbertura = c.dtAbertura.truncatedTo(ChronoUnit.MILLIS);
+        c.dtPrazoAtendimento = c.dtPrazoAtendimento.truncatedTo(ChronoUnit.MILLIS);
+        c.dtPrazoResolucao = c.dtPrazoResolucao.truncatedTo(ChronoUnit.MILLIS);
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO muralha.chamado (protocolo, titulo, descricao, id_categoria, id_prioridade, " +
                 "id_prioridade_solicitada, status, origem, id_local, id_usuario_solicitante, dt_abertura, " +
