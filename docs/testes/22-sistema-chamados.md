@@ -1,5 +1,7 @@
 # Testes — Plano 22: Sistema de Gerenciamento de Chamados
 
+Documentação do módulo: [`docs/chamados/`](../chamados/) ([arquitetura](../chamados/sistema-chamados-arquitetura.md), [manual do usuário](../chamados/manual-sistema-chamados.md), [relatórios das sessões](../chamados/sessoes/README.md)).
+
 Roteiro manual. Os testes automatizados (123 TestNG: módulo `chamado` + `ReferenciaEditalTest`) rodam sem banco; este roteiro cobre a integração com banco, servidor, SMTP e navegador.
 
 ## Pré-requisitos

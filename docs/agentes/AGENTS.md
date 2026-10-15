@@ -100,7 +100,7 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `18-disponibilidade.md` | Disponibilidade de equipamentos (uptime) | 07 |
 | `19-sensores-externos.md` | Integração Waze/CSV, camada no mapa | — |
 | `20-dashboard-builder.md` | Dashboard Builder self-service | — |
-| `22-sistema-chamados.md` | Sistema de chamados (7.2.3/7.2.4) | 01, 11 |
+| `22-sistema-chamados.md` | Sistema de chamados (7.2.3/7.2.4); documentação em [`docs/chamados/`](../chamados/) | 01, 11 |
 
 ---
 

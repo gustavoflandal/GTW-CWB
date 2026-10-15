@@ -38,6 +38,7 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 746 tabelas, 821 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
+| [chamados/](chamados/) | Sistema de Chamados (Plano 22): arquitetura, manual do usuário, sessões CH-1 a CH-3, relatórios |
 | [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 
 ## Manutenção

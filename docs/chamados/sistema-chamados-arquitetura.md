@@ -1,13 +1,16 @@
-# Spec: Sistema de Gerenciamento de Chamados (Central de Suporte Técnico)
+# Sistema de Chamados — Arquitetura
 
 **Data:** 2026-10-15
-**Módulo:** Muralha Digital — novo módulo `muralha.digital.chamado`
-**Status:** Aprovado (2026-10-15)
-**Plano de implementação:** [`22-sistema-chamados.md`](../../planos-salvador/22-sistema-chamados.md)
+**Módulo:** Muralha Digital — módulo `muralha.digital.chamado`
+**Status:** Implementado (2026-10-15). Este documento descreve a arquitetura vigente, já com os complementos de administração (perfil `ADMIN`, parâmetros de SLA, perfis de acesso, categoria e ícones) e de SMTP, e com os ajustes da revisão final.
+**Plano de implementação:** [`22-sistema-chamados.md`](../planos-salvador/22-sistema-chamados.md)
+**Documentos relacionados:** [entrega](../entregas/22-sistema-chamados.md) · [roteiro de testes](../testes/22-sistema-chamados.md) · [manual do usuário](manual-sistema-chamados.md) · [sessões](sessoes/README.md)
+
+> Onde o texto original foi alterado pelos complementos, a nota "(vigente)" indica o comportamento atual. As seções "Complemento" e "Ajustes da revisão final", no fim do documento, prevalecem quando houver divergência.
 
 ## Origem
 
-- **Edital:** planilha [`Atividades Edital Salvador 2026.xlsx`](../../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx), aba **"Sist. Chamado"**, linhas 2–7 (itens 7.2 a 7.2.5).
+- **Edital:** planilha [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx), aba **"Sist. Chamado"**, linhas 2–7 (itens 7.2 a 7.2.5).
 - **Itens cobertos:** **7.2.3** (a–f) e **7.2.4**.
 - **Itens relacionados, fora deste escopo:** 7.2.1 (central 24x7 — obrigação de serviço), 7.2.2.a (telefone), 7.2.2.c (abertura por e-mail), 7.2.2.d (mensageria para críticos), 7.2.5 (preposto).
 - **Lacuna documental:** o Capítulo 7 do TR não está no repositório (`docs-editais/edital-salvador/` só contém Cap. 5, Cap. 21 e Anexo A). Não há tabela oficial de prioridades × prazos nem lista de categorias; por decisão do responsável, ambos ficam **configuráveis**, com valores iniciais sugeridos (§2.3).
@@ -47,15 +50,16 @@
 
 ### 1.1 Perfis
 
-Três grupos novos em `dbo.sis_grupo`. Os IDs dos grupos ficam em `muralha.config_chave_valor` (`chamado_grupo_solicitante`, `chamado_grupo_gestor`, `chamado_grupo_equipe`) para não depender de IDs fixos no código. O perfil é resolvido no servlet a partir de `dbo.sis_usuario_grupo` — **não** apenas pela URL.
+Três grupos novos em `dbo.sis_grupo` (107–109, abaixo do grupo 11) mais o grupo de administradores já existente. Os IDs dos grupos ficam em `muralha.config_chave_valor` (`chamado_grupo_solicitante`, `chamado_grupo_gestor`, `chamado_grupo_equipe`, `chamado_grupo_admin`) para não depender de IDs fixos no código. O perfil é resolvido no servlet a partir de `dbo.sis_usuario_grupo` — **não** apenas pela URL.
 
 | Perfil | Lado | Permissões |
 |---|---|---|
 | `SOLICITANTE` | CONTRATANTE | Abrir; ver **apenas os próprios**; responder; avaliar/fechar/reabrir os próprios; cancelar os próprios enquanto `ABERTO`; exportar os próprios |
 | `GESTOR` | CONTRATANTE | Tudo do solicitante + ver **todos**, relatórios e exportação geral |
-| `EQUIPE` | CONTRATADA | Ver todos; assumir; mudar status; reclassificar prioridade; cancelar com justificativa; relatórios; cadastro de categorias e prioridades |
+| `EQUIPE` | CONTRATADA | Ver todos; assumir; mudar status; reclassificar prioridade; cancelar com justificativa; relatórios (vigente: **não** configura mais) |
+| `ADMIN` | Administração | Grupo em `chamado_grupo_admin` (padrão 11, Administradores). **Único** perfil que acessa a Configuração (prioridades e prazos, categorias, parâmetros de SLA, perfis de acesso, SMTP). Vê todos os chamados e os relatórios em modo somente leitura: sozinho não executa nenhuma ação de atendimento (`MaquinaEstados` não o reconhece) |
 
-Usuário em mais de um grupo recebe a **união** das permissões. Usuário sem nenhum dos três grupos recebe 403.
+Usuário em mais de um grupo recebe a **união** das permissões. Usuário sem nenhum dos perfis é recusado (a negação responde HTTP 200 com `{ok:false}`; ver "Ajustes da revisão final").
 
 ### 1.2 Estados e transições
 
@@ -92,9 +96,9 @@ A transição é aplicada com `UPDATE … WHERE id = ? AND status = ?` (controle
 
 - `dt_prazo_atendimento = dt_abertura + minutos_atendimento(prioridade)`. Cumprido se `dt_primeiro_atendimento <= dt_prazo_atendimento`.
 - `dt_prazo_resolucao = dt_abertura + minutos_resolucao(prioridade) + minutos_pausados`. Cumprido se `dt_resolucao <= dt_prazo_resolucao`.
-- **Pausa:** ao entrar em `AGUARDANDO_SOLICITANTE` ou `RESOLVIDO`, grava `dt_inicio_pausa`; ao sair (para `EM_ATENDIMENTO`), soma a diferença em `minutos_pausados`, zera `dt_inicio_pausa` e recalcula `dt_prazo_resolucao`. A pausa de `RESOLVIDO` só tem efeito quando há reabertura.
+- **Pausa:** ao entrar em `AGUARDANDO_SOLICITANTE` ou `RESOLVIDO`, grava `dt_inicio_pausa`; ao sair (para `EM_ATENDIMENTO`), soma a diferença em `minutos_pausados`, zera `dt_inicio_pausa` e **estende o `dt_prazo_resolucao` gravado** pelo tempo pausado. A pausa de `RESOLVIDO` só tem efeito quando há reabertura.
 - **Reclassificação:** recalcula os dois prazos a partir de `dt_abertura` original com os minutos da nova prioridade (mantendo `minutos_pausados`).
-- **Marcas** (`sla_atendimento`, `sla_resolucao`): `NO_PRAZO` → `EM_RISCO` (consumido ≥ `chamado_sla_risco_percentual`, padrão 80%) → `VENCIDO` (prazo passou e ainda não cumprido); ao cumprir, vira `CUMPRIDO` ou `VIOLADO` (definitivo). Atualizadas na própria transição e pelo `ChamadoSlaJob` a cada 5 minutos.
+- **Marcas** (`sla_atendimento`, `sla_resolucao`): `NO_PRAZO` → `EM_RISCO` (consumido ≥ `chamado_sla_risco_percentual`, padrão 80%, configurável de 1 a 99) → `VENCIDO` (prazo passou e ainda não cumprido); ao cumprir, vira `CUMPRIDO` ou `VIOLADO`, marcas **definitivas** que o job e as transições seguintes não alteram. Atualizadas na própria transição e pelo `ChamadoSlaJob` a cada 5 minutos.
 - Enquanto pausado, a marca de resolução não evolui.
 
 ### 1.4 Protocolo e confirmação (7.2.4)
@@ -174,11 +178,13 @@ Migração única e idempotente `docs/banco-de-dados/migracoes/<AAAAMMDD>_sistem
 | Chave | Valor inicial |
 |---|---|
 | `chamado_sla_risco_percentual` | `80` |
-| `chamado_fechamento_auto_dias` | `5` |
+| `chamado_fechamento_auto_dias` | `5` (configurável de 1 a 60) |
 | `chamado_diretorio_anexos` | `C:\Consilux\MuralhaDigital\chamados` (ajustar por ambiente) |
 | `chamado_anexo_max_mb` | `10` |
 | `chamado_email_ativo` | `1` |
 | `chamado_grupo_solicitante`, `chamado_grupo_gestor`, `chamado_grupo_equipe` | IDs dos grupos criados pelo seed |
+| `chamado_grupo_admin` | `11` (grupo Administradores; criada pela migração `_admin`) |
+| `chamado_smtp_host`, `_porta`, `_usuario`, `_senha`, `_remetente`, `_starttls` | Vazias até o administrador configurar (migração `_smtp`; ver complemento de SMTP) |
 
 ### 2.3 Seed (script separado `<AAAAMMDD>_sistema_chamados_seed.sql`)
 
@@ -204,7 +210,7 @@ Todas incluem `utils/credenciais/cabecalho_bootstrap_simples.jsp` e seguem `docs
    - Tabela: protocolo, título, categoria, equipamento, prioridade (badge na cor da prioridade), status (badge), responsável, abertura, badge de SLA (verde no prazo, amarelo em risco, vermelho vencido/violado, cinza cumprido).
    - Paginação no servidor (`OFFSET/FETCH`, 50 por página).
    - Polling de 30 s (`acao=listar&desde=<dt_atualizacao máx.>`); linhas alteradas piscam brevemente.
-   - Botões: "Novo chamado", exportar **CSV / XLS / PDF** (do conjunto filtrado).
+   - Botões: "Novo chamado" (SOLICITANTE ou GESTOR), "Relatórios" (GESTOR, EQUIPE ou ADMIN), "Configuração" (só ADMIN), exportar **CSV / XLS / PDF** (do conjunto filtrado).
    - Alcance pelo perfil (D9).
 2. **Modal "Novo chamado"** (em `index.jsp`)
    - Categoria → subcategoria; combo de equipamento aparece e torna-se obrigatório quando a categoria exige.
@@ -215,12 +221,12 @@ Todas incluem `utils/credenciais/cabecalho_bootstrap_simples.jsp` e seguem `docs
    - Linha do tempo do histórico (mais recente no topo) com anexos ligados a cada evento.
    - Botões conforme perfil × status (tabela §1.2); cada ação abre SweetAlert com campo de observação obrigatório (e upload em "Responder"); "Avaliar e fechar" usa estrelas 1–5 + comentário.
    - Polling de 30 s.
-4. **`relatorios.jsp`** (GESTOR e EQUIPE)
+4. **`relatorios.jsp`** (GESTOR, EQUIPE e ADMIN)
    - Filtros: período, categoria, equipamento, prioridade; agrupamento por **período (dia/semana/mês)**, **categoria**, **equipamento** ou **prioridade**.
    - Indicadores por grupo: quantidade aberta, resolvida, cancelada; % SLA de atendimento cumprido; % SLA de resolução cumprido; tempo médio de atendimento (TMA) e de resolução (TMR, descontando pausas); nota média; % avaliados.
    - Cards de totais + gráfico Chart.js 4.4.1 (cdnjs) + tabela; exportação CSV / XLS / PDF.
-5. **`configuracao.jsp`** (EQUIPE)
-   - Abas Prioridades e Categorias; edição em modal; desativação lógica (`ativo = 0`); não exclui registros referenciados.
+5. **`configuracao.jsp`** (somente `ADMIN`, vigente)
+   - Cinco abas: **Parâmetros de SLA**, **Perfis de acesso**, **Prioridades e prazos**, **Categorias** e **E-mail (SMTP)**. Edição em modal; desativação lógica (`ativo = 0`); não exclui registros referenciados.
 
 ## 3. Back-end (aguardando revisão)
 
@@ -241,10 +247,12 @@ Unidades com responsabilidade única, para que regras de negócio sejam testáve
 | `ChamadoService` | Orquestra cada ação em **uma transação** (`setAutoCommit(false)`): valida (máquina de estados + perfil + visibilidade), atualiza com controle otimista, grava histórico, enfileira notificação, chama auditoria | DAOs, `MaquinaEstados`, `CalculadoraSla`, `GeradorProtocolo`, `AuditoriaService` |
 | `ArmazenamentoAnexo` | Valida e grava/lê arquivos (§3.4) | `HashUtil` |
 | `ExportacaoChamados` | Monta CSV/XLSX com `ExportacaoService` + rodapé SHA-256 | `ExportacaoService`, `HashUtil` |
-| `EmailChamado` | Monta HTML da confirmação/reclassificação e envia por SMTP | `ServicoEmailMuralha` (novo método `enviarEmailChamado`), `ConfiguracaoProvider` |
+| `EmailChamado` | Monta HTML da confirmação/reclassificação e envia por SMTP com JavaMail próprio (vigente; ver complemento de SMTP) | `ConfiguracaoSmtpChamado` |
+| `CifraSegredo` | Cifra e decifra a senha do SMTP (AES/GCM, pura) | JDK |
+| `ConfiguracaoSmtpChamado` | Resolve o SMTP efetivo (chaves `chamado_smtp_*` ou `confGTW.xml`) e valida os campos | `Connection`, `CifraSegredo` |
 | `ChamadoServlet` | `/MuralhaDigital/Chamado` — operações e consultas do chamado | `ChamadoService` |
 | `ChamadoRelatorioServlet` | `/MuralhaDigital/ChamadoRelatorio` — indicadores e exportação | `ChamadoDao`, `ExportacaoChamados` |
-| `ChamadoConfigServlet` | `/MuralhaDigital/ChamadoConfig` — CRUD de prioridades e categorias (EQUIPE) | `ChamadoConfigDao` |
+| `ChamadoConfigServlet` | `/MuralhaDigital/ChamadoConfig` — prioridades, categorias, parâmetros de SLA, perfis de acesso e SMTP (`ADMIN`) | `ChamadoConfigDao`, `ConfiguracaoSmtpChamado`, `CifraSegredo` |
 | `ChamadoSlaJob` | A cada 5 min: atualiza marcas de SLA; fecha automaticamente `RESOLVIDO` antigos | `ChamadoService`, `CalculadoraSla` |
 | `ChamadoEmailJob` | A cada 1 min: envia `chamado_notificacao` pendentes (até 5 tentativas) | `EmailChamado` |
 
@@ -268,11 +276,11 @@ Todas as respostas JSON (Gson) no formato `{ "ok": true, ... }` ou `{ "ok": fals
 
 **`/MuralhaDigital/ChamadoRelatorio`** — GET `indicadores` (filtros + `agrupamento`), GET `exportar` (`formato=csv|xlsx`, `origem=lista|relatorio` + filtros). PDF é gerado no cliente a partir da tabela exibida.
 
-**`/MuralhaDigital/ChamadoConfig`** — GET `listar`; POST `salvarPrioridade`, `salvarCategoria`, `alternarAtivo`.
+**`/MuralhaDigital/ChamadoConfig`** (todas as ações exigem `ADMIN`) — GET `listar`, `parametros`, `perfis`, `buscarUsuarios`, `smtp`; POST `salvarPrioridade`, `salvarCategoria`, `alternarAtivo`, `salvarParametros`, `adicionarMembro`, `removerMembro`, `salvarSmtp`, `testarSmtp`.
 
 ### 3.3 Segurança
 
-- Todo servlet: sessão (`SessaoConstantes.SESSAO_USUARIO`, 401 se ausente) + `new Acesso(req, resp, true).verificaAcesso(false)` + checagem de perfil por ação (403).
+- Todo servlet: sessão (`SessaoConstantes.SESSAO_USUARIO`, 401 se ausente) + `new Acesso(req, resp, true).verificaAcesso(false)` + checagem de perfil por ação (a negação responde 200 com `{ok:false, erro}`, não 403).
 - **Visibilidade no SQL:** para usuário só SOLICITANTE, toda consulta (lista, detalhe, anexo, exportação, relatório) recebe `AND c.id_usuario_solicitante = ?`. Protocolo de outro usuário retorna 404 (não revela existência).
 - Rotas cadastradas em `sis_menu` (evita o *fail-open* de `fcn_VerificaAcesso`, ver `12-riscos` S4).
 - SQL sempre parametrizado; filtros dinâmicos montados com lista branca de colunas.
@@ -290,7 +298,7 @@ Todas as respostas JSON (Gson) no formato `{ "ok": true, ... }` ou `{ "ok": fals
 
 Registrados em `Agendador.java` seguindo o padrão `possuiJob` usado pelos planos 07/10/18.
 - `ChamadoSlaJob` — a cada 5 min. Atualiza `sla_atendimento`/`sla_resolucao` dos chamados não terminais (uma consulta por lote, não por chamado) e grava histórico tipo `SLA` só quando a marca muda para `EM_RISCO` ou `VENCIDO`. Fecha `RESOLVIDO` com `dt_inicio_pausa` há ≥ `chamado_fechamento_auto_dias` dias.
-- `ChamadoEmailJob` — a cada 1 min, só se `chamado_email_ativo = 1`. Lê até 50 pendentes, envia, marca `ENVIADO` ou incrementa `tentativas` (após 5 → `ERRO`). Usa o primeiro servidor SMTP de `ConfiguracaoProvider` e o remetente configurado (não o fixo `admin@consilux.com`).
+- `ChamadoEmailJob` — a cada 1 min, só se `chamado_email_ativo = 1`. Lê até 50 pendentes, envia, marca `ENVIADO` ou incrementa `tentativas` (após 5 → `ERRO`). Usa o SMTP resolvido por `ConfiguracaoSmtpChamado` (vigente) e o remetente configurado (não o fixo `admin@consilux.com`).
 
 ### 3.6 Exportação (7.2.3.f)
 
@@ -306,6 +314,7 @@ Registrados em `Agendador.java` seguindo o padrão `possuiJob` usado pelos plano
   - `CalculadoraSlaTest` — prazos por prioridade, pausa/retomada, reabertura, reclassificação, limiar de risco, `CUMPRIDO` × `VIOLADO`, com `Clock` fixo.
   - `GeradorProtocoloTest` — formatação e virada de ano.
   - `ArmazenamentoAnexoTest` — extensão/assinatura inválida, tamanho excedido, caminho sem *path traversal*.
+- **Automatizados hoje:** 123 testes TestNG (módulo `chamado` mais `ReferenciaEditalTest`), executados direto pelo TestNG porque o provider `surefire-testng` não está no cache Maven offline.
 - **Manuais:** roteiro em `docs/testes/22-sistema-chamados.md` cobrindo os três perfis, o ciclo completo, e-mails, SLA (com prazos reduzidos via configuração) e exportações.
 - **Build:** `BUILD SUCCESS` com o comando de build do projeto.
 
@@ -320,7 +329,7 @@ Registrados em `Agendador.java` seguindo o padrão `possuiJob` usado pelos plano
 Refinamentos técnicos sem mudança de comportamento para o usuário:
 
 - **Polling sem `desde`:** a lista recarrega a página atual a cada 30 s e destaca as linhas cujo `dt_atualizacao` mudou (§2.4/§3.2 previam o parâmetro `desde`).
-- **Controle otimista:** o `UPDATE` compara `status` **e** `dt_atualizacao`, para detectar também alterações que não mudam o status (assumir, reclassificar).
+- **Controle otimista:** o `UPDATE` compara `status` **e** `dt_atualizacao`, para detectar também alterações que não mudam o status (assumir, reclassificar). Na revisão final a comparação passou a usar a **versão enviada pelo cliente** (ver "Ajustes da revisão final").
 - **Exportação:** `ExportacaoChamados` próprio (Apache POI + `HashUtil`) em vez de `dashboards.ExportacaoService`, que não aceita cabeçalho, rodapé nem aba de metadados. O SHA-256 cobre só o bloco de dados, por isso CSV, XLSX e PDF do mesmo filtro mostram o mesmo hash. O PDF é montado no navegador com jsPDF a partir de `formato=json` (dados completos, não só a página visível). Células iniciadas por `=`, `+`, `-` ou `@` recebem `'` (proteção contra injeção de fórmula).
 - **E-mail:** o método novo em `ServicoEmailMuralha` é `enviarEmailChamado(remetente, destinatarios, assunto, corpoHtml)`; o HTML é montado em `EmailChamado`.
 - **ID do usuário:** `com.consilux.model.Usuario#getId()` (a errata §1 cita `getIdUsuario()`, que não existe nessa classe).
@@ -346,6 +355,18 @@ Pedido do responsável: "As configurações do SMTP também deverão constar em 
 - **Envio:** `EmailChamado.enviar(Connection, …)` monta a sessão JavaMail com `ConfiguracaoSmtpChamado.resolver` (STARTTLS conforme a chave, autenticação só com usuário, tempo-limite de 10 s). `ServicoEmailMuralha` volta ao estado anterior ao plano.
 - **API** (`ChamadoConfig`, `ADMIN`): GET `smtp` (sem a senha; informa `senhaDefinida`, `chaveDisponivel` e `origemAtual`), POST `salvarSmtp` (senha vazia mantém, `limparSenha` apaga; validação de host DNS/IPv4, porta 1–65535, remetente e usuário ≤ 100; histórico em `config_chave_valor_hist` na mesma transação) e POST `testarSmtp` (e-mail de teste ao administrador logado). Auditoria `SALVAR_SMTP` e `TESTAR_SMTP`.
 - **Tela:** aba "E-mail (SMTP)" na Configuração.
+
+### Ajustes da revisão final
+
+Correções feitas após a revisão final das Tarefas 1–13, sem mudar as decisões D1–D14:
+
+- **Marcas definitivas:** `CUMPRIDO` e `VIOLADO` não são mais sobrescritas pelo `ChamadoSlaJob` nem por transições posteriores.
+- **Controle otimista com versão do cliente:** a tela envia a `dtAtualizacao` que carregou (`versao`); a ação só é aplicada se a versão gravada for a mesma. Se outro usuário (ou o job de SLA) alterou o chamado nesse intervalo, a operação responde "Chamado alterado por outro usuário; recarregue". O conflito causado pelo job de SLA é aceito como comportamento correto.
+- **Prazo estendido na saída da pausa:** ao sair de `AGUARDANDO_SOLICITANTE` (ou ao reabrir), o `dt_prazo_resolucao` gravado é estendido pelo tempo pausado, de modo que lista, contador e job leiam o prazo já correto.
+- **Exportação:** injeção no cabeçalho do CSV corrigida (quebras de linha e valores iniciados por `=`, `+`, `-` ou `@` são neutralizados).
+- **Negação por perfil:** responde HTTP 200 com `{ok:false, erro}` em vez de 403; o front mostra a mensagem.
+- **Datas:** o DAO trunca datas de abertura e prazos a milissegundos ao gravar (precisão do `DATETIME2(3)`).
+- **Correções menores:** SweetAlert com `text` em vez de HTML cru, script duplicado removido, auditoria fora do `try` da transação, recursos fechados em `finally`, registro de notificação com `try/catch`, nomes de grupos e tratamento de e-mail vazio.
 
 ## Fora do escopo
 

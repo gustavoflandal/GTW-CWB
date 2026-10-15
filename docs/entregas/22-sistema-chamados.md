@@ -21,7 +21,8 @@ Os scripts SQL foram executados no banco de desenvolvimento e o roteiro integrad
 ## Origem
 
 - Plano [`22-sistema-chamados.md`](../planos-salvador/22-sistema-chamados.md) — Sistema de Gerenciamento de Chamados
-- **Spec:** [`2026-10-15-sistema-chamados-design.md`](../superpowers/specs/2026-10-15-sistema-chamados-design.md)
+- **Arquitetura (antiga spec):** [`sistema-chamados-arquitetura.md`](../chamados/sistema-chamados-arquitetura.md)
+- **Documentação do módulo:** [`docs/chamados/`](../chamados/) — [manual do usuário](../chamados/manual-sistema-chamados.md), [sessões](../chamados/sessoes/README.md) e relatórios CH-1 a CH-3 ([CH-1](../chamados/relatorios/SESSAO-CH-1-relatorio.md), [CH-2](../chamados/relatorios/SESSAO-CH-2-relatorio.md), [CH-3](../chamados/relatorios/SESSAO-CH-3-relatorio.md))
 - **Requisitos do edital:** itens 7.2.3 (a–f) e 7.2.4 da aba "Sist. Chamado" de [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx)
 
 ## Arquivos produzidos

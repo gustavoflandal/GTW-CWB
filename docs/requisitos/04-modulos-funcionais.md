@@ -230,7 +230,7 @@ Módulo self-service de painéis analíticos interativos. Pacote principal: `mur
 
 ## 8. Sistema de Chamados (Plano 22)
 
-Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [spec](../superpowers/specs/2026-10-15-sistema-chamados-design.md)). Pacote `muralha.digital.chamado` (26 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo` (107–109, abaixo do grupo 11), e perfil `ADMIN` mapeado do grupo 11 (Administradores, chave `chamado_grupo_admin`), único que acessa a Configuração.
+Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [arquitetura](../chamados/sistema-chamados-arquitetura.md), [documentação em `docs/chamados/`](../chamados/), [manual](../chamados/manual-sistema-chamados.md)). Pacote `muralha.digital.chamado` (26 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo` (107–109, abaixo do grupo 11), e perfil `ADMIN` mapeado do grupo 11 (Administradores, chave `chamado_grupo_admin`), único que acessa a Configuração.
 
 | Item | Detalhe |
 |---|---|

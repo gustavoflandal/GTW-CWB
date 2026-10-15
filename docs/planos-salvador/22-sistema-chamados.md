@@ -10,7 +10,7 @@
 
 **Tech Stack:** Java 13 · Servlet 3 · JDBC (SQL Server) · Gson · Quartz 2.3.2 · commons-fileupload 1.4 · Apache POI 4.1.1 · JavaMail · TestNG 6.8 · Bootstrap 5.3 · SweetAlert2 · Chart.js 4.4.1 (cdnjs) · jsPDF + autotable (já em `assets/js`). Sem dependência nova.
 
-**Spec:** [`docs/superpowers/specs/2026-10-15-sistema-chamados-design.md`](../superpowers/specs/2026-10-15-sistema-chamados-design.md) — leia antes de começar; decisões D1–D14 e tabelas §1.2/§2.1 são a referência.
+**Spec (arquitetura):** [`docs/chamados/sistema-chamados-arquitetura.md`](../chamados/sistema-chamados-arquitetura.md) — documentação do módulo em [`docs/chamados/`](../chamados/) — leia antes de começar; decisões D1–D14 e tabelas §1.2/§2.1 são a referência.
 
 ## Referência ao Edital (TR TRANSALVADOR)
 
@@ -5213,7 +5213,7 @@ Seguir o formato de `docs/entregas/18-disponibilidade.md`: `# Entrega — Plano 
 ## Origem
 
 - Plano [`22-sistema-chamados.md`](../planos-salvador/22-sistema-chamados.md) — Sistema de Gerenciamento de Chamados
-- **Spec:** [`2026-10-15-sistema-chamados-design.md`](../superpowers/specs/2026-10-15-sistema-chamados-design.md)
+- **Spec (arquitetura):** [`sistema-chamados-arquitetura.md`](../chamados/sistema-chamados-arquitetura.md)
 - **Requisitos do edital:** itens 7.2.3 (a–f) e 7.2.4 da aba "Sist. Chamado" de [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx)
 ```
 
@@ -5244,6 +5244,8 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 ---
 
 ## Complemento — administração, categoria própria e ícones (2026-10-15)
+
+> Documentação consolidada em [`docs/chamados/`](../chamados/): [arquitetura](../chamados/sistema-chamados-arquitetura.md), [manual do usuário](../chamados/manual-sistema-chamados.md), [sessões CH-1 a CH-3](../chamados/sessoes/README.md).
 
 > Pedido do responsável após a primeira entrega, com a migração já executada no `GTW_MURALHA_DEV`:
 > 1. Quem pode abrir chamados é definido na configuração dos poderes do usuário.
