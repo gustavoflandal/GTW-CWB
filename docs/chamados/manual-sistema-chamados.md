@@ -1,44 +1,27 @@
-# Manual do Sistema de Chamados — Muralha Digital
+# Manual do Sistema de Chamados
 
 > Este conteúdo é publicado no sistema em `pages/chamados/manual.jsp` (botão Manual das telas de chamados); mantenha os dois iguais.
 
-Este manual explica, por perfil, como usar o Sistema de Chamados (central de suporte técnico) da Muralha Digital: abrir e acompanhar chamados, responder, avaliar o atendimento, consultar relatórios, exportar registros e, para o administrador, configurar o sistema.
-
-Para a arquitetura e as regras técnicas, veja [`sistema-chamados-arquitetura.md`](sistema-chamados-arquitetura.md). Para o roteiro de testes, veja [`../testes/22-sistema-chamados.md`](../testes/22-sistema-chamados.md).
+Guia completo para abrir, acompanhar e atender chamados de suporte técnico no sistema Muralha Digital.
 
 ---
 
-## Sumário
+## 1. Visão Geral
 
-1. [Visão geral](#1-visão-geral)
-2. [Como chegar às telas](#2-como-chegar-às-telas)
-3. [Solicitante](#3-solicitante)
-4. [Gestor do contrato](#4-gestor-do-contrato)
-5. [Equipe técnica](#5-equipe-técnica)
-6. [Administrador](#6-administrador)
-7. [Prazos de atendimento (SLA)](#7-prazos-de-atendimento-sla)
-8. [Resolução de problemas](#8-resolução-de-problemas)
+O **Sistema de Chamados** é a central de suporte técnico da Muralha Digital. Cada pedido de suporte vira um **chamado** com número de protocolo único, prioridade, prazos e histórico completo. O ciclo de um chamado segue este fluxo:
 
----
+**Abertura** (solicitante registra o pedido) → **Atendimento** (equipe técnica trata) → **Aguardando solicitante** (se faltar informação) → **Resolução** (solução informada) → **Avaliação** (fechar ou reabrir)
 
-## 1. Visão geral
-
-O sistema registra cada pedido de suporte como um **chamado** com número de protocolo único (formato `CH-AAAA-NNNNNN`, por exemplo `CH-2026-000123`), prioridade, prazos e histórico completo.
-
-### Perfis
-
-O que você vê e pode fazer depende do perfil que o administrador atribuiu ao seu usuário. Um usuário pode ter mais de um perfil; nesse caso, recebe a soma das permissões.
-
-| Perfil | Quem é | O que pode fazer |
+| Conceito | O que é | Quem |
 |---|---|---|
-| **Solicitante** | Usuário da contratante | Abrir chamados; ver, responder, avaliar, reabrir e exportar **apenas os próprios**; cancelar os próprios enquanto estiverem "Aberto" |
-| **Gestor do contrato** | Contratante | Abrir chamados; avaliar, reabrir e cancelar **os chamados que abriu**; responder em **qualquer chamado aguardando retorno**; ver **todos** os chamados; relatórios e exportação geral |
-| **Equipe técnica** | Contratada | Ver todos os chamados; assumir, iniciar, aguardar, resolver e reclassificar a prioridade; cancelar enquanto o chamado estiver aberto, em atendimento ou aguardando solicitante; relatórios |
-| **Administrador** | Administração do sistema | Configuração (parâmetros de SLA, perfis de acesso, prioridades, categorias, SMTP); ver todos os chamados e relatórios em **somente leitura** |
+| **Chamado** | Pedido de suporte registrado no sistema, com histórico completo de tudo o que acontece com ele | Solicitante ou Gestor do contrato abre |
+| **Protocolo** | Número único do chamado, no formato `CH-AAAA-NNNNNN` (por exemplo, `CH-2026-000123`) | Gerado pelo sistema |
+| **Prioridade** | Grau de urgência (Crítica, Alta, Média, Baixa). A escolhida na abertura é uma sugestão: a equipe técnica pode reclassificá-la com justificativa | Solicitante sugere; Equipe técnica reclassifica |
+| **SLA** | Prazos de atendimento e de resolução definidos pela prioridade, contados em horas corridas (24x7) | Administrador configura |
+| **Categoria** | Classificação do assunto do chamado, em dois níveis (categoria e subcategoria); algumas exigem informar o equipamento | Administrador cadastra |
+| **Avaliação** | Nota de 1 a 5 e comentário sobre o atendimento, dados ao fechar o chamado resolvido | Solicitante ou Gestor do contrato |
 
-O administrador, sozinho, não atende chamados: para isso precisa também do perfil de equipe técnica.
-
-### Estados de um chamado
+**Estados de um chamado:**
 
 | Status | Significado |
 |---|---|
@@ -53,24 +36,38 @@ Toda ação sobre um chamado exige uma **observação**, que vai para o históri
 
 ---
 
-## 2. Como chegar às telas
+## 2. Acesso ao Sistema
 
-1. Entre no sistema e abra a tela inicial da Muralha Digital.
-2. Clique na categoria **Sistema de Chamados**.
-3. Dentro dela aparecem os cartões a que o seu perfil dá acesso:
-   - **Chamados**: lista, abertura e acompanhamento.
-   - **Relatórios**: indicadores (gestor, equipe técnica e administrador).
-   - **Configuração**: somente para o administrador.
+### 2.1 Perfis necessários
 
-Se um cartão não aparece, o seu usuário não tem o perfil necessário; peça ao administrador.
+O que você vê e pode fazer depende do perfil que o administrador atribuiu ao seu usuário. Um usuário pode ter mais de um perfil; nesse caso, recebe a soma das permissões.
 
-Dentro da tela **Chamados**, os botões "Relatórios" e "Configuração" no canto superior direito também levam às outras telas, quando o seu perfil permite.
+| Perfil | Quem é | Permissão |
+|---|---|---|
+| **Chamados - Solicitante** | Usuário da contratante | Abrir chamados; ver, responder, avaliar, reabrir e exportar **apenas os próprios**; cancelar os próprios enquanto estiverem "Aberto" |
+| **Chamados - Gestor do contrato** | Contratante | Abrir chamados; avaliar, reabrir e cancelar **os chamados que abriu**; responder em **qualquer chamado aguardando retorno**; ver **todos** os chamados; relatórios e exportação geral |
+| **Chamados - Equipe tecnica** | Contratada | Ver todos os chamados; assumir, iniciar, aguardar, resolver e reclassificar a prioridade; cancelar enquanto o chamado estiver aberto, em atendimento ou aguardando solicitante; relatórios |
+| **Administradores** | Administração do sistema | Configuração (parâmetros de SLA, perfis de acesso, prioridades, categorias, SMTP); ver todos os chamados e relatórios em **somente leitura** |
+
+> Se você não vê os menus ou cartões descritos abaixo, solicite ao administrador que adicione seu usuário ao grupo apropriado. O administrador, sozinho, não atende chamados: para isso precisa também do perfil de equipe técnica.
+
+### 2.2 Navegação pelo menu
+
+Entre no sistema, abra a tela inicial da Muralha Digital e clique na categoria **Sistema de Chamados**. Dentro dela aparecem os cartões a que o seu perfil dá acesso:
+
+- **Chamados** — lista, abertura e acompanhamento
+- **Relatórios** — indicadores (gestor, equipe técnica e administrador)
+- **Configuração** — somente para o administrador
+
+Dentro da tela **Chamados**, os botões "Relatórios" e "Configuração" no canto superior direito também levam às outras telas, quando o seu perfil permite. Os botões **Manual**, presentes nas telas do sistema, abrem este guia.
 
 ---
 
-## 3. Solicitante
+## 3. Abrir um Chamado `Solicitante / Gestor`
 
-### 3.1 Abrir um chamado
+> **Quem faz:** o solicitante e o gestor do contrato. A equipe técnica e o administrador não abrem chamados.
+
+### 3.1 Preencher e enviar
 
 1. Na tela **Chamados**, clique em **Novo chamado**.
 2. Escolha a **Categoria** e depois a **Subcategoria**.
@@ -80,18 +77,25 @@ Dentro da tela **Chamados**, os botões "Relatórios" e "Configuração" no cant
 6. Se quiser, anexe arquivos (**PDF, PNG ou JPG**, até 5 por envio; o tamanho máximo por arquivo é definido pelo administrador, 10 MB por padrão).
 7. Clique em **Abrir chamado**.
 
-Ao salvar, uma janela mostra o **número de protocolo**, a **prioridade** atribuída e os **prazos previstos** de atendimento e de resolução. Guarde o protocolo. Uma confirmação com as mesmas informações é enviada ao seu e-mail cadastrado (se o seu usuário não tiver e-mail, a confirmação na tela continua valendo, mas nenhum e-mail é enviado).
+### 3.2 O que acontece ao salvar
+
+Uma janela mostra o **número de protocolo**, a **prioridade** atribuída e os **prazos previstos** de atendimento e de resolução. Guarde o protocolo. Uma confirmação com as mesmas informações é enviada ao seu e-mail cadastrado (se o seu usuário não tiver e-mail, a confirmação na tela continua valendo, mas nenhum e-mail é enviado).
 
 Se algum anexo não puder ser gravado, o chamado inteiro não é aberto e você vê a mensagem "Não foi possível gravar os anexos; tente novamente".
 
-### 3.2 Acompanhar
+---
 
-A tela **Chamados** lista os seus chamados e se atualiza sozinha a cada 30 segundos (acima da tabela aparece "Atualizado às ..."; linhas alteradas ficam destacadas por instantes).
+## 4. Acompanhar e Responder `Solicitante / Gestor`
 
-- Use os filtros (protocolo, status, prioridade, categoria, equipamento, período "De" e "Até") e o botão de busca; o botão com "X" limpa os filtros.
-- Cada linha mostra protocolo, título, categoria, equipamento, prioridade, status, responsável, abertura e duas marcas de prazo (**SLA atend.** e **SLA resol.**; veja a [seção 7](#7-prazos-de-atendimento-sla)).
-- A lista tem 50 chamados por página.
-- Clique numa linha para abrir o **detalhe**.
+> **Quem faz:** o solicitante vê apenas os próprios chamados. O gestor do contrato vê **todos** os chamados, pode filtrar e exportar o conjunto geral e pode **responder** a **qualquer chamado aguardando retorno**, mesmo que não tenha sido aberto por ele.
+
+### 4.1 Acompanhar
+
+A tela **Chamados** lista os chamados e se atualiza sozinha a cada 30 segundos (acima da tabela aparece "Atualizado às ..."; linhas alteradas ficam destacadas por instantes).
+
+1. Use os filtros (protocolo, status, prioridade, categoria, equipamento, período "De" e "Até") e o botão de busca; o botão com "X" limpa os filtros.
+2. Cada linha mostra protocolo, título, categoria, equipamento, prioridade, status, responsável, abertura e duas marcas de prazo (**SLA atend.** e **SLA resol.**; veja a [seção 9](#9-prazos-de-atendimento-sla)). A lista tem 50 chamados por página.
+3. Clique numa linha para abrir o **detalhe**.
 
 No detalhe você vê:
 
@@ -101,38 +105,72 @@ No detalhe você vê:
 
 A tela de detalhe também se atualiza a cada 30 segundos.
 
-### 3.3 Responder
+### 4.2 Responder
 
-Quando o status é **Aguardando solicitante**, a equipe está esperando uma informação sua. No detalhe, clique em **Responder**, escreva a observação (obrigatória), anexe arquivos se precisar (até 5) e confirme. O chamado volta para "Em atendimento" e o relógio de resolução volta a correr.
+Quando o status é **Aguardando solicitante**, a equipe está esperando uma informação sua.
 
-### 3.4 Avaliar e fechar, ou reabrir
+1. No detalhe, clique em **Responder**.
+2. Escreva a observação (obrigatória) e anexe arquivos se precisar (até 5).
+3. Confirme. O chamado volta para "Em atendimento" e o relógio de resolução volta a correr.
 
-Quando o status é **Resolvido**, há duas opções:
+### 4.3 Cancelar
 
-- **Avaliar e fechar**: escolha uma nota de 1 a 5 ★, escreva um comentário (opcional) e clique em **Enviar avaliação**. O chamado fica "Fechado".
-- **Reabrir**: se a solução não resolveu, clique em **Reabrir** e escreva a justificativa. O chamado volta para "Em atendimento".
-
-Se nenhuma das duas ações for feita em alguns dias (5 por padrão, ajustável pelo administrador), o sistema **fecha o chamado automaticamente** e o detalhe mostra "Fechado automaticamente — não avaliado".
-
-### 3.5 Cancelar
-
-Enquanto o chamado estiver **Aberto** (ainda sem atendimento), você pode clicar em **Cancelar** e informar o motivo.
-
-### 3.6 Exportar
-
-Na tela **Chamados**, os botões **CSV**, **XLS** e **PDF** exportam os chamados do conjunto filtrado (no seu caso, só os seus). Os arquivos CSV e XLS trazem os filtros, a data, o usuário, o total e uma impressão digital **SHA-256** do conteúdo; o PDF é montado no navegador.
+Enquanto o chamado estiver **Aberto** (ainda sem atendimento), você pode clicar em **Cancelar** e informar o motivo. O solicitante cancela apenas os próprios chamados; o gestor, os que abriu.
 
 ---
 
-## 4. Gestor do contrato
+## 5. Avaliar o Atendimento `Solicitante / Gestor`
 
-O gestor abre chamados como o solicitante e **avalia, reabre e cancela os chamados que abriu**, com estas diferenças:
+> **Quem faz:** quem abriu o chamado. Quando o status é **Resolvido**, há duas opções: avaliar e fechar, ou reabrir.
 
-- Na tela **Chamados**, vê **todos** os chamados, não só os próprios, e pode filtrar e exportar o conjunto geral.
-- Pode **responder** a **qualquer chamado aguardando retorno**, mesmo que não tenha sido aberto por ele.
-- Tem acesso à tela **Relatórios**.
+### 5.1 Avaliar e fechar
 
-### Relatórios
+1. No detalhe do chamado resolvido, escolha uma nota de 1 a 5 ★.
+2. Escreva um comentário (opcional).
+3. Clique em **Enviar avaliação**. O chamado fica "Fechado".
+
+### 5.2 Reabrir
+
+Se a solução não resolveu, clique em **Reabrir** e escreva a justificativa. O chamado volta para "Em atendimento".
+
+### 5.3 Fechamento automático
+
+Se nenhuma das duas ações for feita em alguns dias (5 por padrão, ajustável pelo administrador), o sistema **fecha o chamado automaticamente** e o detalhe mostra "Fechado automaticamente — não avaliado".
+
+---
+
+## 6. Atender Chamados `Equipe técnica`
+
+> **Quem faz:** a equipe técnica, que enxerga todos os chamados e atende conforme o status. Para atender, o administrador também precisa ter o perfil de equipe técnica.
+
+No detalhe, os botões disponíveis mudam com o status:
+
+| Ação | Quando aparece | O que faz |
+|---|---|---|
+| **Assumir** | Chamado aberto ou em atendimento | Define você como responsável (observação opcional) |
+| **Iniciar atendimento** | Chamado aberto | Passa para "Em atendimento" e registra o primeiro atendimento |
+| **Aguardar solicitante** | Em atendimento | Passa para "Aguardando solicitante"; descreva o que precisa do solicitante. O relógio de resolução pausa |
+| **Resolver** | Em atendimento | Passa para "Resolvido"; descreva a solução |
+| **Reclassificar prioridade** | Qualquer chamado não encerrado | Muda a prioridade (com justificativa), recalcula os prazos e avisa o solicitante por e-mail |
+| **Cancelar** | Aberto, em atendimento ou aguardando solicitante | Encerra o chamado; a justificativa é obrigatória |
+
+1. Abra o chamado na lista e clique na ação desejada.
+2. Na janela que abre, escreva a observação, que vai para o histórico.
+3. Confirme. Se a tela avisar "Chamado alterado por outro usuário; recarregue", alguém mexeu no chamado enquanto você o olhava: recarregue a página e refaça a ação.
+
+A equipe também usa **Relatórios** (veja a [seção 7](#7-relatórios-e-exportação)) e os botões de exportação da lista. A Configuração do sistema é exclusiva do administrador.
+
+---
+
+## 7. Relatórios e Exportação `Todos os perfis`
+
+> **Quem faz:** a exportação da lista está disponível a todos os perfis (o solicitante exporta só os próprios chamados). A tela **Relatórios** é do gestor do contrato, da equipe técnica e do administrador.
+
+### 7.1 Exportar a lista de chamados
+
+Na tela **Chamados**, os botões **CSV**, **XLS** e **PDF** exportam os chamados do conjunto filtrado. Os arquivos CSV e XLS trazem os filtros, a data, o usuário, o total e uma impressão digital **SHA-256** do conteúdo; o PDF é montado no navegador.
+
+### 7.2 Gerar relatórios
 
 1. Abra **Relatórios** (cartão da categoria ou botão na tela Chamados).
 2. Informe os filtros: **De**, **Até**, **Categoria**, **Equipamento** e **Prioridade**.
@@ -151,52 +189,33 @@ A tela mostra três totais (Chamados, Resolvidos e Cancelados), um gráfico e a 
 | Nota média | Média das avaliações (1 a 5) |
 | % avaliados | Percentual de chamados que receberam avaliação |
 
-Os botões **CSV**, **XLS** e **PDF** exportam a tabela de indicadores.
+Os botões **CSV**, **XLS** e **PDF** da tela exportam a tabela de indicadores.
 
 ---
 
-## 5. Equipe técnica
+## 8. Configuração `Admin`
 
-A equipe técnica enxerga todos os chamados e atende conforme o status. No detalhe, os botões disponíveis mudam com o status:
+> **Quem faz:** apenas o administrador, na tela **Configuração** (cartão da categoria ou botão "Configuração" na tela Chamados). Ela tem cinco abas. Todas as alterações feitas aqui são registradas no log de auditoria do sistema.
 
-| Ação | Quando aparece | O que faz |
-|---|---|---|
-| **Assumir** | Chamado aberto ou em atendimento | Define você como responsável (observação opcional) |
-| **Iniciar atendimento** | Chamado aberto | Passa para "Em atendimento" e registra o primeiro atendimento |
-| **Aguardar solicitante** | Em atendimento | Passa para "Aguardando solicitante"; descreva o que precisa do solicitante. O relógio de resolução pausa |
-| **Resolver** | Em atendimento | Passa para "Resolvido"; descreva a solução |
-| **Reclassificar prioridade** | Qualquer chamado não encerrado | Muda a prioridade (com justificativa), recalcula os prazos e avisa o solicitante por e-mail |
-| **Cancelar** | Aberto, em atendimento ou aguardando solicitante | Encerra o chamado; a justificativa é obrigatória |
-
-Cada ação abre uma janela para a observação, que vai ao histórico. Se a tela avisar "Chamado alterado por outro usuário; recarregue", alguém mexeu no chamado enquanto você o olhava: recarregue a página e refaça a ação.
-
-A equipe também usa **Relatórios** (veja a seção 4) e os botões de exportação da lista. A Configuração do sistema é exclusiva do administrador.
-
----
-
-## 6. Administrador
-
-O administrador acessa a tela **Configuração** (cartão da categoria ou botão "Configuração" na tela Chamados). Ela tem cinco abas. Todas as alterações feitas aqui são registradas no log de auditoria do sistema.
-
-### 6.1 Parâmetros de SLA
+### 8.1 Parâmetros de SLA
 
 - **Risco de SLA (% do prazo consumido)**: de 1 a 99. Acima desse percentual o chamado passa a "Em risco". Padrão: 80.
 - **Fechamento automático (dias)**: de 1 a 60. Dias após a resolução em que um chamado resolvido, sem avaliação nem reabertura, é fechado automaticamente. Padrão: 5.
 
 Clique em **Salvar parâmetros**. Os prazos por prioridade ficam na aba "Prioridades e prazos"; as horas são corridas (24x7).
 
-### 6.2 Perfis de acesso
+### 8.2 Perfis de acesso
 
 A aba mostra três cartões: **Solicitantes**, **Gestores do contrato** e **Equipe técnica**, cada um com a lista dos usuários que têm o perfil.
 
-- Para **incluir** um usuário: digite pelo menos 2 letras do nome ou do login no campo "Adicionar usuário", clique no resultado e confirme.
-- Para **remover**: clique na lixeira ao lado do nome e confirme.
+1. Para **incluir** um usuário: digite pelo menos 2 letras do nome ou do login no campo "Adicionar usuário", clique no resultado e confirme.
+2. Para **remover**: clique na lixeira ao lado do nome e confirme.
 
 Os administradores aparecem numa lista de **somente leitura** no fim da aba; o grupo de administradores não é alterado por aqui.
 
-Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito sobre o acesso. Porém, as alterações de grupo feitas pela tela legada de usuários **não aparecem no log de auditoria do sistema de chamados**; só ficam registradas as feitas nesta aba (Perfis de acesso).
+> Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito sobre o acesso. Porém, as alterações de grupo feitas pela tela legada de usuários **não aparecem no log de auditoria do sistema de chamados**; só ficam registradas as feitas nesta aba (Perfis de acesso).
 
-### 6.3 Prioridades e prazos
+### 8.3 Prioridades e prazos
 
 Lista as prioridades com ordem, código, nome, prazo de atendimento e de resolução (em minutos) e situação. Use **Nova prioridade** ou o botão de edição da linha; no formulário informe código (maiúsculas), nome, ordem (1 = mais grave), os dois prazos em minutos e a cor do selo. Os valores iniciais sugeridos são:
 
@@ -209,17 +228,17 @@ Lista as prioridades com ordem, código, nome, prazo de atendimento e de resolu�
 
 Prioridades e categorias não são excluídas: quando deixam de ser usadas, são **desativadas** e não aparecem mais para novos chamados, mas os chamados antigos continuam intactos.
 
-### 6.4 Categorias
+### 8.4 Categorias
 
 Lista categorias e subcategorias (dois níveis). Use **Nova categoria** ou a edição da linha para definir o nome, a **Categoria pai** (vazia para categoria de primeiro nível) e se a categoria **exige equipamento** (a opção vale para a categoria de primeiro nível; as subcategorias herdam). Para retirar uma categoria de uso, desative-a.
 
-### 6.5 E-mail (SMTP)
+### 8.5 E-mail (SMTP)
 
-Define o servidor usado para enviar os e-mails dos chamados (confirmação de abertura e aviso de reclassificação). No alto da aba, um aviso informa qual servidor está em uso: o configurado aqui ou o do arquivo de configuração do servidor (`confGTW.xml`).
+Define o servidor usado para enviar os e-mails dos chamados (confirmação de abertura e aviso de reclassificação). No alto da aba, um aviso informa qual servidor está em uso: o configurado aqui ou o da configuração geral do servidor do sistema.
 
 | Campo | Observação |
 |---|---|
-| **Servidor SMTP** | Nome do servidor ou endereço IPv4. Em branco = usa o servidor do `confGTW.xml` |
+| **Servidor SMTP** | Nome do servidor ou endereço IPv4. Em branco = usa o servidor da configuração geral do sistema |
 | **Porta** | De 1 a 65535 (padrão 587) |
 | **Usuário** | Em branco = sem autenticação |
 | **Senha** | Em branco = mantém a senha atual. Marque **Apagar a senha gravada** para removê-la. A senha nunca é exibida |
@@ -227,15 +246,16 @@ Define o servidor usado para enviar os e-mails dos chamados (confirmação de ab
 | **Usar STARTTLS** | Liga a criptografia STARTTLS (obrigatória nesse caso: se o servidor não oferecer, o envio falha). Desligado = sem criptografia. Só vale para o servidor configurado nesta tela |
 | **Enviar e-mails dos chamados** | Liga ou desliga todo o envio |
 
-São suportados apenas **STARTTLS** (normalmente porta 587) ou **sem criptografia**; a conexão SSL direta (porta 465) **não é suportada**. O interruptor STARTTLS só vale para o servidor configurado nesta tela: o servidor do `confGTW.xml` segue a sua própria configuração.
+> São suportados apenas **STARTTLS** (normalmente porta 587) ou **sem criptografia**; a conexão SSL direta (porta 465) **não é suportada**. O interruptor STARTTLS só vale para o servidor configurado nesta tela: o servidor da configuração geral segue a sua própria configuração.
 
-A senha é gravada **cifrada** e depende de uma chave guardada no servidor (variável de ambiente `GTW_CHAMADO_CHAVE_SMTP`). Ao trocar servidor, porta ou usuário, é preciso digitar a senha novamente (a senha gravada não é reaproveitada em outro servidor). Se a chave não estiver definida, a aba mostra um aviso e não é possível gravar uma senha nova; veja [`../requisitos/07-configuracao-e-segredos.md`](../requisitos/07-configuracao-e-segredos.md).
+A senha é gravada **cifrada** e depende de uma chave de cifragem guardada no servidor, configurada pela equipe de infraestrutura. Ao trocar servidor, porta ou usuário, é preciso digitar a senha novamente (a senha gravada não é reaproveitada em outro servidor). Se a chave não estiver definida, a aba mostra um aviso e não é possível gravar uma senha nova.
 
-Depois de salvar, clique em **Enviar e-mail de teste**: o sistema envia uma mensagem, com a configuração gravada, para o e-mail cadastrado no seu usuário. Se houver falha, a mensagem do servidor é mostrada (sem a senha).
+1. Preencha os campos e salve.
+2. Clique em **Enviar e-mail de teste**: o sistema envia uma mensagem, com a configuração gravada, para o e-mail cadastrado no seu usuário. Se houver falha, a mensagem do servidor é mostrada (sem a senha).
 
 ---
 
-## 7. Prazos de atendimento (SLA)
+## 9. Prazos de Atendimento (SLA)
 
 Cada chamado tem dois prazos, definidos pela prioridade: **atendimento** (até o primeiro atendimento) e **resolução**. A contagem é em **horas corridas, 24 horas por dia, 7 dias por semana**.
 
@@ -256,15 +276,51 @@ O sistema atualiza as marcas a cada 5 minutos.
 
 ---
 
-## 8. Resolução de problemas
+## 10. Resolução de Problemas
 
-| Sintoma | O que fazer |
+**Não vejo a categoria "Sistema de Chamados" ou um dos cartões**
+Solução: o seu usuário não tem o perfil necessário. Peça ao administrador para incluí-lo em Configuração > Perfis de acesso.
+
+**O botão "Novo chamado" não aparece**
+Solução: apenas solicitantes e gestores abrem chamados.
+
+**"Chamado alterado por outro usuário; recarregue"**
+Causa: outra pessoa (ou o sistema, ao atualizar os prazos) alterou o chamado. Solução: recarregue a página e repita a ação.
+
+**"Não foi possível gravar os anexos; tente novamente"**
+Causa: o servidor não conseguiu gravar os arquivos. Solução: tente de novo; se persistir, avise o administrador (diretório de anexos).
+
+**Anexo recusado**
+Solução: só são aceitos PDF, PNG e JPG, dentro do tamanho máximo, e o conteúdo do arquivo precisa corresponder ao tipo.
+
+**Não recebi o e-mail de confirmação**
+Solução: confira se o seu usuário tem e-mail cadastrado e se o SMTP está configurado e ligado (administrador: aba E-mail (SMTP) e botão de teste).
+
+**Na aba SMTP aparece o aviso sobre a chave de cifragem**
+Solução: a chave de cifragem não está definida no servidor. Peça à equipe de infraestrutura para configurá-la.
+
+**O gráfico dos relatórios não aparece**
+Solução: a tela carrega a biblioteca de gráficos da internet; verifique o acesso do computador e recarregue.
+
+---
+
+## 11. Glossário
+
+| Termo | Definição |
 |---|---|
-| Não vejo a categoria "Sistema de Chamados" ou um dos cartões | O seu usuário não tem o perfil necessário. Peça ao administrador para incluí-lo em Configuração > Perfis de acesso |
-| O botão "Novo chamado" não aparece | Apenas solicitantes e gestores abrem chamados |
-| Mensagem "Chamado alterado por outro usuário; recarregue" | Outra pessoa (ou o sistema, ao atualizar os prazos) alterou o chamado. Recarregue a página e repita a ação |
-| "Não foi possível gravar os anexos; tente novamente" | O servidor não conseguiu gravar os arquivos. Tente de novo; se persistir, avise o administrador (diretório de anexos) |
-| Anexo recusado | Só são aceitos PDF, PNG e JPG, dentro do tamanho máximo, e o conteúdo do arquivo precisa corresponder ao tipo |
-| Não recebi o e-mail de confirmação | Confira se o seu usuário tem e-mail cadastrado e se o SMTP está configurado e ligado (administrador: aba E-mail (SMTP) e botão de teste) |
-| Na aba SMTP aparece o aviso da variável `GTW_CHAMADO_CHAVE_SMTP` | A chave de cifragem não está definida no servidor. Veja a documentação de configuração e segredos |
-| O gráfico dos relatórios não aparece | A tela carrega a biblioteca de gráficos da internet; verifique o acesso do computador e recarregue |
+| **Avaliação** | Nota de 1 a 5 e comentário opcional dados ao fechar um chamado resolvido |
+| **Categoria** | Classificação do assunto do chamado, com subcategoria; pode exigir equipamento |
+| **Chamado** | Pedido de suporte técnico registrado no sistema, com histórico completo |
+| **Fechamento automático** | Fechamento feito pelo sistema quando um chamado resolvido não é avaliado nem reaberto no prazo configurado |
+| **Prioridade** | Grau de urgência do chamado (Crítica, Alta, Média, Baixa); define os prazos de SLA |
+| **Protocolo** | Número único do chamado, no formato CH-AAAA-NNNNNN |
+| **Reclassificar** | Mudar a prioridade de um chamado, com justificativa, recalculando os prazos |
+| **SLA** | Acordo de nível de serviço — prazos de atendimento e de resolução, em horas corridas (24x7) |
+| **SMTP** | Servidor usado para enviar os e-mails do sistema |
+| **STARTTLS** | Criptografia da conexão com o servidor de e-mail, ligada na tela de Configuração |
+| **TMA** | Tempo médio de atendimento — até o primeiro atendimento |
+| **TMR** | Tempo médio de resolução, descontando as pausas |
+
+---
+
+*Manual do Sistema de Chamados — Muralha Digital*
