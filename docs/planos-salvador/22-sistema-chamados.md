@@ -5321,6 +5321,35 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - [ ] **Step 2:** Atualizar a spec (seção de ajustes), `docs/entregas/22-sistema-chamados.md`, `docs/testes/22-sistema-chamados.md`, `ReferenciaEdital` (menu 383 → itens 7.2.3 e 7.2.4, com teste) e os índices que citam os menus do módulo. Somente pastas existentes em `docs/`.
 - [ ] **Step 3:** Commit, push e Pull Request para `main`, sem arquivos rastreáveis pendentes (`git status` limpo; `confGTW.xml` e `target/` seguem ignorados por regra do projeto).
 
+### Tarefa 19: Configuração do SMTP dos chamados pelo administrador
+
+> Pedido do responsável (2026-10-15): "As configurações do SMTP também deverão constar em configurações do sistema de chamados." Decisão: senha guardada **cifrada** no banco (AES-GCM do JDK, sem dependência nova), com a chave na variável de ambiente `GTW_CHAMADO_CHAVE_SMTP` do servidor.
+
+**Files:**
+- Create: `docs/banco-de-dados/migracoes/20261015_sistema_chamados_smtp.sql`
+- Create: `src/main/java/muralha/digital/chamado/CifraSegredo.java`, `ConfiguracaoSmtpChamado.java`
+- Modify: `EmailChamado.java`, `ChamadoConfigDao.java`, `ChamadoConfigServlet.java`, `src/main/java/muralha/digital/notificacao/ServicoEmailMuralha.java` (remover o método `enviarEmailChamado`, que passa a ser desnecessário, devolvendo o arquivo ao estado anterior ao plano)
+- Modify: `pages/chamados/configuracao.jsp`, `assets/js/chamados/chamados-configuracao.js`
+- Modify: `docs/requisitos/07-configuracao-e-segredos.md` (variável de ambiente nova)
+- Test: `CifraSegredoTest.java`, `ConfiguracaoSmtpChamadoTest.java`
+
+**Interfaces e regras:**
+- Chaves novas em `muralha.config_chave_valor` (inseridas vazias pelo script): `chamado_smtp_host`, `chamado_smtp_porta`, `chamado_smtp_usuario`, `chamado_smtp_senha` (texto cifrado), `chamado_smtp_remetente`, `chamado_smtp_starttls` (`1`/`0`). `chamado_email_ativo` já existe.
+- `CifraSegredo` (pura): `static String cifrar(String texto, byte[] chave)` → `"v1:" + Base64(iv12 ‖ ciphertext+tag)` com AES/GCM/NoPadding (chave de 32 bytes, IV aleatório por cifragem, tag 128 bits); `static String decifrar(String valor, byte[] chave)` (rejeita prefixo desconhecido, valor adulterado → exceção); `static byte[] chaveDoAmbiente()` lê `GTW_CHAMADO_CHAVE_SMTP` (Base64 de 32 bytes) e devolve `null` se ausente ou inválida. O resultado precisa caber em `varchar(255)`: limitar a senha a 120 caracteres.
+- `ConfiguracaoSmtpChamado`: campos `host, porta, usuario, senha, remetente, starttls, origem` (`"CHAMADOS"` ou `"CONFGTW"`); `static ConfiguracaoSmtpChamado resolver(Connection)`: se `chamado_smtp_host` estiver vazio, usa o primeiro servidor de `ConfiguracaoProvider.getInstance().getListaServidoresSmtp()` (comportamento atual); senão usa as chaves, decifrando a senha (sem chave no ambiente e com senha gravada → `IllegalStateException` com mensagem clara). Validação pura `static void validar(host, porta, remetente, usuario)` testável: host = nome DNS ou IPv4, porta 1–65535, remetente e-mail válido, usuário ≤ 100.
+- `EmailChamado.enviar(Connection, destinatario, assunto, html)`: monta a sessão JavaMail com a configuração resolvida (STARTTLS conforme a flag, autenticação só se houver usuário, `mail.smtp.connectiontimeout`/`timeout` = 10000) e envia. `ChamadoEmailJob` passa a conexão.
+- `ChamadoConfigServlet` (ADMIN):
+  - GET `smtp` → `{host, porta, usuario, remetente, starttls, emailAtivo, senhaDefinida, chaveDisponivel, origemAtual}`. A senha **nunca** sai.
+  - POST `salvarSmtp` (`host, porta, usuario, senha, limparSenha, remetente, starttls, emailAtivo`): senha vazia mantém a atual; `limparSenha=true` apaga; senha nova sem chave no ambiente → `ok:false` "Defina a variável GTW_CHAMADO_CHAVE_SMTP no servidor para gravar a senha". Grava as chaves e o histórico (`config_chave_valor_hist`, sem a senha) numa transação. Host vazio = voltar a usar o `confGTW.xml`.
+  - POST `testarSmtp`: envia e-mail de teste ao e-mail do administrador logado (`dbo.sis_usuario.email`) com a configuração gravada; devolve `ok:true` ou `ok:false` com a mensagem do servidor SMTP (sem a senha).
+  - Auditoria (motor de logs): `SALVAR_SMTP` (campos alterados, "senha alterada: sim/não", nunca o valor) e `TESTAR_SMTP` (destinatário e resultado).
+- Tela: aba "E-mail (SMTP)" na Configuração, com campos, senha `type=password` + `autocomplete=new-password` + "deixe em branco para manter", aviso quando a chave não está disponível, indicação da origem em uso (Chamados ou confGTW.xml), botões Salvar e "Enviar e-mail de teste".
+
+- [ ] **Step 1 (TDD):** `CifraSegredoTest` (ida e volta; IVs diferentes a cada cifragem; adulteração rejeitada; chave errada rejeitada; prefixo desconhecido rejeitado; senha de 120 caracteres cabe em 255) e `ConfiguracaoSmtpChamadoTest` (validação de host, porta, remetente e usuário).
+- [ ] **Step 2:** Script de chaves vazias + execução no DEV; implementação; bateria completa; build; `node --check`.
+- [ ] **Step 3:** Teste integrado: reiniciar o servidor com uma chave temporária em `GTW_CHAMADO_CHAVE_SMTP` na sessão; salvar uma configuração fictícia com senha; conferir no banco que a senha está cifrada (`v1:`) e que o GET não a devolve; `testarSmtp` com host inválido devolve erro legível; voltar a configuração para vazio (fallback `confGTW.xml`) e apagar a senha cifrada com a chave temporária; conferir os registros `SALVAR_SMTP`/`TESTAR_SMTP` em `sis_log_auditoria`.
+- [ ] **Step 4:** Documentação: `07-configuracao-e-segredos.md` (variável `GTW_CHAMADO_CHAVE_SMTP`: formato, geração com PowerShell, efeito da troca de chave), spec, entrega e roteiro de testes. Commits.
+
 ## Cobertura da spec
 
 | Spec | Tarefa |
