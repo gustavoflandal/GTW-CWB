@@ -54,8 +54,8 @@ Observações de higiene: ~156 tabelas com sufixo `_test*`, `bkp`, `backup`, `_a
 | [`tabelas/<schema>/<grupo>.md`](tabelas/) | 65 arquivos agrupados pelo prefixo do nome: colunas (tipo, null, identity, default), PK/índices, FKs de saída e "referenciada por", contagem de linhas. Prefixos com < 4 tabelas vão em `outros.md` |
 | [`objetos-programaveis.md`](objetos-programaveis.md) | Catálogo das views/procedures/funções/triggers: parâmetros, **objetos referenciados**, datas de criação/alteração |
 | [`codigo-sql/`](codigo-sql/) | **Código-fonte** de cada objeto (826 arquivos em `views/ procedures/ funcoes/ triggers/` — `<schema>.<nome>.sql`) |
-| [`dominios.md`](dominios.md) | Valores de 43 tabelas de domínio pequenas (tipos, status, motivos…) |
-| [`scripts/extrair-catalogo.ps1`](scripts/extrair-catalogo.ps1) | Regenera `tabelas/` e `codigo-sql/` (somente SELECT em `sys.*`) |
+| [`dominios.md`](dominios.md) | Valores de 46 tabelas de domínio pequenas (tipos, status, situações, categorias, prioridades…) |
+| [`scripts/extrair-catalogo.ps1`](scripts/extrair-catalogo.ps1) | Regenera `tabelas/`, `codigo-sql/`, `objetos-programaveis.md` e `dominios.md` (somente SELECT) |
 | [`../referencia/menus-e-permissoes.md`](../referencia/menus-e-permissoes.md) | Conteúdo de `sis_grupo`, `sis_menu*` (menus e direitos) |
 | [`migracoes/`](migracoes/) | Scripts DDL/DML versionados (`AAAAMMDD_descricao.sql`, idempotentes, com rollback comentado) das Planos Salvador, do Construtor de Dashboards e do Sistema de Chamados; o [README da pasta](migracoes/README.md) lista cada script, sua situação no DEV e a ordem de execução. Regras gerais em [`../requisitos/10-guia-de-implementacao.md`](../requisitos/10-guia-de-implementacao.md) §6 |
 

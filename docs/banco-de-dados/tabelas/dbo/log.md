@@ -4,7 +4,7 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.log_alerta
 
-Linhas: ~48
+Linhas: ~53
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -137,7 +137,7 @@ Linhas: ~0
 
 ## dbo.log_processos
 
-Linhas: ~1356339
+Linhas: ~1356371
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -167,7 +167,7 @@ Linhas: ~169
 
 ## dbo.log_tipo
 
-Linhas: ~27
+Linhas: ~32
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

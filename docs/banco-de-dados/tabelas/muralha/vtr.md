@@ -18,7 +18,7 @@ Linhas: ~0
 
 ## muralha.vtr_imagem_complemento
 
-Linhas: ~141600
+Linhas: ~142000
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

@@ -1,8 +1,8 @@
 # Catálogo de objetos programáveis
 
-O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Para cada objeto: parâmetros e objetos referenciados (tabelas/views/outros) extraídos de `sys.sql_expression_dependencies`. Tipos entre colchetes: U=tabela, V=view, P=procedure, FN/IF/TF=função, TR=trigger.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Para cada objeto: parâmetros e objetos referenciados (tabelas/views/outros) extraídos de `sys.sql_expression_dependencies`. Tipos entre colchetes: U=tabela, V=view, P=procedure, FN/IF/TF=função, TR=trigger.
 
-## Views — 123
+## Views — 126
 
 ### dbo.agenda_camera_vigente
 - Arquivo: `codigo-sql/views/dbo.agenda_camera_vigente.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -564,6 +564,16 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 - Parâmetros/retorno: —
 - Referencia: dbo.sis_usuario [U], muralha.config_monitoramento_ao_vivo [U], muralha.monitoramento_ao_vivo_grupo_exibicao [U]
 
+### muralha.v_dashboard_alertas_resumo
+- Arquivo: `codigo-sql/views/muralha.v_dashboard_alertas_resumo.sql` · criado 2026-10-09 · alterado 2026-10-09
+- Parâmetros/retorno: —
+- Referencia: muralha.alerta [U], muralha.status_alerta [U], muralha.tipo_alerta_ocorrencia [U]
+
+### muralha.v_dashboard_passagens_diarias
+- Arquivo: `codigo-sql/views/muralha.v_dashboard_passagens_diarias.sql` · criado 2026-10-09 · alterado 2026-10-09
+- Parâmetros/retorno: —
+- Referencia: dbo.local_pista_vigente [V], muralha.veiculo_tempo_real [U]
+
 ### muralha.v_enquadramentos_dashboard
 - Arquivo: `codigo-sql/views/muralha.v_enquadramentos_dashboard.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: —
@@ -609,6 +619,11 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 - Parâmetros/retorno: —
 - Referencia: —
 
+### muralha.vw_passagem_anonimizada
+- Arquivo: `codigo-sql/views/muralha.vw_passagem_anonimizada.sql` · criado 2026-10-09 · alterado 2026-10-09
+- Parâmetros/retorno: —
+- Referencia: muralha.veiculo_tempo_real [U], muralha.vtr_status_analise [U]
+
 ### muralha.vw_registro_fato_origem
 - Arquivo: `codigo-sql/views/muralha.vw_registro_fato_origem.sql` · criado 2025-09-29 · alterado 2025-09-29
 - Parâmetros/retorno: —
@@ -619,7 +634,7 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 - Parâmetros/retorno: —
 - Referencia: muralha.analise_correlacionamento_placas_registro_fato, muralha.correlacionamento_placas
 
-## Stored Procedures — 388
+## Stored Procedures — 390
 
 ### dbo.grava_indicadores_tempo_real
 - Arquivo: `codigo-sql/procedures/dbo.grava_indicadores_tempo_real.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -628,7 +643,7 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 
 ### dbo.obter_indicadores_tempo_real
 - Arquivo: `codigo-sql/procedures/dbo.obter_indicadores_tempo_real.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: @id bigint OUT
+- Parâmetros/retorno: @id bigint OUTPUT
 - Referencia: dbo.indicadores_estatisticas_tempo_real [U]
 
 ### dbo.ObterPassagensPorPlaca
@@ -800,6 +815,11 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 - Arquivo: `codigo-sql/procedures/dbo.spu_atualizar_cad_isento_antigo.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: —
 - Referencia: dbo.cad_isento [U], dbo.cad_isento_ant [U], dbo.infracao [U]
+
+### dbo.spu_atualizar_classe_veiculo
+- Arquivo: `codigo-sql/procedures/dbo.spu_atualizar_classe_veiculo.sql` · criado 2026-10-15 · alterado 2026-10-15
+- Parâmetros/retorno: @idCaptura varchar, @idClasse varchar
+- Referencia: dbo.veiculo [U], dbo.veiculo_estatistica [U], ia.veiculo_caracteristica [U], muralha.veiculo_tempo_real [U]
 
 ### dbo.spu_atualizar_inconsistencias_processo
 - Arquivo: `codigo-sql/procedures/dbo.spu_atualizar_inconsistencias_processo.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -1378,7 +1398,7 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 
 ### dbo.spu_getHTML_AlertaCapturaTravado
 - Arquivo: `codigo-sql/procedures/dbo.spu_getHTML_AlertaCapturaTravado.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: @tableHTML nvarchar OUT
+- Parâmetros/retorno: @tableHTML nvarchar OUTPUT
 - Referencia: dbo.AlertaCapturaTravado
 
 ### dbo.spu_getModoOperacaoPPV
@@ -1733,7 +1753,7 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 
 ### dbo.spu_ppv_sis_usuario_token
 - Arquivo: `codigo-sql/procedures/dbo.spu_ppv_sis_usuario_token.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: @id_usuario int, @endereco_ip varchar, @ret uniqueidentifier OUT
+- Parâmetros/retorno: @id_usuario int, @endereco_ip varchar, @ret uniqueidentifier OUTPUT
 - Referencia: dbo.sis_usuario_token [U]
 
 ### dbo.spu_ppv_sis_usuario_token_encerra
@@ -2023,7 +2043,7 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 
 ### dbo.spu_verificar_filtros
 - Arquivo: `codigo-sql/procedures/dbo.spu_verificar_filtros.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: @id_infracao int, @id_processo int, @id_filtro_aplicado int OUT, @id_inconsistencia int OUT, @espera bit OUT
+- Parâmetros/retorno: @id_infracao int, @id_processo int, @id_filtro_aplicado int OUTPUT, @id_inconsistencia int OUTPUT, @espera bit OUTPUT
 - Referencia: dbo.fcn_getSqlVerificaFiltros [FN], dbo.filtro [U], dbo.infracao [U]
 
 ### dbo.spuObterDadosVeiculoGtw
@@ -2180,6 +2200,11 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 - Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoFluxoInfracao.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
 - Referencia: dbo.fcn_ObterDatasPeriodo [IF]
+
+### muralha.spu_getComparativoFluxoInfracaoSalvador
+- Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoFluxoInfracaoSalvador.sql` · criado 2026-10-15 · alterado 2026-10-15
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint, @Hora_Ini int, @Hora_Fim int, @Id_Classe char
+- Referencia: dbo.infracao [U], dbo.local_vigente [V], dbo.veiculo [U], dbo.veiculo_sumarizado [U]
 
 ### muralha.spu_getComparativoPeriodoAnoAnterior
 - Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoPeriodoAnoAnterior.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -3697,302 +3722,302 @@ O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Par
 
 ### dbo.DAC_AIT
 - Arquivo: `codigo-sql/funcoes/dbo.DAC_AIT.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) smallint OUT, @tipo char, @serie char, @auto int
+- Parâmetros/retorno: retorna smallint, @tipo char, @serie char, @auto int
 - Referencia: —
 
 ### dbo.fcn_calcula_espaco_imagens_dia
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_calcula_espaco_imagens_dia.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) bigint OUT, @dia date
+- Parâmetros/retorno: retorna bigint, @dia date
 - Referencia: —
 
 ### dbo.fcn_checkSemelhancaPlaca
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_checkSemelhancaPlaca.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) tinyint OUT, @placa1 char, @placa2 char
+- Parâmetros/retorno: retorna tinyint, @placa1 char, @placa2 char
 - Referencia: dbo.configuracao_semelhanca_placa [U]
 
 ### dbo.fcn_contar_sugestoes_amostras
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_contar_sugestoes_amostras.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @id_local int, @id_pista tinyint, @dia date, @metrologica bit
+- Parâmetros/retorno: retorna nvarchar, @id_local int, @id_pista tinyint, @dia date, @metrologica bit
 - Referencia: dbo.fcn_lista_amostras_periodo_local_pista [IF], dbo.fcn_listar_sugestoes_amostras [IF]
 
 ### dbo.fcn_FormataNumero
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_FormataNumero.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @Numero bigint
+- Parâmetros/retorno: retorna varchar, @Numero bigint
 - Referencia: —
 
 ### dbo.fcn_getAlertaCapturaTravadoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaCapturaTravadoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getAlertaCapturaTravado [IF]
 
 ### dbo.fcn_getAlertaEventoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaEventoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @title nvarchar, @idEvento int, @dataInicio datetime, @mensagem bit
+- Parâmetros/retorno: retorna nvarchar, @title nvarchar, @idEvento int, @dataInicio datetime, @mensagem bit
 - Referencia: dbo.fcn_getAlertaEvento [IF]
 
 ### dbo.fcn_getAlertaExcessoEventosHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaExcessoEventosHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getAlertaExcessoEventos [IF]
 
 ### dbo.fcn_getAlertaFalhaCarregamentoAgendaHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaFalhaCarregamentoAgendaHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.eventos_csx_pesquisa [V]
 
 ### dbo.fcn_getAlertaLocaisConexaoInstavelHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaLocaisConexaoInstavelHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getAlertaLocaisConexaoInstavel [IF]
 
 ### dbo.fcn_getAlertaLocaisOfflineHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaLocaisOfflineHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getAlertaLocaisOffLine [IF]
 
 ### dbo.fcn_getAlertaNaoEnviaEventosHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAlertaNaoEnviaEventosHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getAlertaNaoEnviaEventos [IF]
 
 ### dbo.fcn_getAproveitamentoImagens
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAproveitamentoImagens.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @data date
+- Parâmetros/retorno: retorna nvarchar, @data date
 - Referencia: dbo.inconsistencia [U], dbo.infracao [U], dbo.processo [U]
 
 ### dbo.fcn_getAproveitamentoImagensAgrupado
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAproveitamentoImagensAgrupado.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @dataLimite date
+- Parâmetros/retorno: retorna nvarchar, @dataLimite date
 - Referencia: dbo.fcn_getAproveitamentoImagensAgrupadoPeriodo [FN], dbo.infracao [U], dbo.processo [U]
 
 ### dbo.fcn_getAproveitamentoImagensAgrupadoPeriodo
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getAproveitamentoImagensAgrupadoPeriodo.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @dataInicio date, @dataFim date
+- Parâmetros/retorno: retorna nvarchar, @dataInicio date, @dataFim date
 - Referencia: dbo.inconsistencia [U], dbo.infracao [U], dbo.local_vigente [V], dbo.processo [U]
 
 ### dbo.fcn_getClassificacaoCad
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getClassificacaoCad.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @placa char
+- Parâmetros/retorno: retorna int, @placa char
 - Referencia: dbo.cad_tipo [U], dbo.cad_veiculo [U]
 
 ### dbo.fcn_getClassificacaoPerfil
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getClassificacaoPerfil.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @classe char
+- Parâmetros/retorno: retorna int, @classe char
 - Referencia: —
 
 ### dbo.fcn_getClassificacaoPNCT_v2
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getClassificacaoPNCT_v2.sql` · criado 2025-09-30 · alterado 2025-09-30
-- Parâmetros/retorno: (retorno) nchar OUT, @id_classe char, @qtde_eixos tinyint, @comprimento decimal, @pbt float, @distancia_E1E2 float, @distancia_E2E3 float, @distancia_E3E4 float, @distancia_E4E5 float, @distancia_E5E6 float, @distancia_E6E7 float, @distancia_E7E8 float, @distancia_E8E9 float
+- Parâmetros/retorno: retorna nchar, @id_classe char, @qtde_eixos tinyint, @comprimento decimal, @pbt float, @distancia_E1E2 float, @distancia_E2E3 float, @distancia_E3E4 float, @distancia_E4E5 float, @distancia_E5E6 float, @distancia_E6E7 float, @distancia_E7E8 float, @distancia_E8E9 float
 - Referencia: —
 
 ### dbo.fcn_getClassificacaoVeiculoRef
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getClassificacaoVeiculoRef.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) char OUT, @comprimento float
+- Parâmetros/retorno: retorna char, @comprimento float
 - Referencia: dbo.classificacao_veiculo_ref [U]
 
 ### dbo.fcn_getDataInicioSumariza
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getDataInicioSumariza.sql` · criado 2025-06-02 · alterado 2025-10-21
-- Parâmetros/retorno: (retorno) date OUT
+- Parâmetros/retorno: retorna date
 - Referencia: —
 
 ### dbo.fcn_getDestinatariosAlerta
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getDestinatariosAlerta.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: —
 
 ### dbo.fcn_getErrosProcessamentoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getErrosProcessamentoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @data datetime
+- Parâmetros/retorno: retorna nvarchar, @data datetime
 - Referencia: dbo.fcn_getErrosProcessamento [IF]
 
 ### dbo.fcn_getErrosRespostaPoolingHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getErrosRespostaPoolingHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @title nvarchar, @dataInicio datetime
+- Parâmetros/retorno: retorna nvarchar, @title nvarchar, @dataInicio datetime
 - Referencia: dbo.fcn_getErrosRespostaPooling [IF]
 
 ### dbo.fcn_getHistoricoAfericaoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getHistoricoAfericaoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getHistoricoAfericao [IF]
 
 ### dbo.fcn_getHistoricoManutencaoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getHistoricoManutencaoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getHistoricoManutencao [IF]
 
 ### dbo.fcn_getIdConfiguracaoEquipamento
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getIdConfiguracaoEquipamento.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @idLocal int, @dataHora datetime
+- Parâmetros/retorno: retorna int, @idLocal int, @dataHora datetime
 - Referencia: dbo.local [U]
 
 ### dbo.fcn_getImagensProcessamentoHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getImagensProcessamentoHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @id_processo int, @consistentes bit, @inconsistentes bit
+- Parâmetros/retorno: retorna nvarchar, @id_processo int, @consistentes bit, @inconsistentes bit
 - Referencia: dbo.fcn_ImagensProcessamento [IF], dbo.processo [U]
 
 ### dbo.fcn_getInfracaoHorarioValida
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getInfracaoHorarioValida.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @id_infracao int
+- Parâmetros/retorno: retorna int, @id_infracao int
 - Referencia: dbo.configuracao_equipamento_regra_infracao [U], dbo.enquadramento_regra_infracao [U], dbo.infracao [U], dbo.local [U]
 
 ### dbo.fcn_getNomeContrato
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getNomeContrato.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.chave_valor [U]
 
 ### dbo.fcn_getProdutividadeOperacoes
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getProdutividadeOperacoes.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.infracao_processo [U], dbo.processo [U]
 
 ### dbo.fcn_getProdutividadeOperadoresHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getProdutividadeOperadoresHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getProdutividadeOperadores [IF]
 
 ### dbo.fcn_getProximasAfericoesHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getProximasAfericoesHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getProximasAfericoes [IF]
 
 ### dbo.fcn_getRelatorioIsencoesHTML
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getRelatorioIsencoesHTML.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: dbo.fcn_getRelatorioIsencoes [IF]
 
 ### dbo.fcn_getSqlVerificaFiltros
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getSqlVerificaFiltros.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @id_infracao int, @id_enquadramento int, @id_processo int, @id_local int, @id_pista int, @id_classe char, @data_ini datetime, @data_fim datetime, @sql_criterio varchar, @select_count bit
+- Parâmetros/retorno: retorna nvarchar, @id_infracao int, @id_enquadramento int, @id_processo int, @id_local int, @id_pista int, @id_classe char, @data_ini datetime, @data_fim datetime, @sql_criterio varchar, @select_count bit
 - Referencia: —
 
 ### dbo.fcn_getUltimaSemanaProcessada
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_getUltimaSemanaProcessada.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT
+- Parâmetros/retorno: retorna int
 - Referencia: dbo.infracao [U], dbo.processo [U]
 
 ### dbo.fcn_InitCap
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_InitCap.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @InputString varchar
+- Parâmetros/retorno: retorna varchar, @InputString varchar
 - Referencia: —
 
 ### dbo.fcn_ObterErrosRemessa
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_ObterErrosRemessa.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @id_remessa int
+- Parâmetros/retorno: retorna int, @id_remessa int
 - Referencia: dbo.infracao [U], dbo.infracao_processo [U], dbo.infracao_processo_digitacao [U], dbo.infracao_remessa [U], dbo.movimento_importacao [U], dbo.remessa [U], dbo.remessa_amostragem [U]
 
 ### dbo.fcn_ObterVariavelFluxo
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_ObterVariavelFluxo.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) float OUT, @fluxo int
+- Parâmetros/retorno: retorna float, @fluxo int
 - Referencia: —
 
 ### dbo.fcn_PMESP_ObterTempoOffline
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_PMESP_ObterTempoOffline.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @id_local int
+- Parâmetros/retorno: retorna int, @id_local int
 - Referencia: dbo.fcn_ObterDatasMinutosPeriodo [IF], dbo.pmesp_evento_conexao [U]
 
 ### dbo.fcn_pontua_infracao
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_pontua_infracao.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) smallint OUT, @id_infracao int
+- Parâmetros/retorno: retorna smallint, @id_infracao int
 - Referencia: dbo.infracao_amostra [V], dbo.infracao_processo_concluido [U], dbo.processo [U]
 
 ### dbo.fcn_SplitString
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_SplitString.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @string nvarchar, @delimiter char, @part int
+- Parâmetros/retorno: retorna varchar, @string nvarchar, @delimiter char, @part int
 - Referencia: —
 
 ### dbo.fcn_totalErrosPlacas
 - Arquivo: `codigo-sql/funcoes/dbo.fcn_totalErrosPlacas.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) tinyint OUT, @placa1 char, @placa2 char
+- Parâmetros/retorno: retorna tinyint, @placa1 char, @placa2 char
 - Referencia: —
 
 ### dbo.fn_calculateJaro
 - Arquivo: `codigo-sql/funcoes/dbo.fn_calculateJaro.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) float OUT, @str1 varchar, @str2 varchar
+- Parâmetros/retorno: retorna float, @str1 varchar, @str2 varchar
 - Referencia: dbo.fn_calculateMatchWindow [FN], dbo.fn_calculateTranspositions [FN], dbo.fn_GetCommonCharacters [FN]
 
 ### dbo.fn_calculateMatchWindow
 - Arquivo: `codigo-sql/funcoes/dbo.fn_calculateMatchWindow.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @s1_len int, @s2_len int
+- Parâmetros/retorno: retorna int, @s1_len int, @s2_len int
 - Referencia: —
 
 ### dbo.fn_calculatePrefixLength
 - Arquivo: `codigo-sql/funcoes/dbo.fn_calculatePrefixLength.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @firstWord varchar, @secondWord varchar
+- Parâmetros/retorno: retorna int, @firstWord varchar, @secondWord varchar
 - Referencia: —
 
 ### dbo.fn_calculateSimilarity
 - Arquivo: `codigo-sql/funcoes/dbo.fn_calculateSimilarity.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) float OUT, @str1 varchar, @str2 varchar
+- Parâmetros/retorno: retorna float, @str1 varchar, @str2 varchar
 - Referencia: dbo.fn_calculateJaro [FN], dbo.fn_calculatePrefixLength [FN]
 
 ### dbo.fn_calculateTranspositions
 - Arquivo: `codigo-sql/funcoes/dbo.fn_calculateTranspositions.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @s1_len int, @str1 varchar, @str2 varchar
+- Parâmetros/retorno: retorna int, @s1_len int, @str1 varchar, @str2 varchar
 - Referencia: —
 
 ### dbo.fn_diagramobjects
 - Arquivo: `codigo-sql/funcoes/dbo.fn_diagramobjects.sql` · criado 2025-06-06 · alterado 2025-06-06
-- Parâmetros/retorno: (retorno) int OUT
+- Parâmetros/retorno: retorna int
 - Referencia: —
 
 ### dbo.fn_FormatarSegundosEmDHM
 - Arquivo: `codigo-sql/funcoes/dbo.fn_FormatarSegundosEmDHM.sql` · criado 2025-10-03 · alterado 2025-10-03
-- Parâmetros/retorno: (retorno) varchar OUT, @total_segundos bigint
+- Parâmetros/retorno: retorna varchar, @total_segundos bigint
 - Referencia: —
 
 ### dbo.fn_GetCommonCharacters
 - Arquivo: `codigo-sql/funcoes/dbo.fn_GetCommonCharacters.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @firstWord varchar, @secondWord varchar, @matchWindow int
+- Parâmetros/retorno: retorna varchar, @firstWord varchar, @secondWord varchar, @matchWindow int
 - Referencia: —
 
 ### dbo.InitCap
 - Arquivo: `codigo-sql/funcoes/dbo.InitCap.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @inStr varchar
+- Parâmetros/retorno: retorna varchar, @inStr varchar
 - Referencia: —
 
 ### dbo.MAX_DATE
 - Arquivo: `codigo-sql/funcoes/dbo.MAX_DATE.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) datetime OUT, @date_a datetime, @date_b datetime
+- Parâmetros/retorno: retorna datetime, @date_a datetime, @date_b datetime
 - Referencia: —
 
 ### dbo.TEMPO_DECORRIDO
 - Arquivo: `codigo-sql/funcoes/dbo.TEMPO_DECORRIDO.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) varchar OUT, @data datetime
+- Parâmetros/retorno: retorna varchar, @data datetime
 - Referencia: —
 
 ### dbo.TryConvertInt
 - Arquivo: `codigo-sql/funcoes/dbo.TryConvertInt.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @Value varchar
+- Parâmetros/retorno: retorna int, @Value varchar
 - Referencia: —
 
 ### dbo.VerificarEmail
 - Arquivo: `codigo-sql/funcoes/dbo.VerificarEmail.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) bit OUT, @email varchar
+- Parâmetros/retorno: retorna bit, @email varchar
 - Referencia: —
 
 ### muralha.calcular_distancia_km
 - Arquivo: `codigo-sql/funcoes/muralha.calcular_distancia_km.sql` · criado 2025-11-27 · alterado 2025-11-27
-- Parâmetros/retorno: (retorno) decimal OUT, @lat1 decimal, @lon1 decimal, @lat2 decimal, @lon2 decimal
+- Parâmetros/retorno: retorna decimal, @lat1 decimal, @lon1 decimal, @lat2 decimal, @lon2 decimal
 - Referencia: —
 
 ### muralha.fcn_getDispositivosContagensFluxoDiarioJson
 - Arquivo: `codigo-sql/funcoes/muralha.fcn_getDispositivosContagensFluxoDiarioJson.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT, @id_local int
+- Parâmetros/retorno: retorna nvarchar, @id_local int
 - Referencia: dbo.hora [U], dbo.local_vigente [V], muralha.veiculo_tempo_real [U]
 
 ### muralha.fcn_ObterRemetenteEmailmuralha
 - Arquivo: `codigo-sql/funcoes/muralha.fcn_ObterRemetenteEmailmuralha.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) nvarchar OUT
+- Parâmetros/retorno: retorna nvarchar
 - Referencia: —
 
 ### muralha.fn_ValidarPlacasIguaisSemelhantes
 - Arquivo: `codigo-sql/funcoes/muralha.fn_ValidarPlacasIguaisSemelhantes.sql` · criado 2025-06-02 · alterado 2025-06-24
-- Parâmetros/retorno: (retorno) int OUT, @placa1 char, @placa2 char
+- Parâmetros/retorno: retorna int, @placa1 char, @placa2 char
 - Referencia: muralha.config_semelhanca_placa [U]
 
 ### muralha.fn_ValidarPlacasParciaisIguais
 - Arquivo: `codigo-sql/funcoes/muralha.fn_ValidarPlacasParciaisIguais.sql` · criado 2025-06-02 · alterado 2025-06-02
-- Parâmetros/retorno: (retorno) int OUT, @placaEntrada char, @placaParcial char
+- Parâmetros/retorno: retorna int, @placaEntrada char, @placaParcial char
 - Referencia: —
 
 ## Funções tabela (TF) — 16

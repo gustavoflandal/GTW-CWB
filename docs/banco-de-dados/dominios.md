@@ -1,6 +1,6 @@
 # Tabelas de domínio (valores atuais)
 
-Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status, situação, categoria, motivo, perfil...). Valores em 2026-10-08 no ambiente DEV; podem diferir em produção.
+Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status, situação, categoria, motivo, perfil, prioridade, classe). Valores em 2026-10-15 no ambiente DEV; podem diferir em produção.
 
 ## dbo.cad_categoria (14)
 
@@ -85,18 +85,26 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 
 | id_classe | descricao | id_classe_git | id_classe_tr |
 |---|---|---|---|
-| C | Caminhão        | 3 | C |
-| T | Camionete       | 2 | P |
-| M | Motocicleta     | 1 | M |
 |   | N/A             | 1 | P |
+| B | Moto com baú    | 6 | B |
+| C | Caminhão        | 3 | C |
+| F | Carro Forte     | 5 | F |
+| M | Motocicleta     | 1 | M |
 | O | Onibus          | 3 | O |
 | P | Veíc. Passeio   | 1 | P |
-| V | Van/Furgão      | 4 | V |
-| F | Carro Forte     | 5 | F |
-| B | Moto com baú    | 6 | B |
 | Q | Caminhão tanque | 7 | Q |
+| T | Camionete       | 2 | P |
+| V | Van/Furgão      | 4 | V |
 
-## dbo.log_tipo (22)
+## dbo.eventos_csx_desc_prioridade (3)
+
+| id_prioridade | prioridade |
+|---|---|
+| 0 | BAIXA |
+| 1 | NORMAL |
+| 2 | ALTA |
+
+## dbo.log_tipo (32)
 
 | id | tipo | subtipo | descricao |
 |---|---|---|---|
@@ -117,11 +125,21 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 26 | 2 | 6 | Falha na comunicação com a câmera |
 | 27 | 2 | 7 | Falha na sequência semafórica |
 | 28 | 2 | 8 | Sequência semafórica correta |
+| 29 | 3 | 15 | Circulação ou estacionamento irregular |
+| 30 | 3 | 16 | Circulação em desacordo com uso da via |
+| 31 | 3 | 17 | Congestionamento ou retenção anormal |
+| 32 | 3 | 18 | Bloqueio ou interferência na via |
+| 33 | 3 | 19 | Evento operacional de mobilidade urbana |
 | 110 | 1 | 10 | Ajuste de relógio |
 | 111 | 1 | 11 | Mudança de horário de verão |
 | 112 | 1 | 12 | Conectado ao servidor |
 | 113 | 1 | 13 | Desconectado do servidor |
 | 114 | 1 | 14 | Cópia de Arquivos |
+| 115 | 1 | 15 | Circulação/estacionamento irreg. |
+| 116 | 1 | 16 | Circulação irregular na via |
+| 117 | 1 | 17 | Congestionamento anormal |
+| 118 | 1 | 18 | Bloqueio na circulação viária |
+| 119 | 1 | 19 | Evento de mobilidade urbana |
 
 ## dbo.sis_usuario_status (3)
 
@@ -135,60 +153,60 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 
 | serie_equipamento | versao | tempo_executando | status_copia | ultima_deteccao | data_atualizacao |
 |---|---|---|---|---|---|
-| 3700013 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700019 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 1000100 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 01/06/2026 14:12:23 |
-| 3200038 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 08/03/2026 09:36:11 |
-| 3700006 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700017 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700023 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700039 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 1000001 | 20260812.01DAT11     | 59157 | opening tcp connection to csx-sede-cwb.no-ip.net port 20021 … | 10/08/2026 15:38:53 | 10/08/2026 15:39:10 |
-| 1000201 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 11/02/2025 02:02:39 |
-| 5800005 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 11/30/2025 02:03:37 |
-| 3700001 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700018 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700037 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700016 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700022 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700021 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700032 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 1000101 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 08/14/2025 02:02:38 |
-| 3700014 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700026 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700038 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700011 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700020 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700031 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700035 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 1000202 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 11/02/2025 02:02:39 |
-| 3700007 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700025 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700012 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700027 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 3700036 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
-| 5800102 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 10/07/2025 02:02:36 |
-| 1000102 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 11/19/2025 02:03:08 |
-| 3700002 |                      | 0 |                                                             … | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 1000001 | 20260812.01DAT11     | 123962859 | Sincronização incompleta [Error in socket I/O]                                                                                                                                                                                                             | 10/15/2026 16:43:53 | 10/15/2026 16:44:05 |
+| 1000100 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 01/06/2026 14:12:23 |
+| 1000101 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 08/14/2025 02:02:38 |
+| 1000102 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 11/19/2025 02:03:08 |
+| 1000201 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 11/02/2025 02:02:39 |
+| 1000202 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 11/02/2025 02:02:39 |
+| 3200038 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 08/03/2026 09:36:11 |
+| 3700001 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700002 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700006 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700007 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700011 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700012 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700013 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700014 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700016 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700017 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700018 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700019 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700020 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700021 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700022 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700023 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700025 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700026 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700027 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700031 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700032 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700035 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700036 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700037 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700038 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 3700039 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 06/23/2025 16:46:03 |
+| 5800005 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 11/30/2025 02:03:37 |
+| 5800102 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 10/07/2025 02:02:36 |
 
 ## dbo.tipo_imagem (14)
 
 | id_tipo_imagem | nome | numero |
 |---|---|---|
 | 1 | OBJ             | 1 |
+| 2 | PAN             | 1 |
 | 3 | OBJ             | 2 |
 | 4 | OBJ             | 3 |
 | 5 | OBJ             | 4 |
 | 6 | OBJ             | 5 |
 | 7 | OBJ             | 6 |
 | 8 | OBJ             | 7 |
-| 13 | OBJ             | 8 |
-| 14 | OBJ             | 9 |
-| 2 | PAN             | 1 |
 | 9 | PAN             | 2 |
 | 10 | PAN             | 3 |
 | 11 | PAN             | 4 |
 | 12 | PAN             | 5 |
+| 13 | OBJ             | 8 |
+| 14 | OBJ             | 9 |
 
 ## dbo.tipo_relatorio_edital_rj (2)
 
@@ -212,6 +230,12 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 |---|---|---|
 | 1 | PAN             | 1 |
 | 2 | PAN             | 2 |
+
+## ia.cad_tipo_especial (1)
+
+| id | descricao |
+|---|---|
+| 1 | Carro Forte - Teste Manual |
 
 ## mobilidade.bloqueio_tipo (2)
 
@@ -336,6 +360,42 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 3 | Concluido |
 | 4 | Cancelado |
 
+## muralha.chamado_categoria (22)
+
+| id | nome | id_pai | exige_equipamento | ativo |
+|---|---|---|---|---|
+| 1 | Acesso/usuário |  | False | True |
+| 2 | Dúvida/solicitação |  | False | True |
+| 3 | Equipamento |  | True | True |
+| 4 | Integração |  | False | True |
+| 5 | Sistema |  | False | True |
+| 6 | Criação/bloqueio de usuário | 1 | False | True |
+| 7 | Permissões | 1 | False | True |
+| 8 | Senha/MFA | 1 | False | True |
+| 9 | Dúvida de uso | 2 | False | True |
+| 10 | Outros | 2 | False | True |
+| 11 | Solicitação de melhoria | 2 | False | True |
+| 12 | Dano físico/vandalismo | 3 | True | True |
+| 13 | Falha de captura/OCR | 3 | True | True |
+| 14 | Falha de comunicação | 3 | True | True |
+| 15 | Falha de energia | 3 | True | True |
+| 16 | Outros | 3 | True | True |
+| 17 | Falha de integração externa | 4 | False | True |
+| 18 | Outros | 4 | False | True |
+| 19 | Erro de funcionalidade | 5 | False | True |
+| 20 | Indisponibilidade | 5 | False | True |
+| 21 | Lentidão | 5 | False | True |
+| 22 | Outros | 5 | False | True |
+
+## muralha.chamado_prioridade (4)
+
+| id | codigo | nome | ordem | minutos_atendimento | minutos_resolucao | cor | ativo |
+|---|---|---|---|---|---|---|---|
+| 1 | CRITICA | Crítica | 1 | 60 | 240 | #dc3545 | True |
+| 2 | ALTA | Alta | 2 | 120 | 480 | #fd7e14 | True |
+| 3 | MEDIA | Média | 3 | 240 | 1440 | #0d6efd | True |
+| 4 | BAIXA | Baixa | 4 | 480 | 4320 | #6c757d | True |
+
 ## muralha.config_alarme_tipo (12)
 
 | id | tipo | prioridade | habilitado | id_tipo_alerta |
@@ -405,58 +465,6 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 15 | Conhecido |
 | 16 | Solicitante |
 
-## muralha.registro_fato_natureza (25)
-
-| id | id_registro_tipo | natureza_desc | requer_bo |
-|---|---|---|---|
-| 1 | 1 | Furto simples | 1 |
-| 2 | 2 | Roubo à mão armada | 1 |
-| 3 | 3 | Extravio de documento | 0 |
-| 4 | 4 | Dano simples | 1 |
-| 5 | 5 | Fraude eletrônica | 1 |
-| 6 | 6 | Ameaça verbal | 1 |
-| 7 | 7 | Lesão corporal leve | 1 |
-| 8 | 8 | Pessoa desaparecida | 1 |
-| 9 | 9 | Localização de desaparecido | 0 |
-| 10 | 10 | Lesão corporal doméstica | 1 |
-| 11 | 11 | Medida judicial descumprida | 1 |
-| 12 | 12 | Deixar de prover cuidados | 1 |
-| 13 | 13 | Com vítima | 1 |
-| 14 | 13 | Sem vítima | 0 |
-| 15 | 14 | Grafite em bem público | 1 |
-| 16 | 15 | Monitoramento vinculado a denúncia | 1 |
-| 17 | 16 | Identificação de veículo roubado | 1 |
-| 18 | 17 | Veículo de interesse investigativo | 0 |
-| 19 | 18 | Grupo de veículos em suspeita | 0 |
-| 20 | 19 | Transporte irregular de passageiros | 1 |
-| 21 | 20 | Veículo monitorado em roubo planejado | 1 |
-| 22 | 21 | Identificação via sistema | 0 |
-| 23 | 22 | Monitoramento de veículo furtado | 1 |
-| 24 | 23 | Placa clonada identificada | 1 |
-| 25 | 24 | Análise de correlação | 1 |
-
-## muralha.registro_fato_natureza_delituosa (17)
-
-| id | id_registro_natureza | natureza_delituosa_desc | codigo_penal_lei |
-|---|---|---|---|
-| 1 | 1 | Furto | Art. 155 - CP |
-| 2 | 2 | Roubo | Art. 157 - CP |
-| 3 | 4 | Dano | Art. 163 - CP |
-| 4 | 5 | Estelionato | Art. 171 - CP |
-| 5 | 6 | Ameaça | Art. 147 - CP |
-| 6 | 7 | Lesão corporal | Art. 129 - CP |
-| 7 | 10 | Lesão corporal | Art. 129, §9º - CP |
-| 8 | 11 | Descumprimento de decisão | Art. 330 - CP |
-| 9 | 12 | Abandono de incapaz | Art. 133 - CP |
-| 10 | 15 | Pichação | Art. 65 - Lei 9.605/1998 |
-| 11 | 16 | Sequestro Relâmpago | Art. 158 - CP |
-| 12 | 17 | Roubo de veículo | Art. 157 - CP |
-| 13 | 20 | Exercício ilegal de atividade | Art. 47 - LCP |
-| 14 | 21 | Roubo qualificado | Art. 157, §3º - CP |
-| 15 | 22 | Infração administrativa | CTB - Art. 230, V |
-| 16 | 23 | Furto | Art. 155 - CP |
-| 17 | 24 | Adulteração de sinal | Art. 311 - CP |
-
 ## muralha.registro_fato_status (2)
 
 | id | descricao |
@@ -500,7 +508,7 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 15ebba5f-c805-449e-83cc-227ed3b3ad3c | OCORRÊNCIA |  |
 | 5479c6d9-7381-4492-99be-442ef2e741b0 | PENDENTE |  |
 | 298f5a62-c799-4ca9-8220-6b08f8664534 | DESCARTADO |  |
-| ca5e4ae0-501e-48e2-9652-a1cf7aa340bb | VINCULADO | Este stauts significa que houve a geração de ocorrência a pa… |
+| ca5e4ae0-501e-48e2-9652-a1cf7aa340bb | VINCULADO | Este stauts significa que houve a geração de ocorrência a partir de outro alerta |
 
 ## muralha.status_correlacionamento_automatico (3)
 
@@ -595,4 +603,39 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 |---|---|
 | 5511cef5-c1a0-450b-99b3-6fca8668d243 | OCORRÊNCIA |
 | e7d115b9-e6b3-4e86-9083-f347a1917045 | ALERTA |
+
+## muralha.vtr_status_analise (30)
+
+| id_veiculo_tempo_real | status_analise |
+|---|---|
+| a0000001-0001-0001-0001-000000000001 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000002 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000003 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000004 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000005 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000006 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000007 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000008 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000009 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000010 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000011 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000012 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000013 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000014 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000015 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000016 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000017 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000018 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000019 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000020 | PRE_APROVADA |
+| a0000001-0001-0001-0001-000000000021 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000022 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000023 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000024 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000025 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000026 | DESEMPATE |
+| a0000001-0001-0001-0001-000000000027 | REPROVADA |
+| a0000001-0001-0001-0001-000000000028 | REPROVADA |
+| a0000001-0001-0001-0001-000000000029 | REPROVADA |
+| a0000001-0001-0001-0001-000000000030 | REPROVADA |
 

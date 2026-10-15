@@ -124,7 +124,7 @@ Linhas: ~34
 
 ## muralha.alerta_sla
 
-Linhas: ~708
+Linhas: ~710
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

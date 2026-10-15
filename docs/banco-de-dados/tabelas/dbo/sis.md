@@ -118,7 +118,7 @@ Linhas: ~2
 
 ## dbo.sis_log
 
-Linhas: ~1094150
+Linhas: ~1094274
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -162,7 +162,7 @@ Linhas: ~71
 
 ## dbo.sis_log_detalhe
 
-Linhas: ~1094150
+Linhas: ~1094274
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -177,7 +177,7 @@ Linhas: ~1094150
 
 ## dbo.sis_logon_logoff_usuario
 
-Linhas: ~9096
+Linhas: ~9097
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

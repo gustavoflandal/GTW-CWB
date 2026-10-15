@@ -80,7 +80,66 @@ $mods = Run "SELECT s.name sch,RTRIM(o.type) typ,o.name nm,m.definition def FROM
 foreach($r in $mods.Rows){ if(-not $map.ContainsKey($r.typ)){continue}; $d=Join-Path $codDir $map[$r.typ]; New-Item -ItemType Directory $d -Force | Out-Null
   $fn=("{0}.{1}.sql" -f $r.sch,$r.nm) -replace '[\\/:*?"<>|]','_'; [IO.File]::WriteAllText((Join-Path $d $fn),[string]$r.def,$utf) }
 
-# (objetos-programaveis.md e dominios.md: atualizar manualmente — usam sys.parameters,
-#  sys.sql_expression_dependencies e SELECT TOP 40 em tabelas pequenas de domínio.)
+# ---------- 3. objetos-programaveis.md (sys.parameters + sys.sql_expression_dependencies) ----------
+$obj = Run @"
+SELECT o.object_id oid,s.name sch,o.name nm,RTRIM(o.type) typ,CONVERT(varchar(10),o.create_date,120) cri,CONVERT(varchar(10),o.modify_date,120) alt
+FROM sys.objects o JOIN sys.schemas s ON s.schema_id=o.schema_id
+WHERE o.is_ms_shipped=0 AND o.type IN ('V','P','IF','FN','TF','TR') ORDER BY s.name,o.name
+"@
+$par = Run @"
+SELECT p.object_id oid,p.parameter_id pid,p.name nm,TYPE_NAME(p.user_type_id) tp,p.is_output saida
+FROM sys.parameters p JOIN sys.objects o ON o.object_id=p.object_id
+WHERE o.is_ms_shipped=0 AND o.type IN ('V','P','IF','FN','TF','TR') ORDER BY p.object_id,p.parameter_id
+"@
+$dep = Run @"
+SELECT DISTINCT d.referencing_id oid,ISNULL(d.referenced_schema_name,'dbo')+'.'+d.referenced_entity_name ref,RTRIM(ro.type) rtp
+FROM sys.sql_expression_dependencies d LEFT JOIN sys.objects ro ON ro.object_id=d.referenced_id
+WHERE d.referenced_entity_name IS NOT NULL
+"@
+$pm=@{}; foreach($r in $par.Rows){ $k=[string]$r.oid; if(-not $pm[$k]){$pm[$k]=@()}
+  if($r.pid -eq 0){ $pm[$k]+="retorna $($r.tp)" } else { $pm[$k]+=("{0} {1}{2}" -f $r.nm,$r.tp,$(if($r.saida){' OUTPUT'}else{''})) } }
+$dm=@{}; foreach($r in $dep.Rows){ $k=[string]$r.oid; if(-not $dm[$k]){$dm[$k]=@()}
+  $dm[$k]+= if([string]::IsNullOrEmpty([string]$r.rtp)){ $r.ref } else { "$($r.ref) [$($r.rtp)]" } }
+$secoes=[ordered]@{'V'='Views';'P'='Stored Procedures';'IF'='Funções inline (IF)';'FN'='Funções escalares (FN)';'TF'='Funções tabela (TF)';'TR'='Triggers'}
+$sb=New-Object Text.StringBuilder
+[void]$sb.AppendLine("# Catálogo de objetos programáveis`n")
+[void]$sb.AppendLine("Gerado de $Banco em $(Get-Date -Format yyyy-MM-dd). O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Para cada objeto: parâmetros e objetos referenciados (tabelas/views/outros) extraídos de ``sys.sql_expression_dependencies``. Tipos entre colchetes: U=tabela, V=view, P=procedure, FN/IF/TF=função, TR=trigger.`n")
+foreach($t in $secoes.Keys){
+  $lista=@($obj.Rows | Where-Object { $_.typ -eq $t })
+  [void]$sb.AppendLine("## $($secoes[$t]) — $($lista.Count)`n")
+  foreach($o in $lista){
+    $k=[string]$o.oid; $pasta=$map[$t]
+    $p= if($pm[$k]){ $pm[$k] -join ', ' } else { '—' }
+    $rf= if($dm[$k]){ ($dm[$k] | Sort-Object -Unique) -join ', ' } else { '—' }
+    [void]$sb.AppendLine("### $($o.sch).$($o.nm)")
+    [void]$sb.AppendLine("- Arquivo: ``codigo-sql/$pasta/$($o.sch).$($o.nm).sql`` · criado $($o.cri) · alterado $($o.alt)")
+    [void]$sb.AppendLine("- Parâmetros/retorno: $p")
+    [void]$sb.AppendLine("- Referencia: $rf`n")
+  }
+}
+[IO.File]::WriteAllText((Join-Path $Saida 'objetos-programaveis.md'),$sb.ToString(),$utf)
+
+# ---------- 4. dominios.md (tabelas pequenas cujo nome sugere domínio) ----------
+$dom = Run @"
+SELECT s.name sch,t.name tb,SUM(p.rows) n FROM sys.tables t JOIN sys.schemas s ON s.schema_id=t.schema_id
+JOIN sys.partitions p ON p.object_id=t.object_id AND p.index_id IN (0,1)
+WHERE t.name LIKE '%tipo%' OR t.name LIKE '%situacao%' OR t.name LIKE '%status%' OR t.name LIKE '%categoria%'
+   OR t.name LIKE '%motivo%' OR t.name LIKE '%perfil%' OR t.name LIKE '%prioridade%' OR t.name LIKE '%classe%'
+GROUP BY s.name,t.name HAVING SUM(p.rows) BETWEEN 1 AND 40 ORDER BY s.name,t.name
+"@
+$sb=New-Object Text.StringBuilder
+[void]$sb.AppendLine("# Tabelas de domínio (valores atuais)`n")
+[void]$sb.AppendLine("Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status, situação, categoria, motivo, perfil, prioridade, classe). Valores em $(Get-Date -Format yyyy-MM-dd) no ambiente DEV; podem diferir em produção.`n")
+foreach($d in $dom.Rows){
+  $dt = Run ("SELECT TOP 40 * FROM [{0}].[{1}] ORDER BY 1" -f $d.sch,$d.tb)
+  $nomes=@($dt.Columns | ForEach-Object { $_.ColumnName })
+  [void]$sb.AppendLine("## $($d.sch).$($d.tb) ($($d.n))`n")
+  [void]$sb.AppendLine("| " + ($nomes -join ' | ') + " |")
+  [void]$sb.AppendLine("|" + ((1..$nomes.Count | ForEach-Object { '---' }) -join '|') + "|")
+  foreach($r in $dt.Rows){ [void]$sb.AppendLine("| " + (($nomes | ForEach-Object { Esc $r[$_] }) -join ' | ') + " |") }
+  [void]$sb.AppendLine()
+}
+[IO.File]::WriteAllText((Join-Path $Saida 'dominios.md'),$sb.ToString(),$utf)
+
 $cn.Close()
 Write-Host "Catálogo regenerado em $Saida"

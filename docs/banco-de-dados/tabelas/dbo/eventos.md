@@ -4,7 +4,7 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.eventos_csx
 
-Linhas: ~503057
+Linhas: ~503070
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

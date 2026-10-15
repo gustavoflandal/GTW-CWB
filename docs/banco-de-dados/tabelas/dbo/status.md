@@ -28,7 +28,7 @@ Linhas: ~11341
 
 ## dbo.status_div
 
-Linhas: ~199318
+Linhas: ~199326
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
