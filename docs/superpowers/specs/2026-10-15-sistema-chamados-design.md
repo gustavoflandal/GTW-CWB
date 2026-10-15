@@ -337,6 +337,16 @@ Pedido do responsável após a primeira entrega, com a migração já executada 
 - **Motor de logs:** parâmetros (`SALVAR_PARAMETROS_SLA`) e perfis (`ADICIONAR_PERFIL`, `REMOVER_PERFIL`) se somam às operações já auditadas, via `AuditoriaService` (funcionalidade "Chamado").
 - Script: `docs/banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql` (idempotente, rollback no cabeçalho).
 
+### Complemento — SMTP dos chamados pelo administrador (2026-10-15)
+
+Pedido do responsável: "As configurações do SMTP também deverão constar em configurações do sistema de chamados." Decisões (substituem, para o envio, o uso de `ServicoEmailMuralha.enviarEmailChamado` e de `ConfiguracaoProvider` descrito em §3.1 e §3.5):
+
+- **Chaves** em `muralha.config_chave_valor`, criadas vazias por `20261015_sistema_chamados_smtp.sql`: `chamado_smtp_host`, `chamado_smtp_porta`, `chamado_smtp_usuario`, `chamado_smtp_senha`, `chamado_smtp_remetente`, `chamado_smtp_starttls` (`1`/`0`), além da já existente `chamado_email_ativo`. Host vazio = primeiro servidor do `confGTW.xml` (comportamento anterior).
+- **Senha cifrada:** `CifraSegredo` (AES/GCM/NoPadding do JDK, IV aleatório de 12 bytes, tag de 128 bits) grava `v1:` + Base64(IV ‖ cifrado+tag); chave de 32 bytes em Base64 na variável de ambiente `GTW_CHAMADO_CHAVE_SMTP`; senha limitada a 120 caracteres para caber em `varchar(255)`. A senha nunca sai pela API, logs, histórico ou auditoria.
+- **Envio:** `EmailChamado.enviar(Connection, …)` monta a sessão JavaMail com `ConfiguracaoSmtpChamado.resolver` (STARTTLS conforme a chave, autenticação só com usuário, tempo-limite de 10 s). `ServicoEmailMuralha` volta ao estado anterior ao plano.
+- **API** (`ChamadoConfig`, `ADMIN`): GET `smtp` (sem a senha; informa `senhaDefinida`, `chaveDisponivel` e `origemAtual`), POST `salvarSmtp` (senha vazia mantém, `limparSenha` apaga; validação de host DNS/IPv4, porta 1–65535, remetente e usuário ≤ 100; histórico em `config_chave_valor_hist` na mesma transação) e POST `testarSmtp` (e-mail de teste ao administrador logado). Auditoria `SALVAR_SMTP` e `TESTAR_SMTP`.
+- **Tela:** aba "E-mail (SMTP)" na Configuração.
+
 ## Fora do escopo
 
 - Abertura de chamado por e-mail recebido (7.2.2.c) e por aplicativo de mensagens (7.2.2.d); a coluna `origem` fica preparada.

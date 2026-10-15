@@ -61,8 +61,25 @@ Obs.: caminhos `E:\Consilux\MuralhaDigital\…` e `C:\Consilux\…` são do serv
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | `muralha.digital.google.LoginGoogle` | OAuth 2.0 "Login com Google" (`REDIRECT_URI` ainda fixo em `http://localhost:8080/callback` — ajustar por ambiente) |
 | `SENDGRID_API_KEY` | `ServicoEmailMuralha` | Envio via SendGrid (chave de conta de teste; trocar em produção) |
 | `TWILIO_TEST_ACCOUNT_SID` / `TWILIO_TEST_AUTH_TOKEN` | `ServicoSMS.EnviaSMS_RecuperacaoSenha_Twilio` | Credenciais de teste do SMS de recuperação de senha |
+| `GTW_CHAMADO_CHAVE_SMTP` | `muralha.digital.chamado.CifraSegredo` | Chave que cifra a senha do SMTP do Sistema de Chamados gravada em `muralha.config_chave_valor` (ver §3.1) |
 
 Como definir (Windows, Tomcat standalone): `setenv.bat` em `apache-tomcat-9.0.91\bin` **não existe** na stack (e a stack não deve ser alterada) — defina as variáveis no ambiente do usuário/serviço antes de iniciar (`setx` ou propriedades do serviço). Para `tomcat7:run`: definir na sessão do PowerShell antes de `run.ps1` (`$env:SENDGRID_API_KEY='…'`).
+
+### 3.1 `GTW_CHAMADO_CHAVE_SMTP` (senha do SMTP dos chamados)
+
+- **Formato:** Base64 de exatamente 32 bytes aleatórios (chave AES-256). Valor ausente ou em outro formato = chave indisponível.
+- **Uso:** o administrador grava o SMTP dos chamados em *Chamados › Configuração › E-mail (SMTP)*. A senha é cifrada com AES/GCM (JDK, sem biblioteca extra) e gravada como `v1:` + Base64(IV ‖ texto cifrado + tag) na chave `chamado_smtp_senha`; ela nunca volta para a tela, para logs nem para a auditoria. Sem a variável, a tela avisa e recusa senha nova ("Defina a variável GTW_CHAMADO_CHAVE_SMTP no servidor para gravar a senha"). Com o servidor SMTP em branco, os chamados usam o primeiro servidor do `confGTW.xml` e a variável não é necessária.
+- **Gerar** (PowerShell, uma vez por ambiente; guarde o valor fora do repositório):
+
+```powershell
+$b = New-Object byte[] 32
+[System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
+[Convert]::ToBase64String($b)          # copie e defina no serviço/usuário do Tomcat
+# Ex.: setx GTW_CHAMADO_CHAVE_SMTP "<valor>"   (nova sessão/serviço reiniciado para valer)
+```
+
+- **Troca ou perda da chave:** a senha gravada deixa de ser decifrável — o envio dos chamados falha com a mensagem "Não foi possível decifrar a senha do SMTP dos chamados com a chave atual…" (ou, sem a variável, "…a variável de ambiente GTW_CHAMADO_CHAVE_SMTP não está definida…"). Para trocar a chave: definir a nova variável, reiniciar o Tomcat e **gravar a senha de novo** na tela. Não há recifragem automática.
+- Parâmetros relacionados (não secretos) em `muralha.config_chave_valor`: `chamado_smtp_host`, `chamado_smtp_porta`, `chamado_smtp_usuario`, `chamado_smtp_remetente`, `chamado_smtp_starttls` (`1`/`0`) e `chamado_email_ativo` — criados vazios por `docs/banco-de-dados/migracoes/20261015_sistema_chamados_smtp.sql`.
 
 ## 4. Parâmetros dinâmicos no banco (não são segredos)
 `muralha.config_chave_valor` (+ `_hist`), `muralha.config_grupo_permissao` (+ `historico_config_grupo_permissao`), `muralha.config_alarme*`, `config_alerta*`, `config_envio_tempo_real*`, `config_monitoramento_ao_vivo*`, `config_semelhanca_placa`, `config_mobile_silencio`; `dbo.configuracao*`. Edição via telas de configuração (`configuracao-monitoramento/`, `PermissoesFuncionalidade`, `ConfiguracaoInatividade`, `ConfiguracaoRadares`, `ConfiguracaoTempoOcrBlitz`, `ConfiguracaoTempo`).

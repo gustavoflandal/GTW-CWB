@@ -1,13 +1,13 @@
 # Testes — Plano 22: Sistema de Gerenciamento de Chamados
 
-Roteiro manual. Os testes automatizados (98 TestNG: módulo `chamado` + `ReferenciaEditalTest`) rodam sem banco; este roteiro cobre a integração com banco, servidor, SMTP e navegador.
+Roteiro manual. Os testes automatizados (123 TestNG: módulo `chamado` + `ReferenciaEditalTest`) rodam sem banco; este roteiro cobre a integração com banco, servidor, SMTP e navegador.
 
 ## Pré-requisitos
 
-- Migração `20261015_sistema_chamados.sql`, seed `20261015_sistema_chamados_seed.sql` e complemento `20261015_sistema_chamados_admin.sql` executados em `docs/banco-de-dados/migracoes/` (com `sqlcmd -b -f 65001`: `-b` faz o `sqlcmd` sair com erro e `-f 65001` preserva os acentos do seed).
+- Migração `20261015_sistema_chamados.sql`, seed `20261015_sistema_chamados_seed.sql` e complementos `20261015_sistema_chamados_admin.sql` e `20261015_sistema_chamados_smtp.sql` executados em `docs/banco-de-dados/migracoes/` (com `sqlcmd -b -f 65001`: `-b` faz o `sqlcmd` sair com erro e `-f 65001` preserva os acentos do seed).
 - Três usuários de teste, um em cada grupo criado pelo seed: "Chamados - Solicitante", "Chamados - Gestor do contrato" e "Chamados - Equipe tecnica", e um usuário do grupo 11 (Administradores) para a configuração. Um segundo usuário solicitante é necessário para o teste de visibilidade (T08). Em desenvolvimento, `20261015_usuarios_teste_chamados.sql` cria um administrador e um solicitante de teste (a seção de limpeza no cabeçalho os remove).
 - Diretório de anexos existente e gravável, conforme `chamado_diretorio_anexos` em `muralha.config_chave_valor` (padrão `C:\Consilux\MuralhaDigital\chamados`).
-- SMTP configurado (primeiro servidor de `ConfiguracaoProvider`) e `chamado_email_ativo = 1`.
+- SMTP configurado (aba "E-mail (SMTP)" da Configuração ou, com o servidor em branco, o primeiro servidor do `confGTW.xml`) e `chamado_email_ativo = 1`. Para gravar a senha pela tela, o Tomcat precisa da variável `GTW_CHAMADO_CHAVE_SMTP` (ver `docs/requisitos/07-configuracao-e-segredos.md`).
 - Servidor rodando (`..\.setup-gtw\run.ps1`); jobs `ChamadoSlaJob` e `ChamadoEmailJob` registrados no log de inicialização.
 
 ## Casos de teste
@@ -117,7 +117,7 @@ Abrir a tela inicial do Muralha Digital com um usuário de cada grupo.
 1. Com o administrador (grupo 11), abrir `configuracao.jsp`.
 2. Com o solicitante, o gestor e a equipe, abrir `configuracao.jsp` pela URL e chamar `GET /MuralhaDigital/ChamadoConfig?acao=parametros`.
 
-**Resultado esperado:** (1) abas "Parâmetros de SLA", "Perfis de acesso", "Prioridades e prazos" e "Categorias"; (2) página negada (redireciona para `/login/gtw_principal.jsp`) e a API responde `{ok:false, erro:"Seu perfil não permite esta operação."}`.
+**Resultado esperado:** (1) abas "Parâmetros de SLA", "Perfis de acesso", "Prioridades e prazos", "Categorias" e "E-mail (SMTP)"; (2) página negada (redireciona para `/login/gtw_principal.jsp`) e a API responde `{ok:false, erro:"Seu perfil não permite esta operação."}`.
 
 ### T16 — Parâmetros de SLA (complemento)
 
@@ -146,7 +146,21 @@ Abrir `/login/muralha_principal.jsp` e clicar em "Sistema de Chamados" (`?menu_i
 
 Abrir `pages/auditoria/consulta-log.jsp` com funcionalidade "Chamado" ou consultar `SELECT funcionalidade, operacao, id_registro, descricao FROM dbo.sis_log_auditoria WHERE funcionalidade = 'Chamado'`.
 
-**Resultado esperado:** `ABRIR`, as transições (`INICIAR`, `AGUARDAR`, `RESPONDER`, `RESOLVER`, `AVALIAR`…), `RECLASSIFICAR`, `EXPORTAR`, `SALVAR_PARAMETROS_SLA`, `ADICIONAR_PERFIL` e `REMOVER_PERFIL`, com o usuário e o IP de quem executou.
+**Resultado esperado:** `ABRIR`, as transições (`INICIAR`, `AGUARDAR`, `RESPONDER`, `RESOLVER`, `AVALIAR`…), `RECLASSIFICAR`, `EXPORTAR`, `SALVAR_PARAMETROS_SLA`, `ADICIONAR_PERFIL`, `REMOVER_PERFIL`, `SALVAR_SMTP` e `TESTAR_SMTP`, com o usuário e o IP de quem executou.
+
+### T20 — E-mail (SMTP) dos chamados (complemento)
+
+Servidor iniciado com `GTW_CHAMADO_CHAVE_SMTP` definida (Base64 de 32 bytes). Usar dados fictícios.
+
+1. Na aba "E-mail (SMTP)", conferir o aviso de origem ("servidor do confGTW.xml" com o campo em branco).
+2. Tentar salvar porta 0 e servidor `smtp invalido`.
+3. Salvar servidor `smtp.invalid`, porta 587, usuário e uma senha fictícia, remetente `chamados@example.invalid`, STARTTLS ligado; recarregar. Consultar `SELECT LEFT(valor, 3) FROM muralha.config_chave_valor WHERE chave = 'chamado_smtp_senha'`.
+4. Salvar de novo com a senha em branco.
+5. "Enviar e-mail de teste".
+6. Limpar o servidor, marcar "Apagar a senha gravada" e salvar.
+7. Reiniciar o servidor **sem** a variável e tentar salvar uma senha.
+
+**Resultado esperado:** (1) aviso "Em uso: servidor do confGTW.xml"; (2) "A porta do SMTP deve estar entre 1 e 65535." e "Servidor SMTP inválido: informe um nome DNS ou um endereço IPv4."; (3) campos persistem, a senha não volta para a tela (o GET `acao=smtp` só traz `senhaDefinida: true`), o banco guarda `v1:…` e o aviso passa para "configuração dos Chamados"; (4) a senha continua definida; (5) mensagem legível com a causa (ex.: "Couldn't connect to host, port: smtp.invalid, 587; timeout 10000 (UnknownHostException: smtp.invalid)"); (6) volta a origem `confGTW.xml` e `senhaDefinida: false`; (7) aviso de chave indisponível na tela e "Defina a variável GTW_CHAMADO_CHAVE_SMTP no servidor para gravar a senha". `config_chave_valor_hist` registra cada campo alterado e, para a senha, só "alterada"/"removida"; auditoria `SALVAR_SMTP` ("senha alterada: sim/não") e `TESTAR_SMTP` (destinatário e resultado), nunca com a senha.
 
 ## Execução de 2026-10-15
 
@@ -168,3 +182,16 @@ Teste integrado por HTTP (sessões `curl` com cookie, sem navegador) no servidor
 Limpeza: a seção de limpeza de `20261015_usuarios_teste_chamados.sql` removeu os dois usuários, seus grupos, complemento, logons e `sis_log`, os chamados `CH-2026-000001` a `000003` com histórico, anexos e notificações, e o contador de protocolo de 2026 (criado pelo teste); as pastas de anexos foram apagadas do disco e os parâmetros de SLA ficaram em 80 % / 5 dias. Os registros de `dbo.sis_log_auditoria` e de `muralha.config_chave_valor_hist` foram mantidos como log.
 
 Observação: o SMTP configurado no ambiente local recusa a autenticação (`535 5.7.8 BadCredentials`), por isso nenhuma mensagem saiu do servidor; o envio com sucesso (T11, item 1) continua dependendo de um SMTP válido.
+
+### SMTP dos chamados (T20), 2026-10-15
+
+Por HTTP (`curl` com cookie), com o administrador de teste recriado por `20261015_usuarios_teste_chamados.sql` (senha gerada na hora, fora do repositório) e o servidor reiniciado com uma chave temporária em `GTW_CHAMADO_CHAVE_SMTP`, definida só naquela sessão. **Passou.**
+
+- GET `smtp` inicial: host vazio, `origemAtual: CONFGTW`, `chaveDisponivel: true`, `senhaDefinida: false`.
+- Porta 0 e host `smtp invalido` recusados com as mensagens de validação.
+- Configuração fictícia (`smtp.invalid`:587, senha fictícia) → `ok:true`; GET sem a senha (`senhaDefinida: true`, `origemAtual: CHAMADOS`); banco com `chamado_smtp_senha = v1:…` (71 caracteres); a senha em claro não aparece em `config_chave_valor`, `config_chave_valor_hist`, `sis_log_auditoria` nem no log do servidor. Salvar com a senha em branco manteve a senha.
+- `testarSmtp` → `{"ok":false,"erro":"Falha no envio: Couldn't connect to host, port: smtp.invalid, 587; timeout 10000 (UnknownHostException: smtp.invalid)"}` (a senha foi decifrada com a chave do ambiente e o envio chegou à conexão).
+- Configuração devolvida ao vazio com `limparSenha=true` (`origemAtual: CONFGTW`, `senhaDefinida: false`).
+- Servidor reiniciado sem a variável: `chaveDisponivel: false`; salvar com senha → "Defina a variável GTW_CHAMADO_CHAVE_SMTP no servidor para gravar a senha."; `testarSmtp` pelo `confGTW.xml` → erro legível `535-5.7.8 Username and Password not accepted…` (mesma recusa de credencial do ambiente local).
+- Auditoria: `SALVAR_SMTP` (3) e `TESTAR_SMTP` (2), com "senha alterada: sim/não" e o resultado do teste.
+- Limpeza: seção de limpeza do script de usuários de teste e as 11 linhas de `config_chave_valor_hist` do administrador de teste removidas; SELECTs confirmaram zero linhas dos usuários de teste. As chaves `chamado_smtp_*` ficaram vazias, exceto `chamado_smtp_starttls = 1` (equivalente ao vazio: STARTTLS ligado).
