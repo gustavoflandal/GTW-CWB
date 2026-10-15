@@ -325,6 +325,18 @@ Refinamentos técnicos sem mudança de comportamento para o usuário:
 - **E-mail:** o método novo em `ServicoEmailMuralha` é `enviarEmailChamado(remetente, destinatarios, assunto, corpoHtml)`; o HTML é montado em `EmailChamado`.
 - **ID do usuário:** `com.consilux.model.Usuario#getId()` (a errata §1 cita `getIdUsuario()`, que não existe nessa classe).
 
+### Complemento — administração, categoria própria e ícones (2026-10-15)
+
+Pedido do responsável após a primeira entrega, com a migração já executada no `GTW_MURALHA_DEV`: quem pode abrir chamados é definido na configuração dos poderes do usuário; o sistema ganha categoria própria na tela inicial, com ícones no estilo já usado; o acordo de nível de serviço é configurável pelo administrador; configuração e definição de quem usa o sistema aparecem só para o administrador; todas as alterações passam pelo motor de logs. Decisões:
+
+- **Perfil `ADMIN`** (§1.1), mapeado do grupo em `chamado_grupo_admin` (padrão `11`, Administradores). A tela e a API de Configuração passam a exigir `ADMIN`; a `EQUIPE` deixa de configurar. `ADMIN` enxerga todos os chamados, somente leitura, a menos que também tenha outro perfil.
+- **Hierarquia dos grupos:** os grupos 107–109 passam a ter `id_grupo_pai = 11`, para aparecerem na tela legada de usuários (GWT), que lista os grupos abaixo do grupo de quem edita.
+- **Aba "Perfis de acesso"** na Configuração: o administrador inclui ou remove usuários dos três grupos de perfil, na mesma tabela `dbo.sis_usuario_grupo` da tela legada; o grupo do `ADMIN` não é gerenciado por ali.
+- **Aba "Parâmetros de SLA":** `chamado_sla_risco_percentual` (1–99) e `chamado_fechamento_auto_dias` (1–60), validados no servidor e registrados em `muralha.config_chave_valor_hist`.
+- **Categoria "Sistema de Chamados"** na tela inicial (`sis_menu` 383, `sis_menu_infos` 49, `menu_pai NULL`, `ordenacao 10`); os cards 46, 47 e 48 passam para `menu_pai = 49`, com ícones SVG novos em `assets/images/menu-icons/`. O direito do menu 382 (Configuração) fica só com o grupo administrador.
+- **Motor de logs:** parâmetros (`SALVAR_PARAMETROS_SLA`) e perfis (`ADICIONAR_PERFIL`, `REMOVER_PERFIL`) se somam às operações já auditadas, via `AuditoriaService` (funcionalidade "Chamado").
+- Script: `docs/banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql` (idempotente, rollback no cabeçalho).
+
 ## Fora do escopo
 
 - Abertura de chamado por e-mail recebido (7.2.2.c) e por aplicativo de mensagens (7.2.2.d); a coluna `origem` fica preparada.

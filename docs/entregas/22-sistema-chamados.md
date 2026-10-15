@@ -1,13 +1,21 @@
 # Entrega — Plano 22: Sistema de Gerenciamento de Chamados
 
 **Data:** 2026-10-15  
-**Status:** Implementado — aguardando execução da migração e testes integrados
+**Status:** Implementado — migração executada no `GTW_MURALHA_DEV` em 2026-10-15 e teste integrado executado em 2026-10-15 (10 de 10 casos passaram)
 
 ## Escopo
 
 Módulo de chamados (central de suporte técnico) integrado ao Muralha Digital: abertura com classificação de prioridade, acompanhamento por status com atualização a cada 30 s, histórico integral, relatórios por período/categoria/equipamento/prioridade, avaliação do atendimento, exportação CSV/XLSX/PDF e número de protocolo único com confirmação automática por e-mail. CONTRATANTE (perfis Solicitante e Gestor do contrato) e CONTRATADA (perfil Equipe técnica) usam o mesmo sistema. SLA em horas corridas 24x7, com pausa enquanto o chamado aguarda o solicitante.
 
-Os scripts SQL ainda **não foram executados** no banco (aguardam autorização do responsável), por isso as verificações no navegador ficaram adiadas. O código compila e os testes automatizados passam (ver Critérios de aceite).
+**Complemento (2026-10-15)**, pedido pelo responsável após a primeira entrega:
+
+- Perfil `ADMIN`, mapeado do grupo em `chamado_grupo_admin` (padrão 11, Administradores). A tela e a API de Configuração exigem `ADMIN` (a equipe deixa de configurar); o administrador enxerga todos os chamados em modo somente leitura, a menos que também tenha outro perfil.
+- Aba "Parâmetros de SLA": percentual de risco (`chamado_sla_risco_percentual`, 1–99) e dias para o fechamento automático (`chamado_fechamento_auto_dias`, 1–60), com histórico em `muralha.config_chave_valor_hist`.
+- Aba "Perfis de acesso": o administrador inclui ou remove usuários dos grupos Solicitante, Gestor e Equipe (mesma tabela `dbo.sis_usuario_grupo` da tela legada de usuários; os grupos 107–109 passam a ter `id_grupo_pai = 11`).
+- Categoria "Sistema de Chamados" na tela inicial (`sis_menu` 383, `sis_menu_infos` 49), com os cards Chamados, Relatórios e Configuração dentro dela e ícones SVG próprios no estilo dos menus.
+- Todas as alterações (ações nos chamados, exportações, parâmetros e perfis) registradas pelo motor de logs (`AuditoriaService` → `dbo.sis_log_auditoria`, funcionalidade "Chamado").
+
+Os scripts SQL foram executados no banco de desenvolvimento e o roteiro integrado foi executado por HTTP com usuários de teste criados e removidos para isso (ver [Execução de 2026-10-15](../testes/22-sistema-chamados.md#execução-de-2026-10-15)). As verificações visuais no navegador (polling, gráficos, PDF gerado no cliente) não fizeram parte dessa execução.
 
 ## Origem
 
@@ -21,25 +29,29 @@ Os scripts SQL ainda **não foram executados** no banco (aguardam autorização 
 |---|---|
 | `docs/banco-de-dados/migracoes/20261015_sistema_chamados.sql` | Migração idempotente: tabelas `muralha.chamado_prioridade`, `chamado_categoria`, `chamado`, `chamado_historico`, `chamado_anexo`, `chamado_notificacao` e `chamado_protocolo` |
 | `docs/banco-de-dados/migracoes/20261015_sistema_chamados_seed.sql` | Seed: quatro prioridades, categorias/subcategorias, três grupos em `dbo.sis_grupo`, chaves `chamado_*` em `config_chave_valor` e menus 379–382 (`sis_menu`, `sis_menu_infos`, `sis_menu_direitos`) |
+| `docs/banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql` | Complemento: chave `chamado_grupo_admin`, grupos 107–109 abaixo do grupo 11, categoria 383/49, cards 46–48 dentro da categoria e direito do menu 382 só para o administrador |
+| `docs/banco-de-dados/migracoes/20261015_usuarios_teste_chamados.sql` | Usuários de teste do banco de desenvolvimento (administrador e solicitante), com a seção de limpeza no cabeçalho |
+| `src/main/webapp/muralha-digital/assets/images/menu-icons/chamados*.svg` | Ícones da categoria e dos cards Chamados, Relatórios e Configuração |
 | `src/main/java/muralha/digital/chamado/` | Pacote com 26 classes: regras puras (`StatusChamado`, `AcaoChamado`, `PerfilChamado`, `MaquinaEstados`, `CalculadoraSla`, `GeradorProtocolo`), `ArmazenamentoAnexo`, `ExportacaoChamados`, `EmailChamado`, DAOs, `ChamadoService`, três servlets e dois jobs |
 | `src/main/java/muralha/digital/chamado/ChamadoServlet.java` | `/MuralhaDigital/Chamado` — perfil, listagem, detalhe, opções, anexo e ações do chamado |
 | `src/main/java/muralha/digital/chamado/ChamadoRelatorioServlet.java` | `/MuralhaDigital/ChamadoRelatorio` — indicadores e exportação |
-| `src/main/java/muralha/digital/chamado/ChamadoConfigServlet.java` | `/MuralhaDigital/ChamadoConfig` — CRUD de prioridades e categorias |
+| `src/main/java/muralha/digital/chamado/ChamadoConfigServlet.java` | `/MuralhaDigital/ChamadoConfig` — restrito ao `ADMIN`: CRUD de prioridades e categorias, parâmetros de SLA e perfis de acesso |
 | `src/main/java/muralha/digital/chamado/ChamadoSlaJob.java` | Job Quartz (5 min): marcas de SLA e fechamento automático |
 | `src/main/java/muralha/digital/chamado/ChamadoEmailJob.java` | Job Quartz (1 min): envia a fila `chamado_notificacao` |
 | `src/main/webapp/muralha-digital/pages/chamados/index.jsp` | Lista, filtros, exportação e modal "Novo chamado" |
 | `src/main/webapp/muralha-digital/pages/chamados/detalhe.jsp` | Detalhe, linha do tempo e ações por perfil e status |
 | `src/main/webapp/muralha-digital/pages/chamados/relatorios.jsp` | Indicadores com Chart.js, tabela e exportação |
-| `src/main/webapp/muralha-digital/pages/chamados/configuracao.jsp` | Prioridades/prazos e categorias (equipe) |
-| `src/main/java/muralha/digital/acessos/ReferenciaEdital.java` | Itens 7.2.3 e 7.2.4 para os menus 379–382 |
-| `src/test/java/muralha/digital/chamado/` | Testes TestNG das regras do módulo (76 testes) |
-| `docs/testes/22-sistema-chamados.md` | Roteiro de testes manuais |
+| `src/main/webapp/muralha-digital/pages/chamados/configuracao.jsp` | Abas Parâmetros de SLA, Perfis de acesso, Prioridades e prazos e Categorias (administrador) |
+| `src/main/webapp/muralha-digital/assets/js/chamados/` | Scripts das telas (`chamados-comum.js`, `-lista`, `-detalhe`, `-relatorios`, `-configuracao`) |
+| `src/main/java/muralha/digital/acessos/ReferenciaEdital.java` | Itens 7.2.3 e 7.2.4 para os menus 379–382 e a categoria 383 |
+| `src/test/java/muralha/digital/chamado/` | Testes TestNG das regras do módulo |
+| `docs/testes/22-sistema-chamados.md` | Roteiro de testes manuais e registro da execução de 2026-10-15 |
 
 Também foram alterados `Agendador.java` (registro dos dois jobs) e `ServicoEmailMuralha.java` (método `enviarEmailChamado`).
 
 ## Arquitetura
 
-- **Perfis:** `SOLICITANTE`, `GESTOR` e `EQUIPE`, resolvidos no servidor a partir de `dbo.sis_usuario_grupo` (IDs dos grupos em `config_chave_valor`), com união das permissões. Solicitante vê só os próprios chamados; protocolo alheio responde "não encontrado".
+- **Perfis:** `SOLICITANTE`, `GESTOR`, `EQUIPE` e `ADMIN`, resolvidos no servidor a partir de `dbo.sis_usuario_grupo` (IDs dos grupos em `config_chave_valor`), com união das permissões. Solicitante vê só os próprios chamados; protocolo alheio responde "não encontrado". `ADMIN` configura o módulo e vê todos os chamados sem ações sobre eles.
 - **Máquina de estados** pura (`MaquinaEstados`): `ABERTO`, `EM_ATENDIMENTO`, `AGUARDANDO_SOLICITANTE`, `RESOLVIDO`, `FECHADO`, `CANCELADO`; toda transição exige observação e grava histórico e auditoria.
 - **Transação por ação** em `ChamadoService`, com controle otimista (`UPDATE … WHERE status e dt_atualizacao`); falha ao gravar anexo desfaz a operação e remove os arquivos já gravados.
 - **SLA 24x7** (`CalculadoraSla`): prazos por prioridade, pausa em `AGUARDANDO_SOLICITANTE` e `RESOLVIDO`, recálculo na reclassificação, marcas `NO_PRAZO` → `EM_RISCO` → `VENCIDO` e `CUMPRIDO`/`VIOLADO`. Prazos iniciais (atendimento/resolução): Crítica 1 h/4 h, Alta 2 h/8 h, Média 4 h/24 h, Baixa 8 h/72 h, todos configuráveis.
@@ -55,26 +67,29 @@ Também foram alterados `Agendador.java` (registro dos dois jobs) e `ServicoEmai
 Verificados:
 
 - [x] Build compila sem erros
-- [x] 80 testes TestNG passando (76 do módulo `chamado` + 4 de `ReferenciaEditalTest`)
-- [x] Menus 379–382 com referência aos itens do edital em `ReferenciaEdital`
+- [x] 98 testes TestNG passando (módulo `chamado` + 5 de `ReferenciaEditalTest`)
+- [x] Menus 379–382 e categoria 383 com referência aos itens do edital em `ReferenciaEdital`
+- [x] Migrações `20261015_sistema_chamados.sql`, `_seed.sql` e `_admin.sql` executadas no `GTW_MURALHA_DEV`
 
-Dependem da migração e do navegador (desmarcados):
+Teste integrado por HTTP em 2026-10-15 ([execução](../testes/22-sistema-chamados.md#execução-de-2026-10-15)):
 
-- [ ] 7.2.3.a — Abertura de chamado com classificação de prioridade
-- [ ] 7.2.3.b — Acompanhamento do status em tempo real (polling de 30 s)
-- [ ] 7.2.3.c — Registro e consulta do histórico integral
-- [ ] 7.2.3.d — Relatórios por período, categoria e equipamento
-- [ ] 7.2.3.e — Avaliação da qualidade do atendimento (nota 1–5 e comentário)
-- [ ] 7.2.3.f — Exportação em PDF, CSV e XLS
-- [ ] 7.2.4 — Protocolo único com confirmação automática (protocolo, prioridade e prazos) na tela e por e-mail
-- [ ] Jobs `ChamadoSlaJob` e `ChamadoEmailJob` registrados e executando
-- [ ] Roteiro [`22-sistema-chamados.md`](../testes/22-sistema-chamados.md) executado com os três perfis
+- [x] 7.2.3.a — Abertura de chamado com classificação de prioridade (protocolo, prazos +1 h/+4 h para Crítica, anexo validado pela assinatura)
+- [ ] 7.2.3.b — Acompanhamento do status em tempo real: status e ações conferidos pela API; o polling de 30 s no navegador não foi verificado
+- [x] 7.2.3.c — Registro e consulta do histórico integral (abertura, transições, resposta, reclassificação e avaliação)
+- [x] 7.2.3.d — Relatórios por período, categoria, equipamento e prioridade (`indicadores` com `mes`, `semana`, `categoria`, `equipamento` e `prioridade`)
+- [x] 7.2.3.e — Avaliação da qualidade do atendimento (nota 4 → `FECHADO`)
+- [ ] 7.2.3.f — Exportação: CSV e XLSX baixados com o mesmo SHA-256 do `formato=json`; o PDF montado no navegador (jsPDF) não foi verificado
+- [ ] 7.2.4 — Protocolo único com confirmação na tela (resposta da abertura) e notificação enfileirada; o e-mail não saiu porque o SMTP local recusa a autenticação
+- [x] Jobs `ChamadoSlaJob` e `ChamadoEmailJob` registrados e executando (fila de e-mail processada a cada minuto até `ERRO`)
+- [x] Complemento: configuração só para o administrador, parâmetros de SLA, perfis de acesso, categoria e ícones, motor de logs
+- [ ] Roteiro [`22-sistema-chamados.md`](../testes/22-sistema-chamados.md) executado com os quatro perfis: executado com Administrador, Equipe e Solicitante; o perfil Gestor e as telas no navegador ficaram para a homologação
 
 ## Pendencias
 
-- Executar os scripts `20261015_sistema_chamados.sql` e `20261015_sistema_chamados_seed.sql` com `sqlcmd -b -f 65001` (UTF-8 para preservar os acentos do seed; `-b` para o `sqlcmd` encerrar com erro se uma verificação falhar). Exige autorização do responsável.
-- Executar as verificações no navegador adiadas por falta das tabelas (Tarefas 10 a 12) e o roteiro completo de testes.
-- Associar os três usuários de teste aos grupos de chamados e criar o diretório `chamado_diretorio_anexos`.
+- Em outros ambientes (homologação/produção), executar `20261015_sistema_chamados.sql`, `20261015_sistema_chamados_seed.sql` e `20261015_sistema_chamados_admin.sql`, nessa ordem, com `sqlcmd -b -f 65001` (UTF-8 para preservar os acentos; `-b` para o `sqlcmd` encerrar com erro se uma verificação falhar). Exige autorização do responsável. `20261015_usuarios_teste_chamados.sql` é só para desenvolvimento.
+- Verificar no navegador o polling de 30 s, os gráficos dos relatórios, o PDF gerado no cliente e o fluxo com o perfil Gestor.
+- Configurar um SMTP válido no `confGTW.xml` para confirmar o envio real dos e-mails (no ambiente local a autenticação é recusada com `535 5.7.8 BadCredentials`).
+- O nome de alguns equipamentos em `local_vigente` começa com espaço e aparece assim na exportação e no agrupamento por equipamento (dado de origem; o código aplica só `RTRIM`).
 - Os testes automatizados foram rodados direto pelo TestNG, porque o provider `surefire-testng` não está no cache Maven offline; `mvn test` com `-Dtest` não funciona neste ambiente.
 - O Capítulo 7 do TR não está no repositório: os prazos por prioridade e as categorias são os sugeridos na spec e podem ser ajustados pela tela de configuração.
 - Canais de abertura por e-mail (7.2.2.c) e por aplicativo de mensagens (7.2.2.d) ficaram fora do escopo; a coluna `origem` está preparada.
