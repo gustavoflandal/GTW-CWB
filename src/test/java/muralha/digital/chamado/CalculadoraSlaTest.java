@@ -65,4 +65,27 @@ public class CalculadoraSlaTest {
         assertEquals(CalculadoraSla.marca(ABERTURA, prazo, null, ABERTURA.plusMinutes(500), 80, true, Marca.EM_RISCO), Marca.EM_RISCO);
         assertEquals(CalculadoraSla.marca(ABERTURA, prazo, null, ABERTURA.plusMinutes(500), 80, true, null), Marca.NO_PRAZO);
     }
+
+    @Test
+    public void violadoPermaneceVioladoMesmoComPrazoNovoMaior() {
+        LocalDateTime prazoNovo = ABERTURA.plusMinutes(1000);
+        LocalDateTime cumpridoEm = ABERTURA.plusMinutes(200);
+        assertEquals(CalculadoraSla.marca(ABERTURA, prazoNovo, cumpridoEm, cumpridoEm.plusDays(1), 80, false, Marca.VIOLADO), Marca.VIOLADO);
+    }
+
+    @Test
+    public void cumpridoPermaneceCumpridoMesmoComPrazoNovoMenor() {
+        LocalDateTime prazoNovo = ABERTURA.plusMinutes(50);
+        LocalDateTime cumpridoEm = ABERTURA.plusMinutes(200);
+        assertEquals(CalculadoraSla.marca(ABERTURA, prazoNovo, cumpridoEm, cumpridoEm.plusDays(1), 80, false, Marca.CUMPRIDO), Marca.CUMPRIDO);
+    }
+
+    @Test
+    public void primeiraMarcacaoDecidePeloPrazo() {
+        LocalDateTime prazo = ABERTURA.plusMinutes(100);
+        for (Marca atual : new Marca[]{null, Marca.NO_PRAZO, Marca.EM_RISCO, Marca.VENCIDO}) {
+            assertEquals(CalculadoraSla.marca(ABERTURA, prazo, prazo, prazo, 80, false, atual), Marca.CUMPRIDO);
+            assertEquals(CalculadoraSla.marca(ABERTURA, prazo, prazo.plusMinutes(1), prazo, 80, false, atual), Marca.VIOLADO);
+        }
+    }
 }

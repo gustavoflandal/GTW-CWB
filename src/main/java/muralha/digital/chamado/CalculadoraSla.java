@@ -32,6 +32,8 @@ public final class CalculadoraSla {
     public static Marca marca(LocalDateTime abertura, LocalDateTime prazo, LocalDateTime cumpridoEm,
                               LocalDateTime agora, int percentualRisco, boolean pausado, Marca atual) {
         if (cumpridoEm != null) {
+            // CUMPRIDO/VIOLADO sao definitivas (spec §1.3); so REABRIR (cumpridoEm nulo) as desfaz
+            if (atual == Marca.CUMPRIDO || atual == Marca.VIOLADO) return atual;
             return cumpridoEm.isAfter(prazo) ? Marca.VIOLADO : Marca.CUMPRIDO;
         }
         if (pausado) {
