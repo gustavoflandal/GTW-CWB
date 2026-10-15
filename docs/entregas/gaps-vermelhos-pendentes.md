@@ -85,4 +85,4 @@ O relatório deve conter no mínimo (§5.5.3.1): volume recebido, pré-processad
 1. Preencher as respostas acima para alinhar o escopo de cada item
 2. Criar planos de implementação individuais em `docs/planos-salvador/`
 3. Priorizar e estimar esforço
-4. Implementar, testar e documentar como entregas (21, 22, 23)
+4. Implementar, testar e documentar como entregas (22, 23, 24)

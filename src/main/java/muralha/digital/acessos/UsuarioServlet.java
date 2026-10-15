@@ -206,18 +206,26 @@ public class UsuarioServlet extends HttpServlet
 	        session.setAttribute("listaMenus", this.ObterListaMenusAcesso(resultado.getIdUsuario(), 0));
 		}
 		
+		if (resultado != null) {
+			AuditoriaService.registrar(request, "autenticacao", "login",
+				String.valueOf(resultado.getIdUsuario()), "Login bem-sucedido: " + usuario);
+		} else {
+			AuditoriaService.registrar(request, "autenticacao", "login-falha",
+				null, "Tentativa de login falhou: " + usuario);
+		}
+
 		myObj.addProperty("validacao", resultado != null);
 		myObj.addProperty("senhaMD5", senhaMD5);
 		myObj.addProperty("usuario", usuario);
 		myObj.addProperty("paginaInicial", resultado != null ? resultado.getPaginaInicial() : "");
-		
+
 		if (resultado != null && resultado.getToken() != null)
 			myObj.addProperty("token", resultado.getToken());
-		else 
+		else
 			myObj.addProperty("token", "");
-		
+
 		out.println(myObj.toString());
-		
+
 		out.close();
     }
     
@@ -233,19 +241,24 @@ public class UsuarioServlet extends HttpServlet
 		return;
     }
     
-    private void fechaSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
+    private void fechaSessao(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
-    	HttpSession session = request.getSession(false); //getSession(false) impede que outra sessão seja criada para esse usuário
-    	Usuario objUsuario 	= (Usuario) session.getAttribute("objUsuario");	
-//    	String usuario = (String) session.getAttribute("[usuario]");
+    	HttpSession session = request.getSession(false);
+    	Usuario objUsuario 	= (Usuario) session.getAttribute("objUsuario");
     	com.consilux.model.Usuario objUsuario2 = (com.consilux.model.Usuario) session.getAttribute("[usuario]");
+
+    	String loginLogout = objUsuario != null ? objUsuario.getUsuario()
+    			: (objUsuario2 != null ? objUsuario2.getUsuario() : null);
+
+    	AuditoriaService.registrar(request, "autenticacao", "logout",
+    		loginLogout, "Logout: " + loginLogout);
 
     	if (objUsuario != null && objUsuario.getToken() != null) {
     		logger.debug("Token: " + objUsuario.getToken());
     		EncerrarToken(objUsuario.getToken());
     	}
-    	
-    	logger.info("Fechando sessão do usuário: " + objUsuario2.getUsuario());	    	
+
+    	logger.info("Fechando sessão do usuário: " + (objUsuario2 != null ? objUsuario2.getUsuario() : loginLogout));
 		session.invalidate();
 
 		PrintWriter out = response.getWriter();
@@ -944,7 +957,7 @@ public class UsuarioServlet extends HttpServlet
 			try {
 				conn = Conexao.getConexao();
 				try (PreparedStatement ps = conn.prepareStatement(
-						"UPDATE dbo.sis_usuario SET tentativas_invalidas=0, bloqueado_ate=NULL WHERE id=?")) {
+						"UPDATE dbo.sis_usuario_complemento SET tentativas_invalidas=0, bloqueado_ate=NULL WHERE id_usuario=?")) {
 					ps.setInt(1, idAlvo);
 					ps.executeUpdate();
 				}

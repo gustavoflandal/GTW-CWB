@@ -16,4 +16,4 @@ Papel: **Agente Backend Java**. Leia `AGENTS.md`, `agente-backend-java.md`, `doc
 2. Implemente verificação de sessão+permissão, validação, JDBC parametrizado, fechamento de recursos, JSON via Gson, erros sem detalhes internos.
 3. Não mude contratos existentes; acrescente campos se necessário.
 4. Compile (`..\.setup-gtw\build.ps1`) se possível; descreva testes manuais (200/400/401/403/404).
-5. Atualize `docs/04-modulos-funcionais.md` e regenere `docs/referencia/*` (`regenerar-referencia.md`). Relatório `AGENTS.md` §5.
+5. Atualize `docs/04-modulos-funcionais.md` e regenere `docs/referencia/*` (scripts em `docs/referencia/scripts/`). Relatório `AGENTS.md` §5.

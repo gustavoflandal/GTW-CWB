@@ -57,4 +57,4 @@
 3. `ffmpeg.exe` (108 MB) não está no git.
 4. `target/` e WAR antigos podem confundir; faça `clean`.
 5. Páginas fora de `login/` exigem sessão **e** podem exigir cadastro em `sis_menu`; teste com usuário de perfil real.
-6. O repositório local `D:\GTW-CWB` (pai) tem um `.git` sem commits e **não** é o repositório do GitHub; o git do projeto é `D:\GTW-CWB\GTW-CWB\.git`.
+6. O repositório do projeto é `D:\GTW-CWB\.git` (raiz: `D:\GTW-CWB`, remoto: GitHub `gustavoflandal/GTW-CWB`).

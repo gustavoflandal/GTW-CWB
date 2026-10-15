@@ -8,6 +8,15 @@
 
 **Tech Stack:** SQL Server · Java Servlet · Leaflet.js (cdnjs) · Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.3.7.7 | Mapas, gráficos, indicadores visuais (ver também [Plano 19](19-sensores-externos.md)) |
+| §5.4.4.4 | Exportação de dados georreferenciados (GIS) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Leaflet.js de cdnjs.cloudflare.com

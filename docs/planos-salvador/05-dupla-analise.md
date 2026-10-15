@@ -9,6 +9,17 @@
 
 **Tech Stack:** Java 13 · SQL Server · Bootstrap 5.3 · SweetAlert2
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.1 | Segregação de funções / duplo controle |
+| §5.2.3.2-3 | Dupla análise independente obrigatória (sem ver análise anterior) |
+| §5.2.3.4 | Desempate por terceiro operador sem ver análises anteriores |
+| §5.5.1.2g | Dupla análise independente por operadores distintos |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Um operador jamais vê a classificação do outro enquanto o segundo ainda não respondeu

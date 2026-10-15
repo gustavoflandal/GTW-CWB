@@ -91,7 +91,7 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 10 | SLA Pre-processamento | 5.5.2.1 |
 | 11 | Exportacao Padronizada | 5.1.10, 5.2.8.3 |
 | 12 | Retencao de Dados | 5.1.8, 5.5.4.6 |
-| 13 | Anonimizacao de Placas | 5.1.4, 5.4.1.2.g |
+| 13 | Anonimizacao de Placas | 5.4.1.2.g |
 | 14 | Gestao de Lotes | 5.2.5.1–5 |
 | 15 | KPIs Configuraveis | 5.2.8.4, 5.4.2.1–6, 5.4.6.1–3 |
 | 16 | Exportacao GIS | 5.4.4.1–4, 5.3.7.7 |

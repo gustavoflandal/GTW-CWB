@@ -9,6 +9,18 @@
 
 **Tech Stack:** Quartz Scheduler (já no projeto) · SQL Server · Bootstrap 5.3 · Chart.js (cdnjs)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.7 | Telemetria operacional em tempo real |
+| §5.3.7.5 | Resposta ≤4 segundos para eventos críticos / Blitz Eletrônica |
+| §5.6.2.3 | Tempo máximo 4s para eventos críticos/Blitz |
+| §5.7.9.1 | Tempo máximo 4s entre leitura e alerta na plataforma |
+| §5.8.6.1 | Monitoramento contínuo da infraestrutura |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Quartz já está no `pom.xml`; não adicionar nova dependência

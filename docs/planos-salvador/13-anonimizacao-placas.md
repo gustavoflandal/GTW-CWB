@@ -8,6 +8,15 @@
 
 **Tech Stack:** SQL Server (VIEW) · Java Servlet · Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.4.1.2-3 | Conformidade LGPD (anonimização, finalidade, necessidade) |
+| §5.7.8 | Anonimização de placas para fins estatísticos (LGPD) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - View não altera dados originais — somente leitura

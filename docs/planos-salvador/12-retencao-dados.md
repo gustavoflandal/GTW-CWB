@@ -9,6 +9,16 @@
 
 **Tech Stack:** Quartz Scheduler · SQL Server · Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.1.8 | Retenção de logs durante vigência contratual |
+| §5.5.4.6 | Retenção de logs por 5 anos após encerramento contratual |
+| §5.7.5.3 | Retenção do histórico de LAP por 5 anos pós-contrato |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Quartz já no `pom.xml`; sem nova dependência

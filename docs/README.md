@@ -10,7 +10,7 @@ Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha 
 | Humano novo no projeto | `00` → `01` → `02` → `04` |
 | Vai criar/alterar uma tela | `05` → `06` §4–5 → `10` §1–2 → exemplos `pages/guarnicao`, `pages/consulta-veiculo` |
 | Vai criar/alterar back-end | `02` → `06` §1–3 → `10` §3 → `referencia/modulos-backend-muralha.md` |
-| Vai mexer em banco | `banco-de-dados/README.md` → `agentes/agente-banco-de-dados.md` |
+| Vai mexer em banco | `banco-de-dados/README.md` → `agentes/AGENTS.md` |
 | Subagent | **`agentes/AGENTS.md`** e o guia do seu papel |
 
 ## Diagrama de Arquitetura
@@ -26,7 +26,7 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [01-stack-e-ambiente.md](01-stack-e-ambiente.md) | Stack (`.setup-gtw`), versões, build/run/debug |
 | [02-arquitetura.md](02-arquitetura.md) | Camadas, requisição, sessão, dados, WebSocket, jobs, SOAP |
 | [03-estrutura-do-projeto.md](03-estrutura-do-projeto.md) | Árvore e onde colocar cada coisa |
-| [04-modulos-funcionais.md](04-modulos-funcionais.md) | Catálogo funcional (menus, telas, APIs, tabelas) |
+| [04-modulos-funcionais.md](04-modulos-funcionais.md) | Catálogo funcional: módulos originais, 20 planos PoC Salvador (menus, telas, APIs, tabelas) |
 | [05-padrao-visual.md](05-padrao-visual.md) | **Design system**: cores, fontes, ícones, componentes, layout |
 | [06-padroes-de-codigo.md](06-padroes-de-codigo.md) | Padrões Java/JSP/JS/SQL e anti-padrões |
 | [07-configuracao-e-segredos.md](07-configuracao-e-segredos.md) | Arquivos de configuração, variáveis de ambiente |
@@ -37,10 +37,11 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [12-riscos-e-debitos-tecnicos.md](12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 746 tabelas, 821 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
+| [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
 | [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 
 ## Manutenção
-Regenerar inventários: `referencia/scripts/gerar-referencia.ps1`; catálogo do banco: `banco-de-dados/scripts/extrair-catalogo.ps1` (precisa de `GTW_DB_PASSWORD`). Procedimento: `agentes/prompts/regenerar-referencia.md`.
+Regenerar inventários: `referencia/scripts/gerar-referencia.ps1`; catálogo do banco: `banco-de-dados/scripts/extrair-catalogo.ps1` (precisa de `GTW_DB_PASSWORD`).
 
 ## Limitações conhecidas desta documentação
 - Inventários em `referencia/` usam heurísticas (regex); confirme no código antes de decisões críticas.

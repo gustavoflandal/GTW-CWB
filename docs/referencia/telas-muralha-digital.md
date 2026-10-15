@@ -378,3 +378,134 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - JS próprios: assets/js/visualizacao-cameras.js, camera-api/controles.js, camera-api/controles-original.js, camera-api/module/audioTalkWorker.worker.js, camera-api/module/audioWorker.worker.js, camera-api/module/libDecodeSDK.js, camera-api/module/PlayerControl.js, camera-api/module/videoWorker.worker.js, camera-api/module/videoWorkerTrain.worker.js
 - CSS próprios: camera-api/css/visualizacao-cameras.css, camera-api/css/visualizacao-cameras-original.css
 
+## admin/cpf-matricula
+
+- Caminho: `muralha-digital/pages/admin/cpf-matricula`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Gestão CPF/Matrícula
+
+## admin/datasets
+
+- Caminho: `muralha-digital/pages/admin/datasets`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Catálogo de Datasets (legado)
+
+## admin/kpis
+
+- Caminho: `muralha-digital/pages/admin/kpis`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Configuração de KPIs
+
+## admin/retencao
+
+- Caminho: `muralha-digital/pages/admin/retencao`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Política de Retenção
+
+## ajuda
+
+- Caminho: `muralha-digital/pages/ajuda`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Ajuda contextual
+
+## analises/datasets
+
+- Caminho: `muralha-digital/pages/analises/datasets`
+- JSPs: index.jsp, editor.jsp, modelador.jsp
+- Títulos (`<title>`): index: Catálogo de Datasets · editor: Editor de Datasets (wizard) · modelador: Modelador Visual de Datasets (canvas AntV X6)
+- Endpoints chamados: `/api/dash/datasets` (ações: listar, obter, salvar, publicar, excluir, sugestoesRelacao, validarRelacao, verificarCardinalidade, salvarModelador)
+- Vendor: AntV X6 2.18.1 (`static/vendor/x6/`), dagre 0.8.5 (`static/vendor/dagre/`)
+- JS modelador: `static/js/dashboards/modelador/` (canvas.js, painel-tabelas.js, campos.js, previa.js)
+
+## analises/paineis
+
+- Caminho: `muralha-digital/pages/analises/paineis`
+- JSPs: index.jsp, lista.jsp
+- Títulos (`<title>`): index: Painéis de Análise · lista: Painéis de Análise
+
+## analises/widgets
+
+- Caminho: `muralha-digital/pages/analises/widgets`
+- JSPs: editor.jsp
+- Títulos (`<title>`): editor: Editor de Widget
+
+## analises/catalogo
+
+- Caminho: `muralha-digital/pages/analises/catalogo`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Catalogo de Dados
+- Endpoints chamados: `/api/dash/catalogo` (ações: listarTabelas, listarColunas, listarRelacoes, salvarTabela, salvarColuna, salvarRelacao, excluirRelacao)
+- Menu: 378 (Cadastro e Configuração, menu_pai=16)
+
+## auditoria
+
+- Caminho: `muralha-digital/pages/auditoria`
+- JSPs: consulta-log.jsp
+- Títulos (`<title>`): consulta-log: Log de Auditoria
+
+## dashboard/builder
+
+- Caminho: `muralha-digital/pages/dashboard/builder`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Dashboard Builder (legado)
+
+## dashboard/kpis
+
+- Caminho: `muralha-digital/pages/dashboard/kpis`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: KPIs (legado)
+
+## meu-perfil
+
+- Caminho: `muralha-digital/pages/meu-perfil`
+- JSPs: configurar-mfa.jsp
+- Títulos (`<title>`): configurar-mfa: Configuração MFA
+
+## monitoramento/assertividade
+
+- Caminho: `muralha-digital/pages/monitoramento/assertividade`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Painel Assertividade
+
+## monitoramento/disponibilidade
+
+- Caminho: `muralha-digital/pages/monitoramento/disponibilidade`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Disponibilidade Equipamentos
+
+## monitoramento/mapa
+
+- Caminho: `muralha-digital/pages/monitoramento/mapa`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Mapa GIS
+
+## monitoramento/sla-latencia
+
+- Caminho: `muralha-digital/pages/monitoramento/sla-latencia`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: SLA Latência
+
+## monitoramento/sla-preproc
+
+- Caminho: `muralha-digital/pages/monitoramento/sla-preproc`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: SLA Pré-processamento
+
+## monitoramento/timelapse
+
+- Caminho: `muralha-digital/pages/monitoramento/timelapse`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Timelapse
+
+## processamento/dupla-analise
+
+- Caminho: `muralha-digital/pages/processamento/dupla-analise`
+- JSPs: fila.jsp, analisar.jsp
+- Títulos (`<title>`): fila: Dupla Análise · analisar: Dupla Análise
+
+## processamento/lotes
+
+- Caminho: `muralha-digital/pages/processamento/lotes`
+- JSPs: index.jsp
+- Títulos (`<title>`): index: Gestão de Lotes
+

@@ -80,7 +80,7 @@ $mods = Run "SELECT s.name sch,RTRIM(o.type) typ,o.name nm,m.definition def FROM
 foreach($r in $mods.Rows){ if(-not $map.ContainsKey($r.typ)){continue}; $d=Join-Path $codDir $map[$r.typ]; New-Item -ItemType Directory $d -Force | Out-Null
   $fn=("{0}.{1}.sql" -f $r.sch,$r.nm) -replace '[\\/:*?"<>|]','_'; [IO.File]::WriteAllText((Join-Path $d $fn),[string]$r.def,$utf) }
 
-# (objetos-programaveis.md e dominios.md: ver agentes/prompts/regenerar-referencia.md — usam sys.parameters,
+# (objetos-programaveis.md e dominios.md: atualizar manualmente — usam sys.parameters,
 #  sys.sql_expression_dependencies e SELECT TOP 40 em tabelas pequenas de domínio.)
 $cn.Close()
 Write-Host "Catálogo regenerado em $Saida"
