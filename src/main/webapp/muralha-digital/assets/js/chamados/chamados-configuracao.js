@@ -21,6 +21,121 @@
     }).join('');
   }
 
+  // ---- Parâmetros de SLA ----
+  async function carregarParametros() {
+    var d = await Chamados.get('ChamadoConfig', { acao: 'parametros' });
+    if (!d.ok) return;
+    document.getElementById('slaRisco').value = d.riscoPercentual;
+    document.getElementById('slaDias').value = d.fechamentoAutoDias;
+  }
+
+  async function salvarParametros(e) {
+    e.preventDefault();
+    var btn = document.getElementById('btnSalvarSla');
+    btn.disabled = true;
+    try {
+      var d = await Chamados.post('ChamadoConfig', new URLSearchParams({
+        acao: 'salvarParametros',
+        riscoPercentual: document.getElementById('slaRisco').value,
+        fechamentoAutoDias: document.getElementById('slaDias').value
+      }));
+      if (d.ok) Swal.fire({ icon: 'success', title: 'Parâmetros salvos', timer: 1200, showConfirmButton: false });
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  // ---- Perfis de acesso ----
+  var PERFIS = [
+    { codigo: 'SOLICITANTE', titulo: 'Solicitantes', icone: 'bi-person' },
+    { codigo: 'GESTOR', titulo: 'Gestores do contrato', icone: 'bi-person-badge' },
+    { codigo: 'EQUIPE', titulo: 'Equipe técnica', icone: 'bi-tools' }
+  ];
+  var membros = [];
+  var timers = {};
+
+  function montarCartoes() {
+    document.getElementById('cartoesPerfis').innerHTML = PERFIS.map(function (p) {
+      return '<div class="col-12 col-lg-4"><div class="card h-100"><div class="card-header"><i class="bi ' + p.icone + ' me-1"></i>' + esc(p.titulo) + '</div>' +
+        '<div class="card-body"><label class="form-label small" for="busca' + p.codigo + '">Adicionar usuário</label>' +
+        '<div class="position-relative mb-3"><input type="search" class="form-control form-control-sm" id="busca' + p.codigo +
+        '" data-perfil="' + p.codigo + '" autocomplete="off" placeholder="Digite ao menos 2 letras do nome ou login">' +
+        '<div class="list-group position-absolute w-100 shadow-sm d-none" style="z-index:1050;max-height:220px;overflow:auto" id="res' + p.codigo + '"></div></div>' +
+        '<ul class="list-group list-group-flush" id="lista' + p.codigo + '"></ul></div></div></div>';
+    }).join('');
+  }
+
+  function renderPerfis() {
+    PERFIS.forEach(function (p) {
+      var itens = membros.filter(function (m) { return m.perfil === p.codigo; });
+      document.getElementById('lista' + p.codigo).innerHTML = itens.length ? itens.map(function (m) {
+        return '<li class="list-group-item d-flex justify-content-between align-items-center px-0"><span>' + esc(m.nome) +
+          ' <span class="small text-muted">(' + esc(m.login) + ')</span>' + (m.ativo === false ? ' <span class="badge text-bg-secondary">Inativo</span>' : '') +
+          '</span><button type="button" class="btn btn-sm btn-outline-danger" data-remover="' + esc(p.codigo) + ':' + esc(m.idUsuario) +
+          '" aria-label="Remover ' + esc(m.nome) + '"><i class="bi bi-trash"></i></button></li>';
+      }).join('') : '<li class="list-group-item px-0 text-muted small">Nenhum usuário neste perfil.</li>';
+    });
+    var admins = membros.filter(function (m) { return m.perfil === 'ADMIN'; });
+    document.getElementById('listaAdmin').innerHTML = admins.length ? admins.map(function (m) {
+      return '<li class="list-group-item px-0">' + esc(m.nome) + ' <span class="text-muted">(' + esc(m.login) + ')</span></li>';
+    }).join('') : '<li class="list-group-item px-0 text-muted">Nenhum administrador.</li>';
+  }
+
+  async function carregarPerfis() {
+    var d = await Chamados.get('ChamadoConfig', { acao: 'perfis' });
+    if (!d.ok) return;
+    membros = d.membros;
+    renderPerfis();
+  }
+
+  function fecharResultados(perfil) {
+    var box = document.getElementById('res' + perfil);
+    box.classList.add('d-none');
+    box.innerHTML = '';
+  }
+
+  async function buscar(perfil, termo) {
+    var box = document.getElementById('res' + perfil);
+    if (termo.length < 2) { fecharResultados(perfil); return; }
+    var d = await Chamados.get('ChamadoConfig', { acao: 'buscarUsuarios', termo: termo });
+    if (!d.ok) return;
+    if (document.getElementById('busca' + perfil).value.trim() !== termo) return; // resposta obsoleta
+    var jaTem = membros.filter(function (m) { return m.perfil === perfil; }).map(function (m) { return String(m.idUsuario); });
+    var lista = d.usuarios.filter(function (u) { return jaTem.indexOf(String(u.idUsuario)) < 0; });
+    box.innerHTML = lista.length ? lista.map(function (u) {
+      return '<button type="button" class="list-group-item list-group-item-action small" data-adicionar="' + esc(perfil) + ':' + esc(u.idUsuario) +
+        '" data-nome="' + esc(u.nome) + '">' + esc(u.nome) + ' <span class="text-muted">(' + esc(u.login) + ')</span></button>';
+    }).join('') : '<div class="list-group-item small text-muted">Nenhum usuário encontrado.</div>';
+    box.classList.remove('d-none');
+  }
+
+  function rotuloPerfil(codigo) {
+    return PERFIS.filter(function (p) { return p.codigo === codigo; })[0].titulo;
+  }
+
+  function nomeDoMembro(perfil, id) {
+    var m = membros.filter(function (x) { return x.perfil === perfil && String(x.idUsuario) === String(id); })[0];
+    return m ? m.nome : 'o usuário';
+  }
+
+  async function alterarMembro(acao, perfil, idUsuario, nome) {
+    var adicionar = acao === 'adicionarMembro';
+    var c = await Swal.fire({
+      title: adicionar ? 'Adicionar usuário?' : 'Remover usuário?',
+      text: (adicionar ? 'Incluir ' : 'Remover ') + nome + (adicionar ? ' em ' : ' de ') + rotuloPerfil(perfil) + '?',
+      icon: 'question', showCancelButton: true, confirmButtonText: adicionar ? 'Adicionar' : 'Remover', cancelButtonText: 'Cancelar'
+    });
+    if (!c.isConfirmed) return;
+    var d = await Chamados.post('ChamadoConfig', new URLSearchParams({ acao: acao, perfil: perfil, idUsuario: idUsuario }));
+    if (!d.ok) return;
+    Swal.fire({ icon: 'success', title: adicionar ? 'Usuário adicionado' : 'Usuário removido', timer: 1200, showConfirmButton: false });
+    if (adicionar) {
+      document.getElementById('busca' + perfil).value = '';
+      fecharResultados(perfil);
+    }
+    carregarPerfis();
+  }
+
   async function enviar(params) {
     var fd = new URLSearchParams(params);
     var r = await fetch((window.CTX || '') + '/MuralhaDigital/ChamadoConfig', { method: 'POST', body: fd });
@@ -78,6 +193,14 @@
     if (!b) return;
     if (b.dataset.editarPri) editarPrioridade(dados.prioridades.find(function (p) { return String(p.id) === b.dataset.editarPri; }));
     if (b.dataset.editarCat) editarCategoria(dados.categorias.find(function (c) { return String(c.id) === b.dataset.editarCat; }));
+    if (b.dataset.remover) {
+      var r = b.dataset.remover.split(':');
+      alterarMembro('removerMembro', r[0], r[1], nomeDoMembro(r[0], r[1]));
+    }
+    if (b.dataset.adicionar) {
+      var a = b.dataset.adicionar.split(':');
+      alterarMembro('adicionarMembro', a[0], a[1], b.dataset.nome);
+    }
     if (b.dataset.ativo) {
       var partes = b.dataset.ativo.split(':');
       enviar({ acao: 'alternarAtivo', tipo: partes[0], id: partes[1] });
@@ -85,5 +208,19 @@
   });
   document.getElementById('btnNovaPri').addEventListener('click', function () { editarPrioridade(null); });
   document.getElementById('btnNovaCat').addEventListener('click', function () { editarCategoria(null); });
+  document.getElementById('formSla').addEventListener('submit', salvarParametros);
+  montarCartoes();
+  document.getElementById('cartoesPerfis').addEventListener('input', function (e) {
+    var perfil = e.target.dataset.perfil;
+    if (!perfil) return;
+    clearTimeout(timers[perfil]);
+    var termo = e.target.value.trim();
+    timers[perfil] = setTimeout(function () { buscar(perfil, termo); }, 300);
+  });
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-perfil], [data-adicionar]')) PERFIS.forEach(function (p) { fecharResultados(p.codigo); });
+  });
+  carregarParametros();
+  carregarPerfis();
   carregar();
 })();

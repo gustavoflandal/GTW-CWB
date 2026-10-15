@@ -22,8 +22,8 @@
     if (!perfil.ok) return;
     var p = perfil.perfis;
     if (p.indexOf('SOLICITANTE') >= 0 || p.indexOf('GESTOR') >= 0) document.getElementById('btnNovo').classList.remove('d-none');
-    if (p.indexOf('GESTOR') >= 0 || p.indexOf('EQUIPE') >= 0) document.getElementById('lnkRelatorios').classList.remove('d-none');
-    if (p.indexOf('EQUIPE') >= 0) document.getElementById('lnkConfig').classList.remove('d-none');
+    if (p.indexOf('GESTOR') >= 0 || p.indexOf('EQUIPE') >= 0 || p.indexOf('ADMIN') >= 0) document.getElementById('lnkRelatorios').classList.remove('d-none');
+    if (p.indexOf('ADMIN') >= 0) document.getElementById('lnkConfig').classList.remove('d-none');
 
     opcoes = await Chamados.get('Chamado', { acao: 'opcoes' });
     if (!opcoes.ok) return;
