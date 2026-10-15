@@ -8,6 +8,15 @@
 
 **Tech Stack:** Java Servlet · Bootstrap 5.3 · JavaScript puro
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.4.1-2 | Interface de análise com zoom, brilho, contraste (sem alterar original) |
+| §5.7.7 | Vídeos operacionais time-lapse |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Imagens servidas pelo servlet existente de imagem (reutilizar ou criar)
@@ -21,8 +30,8 @@
 
 | Ação | Caminho |
 |---|---|
-| Criar | `src/main/java/muralha/digital/imagem/TimelapseServlet.java` |
-| Criar | `src/main/java/muralha/digital/imagem/ImagemPassagemServlet.java` (se não existir) |
+| Criar | `src/main/java/muralha/digital/timelapse/TimelapseServlet.java` |
+| Criar | `src/main/java/muralha/digital/imagem/ImagemPassagemServlet.java` (se não existir — na implementação, reutilizado servlet existente) |
 | Criar | `src/main/webapp/muralha-digital/pages/monitoramento/timelapse/index.jsp` |
 
 ---
@@ -113,8 +122,8 @@ Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"
 - [ ] **Criar `TimelapseServlet.java`**
 
 ```java
-// src/main/java/muralha/digital/imagem/TimelapseServlet.java
-package muralha.digital.imagem;
+// src/main/java/muralha/digital/timelapse/TimelapseServlet.java
+package muralha.digital.timelapse;
 
 import com.consilux.lib.Conexao;
 import com.google.gson.*;
@@ -206,7 +215,7 @@ public class TimelapseServlet extends HttpServlet {
 ```
 
 ```bash
-git add src/main/java/muralha/digital/imagem/TimelapseServlet.java
+git add src/main/java/muralha/digital/timelapse/TimelapseServlet.java
 git commit -m "Adiciona TimelapseServlet para listagem de frames por equipamento e período
 
 Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>"

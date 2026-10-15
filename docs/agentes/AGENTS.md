@@ -99,6 +99,7 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `17-timelapse.md` | Time-lapse de passagens por equipamento | — |
 | `18-disponibilidade.md` | Disponibilidade de equipamentos (uptime) | 07 |
 | `19-sensores-externos.md` | Integração Waze/CSV, camada no mapa | — |
+| `20-dashboard-builder.md` | Dashboard Builder self-service | — |
 
 ---
 

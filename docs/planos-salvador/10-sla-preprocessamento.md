@@ -9,6 +9,16 @@
 
 **Tech Stack:** Quartz Scheduler (já no projeto) · SQL Server · Bootstrap 5.3
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.1.6 | Sinalização de registros fora do prazo — parcial |
+| §5.5.2.1 | Prazo máximo 72h por lote de pré-processamento |
+| §5.5.3.1 | Painel de controle operacional do pré-processamento — parcial (ver também [Plano 20](20-dashboard-builder.md)) |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Quartz já no `pom.xml`; sem nova dependência

@@ -109,7 +109,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 - Nomes `snake_case` minúsculos; tabelas no singular; PK `id` (`muralha.*`) ou `id_<tabela>` (`dbo.*`); FK `id_<referenciada>`; flags `ativo bit/int`; datas `data_<evento>`; auditoria `data_criacao`, `data_modificacao`, `id_usuario*`.
 - Procedures `spu_<Acao>` (padrão atual; `sp_` e `usp_` são raros), funções tabela `fcn_<Nome>`, views `v_<nome>`/`vw_<nome>`. Schema explícito.
 - Compatibilidade **SQL Server 2016** (sem `STRING_AGG`, `TRIM`, `CONCAT_WS`, `GENERATE_SERIES`; o banco está em nível de compatibilidade **110**, então também evite `STRING_SPLIT`/`OPENJSON` sem testar).
-- Toda mudança de esquema = script versionado em `docs/banco-de-dados/migracoes/AAAAMMDD_descricao.sql`, idempotente (`IF NOT EXISTS`), com rollback comentado e aprovação — **nunca** aplicar DDL direto sem autorização. Ver `agentes/agente-banco-de-dados.md`.
+- Toda mudança de esquema = script versionado em `docs/banco-de-dados/migracoes/AAAAMMDD_descricao.sql`, idempotente (`IF NOT EXISTS`), com rollback comentado e aprovação — **nunca** aplicar DDL direto sem autorização. Ver `agentes/AGENTS.md`.
 
 ## 7. Tratamento de erros e logs (resumo)
 Servidor: log com stack no `error.log`, resposta genérica ao cliente. Cliente: mensagem amigável + `console.error`. Erros previsíveis (validação) → 400 com texto; falha inesperada → 500.

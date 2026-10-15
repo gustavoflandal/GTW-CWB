@@ -9,7 +9,7 @@ Sistema legado Java/JSP (Tomcat, SQL Server) da Consilux: **GTW clássico** + **
 - **Banco** `GTW_MURALHA_DEV` (10.0.0.200): somente leitura sem autorização; DDL/DML só como script em `docs/banco-de-dados/migracoes/`.
 - Código novo: sessão + permissão (`docs/06-padroes-de-codigo.md` §1.1), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
 
-## Comandos (a partir de `D:\GTW-CWB\GTW-CWB`)
+## Comandos (a partir de `D:\GTW-CWB`)
 ```powershell
 ..\.setup-gtw\build.ps1     # clean install -DskipTests (WAR em target\GTW_MURALHA_DIGITAL\...)
 ..\.setup-gtw\run.ps1       # tomcat7:run → http://localhost:8080/

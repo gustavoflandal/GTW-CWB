@@ -53,9 +53,14 @@ public class MfaConfigServlet extends HttpServlet {
                     try {
                         conn = Conexao.getConexao();
                         try (PreparedStatement ps = conn.prepareStatement(
-                                "UPDATE dbo.sis_usuario SET totp_secret=?, totp_habilitado=1 WHERE id=?")) {
-                            ps.setString(1, segredo);
-                            ps.setInt(2, idUsuario);
+                                "MERGE dbo.sis_usuario_complemento AS alvo " +
+                                "USING (SELECT ? AS id) AS src ON alvo.id_usuario = src.id " +
+                                "WHEN MATCHED THEN UPDATE SET totp_secret=?, totp_habilitado=1 " +
+                                "WHEN NOT MATCHED THEN INSERT (id_usuario, totp_secret, totp_habilitado) " +
+                                "  VALUES (src.id, ?, 1);")) {
+                            ps.setInt(1, idUsuario);
+                            ps.setString(2, segredo);
+                            ps.setString(3, segredo);
                             ps.executeUpdate();
                         }
                     } finally {
@@ -79,7 +84,11 @@ public class MfaConfigServlet extends HttpServlet {
                 try {
                     conn = Conexao.getConexao();
                     try (PreparedStatement ps = conn.prepareStatement(
-                            "UPDATE dbo.sis_usuario SET totp_secret=NULL, totp_habilitado=0 WHERE id=?")) {
+                            "MERGE dbo.sis_usuario_complemento AS alvo " +
+                            "USING (SELECT ? AS id) AS src ON alvo.id_usuario = src.id " +
+                            "WHEN MATCHED THEN UPDATE SET totp_secret=NULL, totp_habilitado=0 " +
+                            "WHEN NOT MATCHED THEN INSERT (id_usuario, totp_habilitado) " +
+                            "  VALUES (src.id, 0);")) {
                         ps.setInt(1, idUsuario);
                         ps.executeUpdate();
                     }

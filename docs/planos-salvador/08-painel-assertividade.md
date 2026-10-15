@@ -9,6 +9,15 @@
 
 **Tech Stack:** SQL Server · Java Servlet · Bootstrap 5.3 · Chart.js (cdnjs)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.2.3 | Aderência mínima de 80% da pré-classificação |
+| §5.2.2.6 | Painel de controle com assertividade, volume, divergências em tempo real |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Sem nova dependência no `pom.xml`

@@ -8,6 +8,17 @@
 
 **Tech Stack:** SQL Server · Java Servlet · Bootstrap 5.3 · Chart.js (cdnjs)
 
+## Referência ao Edital (TR TRANSALVADOR)
+
+| Ref. TR | Requisito |
+|---|---|
+| §5.2.8.4 | Dashboards analíticos em tempo real |
+| §5.4.2.1-2 | Dashboards analíticos interativos via navegador |
+| §5.4.2.5 | Configuração de dashboards personalizados pela CONTRATANTE (ver também [Plano 20](20-dashboard-builder.md)) |
+| §5.4.6.1-3 | Indicadores parametrizáveis com metas e alertas automáticos |
+
+> Análise de aderência completa: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
 ## Global Constraints
 
 - Queries de KPI executam somente SELECT; bloquear DML/DDL na execução
