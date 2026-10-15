@@ -283,7 +283,7 @@
         <p>A aba mostra três cartões: <strong>Solicitantes</strong>, <strong>Gestores do contrato</strong> e <strong>Equipe técnica</strong>, cada um com a lista dos usuários que têm o perfil.</p>
         <div class="step-item"><span class="step-number">1</span><p>Para <strong>incluir</strong> um usuário: digite pelo menos 2 letras do nome ou do login no campo "Adicionar usuário", clique no resultado e confirme.</p></div>
         <div class="step-item"><span class="step-number">2</span><p>Para <strong>remover</strong>: clique na lixeira ao lado do nome e confirme.</p></div>
-        <p>Os administradores aparecem numa lista de <strong>somente leitura</strong> no fim da aba; o grupo de administradores não é alterado por aqui.</p>
+        <p>O grupo de administradores não aparece nem é alterado por aqui; ele é mantido na tela de usuários do sistema.</p>
         <blockquote>Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito sobre o acesso. Porém, as alterações de grupo feitas pela tela legada de usuários <strong>não aparecem no log de auditoria do sistema de chamados</strong>; só ficam registradas as feitas nesta aba (Perfis de acesso).</blockquote>
 
         <h3 id="adm-prioridades">8.3 Prioridades e prazos</h3>

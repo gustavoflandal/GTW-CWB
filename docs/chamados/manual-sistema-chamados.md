@@ -211,7 +211,7 @@ A aba mostra três cartões: **Solicitantes**, **Gestores do contrato** e **Equi
 1. Para **incluir** um usuário: digite pelo menos 2 letras do nome ou do login no campo "Adicionar usuário", clique no resultado e confirme.
 2. Para **remover**: clique na lixeira ao lado do nome e confirme.
 
-Os administradores aparecem numa lista de **somente leitura** no fim da aba; o grupo de administradores não é alterado por aqui.
+O grupo de administradores não aparece nem é alterado por aqui; ele é mantido na tela de usuários do sistema.
 
 > Os mesmos grupos aparecem na tela de usuários do sistema legado; incluir um usuário por lá ou por aqui tem o mesmo efeito sobre o acesso. Porém, as alterações de grupo feitas pela tela legada de usuários **não aparecem no log de auditoria do sistema de chamados**; só ficam registradas as feitas nesta aba (Perfis de acesso).
 
