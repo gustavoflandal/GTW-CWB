@@ -88,6 +88,15 @@ public class MaquinaEstadosTest {
     }
 
     @Test
+    public void adminVeTodosMasNaoExecutaAcoes() {
+        Set<PerfilChamado> adm = EnumSet.of(PerfilChamado.ADMIN);
+        assertTrue(PerfilChamado.veTodos(adm));
+        for (StatusChamado s : StatusChamado.values()) {
+            assertTrue(MaquinaEstados.permitidas(s, adm, false).isEmpty(), "ADMIN sozinho nao age em " + s);
+        }
+    }
+
+    @Test
     public void codigoDaAcao() {
         assertEquals(AcaoChamado.deCodigo("reclassificar"), RECLASSIFICAR);
         assertNull(AcaoChamado.deCodigo("abrir"));

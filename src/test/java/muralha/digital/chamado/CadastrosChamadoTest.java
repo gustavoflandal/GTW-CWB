@@ -1,5 +1,6 @@
 package muralha.digital.chamado;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 public class CadastrosChamadoTest {
@@ -39,6 +40,22 @@ public class CadastrosChamadoTest {
         Prioridade p = valida();
         p.codigo = "crit ica";
         p.validar();
+    }
+
+    @Test
+    public void parametrosSlaNasBordas() {
+        ChamadoConfigDao.validarParametrosSla(1, 1);
+        ChamadoConfigDao.validarParametrosSla(99, 60);
+    }
+
+    @DataProvider
+    public Object[][] parametrosSlaInvalidos() {
+        return new Object[][] {{0, 5}, {100, 5}, {80, 0}, {80, 61}, {-1, -1}};
+    }
+
+    @Test(dataProvider = "parametrosSlaInvalidos", expectedExceptions = RegraChamadoException.class)
+    public void parametrosSlaForaDosLimites(int risco, int dias) {
+        ChamadoConfigDao.validarParametrosSla(risco, dias);
     }
 
     @Test(expectedExceptions = RegraChamadoException.class)

@@ -22,6 +22,9 @@ public final class ChamadoConfigDao {
             "CAST(CASE WHEN c.id_pai IS NULL THEN c.exige_equipamento ELSE p.exige_equipamento END AS BIT) AS exige " +
             "FROM muralha.chamado_categoria c LEFT JOIN muralha.chamado_categoria p ON p.id = c.id_pai ";
 
+    private static final String CHAVE_RISCO = "chamado_sla_risco_percentual";
+    private static final String CHAVE_FECHAMENTO = "chamado_fechamento_auto_dias";
+
     private ChamadoConfigDao() {
     }
 
@@ -52,6 +55,7 @@ public final class ChamadoConfigDao {
         mapear(conn, porGrupo, "chamado_grupo_solicitante", PerfilChamado.SOLICITANTE);
         mapear(conn, porGrupo, "chamado_grupo_gestor", PerfilChamado.GESTOR);
         mapear(conn, porGrupo, "chamado_grupo_equipe", PerfilChamado.EQUIPE);
+        mapear(conn, porGrupo, "chamado_grupo_admin", PerfilChamado.ADMIN);
         Set<PerfilChamado> perfis = EnumSet.noneOf(PerfilChamado.class);
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT id_grupo FROM dbo.sis_usuario_grupo WHERE id_usuario = ?")) {
@@ -70,6 +74,169 @@ public final class ChamadoConfigDao {
             throws SQLException {
         int idGrupo = valorInt(conn, chave, -1);
         if (idGrupo > 0) mapa.put(idGrupo, perfil);
+    }
+
+    private static String chaveGrupo(PerfilChamado perfil) {
+        switch (perfil) {
+            case SOLICITANTE: return "chamado_grupo_solicitante";
+            case GESTOR: return "chamado_grupo_gestor";
+            case EQUIPE: return "chamado_grupo_equipe";
+            default: return "chamado_grupo_admin";
+        }
+    }
+
+    /** Limites dos parametros de SLA (pura, testavel sem banco). */
+    static void validarParametrosSla(int riscoPercentual, int fechamentoAutoDias) {
+        if (riscoPercentual < 1 || riscoPercentual > 99) {
+            throw new RegraChamadoException("O percentual de risco deve estar entre 1 e 99.");
+        }
+        if (fechamentoAutoDias < 1 || fechamentoAutoDias > 60) {
+            throw new RegraChamadoException("O prazo de fechamento automático deve estar entre 1 e 60 dias.");
+        }
+    }
+
+    public static JsonObject parametrosSla(Connection conn) throws SQLException {
+        JsonObject o = new JsonObject();
+        o.addProperty("riscoPercentual", valorInt(conn, CHAVE_RISCO, 80));
+        o.addProperty("fechamentoAutoDias", valorInt(conn, CHAVE_FECHAMENTO, 5));
+        return o;
+    }
+
+    /** Atualiza os parametros e registra cada mudanca no historico, na mesma transacao. */
+    public static void salvarParametrosSla(Connection conn, int riscoPercentual, int fechamentoAutoDias,
+                                           int idUsuario) throws SQLException {
+        validarParametrosSla(riscoPercentual, fechamentoAutoDias);
+        boolean autoCommit = conn.getAutoCommit();
+        conn.setAutoCommit(false);
+        try {
+            atualizarParametro(conn, CHAVE_RISCO, 80, riscoPercentual, idUsuario);
+            atualizarParametro(conn, CHAVE_FECHAMENTO, 5, fechamentoAutoDias, idUsuario);
+            conn.commit();
+        } catch (SQLException | RuntimeException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(autoCommit);
+        }
+    }
+
+    private static void atualizarParametro(Connection conn, String chave, int padrao, int novo, int idUsuario)
+            throws SQLException {
+        int antigo = valorInt(conn, chave, padrao);
+        try (PreparedStatement ps = conn.prepareStatement(
+                "UPDATE muralha.config_chave_valor SET valor = ? WHERE chave = ?")) {
+            ps.setString(1, String.valueOf(novo));
+            ps.setString(2, chave);
+            if (ps.executeUpdate() == 0) {
+                throw new RegraChamadoException("Parâmetro \"" + chave + "\" não cadastrado.");
+            }
+        }
+        if (antigo == novo) return;
+        String evento = chave + ": " + antigo + " -> " + novo;
+        if (evento.length() > 255) evento = evento.substring(0, 255);
+        try (PreparedStatement ps = conn.prepareStatement(
+                "INSERT INTO muralha.config_chave_valor_hist (id_usuario, data_atualizacao, evento) " +
+                "VALUES (?, GETDATE(), ?)")) {
+            ps.setInt(1, idUsuario);
+            ps.setString(2, evento);
+            ps.executeUpdate();
+        }
+    }
+
+    public static JsonArray membrosPerfis(Connection conn) throws SQLException {
+        JsonArray arr = new JsonArray();
+        for (PerfilChamado perfil : PerfilChamado.values()) {
+            int idGrupo = valorInt(conn, chaveGrupo(perfil), -1);
+            if (idGrupo <= 0) continue;
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "SELECT u.id_usuario, RTRIM(u.nome) AS nome, RTRIM(u.usuario) AS login, " +
+                    "RTRIM(u.email) AS email, u.ativo " +
+                    "FROM dbo.sis_usuario_grupo ug JOIN dbo.sis_usuario u ON u.id_usuario = ug.id_usuario " +
+                    "WHERE ug.id_grupo = ? ORDER BY u.nome")) {
+                ps.setInt(1, idGrupo);
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        JsonObject o = new JsonObject();
+                        o.addProperty("perfil", perfil.name());
+                        o.addProperty("idUsuario", rs.getInt("id_usuario"));
+                        o.addProperty("nome", rs.getString("nome"));
+                        o.addProperty("login", rs.getString("login"));
+                        o.addProperty("email", rs.getString("email"));
+                        o.addProperty("ativo", rs.getBoolean("ativo"));
+                        arr.add(o);
+                    }
+                }
+            }
+        }
+        return arr;
+    }
+
+    /** Ate 20 usuarios ativos cujo nome ou login contem o termo. */
+    public static JsonArray buscarUsuarios(Connection conn, String termo) throws SQLException {
+        JsonArray arr = new JsonArray();
+        String t = termo == null ? "" : termo.trim();
+        if (t.isEmpty()) return arr;
+        String padrao = "%" + t.replace("[", "[[]").replace("%", "[%]").replace("_", "[_]") + "%";
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT TOP 20 id_usuario, RTRIM(nome) AS nome, RTRIM(usuario) AS login FROM dbo.sis_usuario " +
+                "WHERE ativo = 1 AND (nome LIKE ? OR usuario LIKE ?) ORDER BY nome")) {
+            ps.setString(1, padrao);
+            ps.setString(2, padrao);
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    JsonObject o = new JsonObject();
+                    o.addProperty("idUsuario", rs.getInt("id_usuario"));
+                    o.addProperty("nome", rs.getString("nome"));
+                    o.addProperty("login", rs.getString("login"));
+                    arr.add(o);
+                }
+            }
+        }
+        return arr;
+    }
+
+    /** "Nome (login)" do usuario, ou null se nao existir. */
+    public static String nomeLogin(Connection conn, int idUsuario) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT RTRIM(nome), RTRIM(usuario) FROM dbo.sis_usuario WHERE id_usuario = ?")) {
+            ps.setInt(1, idUsuario);
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? rs.getString(1) + " (" + rs.getString(2) + ")" : null;
+            }
+        }
+    }
+
+    private static int grupoGerenciavel(Connection conn, PerfilChamado perfil) throws SQLException {
+        if (perfil == null || perfil == PerfilChamado.ADMIN) {
+            throw new RegraChamadoException("Este perfil não é gerenciado por aqui.");
+        }
+        int idGrupo = valorInt(conn, chaveGrupo(perfil), -1);
+        if (idGrupo <= 0) throw new RegraChamadoException("Grupo do perfil não configurado.");
+        return idGrupo;
+    }
+
+    public static void adicionarMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
+        int idGrupo = grupoGerenciavel(conn, perfil);
+        if (nomeLogin(conn, idUsuario) == null) throw new RegraChamadoException("Usuário não encontrado.");
+        try (PreparedStatement ps = conn.prepareStatement(
+                "INSERT INTO dbo.sis_usuario_grupo (id_usuario, id_grupo) SELECT ?, ? WHERE NOT EXISTS " +
+                "(SELECT 1 FROM dbo.sis_usuario_grupo WHERE id_usuario = ? AND id_grupo = ?)")) {
+            ps.setInt(1, idUsuario);
+            ps.setInt(2, idGrupo);
+            ps.setInt(3, idUsuario);
+            ps.setInt(4, idGrupo);
+            ps.executeUpdate();
+        }
+    }
+
+    public static void removerMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
+        int idGrupo = grupoGerenciavel(conn, perfil);
+        try (PreparedStatement ps = conn.prepareStatement(
+                "DELETE FROM dbo.sis_usuario_grupo WHERE id_usuario = ? AND id_grupo = ?")) {
+            ps.setInt(1, idUsuario);
+            ps.setInt(2, idGrupo);
+            ps.executeUpdate();
+        }
     }
 
     public static String emailUsuario(Connection conn, int idUsuario) throws SQLException {
