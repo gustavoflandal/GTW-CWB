@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -133,11 +134,13 @@ public class ChamadoServlet extends HttpServlet {
         Path arquivo = ChamadoService.armazenamento(conn).resolver(a.get("caminho").getAsString());
         if (!Files.exists(arquivo)) throw new ChamadoNaoEncontradoException("anexo");
         String nome = URLEncoder.encode(a.get("nome").getAsString(), StandardCharsets.UTF_8).replace("+", "%20");
-        resp.setContentType(a.get("tipoMime").getAsString());
-        resp.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + nome);
-        resp.setHeader("X-Content-Type-Options", "nosniff");
-        resp.setHeader("Content-Length", String.valueOf(Files.size(arquivo)));
-        Files.copy(arquivo, resp.getOutputStream());
+        try (InputStream in = Files.newInputStream(arquivo)) {
+            resp.setContentType(a.get("tipoMime").getAsString());
+            resp.setHeader("Content-Disposition", "attachment; filename*=UTF-8''" + nome);
+            resp.setHeader("X-Content-Type-Options", "nosniff");
+            resp.setHeader("Content-Length", String.valueOf(Files.size(arquivo)));
+            in.transferTo(resp.getOutputStream());
+        }
     }
 
     private static final class Formulario {
@@ -190,7 +193,10 @@ public class ChamadoServlet extends HttpServlet {
     static void tratar(HttpServletResponse resp, Exception e) throws IOException {
         if (resp.isCommitted()) {
             logger.error("Erro apos inicio da resposta", e);
-        } else if (e instanceof ChamadoNaoEncontradoException) {
+            return;
+        }
+        resp.reset();
+        if (e instanceof ChamadoNaoEncontradoException) {
             ContextoRequisicao.erro(resp, HttpServletResponse.SC_NOT_FOUND, "Chamado não encontrado.");
         } else if (e instanceof RegraChamadoException) {
             ContextoRequisicao.erro(resp, HttpServletResponse.SC_OK, e.getMessage());
