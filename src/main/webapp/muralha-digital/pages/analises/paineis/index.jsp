@@ -1,7 +1,7 @@
 <%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ include file="/muralha-digital/utils/credenciais/cabecalho_bootstrap_simples.jsp"%>
 
-<link rel="stylesheet" href="/static/vendor/gridstack/gridstack.min.css">
+<link rel="stylesheet" href="/static/vendor/gridstack/gridstack.min.css?v=10.1.2">
 <link rel="stylesheet" href="/static/css/dashboards/print.css" media="print">
 <style>
     .dash-area {
@@ -186,7 +186,7 @@
 
 <!-- Vendor -->
 <script src="/static/vendor/echarts/echarts.min.js"></script>
-<script src="/static/vendor/gridstack/gridstack-all.min.js"></script>
+<script src="/static/vendor/gridstack/gridstack-all.min.js?v=10.1.2"></script>
 <script src="/static/vendor/ag-grid/ag-grid-community.min.js"></script>
 
 <!-- Modulos do painel -->
