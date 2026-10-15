@@ -123,6 +123,10 @@ public class Agendador extends HttpServlet {
 
 	public static final String GRUPO_INTEGRACAO = "Integracao";
 	public static final String JOB_INCIDENTE_IMPORT = "Importa Incidentes Waze";
+
+	public static final String GRUPO_CHAMADOS = "Chamados";
+	public static final String JOB_CHAMADO_SLA = "Chamados SLA e fechamento automatico";
+	public static final String JOB_CHAMADO_EMAIL = "Chamados envio de e-mails";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -187,6 +191,8 @@ public class Agendador extends HttpServlet {
 			reajustaJobRetencao();
 			reajustaJobDisponibilidade();
 			reajustaJobIncidenteImport();
+			reajustaJobChamadoSla();
+			reajustaJobChamadoEmail();
 
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -935,6 +941,36 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job Importação Incidentes Waze agendada a cada 30 minutos.");
+		}
+	}
+
+	private static void reajustaJobChamadoSla() throws SchedulerException {
+		if (!possuiJob(GRUPO_CHAMADOS, JOB_CHAMADO_SLA)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.chamado.ChamadoSlaJob.class)
+					.withIdentity(JOB_CHAMADO_SLA, GRUPO_CHAMADOS)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_CHAMADO_SLA, GRUPO_CHAMADOS)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Chamados SLA agendada a cada 5 minutos.");
+		}
+	}
+
+	private static void reajustaJobChamadoEmail() throws SchedulerException {
+		if (!possuiJob(GRUPO_CHAMADOS, JOB_CHAMADO_EMAIL)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.chamado.ChamadoEmailJob.class)
+					.withIdentity(JOB_CHAMADO_EMAIL, GRUPO_CHAMADOS)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_CHAMADO_EMAIL, GRUPO_CHAMADOS)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Chamados e-mail agendada a cada 1 minuto.");
 		}
 	}
 

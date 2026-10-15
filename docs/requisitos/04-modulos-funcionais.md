@@ -1,6 +1,6 @@
 ﻿# 04 — Catálogo Funcional dos Módulos
 
-> Fonte: menus reais do banco (`referencia/menus-e-permissoes.md`), servlets/ações (`referencia/modulos-backend-muralha.md`), telas (`referencia/telas-muralha-digital.md`) e leitura do código. Convenções: **Tela** = `/muralha-digital/pages/<dir>/…`; **API** = `/MuralhaDigital/<X>` (servlet, parâmetro `acao`); **Pacote** = `muralha.digital.<pkg>`.
+> Fonte: menus reais do banco (`../referencia/menus-e-permissoes.md`), servlets/ações (`../referencia/modulos-backend-muralha.md`), telas (`../referencia/telas-muralha-digital.md`) e leitura do código. Convenções: **Tela** = `/muralha-digital/pages/<dir>/…`; **API** = `/MuralhaDigital/<X>` (servlet, parâmetro `acao`); **Pacote** = `muralha.digital.<pkg>`.
 
 ## 1. Menu principal do Muralha Digital (tabela `sis_menu_infos`)
 
@@ -205,7 +205,7 @@ Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `m
 
 ## 7. Construtor de Dashboards (Plano 20)
 
-Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
+Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](../planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
 
 **Servlets REST (prefixo `/api/dash/`):**
 - `DashCatalogoServlet` — CRUD do catálogo de tabelas/colunas/relações
@@ -227,3 +227,18 @@ Módulo self-service de painéis analíticos interativos. Pacote principal: `mur
 **Modelador Visual** (`datasets/modelador.jsp`): interface alternativa ao wizard para edição de datasets com canvas interativo (AntV X6). Arrastar tabelas do painel lateral para o canvas, criar relações por drag entre portas de colunas, sugestões automáticas (FKs, catálogo, nomes id_X), auto-layout dagre, undo/redo, seleção de campos com prévia de dados. API: GET `sugestoesRelacao`; POST `validarRelacao`, `verificarCardinalidade`, `salvarModelador`, `promoverRelacao`.
 
 **Schema:** `dash` (15 tabelas: catalogo_tabela, catalogo_coluna, catalogo_relacao, dataset, dataset_campo, dataset_tabela, dataset_relacao, dataset_modelador, dataset_filtro_fixo, dashboard, widget, compartilhamento, historico_versao, consulta_log, dataset_estatistica).
+
+## 8. Sistema de Chamados (Plano 22)
+
+Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [arquitetura](../chamados/sistema-chamados-arquitetura.md), [documentação em `docs/chamados/`](../chamados/), [manual](../chamados/manual-sistema-chamados.md)). Pacote `muralha.digital.chamado` (26 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo` (107–109, abaixo do grupo 11), e perfil `ADMIN` mapeado do grupo 11 (Administradores, chave `chamado_grupo_admin`), único que acessa a Configuração.
+
+| Item | Detalhe |
+|---|---|
+| Menus | 383 (categoria "Sistema de Chamados" na tela inicial, `sis_menu_infos` 49), com os cards 379 (Chamados), 381 (Relatórios de Chamados) e 382 (Configuração de Chamados, só administrador); 380 (Detalhe do Chamado, sem card) |
+| Telas (`pages/chamados/`) | `index.jsp` (lista, filtros, modal "Novo chamado", exportação), `detalhe.jsp` (histórico e ações), `relatorios.jsp` (indicadores e gráfico), `configuracao.jsp` (parâmetros de SLA, perfis de acesso, prioridades e categorias) |
+| Servlets | `/MuralhaDigital/Chamado`, `/MuralhaDigital/ChamadoRelatorio`, `/MuralhaDigital/ChamadoConfig` |
+| Jobs Quartz | `ChamadoSlaJob` (5 min: marcas de SLA e fechamento automático), `ChamadoEmailJob` (1 min: fila de e-mails) |
+| Tabelas (schema `muralha`) | `chamado_prioridade`, `chamado_categoria`, `chamado`, `chamado_historico`, `chamado_anexo`, `chamado_notificacao`, `chamado_protocolo` |
+| Parâmetros | chaves `chamado_*` em `muralha.config_chave_valor` (risco de SLA, fechamento automático, diretório e tamanho de anexos, e-mail ativo, IDs dos grupos) |
+
+**Status:** implementado; migração, seed e complemento (`20261015_sistema_chamados.sql`, `_seed.sql` e `_admin.sql`) executados no `GTW_MURALHA_DEV` e teste integrado executado em 2026-10-15 ([roteiro](../testes/22-sistema-chamados.md)).

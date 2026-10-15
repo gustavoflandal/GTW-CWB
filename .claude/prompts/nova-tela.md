@@ -1,6 +1,6 @@
 # Prompt: criar nova tela Muralha
 
-Papel: **Agente Frontend Muralha** (+ Backend se faltar endpoint). Leia `docs/agentes/AGENTS.md`, `docs/agentes/agente-frontend-muralha.md`, `docs/05-padrao-visual.md`, `docs/06-padroes-de-codigo.md`, `docs/10-guia-de-implementacao.md` §1–2.
+Papel: **Agente Frontend Muralha** (+ Backend se faltar endpoint). Leia `docs/agentes/AGENTS.md`, `docs/agentes/agente-frontend-muralha.md`, `docs/requisitos/05-padrao-visual.md`, `docs/requisitos/06-padroes-de-codigo.md`, `docs/requisitos/10-guia-de-implementacao.md` §1–2.
 
 ## Preencher
 - **Nome da tela / diretório (kebab-case):** `<...>`
@@ -18,7 +18,7 @@ Papel: **Agente Frontend Muralha** (+ Backend se faltar endpoint). Leia `docs/ag
 3. Se faltar API, acione o fluxo de `novo-endpoint.md`.
 4. Gere (não aplique) o script de `sis_menu`/`sis_menu_direitos`/`sis_menu_infos` em `docs/banco-de-dados/migracoes/`.
 5. Valide com `docs/agentes/agente-qa-testes.md` (roteiro) e a checklist `05` §9.
-6. Atualize `docs/04-modulos-funcionais.md`. Entregue o relatório de `AGENTS.md` §5.
+6. Atualize `docs/requisitos/04-modulos-funcionais.md`. Entregue o relatório de `AGENTS.md` §5.
 
 ## Não faça
 Não nova lib/ícone/fonte; não altere cabeçalhos/utils compartilhados; não grave no banco.

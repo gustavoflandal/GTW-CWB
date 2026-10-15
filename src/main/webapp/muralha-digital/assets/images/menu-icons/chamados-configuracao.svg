@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300">
+  <rect width="450" height="300" fill="white"/>
+  <rect x="6" y="6" width="438" height="288" rx="10" fill="none" stroke="#c5dff0" stroke-width="2"/>
+  <!-- Gear -->
+  <g transform="translate(-25, 0)">
+    <circle cx="180" cy="140" r="55" fill="none" stroke="#2c3e50" stroke-width="5.5"/>
+    <circle cx="180" cy="140" r="22" fill="none" stroke="#2c3e50" stroke-width="5"/>
+    <rect x="172" y="72" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3"/>
+    <rect x="172" y="188" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3"/>
+    <rect x="112" y="132" width="20" height="16" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3"/>
+    <rect x="228" y="132" width="20" height="16" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3"/>
+    <rect x="212" y="84" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3" transform="rotate(45, 220, 94)"/>
+    <rect x="132" y="84" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3" transform="rotate(-45, 140, 94)"/>
+    <rect x="212" y="176" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3" transform="rotate(-45, 220, 186)"/>
+    <rect x="132" y="176" width="16" height="20" rx="4" fill="#1a78b0" stroke="#2c3e50" stroke-width="3" transform="rotate(45, 140, 186)"/>
+  </g>
+  <!-- Stopwatch (SLA) -->
+  <rect x="293" y="46" width="24" height="14" rx="4" fill="#85c1e9" stroke="#2c3e50" stroke-width="3.5"/>
+  <line x1="305" y1="60" x2="305" y2="72" stroke="#2c3e50" stroke-width="5"/>
+  <line x1="337" y1="81" x2="347" y2="71" stroke="#2c3e50" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 305 120 L 305 85 A 35 35 0 0 1 340 120 Z" fill="#85c1e9"/>
+  <circle cx="305" cy="120" r="48" fill="none" stroke="#2c3e50" stroke-width="5"/>
+  <line x1="305" y1="120" x2="305" y2="88" stroke="#2c3e50" stroke-width="4.5" stroke-linecap="round"/>
+  <line x1="305" y1="120" x2="330" y2="134" stroke="#1a78b0" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="305" cy="120" r="5" fill="#2c3e50"/>
+  <!-- User badge (perfis) -->
+  <rect x="315" y="182" width="65" height="65" rx="15" fill="#1a78b0" stroke="#2c3e50" stroke-width="3.5"/>
+  <circle cx="347.5" cy="204" r="10" fill="white"/>
+  <path d="M 328 236 Q 328 218 347.5 218 Q 367 218 367 236 Z" fill="white"/>
+</svg>

@@ -1,6 +1,6 @@
 # Migracoes de banco de dados
 
-Scripts versionados (AAAAMMDD_descricao.sql). Regras: idempotentes, schema explicito, compativeis com SQL Server 2016 (nivel de compatibilidade 130), rollback comentado, sem dados reais, **nunca aplicados por agentes sem autorizacao humana explicita**. Ver docs/10-guia-de-implementacao.md secao 6 e docs/agentes/AGENTS.md.
+Scripts versionados (AAAAMMDD_descricao.sql). Regras: idempotentes, schema explicito, compativeis com SQL Server 2016 (nivel de compatibilidade 130), rollback comentado, sem dados reais, **nunca aplicados por agentes sem autorizacao humana explicita**. Ver docs/requisitos/10-guia-de-implementacao.md secao 6 e docs/agentes/AGENTS.md.
 
 ## Inventario de scripts
 

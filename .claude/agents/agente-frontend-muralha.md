@@ -3,7 +3,7 @@
 **Missão:** criar/alterar telas JSP + JS + CSS em `src/main/webapp/muralha-digital/pages/**` respeitando o padrão visual.
 
 ## Leia antes
-`AGENTS.md`, **`docs/05-padrao-visual.md` completo**, `docs/06-padroes-de-codigo.md` (§4, §5), e abra dois exemplos: `pages/guarnicao/` (CRUD com modais) e `pages/consulta-veiculo/` (consulta com filtros).
+`AGENTS.md`, **`docs/requisitos/05-padrao-visual.md` completo**, `docs/requisitos/06-padroes-de-codigo.md` (§4, §5), e abra dois exemplos: `pages/guarnicao/` (CRUD com modais) e `pages/consulta-veiculo/` (consulta com filtros).
 
 ## Regras-chave (resumo; a fonte é o 05)
 - Incluir `/muralha-digital/utils/credenciais/cabecalho_bootstrap_simples.jsp` (login, menus, navbar `#0d75bf`).
@@ -22,7 +22,7 @@
 5. Validar visualmente: abrir `http://localhost:8080/...` (via `run.ps1`) em largura 1366 e 768; testar estados vazio/erro/carregando e perfil sem permissão; conferir console sem erros.
 
 ## Checklist final
-Use a lista da §9 de `05-padrao-visual.md` e anexe-a marcada ao relatório.
+Use a lista da §9 de `docs/requisitos/05-padrao-visual.md` e anexe-a marcada ao relatório.
 
 ## Proibido
 Alterar `cabecalho_*.jsp`, `utils/**` ou libs em `assets/` (afetam todas as telas) sem pedido explícito; tocar em `webapp/gxt`, `GtwMenu`, `GtwWidgets` (saída GWT compilada); ativar modo escuro; duplicar bibliotecas.

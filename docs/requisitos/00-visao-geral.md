@@ -1,6 +1,6 @@
 ﻿# 00 — Visão Geral do Sistema GTW-CWB
 
-> Documentação de base para qualquer implementação neste projeto. Leia também `agentes/AGENTS.md` antes de alterar código.
+> Documentação de base para qualquer implementação neste projeto. Leia também `../agentes/AGENTS.md` antes de alterar código.
 
 ## 1. O que é
 
@@ -12,7 +12,7 @@ O WAR reúne **três gerações de software** que convivem no mesmo contexto web
 |---|---|---|---|---|
 | 1 | **GTW clássico** | JSP + GWT/GXT (compilado) + CSS próprio (Verdana, azul-acinzentado) | `webapp/{cadastro,ferramenta,processo,relatorio,infracao,remessa,...}`, `webapp/gxt`, `webapp/GtwMenu`, `webapp/GtwWidgets`, `webapp/css` | Processamento de infrações de radar/PCL: importar, validar imagens, gerar remessas/AIT, cadastros, relatórios de fluxo |
 | 2 | **Muralha Digital** | JSP + Bootstrap 5.3 + jQuery + Font Awesome/Bootstrap Icons | `webapp/muralha-digital/**`, pacote Java `muralha.digital.*` | Monitoramento em tempo real, alertas de veículos monitorados, blitz digital, atendimento de ocorrências, mapas, câmeras, registro de fatos, boletins |
-| 3 | **Mobilidade Urbana** (dados) | — (somente dados no mesmo banco) | schema `mobilidade` | Dados de congestionamento/Waze. **Não é consumido por este código Java** (ver `banco-de-dados/README.md`). |
+| 3 | **Mobilidade Urbana** (dados) | — (somente dados no mesmo banco) | schema `mobilidade` | Dados de congestionamento/Waze. **Não é consumido por este código Java** (ver `../banco-de-dados/README.md`). |
 
 **Código novo deve ser escrito no padrão Muralha Digital** (geração 2) — ver `05-padrao-visual.md` e `06-padroes-de-codigo.md`. A geração 1 só deve ser alterada para correções pontuais.
 
@@ -46,18 +46,18 @@ O WAR reúne **três gerações de software** que convivem no mesmo contexto web
 | `05-padrao-visual.md` | **Design system**: paleta, tipografia, ícones, componentes, layout, acessibilidade |
 | `06-padroes-de-codigo.md` | Convenções Java/JSP/JS/SQL observadas e as **obrigatórias** para código novo |
 | `07-configuracao-e-segredos.md` | Arquivos de configuração, variáveis de ambiente, regras para segredos |
-| `banco-de-dados/` | Catálogo completo do banco (tabelas, views, procs, funções, domínios, código SQL) |
+| `../banco-de-dados/` | Catálogo completo do banco (tabelas, views, procs, funções, domínios, código SQL) |
 | `08-integracoes.md` | Twilio, SendGrid, Facilita Móvel, SmsDev, Comtele, Bitly, Google (OAuth/Maps), Waze, câmeras, FFmpeg, Axis |
 | `09-seguranca-e-permissoes.md` | Autenticação, autorização, riscos conhecidos |
 | `10-guia-de-implementacao.md` | Receitas passo a passo (nova tela, endpoint, tabela, permissão, job…) |
 | `11-glossario.md` | Termos e siglas |
 | `12-riscos-e-debitos-tecnicos.md` | Dívidas técnicas e armadilhas |
-| `referencia/` | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
-| `agentes/` | Guias e prompts para subagents |
+| `../referencia/` | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
+| `../agentes/` | Guias e prompts para subagents |
 
 ## 5. Regras imutáveis
 
 1. **A stack de desenvolvimento (`.setup-gtw/`, na pasta pai deste projeto) não pode ser alterada**: JDK 13.0.1, Maven 3.9.9, Tomcat 9.0.91 (scripts) e `tomcat7-maven-plugin` para execução. Não atualizar versões, não trocar bibliotecas base, não adicionar frameworks (Spring, JPA, React, etc.).
 2. **O padrão visual é obrigatório** (`05-padrao-visual.md`): paleta, fontes, ícones, componentes.
 3. **Nenhum segredo no repositório.** Credenciais ficam em arquivos locais ignorados pelo git (`confGTW.xml`, `muralha-digital-config.xml`) ou variáveis de ambiente.
-4. **Sem alterar o esquema do banco por conta própria**: mudanças de DDL exigem script versionado e aprovação (ver `agentes/AGENTS.md`).
+4. **Sem alterar o esquema do banco por conta própria**: mudanças de DDL exigem script versionado e aprovação (ver `../agentes/AGENTS.md`).

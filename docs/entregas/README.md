@@ -27,6 +27,7 @@ Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios d
 | 19 | Sensores Externos (Waze/SAMU) | 2026-10-08 | ✅ Entregue | [19-sensores-externos.md](19-sensores-externos.md) |
 | 20 | Registro dos Modulos no Menu | 2026-10-09 | ✅ Entregue | [20-menu-modulos.md](20-menu-modulos.md) |
 | 21 | Dashboard Builder Self-Service | 2026-10-13 | ✅ Entregue | [21-dashboard-builder.md](21-dashboard-builder.md) |
+| 22 | Sistema de Gerenciamento de Chamados | 2026-10-15 | 🟡 Implementado — aguardando execução da migração e testes integrados | [22-sistema-chamados.md](22-sistema-chamados.md) |
 
 > ✅ 16 migrações SQL executadas (10 em 2026-10-09, 6 em 2026-10-13) (ver [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md)).
 

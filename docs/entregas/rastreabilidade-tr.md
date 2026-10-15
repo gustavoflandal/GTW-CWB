@@ -64,6 +64,15 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 5.5.3.1 | Painel operacional pre-processamento | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
 | 5.5.4.6 | Retencao de logs por 5 anos apos encerramento | [12](../planos-salvador/12-retencao-dados.md) | [12](12-retencao-dados.md) | [12](../testes/12-retencao-dados.md) |
 
+## 7 — Central de Suporte Técnico (aba "Sist. Chamado")
+
+Itens da planilha [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx); o Capítulo 7 do TR não está no repositório.
+
+| Item | Requisito | Plano | Entrega | Teste |
+|---|---|---|---|---|
+| 7.2.3 (a–f) | Sistema de chamados: abertura com prioridade, acompanhamento de status, histórico, relatórios, avaliação e exportação PDF/CSV/XLS | [22](../planos-salvador/22-sistema-chamados.md) | [22](22-sistema-chamados.md) | [22](../testes/22-sistema-chamados.md) |
+| 7.2.4 | Protocolo único com confirmação automática (protocolo, prioridade, prazos) | [22](../planos-salvador/22-sistema-chamados.md) | [22](22-sistema-chamados.md) | [22](../testes/22-sistema-chamados.md) |
+
 ## Anexo A — Prova de Conceito
 
 | Item PoC | Verificacao | Planos relacionados |
@@ -98,3 +107,4 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 17 | Time-lapse | 5.2.4.1–2 |
 | 18 | Disponibilidade | 5.2.7.1–3, 5.4.2.3.e |
 | 19 | Sensores Externos | 5.3.7.1–3 |
+| 22 | Sistema de Chamados | 7.2.3 (a–f), 7.2.4 |

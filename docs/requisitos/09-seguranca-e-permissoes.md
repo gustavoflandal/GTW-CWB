@@ -12,7 +12,7 @@ sis_menu_direitos (id_menu_direito, id_menu, id_grupo, id_usuario)   ← direito
 sis_menu_infos / sis_menu_relatorio_infos / sis_menu_graficos_infos  ← o que aparece nos menus (href, ordenação, menu_pai)
 ```
 - `sis_menu.acao` guarda a **URL/ação protegida** (ex.: `/muralha-digital/pages/guarnicao/listagem-guarnicoes.jsp`). Pais são linhas com `acao` vazia (ex.: "Processamentos", "Monitoramento", "Anel de Segurança" = raiz das telas Muralha).
-- Dados reais (grupos, funcionalidades, menus): `referencia/menus-e-permissoes.md`. Grupos do Muralha: Anel de Segurança (41), Supervisores (42), Agente Central Atendimento (43), Agente de Guarnição (44), App Alerta Furtado (47), App Alerta Monitorado (48), PM (38), Monitoramento (40), Consilux (39), Esperando permissão (46)…
+- Dados reais (grupos, funcionalidades, menus): `../referencia/menus-e-permissoes.md`. Grupos do Muralha: Anel de Segurança (41), Supervisores (42), Agente Central Atendimento (43), Agente de Guarnição (44), App Alerta Furtado (47), App Alerta Monitorado (48), PM (38), Monitoramento (40), Consilux (39), Esperando permissão (46)…
 - Permissões finas do Muralha (quem enxerga quais tipos de alerta/ocorrência, notificações): `muralha.config_grupo_permissao` (+ histórico) e `registro_fato_usuario_grupo` (visibilidade de registros de fato).
 
 ## 2. Fluxo de verificação
@@ -51,4 +51,4 @@ INSERT INTO dbo.sis_menu_direitos (id_menu, id_grupo) VALUES (SCOPE_IDENTITY(), 
 -- 3) item de menu (se aparecer na navbar)
 INSERT INTO dbo.sis_menu_infos (id_infos, id_menu, src, descricao, href, descricao_detalhada, ordenacao, menu_pai) VALUES (...);
 ```
-(222 = nó pai "Anel de Segurança" (`nome_sistema='Muralha-Digital'`) em `sis_menu`; o grupo 42 é "Anel de Segurança - Supervisores". Confirmar IDs em `referencia/menus-e-permissoes.md`. Executar **somente com aprovação**, em DEV.)
+(222 = nó pai "Anel de Segurança" (`nome_sistema='Muralha-Digital'`) em `sis_menu`; o grupo 42 é "Anel de Segurança - Supervisores". Confirmar IDs em `../referencia/menus-e-permissoes.md`. Executar **somente com aprovação**, em DEV.)

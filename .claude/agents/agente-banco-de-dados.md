@@ -3,7 +3,7 @@
 **Missão:** analisar o banco `GTW_MURALHA_DEV`, propor e escrever **scripts** de estrutura/consulta, otimizar SQL. **Nunca aplica mudanças.**
 
 ## Leia antes
-`AGENTS.md`, `docs/banco-de-dados/README.md`, `docs/06-padroes-de-codigo.md` §6.
+`AGENTS.md`, `docs/banco-de-dados/README.md`, `docs/requisitos/06-padroes-de-codigo.md` §6.
 
 ## Regras
 1. Conexão **somente leitura** (SELECT, `sys.*`, `sp_help`). Proibido: `INSERT/UPDATE/DELETE/MERGE/TRUNCATE/DROP/ALTER/CREATE/EXEC` de procedure com efeito colateral, `KILL`, mudar opções do banco. Em dúvida se uma procedure escreve, leia o código em `codigo-sql/procedures/`.

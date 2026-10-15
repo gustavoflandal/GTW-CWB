@@ -407,7 +407,7 @@ Todos os itens devem seguir as regras do projeto:
 - **Recursos fechados:** Sempre `finally { rs.close(); stmt.close(); conn.close(); }`.
 - **Padrão visual:** Bootstrap 5.3, navbar `#0d75bf`, Bootstrap Icons, SweetAlert2 para confirmações.
 - **Scripts SQL:** Toda nova DDL/DML vai em `docs/banco-de-dados/migracoes/` com nome `YYYYMMDD_descricao.sql`.
-- **Segredos:** Nenhuma chave ou senha no código — usar `muralha-digital-config.xml` (variáveis de ambiente) conforme `docs/07-configuracao-e-segredos.md`.
+- **Segredos:** Nenhuma chave ou senha no código — usar `muralha-digital-config.xml` (variáveis de ambiente) conforme `docs/requisitos/07-configuracao-e-segredos.md`.
 - **Sem novos frameworks:** Usar apenas as dependências já declaradas em `pom.xml`.
 
 ---

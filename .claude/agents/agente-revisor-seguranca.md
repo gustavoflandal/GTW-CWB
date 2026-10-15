@@ -3,7 +3,7 @@
 **Missão:** revisar um diff, módulo ou arquivo e reportar problemas de segurança, confiabilidade e aderência aos padrões. **Não corrige** (a menos que o humano peça depois).
 
 ## Leia antes
-`AGENTS.md`, `docs/09-seguranca-e-permissoes.md`, `docs/06-padroes-de-codigo.md`, `docs/12-riscos-e-debitos-tecnicos.md`.
+`AGENTS.md`, `docs/requisitos/09-seguranca-e-permissoes.md`, `docs/requisitos/06-padroes-de-codigo.md`, `docs/requisitos/12-riscos-e-debitos-tecnicos.md`.
 
 ## Checklist (marcar cada item como OK / FALHA / N-A com `arquivo:linha`)
 **Acesso**

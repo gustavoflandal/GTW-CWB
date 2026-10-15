@@ -1,6 +1,6 @@
 # 10 — Guia de Implementação (receitas)
 
-Antes de qualquer receita: leia `00`, `02`, `05` e `06`; confirme se já existe algo parecido (`referencia/` e `banco-de-dados/objetos-programaveis.md`). Build/teste: `..\.setup-gtw\build.ps1` / `run.ps1` (ver `01`).
+Antes de qualquer receita: leia `00`, `02`, `05` e `06`; confirme se já existe algo parecido (`../referencia/` e `../banco-de-dados/objetos-programaveis.md`). Build/teste: `..\.setup-gtw\build.ps1` / `run.ps1` (ver `01`).
 
 ## 1. Nova tela de listagem + CRUD (Muralha)
 
@@ -14,7 +14,7 @@ Exemplo de referência canônico: `guarnicao` (`pages/guarnicao/`, `GuarnicaoSer
 6. **CSS** `assets/css/…` apenas se necessário.
 7. **Menu e permissão**: §4.
 8. **Teste manual**: login com usuário do grupo autorizado e de um grupo sem permissão; cadastrar, editar, excluir; olhar `GTW_MURALHA_DIGITAL-error.log`.
-9. **Documentar**: acrescentar a tela em `04-modulos-funcionais.md` e regenerar `referencia/*` (§7).
+9. **Documentar**: acrescentar a tela em `04-modulos-funcionais.md` e regenerar `../referencia/*` (§7).
 
 ## 2. Nova tela de consulta com filtros (grandes volumes)
 
@@ -27,7 +27,7 @@ Referência: `consulta-veiculo/consulta.jsp`.
 ## 3. Novo endpoint em módulo existente
 1. Adicionar `acao` no `doGet`/`doPost` do servlet do módulo (não criar servlet novo se já existe o da entidade).
 2. Implementar o método de domínio; reaproveitar `spu_*` existentes.
-3. Responder JSON conforme `06` §1. Documentar a ação em `04` e `referencia/modulos-backend-muralha.md` (regenerar).
+3. Responder JSON conforme `06` §1. Documentar a ação em `04` e `../referencia/modulos-backend-muralha.md` (regenerar).
 4. Não alterar o formato de respostas existentes (o JS depende de nomes de campos). Se precisar mudar, **adicione** campos.
 
 ## 4. Registrar funcionalidade, menu e permissão
@@ -74,5 +74,5 @@ Seguir checklist de `07` §5; isolar em classe `Servico<Nome>` no pacote do mód
 - [ ] Sem segredos; configuração em `.example` atualizada
 - [ ] SQL parametrizado; conexões fechadas; consultas com limites
 - [ ] Testado manualmente (caminho feliz, erro, sem permissão) e build `BUILD SUCCESS`
-- [ ] Docs atualizadas (`04`, `referencia/`, `banco-de-dados/` se aplicável)
+- [ ] Docs atualizadas (`04`, `../referencia/`, `../banco-de-dados/` se aplicável)
 - [ ] Commit em PT-BR sem arquivos indevidos (`git status` limpo de `target/`, logs, configs locais)

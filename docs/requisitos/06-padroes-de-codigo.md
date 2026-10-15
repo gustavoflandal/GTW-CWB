@@ -69,7 +69,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 ```
 - **Sempre** `Conexao.getConexao()` e fechar no `finally` (pool máx. 400, `maxWait 2 s`: vazamento derruba o sistema). Preferir **try-with-resources** (Java 13) em código novo.
 - **Sempre `PreparedStatement` com `?`**. Nunca concatenar parâmetros do usuário em SQL (há concatenação de colunas fixas em código antigo — não copiar). Para `IN (…)` gere os `?` dinamicamente.
-- Procedures: `EXEC muralha.spu_Nome ?, ?` via `prepareStatement` (resultset) ou `prepareCall("{call …}")`. Reutilize `spu_*`/`fcn_*`/`v_*` existentes antes de escrever SQL novo (catálogo em `banco-de-dados/objetos-programaveis.md`).
+- Procedures: `EXEC muralha.spu_Nome ?, ?` via `prepareStatement` (resultset) ou `prepareCall("{call …}")`. Reutilize `spu_*`/`fcn_*`/`v_*` existentes antes de escrever SQL novo (catálogo em `../banco-de-dados/objetos-programaveis.md`).
 - Qualificar o schema: `muralha.` ou `dbo.`. Tabelas grandes (`veiculo_tempo_real`, `veiculo_tempo_real_imagem`) **sempre** com filtro de período/equipamento e `TOP`/paginação; usar `WITH (NOLOCK)` apenas em leituras de tela já assim (como `fcn_VerificaAcesso`).
 - Transação: `conn.setAutoCommit(false)` → `commit/rollback` → restaurar. Auto-commit é o padrão do pool.
 - Exclusão: **soft delete** (`ativo = 0`) é a norma (`deletarGuarnicao`/`acaoSoft`); histórico em tabelas `*_historico` quando existir.
@@ -109,7 +109,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 - Nomes `snake_case` minúsculos; tabelas no singular; PK `id` (`muralha.*`) ou `id_<tabela>` (`dbo.*`); FK `id_<referenciada>`; flags `ativo bit/int`; datas `data_<evento>`; auditoria `data_criacao`, `data_modificacao`, `id_usuario*`.
 - Procedures `spu_<Acao>` (padrão atual; `sp_` e `usp_` são raros), funções tabela `fcn_<Nome>`, views `v_<nome>`/`vw_<nome>`. Schema explícito.
 - Compatibilidade **SQL Server 2016** (sem `STRING_AGG`, `TRIM`, `CONCAT_WS`, `GENERATE_SERIES`; o banco está em nível de compatibilidade **110**, então também evite `STRING_SPLIT`/`OPENJSON` sem testar).
-- Toda mudança de esquema = script versionado em `docs/banco-de-dados/migracoes/AAAAMMDD_descricao.sql`, idempotente (`IF NOT EXISTS`), com rollback comentado e aprovação — **nunca** aplicar DDL direto sem autorização. Ver `agentes/AGENTS.md`.
+- Toda mudança de esquema = script versionado em `docs/banco-de-dados/migracoes/AAAAMMDD_descricao.sql`, idempotente (`IF NOT EXISTS`), com rollback comentado e aprovação — **nunca** aplicar DDL direto sem autorização. Ver `../agentes/AGENTS.md`.
 
 ## 7. Tratamento de erros e logs (resumo)
 Servidor: log com stack no `error.log`, resposta genérica ao cliente. Cliente: mensagem amigável + `console.error`. Erros previsíveis (validação) → 400 com texto; falha inesperada → 500.

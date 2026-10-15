@@ -53,7 +53,7 @@ Observações de higiene: ~156 tabelas com sufixo `_test*`, `bkp`, `backup`, `_a
 | [`dominios.md`](dominios.md) | Valores de 43 tabelas de domínio pequenas (tipos, status, motivos…) |
 | [`scripts/extrair-catalogo.ps1`](scripts/extrair-catalogo.ps1) | Regenera `tabelas/` e `codigo-sql/` (somente SELECT em `sys.*`) |
 | [`../referencia/menus-e-permissoes.md`](../referencia/menus-e-permissoes.md) | Conteúdo de `sis_grupo`, `sis_menu*` (menus e direitos) |
-| `migracoes/` *(criar quando necessário)* | Scripts DDL/DML versionados — ver `docs/10-guia-de-implementacao.md` §6 |
+| `migracoes/` *(criar quando necessário)* | Scripts DDL/DML versionados — ver `docs/requisitos/10-guia-de-implementacao.md` §6 |
 
 ## 4. Mapa dos grupos de tabelas (dbo)
 

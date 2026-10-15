@@ -26,8 +26,8 @@ Você está trabalhando no sistema **GTW-CWB** (Consilux Tecnologia): sistema le
 |---|---|---|
 | Errata obrigatória | `docs/planos-salvador/00c-errata-correcoes.md` | Corrige erros nos planos; leia SEMPRE |
 | Tabelas complementares | `docs/planos-salvador/00b-tabelas-complementares.md` | Schema das tabelas novas; não usar ALTER TABLE |
-| Padrões de código | `docs/06-padroes-de-codigo.md` | Sessão, acesso, conexão, SQL |
-| Stack e ambiente | `docs/01-stack-e-ambiente.md` | Como fazer build/run/debug |
+| Padrões de código | `docs/requisitos/06-padroes-de-codigo.md` | Sessão, acesso, conexão, SQL |
+| Stack e ambiente | `docs/requisitos/01-stack-e-ambiente.md` | Como fazer build/run/debug |
 
 ### Quando criar um servlet novo
 
@@ -36,7 +36,7 @@ Você está trabalhando no sistema **GTW-CWB** (Consilux Tecnologia): sistema le
 | Estrutura canônica de servlet | `docs/planos-salvador/00c-errata-correcoes.md` §3 |
 | Padrão de sessão/acesso | `docs/planos-salvador/00c-errata-correcoes.md` §1–2 |
 | Como registrar no menu | `docs/planos-salvador/00c-errata-correcoes.md` §8 |
-| Padrão visual (JSP/Bootstrap) | `docs/05-padrao-visual.md` |
+| Padrão visual (JSP/Bootstrap) | `docs/requisitos/05-padrao-visual.md` |
 | Exemplos existentes | `src/main/java/muralha/digital/guarnicao/` |
 
 ### Quando escrever SQL
@@ -100,6 +100,7 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `18-disponibilidade.md` | Disponibilidade de equipamentos (uptime) | 07 |
 | `19-sensores-externos.md` | Integração Waze/CSV, camada no mapa | — |
 | `20-dashboard-builder.md` | Dashboard Builder self-service | — |
+| `22-sistema-chamados.md` | Sistema de chamados (7.2.3/7.2.4); documentação em [`docs/chamados/`](../chamados/) | 01, 11 |
 
 ---
 
@@ -181,7 +182,7 @@ LEFT JOIN muralha.vtr_complemento c ON c.id_vtr = vtr.id
 - **Não use** `muralha.configuracao` — a tabela real é `muralha.config_chave_valor`
 - **Não confie** nas colunas `dt_captura_equipamento`, `dt_recepcao_servidor`, `equipamento` em `veiculo_tempo_real` — não existem
 - **Não assuma** que PKs de `veiculo_tempo_real*` são `bigint` — são `uniqueidentifier`
-- **Não leia** `.setup-gtw/` para entender a stack — leia `docs/01-stack-e-ambiente.md`
+- **Não leia** `.setup-gtw/` para entender a stack — leia `docs/requisitos/01-stack-e-ambiente.md`
 - **Não execute** DDL/DML direto — crie script em `docs/banco-de-dados/migracoes/`
 
 ---
