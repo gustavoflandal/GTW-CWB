@@ -39,7 +39,9 @@ public final class ReferenciaEdital {
             Map.entry(379, List.of("7.2.3.a", "7.2.3.b", "7.2.3.c", "7.2.3.f", "7.2.4")),
             Map.entry(380, List.of("7.2.3.b", "7.2.3.c", "7.2.3.e")),
             Map.entry(381, List.of("7.2.3.d", "7.2.3.f")),
-            Map.entry(382, List.of("7.2.3.a"))
+            Map.entry(382, List.of("7.2.3.a")),
+            // Categoria "Sistema de Chamados" na tela inicial (agrupa os cards 379, 381 e 382)
+            Map.entry(383, List.of("7.2.3", "7.2.4"))
     );
 
     private ReferenciaEdital() {

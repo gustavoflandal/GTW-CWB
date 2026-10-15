@@ -23,6 +23,12 @@ public class ReferenciaEditalTest {
     }
 
     @Test
+    public void categoriaSistemaDeChamadosTemItens723e724() {
+        assertEquals(ReferenciaEdital.itens(383), java.util.List.of("7.2.3", "7.2.4"));
+        assertEquals(ReferenciaEdital.titulo(383), "Itens do edital (TR TRANSALVADOR):<br>7.2.3<br>7.2.4");
+    }
+
+    @Test
     public void menuLegadoNaoTemReferencia() {
         assertTrue(ReferenciaEdital.itens(1).isEmpty());
         assertEquals(ReferenciaEdital.titulo(1), "");
