@@ -5243,6 +5243,84 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 
 ---
 
+## Complemento — administração, categoria própria e ícones (2026-10-15)
+
+> Pedido do responsável após a primeira entrega, com a migração já executada no `GTW_MURALHA_DEV`:
+> 1. Quem pode abrir chamados é definido na configuração dos poderes do usuário.
+> 2. O sistema de chamados ganha tela própria (categoria na tela inicial), com ícones no estilo já usado.
+> 3. O acordo de nível de serviço é configurável pelo administrador.
+> 4. O acesso à configuração e à definição de quem usa o sistema aparece **só para o administrador**.
+> 5. Todas as alterações são capturadas pelo motor de logs (`AuditoriaService` → `dbo.sis_log_auditoria`).
+
+**Decisões:**
+- Novo perfil `ADMIN`, mapeado do grupo em `chamado_grupo_admin` (padrão `11`, Administradores). A tela e a API de Configuração passam a exigir `ADMIN`; a `EQUIPE` deixa de configurar.
+- `ADMIN` enxerga todos os chamados (somente leitura, a menos que também tenha outro perfil).
+- Os grupos 107–109 passam a ter `id_grupo_pai = 11`, para aparecerem na tela legada de usuários (GWT), que lista os grupos abaixo do grupo de quem edita.
+- Nova aba "Perfis de acesso" na Configuração: o administrador inclui ou remove usuários dos três grupos (mesma tabela `dbo.sis_usuario_grupo` da tela legada).
+- Nova aba "Parâmetros de SLA": `chamado_sla_risco_percentual` (1–99) e `chamado_fechamento_auto_dias` (1–60).
+- Categoria "Sistema de Chamados" na tela inicial (`sis_menu` 383, `sis_menu_infos` 49, `menu_pai NULL`, `ordenacao 10`). Os cards 46, 47 e 48 passam para `menu_pai = 49`. Ícones SVG novos em `assets/images/menu-icons/`.
+- O direito do menu 382 (Configuração) fica só com o grupo administrador.
+
+### Tarefa 14: Migração complementar (administração e categoria)
+
+**Files:**
+- Create: `docs/banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql`
+
+**Interfaces:**
+- Produces: chave `chamado_grupo_admin = '11'`; `sis_grupo.id_grupo_pai = 11` para os grupos de `chamado_grupo_solicitante/gestor/equipe`; `sis_menu` 383 (`acao = '/login/muralha_principal.jsp?menu_info_pai=49'`, `tipo 'U'`, `nivel 1`, `id_pai_menu 222`, `nome_sistema 'Muralha-Digital'`); `sis_menu_infos` 49 (`src '/muralha-digital/assets/images/menu-icons/chamados-categoria.svg'`, `descricao 'Sistema de Chamados'`, `href '/login/muralha_principal.jsp?menu_info_pai=49&desc=Sistema de Chamados'`, `descricao_detalhada 'Central de suporte técnico'`, `ordenacao 10`, `menu_pai NULL`); direitos de 383 para os grupos 107, 108, 109 e o grupo admin; cards 46/47/48 com `menu_pai = 49`, `ordenacao` 1/2/3 e `src` `menu-icons/chamados.svg`, `menu-icons/chamados-relatorios.svg`, `menu-icons/chamados-configuracao.svg`; direitos do menu 382 apenas para o grupo admin (remove o grupo da equipe).
+
+- [ ] **Step 1:** Escrever o script no padrão de `20261015_sistema_chamados_seed.sql`: idempotente (`IF NOT EXISTS`/`WHERE NOT EXISTS`), rollback comentado no cabeçalho, sem `ALTER TABLE`, lendo os IDs dos grupos de `muralha.config_chave_valor` e o ID admin de `chamado_grupo_admin`. Guarda: se `sis_menu` 383 ou `sis_menu_infos` 49 já existirem com `acao`/`href` diferente de `%menu_info_pai=49%`, `RAISERROR` + `RETURN` (bloco de menus em lote único). Textos com acento em `N'...'`.
+- [ ] **Step 2:** Executar no DEV (autorizado pelo responsável em 2026-10-15): `sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -b -f 65001 -i docs\banco-de-dados\migracoes\20261015_sistema_chamados_admin.sql`. Rodar duas vezes para provar a idempotência.
+- [ ] **Step 3:** Verificar: `SELECT id_grupo, id_grupo_pai FROM dbo.sis_grupo WHERE id_grupo IN (107,108,109)`; `SELECT id_infos, menu_pai, src FROM dbo.sis_menu_infos WHERE id_infos IN (46,47,48,49)`; `SELECT id_grupo FROM dbo.sis_menu_direitos WHERE id_menu = 382` (só o admin).
+- [ ] **Step 4:** Commit `Adiciona migracao de administracao e categoria do sistema de chamados`.
+
+### Tarefa 15: Ícones SVG da categoria e dos cards
+
+**Files:**
+- Create: `src/main/webapp/muralha-digital/assets/images/menu-icons/chamados-categoria.svg`, `chamados.svg`, `chamados-relatorios.svg`, `chamados-configuracao.svg`
+
+- [ ] **Step 1:** Ler 3 SVGs existentes da pasta (`auditoria.svg`, `config-kpis.svg`, `gestao-lotes.svg`) e reproduzir o estilo: `viewBox="0 0 450 300"`, fundo `#f0f7fc` ou branco com moldura arredondada `#c5dff0` de 2 px, traço 5 px `#2c3e50` com cantos arredondados, destaque `#0d75bf`/`#1a78b0`, azul claro `#85c1e9`, SVG puro sem imagens externas nem fontes externas (texto, se houver, em Arial).
+- [ ] **Step 2:** Metáforas: categoria = fone de ouvido (headset) com balão de conversa; chamados = ticket/etiqueta com balão e sinal de "+"; relatórios = gráfico de barras sobre um ticket; configuração = engrenagem com cronômetro (SLA) e silhueta de usuário (perfis).
+- [ ] **Step 3:** Validar que cada arquivo é XML bem formado (`[xml](Get-Content arquivo -Raw)` no PowerShell) e tem menos de 4 KB.
+- [ ] **Step 4:** Commit `Adiciona icones do sistema de chamados no estilo dos menus`.
+
+### Tarefa 16: Perfil ADMIN, parâmetros de SLA e perfis de acesso (back-end)
+
+**Files:**
+- Modify: `PerfilChamado.java`, `ChamadoConfigDao.java`, `ChamadoConfigServlet.java` (pacote `muralha.digital.chamado`)
+- Test: `src/test/java/muralha/digital/chamado/MaquinaEstadosTest.java`, `CadastrosChamadoTest.java`
+
+**Interfaces:**
+- `enum PerfilChamado { SOLICITANTE, GESTOR, EQUIPE, ADMIN }`; `veTodos` = GESTOR ∨ EQUIPE ∨ ADMIN. `MaquinaEstados` não muda: ADMIN sozinho não executa ações de chamado.
+- `ChamadoConfigDao.perfis` também mapeia `chamado_grupo_admin` → `ADMIN`.
+- `ChamadoConfigDao`:
+  - `JsonObject parametrosSla(Connection)` → `{riscoPercentual, fechamentoAutoDias}` (lê `chamado_sla_risco_percentual` padrão 80 e `chamado_fechamento_auto_dias` padrão 5).
+  - `void salvarParametrosSla(Connection, int riscoPercentual, int fechamentoAutoDias)` — valida 1–99 e 1–60 (`RegraChamadoException`); faz UPDATE em `muralha.config_chave_valor` e grava o valor anterior em `muralha.config_chave_valor_hist` se essa tabela tiver colunas compatíveis (conferir em `docs/banco-de-dados/tabelas/muralha/config.md`; se não tiver, só o UPDATE).
+  - `JsonArray membrosPerfis(Connection)` → `[{perfil, idUsuario, nome, login, email, ativo}]` dos grupos de solicitante, gestor, equipe e admin (join `sis_usuario_grupo` × `sis_usuario`, `RTRIM`).
+  - `JsonArray buscarUsuarios(Connection, String termo)` → até 20 usuários ativos cujo `nome` ou `usuario` contenha o termo (parâmetro `LIKE` com `%` escapado), `[{idUsuario, nome, login}]`.
+  - `void adicionarMembro(Connection, PerfilChamado, int idUsuario)` / `void removerMembro(Connection, PerfilChamado, int idUsuario)` — só SOLICITANTE, GESTOR, EQUIPE (o grupo admin não é gerido por aqui → `RegraChamadoException`); insert idempotente (`WHERE NOT EXISTS`) e delete em `dbo.sis_usuario_grupo`.
+- `ChamadoConfigServlet`: todas as ações exigem `ADMIN`. Novas ações: GET `parametros`, `perfis`, `buscarUsuarios&termo=`; POST `salvarParametros` (`riscoPercentual`, `fechamentoAutoDias`), `adicionarMembro` / `removerMembro` (`perfil`, `idUsuario`). Cada POST chama `AuditoriaService.registrar(req, "Chamado", <OPERACAO>, <id>, <descrição com antes/depois>)` — operações `SALVAR_PARAMETROS_SLA`, `ADICIONAR_PERFIL`, `REMOVER_PERFIL` (além das existentes) — e `logger.info` (log4j).
+
+- [ ] **Step 1 (TDD):** testes primeiro: `PerfilChamado.veTodos(EnumSet.of(ADMIN))` é verdadeiro; ADMIN sozinho não tem nenhuma ação em `MaquinaEstados.permitidas` para qualquer status; validação dos parâmetros de SLA extraída para um método estático puro `ChamadoConfigDao.validarParametrosSla(int, int)` (limites 1–99 e 1–60, inclusive bordas) e testada em `CadastrosChamadoTest`.
+- [ ] **Step 2:** implementar; rodar a bateria completa; build.
+- [ ] **Step 3:** Commit `Adiciona perfil administrador, parametros de SLA e perfis de acesso dos chamados`.
+
+### Tarefa 17: Telas — Configuração só do administrador
+
+**Files:**
+- Modify: `src/main/webapp/muralha-digital/pages/chamados/configuracao.jsp`, `assets/js/chamados/chamados-configuracao.js`, `assets/js/chamados/chamados-lista.js`
+
+- [ ] **Step 1:** `chamados-lista.js`: link "Configuração" visível só com perfil `ADMIN`; "Relatórios" com `GESTOR`, `EQUIPE` ou `ADMIN`; "Novo chamado" continua com `SOLICITANTE` ou `GESTOR`.
+- [ ] **Step 2:** `configuracao.jsp`: duas abas novas antes das existentes — "Parâmetros de SLA" (risco % e dias para fechamento automático, com texto explicando que os prazos por prioridade ficam na aba "Prioridades e prazos" e que as horas são corridas 24x7) e "Perfis de acesso" (três colunas/cartões: Solicitantes, Gestores do contrato, Equipe técnica; cada um com a lista de membros, botão remover e campo de busca com autocompletar para adicionar; administradores listados só para leitura).
+- [ ] **Step 3:** `chamados-configuracao.js`: carregar parâmetros e perfis; salvar parâmetros; buscar (debounce 300 ms, mínimo 2 caracteres), adicionar e remover membros com confirmação SweetAlert; todo texto do servidor por `Chamados.esc()`/`textContent`; mensagens com `Swal.fire({title, text, icon})`; usar `Chamados.get`/`Chamados.post` (com `FormData`).
+- [ ] **Step 4:** `node --check`; build. Commit `Adiciona abas de parametros de SLA e perfis de acesso na configuracao de chamados`.
+
+### Tarefa 18: Teste integrado com o banco migrado e documentação
+
+- [ ] **Step 1:** Subir o servidor e testar com usuários reais, seguindo `docs/testes/22-sistema-chamados.md` (incluir os casos novos: configuração visível só ao administrador; parâmetros de SLA; incluir/remover perfil; registros no `consulta-log.jsp` com funcionalidade "Chamado"; categoria "Sistema de Chamados" com os ícones novos).
+- [ ] **Step 2:** Atualizar a spec (seção de ajustes), `docs/entregas/22-sistema-chamados.md`, `docs/testes/22-sistema-chamados.md`, `ReferenciaEdital` (menu 383 → itens 7.2.3 e 7.2.4, com teste) e os índices que citam os menus do módulo. Somente pastas existentes em `docs/`.
+- [ ] **Step 3:** Commit, push e Pull Request para `main`, sem arquivos rastreáveis pendentes (`git status` limpo; `confGTW.xml` e `target/` seguem ignorados por regra do projeto).
+
 ## Cobertura da spec
 
 | Spec | Tarefa |
