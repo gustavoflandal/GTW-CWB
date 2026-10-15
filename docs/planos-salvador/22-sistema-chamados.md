@@ -118,7 +118,7 @@ $env:PATH = "$env:JAVA_HOME\bin;$s\apache-maven\bin;$env:PATH"
 | Modificar | `src/test/java/muralha/digital/acessos/ReferenciaEditalTest.java` | Cobrir 379–382 |
 | Criar | `docs/testes/22-sistema-chamados.md` | Roteiro de testes manuais |
 | Criar | `docs/entregas/22-sistema-chamados.md` | Documento de entrega |
-| Modificar | `docs/entregas/README.md`, `docs/entregas/itens-edital-x-entregas.md`, `docs/entregas/rastreabilidade-tr.md`, `docs/agentes/AGENTS.md`, `docs/04-modulos-funcionais.md`, `docs-editais/edital-salvador/README.md` | Rastreabilidade |
+| Modificar | `docs/entregas/README.md`, `docs/entregas/itens-edital-x-entregas.md`, `docs/entregas/rastreabilidade-tr.md`, `docs/agentes/AGENTS.md`, `docs/requisitos/04-modulos-funcionais.md`, `docs-editais/edital-salvador/README.md` | Rastreabilidade |
 
 ---
 
@@ -5157,7 +5157,7 @@ Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
 - Modify: `src/main/java/muralha/digital/acessos/ReferenciaEdital.java`
 - Modify: `src/test/java/muralha/digital/acessos/ReferenciaEditalTest.java`
 - Create: `docs/testes/22-sistema-chamados.md`, `docs/entregas/22-sistema-chamados.md`
-- Modify: `docs/entregas/README.md`, `docs/entregas/itens-edital-x-entregas.md`, `docs/entregas/rastreabilidade-tr.md`, `docs/agentes/AGENTS.md`, `docs/04-modulos-funcionais.md`, `docs-editais/edital-salvador/README.md`
+- Modify: `docs/entregas/README.md`, `docs/entregas/itens-edital-x-entregas.md`, `docs/entregas/rastreabilidade-tr.md`, `docs/agentes/AGENTS.md`, `docs/requisitos/04-modulos-funcionais.md`, `docs-editais/edital-salvador/README.md`
 
 - [ ] **Step 1: Escrever o teste que falha**
 
@@ -5225,7 +5225,7 @@ Depois: `## Arquivos produzidos`, `## Arquitetura`, `## Criterios de aceite` (um
 - `docs/entregas/itens-edital-x-entregas.md`: nova seção "Capítulo 7 — Central de Suporte Técnico (aba Sist. Chamado)" com 7.2.3.a–f e 7.2.4 → entrega 22; 7.2.1, 7.2.2 e 7.2.5 como "fora do escopo de software / não atendido por este plano".
 - `docs/entregas/rastreabilidade-tr.md`: itens 7.2.3 e 7.2.4 → Plano 22.
 - `docs/agentes/AGENTS.md`: linha `| 22-sistema-chamados.md | Sistema de chamados (7.2.3/7.2.4) | 01, 11 |` na tabela de planos.
-- `docs/04-modulos-funcionais.md`: módulo "Sistema de Chamados" (menus 379–382, telas, servlets, tabelas).
+- `docs/requisitos/04-modulos-funcionais.md`: módulo "Sistema de Chamados" (menus 379–382, telas, servlets, tabelas).
 - `docs-editais/edital-salvador/README.md`: plano 22 na tabela de planos.
 
 - [ ] **Step 8: Build final**
@@ -5235,7 +5235,7 @@ Run: build → `BUILD SUCCESS`.
 - [ ] **Step 9: Commit**
 
 ```bash
-git add src/main/java/muralha/digital/acessos/ReferenciaEdital.java src/test/java/muralha/digital/acessos/ReferenciaEditalTest.java docs/testes/22-sistema-chamados.md docs/entregas/ docs/agentes/AGENTS.md docs/04-modulos-funcionais.md docs-editais/edital-salvador/README.md
+git add src/main/java/muralha/digital/acessos/ReferenciaEdital.java src/test/java/muralha/digital/acessos/ReferenciaEditalTest.java docs/testes/22-sistema-chamados.md docs/entregas/ docs/agentes/AGENTS.md docs/requisitos/04-modulos-funcionais.md docs-editais/edital-salvador/README.md
 git commit -m "Documenta entrega do sistema de chamados e marca itens 7.2.3/7.2.4 no menu
 
 Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"

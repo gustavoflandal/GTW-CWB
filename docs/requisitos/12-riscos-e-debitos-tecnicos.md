@@ -14,7 +14,7 @@
 | S6 | Sem proteção **CSRF**; POST de escrita só por cookie de sessão | M | Nenhum token/`SameSite` | Token por sessão + header; cookies `HttpOnly`/`Secure`/`SameSite` (hoje `JSESSIONID_HTTP` sem `Secure` quando HTTP) |
 | S7 | Web services SOAP (`/services/*`, `AdminServlet`, `/servlet/AdminServlet`) expostos | A | `web.xml` | Restringir por rede/IP (`ip_permitidos.txt`), desabilitar AdminService em produção |
 | S8 | `Maven` configurado com `allowInsecure/ssl.allowall` e repositório HTTP | M | `.setup-gtw` | Stack imutável — apenas ciência; não replicar em CI |
-| S9 | Possível SQL concatenado e `Statement` | M | `UsuarioServlet`, `Alertas` | Revisão dirigida (`agentes/agente-revisor-seguranca.md`) |
+| S9 | Possível SQL concatenado e `Statement` | M | `UsuarioServlet`, `Alertas` | Revisão dirigida (`../agentes/agente-revisor-seguranca.md`) |
 | S10 | XSS: JS monta HTML com dados do servidor sem escape | M | `listagem-guarnicoes.js` (`${guarnicao.nome}`) | Função `esc()`/`.text()` |
 | S11 | `REDIRECT_URI` do Google fixo em `localhost:8080` | M | `LoginGoogle` | Parametrizar por ambiente |
 | S12 | Chave Google Maps visível no cliente | B | `maps-config.js` | Restringir por referrer/domínio no console Google |

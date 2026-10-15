@@ -4,10 +4,10 @@ Sistema legado Java/JSP (Tomcat, SQL Server) da Consilux: **GTW clássico** + **
 
 ## Regras que nunca mudam
 - **Não alterar** `D:\GTW-CWB\.setup-gtw\` (JDK 13.0.1, Maven, Tomcat 9, scripts) nem `pom.xml` (versões/dependências) sem aprovação explícita. Sem novos frameworks/bibliotecas.
-- **Padrão visual obrigatório**: `docs/05-padrao-visual.md` (Bootstrap 5.3, navbar `#0d75bf`, Bootstrap Icons, SweetAlert2…).
-- **Sem segredos no git.** `confGTW.xml` e `muralha-digital-config.xml` (WEB-INF) são locais e ignorados; use os `.example`. Chaves via variáveis de ambiente (`docs/07-configuracao-e-segredos.md`).
+- **Padrão visual obrigatório**: `docs/requisitos/05-padrao-visual.md` (Bootstrap 5.3, navbar `#0d75bf`, Bootstrap Icons, SweetAlert2…).
+- **Sem segredos no git.** `confGTW.xml` e `muralha-digital-config.xml` (WEB-INF) são locais e ignorados; use os `.example`. Chaves via variáveis de ambiente (`docs/requisitos/07-configuracao-e-segredos.md`).
 - **Banco** `GTW_MURALHA_DEV` (10.0.0.200): somente leitura sem autorização; DDL/DML só como script em `docs/banco-de-dados/migracoes/`.
-- Código novo: sessão + permissão (`docs/06-padroes-de-codigo.md` §1.1), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
+- Código novo: sessão + permissão (`docs/requisitos/06-padroes-de-codigo.md` §1.1), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
 
 ## Comandos (a partir de `D:\GTW-CWB`)
 ```powershell

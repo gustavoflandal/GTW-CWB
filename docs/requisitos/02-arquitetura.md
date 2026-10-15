@@ -48,7 +48,7 @@ Fluxo GTW clássico: JSP → `include cabecalho.jsp` → GWT widgets (`GtwMenu.n
 
 ## 4. Autorização (resumo)
 
-`Acesso.verificaAcesso()` consulta `dbo.fcn_VerificaAcesso(url/ação, id_usuario)`: URLs não cadastradas em `sis_menu.acao` são **liberadas**; cadastradas exigem direito via `sis_menu_direitos` (por grupo ou diretamente por usuário). Menus dinâmicos vêm de `sis_menu_infos`, `sis_menu_relatorio_infos`, `sis_menu_graficos_infos`. Detalhe completo em `09-seguranca-e-permissoes.md` e dados reais em `referencia/menus-e-permissoes.md`.
+`Acesso.verificaAcesso()` consulta `dbo.fcn_VerificaAcesso(url/ação, id_usuario)`: URLs não cadastradas em `sis_menu.acao` são **liberadas**; cadastradas exigem direito via `sis_menu_direitos` (por grupo ou diretamente por usuário). Menus dinâmicos vêm de `sis_menu_infos`, `sis_menu_relatorio_infos`, `sis_menu_graficos_infos`. Detalhe completo em `09-seguranca-e-permissoes.md` e dados reais em `../referencia/menus-e-permissoes.md`.
 
 ## 5. Acesso a dados
 

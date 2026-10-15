@@ -99,7 +99,7 @@ Chamado automaticamente pelo `gtw.ps1`. Configura `JAVA_HOME` e `PATH` para o JD
 | `confGTW.xml` | `WEB-INF/` (dentro do Tomcat ou do `src/main/webapp/WEB-INF/`) | Conexão com banco, parâmetros GTW clássico |
 | `muralha-digital-config.xml` | `WEB-INF/` | Parâmetros da Muralha Digital (SMS, e-mail, etc.) |
 
-Esses arquivos estão no `.gitignore`. Use os arquivos `.example` correspondentes como template. Segredos reais (senhas, chaves de API) devem ser definidos via variáveis de ambiente — ver `docs/07-configuracao-e-segredos.md`.
+Esses arquivos estão no `.gitignore`. Use os arquivos `.example` correspondentes como template. Segredos reais (senhas, chaves de API) devem ser definidos via variáveis de ambiente — ver `docs/requisitos/07-configuracao-e-segredos.md`.
 
 ---
 

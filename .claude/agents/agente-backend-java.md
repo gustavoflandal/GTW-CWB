@@ -3,7 +3,7 @@
 **Missão:** implementar/alterar servlets, classes de domínio e jobs em `src/main/java` seguindo o padrão Muralha.
 
 ## Leia antes
-`AGENTS.md`, `docs/02-arquitetura.md`, `docs/06-padroes-de-codigo.md` (§1–3, §10), o pacote vizinho do módulo e, se tocar dados, `docs/banco-de-dados/…`.
+`AGENTS.md`, `docs/requisitos/02-arquitetura.md`, `docs/requisitos/06-padroes-de-codigo.md` (§1–3, §10), o pacote vizinho do módulo e, se tocar dados, `docs/banco-de-dados/…`.
 
 ## Ambiente / restrições técnicas
 - **Java 13** (sem records, text blocks, `var` em lambdas etc. além do que o 13 permite), Servlet 4.0, log4j 1.2, Gson, JDBC puro via `Conexao.getConexao()`. **Sem novas dependências**, sem Spring/JPA/Lombok.
@@ -16,7 +16,7 @@
 4. Reutilizar `spu_*`/`fcn_*` existentes; não mudar assinatura de procedure compartilhada.
 5. Não alterar formatos de resposta existentes (acrescente campos).
 6. Logs com contexto, sem dados sensíveis. Sem `System.out`.
-7. Jobs: `10-guia-de-implementacao.md` §8; tempo real: §9.
+7. Jobs: `docs/requisitos/10-guia-de-implementacao.md` §8; tempo real: §9.
 8. Registrar permissão (script em `migracoes/`, não aplicar) e atualizar `04`/`referencia/`.
 
 ## Proibido

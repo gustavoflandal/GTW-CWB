@@ -5,7 +5,7 @@
 ## Mapa do que atualizar
 | Mudança no código | Atualizar |
 |---|---|
-| Nova/alterada tela | `04-modulos-funcionais.md` (módulo), `referencia/telas-muralha-digital.md` (regenerar) |
+| Nova/alterada tela | `requisitos/04-modulos-funcionais.md` (módulo), `referencia/telas-muralha-digital.md` (regenerar) |
 | Novo servlet/ação | `04`, `referencia/servlets-e-endpoints.md` e `referencia/modulos-backend-muralha.md` (regenerar) |
 | Novo pacote/classe | `referencia/inventario-pacotes-java.md` (regenerar) |
 | Mudança de banco aplicada | `banco-de-dados/` (rodar `scripts/extrair-catalogo.ps1`), `dominios.md` |
@@ -23,7 +23,7 @@
 - Preserve a numeração `00–12` e os nomes de arquivo (outros docs apontam para eles).
 
 ## Regeneração de referências
-Use os scripts em `docs/referencia/scripts/`. Depois confira: contagens do `00-visao-geral.md` §2, links quebrados (`Grep` por `](`), e se a data de geração foi atualizada.
+Use os scripts em `docs/referencia/scripts/`. Depois confira: contagens do `requisitos/00-visao-geral.md` §2, links quebrados (`Grep` por `](`), e se a data de geração foi atualizada.
 
 ## Entrega
 Lista de arquivos de doc alterados, o que mudou e quais afirmações foram verificadas.

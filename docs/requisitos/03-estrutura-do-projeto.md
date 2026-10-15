@@ -42,7 +42,7 @@ Estrutura típica de um módulo Muralha (`muralha.digital.<modulo>`):
 <Entidade>Result.java    ← wrappers de resposta (alguns módulos)
 ```
 
-Inventário completo: `referencia/inventario-pacotes-java.md` e `referencia/modulos-backend-muralha.md`.
+Inventário completo: `../referencia/inventario-pacotes-java.md` e `../referencia/modulos-backend-muralha.md`.
 
 ## 3. Web (`src/main/webapp`)
 

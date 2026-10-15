@@ -197,7 +197,7 @@ Migração única e idempotente `docs/banco-de-dados/migracoes/<AAAAMMDD>_sistem
 
 ### 2.4 Telas (`src/main/webapp/muralha-digital/pages/chamados/`)
 
-Todas incluem `utils/credenciais/cabecalho_bootstrap_simples.jsp` e seguem `docs/05-padrao-visual.md` (Bootstrap 5.3, Bootstrap Icons, SweetAlert2). Todo texto vindo do servidor é inserido com escape (`textContent` ou função `esc()`), nunca por `innerHTML` cru.
+Todas incluem `utils/credenciais/cabecalho_bootstrap_simples.jsp` e seguem `docs/requisitos/05-padrao-visual.md` (Bootstrap 5.3, Bootstrap Icons, SweetAlert2). Todo texto vindo do servidor é inserido com escape (`textContent` ou função `esc()`), nunca por `innerHTML` cru.
 
 1. **`index.jsp` — Chamados**
    - Filtros: protocolo, status, prioridade, categoria, equipamento, período de abertura.
@@ -313,7 +313,7 @@ Registrados em `Agendador.java` seguindo o padrão `possuiJob` usado pelos plano
 
 - `docs/entregas/22-sistema-chamados.md` (com seção "## Origem" apontando para o plano 22).
 - `docs/entregas/README.md`, `docs/entregas/itens-edital-x-entregas.md` (nova seção para o item 7.2), `docs/entregas/rastreabilidade-tr.md`.
-- `docs/04-modulos-funcionais.md`, `docs/referencia/` (servlets, telas, menus), `docs-editais/edital-salvador/README.md`.
+- `docs/requisitos/04-modulos-funcionais.md`, `docs/referencia/` (servlets, telas, menus), `docs-editais/edital-salvador/README.md`.
 
 ## Ajustes feitos ao detalhar o plano
 

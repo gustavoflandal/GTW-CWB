@@ -22,19 +22,19 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 ## Índice
 | Documento | Conteúdo |
 |---|---|
-| [00-visao-geral.md](00-visao-geral.md) | O que é, gerações, domínio, números, regras imutáveis |
-| [01-stack-e-ambiente.md](01-stack-e-ambiente.md) | Stack (`.setup-gtw`), versões, build/run/debug |
-| [02-arquitetura.md](02-arquitetura.md) | Camadas, requisição, sessão, dados, WebSocket, jobs, SOAP |
-| [03-estrutura-do-projeto.md](03-estrutura-do-projeto.md) | Árvore e onde colocar cada coisa |
-| [04-modulos-funcionais.md](04-modulos-funcionais.md) | Catálogo funcional: módulos originais, 20 planos PoC Salvador (menus, telas, APIs, tabelas) |
-| [05-padrao-visual.md](05-padrao-visual.md) | **Design system**: cores, fontes, ícones, componentes, layout |
-| [06-padroes-de-codigo.md](06-padroes-de-codigo.md) | Padrões Java/JSP/JS/SQL e anti-padrões |
-| [07-configuracao-e-segredos.md](07-configuracao-e-segredos.md) | Arquivos de configuração, variáveis de ambiente |
-| [08-integracoes.md](08-integracoes.md) | SMS, e-mail, Google, câmeras, SOAP, WebSocket |
-| [09-seguranca-e-permissoes.md](09-seguranca-e-permissoes.md) | Autenticação, autorização, modelo de menus/direitos |
-| [10-guia-de-implementacao.md](10-guia-de-implementacao.md) | Receitas passo a passo e Definição de Pronto |
-| [11-glossario.md](11-glossario.md) | Termos e siglas |
-| [12-riscos-e-debitos-tecnicos.md](12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
+| [00-visao-geral.md](requisitos/00-visao-geral.md) | O que é, gerações, domínio, números, regras imutáveis |
+| [01-stack-e-ambiente.md](requisitos/01-stack-e-ambiente.md) | Stack (`.setup-gtw`), versões, build/run/debug |
+| [02-arquitetura.md](requisitos/02-arquitetura.md) | Camadas, requisição, sessão, dados, WebSocket, jobs, SOAP |
+| [03-estrutura-do-projeto.md](requisitos/03-estrutura-do-projeto.md) | Árvore e onde colocar cada coisa |
+| [04-modulos-funcionais.md](requisitos/04-modulos-funcionais.md) | Catálogo funcional: módulos originais, 20 planos PoC Salvador (menus, telas, APIs, tabelas) |
+| [05-padrao-visual.md](requisitos/05-padrao-visual.md) | **Design system**: cores, fontes, ícones, componentes, layout |
+| [06-padroes-de-codigo.md](requisitos/06-padroes-de-codigo.md) | Padrões Java/JSP/JS/SQL e anti-padrões |
+| [07-configuracao-e-segredos.md](requisitos/07-configuracao-e-segredos.md) | Arquivos de configuração, variáveis de ambiente |
+| [08-integracoes.md](requisitos/08-integracoes.md) | SMS, e-mail, Google, câmeras, SOAP, WebSocket |
+| [09-seguranca-e-permissoes.md](requisitos/09-seguranca-e-permissoes.md) | Autenticação, autorização, modelo de menus/direitos |
+| [10-guia-de-implementacao.md](requisitos/10-guia-de-implementacao.md) | Receitas passo a passo e Definição de Pronto |
+| [11-glossario.md](requisitos/11-glossario.md) | Termos e siglas |
+| [12-riscos-e-debitos-tecnicos.md](requisitos/12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 746 tabelas, 821 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |

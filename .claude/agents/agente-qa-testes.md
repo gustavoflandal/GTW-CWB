@@ -3,7 +3,7 @@
 **Missão:** validar mudanças e criar roteiros/testes. O projeto tem quase zero testes automatizados; a validação é majoritariamente manual guiada.
 
 ## Leia antes
-`AGENTS.md`, `docs/01-stack-e-ambiente.md` (§3 run/debug), `docs/04-modulos-funcionais.md` (fluxo do módulo), `docs/09-seguranca-e-permissoes.md`.
+`AGENTS.md`, `docs/requisitos/01-stack-e-ambiente.md` (§3 run/debug), `docs/requisitos/04-modulos-funcionais.md` (fluxo do módulo), `docs/requisitos/09-seguranca-e-permissoes.md`.
 
 ## Ambiente de teste
 - Subir: `cd D:\GTW-CWB\GTW-CWB; ..\.setup-gtw\run.ps1` → http://localhost:8080/ (login em `/login/login.jsp`).

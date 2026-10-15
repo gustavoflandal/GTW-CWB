@@ -1,6 +1,6 @@
 ﻿# 04 — Catálogo Funcional dos Módulos
 
-> Fonte: menus reais do banco (`referencia/menus-e-permissoes.md`), servlets/ações (`referencia/modulos-backend-muralha.md`), telas (`referencia/telas-muralha-digital.md`) e leitura do código. Convenções: **Tela** = `/muralha-digital/pages/<dir>/…`; **API** = `/MuralhaDigital/<X>` (servlet, parâmetro `acao`); **Pacote** = `muralha.digital.<pkg>`.
+> Fonte: menus reais do banco (`../referencia/menus-e-permissoes.md`), servlets/ações (`../referencia/modulos-backend-muralha.md`), telas (`../referencia/telas-muralha-digital.md`) e leitura do código. Convenções: **Tela** = `/muralha-digital/pages/<dir>/…`; **API** = `/MuralhaDigital/<X>` (servlet, parâmetro `acao`); **Pacote** = `muralha.digital.<pkg>`.
 
 ## 1. Menu principal do Muralha Digital (tabela `sis_menu_infos`)
 
@@ -205,7 +205,7 @@ Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `m
 
 ## 7. Construtor de Dashboards (Plano 20)
 
-Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
+Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](../planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
 
 **Servlets REST (prefixo `/api/dash/`):**
 - `DashCatalogoServlet` — CRUD do catálogo de tabelas/colunas/relações
