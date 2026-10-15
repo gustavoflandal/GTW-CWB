@@ -56,7 +56,7 @@ Fluxo GTW clássico: JSP → `include cabecalho.jsp` → GWT widgets (`GtwMenu.n
 - `Conexao.getConexao()` devolve um `ConnectionAdapter` (auto-commit `true`; `close()` devolve ao pool). **Quem abre fecha** — sempre em `finally`.
 - Padrão de DAO: **métodos estáticos nas próprias classes de domínio** (`Guarnicao.listarTodas()`, `Alertas.obter…`), SQL em `StringBuilder`/strings concatenadas, `PreparedStatement` com parâmetros posicionais, procedures via `EXEC schema.proc ?` ou `{call …}`.
 - Transações explícitas só onde necessário (`setAutoCommit(false)`).
-- Esquemas: `dbo` (GTW clássico e cadastros de sistema), `muralha` (Muralha Digital), `mobilidade` (dados Waze/mobilidade; não usado pelo Java), `ia` (classificação de características do veículo por IA: `veiculo_caracteristica`, `cad_cor/marca/modelo`).
+- Esquemas: `dbo` (GTW clássico e cadastros de sistema), `muralha` (Muralha Digital), `mobilidade` (dados Waze/mobilidade; não usado pelo Java), `ia` (classificação de características do veículo por IA: `veiculo_caracteristica`, `cad_cor/marca/modelo`), `dash` (Construtor de Dashboards: catálogo de dados, datasets, dashboards e widgets).
 
 ## 6. Tempo real
 

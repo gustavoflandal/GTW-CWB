@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `infracao`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.infracao
 
-Linhas: ~73587
+Linhas: ~74883
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -176,7 +176,7 @@ Linhas: ~0
 
 ## dbo.infracao_imagem
 
-Linhas: ~72061
+Linhas: ~73357
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -295,7 +295,7 @@ Linhas: ~24
 
 ## dbo.infracao_processo
 
-Linhas: ~100917
+Linhas: ~102702
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -334,7 +334,7 @@ Linhas: ~100917
 
 ## dbo.infracao_processo_concluido
 
-Linhas: ~80635
+Linhas: ~81931
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

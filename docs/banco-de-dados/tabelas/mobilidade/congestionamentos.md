@@ -1,10 +1,10 @@
 # Tabelas — schema `mobilidade` — grupo `congestionamentos`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## mobilidade.congestionamentos
 
-Linhas: ~4883
+Linhas: ~12793
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -54,7 +54,7 @@ Linhas: ~4883
 
 ## mobilidade.congestionamentos_atual
 
-Linhas: ~0
+Linhas: ~1595
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -136,7 +136,7 @@ Linhas: ~2539
 
 ## mobilidade.congestionamentos_coordenadas
 
-Linhas: ~36915
+Linhas: ~122083
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -157,7 +157,7 @@ Linhas: ~36915
 
 ## mobilidade.congestionamentos_coordenadas_atual
 
-Linhas: ~0
+Linhas: ~16238
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

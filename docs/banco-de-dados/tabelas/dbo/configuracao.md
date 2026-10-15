@@ -1,6 +1,6 @@
 # Tabelas — schema `dbo` — grupo `configuracao`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.configuracao_alerta_cad_arquivos_importados
 
@@ -220,8 +220,8 @@ Linhas: ~0
 - PK `PK_configuracao_equipamento_captura_imagem` (NONCLUSTERED): id_configuracao_equipamento, id_pista, id_captura_imagem
 
 **FKs (saída):**
-- id_configuracao_equipamento → dbo.configuracao_equipamento_pista.id_configuracao_equipamento
 - id_pista → dbo.configuracao_equipamento_pista.id_pista
+- id_configuracao_equipamento → dbo.configuracao_equipamento_pista.id_configuracao_equipamento
 
 ## dbo.configuracao_equipamento_captura_veiculo
 
@@ -246,8 +246,8 @@ Linhas: ~1007
 - PK `PK_configuracao_equipamento_captura_veiculo` (NONCLUSTERED): id_configuracao_equipamento, id_pista
 
 **FKs (saída):**
-- id_pista → dbo.configuracao_equipamento_pista.id_pista
 - id_configuracao_equipamento → dbo.configuracao_equipamento_pista.id_configuracao_equipamento
+- id_pista → dbo.configuracao_equipamento_pista.id_pista
 
 ## dbo.configuracao_equipamento_controlador
 
@@ -638,10 +638,10 @@ Linhas: ~1007
 **Referenciada por:**
 - dbo.configuracao_equipamento_agd_pista.id_configuracao_equipamento
 - dbo.configuracao_equipamento_agd_pista.id_pista
-- dbo.configuracao_equipamento_captura_imagem.id_configuracao_equipamento
 - dbo.configuracao_equipamento_captura_imagem.id_pista
-- dbo.configuracao_equipamento_captura_veiculo.id_pista
+- dbo.configuracao_equipamento_captura_imagem.id_configuracao_equipamento
 - dbo.configuracao_equipamento_captura_veiculo.id_configuracao_equipamento
+- dbo.configuracao_equipamento_captura_veiculo.id_pista
 
 ## dbo.configuracao_equipamento_pista_pesagem
 

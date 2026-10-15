@@ -1,6 +1,6 @@
 # Tabelas — schema `ia` — grupo `cad`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## ia.cad_cor
 
@@ -49,7 +49,7 @@ Linhas: ~17
 
 ## ia.cad_tipo_especial
 
-Linhas: ~0
+Linhas: ~1
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|

@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `log`
 
-Gerado a partir de GTW_MURALHA_DEV (SQL Server 2016). Contagens de linhas são aproximadas (data da extração: 2026-10-08).
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
 
 ## dbo.log_alerta
 
-Linhas: ~45
+Linhas: ~48
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -137,7 +137,7 @@ Linhas: ~0
 
 ## dbo.log_processos
 
-Linhas: ~1315847
+Linhas: ~1356339
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -167,7 +167,7 @@ Linhas: ~169
 
 ## dbo.log_tipo
 
-Linhas: ~22
+Linhas: ~27
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
