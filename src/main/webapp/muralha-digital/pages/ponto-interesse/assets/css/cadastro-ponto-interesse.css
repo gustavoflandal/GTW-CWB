@@ -1,16 +1,5 @@
-@charset "ISO-8859-1";
-
-/* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
 #map {
-  height: 50%;
+  height: 400px;
   width: 100%;
-}
-
-/* Optional: Makes the sample page fill the window. */
-html,
-body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+  border-radius: 0.25rem;
 }

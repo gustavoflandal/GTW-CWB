@@ -50,6 +50,8 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 5.4.1.2.g | Anonimizacao de dados (LGPD) | [13](../planos-salvador/13-anonimizacao-placas.md) | [13](13-anonimizacao-placas.md) | [13](../testes/13-anonimizacao-placas.md) |
 | 5.4.2.1–6 | Dashboards analiticos interativos | [15](../planos-salvador/15-kpis-configuráveis.md) | [15](15-kpis-configuraveis.md) | [15](../testes/15-kpis-configuraveis.md) |
 | 5.4.2.3.e | Disponibilidade da solucao | [18](../planos-salvador/18-disponibilidade.md) | [18](18-disponibilidade.md) | [18](../testes/18-disponibilidade.md) |
+| 5.4.2.4a-b | Filtros dinamicos com atualizacao simultanea | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
+| 5.4.2.5 | Dashboards customizaveis pela CONTRATANTE | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
 | 5.4.4.1–4 | Analise espacial, georreferenciamento e exportacao GIS | [16](../planos-salvador/16-exportacao-gis.md) | [16](16-exportacao-gis.md) | [16](../testes/16-exportacao-gis.md) |
 | 5.4.6.1–3 | Indicadores operacionais configuraveis com metas e alertas | [15](../planos-salvador/15-kpis-configuráveis.md) | [15](15-kpis-configuraveis.md) | [15](../testes/15-kpis-configuraveis.md) |
 | 5.4.7.1–7 | Repositorio central de logs | [01](../planos-salvador/01-log-auditoria.md) | [01](01-log-auditoria.md) | [01](../testes/01-log-auditoria.md) |
@@ -59,6 +61,7 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | Item TR | Requisito | Plano | Entrega | Teste |
 |---|---|---|---|---|
 | 5.5.2.1 | Prazo maximo de 72h para pre-processamento | [10](../planos-salvador/10-sla-preprocessamento.md) | [10](10-sla-preprocessamento.md) | [10](../testes/10-sla-preprocessamento.md) |
+| 5.5.3.1 | Painel operacional pre-processamento | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
 | 5.5.4.6 | Retencao de logs por 5 anos apos encerramento | [12](../planos-salvador/12-retencao-dados.md) | [12](12-retencao-dados.md) | [12](../testes/12-retencao-dados.md) |
 
 ## Anexo A — Prova de Conceito

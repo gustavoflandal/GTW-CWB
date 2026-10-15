@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300">
+  <rect width="450" height="300" fill="white"/>
+  <rect x="6" y="6" width="438" height="288" rx="10" fill="none" stroke="#c5dff0" stroke-width="2"/>
+  <!-- Clock body -->
+  <circle cx="200" cy="140" r="75" fill="none" stroke="#2c3e50" stroke-width="5.5"/>
+  <circle cx="200" cy="140" r="5" fill="#2c3e50"/>
+  <!-- Hour marks -->
+  <line x1="200" y1="72" x2="200" y2="85" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="200" y1="195" x2="200" y2="208" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="132" y1="140" x2="145" y2="140" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+  <line x1="255" y1="140" x2="268" y2="140" stroke="#2c3e50" stroke-width="4" stroke-linecap="round"/>
+  <!-- Small marks -->
+  <line x1="153" y1="93" x2="160" y2="100" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+  <line x1="247" y1="93" x2="240" y2="100" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+  <line x1="153" y1="187" x2="160" y2="180" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+  <line x1="247" y1="187" x2="240" y2="180" stroke="#2c3e50" stroke-width="3" stroke-linecap="round"/>
+  <!-- Hour hand -->
+  <line x1="200" y1="140" x2="200" y2="95" stroke="#2c3e50" stroke-width="5" stroke-linecap="round"/>
+  <!-- Minute hand -->
+  <line x1="200" y1="140" x2="240" y2="112" stroke="#1a78b0" stroke-width="4" stroke-linecap="round"/>
+  <!-- Speed badge -->
+  <rect x="295" y="175" width="65" height="65" rx="15" fill="#1a78b0" stroke="#2c3e50" stroke-width="3.5"/>
+  <path d="M 310 218 A 22 22 0 1 1 350 218" fill="none" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <line x1="330" y1="208" x2="340" y2="196" stroke="white" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="330" cy="208" r="2.5" fill="white"/>
+</svg>

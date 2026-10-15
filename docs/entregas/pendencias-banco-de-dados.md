@@ -2,7 +2,7 @@
 
 Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–19.
 
-> ✅ **Todas as 10 migrações foram executadas com sucesso em 2026-10-09** via `sqlcmd` no banco GTW_MURALHA_DEV.  
+> ✅ **16 migrações executadas (10 em 2026-10-09, 6 em 2026-10-13)** via `sqlcmd` no banco GTW_MURALHA_DEV.  
 > **Atenção:** todas as migrações usam `IF NOT EXISTS` / `IF COL_LENGTH(...) IS NULL` — podem ser reexecutadas com segurança (idempotentes).  
 > **Nenhuma migração faz ALTER TABLE** em tabelas existentes do sistema legado.
 
@@ -24,6 +24,13 @@ Executar na ordem abaixo. Cada script é independente, mas a ordem respeita depe
 | 8 | [`20261008_retencao_anonimizacao.sql`](../banco-de-dados/migracoes/20261008_retencao_anonimizacao.sql) | 12, 13 | `muralha.expurgo_log`, VIEW `muralha.vw_passagem_anonimizada`, config `retencao_anos`, `anonimizar_placa_padrao` | ✅ Executado |
 | 9 | [`20261008_lotes_kpis.sql`](../banco-de-dados/migracoes/20261008_lotes_kpis.sql) | 14, 15 | `muralha.lote_infracao`, `muralha.lote_infracao_item`, `muralha.kpi_config` (4 KPIs padrão) | ✅ Executado |
 | 10 | [`20261008_disponibilidade_incidentes.sql`](../banco-de-dados/migracoes/20261008_disponibilidade_incidentes.sql) | 18, 19 | `muralha.equipamento_disponibilidade`, `muralha.incidente_externo` + constraint UNIQUE, configs | ✅ Executado |
+| 11 | [`20261013_dash_fundacao.sql`](../banco-de-dados/migracoes/20261013_dash_fundacao.sql) | 20 | Schema `dash`, tabelas de catálogo, dataset, dashboard, widget, compartilhamento, histórico | ✅ Executado |
+| 12 | [`20261013_dash2_dataset_editor.sql`](../banco-de-dados/migracoes/20261013_dash2_dataset_editor.sql) | 20 | Campos adicionais de dataset, estatísticas, campos calculados | ✅ Executado |
+| 13 | [`20261013_dashboards_observabilidade.sql`](../banco-de-dados/migracoes/20261013_dashboards_observabilidade.sql) | 20 | Tabela `dash.consulta_log`, `dash.dataset_estatistica` | ✅ Executado |
+| 14 | [`20261013_atualizar_menus_dashboard_builder.sql`](../banco-de-dados/migracoes/20261013_atualizar_menus_dashboard_builder.sql) | 20 | Menus e permissões do Dashboard Builder | ✅ Executado |
+| 15 | [`20261013_menu_catalogo_dados.sql`](../banco-de-dados/migracoes/20261013_menu_catalogo_dados.sql) | 20 | Menu 378, info 45 (Catálogo de Dados) | ✅ Executado |
+| 16 | [`20261013_dash_modelador_visual.sql`](../banco-de-dados/migracoes/20261013_dash_modelador_visual.sql) | 20 | Tabelas `dash.dataset_relacao`, `dash.dataset_modelador` (modelador visual) | ✅ Executado |
+| 17 | [`20261014_dados_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261014_dados_demonstracao_dashboards.sql) | 21 | Dados de demonstração: 3 datasets, 2 painéis, 16 widgets | ✅ Executado (2026-10-14) |
 
 ### Comando de execução
 
@@ -74,7 +81,7 @@ Após executar as migrações, registrar as novas telas no menu do sistema. Os I
 | Plano | Tela | URL sugerida | Grupo de menu |
 |---|---|---|---|
 | 01 | Consulta de Auditoria | `/muralha-digital/pages/auditoria/consulta-log.jsp` | Administração |
-| 05 | Fila de Análise | `/muralha-digital/pages/processamento/fila-analise/fila.jsp` | Processamento |
+| 05 | Fila de Análise | `/muralha-digital/pages/processamento/dupla-analise/fila.jsp` | Processamento |
 | 08 | Painel de Assertividade | `/muralha-digital/pages/monitoramento/assertividade/index.jsp` | Monitoramento |
 | 09 | CPF/Matrícula | `/muralha-digital/pages/admin/cpf-matricula/index.jsp` | Administração |
 | 10 | SLA Pré-processamento | `/muralha-digital/pages/monitoramento/sla-preproc/index.jsp` | Monitoramento |
@@ -88,7 +95,7 @@ Após executar as migrações, registrar as novas telas no menu do sistema. Os I
 | 17 | Time-lapse | `/muralha-digital/pages/monitoramento/timelapse/index.jsp` | Monitoramento |
 | 18 | Disponibilidade | `/muralha-digital/pages/monitoramento/disponibilidade/index.jsp` | Monitoramento |
 
-> **Nota:** as telas dos Planos 02, 03, 04, 06 e 07 não requerem menu próprio — são funcionalidades integradas a fluxos existentes (login, análise de imagens, painel SLA).
+> **Nota:** as telas dos Planos 02, 03, 04 e 06 não requerem menu próprio — são funcionalidades integradas a fluxos existentes (login, análise de imagens).
 
 ---
 

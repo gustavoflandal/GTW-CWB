@@ -1,0 +1,37 @@
+/**
+ * GridStack 10.1.2 - MIT License
+ * PLACEHOLDER: substituir pelo gridstack.min.css real
+ * Baixar de: https://cdn.jsdelivr.net/npm/gridstack@10.1.2/dist/gridstack.min.css
+ */
+.grid-stack{position:relative}
+.grid-stack-item{position:absolute;padding:0}
+.grid-stack-item-content{margin:0;position:absolute;inset:0;overflow:hidden;border-radius:0.5rem}
+.grid-stack-placeholder>.placeholder-content{border:2px dashed var(--bs-primary,#0d75bf);border-radius:0.5rem;background:rgba(13,117,191,0.05)}
+.grid-stack>.grid-stack-item>.grid-stack-item-content{position:relative;inset:auto;height:100%}
+.gs-12>.grid-stack-item{width:8.333%}
+.gs-12>.grid-stack-item[gs-w="1"]{width:8.333%}
+.gs-12>.grid-stack-item[gs-w="2"]{width:16.667%}
+.gs-12>.grid-stack-item[gs-w="3"]{width:25%}
+.gs-12>.grid-stack-item[gs-w="4"]{width:33.333%}
+.gs-12>.grid-stack-item[gs-w="5"]{width:41.667%}
+.gs-12>.grid-stack-item[gs-w="6"]{width:50%}
+.gs-12>.grid-stack-item[gs-w="7"]{width:58.333%}
+.gs-12>.grid-stack-item[gs-w="8"]{width:66.667%}
+.gs-12>.grid-stack-item[gs-w="9"]{width:75%}
+.gs-12>.grid-stack-item[gs-w="10"]{width:83.333%}
+.gs-12>.grid-stack-item[gs-w="11"]{width:91.667%}
+.gs-12>.grid-stack-item[gs-w="12"]{width:100%}
+.gs-12>.grid-stack-item[gs-x="1"]{left:8.333%}
+.gs-12>.grid-stack-item[gs-x="2"]{left:16.667%}
+.gs-12>.grid-stack-item[gs-x="3"]{left:25%}
+.gs-12>.grid-stack-item[gs-x="4"]{left:33.333%}
+.gs-12>.grid-stack-item[gs-x="5"]{left:41.667%}
+.gs-12>.grid-stack-item[gs-x="6"]{left:50%}
+.gs-12>.grid-stack-item[gs-x="7"]{left:58.333%}
+.gs-12>.grid-stack-item[gs-x="8"]{left:66.667%}
+.gs-12>.grid-stack-item[gs-x="9"]{left:75%}
+.gs-12>.grid-stack-item[gs-x="10"]{left:83.333%}
+.gs-12>.grid-stack-item[gs-x="11"]{left:91.667%}
+.grid-stack-item>.ui-resizable-handle{position:absolute;font-size:0.1px;display:block;-ms-touch-action:none;touch-action:none}
+.grid-stack-item>.ui-resizable-se{cursor:se-resize;width:20px;height:20px;right:2px;bottom:2px}
+.grid-stack-item.ui-draggable-dragging>.grid-stack-item-content{box-shadow:0 4px 16px rgba(0,0,0,0.15)}

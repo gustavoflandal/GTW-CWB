@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 300">
+  <rect width="450" height="300" fill="white"/>
+  <rect x="6" y="6" width="438" height="288" rx="10" fill="none" stroke="#c5dff0" stroke-width="2"/>
+  <!-- Clipboard body -->
+  <rect x="115" y="50" width="145" height="195" rx="10" fill="none" stroke="#2c3e50" stroke-width="5"/>
+  <!-- Clipboard clip -->
+  <rect x="163" y="36" width="50" height="26" rx="7" fill="#85c1e9" stroke="#2c3e50" stroke-width="4"/>
+  <circle cx="188" cy="49" r="5" fill="#2c3e50"/>
+  <!-- Log lines with check marks -->
+  <path d="M 140 100 L 145 106 L 155 95" fill="none" stroke="#1a78b0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="168" y1="100" x2="235" y2="100" stroke="#85c1e9" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 140 130 L 145 136 L 155 125" fill="none" stroke="#1a78b0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="168" y1="130" x2="235" y2="130" stroke="#85c1e9" stroke-width="3" stroke-linecap="round"/>
+  <path d="M 140 160 L 145 166 L 155 155" fill="none" stroke="#1a78b0" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <line x1="168" y1="160" x2="220" y2="160" stroke="#85c1e9" stroke-width="3" stroke-linecap="round"/>
+  <line x1="168" y1="190" x2="210" y2="190" stroke="#85c1e9" stroke-width="3" stroke-linecap="round"/>
+  <!-- Magnifying glass -->
+  <circle cx="320" cy="165" r="38" fill="none" stroke="#2c3e50" stroke-width="5"/>
+  <line x1="347" y1="193" x2="370" y2="218" stroke="#2c3e50" stroke-width="6" stroke-linecap="round"/>
+  <!-- Eye inside magnifier -->
+  <ellipse cx="320" cy="165" rx="16" ry="10" fill="none" stroke="#1a78b0" stroke-width="3.5"/>
+  <circle cx="320" cy="165" r="5" fill="#1a78b0"/>
+</svg>

@@ -308,3 +308,119 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 - Arquivos Java: 3 (pacote `muralha.digital.websocket`)
 - Classes: Cliente, ClienteSessoes, ControleAcessoEnvio
 
+---
+
+### Módulos adicionados nos Planos 01-20
+
+## acesso
+
+- Arquivos Java: 3 (pacote `muralha.digital.acesso`)
+- Classes: MfaConfigServlet, SenhaService, TotpService
+- Servlet URL(s): `/MuralhaDigital/MfaConfig`
+
+## anonimizacao
+
+- Arquivos Java: 1 (pacote `muralha.digital.anonimizacao`)
+- Classes: ConsultaAnonimizadaServlet
+- Servlet URL(s): `/MuralhaDigital/ConsultaAnonimizada`
+
+## assertividade
+
+- Arquivos Java: 1 (pacote `muralha.digital.assertividade`)
+- Classes: AssertividadeServlet
+- Servlet URL(s): `/MuralhaDigital/Assertividade`
+
+## auditoria
+
+- Arquivos Java: 2 (pacote `muralha.digital.auditoria`)
+- Classes: AuditoriaService, AuditoriaServlet
+- Servlet URL(s): `/MuralhaDigital/Auditoria`
+
+## dashboard
+
+- Arquivos Java: 2 (pacote `muralha.digital.dashboard`)
+- Classes: DashboardBuilderServlet, DatasetServlet
+- Servlet URL(s): `/MuralhaDigital/DashboardBuilder`, `/MuralhaDigital/Dataset`
+
+## dashboards (API REST)
+
+- Arquivos Java: 19 (pacote `muralha.digital.dashboards`)
+- Classes: DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
+- Subpacote `consulta`: ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta
+- Servlet URL(s): `/api/dash/catalogo`, `/api/dash/consultas`, `/api/dash/datasets`, `/api/dash/exportar`, `/api/dash/health`, `/api/dash/paineis`, `/api/dash/widgets`
+- Ações `DashCatalogoServlet` (GET): listarTabelas, listarColunas, listarRelacoes, importarSugestoes, amostraTabela; (POST): salvarTabela, salvarRelacao, salvarColuna, excluirRelacao, promoverRelacao
+- Ações `DatasetServlet` (GET): listar, obter, relacoes, colunas, tabelasCatalogo, sugestoesRelacao; (POST): salvar, publicar, excluir, validarExpressao, validarRelacao, verificarCardinalidade, salvarModelador
+- Tabelas: `dash.catalogo_tabela`, `dash.catalogo_coluna`, `dash.catalogo_relacao`, `dash.dataset`, `dash.dataset_campo`, `dash.dataset_tabela`, `dash.dataset_relacao`, `dash.dataset_modelador`, `dash.dataset_filtro_fixo`
+
+## disponibilidade
+
+- Arquivos Java: 2 (pacote `muralha.digital.disponibilidade`)
+- Classes: DisponibilidadeJob, DisponibilidadeServlet
+- Servlet URL(s): `/MuralhaDigital/Disponibilidade`
+
+## exportacao
+
+- Arquivos Java: 1 (pacote `muralha.digital.exportacao`)
+- Classes: ExportacaoServlet
+- Servlet URL(s): `/MuralhaDigital/Exportacao`
+
+## gis
+
+- Arquivos Java: 1 (pacote `muralha.digital.gis`)
+- Classes: GisServlet
+- Servlet URL(s): `/MuralhaDigital/Gis`
+
+## imagem (novos)
+
+- Arquivos Java: 2 (pacote `muralha.digital.imagem` — novos)
+- Classes: ObliteracaoService, ObliteracaoServlet
+- Servlet URL(s): `/MuralhaDigital/Obliteracao`
+
+## kpi
+
+- Arquivos Java: 1 (pacote `muralha.digital.kpi`)
+- Classes: KpiServlet
+- Servlet URL(s): `/MuralhaDigital/Kpi`
+
+## lote
+
+- Arquivos Java: 1 (pacote `muralha.digital.lote`)
+- Classes: LoteServlet
+- Servlet URL(s): `/MuralhaDigital/Lote`
+
+## processamento
+
+- Arquivos Java: 2 (pacote `muralha.digital.processamento`)
+- Classes: InfracaoAnaliseDAO, InfracaoAnaliseServlet
+- Servlet URL(s): `/MuralhaDigital/InfracaoAnalise`
+
+## retencao
+
+- Arquivos Java: 2 (pacote `muralha.digital.retencao`)
+- Classes: RetencaoJob, RetencaoServlet
+- Servlet URL(s): `/MuralhaDigital/Retencao`
+
+## sensores
+
+- Arquivos Java: 2 (pacote `muralha.digital.sensores`)
+- Classes: IncidenteImportJob, IncidenteServlet
+- Servlet URL(s): `/MuralhaDigital/Incidente`
+
+## sla
+
+- Arquivos Java: 4 (pacote `muralha.digital.sla`)
+- Classes: SlaLatenciaJob, SlaLatenciaServlet, SlaPreprocessamentoJob, SlaPreprocessamentoServlet
+- Servlet URL(s): `/MuralhaDigital/SlaLatencia`, `/MuralhaDigital/SlaPreprocessamento`
+
+## timelapse
+
+- Arquivos Java: 1 (pacote `muralha.digital.timelapse`)
+- Classes: TimelapseServlet
+- Servlet URL(s): `/MuralhaDigital/Timelapse`
+
+## usuario
+
+- Arquivos Java: 2 (pacote `muralha.digital.usuario`)
+- Classes: UsuarioCpfMatriculaServlet, UsuarioCpfUtil
+- Servlet URL(s): `/MuralhaDigital/UsuarioCpfMatricula`
+
