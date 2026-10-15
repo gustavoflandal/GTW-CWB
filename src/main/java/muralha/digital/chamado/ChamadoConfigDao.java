@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,6 +25,7 @@ public final class ChamadoConfigDao {
 
     private static final String CHAVE_RISCO = "chamado_sla_risco_percentual";
     private static final String CHAVE_FECHAMENTO = "chamado_fechamento_auto_dias";
+    public static final String CHAVE_EMAIL_ATIVO = "chamado_email_ativo";
 
     private ChamadoConfigDao() {
     }
@@ -132,7 +134,112 @@ public final class ChamadoConfigDao {
             }
         }
         if (antigo == novo) return;
-        String evento = chave + ": " + antigo + " -> " + novo;
+        registrarHistorico(conn, idUsuario, chave + ": " + antigo + " -> " + novo);
+    }
+
+    /** Configuracao do SMTP para a tela; a senha nunca sai, so se esta definida. */
+    public static JsonObject configuracaoSmtp(Connection conn) throws SQLException {
+        String host = valor(conn, ConfiguracaoSmtpChamado.CHAVE_HOST, "");
+        JsonObject o = new JsonObject();
+        o.addProperty("host", host);
+        o.addProperty("porta", valorInt(conn, ConfiguracaoSmtpChamado.CHAVE_PORTA, ConfiguracaoSmtpChamado.PORTA_PADRAO));
+        o.addProperty("usuario", valor(conn, ConfiguracaoSmtpChamado.CHAVE_USUARIO, ""));
+        o.addProperty("remetente", valor(conn, ConfiguracaoSmtpChamado.CHAVE_REMETENTE, ""));
+        o.addProperty("starttls", !"0".equals(valor(conn, ConfiguracaoSmtpChamado.CHAVE_STARTTLS, "1")));
+        o.addProperty("emailAtivo", "1".equals(valor(conn, CHAVE_EMAIL_ATIVO, "1")));
+        o.addProperty("senhaDefinida", !valor(conn, ConfiguracaoSmtpChamado.CHAVE_SENHA, "").isEmpty());
+        o.addProperty("chaveDisponivel", CifraSegredo.chaveDoAmbiente() != null);
+        o.addProperty("origemAtual", host.isEmpty() ? ConfiguracaoSmtpChamado.ORIGEM_CONFGTW
+                : ConfiguracaoSmtpChamado.ORIGEM_CHAMADOS);
+        return o;
+    }
+
+    /** Dados do formulario de SMTP. senha vazia = manter a atual; limparSenha = apagar. */
+    public static final class DadosSmtp {
+        public String host;
+        public int porta;
+        public String usuario;
+        public String senha;
+        public boolean limparSenha;
+        public String remetente;
+        public boolean starttls;
+        public boolean emailAtivo;
+    }
+
+    /**
+     * Valida, cifra a senha nova e grava as chaves + historico (sem a senha) numa transacao.
+     * Retorna as chaves alteradas (a da senha aparece como chamado_smtp_senha, sem valor).
+     */
+    public static List<String> salvarSmtp(Connection conn, DadosSmtp d, int idUsuario) throws SQLException {
+        String host = d.host == null ? "" : d.host.trim();
+        String usuario = d.usuario == null ? "" : d.usuario.trim();
+        String remetente = d.remetente == null ? "" : d.remetente.trim();
+        ConfiguracaoSmtpChamado.validar(host, d.porta, remetente, usuario);
+        String senhaNova = null; // null = nao mexe
+        if (d.limparSenha) {
+            senhaNova = "";
+        } else if (d.senha != null && !d.senha.isEmpty()) {
+            if (d.senha.length() > CifraSegredo.MAX_CARACTERES) {
+                throw new RegraChamadoException("A senha do SMTP deve ter no máximo " + CifraSegredo.MAX_CARACTERES + " caracteres.");
+            }
+            byte[] chave = CifraSegredo.chaveDoAmbiente();
+            if (chave == null) {
+                throw new RegraChamadoException("Defina a variável " + CifraSegredo.VARIAVEL_CHAVE
+                        + " no servidor para gravar a senha.");
+            }
+            try {
+                senhaNova = CifraSegredo.cifrar(d.senha, chave);
+            } catch (IllegalArgumentException e) {
+                throw new RegraChamadoException("A senha do SMTP é longa demais para ser gravada.");
+            }
+        }
+        String porta = host.isEmpty() && d.porta == 0 ? "" : String.valueOf(d.porta);
+
+        Map<String, String> novos = new LinkedHashMap<>();
+        novos.put(ConfiguracaoSmtpChamado.CHAVE_HOST, host);
+        novos.put(ConfiguracaoSmtpChamado.CHAVE_PORTA, porta);
+        novos.put(ConfiguracaoSmtpChamado.CHAVE_USUARIO, usuario);
+        novos.put(ConfiguracaoSmtpChamado.CHAVE_REMETENTE, remetente);
+        novos.put(ConfiguracaoSmtpChamado.CHAVE_STARTTLS, d.starttls ? "1" : "0");
+        novos.put(CHAVE_EMAIL_ATIVO, d.emailAtivo ? "1" : "0");
+        if (senhaNova != null) novos.put(ConfiguracaoSmtpChamado.CHAVE_SENHA, senhaNova);
+
+        List<String> alteradas = new ArrayList<>();
+        boolean autoCommit = conn.getAutoCommit();
+        conn.setAutoCommit(false);
+        try {
+            for (Map.Entry<String, String> e : novos.entrySet()) {
+                String chave = e.getKey();
+                String antigo = valor(conn, chave, "");
+                try (PreparedStatement ps = conn.prepareStatement(
+                        "UPDATE muralha.config_chave_valor SET valor = ? WHERE chave = ?")) {
+                    ps.setString(1, e.getValue());
+                    ps.setString(2, chave);
+                    if (ps.executeUpdate() == 0) {
+                        throw new RegraChamadoException("Parâmetro \"" + chave + "\" não cadastrado.");
+                    }
+                }
+                boolean ehSenha = ConfiguracaoSmtpChamado.CHAVE_SENHA.equals(chave);
+                // a senha cifrada muda a cada gravacao (IV aleatorio): qualquer senha informada conta como alteracao
+                if (!ehSenha && antigo.equals(e.getValue())) continue;
+                if (ehSenha && antigo.isEmpty() && e.getValue().isEmpty()) continue;
+                alteradas.add(chave);
+                String evento = ehSenha
+                        ? chave + ": " + (e.getValue().isEmpty() ? "removida" : "alterada")
+                        : chave + ": " + antigo + " -> " + e.getValue();
+                registrarHistorico(conn, idUsuario, evento);
+            }
+            conn.commit();
+        } catch (SQLException | RuntimeException e) {
+            conn.rollback();
+            throw e;
+        } finally {
+            conn.setAutoCommit(autoCommit);
+        }
+        return alteradas;
+    }
+
+    private static void registrarHistorico(Connection conn, int idUsuario, String evento) throws SQLException {
         if (evento.length() > 255) evento = evento.substring(0, 255);
         try (PreparedStatement ps = conn.prepareStatement(
                 "INSERT INTO muralha.config_chave_valor_hist (id_usuario, data_atualizacao, evento) " +

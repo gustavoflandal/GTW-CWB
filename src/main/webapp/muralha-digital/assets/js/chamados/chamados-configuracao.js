@@ -45,6 +45,66 @@
     }
   }
 
+  // ---- E-mail (SMTP) ----
+  function el(id) { return document.getElementById(id); }
+
+  async function carregarSmtp() {
+    var d = await Chamados.get('ChamadoConfig', { acao: 'smtp' });
+    if (!d.ok) return;
+    el('smtpHost').value = d.host || '';
+    el('smtpPorta').value = d.porta || '';
+    el('smtpUsuario').value = d.usuario || '';
+    el('smtpRemetente').value = d.remetente || '';
+    el('smtpStarttls').checked = !!d.starttls;
+    el('smtpEmailAtivo').checked = !!d.emailAtivo;
+    el('smtpSenha').value = '';
+    el('smtpLimparSenha').checked = false;
+    el('smtpLimparSenha').disabled = !d.senhaDefinida;
+    el('smtpSenhaAjuda').textContent = d.senhaDefinida
+      ? 'Há uma senha gravada (cifrada). Deixe em branco para manter a senha atual.'
+      : 'Nenhuma senha gravada. Deixe em branco para manter sem senha.';
+    el('smtpSemChave').classList.toggle('d-none', !!d.chaveDisponivel);
+    el('smtpOrigem').innerHTML = '<i class="bi bi-info-circle me-1"></i>Em uso: ' + (d.origemAtual === 'CHAMADOS'
+      ? '<strong>configuração dos Chamados</strong> (servidor ' + esc(d.host) + ').'
+      : '<strong>servidor do confGTW.xml</strong> (o campo "Servidor SMTP" está em branco).');
+  }
+
+  async function salvarSmtp(e) {
+    e.preventDefault();
+    var btn = el('btnSalvarSmtp');
+    btn.disabled = true;
+    try {
+      var d = await Chamados.post('ChamadoConfig', new URLSearchParams({
+        acao: 'salvarSmtp',
+        host: el('smtpHost').value.trim(),
+        porta: el('smtpPorta').value,
+        usuario: el('smtpUsuario').value.trim(),
+        senha: el('smtpSenha').value,
+        limparSenha: el('smtpLimparSenha').checked,
+        remetente: el('smtpRemetente').value.trim(),
+        starttls: el('smtpStarttls').checked,
+        emailAtivo: el('smtpEmailAtivo').checked
+      }));
+      if (d.ok) {
+        Swal.fire({ icon: 'success', title: 'Configuração de e-mail salva', timer: 1200, showConfirmButton: false });
+        carregarSmtp();
+      }
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
+  async function testarSmtp() {
+    var btn = el('btnTestarSmtp');
+    btn.disabled = true;
+    try {
+      var d = await Chamados.post('ChamadoConfig', new URLSearchParams({ acao: 'testarSmtp' }));
+      if (d.ok) Swal.fire({ icon: 'success', title: 'E-mail de teste enviado', text: 'Verifique a caixa de entrada de ' + d.destinatario + '.' });
+    } finally {
+      btn.disabled = false;
+    }
+  }
+
   // ---- Perfis de acesso ----
   var PERFIS = [
     { codigo: 'SOLICITANTE', titulo: 'Solicitantes', icone: 'bi-person' },
@@ -209,6 +269,8 @@
   document.getElementById('btnNovaPri').addEventListener('click', function () { editarPrioridade(null); });
   document.getElementById('btnNovaCat').addEventListener('click', function () { editarCategoria(null); });
   document.getElementById('formSla').addEventListener('submit', salvarParametros);
+  el('formSmtp').addEventListener('submit', salvarSmtp);
+  el('btnTestarSmtp').addEventListener('click', testarSmtp);
   montarCartoes();
   document.getElementById('cartoesPerfis').addEventListener('input', function (e) {
     var perfil = e.target.dataset.perfil;
@@ -221,6 +283,7 @@
     if (!e.target.closest('[data-perfil], [data-adicionar]')) PERFIS.forEach(function (p) { fecharResultados(p.codigo); });
   });
   carregarParametros();
+  carregarSmtp();
   carregarPerfis();
   carregar();
 })();

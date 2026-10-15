@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
+import java.util.List;
 
 /** Configuracao do Sistema de Chamados: restrita ao perfil ADMIN. */
 @WebServlet("/MuralhaDigital/ChamadoConfig")
@@ -41,6 +42,8 @@ public class ChamadoConfigServlet extends HttpServlet {
                 r.add("membros", ChamadoConfigDao.membrosPerfis(conn));
             } else if ("buscarUsuarios".equals(acao)) {
                 r.add("usuarios", ChamadoConfigDao.buscarUsuarios(conn, req.getParameter("termo")));
+            } else if ("smtp".equals(acao)) {
+                r = ChamadoConfigDao.configuracaoSmtp(conn);
             } else {
                 throw new RegraChamadoException("Ação inválida.");
             }
@@ -58,6 +61,7 @@ public class ChamadoConfigServlet extends HttpServlet {
         try (Connection conn = Conexao.getConexao()) {
             ctx.exigir(ctx.operador.perfis.contains(PerfilChamado.ADMIN));
             String acao = req.getParameter("acao");
+            JsonObject r = new JsonObject();
             if ("salvarPrioridade".equals(acao)) {
                 Prioridade p = new Prioridade();
                 p.id = inteiro(req, "id", 0);
@@ -88,10 +92,14 @@ public class ChamadoConfigServlet extends HttpServlet {
                 salvarParametros(ctx, conn, req);
             } else if ("adicionarMembro".equals(acao) || "removerMembro".equals(acao)) {
                 alterarMembro(ctx, conn, req, "adicionarMembro".equals(acao));
+            } else if ("salvarSmtp".equals(acao)) {
+                salvarSmtp(ctx, conn, req);
+            } else if ("testarSmtp".equals(acao)) {
+                r = testarSmtp(ctx, conn, req);
             } else {
                 throw new RegraChamadoException("Ação inválida.");
             }
-            ContextoRequisicao.json(resp, new JsonObject());
+            ContextoRequisicao.json(resp, r);
         } catch (Exception e) {
             ChamadoServlet.tratar(resp, e);
         }
@@ -127,6 +135,55 @@ public class ChamadoConfigServlet extends HttpServlet {
                 String.valueOf(idUsuario), descricao);
         logger.info((adicionar ? "Perfil adicionado" : "Perfil removido") + " por usuario "
                 + ctx.usuario.getId() + ": " + descricao);
+    }
+
+    private static void salvarSmtp(ContextoRequisicao ctx, Connection conn, HttpServletRequest req) throws Exception {
+        ChamadoConfigDao.DadosSmtp d = new ChamadoConfigDao.DadosSmtp();
+        d.host = req.getParameter("host");
+        d.porta = inteiro(req, "porta", 0);
+        d.usuario = req.getParameter("usuario");
+        d.senha = req.getParameter("senha");
+        d.limparSenha = "true".equals(req.getParameter("limparSenha"));
+        d.remetente = req.getParameter("remetente");
+        d.starttls = "true".equals(req.getParameter("starttls"));
+        d.emailAtivo = "true".equals(req.getParameter("emailAtivo"));
+        List<String> alteradas = ChamadoConfigDao.salvarSmtp(conn, d, ctx.usuario.getId());
+        boolean senhaAlterada = alteradas.remove(ConfiguracaoSmtpChamado.CHAVE_SENHA);
+        String descricao = "campos alterados: " + (alteradas.isEmpty() ? "nenhum" : String.join(", ", alteradas))
+                + "; senha alterada: " + (senhaAlterada ? "sim" : "não");
+        AuditoriaService.registrar(req, "Chamado", "SALVAR_SMTP", "SMTP", descricao);
+        logger.info("SMTP dos chamados alterado por usuario " + ctx.usuario.getId() + ": " + descricao);
+    }
+
+    /** Envia um e-mail de teste ao administrador logado com a configuracao gravada. */
+    private static JsonObject testarSmtp(ContextoRequisicao ctx, Connection conn, HttpServletRequest req)
+            throws Exception {
+        String destinatario = ChamadoConfigDao.emailUsuario(conn, ctx.usuario.getId());
+        if (destinatario == null) throw new RegraChamadoException("Seu usuário não tem e-mail cadastrado.");
+        JsonObject r = new JsonObject();
+        String resultado;
+        ConfiguracaoSmtpChamado cfg = null;
+        try {
+            cfg = ConfiguracaoSmtpChamado.resolver(conn);
+            EmailChamado.enviar(cfg, destinatario, "[Chamados] E-mail de teste",
+                    "<div style='font-family:Arial,sans-serif;font-size:14px;color:#333'>"
+                    + "<h2 style='color:#0d75bf'>E-mail de teste do Sistema de Chamados</h2>"
+                    + "<p>Se você recebeu esta mensagem, o envio de e-mails dos chamados está funcionando.</p>"
+                    + "<p style='font-size:12px;color:#777'>Mensagem automática — não responda este e-mail.</p></div>");
+            r.addProperty("ok", true);
+            r.addProperty("destinatario", destinatario);
+            resultado = "enviado";
+        } catch (Exception e) {
+            String msg = EmailChamado.mensagemErro(e, cfg == null ? null : cfg.senha);
+            r.addProperty("ok", false);
+            r.addProperty("erro", "Falha no envio: " + msg);
+            resultado = "falha: " + msg;
+            logger.warn("Teste de SMTP dos chamados falhou (usuario " + ctx.usuario.getId() + "): " + msg);
+        }
+        String origem = cfg == null ? "" : " (origem " + cfg.origem + ")";
+        AuditoriaService.registrar(req, "Chamado", "TESTAR_SMTP", "SMTP",
+                "destinatário " + destinatario + origem + ": " + resultado);
+        return r;
     }
 
     private static int inteiro(HttpServletRequest req, String nome, int padrao) {

@@ -42,10 +42,10 @@ public class ChamadoEmailJob implements Job {
                 try {
                     String html = EmailChamado.corpoHtml(p.tipo, p.protocolo, p.titulo, p.prioridade,
                             p.prazoAtendimento.toLocalDateTime(), p.prazoResolucao.toLocalDateTime(), p.justificativa);
-                    enviado = EmailChamado.enviar(p.destinatario, EmailChamado.assunto(p.tipo, p.protocolo), html);
-                    if (!enviado) erro = "Falha no envio SMTP (ver log)";
+                    EmailChamado.enviar(conn, p.destinatario, EmailChamado.assunto(p.tipo, p.protocolo), html);
+                    enviado = true;
                 } catch (Exception e) {
-                    erro = e.getMessage();
+                    erro = EmailChamado.mensagemErro(e, null);
                     logger.warn("ChamadoEmailJob: falha ao enviar notificacao " + p.id, e);
                 }
                 try {

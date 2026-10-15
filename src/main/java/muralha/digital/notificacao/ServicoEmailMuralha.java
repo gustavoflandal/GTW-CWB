@@ -322,40 +322,4 @@ public class ServicoEmailMuralha {
 		}
 	}
 
-	public boolean enviarEmailChamado(InternetAddress remetente, List<InternetAddress> destinatarios,
-	                                  String assunto, String corpoHtml) {
-	    try {
-	        Properties props = new Properties();
-	        props.put("mail.smtp.host", smtpHost);
-	        props.put("mail.smtp.port", String.valueOf(smtpPort));
-	        props.put("mail.smtp.starttls.enable", "true");
-
-	        Session session;
-	        if (smtpUser != null && !smtpUser.isEmpty()) {
-	            props.put("mail.smtp.auth", "true");
-	            Authenticator auth = new Authenticator() {
-	                @Override
-	                protected PasswordAuthentication getPasswordAuthentication() {
-	                    return new PasswordAuthentication(smtpUser, smtpPassword);
-	                }
-	            };
-	            session = Session.getInstance(props, auth);
-	        } else {
-	            session = Session.getInstance(props);
-	        }
-
-	        MimeMessage msg = new MimeMessage(session);
-	        msg.setFrom(remetente);
-	        msg.addRecipients(Message.RecipientType.TO, destinatarios.toArray(new InternetAddress[0]));
-	        msg.setSubject(assunto, "UTF-8");
-	        msg.setContent(corpoHtml, "text/html; charset=UTF-8");
-	        msg.setSentDate(new Date());
-	        Transport.send(msg);
-	        return true;
-	    } catch (Exception e) {
-	        logger.error("Erro ao enviar e-mail de chamado: ", e);
-	        return false;
-	    }
-	}
-
 }

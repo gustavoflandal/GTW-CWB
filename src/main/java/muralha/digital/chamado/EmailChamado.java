@@ -1,13 +1,18 @@
 package muralha.digital.chamado;
 
-import com.consilux.conf.ConfiguracaoProvider;
-import com.consilux.conf.ConfiguracaoServidorSmtp;
-import muralha.digital.notificacao.ServicoEmailMuralha;
-
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.util.Date;
+import java.util.Properties;
 
 /** Confirmacao de abertura e aviso de reclassificacao (spec §1.4, D14). */
 public final class EmailChamado {
@@ -15,6 +20,7 @@ public final class EmailChamado {
     public static final String CONFIRMACAO_ABERTURA = "CONFIRMACAO_ABERTURA";
     public static final String RECLASSIFICACAO = "RECLASSIFICACAO";
     public static final int MAX_TENTATIVAS = 5;
+    private static final String TIMEOUT_MS = "10000";
 
     private static final DateTimeFormatter FMT = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
@@ -58,15 +64,52 @@ public final class EmailChamado {
         return tentativasAntes + 1 >= MAX_TENTATIVAS ? "ERRO" : "PENDENTE";
     }
 
-    public static boolean enviar(String destinatario, String assunto, String html) throws Exception {
-        List<ConfiguracaoServidorSmtp> servidores = ConfiguracaoProvider.getInstance().getListaServidoresSmtp();
-        if (servidores == null || servidores.isEmpty()) {
-            throw new IllegalStateException("Nenhum servidor SMTP configurado em confGTW.xml.");
+    /** Envia com a configuracao em vigor (Chamados ou confGTW.xml); lanca excecao em caso de falha. */
+    public static void enviar(Connection conn, String destinatario, String assunto, String html) throws Exception {
+        enviar(ConfiguracaoSmtpChamado.resolver(conn), destinatario, assunto, html);
+    }
+
+    public static void enviar(ConfiguracaoSmtpChamado cfg, String destinatario, String assunto, String html)
+            throws MessagingException {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", cfg.host);
+        props.put("mail.smtp.port", String.valueOf(cfg.porta));
+        props.put("mail.smtp.starttls.enable", String.valueOf(cfg.starttls));
+        props.put("mail.smtp.connectiontimeout", TIMEOUT_MS);
+        props.put("mail.smtp.timeout", TIMEOUT_MS);
+        Session session;
+        if (cfg.usuario != null && !cfg.usuario.isEmpty()) {
+            props.put("mail.smtp.auth", "true");
+            final String usuario = cfg.usuario;
+            final String senha = cfg.senha == null ? "" : cfg.senha;
+            session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(usuario, senha);
+                }
+            });
+        } else {
+            session = Session.getInstance(props);
         }
-        ConfiguracaoServidorSmtp s = servidores.get(0);
-        ServicoEmailMuralha servico = new ServicoEmailMuralha(s.getUser(), s.getPassword(), s.getHost(), s.getPort());
-        return servico.enviarEmailChamado(new InternetAddress(s.getMail()),
-                List.of(new InternetAddress(destinatario)), assunto, html);
+        MimeMessage msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress(cfg.remetente));
+        msg.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+        msg.setSubject(assunto, "UTF-8");
+        msg.setContent(html, "text/html; charset=UTF-8");
+        msg.setSentDate(new Date());
+        Transport.send(msg);
+    }
+
+    /** Mensagem legivel da falha (com a causa raiz), sem o segredo informado. */
+    public static String mensagemErro(Throwable e, String segredo) {
+        String msg = e.getMessage() == null ? e.getClass().getSimpleName() : e.getMessage();
+        Throwable raiz = e;
+        while (raiz.getCause() != null && raiz.getCause() != raiz) raiz = raiz.getCause();
+        if (raiz != e) {
+            msg += " (" + raiz.getClass().getSimpleName() + (raiz.getMessage() == null ? "" : ": " + raiz.getMessage()) + ")";
+        }
+        if (segredo != null && !segredo.isEmpty()) msg = msg.replace(segredo, "***");
+        return msg;
     }
 
     static String esc(String s) {
