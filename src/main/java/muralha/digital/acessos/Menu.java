@@ -45,4 +45,13 @@ public class Menu
 	public void setDescDetalhada(String descDetalhada) {
 		this.descDetalhada = descDetalhada;
 	}
+	public boolean isAtendeEdital() {
+		return !ReferenciaEdital.itens(idMenu).isEmpty();
+	}
+	public String getTituloEdital() {
+		return ReferenciaEdital.titulo(idMenu);
+	}
+	public String getItensEditalTexto() {
+		return String.join(", ", ReferenciaEdital.itens(idMenu));
+	}
 }

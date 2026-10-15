@@ -351,6 +351,15 @@
 													          	<span class="text-center fw-light text-white"><h6><b>${menu.descricao}</b></h6></span>
 													        </a>
 															<p class="text-center fw-light"><b>${menu.descDetalhada}</b></p>
+															<c:if test="${menu.atendeEdital}">
+																<p class="text-center mb-0">
+																	<span class="ref-edital text-danger fw-bold" tabindex="0" role="button"
+																		  data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom"
+																		  data-bs-custom-class="tooltip-edital"
+																		  data-bs-title="<c:out value='${menu.tituloEdital}'/>"
+																		  aria-label="Itens do edital: <c:out value='${menu.itensEditalTexto}'/>">*</span>
+																</p>
+															</c:if>
 														</div>
 											      	</div>
 											        
@@ -369,12 +378,27 @@
 		       	</div>
 	</body>	
 
+	<script type="text/javascript">
+		document.querySelectorAll('.ref-edital').forEach(function(el) {
+			new bootstrap.Tooltip(el);
+			el.addEventListener('click', function(e) { e.stopPropagation(); });
+		});
+	</script>
+
 	<%@ include file="/muralha-digital/utils/notificacoes-browser/notificacoes.jsp" %>
 	<%@ include file="/muralha-digital/utils/notificacao/notificacao.jsp"%>
 	
 	
 </html>
 <style>
+  .ref-edital {
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: help;
+  }
+  .tooltip-edital.show {
+    opacity: 1;
+  }
   .badge-custom {
     background-color: #dc3545;
     color: white;
