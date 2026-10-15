@@ -157,8 +157,13 @@
   async function buscar(perfil, termo) {
     var box = document.getElementById('res' + perfil);
     if (termo.length < 2) { fecharResultados(perfil); return; }
-    var d = await Chamados.get('ChamadoConfig', { acao: 'buscarUsuarios', termo: termo });
-    if (!d.ok) return;
+    var d;
+    try {
+      // busca a cada digitacao: falha silenciosa (sem Swal), apenas fecha a lista
+      var r = await fetch((window.CTX || '') + '/MuralhaDigital/ChamadoConfig?' + new URLSearchParams({ acao: 'buscarUsuarios', termo: termo }));
+      d = await r.json();
+    } catch (e) { d = null; }
+    if (!d || !d.ok) { fecharResultados(perfil); return; }
     if (document.getElementById('busca' + perfil).value.trim() !== termo) return; // resposta obsoleta
     var jaTem = membros.filter(function (m) { return m.perfil === perfil; }).map(function (m) { return String(m.idUsuario); });
     var lista = d.usuarios.filter(function (u) { return jaTem.indexOf(String(u.idUsuario)) < 0; });
@@ -190,6 +195,7 @@
     if (!d.ok) return;
     Swal.fire({ icon: 'success', title: adicionar ? 'Usuário adicionado' : 'Usuário removido', timer: 1200, showConfirmButton: false });
     if (adicionar) {
+      clearTimeout(timers[perfil]);
       document.getElementById('busca' + perfil).value = '';
       fecharResultados(perfil);
     }

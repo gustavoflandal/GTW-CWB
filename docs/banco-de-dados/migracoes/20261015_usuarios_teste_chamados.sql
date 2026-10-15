@@ -1,6 +1,7 @@
 -- =============================================================================
 -- Usuarios de teste do Sistema de Gerenciamento de Chamados (Plano 22, Tarefa 18)
--- Data: 2026-10-15 — idempotente. SOMENTE para o banco de desenvolvimento (GTW_MURALHA_DEV).
+-- Data: 2026-10-15 — idempotente. EXCLUSIVO do banco de desenvolvimento GTW_MURALHA_DEV: o script se recusa
+-- a rodar em qualquer outro banco (guarda IF DB_NAME() abaixo, com SET NOEXEC ON/OFF).
 -- Executar depois de 20261015_sistema_chamados_admin.sql. Os usuarios sao removidos ao fim do teste
 -- com a secao de LIMPEZA abaixo.
 --
@@ -15,6 +16,8 @@
 --   --    SELECT protocolo FROM muralha.chamado WHERE id_usuario_solicitante IN (SELECT id_usuario FROM dbo.sis_usuario
 --   --      WHERE usuario IN ('TESTE.CHAMADO.ADM','TESTE.CHAMADO.SOL'));
 --   --    e remover C:\Consilux\MuralhaDigital\chamados\<ano>\<protocolo>\ de cada um.
+--   SET XACT_ABORT ON;
+--   BEGIN TRAN;
 --   DECLARE @u TABLE (id INT PRIMARY KEY);
 --   INSERT INTO @u SELECT id_usuario FROM dbo.sis_usuario WHERE usuario IN ('TESTE.CHAMADO.ADM','TESTE.CHAMADO.SOL');
 --   DECLARE @c TABLE (id BIGINT PRIMARY KEY);
@@ -35,7 +38,15 @@
 --   -- Parametros de SLA de volta ao padrao (80 / 5):
 --   UPDATE muralha.config_chave_valor SET valor = '80' WHERE chave = 'chamado_sla_risco_percentual';
 --   UPDATE muralha.config_chave_valor SET valor = '5'  WHERE chave = 'chamado_fechamento_auto_dias';
+--   COMMIT;
 -- =============================================================================
+
+-- Guarda: somente no banco de desenvolvimento
+IF DB_NAME() <> N'GTW_MURALHA_DEV'
+BEGIN
+    RAISERROR('Script exclusivo do banco de desenvolvimento GTW_MURALHA_DEV.', 16, 1);
+    SET NOEXEC ON;
+END
 
 -- 1) Usuarios (e-mails em dominio .invalid de proposito: a notificacao termina em ERRO, sem envio real)
 INSERT INTO dbo.sis_usuario (usuario, senha, nome, email, ativo, alterar_senha, id_grupo_equipamento)
@@ -66,3 +77,4 @@ WHEN NOT MATCHED THEN INSERT (id_usuario, senha_trocada_em, totp_habilitado, ten
                       VALUES (src.id_usuario, SYSDATETIME(), 0, 0);
 PRINT 'Grupos e complemento verificados';
 GO
+SET NOEXEC OFF;

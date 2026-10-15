@@ -1,6 +1,8 @@
 -- =============================================================================
 -- Seed: Sistema de Gerenciamento de Chamados (Plano 22)
 -- Data: 2026-10-15 — idempotente. Executar depois de 20261015_sistema_chamados.sql.
+-- Ordem de execucao dos scripts do modulo: 1) 20261015_sistema_chamados.sql, 2) 20261015_sistema_chamados_seed.sql,
+--   3) 20261015_sistema_chamados_admin.sql, 4) 20261015_sistema_chamados_smtp.sql.
 -- ROLLBACK:
 --   DELETE FROM dbo.sis_menu_direitos WHERE id_menu BETWEEN 379 AND 382;
 --   DELETE FROM dbo.sis_menu_infos    WHERE id_infos BETWEEN 46 AND 48;
@@ -133,13 +135,14 @@ FROM (VALUES
 ) v(id_infos, id_menu, src, descricao, href, det, ord, pai)
 WHERE NOT EXISTS (SELECT 1 FROM dbo.sis_menu_infos i WHERE i.id_infos = v.id_infos);
 
--- Direitos: 379/380 = todos os perfis; 381 = gestor e equipe; 382 = equipe. Grupo 11 = Administradores.
+-- Direitos: 379/380 = todos os perfis; 381 = gestor e equipe; 382 = somente Administradores (grupo 11);
+-- a equipe nao recebe o 382 (o script _admin ja o removia).
 INSERT INTO dbo.sis_menu_direitos (id_grupo, id_usuario, id_menu)
 SELECT v.g, NULL, v.m
 FROM (VALUES (@gSol, 379), (@gGes, 379), (@gEqu, 379), (11, 379),
              (@gSol, 380), (@gGes, 380), (@gEqu, 380), (11, 380),
              (@gGes, 381), (@gEqu, 381), (11, 381),
-             (@gEqu, 382), (11, 382)) v(g, m)
+             (11, 382)) v(g, m)
 WHERE NOT EXISTS (SELECT 1 FROM dbo.sis_menu_direitos d WHERE d.id_grupo = v.g AND d.id_menu = v.m);
 PRINT 'Menus e direitos verificados';
 GO

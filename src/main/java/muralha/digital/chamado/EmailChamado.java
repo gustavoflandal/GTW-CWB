@@ -71,12 +71,7 @@ public final class EmailChamado {
 
     public static void enviar(ConfiguracaoSmtpChamado cfg, String destinatario, String assunto, String html)
             throws MessagingException {
-        Properties props = new Properties();
-        props.put("mail.smtp.host", cfg.host);
-        props.put("mail.smtp.port", String.valueOf(cfg.porta));
-        props.put("mail.smtp.starttls.enable", String.valueOf(cfg.starttls));
-        props.put("mail.smtp.connectiontimeout", TIMEOUT_MS);
-        props.put("mail.smtp.timeout", TIMEOUT_MS);
+        Properties props = propriedades(cfg);
         Session session;
         if (cfg.usuario != null && !cfg.usuario.isEmpty()) {
             props.put("mail.smtp.auth", "true");
@@ -98,6 +93,25 @@ public final class EmailChamado {
         msg.setContent(html, "text/html; charset=UTF-8");
         msg.setSentDate(new Date());
         Transport.send(msg);
+    }
+
+    /**
+     * Propriedades JavaMail. Com o SMTP configurado nos Chamados e STARTTLS ligado, o TLS e obrigatorio
+     * (sem downgrade) e o certificado e conferido; o caminho confGTW.xml mantem o comportamento legado.
+     */
+    static Properties propriedades(ConfiguracaoSmtpChamado cfg) {
+        Properties props = new Properties();
+        props.put("mail.smtp.host", cfg.host);
+        props.put("mail.smtp.port", String.valueOf(cfg.porta));
+        props.put("mail.smtp.starttls.enable", String.valueOf(cfg.starttls));
+        if (cfg.starttls && ConfiguracaoSmtpChamado.ORIGEM_CHAMADOS.equals(cfg.origem)) {
+            props.put("mail.smtp.starttls.required", "true");
+            props.put("mail.smtp.ssl.checkserveridentity", "true");
+        }
+        props.put("mail.smtp.connectiontimeout", TIMEOUT_MS);
+        props.put("mail.smtp.timeout", TIMEOUT_MS);
+        props.put("mail.smtp.writetimeout", TIMEOUT_MS);
+        return props;
     }
 
     /** Mensagem legivel da falha (com a causa raiz), sem o segredo informado. */

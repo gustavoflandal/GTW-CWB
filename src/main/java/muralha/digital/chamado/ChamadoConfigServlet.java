@@ -72,7 +72,7 @@ public class ChamadoConfigServlet extends HttpServlet {
                 p.minutosResolucao = inteiro(req, "minutosResolucao", 0);
                 p.cor = req.getParameter("cor");
                 ChamadoConfigDao.salvarPrioridade(conn, p);
-                AuditoriaService.registrar(req, "Chamado", "SALVAR_PRIORIDADE", p.codigo,
+                registrar(req, "SALVAR_PRIORIDADE", p.codigo,
                         p.nome + " " + p.minutosAtendimento + "/" + p.minutosResolucao + " min");
             } else if ("salvarCategoria".equals(acao)) {
                 Categoria c = new Categoria();
@@ -82,16 +82,16 @@ public class ChamadoConfigServlet extends HttpServlet {
                 c.idPai = idPai == 0 ? null : idPai;
                 c.exigeEquipamento = "true".equals(req.getParameter("exigeEquipamento"));
                 ChamadoConfigDao.salvarCategoria(conn, c);
-                AuditoriaService.registrar(req, "Chamado", "SALVAR_CATEGORIA", String.valueOf(c.id), c.nome);
+                registrar(req, "SALVAR_CATEGORIA", String.valueOf(c.id), c.nome);
             } else if ("alternarAtivo".equals(acao)) {
                 String tipo = req.getParameter("tipo");
                 int id = inteiro(req, "id", 0);
                 ChamadoConfigDao.alternarAtivo(conn, tipo, id);
-                AuditoriaService.registrar(req, "Chamado", "ALTERNAR_ATIVO", tipo + "#" + id, "");
+                registrar(req, "ALTERNAR_ATIVO", tipo + "#" + id, "");
             } else if ("salvarParametros".equals(acao)) {
                 salvarParametros(ctx, conn, req);
             } else if ("adicionarMembro".equals(acao) || "removerMembro".equals(acao)) {
-                alterarMembro(ctx, conn, req, "adicionarMembro".equals(acao));
+                alterarMembro(ctx, conn, req, "adicionarMembro".equals(acao), r);
             } else if ("salvarSmtp".equals(acao)) {
                 salvarSmtp(ctx, conn, req);
             } else if ("testarSmtp".equals(acao)) {
@@ -113,12 +113,12 @@ public class ChamadoConfigServlet extends HttpServlet {
         ChamadoConfigDao.salvarParametrosSla(conn, risco, dias, ctx.usuario.getId());
         String descricao = "risco " + antes.get("riscoPercentual").getAsInt() + "->" + risco
                 + ", fechamento " + antes.get("fechamentoAutoDias").getAsInt() + "->" + dias;
-        AuditoriaService.registrar(req, "Chamado", "SALVAR_PARAMETROS_SLA", "SLA", descricao);
+        registrar(req, "SALVAR_PARAMETROS_SLA", "SLA", descricao);
         logger.info("Parametros de SLA alterados por usuario " + ctx.usuario.getId() + ": " + descricao);
     }
 
     private static void alterarMembro(ContextoRequisicao ctx, Connection conn, HttpServletRequest req,
-                                      boolean adicionar) throws Exception {
+                                      boolean adicionar, JsonObject r) throws Exception {
         PerfilChamado perfil;
         try {
             perfil = PerfilChamado.valueOf(String.valueOf(req.getParameter("perfil")));
@@ -128,13 +128,21 @@ public class ChamadoConfigServlet extends HttpServlet {
         int idUsuario = inteiro(req, "idUsuario", 0);
         if (idUsuario <= 0) throw new RegraChamadoException("Usuário inválido.");
         String alvo = ChamadoConfigDao.nomeLogin(conn, idUsuario);
-        if (adicionar) ChamadoConfigDao.adicionarMembro(conn, perfil, idUsuario);
-        else ChamadoConfigDao.removerMembro(conn, perfil, idUsuario);
+        boolean alterado = adicionar
+                ? ChamadoConfigDao.adicionarMembro(conn, perfil, idUsuario)
+                : ChamadoConfigDao.removerMembro(conn, perfil, idUsuario);
+        r.addProperty("alterado", alterado);
+        if (!alterado) return;
         String descricao = perfil + " - " + (alvo == null ? "usuário " + idUsuario : alvo);
-        AuditoriaService.registrar(req, "Chamado", adicionar ? "ADICIONAR_PERFIL" : "REMOVER_PERFIL",
-                String.valueOf(idUsuario), descricao);
+        registrar(req, adicionar ? "ADICIONAR_PERFIL" : "REMOVER_PERFIL", String.valueOf(idUsuario), descricao);
         logger.info((adicionar ? "Perfil adicionado" : "Perfil removido") + " por usuario "
                 + ctx.usuario.getId() + ": " + descricao);
+    }
+
+    /** Auditoria com a descricao limitada a 500 caracteres. */
+    private static void registrar(HttpServletRequest req, String operacao, String idRegistro, String descricao) {
+        if (descricao != null && descricao.length() > 500) descricao = descricao.substring(0, 500);
+        AuditoriaService.registrar(req, "Chamado", operacao, idRegistro, descricao);
     }
 
     private static void salvarSmtp(ContextoRequisicao ctx, Connection conn, HttpServletRequest req) throws Exception {
@@ -149,9 +157,10 @@ public class ChamadoConfigServlet extends HttpServlet {
         d.emailAtivo = "true".equals(req.getParameter("emailAtivo"));
         List<String> alteradas = ChamadoConfigDao.salvarSmtp(conn, d, ctx.usuario.getId());
         boolean senhaAlterada = alteradas.remove(ConfiguracaoSmtpChamado.CHAVE_SENHA);
+        String senha = !senhaAlterada ? "mantida" : (d.limparSenha ? "removida" : "alterada");
         String descricao = "campos alterados: " + (alteradas.isEmpty() ? "nenhum" : String.join(", ", alteradas))
-                + "; senha alterada: " + (senhaAlterada ? "sim" : "não");
-        AuditoriaService.registrar(req, "Chamado", "SALVAR_SMTP", "SMTP", descricao);
+                + "; senha: " + senha;
+        registrar(req, "SALVAR_SMTP", "SMTP", descricao);
         logger.info("SMTP dos chamados alterado por usuario " + ctx.usuario.getId() + ": " + descricao);
     }
 
@@ -181,7 +190,7 @@ public class ChamadoConfigServlet extends HttpServlet {
             logger.warn("Teste de SMTP dos chamados falhou (usuario " + ctx.usuario.getId() + "): " + msg);
         }
         String origem = cfg == null ? "" : " (origem " + cfg.origem + ")";
-        AuditoriaService.registrar(req, "Chamado", "TESTAR_SMTP", "SMTP",
+        registrar(req, "TESTAR_SMTP", "SMTP",
                 "destinatário " + destinatario + origem + ": " + resultado);
         return r;
     }

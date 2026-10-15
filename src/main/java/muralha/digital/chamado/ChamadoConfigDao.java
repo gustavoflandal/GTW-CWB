@@ -167,6 +167,22 @@ public final class ChamadoConfigDao {
     }
 
     /**
+     * A senha gravada nao pode ser reaproveitada em outro servidor/porta/usuario: se algum mudou, ha senha
+     * gravada e nao veio senha nova nem pedido de limpeza, a gravacao deve ser recusada (pura, testavel).
+     */
+    static boolean exigeNovaSenha(String hostAntigo, String portaAntiga, String usuarioAntigo,
+                                  String hostNovo, String portaNova, String usuarioNovo,
+                                  boolean senhaGravada, String senhaNova, boolean limparSenha) {
+        if (!senhaGravada || limparSenha) return false;
+        if (senhaNova != null && !senhaNova.isEmpty()) return false;
+        return !igual(hostAntigo, hostNovo) || !igual(portaAntiga, portaNova) || !igual(usuarioAntigo, usuarioNovo);
+    }
+
+    private static boolean igual(String a, String b) {
+        return (a == null ? "" : a.trim()).equals(b == null ? "" : b.trim());
+    }
+
+    /**
      * Valida, cifra a senha nova e grava as chaves + historico (sem a senha) numa transacao.
      * Retorna as chaves alteradas (a da senha aparece como chamado_smtp_senha, sem valor).
      */
@@ -175,6 +191,14 @@ public final class ChamadoConfigDao {
         String usuario = d.usuario == null ? "" : d.usuario.trim();
         String remetente = d.remetente == null ? "" : d.remetente.trim();
         ConfiguracaoSmtpChamado.validar(host, d.porta, remetente, usuario);
+        String portaTexto = host.isEmpty() && d.porta == 0 ? "" : String.valueOf(d.porta);
+        boolean senhaGravada = !valor(conn, ConfiguracaoSmtpChamado.CHAVE_SENHA, "").isEmpty();
+        if (exigeNovaSenha(valor(conn, ConfiguracaoSmtpChamado.CHAVE_HOST, ""),
+                valor(conn, ConfiguracaoSmtpChamado.CHAVE_PORTA, ""),
+                valor(conn, ConfiguracaoSmtpChamado.CHAVE_USUARIO, ""),
+                host, portaTexto, usuario, senhaGravada, d.senha, d.limparSenha)) {
+            throw new RegraChamadoException("Informe a senha novamente ao trocar servidor, porta ou usuário.");
+        }
         String senhaNova = null; // null = nao mexe
         if (d.limparSenha) {
             senhaNova = "";
@@ -193,7 +217,7 @@ public final class ChamadoConfigDao {
                 throw new RegraChamadoException("A senha do SMTP é longa demais para ser gravada.");
             }
         }
-        String porta = host.isEmpty() && d.porta == 0 ? "" : String.valueOf(d.porta);
+        String porta = portaTexto;
 
         Map<String, String> novos = new LinkedHashMap<>();
         novos.put(ConfiguracaoSmtpChamado.CHAVE_HOST, host);
@@ -319,10 +343,14 @@ public final class ChamadoConfigDao {
         }
         int idGrupo = valorInt(conn, chaveGrupo(perfil), -1);
         if (idGrupo <= 0) throw new RegraChamadoException("Grupo do perfil não configurado.");
+        if (idGrupo == valorInt(conn, chaveGrupo(PerfilChamado.ADMIN), -1)) {
+            throw new RegraChamadoException("Este perfil não é gerenciado por aqui.");
+        }
         return idGrupo;
     }
 
-    public static void adicionarMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
+    /** @return true se o usuario foi incluido (false = ja era membro). */
+    public static boolean adicionarMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
         int idGrupo = grupoGerenciavel(conn, perfil);
         if (nomeLogin(conn, idUsuario) == null) throw new RegraChamadoException("Usuário não encontrado.");
         try (PreparedStatement ps = conn.prepareStatement(
@@ -332,17 +360,18 @@ public final class ChamadoConfigDao {
             ps.setInt(2, idGrupo);
             ps.setInt(3, idUsuario);
             ps.setInt(4, idGrupo);
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         }
     }
 
-    public static void removerMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
+    /** @return true se o usuario foi removido (false = nao era membro). */
+    public static boolean removerMembro(Connection conn, PerfilChamado perfil, int idUsuario) throws SQLException {
         int idGrupo = grupoGerenciavel(conn, perfil);
         try (PreparedStatement ps = conn.prepareStatement(
                 "DELETE FROM dbo.sis_usuario_grupo WHERE id_usuario = ? AND id_grupo = ?")) {
             ps.setInt(1, idUsuario);
             ps.setInt(2, idGrupo);
-            ps.executeUpdate();
+            return ps.executeUpdate() > 0;
         }
     }
 
