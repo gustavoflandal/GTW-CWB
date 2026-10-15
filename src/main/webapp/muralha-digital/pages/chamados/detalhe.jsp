@@ -47,7 +47,6 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>window.CTX = '<%= request.getContextPath() %>';</script>
 <script src="<%= request.getContextPath() %>/muralha-digital/assets/js/chamados/chamados-comum.js"></script>
 <script src="<%= request.getContextPath() %>/muralha-digital/assets/js/chamados/chamados-detalhe.js"></script>

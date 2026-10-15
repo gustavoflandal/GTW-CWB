@@ -5,7 +5,7 @@ Roteiro manual. Os testes automatizados (76 do módulo `chamado` + `ReferenciaEd
 ## Pré-requisitos
 
 - Migração `20261015_sistema_chamados.sql` e seed `20261015_sistema_chamados_seed.sql` executados em `docs/banco-de-dados/migracoes/` (com `sqlcmd -b -f 65001`: `-b` faz o `sqlcmd` sair com erro e `-f 65001` preserva os acentos do seed).
-- Três usuários de teste, um em cada grupo criado pelo seed: "Chamados – Solicitante", "Chamados – Gestor do contrato" e "Chamados – Equipe técnica". Um segundo usuário solicitante é necessário para o teste de visibilidade (T08).
+- Três usuários de teste, um em cada grupo criado pelo seed: "Chamados - Solicitante", "Chamados - Gestor do contrato" e "Chamados - Equipe tecnica". Um segundo usuário solicitante é necessário para o teste de visibilidade (T08).
 - Diretório de anexos existente e gravável, conforme `chamado_diretorio_anexos` em `muralha.config_chave_valor` (padrão `C:\Consilux\MuralhaDigital\chamados`).
 - SMTP configurado (primeiro servidor de `ConfiguracaoProvider`) e `chamado_email_ativo = 1`.
 - Servidor rodando (`..\.setup-gtw\run.ps1`); jobs `ChamadoSlaJob` e `ChamadoEmailJob` registrados no log de inicialização.

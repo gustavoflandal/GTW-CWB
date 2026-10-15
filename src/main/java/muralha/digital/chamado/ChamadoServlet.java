@@ -114,6 +114,14 @@ public class ChamadoServlet extends HttpServlet {
                 p.idPrioridade = idPri == null || idPri.isEmpty() ? null : inteiro(idPri, "prioridade");
                 String nota = f.campos.get("nota");
                 p.nota = nota == null || nota.isEmpty() ? null : inteiro(nota, "nota");
+                String versao = f.campos.get("versao");
+                if (versao != null && !versao.isEmpty()) {
+                    try {
+                        p.versao = LocalDateTime.parse(versao);
+                    } catch (java.time.format.DateTimeParseException e) {
+                        throw new RegraChamadoException("Versão inválida.");
+                    }
+                }
                 p.arquivos = f.arquivos;
                 Chamado c = service.executar(ctx.operador, f.campos.get("protocolo"), AcaoChamado.deCodigo(acao), p);
                 r.addProperty("status", c.status.name());

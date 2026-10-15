@@ -25,7 +25,7 @@
     var fd = new URLSearchParams(params);
     var r = await fetch((window.CTX || '') + '/MuralhaDigital/ChamadoConfig', { method: 'POST', body: fd });
     var d = await r.json().catch(function () { return { ok: false, erro: 'Falha de comunicação.' }; });
-    if (!d.ok) { Swal.fire('Atenção', d.erro, 'warning'); return; }
+    if (!d.ok) { Swal.fire({ title: 'Atenção', text: d.erro, icon: 'warning' }); return; }
     Swal.fire({ icon: 'success', title: 'Salvo', timer: 1200, showConfirmButton: false });
     carregar();
   }

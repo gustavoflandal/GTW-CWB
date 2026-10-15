@@ -63,6 +63,8 @@ public class ChamadoService {
         public String texto;
         public Integer idPrioridade;
         public Integer nota;
+        /** dt_atualizacao que o usuario estava vendo; null = nao conferir. */
+        public LocalDateTime versao;
         public List<ArquivoEnviado> arquivos = new ArrayList<>();
     }
 
@@ -77,6 +79,7 @@ public class ChamadoService {
         Connection conn = null;
         ArmazenamentoAnexo armazenamento = null;
         List<String> gravados = new ArrayList<>();
+        Chamado c;
         try {
             conn = Conexao.getConexao();
             conn.setAutoCommit(false);
@@ -92,7 +95,7 @@ public class ChamadoService {
             }
 
             LocalDateTime agora = agora();
-            Chamado c = new Chamado();
+            c = new Chamado();
             c.protocolo = GeradorProtocolo.proximo(conn, agora.getYear());
             c.titulo = titulo;
             c.descricao = descricao;
@@ -117,14 +120,14 @@ public class ChamadoService {
             ChamadoDao.enfileirarNotificacao(conn, c.id, EmailChamado.CONFIRMACAO_ABERTURA,
                     ChamadoConfigDao.emailUsuario(conn, op.idUsuario));
             conn.commit();
-            auditar(op, "ABRIR", c.protocolo, "Chamado aberto: " + titulo);
-            return c;
         } catch (Exception e) {
             desfazer(conn, armazenamento, gravados);
             throw e;
         } finally {
             fechar(conn);
         }
+        auditar(op, "ABRIR", c.protocolo, "Chamado aberto: " + titulo);
+        return c;
     }
 
     public Chamado executar(Operador op, String protocolo, AcaoChamado acao, ParametrosAcao p) throws Exception {
@@ -139,10 +142,13 @@ public class ChamadoService {
         Connection conn = null;
         ArmazenamentoAnexo armazenamento = null;
         List<String> gravados = new ArrayList<>();
+        Chamado c;
+        String textoAuditoria;
         try {
             conn = Conexao.getConexao();
             conn.setAutoCommit(false);
-            Chamado c = obterVisivel(conn, op, protocolo);
+            c = obterVisivel(conn, op, protocolo);
+            conferirVersao(c, p.versao);
             boolean autor = c.idUsuarioSolicitante == op.idUsuario;
             StatusChamado anterior = c.status;
             StatusChamado destino = MaquinaEstados.destino(anterior, acao, op.perfis, autor);
@@ -222,17 +228,19 @@ public class ChamadoService {
                 gravarAnexos(conn, armazenamento, c, idHist, op.idUsuario, arquivos, gravados);
             }
             if (notificarReclassificacao) {
-                ChamadoDao.enfileirarNotificacao(conn, c.id, EmailChamado.RECLASSIFICACAO, c.emailSolicitante);
+                ChamadoDao.enfileirarNotificacao(conn, c.id, EmailChamado.RECLASSIFICACAO,
+                        ChamadoConfigDao.emailUsuario(conn, c.idUsuarioSolicitante));
             }
             conn.commit();
-            auditar(op, acao.name(), c.protocolo, texto);
-            return c;
+            textoAuditoria = texto;
         } catch (Exception e) {
             desfazer(conn, armazenamento, gravados);
             throw e;
         } finally {
             fechar(conn);
         }
+        auditar(op, acao.name(), c.protocolo, textoAuditoria);
+        return c;
     }
 
     /** Lanca ChamadoNaoEncontradoException tambem quando o chamado e de outro solicitante (spec §3.3). */
@@ -307,11 +315,19 @@ public class ChamadoService {
         return new ArmazenamentoAnexo(Paths.get(dir), maxBytes);
     }
 
+    /** Controle otimista com a versao que o usuario estava vendo; null = cliente sem versao. */
+    static void conferirVersao(Chamado c, LocalDateTime versao) {
+        if (versao != null && !versao.equals(c.dtAtualizacao)) {
+            throw new RegraChamadoException("Chamado alterado por outro usuário; recarregue a página.");
+        }
+    }
+
     static void encerrarPausa(Chamado c, LocalDateTime agora) {
         if (c.dtInicioPausa == null) return;
-        c.minutosPausados += CalculadoraSla.minutosEntre(c.dtInicioPausa, agora);
+        int min = CalculadoraSla.minutosEntre(c.dtInicioPausa, agora);
+        c.minutosPausados += min;
+        c.dtPrazoResolucao = c.dtPrazoResolucao.plusMinutes(min);   // estende o prazo gravado, sem reler a configuracao
         c.dtInicioPausa = null;
-        c.dtPrazoResolucao = CalculadoraSla.prazoResolucao(c.dtAbertura, c.minutosResolucaoPrioridade, c.minutosPausados);
     }
 
     static void recalcularMarcas(Chamado c, LocalDateTime agora, int percentualRisco) {
@@ -358,9 +374,14 @@ public class ChamadoService {
         if (conn == null) return;
         try {
             conn.setAutoCommit(true);
-            conn.close();
         } catch (Exception ignorada) {
-            // conexao devolvida ao pool
+            // a conexao e fechada de qualquer forma
+        } finally {
+            try {
+                conn.close();
+            } catch (Exception ignorada) {
+                // conexao devolvida ao pool
+            }
         }
     }
 

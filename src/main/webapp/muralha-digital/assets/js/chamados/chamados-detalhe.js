@@ -96,6 +96,7 @@
     var fd = new FormData();
     fd.append('acao', codigo);
     fd.append('protocolo', protocolo);
+    fd.append('versao', dados.chamado.dtAtualizacao);
     var r;
     if (codigo === 'avaliar') {
       r = await Swal.fire({

@@ -48,7 +48,11 @@ public class ChamadoEmailJob implements Job {
                     erro = e.getMessage();
                     logger.warn("ChamadoEmailJob: falha ao enviar notificacao " + p.id, e);
                 }
-                registrar(conn, p.id, EmailChamado.statusAposTentativa(enviado, p.tentativas), erro);
+                try {
+                    registrar(conn, p.id, EmailChamado.statusAposTentativa(enviado, p.tentativas), erro);
+                } catch (Exception e) {
+                    logger.error("ChamadoEmailJob: falha ao registrar resultado da notificacao " + p.id, e);
+                }
             }
         } catch (Exception e) {
             logger.error("ChamadoEmailJob: falha geral", e);

@@ -22,6 +22,8 @@ import java.util.Map;
 public final class ChamadoDao {
 
     private static final DateTimeFormatter ISO = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+    /** Versao para controle otimista: dt_atualizacao com milissegundos (DATETIME2(3)). */
+    private static final DateTimeFormatter ISO_MS = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
     private static final DateTimeFormatter BR = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static final int LIMITE_EXPORTACAO = 50_000;
 
@@ -406,7 +408,7 @@ public final class ChamadoDao {
         o.addProperty("avaliacaoNota", c.avaliacaoNota);
         o.addProperty("avaliacaoComentario", c.avaliacaoComentario);
         o.addProperty("fechadoAutomaticamente", c.fechadoAutomaticamente);
-        o.addProperty("dtAtualizacao", iso(c.dtAtualizacao));
+        o.addProperty("dtAtualizacao", c.dtAtualizacao == null ? null : c.dtAtualizacao.format(ISO_MS));
         return o;
     }
 

@@ -72,4 +72,61 @@ public class ChamadoServiceRegrasTest {
         assertEquals(c.slaAtendimento, Marca.CUMPRIDO);
         assertEquals(c.slaResolucao, Marca.CUMPRIDO);
     }
+
+    @Test
+    public void resolverReabrirResolverRecalculaMarca() {
+        Chamado c = chamadoAlta();                                   // prazo 16:00
+        c.dtResolucao = ABERTURA.plusHours(2);                       // resolve 10:00
+        c.dtInicioPausa = c.dtResolucao;
+        ChamadoService.recalcularMarcas(c, c.dtResolucao, 80);
+        assertEquals(c.slaResolucao, Marca.CUMPRIDO);
+
+        LocalDateTime reabertura = ABERTURA.plusHours(3);            // reabre 11:00 (+60 min de pausa)
+        ChamadoService.encerrarPausa(c, reabertura);
+        c.dtResolucao = null;
+        ChamadoService.recalcularMarcas(c, reabertura, 80);
+        assertEquals(c.slaResolucao, Marca.NO_PRAZO, "reabrir limpa a marca definitiva");
+        assertEquals(c.dtPrazoResolucao, ABERTURA.plusMinutes(540));
+
+        c.dtResolucao = ABERTURA.plusHours(10);                      // resolve 18:00 (> 17:00)
+        c.dtInicioPausa = c.dtResolucao;
+        ChamadoService.recalcularMarcas(c, c.dtResolucao, 80);
+        assertEquals(c.slaResolucao, Marca.VIOLADO);
+    }
+
+    @Test
+    public void marcaDefinitivaNaoMudaAoReclassificar() {
+        Chamado c = chamadoAlta();
+        c.dtResolucao = ABERTURA.plusHours(10);                      // viola o prazo de 8h
+        ChamadoService.recalcularMarcas(c, c.dtResolucao, 80);
+        assertEquals(c.slaResolucao, Marca.VIOLADO);
+        c.dtPrazoResolucao = CalculadoraSla.prazoResolucao(ABERTURA, 4320, 0); // reclassifica para prazo maior
+        ChamadoService.recalcularMarcas(c, c.dtResolucao.plusHours(1), 80);
+        assertEquals(c.slaResolucao, Marca.VIOLADO);
+    }
+
+    @Test
+    public void sairDaPausaNaoPuxaPrazoDaConfiguracaoAtual() {
+        Chamado c = chamadoAlta();                                   // prazo gravado = abertura + 480
+        c.dtInicioPausa = ABERTURA.plusHours(1);
+        c.minutosResolucaoPrioridade = 240;                          // configuracao editada durante a pausa
+        ChamadoService.encerrarPausa(c, ABERTURA.plusHours(3));
+        assertEquals(c.minutosPausados, 120);
+        assertEquals(c.dtPrazoResolucao, ABERTURA.plusMinutes(480 + 120));
+    }
+
+    @Test
+    public void conferirVersao() {
+        LocalDateTime v = LocalDateTime.of(2026, 10, 15, 9, 0, 0, 123_000_000);
+        Chamado c = new Chamado();
+        c.dtAtualizacao = v;
+        ChamadoService.conferirVersao(c, v);
+        ChamadoService.conferirVersao(c, null);
+        try {
+            ChamadoService.conferirVersao(c, v.plusNanos(1_000_000));
+            fail("deveria lancar");
+        } catch (RegraChamadoException esperada) {
+            assertTrue(esperada.getMessage().contains("alterado por outro usuário"));
+        }
+    }
 }

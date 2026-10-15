@@ -38,7 +38,7 @@ var Chamados = (function () {
     if (r.status === 401) { location.href = ctx + '/login/login.jsp'; return { ok: false }; }
     var d;
     try { d = await r.json(); } catch (e) { d = { ok: false, erro: 'Falha de comunicação (HTTP ' + r.status + ').' }; }
-    if (!d.ok) Swal.fire('Atenção', d.erro || 'Falha na operação.', 'warning');
+    if (!d.ok) Swal.fire({ title: 'Atenção', text: d.erro || 'Falha na operação.', icon: 'warning' });
     return d;
   }
 
