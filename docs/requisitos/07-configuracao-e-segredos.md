@@ -99,6 +99,11 @@ $b = New-Object byte[] 32
 - Chaves `LOG_TECNICO_PERIODO_MAX_DIAS`, `LOG_TECNICO_PROCESSOS`, `LOG_TECNICO_PROCESSO_ATRASO_MIN`, `LOG_TECNICO_EXPORTACAO_MAX`, `LOG_TECNICO_JANELA_CORRELACAO_MIN` e `PARAMETRO_HIST_IGNORAR_CONFIGEQUIP` em `muralha.config_chave_valor`, criadas por `docs/banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql`; sem elas valem os padrões de `muralha.digital.logtecnico.ParametrosLogTecnico`.
 - **Código novo que grava parâmetro** deve registrar o valor anterior e o novo com `HistoricoParametros.registrarSemFalhar` (ou `ConfigChaveValor.gravar(conn, chave, valor, ContextoAlteracao)` para `config_chave_valor`). Ver [Entrega 26](../entregas/26-logs-tecnicos-historico-parametros.md).
 
+### 4.4 Score de OCR e revisão de placas
+
+- Chaves `OCR_SCORE_ORIGEM`, `OCR_SCORE_LIMIAR`, `OCR_SCORE_ESCALA`, `OCR_REVISAR_SEM_SCORE`, `OCR_REVISAR_SEM_LEITURA`, `OCR_JANELA_HORAS`, `OCR_LOTE` e `OCR_ESPERA_SCORE_MIN` em `muralha.config_chave_valor`; origem e limiar por equipamento em `muralha.equipamento_ocr_config`; motivos de correção em `muralha.motivo_correcao_placa`. Criados por `docs/banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql`; lidos por `muralha.digital.ocr.ParametrosOcr`.
+- Origem e limiar são editados na aba "Score e limiar" da Revisão de Placas (grupo 42), com registro em `parametro_historico`. Ver [Entrega 27](../entregas/27-score-ocr-revisao-placas.md).
+
 ## 5. Checklist ao criar uma nova integração
 1. Definir a credencial como variável de ambiente ou tag em `muralha-digital-config.xml` (+ campo em `Inicializacao`).
 2. Atualizar o `.example` com tag vazia e este documento.

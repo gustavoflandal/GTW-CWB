@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -291,71 +290,5 @@ public class VeiculoRegistro {
 
         return listaRet;
     }
-
-
-
-    public static void ProcessarCorrecaoPlacas(List<Map<String, String>> loteCompleto) throws SQLException, ConexaoException {
-        if (loteCompleto == null || loteCompleto.isEmpty()) return;
-
-        String sqlInsert = "INSERT INTO muralha.veiculo_tempo_real_correcao (id_veiculo, placa_original, placa_digitada, id_usuario, data) VALUES (?, ?, ?, ?, ?)";
-        String sqlUpdate = "UPDATE muralha.veiculo_tempo_real SET placa = ? WHERE id = ?";
-
-        Connection conn = null;
-        PreparedStatement psInsert = null;
-        PreparedStatement psUpdate = null;
-
-        try {
-            conn = Conexao.getConexao();
-            conn.setAutoCommit(false);
-
-            psInsert = conn.prepareStatement(sqlInsert);
-            psUpdate = conn.prepareStatement(sqlUpdate);
-
-            Timestamp agora = new Timestamp(System.currentTimeMillis());
-
-            for (Map<String, String> item : loteCompleto) {
-                String idVeiculo     = item.get("idVeiculo");
-                String placaAtual    = item.get("placaAtual");
-                String novaPlaca     = item.get("novaPlaca");
-                String idUsuarioStr  = item.get("idUsuario");
-
-                if (idVeiculo != null && novaPlaca != null && idUsuarioStr != null) {
-                    int idUsuario = Integer.parseInt(idUsuarioStr);
-
-                    psInsert.setString(1, idVeiculo);
-                    psInsert.setString(2, placaAtual.toUpperCase());
-                    psInsert.setString(3, novaPlaca.toUpperCase());
-                    psInsert.setInt(4, idUsuario);
-                    psInsert.setTimestamp(5, agora);
-                    psInsert.addBatch();
-
-                    if (!novaPlaca.equalsIgnoreCase(placaAtual)) {
-                        psUpdate.setString(1, novaPlaca.toUpperCase());
-                        psUpdate.setString(2, idVeiculo);
-                        psUpdate.addBatch();
-                    }
-                }
-            }
-
-            psInsert.executeBatch();
-            psUpdate.executeBatch();
-            conn.commit();
-
-            System.out.println("Correções registradas e placas atualizadas com sucesso.");
-        } catch (SQLException e) {
-            if (conn != null) conn.rollback();
-            throw new SQLException("Erro ao processar correções de placas", e);
-        } finally {
-            try {
-                if (psInsert != null) psInsert.close();
-                if (psUpdate != null) psUpdate.close();
-                if (conn != null) conn.setAutoCommit(true); conn.close();
-            } catch (SQLException e) {
-                throw new ConexaoException("Erro ao finalizar conexão", e);
-            }
-        }
-    }
-
-
 
 }

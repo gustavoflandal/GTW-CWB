@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–26. As migrações da correção da auditoria (Planos 24 a 26) foram executadas no DEV em 2026-10-16, com autorização (seção 1, "Correção da auditoria").
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–27. As migrações dos Planos 24 a 26 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria").
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -53,7 +53,7 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261012_dados_assertividade.sql`](../banco-de-dados/migracoes/20261012_dados_assertividade.sql) | 08 | Dados de exemplo da tela de assertividade | ✅ Executado — **só DEV** |
 | [`20261012_dados_log_auditoria.sql`](../banco-de-dados/migracoes/20261012_dados_log_auditoria.sql) | 01 | Registros de exemplo no log de auditoria | ✅ Executado — **só DEV** |
 
-### Correção da auditoria (2026-10-16) — executadas em 2026-10-16
+### Correção da auditoria (2026-10-16)
 
 | Script | Plano | Descrição | Status |
 |---|---|---|---|
@@ -62,6 +62,7 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16): tabela, 6 chaves e menus 387-388 |
 | [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ✅ Executado (2026-10-16): menu 201 com `Ativo = 0` |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
+| [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para a fila de revisão e a justificativa em tabela |
 
 ### Comando de execução
 
@@ -166,6 +167,10 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | `LOG_TECNICO_EXPORTACAO_MAX` | `50000` | 26 | Linhas máximas do CSV de logs técnicos |
 | `LOG_TECNICO_JANELA_CORRELACAO_MIN` | `10` | 26 | Janela (± minutos) da correlação temporal |
 | `PARAMETRO_HIST_IGNORAR_CONFIGEQUIP` | `dataHoraConfiguracao` | 26 | Campos do ConfigEquip fora do histórico de parâmetros |
+| `OCR_SCORE_ORIGEM` / `OCR_SCORE_LIMIAR` | `AUSENTE` / `85` | 27 | Origem do score de OCR e limiar global (exceções por equipamento em `equipamento_ocr_config`) |
+| `OCR_SCORE_ESCALA` | `100` | 27 | Escala do score: `100` (0-100) ou `1` (0-1) |
+| `OCR_REVISAR_SEM_SCORE` / `OCR_REVISAR_SEM_LEITURA` | `0` / `0` | 27 | Se passagens sem score / sem placa lida vão para a fila de revisão |
+| `OCR_JANELA_HORAS` / `OCR_LOTE` / `OCR_ESPERA_SCORE_MIN` | `24` / `500` / `10` | 27 | Janela, lote e espera do `JobOcrRevisao` |
 
 ---
 

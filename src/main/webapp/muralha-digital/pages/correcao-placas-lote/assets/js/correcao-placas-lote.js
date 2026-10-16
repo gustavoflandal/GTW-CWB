@@ -49,7 +49,7 @@ function carregarVeiculos() {
     },
     error: function(xhr, status, error) {
       console.error("Erro ao carregar veículos:", error);
-      alert("Não foi possível carregar os veículos.");
+      JustificativaCorrecaoPlaca.aviso("Não foi possível carregar os veículos.", "erro");
     }
   });
 }
@@ -77,7 +77,9 @@ function gerarCarrossel(listaVeiculos) {
     let itemHTML = `<div class="carousel-item ${isActive}"><div class="row">`;
 
     grupo.forEach((veiculo) => {
-      const placaAtual = veiculo.placa || "N/A";
+      const placaAtual = escaparHtml(veiculo.placa || "N/A");
+      const frontal = veiculo.placa_frontal && veiculo.placa_frontal.trim()
+        ? `<small class="text-muted d-block text-center">Placa frontal: ${escaparHtml(veiculo.placa_frontal.trim())}</small>` : "";
       const idVeiculo = veiculo.id || "";
       const idImagem = veiculo.id_imagem || "";
       
@@ -104,6 +106,7 @@ function gerarCarrossel(listaVeiculos) {
                 <input type="text" class="form-control nova-placa" style="text-transform: uppercase;" placeholder="Digite a nova placa" maxlength="7">
               </div>
               </div>
+              ${frontal}
             </div>
           </div>
         </div>
@@ -257,27 +260,6 @@ function removerAlteracao(index) {
 }
 
 function salvarAlteracoes() {
-  const placasAlteradas = [];
-
-  veiculosRecebidos.forEach(veiculo => {
-    const card = document.querySelector(`.card[data-id-veiculo="${veiculo.id}"]`);
-    if (!card) return;
-
-    const novaPlaca = card.querySelector('.nova-placa')?.value.trim().toUpperCase();
-    const placaAtual = veiculo.placa?.trim().toUpperCase();
-
-    const item = {
-      placaAtual,
-      novaPlaca,
-      idVeiculo: veiculo.id,
-      idUsuario: usuarioID
-    };
-
-    if (novaPlaca && novaPlaca !== placaAtual) {
-      placasAlteradas.push(item);
-    }
-  });
-
   const loteCompleto = veiculosRecebidos.map(veiculo => {
     const card = document.querySelector(`.card[data-id-veiculo="${veiculo.id}"]`);
     const novaPlaca = card?.querySelector('.nova-placa')?.value.trim().toUpperCase() || veiculo.placa;
@@ -285,19 +267,36 @@ function salvarAlteracoes() {
     return {
       placaAtual: veiculo.placa?.trim().toUpperCase(),
       novaPlaca,
-      idVeiculo: veiculo.id,
-      idUsuario: usuarioID
+      idVeiculo: veiculo.id
     };
   });
+  const alteradas = loteCompleto.filter(item => item.novaPlaca && item.novaPlaca !== item.placaAtual).length;
 
+  // TR 5.7.5.2: as placas alteradas exigem motivo e justificativa; as mantidas são registradas como conferidas.
+  if (alteradas === 0) {
+    enviarLote({ loteCompleto });
+    return;
+  }
+  JustificativaCorrecaoPlaca.pedir({
+    titulo: 'Justificativa do lote',
+    resumo: alteradas + ' placa(s) serão corrigidas; as demais ficam registradas como conferidas. O motivo e a justificativa valem para todas as correções do lote.'
+  }, function (just) {
+    enviarLote({ loteCompleto, idMotivo: just.idMotivo, justificativa: just.justificativa });
+  });
+}
+
+function enviarLote(corpo) {
   $.ajax({
     url: '/MuralhaDigital/CorrecaoPlaca?acao=atualizarPlacas',
     type: 'POST',
     contentType: 'application/json',
-    data: JSON.stringify({ loteCompleto }),
-    success: function(response) {
-      alert("Processamento concluído com sucesso!");
-
+    dataType: 'json',
+    data: JSON.stringify(corpo),
+    success: function(resposta) {
+      if (!resposta.sucesso) {
+        JustificativaCorrecaoPlaca.aviso(resposta.mensagem || "Não foi possível gravar o lote.", "erro");
+        return;
+      }
       const modal = document.getElementById('modalResumo');
       const modalInstance = bootstrap.Modal.getInstance(modal);
       if (modalInstance) modalInstance.hide();
@@ -307,11 +306,16 @@ function salvarAlteracoes() {
       if (listaResumo) listaResumo.innerHTML = '';
 
       veiculosRecebidos = [];
-      location.reload();
+      JustificativaCorrecaoPlaca.aviso(resposta.mensagem, "sucesso");
+      carregarVeiculos();
     },
-    error: function() {
-      alert("Erro ao processar alterações.");
+    error: function(jqXHR) {
+      console.error("Erro ao gravar o lote", jqXHR.status);
+      JustificativaCorrecaoPlaca.aviso("Erro ao processar alterações.", "erro");
     }
   });
 }
 
+function escaparHtml(texto) {
+  return String(texto).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}

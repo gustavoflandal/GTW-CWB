@@ -1,0 +1,6 @@
+#telaRevisaoPlacas .btn-toolbar-acoes > * { margin-right: 5px; }
+#telaRevisaoPlacas .btn-toolbar-acoes > *:last-child { margin-right: 0; }
+#telaRevisaoPlacas .table th { white-space: nowrap; }
+#telaRevisaoPlacas #tblFila td { font-size: .85rem; }
+#modalRevisao .rv-imagens img { width: 100%; border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 8px; }
+#modalRevisao .rv-adicional { display: flex; gap: 6px; margin-bottom: 4px; }

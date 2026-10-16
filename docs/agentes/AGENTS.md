@@ -106,6 +106,7 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `24-correcoes-pontuais-auditoria.md` | Correções pontuais da auditoria (Fase 2): prioridade de alerta, `AuditoriaService`, IP dos mapas, Waze `jams`, script de `vtr_imagem_complemento` | 23 |
 | `25-integridade-sha256-recepcao.md` | Integridade SHA-256 na recepção (Fase 3): conferência com hash de origem por equipamento, `vtr_imagem_integridade`, view de contadores, tela `monitoramento/integridade` | 02, 24 |
 | `26-logs-tecnicos-historico-parametros.md` | Logs técnicos (Fase 4): 12 fontes normalizadas em `muralha.digital.logtecnico`, tela `monitoramento/logs-tecnicos`, `parametro_historico` e helper `HistoricoParametros` (use-o ao gravar parâmetros) | 01, 07, 10, 18 |
+| `27-score-ocr-revisao-placas.md` | Score de OCR (Fase 5): `vtr_placa_leitura` (N placas, score, origem), fila `vtr_revisao_placa`, `JobOcrRevisao`, `CorrecaoPlacaService` (use-o para qualquer correção de placa: exige motivo e justificativa) | 26 |
 
 ---
 

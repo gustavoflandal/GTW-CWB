@@ -27,8 +27,8 @@
 |---|---|---|
 | ✅ Implementado em entrega | 54 | 23% |
 | ✅ Já atendido pelo GTW | 32 | 14% |
-| ⚠️ Parcial | 85 | 37% |
-| ❌ Não implementado | 61 | 26% |
+| ⚠️ Parcial | 88 | 38% |
+| ❌ Não implementado | 58 | 25% |
 | **Total** | **232** | 100% |
 
 Em 2026-10-16 a matriz passou de 207 para 232 itens: entraram os 28 subitens de 5.6 e 5.7.7 que estavam omitidos (5.6.1.3–5, 5.6.2.4–5, 5.6.3.1–4, 5.6.4.4–5, 5.6.5.1–4, 5.6.6.2–4, 5.6.7.1–5, 5.7.7.2–6) e saíram as três linhas agregadas 5.6.3, 5.6.5 e 5.6.7.
@@ -45,9 +45,9 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4 Inteligência de Dados | 33 | 11 | 21 | 1 | 65% |
 | 5.5 Pré-processamento de Imagens | 23 | 6 | 10 | 7 | 48% |
 | 5.6 Infraestrutura de Comunicação | 32 | 8 | 6 | 18 | 34% |
-| 5.7 LAP | 38 | 11 | 12 | 15 | 45% |
+| 5.7 LAP | 38 | 11 | 15 | 12 | 49% |
 | 5.8 Datacenter e Continuidade | 25 | 1 | 8 | 16 | 20% |
-| **Total** | **232** | **86** | **85** | **61** | **55%** |
+| **Total** | **232** | **86** | **88** | **58** | **56%** |
 
 ## 5.1 — Princípios Gerais de Controle de Acesso
 
@@ -82,7 +82,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.2.2.2 | ✅ Já atendido pelo GTW † | — |
 | 5.2.2.3 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md) |
 | 5.2.2.4 | ✅ Já atendido pelo GTW | — |
-| 5.2.2.5 | ⚠️ Parcial | — |
+| 5.2.2.5 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Regra de divergência entre leitura embarcada e central encaminha para a fila de revisão; não existe OCR central para gerar a segunda leitura. Aguardando migração e teste no navegador |
 | 5.2.2.6 | ⚠️ Parcial | [08-painel-assertividade.md](08-painel-assertividade.md) — Painel de assertividade sem atualização automática, sem volume processado, divergências e encaminhados para revisão, e sem alerta abaixo de 80% |
 | 5.2.3.1 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
 | 5.2.3.2 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
@@ -255,7 +255,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.7.1.1 | ✅ Já atendido pelo GTW | — |
 | 5.7.1.2 | ✅ Já atendido pelo GTW † | — |
 | 5.7.1.3 | ⚠️ Parcial † | — |
-| 5.7.1.4 | ❌ Não implementado † | — |
+| 5.7.1.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `muralha.vtr_placa_leitura` registra N placas por passagem (tração, frontal, reboques); as do equipamento são só tração e frontal, reboques entram pela revisão manual. Aguardando migração e teste no navegador |
 | 5.7.2.1 | ⚠️ Parcial | — |
 | 5.7.2.2 | ❌ Não implementado † | — |
 | 5.7.2.3 | ❌ Não implementado † | — |
@@ -264,14 +264,14 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.7.3.1 | ❌ Não implementado † ‡ | — |
 | 5.7.3.2 | ❌ Não implementado † ‡ | — |
 | 5.7.3.3 | ✅ Já atendido pelo GTW † | — |
-| 5.7.4.1 | ⚠️ Parcial | `ia.veiculo_caracteristica` não tem coluna de score; se o score chega, é só dentro de `dado_bruto` (a confirmar) |
-| 5.7.4.2 | ❌ Não implementado | Não há limiar de score parametrizável |
-| 5.7.4.3 | ⚠️ Parcial | `CorrecaoPlaca` trata divergências manualmente; não há encaminhamento por score |
-| 5.7.4.4 | ❌ Não implementado | Score não é armazenado como coluna nem metadado consultável |
+| 5.7.4.1 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Score por placa guardado conforme a origem configurada por equipamento; nenhum equipamento envia score hoje (`spu_veiculo_tempo_real` não recebe, `dado_bruto` vazio) |
+| 5.7.4.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Limiar `OCR_SCORE_LIMIAR` (padrão 85) e limiar por equipamento, com tela e histórico de alteração. Aguardando migração e teste no navegador |
+| 5.7.4.3 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `JobOcrRevisao` encaminha à fila as leituras abaixo do limiar; sem score enviado pelos equipamentos, nada é encaminhado. Aguardando migração e teste no navegador |
+| 5.7.4.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Score como metadado de cada leitura em `vtr_placa_leitura`. Aguardando migração e teste no navegador |
 | 5.7.5.1 | ✅ Já atendido pelo GTW | — |
-| 5.7.5.2 | ⚠️ Parcial | — |
+| 5.7.5.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Toda correção (fila, lote, consulta) exige motivo e grava `veiculo_tempo_real_correcao`, justificativa e `sis_log_auditoria`. Aguardando migração e teste no navegador |
 | 5.7.5.3 | ✅ Implementado | [12-retencao-dados.md](12-retencao-dados.md) |
-| 5.7.5.4 | ⚠️ Parcial † | — |
+| 5.7.5.4 | ⚠️ Parcial † | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Fila com filtros de equipamento, período, faixa de score, tipo de intervenção e operador. Aguardando migração e teste no navegador |
 | 5.7.6.1 | ✅ Já atendido pelo GTW † | — |
 | 5.7.6.2 | ⚠️ Parcial † | — |
 | 5.7.7.1 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Player de imagens no navegador (`TimelapseServlet`); não gera arquivo de vídeo |

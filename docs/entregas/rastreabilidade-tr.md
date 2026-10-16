@@ -29,6 +29,7 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 5.2.1.2 | Verificacao SHA-256 de integridade | ⚠️ | [02](../planos-salvador/02-sha256-integridade.md), [25](../planos-salvador/25-integridade-sha256-recepcao.md) | [02](02-sha256-integridade.md), [25](25-integridade-sha256-recepcao.md) | [02](../testes/02-sha256-integridade.md), [25](../testes/25-integridade-sha256-recepcao.md) |
 | 5.2.1.3 | Registro de origem, captura, recepcao e quantidades (recebidos, integros, rejeitados com motivo) | ⚠️ | [25](../planos-salvador/25-integridade-sha256-recepcao.md) | [25](25-integridade-sha256-recepcao.md) | [25](../testes/25-integridade-sha256-recepcao.md) |
 | 5.2.2.3 | Indice minimo 80% de aderencia da pre-classificacao | ✅ | [08](../planos-salvador/08-painel-assertividade.md) | [08](08-painel-assertividade.md) | [08](../testes/08-painel-assertividade.md) |
+| 5.2.2.5 | Encaminhamento automatico de divergencias para revisao | ⚠️ | [27](../planos-salvador/27-score-ocr-revisao-placas.md) | [27](27-score-ocr-revisao-placas.md) | [27](../testes/27-score-ocr-revisao-placas.md) |
 | 5.2.2.6 | Painel de controle com taxa de assertividade | ⚠️ | [08](../planos-salvador/08-painel-assertividade.md) | [08](08-painel-assertividade.md) | [08](../testes/08-painel-assertividade.md) |
 | 5.2.3.1–5 | Dupla analise independente, desempatador, log | ✅ | [05](../planos-salvador/05-dupla-analise.md) | [05](05-dupla-analise.md) | [05](../testes/05-dupla-analise.md) |
 | 5.2.4.1–2 | Interface de analise de imagens (alta resolucao, ampliacao) | ✅ | [05](../planos-salvador/05-dupla-analise.md) (brilho/contraste em `dupla-analise.js`) e legado `proc_infracao.jsp` | [05](05-dupla-analise.md) | [05](../testes/05-dupla-analise.md) |
@@ -64,6 +65,15 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 5.5.2.1 | Prazo maximo de 72h para pre-processamento | ✅ | [10](../planos-salvador/10-sla-preprocessamento.md) | [10](10-sla-preprocessamento.md) | [10](../testes/10-sla-preprocessamento.md) |
 | 5.5.3.1 | Painel operacional pre-processamento | ⚠️ | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
 | 5.5.4.6 | Retencao de logs por 5 anos apos encerramento | ✅ | [12](../planos-salvador/12-retencao-dados.md) | [12](12-retencao-dados.md) | [12](../testes/12-retencao-dados.md) |
+
+## 5.7 — Leitura Automática de Placas (LAP)
+
+| Item TR | Requisito | Situação | Plano | Entrega | Teste |
+|---|---|---|---|---|---|
+| 5.7.1.4 | Registro individual de cada placa em composicoes com multiplas placas | ⚠️ | [27](../planos-salvador/27-score-ocr-revisao-placas.md) | [27](27-score-ocr-revisao-placas.md) | [27](../testes/27-score-ocr-revisao-placas.md) |
+| 5.7.4.1–4 | Score de confianca, limiar, encaminhamento e metadado permanente | ⚠️ | [27](../planos-salvador/27-score-ocr-revisao-placas.md) | [27](27-score-ocr-revisao-placas.md) | [27](../testes/27-score-ocr-revisao-placas.md) |
+| 5.7.5.2 | Log automatico de toda correcao manual | ⚠️ | [27](../planos-salvador/27-score-ocr-revisao-placas.md) | [27](27-score-ocr-revisao-placas.md) | [27](../testes/27-score-ocr-revisao-placas.md) |
+| 5.7.5.4 | Consulta por equipamento, periodo, score, tipo de intervencao e operador | ⚠️ | [27](../planos-salvador/27-score-ocr-revisao-placas.md) | [27](27-score-ocr-revisao-placas.md) | [27](../testes/27-score-ocr-revisao-placas.md) |
 
 ## 7 — Central de Suporte Técnico (aba "Sist. Chamado")
 
@@ -117,4 +127,5 @@ Itens do TR tratados por cada plano; "(parcial)" quando o item está ⚠️ na m
 | 24 | Correções pontuais da auditoria | 24 | 24 | Sem itens próprios: corrige defeitos (completa a Waze da Entrega 19) |
 | 25 | Integridade SHA-256 na recepção | 25 | 25 | 5.2.1.2 (parcial: conferência pronta, sem hash de origem enviado), 5.2.1.3 (parcial: aguardando migração e teste) |
 | 26 | Logs técnicos e histórico de parâmetros | 26 | 26 | 5.4.7.1–7 (parcial), 5.4.7.6 (parcial: aguardando migração e teste), 5.2.7.2 (períodos início/fim) |
+| 27 | Score de OCR, revisão automática e múltiplas placas | 27 | 27 | 5.7.1.4, 5.7.4.1–4, 5.2.2.5, 5.7.5.2, 5.7.5.4 (parciais: aguardando migração e teste; equipamentos não enviam score) |
 | — | Registro dos módulos no menu (pendência da Entrega 17) | 20 | — | Sem itens próprios |
