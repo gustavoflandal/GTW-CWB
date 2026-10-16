@@ -1,7 +1,7 @@
 # Entrega — Plano 28: Alertas Operacionais
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste no navegador (build e testes automatizados aprovados; migração com sintaxe conferida, não executada).
+> **Status:** 🟡 Implementado — migração executada, aguardando teste no navegador.
 > **Fase:** 6 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -40,7 +40,7 @@ Tipos de alerta operacionais (estacionamento irregular, congestionamento/retenç
 
 | Script | Situação |
 |---|---|
-| `20261016_alertas_operacionais.sql` | **Não executado — necessário** para os tipos operacionais, a configuração de cor/criticidade, os tratamentos e a detecção de retenção. Sem ele, os 9 tipos veiculares continuam funcionando normalmente e `notificacao.js` usa o fallback do mapa fixo. Sintaxe conferida com `SET PARSEONLY ON`. |
+| `20261016_alertas_operacionais.sql` | **Executado (2026-10-16)** — 3 tabelas, 4 tipos operacionais, 13 configs de cor, 6 tratamentos seed, 6 parâmetros RETENCAO_*, menu criado (id_menu=392). |
 
 ## Parâmetros (`muralha.config_chave_valor`)
 
@@ -57,7 +57,7 @@ Tipos de alerta operacionais (estacionamento irregular, congestionamento/retenç
 
 - [x] 1. `..\.setup-gtw\build.ps1` compila sem erro (Windows, 2026-10-16).
 - [x] 2. Testes TestNG (Windows, 2026-10-16): `RegraRetencaoTest` 7, `ProcessadorRetencaoTest` 4, `ConfigETratamentoTest` 9. Total 20/20; com as fases anteriores, 369/369 (5 skips de infra). Cobrem consecutividade de horas, severidade, tráfego zero, geração de alerta, duplicata, falha parcial, enum de tratamento, validação de cor, filtro histórico e parâmetros padrão.
-- [ ] 3. Migração executada (com autorização) e roteiro [`docs/testes/28-alertas-operacionais.md`](../testes/28-alertas-operacionais.md) no navegador.
+- [x] 3. Migração executada (2026-10-16): 3 tabelas, 4 tipos, 13 configs, 6 tratamentos, 6 parâmetros, menu (392/53). Roteiro no navegador pendente.
 - [x] 4. `python -I docs/referencia/scripts/validar_aderencia.py` sem erro.
 
 ## Situação dos itens do TR
