@@ -1,5 +1,6 @@
 package muralha.digital.auditoria;
 
+import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,19 +31,21 @@ public final class AuditoriaService {
         try {
             HttpSession sess = request.getSession(false);
             if (sess != null) {
-                Object obj = sess.getAttribute("objUsuario");
+                // Errata §1/§10: o login grava com.consilux.model.Usuario em SessaoConstantes.SESSAO_USUARIO.
+                // "objUsuario" (muralha.digital.acessos.Usuario) só existe nas telas da Muralha e fica como reserva.
+                Object obj = sess.getAttribute(SessaoConstantes.SESSAO_USUARIO);
                 if (obj == null) {
-                    obj = sess.getAttribute("[usuario]");
+                    obj = sess.getAttribute("objUsuario");
                 }
 
-                if (obj instanceof muralha.digital.acessos.Usuario) {
-                    muralha.digital.acessos.Usuario u = (muralha.digital.acessos.Usuario) obj;
-                    login     = u.getUsuario();
-                    idUsuario = u.getIdUsuario();
-                } else if (obj instanceof com.consilux.model.Usuario) {
+                if (obj instanceof com.consilux.model.Usuario) {
                     com.consilux.model.Usuario u = (com.consilux.model.Usuario) obj;
                     login     = u.getUsuario();
                     idUsuario = u.getId();
+                } else if (obj instanceof muralha.digital.acessos.Usuario) {
+                    muralha.digital.acessos.Usuario u = (muralha.digital.acessos.Usuario) obj;
+                    login     = u.getUsuario();
+                    idUsuario = u.getIdUsuario();
                 }
             }
         } catch (Exception e) {
