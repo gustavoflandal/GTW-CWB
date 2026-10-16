@@ -1133,14 +1133,15 @@ function obtemTipoAlerta() {
     });
 }
 
-function obterPrioridade(id, callback){	
+function obterPrioridade(prioridade, idTipo, callback){	
 	 $.ajax({
         type: "GET",
         url: "/MuralhaDigital/ConfiguracaoTempo",
         dataType: "text",
         data: {
             acao: "obterPrioridade",
-            id: id
+            prioridade: prioridade,
+            idTipo: idTipo
         },
         success: function (data) {	
 	console.log(data)		 
@@ -1163,7 +1164,7 @@ function salvarPrioridade() {
         return;
     }    
 
-    obterPrioridade(prioridadeInput, function(prioridadeCadastrada) {
+    obterPrioridade(prioridadeInput, idTipo, function(prioridadeCadastrada) {
 
         console.log("Prioridade cadastrada:", prioridadeCadastrada);
         if(prioridadeCadastrada == prioridadeInput){
