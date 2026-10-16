@@ -136,7 +136,38 @@
                 </div>
 		    </div>
 		    
-			<div class="row" id="divChkSupervisionado" style="display: none;">
+			<div class="row gy-3" id="divFiltrosAvancados">
+		<div class="col-sm-4">
+			<div class="mb-3">
+				<label for="selLocalidade" class="form-label">Localidade:</label>
+				<select class="selectpicker form-control border" data-live-search="true" id="selLocalidade" data-style="btn-white" data-size="10" data-none-selected-text="--Todas--">
+					<option value="" selected>--Todas as Localidades--</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="mb-3">
+				<label for="selUsuarioResp" class="form-label">Usuário Responsável:</label>
+				<select class="selectpicker form-control border" data-live-search="true" id="selUsuarioResp" data-style="btn-white" data-size="10" data-none-selected-text="--Todos--">
+					<option value="" selected>--Todos--</option>
+				</select>
+			</div>
+		</div>
+		<div class="col-sm-4">
+			<div class="mb-3">
+				<label for="selResultado" class="form-label">Resultado do Tratamento:</label>
+				<select class="form-select" id="selResultado">
+					<option value="" selected>--Todos--</option>
+					<option value="PENDENTE">Pendente</option>
+					<option value="OCORRENCIA">Ocorrência gerada</option>
+					<option value="DESCARTADO">Descartado</option>
+					<option value="VINCULADO">Vinculado</option>
+				</select>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" id="divChkSupervisionado" style="display: none;">
 			  <div class="col-12 mb-2">
 				  <div class="border rounded p-3 bg-light">
 					  <h6 class="mb-0"><i class="bi bi-funnel"></i> Filtros de Supervisão</h6>
@@ -214,7 +245,10 @@
 										  	<path fill-rule="evenodd" d="M4 0h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2zm5.5 1.5v2a1 1 0 0 0 1 1h2l-3-3zM4.165 13.668c.09.18.23.343.438.419.207.075.412.04.58-.03.318-.13.635-.436.926-.786.333-.401.683-.927 1.021-1.51a11.651 11.651 0 0 1 1.997-.406c.3.383.61.713.91.95.28.22.603.403.934.417a.856.856 0 0 0 .51-.138c.155-.101.27-.247.354-.416.09-.181.145-.37.138-.563a.844.844 0 0 0-.2-.518c-.226-.27-.596-.4-.96-.465a5.76 5.76 0 0 0-1.335-.05 10.954 10.954 0 0 1-.98-1.686c.25-.66.437-1.284.52-1.794.036-.218.055-.426.048-.614a1.238 1.238 0 0 0-.127-.538.7.7 0 0 0-.477-.365c-.202-.043-.41 0-.601.077-.377.15-.576.47-.651.823-.073.34-.04.736.046 1.136.088.406.238.848.43 1.295a19.697 19.697 0 0 1-1.062 2.227 7.662 7.662 0 0 0-1.482.645c-.37.22-.699.48-.897.787-.21.326-.275.714-.08 1.103z"/>
 										</svg>
 									</button>
-									<button id="gerarExcel" type="button" class="btn btn-outline-success" title="Exportar Excel" onclick="GerarRelatorio('xls')">
+									<button id="gerarCsv" type="button" class="btn btn-outline-secondary" title="Exportar CSV" onclick="GerarRelatorio('csv')">
+									<i class="bi bi-filetype-csv"></i>
+								</button>
+								<button id="gerarExcel" type="button" class="btn btn-outline-success" title="Exportar Excel" onclick="GerarRelatorio('xls')">
 						                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-file-earmark-excel-fill" viewBox="0 0 16 16">
 									  		<path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1zM5.884 6.68 8 9.219l2.116-2.54a.5.5 0 1 1 .768.641L8.651 10l2.233 2.68a.5.5 0 0 1-.768.64L8 10.781l-2.116 2.54a.5.5 0 0 1-.768-.641L7.349 10 5.116 7.32a.5.5 0 1 1 .768-.64z"></path>
 										</svg>
