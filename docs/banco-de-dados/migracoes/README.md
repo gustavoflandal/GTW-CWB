@@ -75,6 +75,7 @@ Ordem sugerida (a mesma da criação): fundação → editor de dataset → obse
 | Script | Plano | Descrição | Situação no DEV |
 |---|---|---|---|
 | `20261016_vtr_imagem_complemento.sql` | 24 (Plano 02) | DDL idempotente de `muralha.vtr_imagem_complemento`, antes só no script obsoleto | Não executado; a tabela já existe no DEV, então o script não faria nada |
+| `20261016_config_mapa_api_trecho.sql` | 24 | Chave `mapa_api_monitoramento_trecho` (endereço da API de trechos, antes fixo em `maps-config.js`) | **Não executado** — necessário para a tela Mapa de situação do trânsito |
 
 ## Como acrescentar uma migração
 
