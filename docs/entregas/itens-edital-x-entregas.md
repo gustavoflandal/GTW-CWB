@@ -118,14 +118,14 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 |---|---|---|
 | 5.3.1.1 | ✅ Já atendido pelo GTW | — |
 | 5.3.1.2 | ✅ Já atendido pelo GTW | — |
-| 5.3.1.3 | ⚠️ Parcial | — |
+| 5.3.1.3 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — tratamentos parametrizáveis com execução automática; aguardando migração |
 | 5.3.1.4 | ✅ Já atendido pelo GTW | — |
-| 5.3.2.1 | ⚠️ Parcial | `muralha.tipo_alerta_ocorrencia` só tem tipos veiculares; faltam estacionamento irregular, congestionamento/retenção, bloqueio de via e falha de equipamento |
+| 5.3.2.1 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — 4 tipos operacionais inseridos pelo script; aguardando migração |
 | 5.3.2.2 | ✅ Já atendido pelo GTW | — |
 | 5.3.3.1 | ✅ Já atendido pelo GTW | — |
 | 5.3.3.2 | ✅ Já atendido pelo GTW | — |
-| 5.3.3.3 | ⚠️ Parcial † | — |
-| 5.3.3.4 | ⚠️ Parcial | Destaque existe, mas cor e ícone estão fixos em `notificacao.js`; não são configuráveis pela CONTRATANTE |
+| 5.3.3.3 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — criticidade configurável via `tipo_alerta_config`; aguardando migração |
+| 5.3.3.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — cor e ícone configuráveis via banco, `notificacao.js` carrega via AJAX; aguardando migração |
 | 5.3.4.1 | ⚠️ Parcial † | — |
 | 5.3.4.2 | ⚠️ Parcial † | — |
 | 5.3.4.3 | ⚠️ Parcial † | — |
@@ -133,17 +133,17 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.3.5.2 | ❌ Não implementado † ‡ | — |
 | 5.3.5.3 | ❌ Não implementado | — |
 | 5.3.6.1 | ✅ Já atendido pelo GTW † | — |
-| 5.3.6.2 | ⚠️ Parcial † | `consulta-alerta-ocorrencia` filtra por período, equipamento, tipo, status e placa; faltam localidade, usuário responsável e resultado do tratamento |
+| 5.3.6.2 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — filtros de localidade, responsável e resultado adicionados; aguardando migração e teste |
 | 5.3.6.3 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.3.6.4 | ⚠️ Parcial | Consulta de alertas exporta PDF e XLS por `utils/export-table.js`, sem CSV; a Entrega 11 não cobre alertas |
+| 5.3.6.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — exportação CSV adicionada; aguardando teste no navegador |
 | 5.3.7.1 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
 | 5.3.7.2 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
 | 5.3.7.3 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.4 | ⚠️ Parcial | Alíneas a–c atendidas pelo legado (`OcupacaoTempo`, `RelatorioTaxaOcupacaoVia`, `FluxoTempo`); d (retenções) e e (alertas parametrizáveis) não implementadas |
+| 5.3.7.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — alíneas a–c pelo legado; d (retenção por regra sobre `veiculo_sumarizado`) e e (alertas parametrizáveis) implementados; aguardando migração |
 | 5.3.7.5 | ⚠️ Parcial | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md), [09-cpf-matricula.md](09-cpf-matricula.md) — Navegador, autenticação individualizada e perfis atendidos; criptografia (HTTPS) depende da configuração do deploy |
-| 5.3.7.6 | ⚠️ Parcial † | — |
+| 5.3.7.6 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — limiares de retenção e config de tipos via interface administrativa; aguardando migração |
 | 5.3.7.7 | ✅ Implementado | [16-exportacao-gis.md](16-exportacao-gis.md), [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.8 | ⚠️ Parcial † | Priorização por `prioridade` do tipo; destaque visual fixo, não parametrizável |
+| 5.3.7.8 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — prioridade + cor/ícone parametrizáveis via tela; aguardando migração |
 
 ## 5.4 — Funcionalidade de Inteligência de Dados e Apoio à Decisão Operacional
 
