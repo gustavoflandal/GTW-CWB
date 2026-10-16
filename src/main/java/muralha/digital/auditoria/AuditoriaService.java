@@ -56,6 +56,30 @@ public final class AuditoriaService {
         if (ip == null || ip.isEmpty()) ip = request.getRemoteAddr();
         if (ip != null && ip.contains(",")) ip = ip.split(",")[0].trim();
 
+        gravarAssincrono(idUsuario, login, ip, funcionalidade, operacao, idRegistro, descricao);
+    }
+
+    /**
+     * Registro feito por processo automático (job), sem requisição HTTP:
+     * login "sistema", sem usuário e sem IP.
+     */
+    public static void registrarSistema(
+            String funcionalidade,
+            String operacao,
+            String idRegistro,
+            String descricao) {
+        gravarAssincrono(null, "sistema", null, funcionalidade, operacao, idRegistro, descricao);
+    }
+
+    private static void gravarAssincrono(
+            Integer idUsuario,
+            String login,
+            String ip,
+            String funcionalidade,
+            String operacao,
+            String idRegistro,
+            String descricao) {
+
         final String loginFinal      = login;
         final Integer idUsuarioFinal = idUsuario;
         final String ipFinal         = ip;

@@ -1,0 +1,5 @@
+#telaIntegridade .btn-toolbar-acoes > * { margin-right: 5px; }
+#telaIntegridade .btn-toolbar-acoes > *:last-child { margin-right: 0; }
+#telaIntegridade .table th { white-space: nowrap; }
+#telaIntegridade #tblDetalhe td { font-size: .85rem; }
+#telaIntegridade .hash { font-family: Consolas, Monaco, 'Courier New', monospace; font-size: .75rem; }

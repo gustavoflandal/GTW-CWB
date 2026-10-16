@@ -11,7 +11,7 @@ Roteiro para a [Entrega 24](../entregas/24-correcoes-pontuais-auditoria.md). Exe
 
 Rodar pelo TestNG (como na Entrega 22, o provider `surefire-testng` não está no cache Maven offline) as classes `muralha.digital.notificacao.ConfiguracaoSonsPrioridadeTest`, `muralha.digital.mapas.MapaConfigServletTest`, `muralha.digital.sensores.IncidenteImportJobTest` e `com.consilux.servlet.relatorio.RelatorioAlteracaoConfigEquipTest`.
 
-**Esperado:** 15 testes, 0 falhas. Na nuvem (2026-10-16): ✅ 15/15. No Windows: ⏳.
+**Esperado:** 15 testes, 0 falhas. Na nuvem (2026-10-16): ✅ 15/15. No Windows (2026-10-16, Maven com `-Dtest=…`): ✅ 15/15. O provider `surefire-testng` está no cache Maven local; o comando está no [roteiro 25](25-integridade-sha256-recepcao.md#t01--testes-automatizados).
 
 ## T02 — Prioridade de tipo de alerta
 
