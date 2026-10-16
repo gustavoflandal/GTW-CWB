@@ -59,6 +59,7 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 |---|---|---|---|
 | [`20261016_vtr_imagem_complemento.sql`](../banco-de-dados/migracoes/20261016_vtr_imagem_complemento.sql) | 24 | DDL idempotente de `muralha.vtr_imagem_complemento` (no DEV a tabela já existe; não faz nada) | ⏳ Pendente (opcional no DEV) |
 | [`20261016_config_mapa_api_trecho.sql`](../banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql) | 24 | Chave `mapa_api_monitoramento_trecho` | ⏳ **Pendente — necessário** para a tela Mapa de situação do trânsito |
+| [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ⏳ Pendente |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário**: sem ele o `JobSha256Imagem` não confere nenhuma imagem |
 
 ### Comando de execução

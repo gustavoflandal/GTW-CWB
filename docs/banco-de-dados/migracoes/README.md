@@ -76,6 +76,7 @@ Ordem sugerida (a mesma da criação): fundação → editor de dataset → obse
 |---|---|---|---|
 | `20261016_vtr_imagem_complemento.sql` | 24 (Plano 02) | DDL idempotente de `muralha.vtr_imagem_complemento`, antes só no script obsoleto | Não executado; a tabela já existe no DEV, então o script não faria nada |
 | `20261016_config_mapa_api_trecho.sql` | 24 | Chave `mapa_api_monitoramento_trecho` (endereço da API de trechos, antes fixo em `maps-config.js`) | **Não executado** — necessário para a tela Mapa de situação do trânsito |
+| `20261016_desativa_menu_201.sql` | 24 (decisão de 2026-10-16) | Desativa o menu 201 "Relatório Alt. ConfigEquip", sem grupos com direito e substituído pelo histórico de parâmetros do Plano 26 | **Não executado** |
 | `20261016_integridade_sha256_recepcao.sql` | 25 | `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`, view `v_integridade_recepcao`, chaves `INTEGRIDADE_*`, tipo de alerta `INTEGRIDADE`, legado `'OK'` → `SEM_CONFERENCIA`, menus. Rodar com `sqlcmd -b -f 65001` | **Não executado** — necessário; sem ele o `JobSha256Imagem` não confere imagens. Sintaxe conferida com `SET PARSEONLY ON` |
 
 ## Como acrescentar uma migração
