@@ -120,6 +120,7 @@ public class Agendador extends HttpServlet {
 	public static final String GRUPO_RETENCAO = "Retencao";
 	public static final String JOB_RETENCAO = "Verifica Retenção de Dados";
 
+	public static final String JOB_ALERTA_RETENCAO_TRAFEGO = "Detecta retencao e congestionamento";
 	public static final String JOB_DISPONIBILIDADE = "Monitora Disponibilidade Equipamentos";
 
 	public static final String GRUPO_INTEGRACAO = "Integracao";
@@ -191,6 +192,7 @@ public class Agendador extends HttpServlet {
 			reajustaJobSlaLatencia();
 			reajustaJobSlaPreprocessamento();
 			reajustaJobRetencao();
+			reajustaJobAlertaRetencaoTrafego();
 			reajustaJobDisponibilidade();
 			reajustaJobIncidenteImport();
 			reajustaJobChamadoSla();
@@ -928,6 +930,21 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job Retenção de Dados agendada a cada 24 horas.");
+		}
+	}
+
+	private static void reajustaJobAlertaRetencaoTrafego() throws SchedulerException {
+		if (!possuiJob(GRUPO_MONITORAMENTO, JOB_ALERTA_RETENCAO_TRAFEGO)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.alerta.operacional.JobAlertaRetencao.class)
+					.withIdentity(JOB_ALERTA_RETENCAO_TRAFEGO, GRUPO_MONITORAMENTO)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_ALERTA_RETENCAO_TRAFEGO, GRUPO_MONITORAMENTO)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(10))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Alerta Retencao Trafego agendada a cada 10 minutos.");
 		}
 	}
 

@@ -12,6 +12,24 @@ var currentPath = window.location.pathname;
 var possui_bo_alerta = '';
 var listaVeiculosMonitorarSomenteEste = [];
 var TEMPO_MAXIMO_EMISSAO = 1; // Valor padrão em minutos
+var _mapaCorTipoAlerta = null;
+
+function carregarCoresTipoAlerta() {
+	if (_mapaCorTipoAlerta !== null) return;
+	$.ajax({
+		url: '/MuralhaDigital/TipoAlertaConfig?acao=listar',
+		type: 'GET', async: false, dataType: 'json',
+		success: function(data) {
+			_mapaCorTipoAlerta = {};
+			if (Array.isArray(data)) {
+				data.forEach(function(t) {
+					if (t.cor) _mapaCorTipoAlerta[t.tipo] = t.cor;
+				});
+			}
+		},
+		error: function() { _mapaCorTipoAlerta = {}; }
+	});
+}
 
 // Função helper para detectar e tratar redirecionamentos de autenticação
 function verificarRedirecionamento(jqXHR, textStatus) {
@@ -527,7 +545,11 @@ function MontarMensagem(id, placa, data, equipamento, tipoAlarme, supervisionado
 }
 
 function obterCorPorTipoAlerta(tituloAlerta) {
-	const mapa = {
+	carregarCoresTipoAlerta();
+	if (_mapaCorTipoAlerta && _mapaCorTipoAlerta[tituloAlerta]) {
+		return _mapaCorTipoAlerta[tituloAlerta];
+	}
+	var mapaFallback = {
 		'Veículo Roubado': 'orange',
 		'Veículo Furtado': 'orange',
 		'Veículo Clonado': 'warning',
@@ -537,8 +559,7 @@ function obterCorPorTipoAlerta(tituloAlerta) {
 		'Veiculo Monitorado': 'success',
 		'Veículo com Atraso de Licenciamento': 'info'
 	};
-
-	return mapa[tituloAlerta];
+	return mapaFallback[tituloAlerta] || 'info';
 }
 
 function ConfiguraAlerta()
