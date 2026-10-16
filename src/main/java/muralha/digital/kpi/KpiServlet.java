@@ -5,6 +5,8 @@ import com.consilux.model.Acesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import muralha.digital.logtecnico.ContextoAlteracao;
+import muralha.digital.logtecnico.HistoricoParametros;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,6 +16,11 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @WebServlet("/MuralhaDigital/Kpi")
 public class KpiServlet extends HttpServlet {
@@ -141,7 +148,20 @@ public class KpiServlet extends HttpServlet {
                 String corPersonalizada = req.getParameter("corPersonalizada");
                 if (corPersonalizada != null && corPersonalizada.isEmpty()) corPersonalizada = null;
 
+                Map<String, String> novo = new LinkedHashMap<>();
+                novo.put("nome", req.getParameter("nome"));
+                novo.put("descricao", req.getParameter("descricao"));
+                novo.put("query_sql", sql);
+                novo.put("unidade", req.getParameter("unidade"));
+                novo.put("threshold_ok", String.valueOf(Double.parseDouble(req.getParameter("thOk"))));
+                novo.put("threshold_warn", String.valueOf(Double.parseDouble(req.getParameter("thWarn"))));
+                novo.put("ordem", String.valueOf(Integer.parseInt(req.getParameter("ordem"))));
+                novo.put("tipo_visual", tipoVisual);
+                novo.put("cor_personalizada", corPersonalizada);
+
                 if (idStr != null && !idStr.isEmpty()) {
+                    novo.put("ativo", String.valueOf("true".equals(req.getParameter("ativo"))));
+                    Map<String, String> antes = lerKpi(conn, Integer.parseInt(idStr));
                     try (PreparedStatement ps = conn.prepareStatement(
                             "UPDATE muralha.kpi_config SET nome = ?, descricao = ?, query_sql = ?, " +
                             "unidade = ?, threshold_ok = ?, threshold_warn = ?, ordem = ?, ativo = ?, " +
@@ -159,11 +179,13 @@ public class KpiServlet extends HttpServlet {
                         ps.setInt(11, Integer.parseInt(idStr));
                         ps.executeUpdate();
                     }
+                    HistoricoParametros.registrarSemFalhar(conn, HistoricoParametros.RECURSO_KPI, idStr,
+                        HistoricoParametros.comparar(antes, novo), ContextoAlteracao.de(req, "Configuracao de KPIs"));
                 } else {
                     try (PreparedStatement ps = conn.prepareStatement(
                             "INSERT INTO muralha.kpi_config (nome, descricao, query_sql, unidade, " +
                             "threshold_ok, threshold_warn, ordem, tipo_visual, cor_personalizada) " +
-                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+                            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS)) {
                         ps.setString(1, req.getParameter("nome"));
                         ps.setString(2, req.getParameter("descricao"));
                         ps.setString(3, sql);
@@ -174,6 +196,13 @@ public class KpiServlet extends HttpServlet {
                         ps.setString(8, tipoVisual);
                         ps.setString(9, corPersonalizada);
                         ps.executeUpdate();
+                        try (ResultSet chaves = ps.getGeneratedKeys()) {
+                            if (chaves.next()) {
+                                HistoricoParametros.registrarSemFalhar(conn, HistoricoParametros.RECURSO_KPI,
+                                    chaves.getString(1), HistoricoParametros.comparar(Collections.emptyMap(), novo),
+                                    ContextoAlteracao.de(req, "Configuracao de KPIs"));
+                            }
+                        }
                     }
                 }
                 result.addProperty("ok", true);
@@ -190,5 +219,30 @@ public class KpiServlet extends HttpServlet {
             if (conn != null) try { conn.close(); } catch (Exception ignored) {}
         }
         resp.getWriter().print(new Gson().toJson(result));
+    }
+
+    /** Valores atuais do KPI, no mesmo formato do mapa gravado (para o histórico de parâmetros). */
+    private static Map<String, String> lerKpi(Connection conn, int id) throws SQLException {
+        Map<String, String> m = new LinkedHashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT nome, descricao, query_sql, unidade, threshold_ok, threshold_warn, ordem, ativo, " +
+                "tipo_visual, cor_personalizada FROM muralha.kpi_config WHERE id = ?")) {
+            ps.setInt(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    m.put("nome", rs.getString("nome"));
+                    m.put("descricao", rs.getString("descricao"));
+                    m.put("query_sql", rs.getString("query_sql"));
+                    m.put("unidade", rs.getString("unidade"));
+                    m.put("threshold_ok", String.valueOf(rs.getDouble("threshold_ok")));
+                    m.put("threshold_warn", String.valueOf(rs.getDouble("threshold_warn")));
+                    m.put("ordem", String.valueOf(rs.getInt("ordem")));
+                    m.put("ativo", String.valueOf(rs.getBoolean("ativo")));
+                    m.put("tipo_visual", rs.getString("tipo_visual"));
+                    m.put("cor_personalizada", rs.getString("cor_personalizada"));
+                }
+            }
+        }
+        return m;
     }
 }

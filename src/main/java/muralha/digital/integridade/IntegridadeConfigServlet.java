@@ -8,6 +8,8 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import muralha.digital.auditoria.AuditoriaService;
+import muralha.digital.logtecnico.ContextoAlteracao;
+import muralha.digital.logtecnico.HistoricoParametros;
 import muralha.digital.util.ConfigChaveValor;
 import muralha.digital.util.Resultado;
 import org.apache.log4j.Logger;
@@ -99,7 +101,8 @@ public class IntegridadeConfigServlet extends HttpServlet {
         try (Connection conn = Conexao.getConexao()) {
             if ("salvarPadrao".equals(acao)) {
                 String anterior = ConfigChaveValor.obter(conn, ParametrosIntegridade.CHAVE_ORIGEM, OrigemHash.AUSENTE.formatar());
-                ConfigChaveValor.gravar(conn, ParametrosIntegridade.CHAVE_ORIGEM, origem.formatar());
+                ConfigChaveValor.gravar(conn, ParametrosIntegridade.CHAVE_ORIGEM, origem.formatar(),
+                    ContextoAlteracao.de(req, "Integridade das imagens"));
                 AuditoriaService.registrar(req, "Integridade de imagens", "config-origem-padrao",
                     ParametrosIntegridade.CHAVE_ORIGEM, "De " + anterior + " para " + origem.formatar());
                 json(resp, new Resultado(true, "Origem padrão salva."));
@@ -129,6 +132,9 @@ public class IntegridadeConfigServlet extends HttpServlet {
                     ps.setObject(5, usuario.getId(), java.sql.Types.INTEGER);
                     ps.executeUpdate();
                 }
+                HistoricoParametros.registrarSemFalhar(conn, HistoricoParametros.RECURSO_EQUIPAMENTO, String.valueOf(idLocal),
+                    HistoricoParametros.comparar("integridade.origem_hash", anterior,
+                        ativo ? origem.formatar() : null), ContextoAlteracao.de(req, "Integridade das imagens"));
                 AuditoriaService.registrar(req, "Integridade de imagens", "config-origem-equipamento",
                     String.valueOf(idLocal), "De " + (anterior == null ? "padrão" : anterior)
                         + " para " + (ativo ? origem.formatar() : "padrão (configuração desativada)"));

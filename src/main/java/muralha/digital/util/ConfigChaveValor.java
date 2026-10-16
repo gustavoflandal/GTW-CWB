@@ -1,5 +1,8 @@
 package muralha.digital.util;
 
+import muralha.digital.logtecnico.ContextoAlteracao;
+import muralha.digital.logtecnico.HistoricoParametros;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -39,7 +42,18 @@ public final class ConfigChaveValor {
         }
     }
 
-    /** Insere ou atualiza a chave. */
+    /**
+     * Insere ou atualiza a chave e registra o valor anterior e o novo em
+     * muralha.parametro_historico (o histórico nunca impede a gravação).
+     */
+    public static void gravar(Connection conn, String chave, String valor, ContextoAlteracao ctx) throws SQLException {
+        String anterior = obter(conn, chave, null);
+        gravar(conn, chave, valor);
+        HistoricoParametros.registrarSemFalhar(conn, HistoricoParametros.RECURSO_CONFIG, chave,
+            HistoricoParametros.comparar("valor", anterior, valor), ctx);
+    }
+
+    /** Insere ou atualiza a chave (sem histórico). */
     public static void gravar(Connection conn, String chave, String valor) throws SQLException {
         try (PreparedStatement ps = conn.prepareStatement(
                 "MERGE muralha.config_chave_valor AS t " +
