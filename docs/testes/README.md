@@ -39,5 +39,9 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
 | 26 — Logs técnicos e histórico de parâmetros | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) | ⏳ Parcial: 42 testes TestNG e consulta real somente leitura aprovados no Windows; migração e roteiro no navegador pendentes |
 | 27 — Score de OCR e revisão de placas | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) | ⏳ Parcial: 32 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
+| 28 — Alertas Operacionais | [28-alertas-operacionais.md](28-alertas-operacionais.md) | ⏳ Parcial: 20 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
+| 29 — KPIs, Histórico e Relatório Mensal | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) | ⏳ Parcial: 16 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
+| 30 — Painéis de Assertividade e Pré-Processamento | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) | ⏳ Parcial: 8 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
+| 31 — Acabamentos de Baixo Custo | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) | ⏳ Parcial: 6 testes TestNG aprovados no Windows; roteiro no navegador pendente |
 
 Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

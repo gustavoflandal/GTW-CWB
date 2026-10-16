@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–27. As migrações dos Planos 24 a 26 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria").
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–31. As migrações dos Planos 24 a 26 e 28 a 30 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria"). O Plano 31 não requer migração.
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -63,6 +63,9 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ✅ Executado (2026-10-16): menu 201 com `Ativo = 0` |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
 | [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para a fila de revisão e a justificativa em tabela |
+| [`20261016_alertas_operacionais.sql`](../banco-de-dados/migracoes/20261016_alertas_operacionais.sql) | 28 | 3 tabelas (`tipo_alerta_config`, `tipo_alerta_tratamento`, `alerta_retencao`), 4 tipos operacionais, configs de cor/ícone, tratamentos seed, 6 parâmetros `RETENCAO_*`, menu 392. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
+| [`20261016_kpis_relatorio_mensal.sql`](../banco-de-dados/migracoes/20261016_kpis_relatorio_mensal.sql) | 29 | 3 tabelas (`kpi_config_meta`, `kpi_historico`, `relatorio_periodico`), 8 KPIs obrigatórios, 12 metas, 5 parâmetros, menu 393. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
+| [`20261016_paineis_assertividade_preproc.sql`](../banco-de-dados/migracoes/20261016_paineis_assertividade_preproc.sql) | 30 | Menu do painel de pré-processamento (394/55). Sem criação de tabelas | ✅ Executado (2026-10-16) |
 
 ### Comando de execução
 
@@ -111,7 +114,7 @@ foreach ($s in $scripts) {
 
 ## 3. Registro de Menus (`dbo.sis_menu_infos`)
 
-> ✅ Os menus abaixo já são criados por [`20261009_menu_modulos_desenvolvidos.sql`](../banco-de-dados/migracoes/20261009_menu_modulos_desenvolvidos.sql) (Planos 01–19); os do Dashboard Builder, por `20261010_dashboard_builder.sql`, `20261013_atualizar_menus_dashboard_builder.sql` e `20261013_menu_catalogo_dados.sql` (menus 376–378); os do Sistema de Chamados, pelos scripts `20261015_sistema_chamados_seed.sql` e `_admin.sql` (menus 379–383). Não há INSERT manual pendente.
+> ✅ Os menus abaixo já são criados por [`20261009_menu_modulos_desenvolvidos.sql`](../banco-de-dados/migracoes/20261009_menu_modulos_desenvolvidos.sql) (Planos 01–19); os do Dashboard Builder, por `20261010_dashboard_builder.sql`, `20261013_atualizar_menus_dashboard_builder.sql` e `20261013_menu_catalogo_dados.sql` (menus 376–378); os do Sistema de Chamados, pelos scripts `20261015_sistema_chamados_seed.sql` e `_admin.sql` (menus 379–383); os da auditoria (Planos 24–30), pelos scripts `20261016_*.sql` (menus 384–394). Não há INSERT manual pendente.
 
 Telas dos Planos 01–19 com entrada de menu:
 
@@ -171,6 +174,17 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | `OCR_SCORE_ESCALA` | `100` | 27 | Escala do score: `100` (0-100) ou `1` (0-1) |
 | `OCR_REVISAR_SEM_SCORE` / `OCR_REVISAR_SEM_LEITURA` | `0` / `0` | 27 | Se passagens sem score / sem placa lida vão para a fila de revisão |
 | `OCR_JANELA_HORAS` / `OCR_LOTE` / `OCR_ESPERA_SCORE_MIN` | `24` / `500` / `10` | 27 | Janela, lote e espera do `JobOcrRevisao` |
+| `RETENCAO_OCUPACAO_MINIMA` | `500` | 28 | Ocupação mínima (valor bruto) para considerar retenção |
+| `RETENCAO_VELOCIDADE_MAXIMA` | `15` | 28 | Velocidade média máxima (km/h) para considerar retenção |
+| `RETENCAO_DURACAO_HORAS` | `1` | 28 | Mínimo de horas consecutivas para gerar alerta |
+| `RETENCAO_JANELA_HORAS` | `3` | 28 | Janela de dados analisada pelo job (últimas N horas) |
+| `RETENCAO_LOTE` | `100` | 28 | Equipamentos avaliados por execução |
+| `RETENCAO_ESPERA_REINCIDENCIA_MIN` | `60` | 28 | Minutos antes de gerar outro alerta para o mesmo equipamento |
+| `KPI_SNAPSHOT_INTERVALO_MIN` | `60` | 29 | Intervalo entre snapshots de KPI (referência) |
+| `KPI_SNAPSHOT_RETENCAO_DIAS` | `90` | 29 | Dias de retenção do histórico de KPIs |
+| `KPI_ALERTA_COOLDOWN_MIN` | `360` | 29 | Cooldown entre alertas analíticos do mesmo KPI |
+| `RELATORIO_GERENCIAL_DIA` | `1` | 29 | Dia do mês para gerar o relatório gerencial |
+| `RELATORIO_PREPROC_DIA_UTIL` | `5` | 29 | N-ésimo dia útil para gerar o relatório de pré-processamento |
 
 ---
 

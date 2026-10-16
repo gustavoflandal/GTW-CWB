@@ -27,7 +27,7 @@
 | Credenciais não compartilhadas/genéricas | 5.1 | ⚠️ | Tecnicamente possível criar usuário genérico; sem enforcement sistêmico | — |
 | Retenção de logs durante vigência | 5.1.8 | ✅ | **PoC implementada:** política de retenção configurável, `RetencaoJob` Quartz | [Plano 12](../../docs/planos-salvador/12-retencao-dados.md) · [Entrega](../../docs/entregas/12-retencao-dados.md) · [Teste](../../docs/testes/12-retencao-dados.md) |
 
-**Cobertura §5.1: 89%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~40%)
+**Cobertura §5.1: 93%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~40%)
 
 ---
 
@@ -60,7 +60,7 @@
 | Relatórios com exportação PDF/CSV/XLS | 5.2.8.3 | ✅ | **PoC implementada:** exportação padronizada com SheetJS + jsPDF em todos os módulos | [Plano 11](../../docs/planos-salvador/11-exportacao-padronizada.md) · [Entrega](../../docs/entregas/11-exportacao-padronizada.md) · [Teste](../../docs/testes/11-exportacao-padronizada.md) |
 | Dashboards analíticos em tempo real | 5.2.8.4 | ⚠️ | **PoC parcial:** KPIs configuráveis com Chart.js (limiares de atenção e crítico) e Dashboard Builder; "tempo real" sem definição: intervalo de atualização e modo push ainda não configuráveis por painel | [Plano 15](../../docs/planos-salvador/15-kpis-configuráveis.md) · [Entrega](../../docs/entregas/15-kpis-configuraveis.md) · [Teste](../../docs/testes/15-kpis-configuraveis.md) |
 
-**Cobertura §5.2: 82%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
+**Cobertura §5.2: 83%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
 
 ---
 
@@ -108,12 +108,12 @@
 | Configuração de dashboards personalizados pela CONTRATANTE | 5.4.2.5 | ✅ | **PoC implementada:** Dashboard Builder (schema `dash`) com datasets, widgets e painéis configuráveis; teste manual no navegador pendente (Entrega 21) | [Plano 15](../../docs/planos-salvador/15-kpis-configuráveis.md), [Plano 20](../../docs/planos-salvador/20-dashboard-builder.md) · [Entrega](../../docs/entregas/21-dashboard-builder.md) |
 | Análise espacial com mapa interativo (heatmap, concentração) | 5.4.4.1-3 | ✅ | `mapa-calor/`, `mapa-interativo/`, `mapa-equipamento/` | — |
 | Exportação de dados georreferenciados (GIS) | 5.4.4.4 | ✅ | GeoJSON e KML com 3 camadas: equipamentos, alertas e infrações | [Plano 16](../../docs/planos-salvador/16-exportacao-gis.md), [Plano 31](../../docs/planos-salvador/31-acabamentos-baixo-custo.md) · [Entrega 31](../../docs/entregas/31-acabamentos-baixo-custo.md) |
-| Relatórios analíticos completos (tráfego, velocidade, infração) | 5.4.5 | ⚠️ | ~35 relatórios legados; Dashboard Builder adiciona widgets TABLE. Cobertura das alíneas a–i de 5.4.5.1 não verificada | [Plano 20](../../docs/planos-salvador/20-dashboard-builder.md) · [Entrega](../../docs/entregas/21-dashboard-builder.md) |
-| Indicadores parametrizáveis com metas e alertas automáticos | 5.4.6.1-3 | ⚠️ | **PoC parcial:** `KpiServlet` e `kpi_config` com cálculo por SQL e dois limiares (atenção e crítico); sem meta, histórico nem alerta automático; o conjunto mínimo de 5.4.6.2 não está cadastrado | [Plano 15](../../docs/planos-salvador/15-kpis-configuráveis.md) · [Entrega](../../docs/entregas/15-kpis-configuraveis.md) · [Teste](../../docs/testes/15-kpis-configuraveis.md) |
+| Relatórios analíticos completos (tráfego, velocidade, infração) | 5.4.5 | ⚠️ | ~35 relatórios legados + Dashboard Builder (widgets TABLE) + relatórios gerenciais periódicos (`RelatorioGerencialServlet`). Cobrem a, c, e, f, h, i de 5.4.5.1; emissão automática mensal | [Plano 20](../../docs/planos-salvador/20-dashboard-builder.md), [Plano 29](../../docs/planos-salvador/29-kpis-relatorio-mensal.md) · [Entrega 29](../../docs/entregas/29-kpis-relatorio-mensal.md) |
+| Indicadores parametrizáveis com metas e alertas automáticos | 5.4.6.1-3 | ⚠️ | **PoC parcial:** `KpiServlet` + `kpi_config` com 12 KPIs (4 originais + 8 obrigatórios do TR), metas em `kpi_config_meta`, histórico horário em `kpi_historico` (`KpiSnapshotJob`), alertas analíticos automáticos com cooldown, gráfico de evolução com linha de meta. Migração executada, teste no navegador pendente | [Plano 15](../../docs/planos-salvador/15-kpis-configuráveis.md), [Plano 29](../../docs/planos-salvador/29-kpis-relatorio-mensal.md) · [Entrega 29](../../docs/entregas/29-kpis-relatorio-mensal.md) |
 | Repositório central de logs técnicos e operacionais | 5.4.7.1-7 | ⚠️ | **PoC parcial:** tela Logs Técnicos (Muralha) reúne 12 fontes do legado e da PoC (`eventos_csx`, `status_conexao`, `status_energia`, `manutencao`, `log_alerta`, `log_processos`, disponibilidade, SLA, auditoria, históricos de parâmetros), normalizadas em categoria e severidade, com filtros, linha do tempo, correlação temporal, exportação e relatório técnico por equipamento. Sem trilha imutável nem retenção própria dos logs (5.4.7.7); migração e teste no navegador pendentes | [Plano 26](../../docs/planos-salvador/26-logs-tecnicos-historico-parametros.md) · [Entrega 26](../../docs/entregas/26-logs-tecnicos-historico-parametros.md) · [Teste 26](../../docs/testes/26-logs-tecnicos-historico-parametros.md) |
 | Histórico de alterações de parâmetros de equipamentos | 5.4.7.6 | ⚠️ | **PoC parcial:** `muralha.parametro_historico` com valor anterior, valor novo, usuário, IP e origem, gravada pelo ConfigEquip (web service e importação, campo a campo), KPIs, retenção e integridade. Telas antigas ainda só gravam o texto de `config_chave_valor_hist`. O menu 201 (relatório vazio) foi desativado. Migração pendente | [Plano 26](../../docs/planos-salvador/26-logs-tecnicos-historico-parametros.md) · [Entrega 26](../../docs/entregas/26-logs-tecnicos-historico-parametros.md) |
 
-**Cobertura §5.4: 64%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~50%)
+**Cobertura §5.4: 68%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~50%)
 
 ---
 
@@ -124,13 +124,13 @@
 | 100% dos registros pré-processados antes de validação | 5.5.1.3 | ⚠️ | Processamento via Quartz; sem garantia de cobertura 100% documentada | — |
 | Dupla análise independente por operadores distintos | 5.5.1.2g | ✅ | **PoC implementada:** `InfracaoAnaliseServlet`, constraint UNIQUE, segregação | [Plano 05](../../docs/planos-salvador/05-dupla-analise.md) · [Entrega](../../docs/entregas/05-dupla-analise.md) · [Teste](../../docs/testes/05-dupla-analise.md) |
 | Prazo máximo 72h por lote | 5.5.2.1 | ✅ | **PoC implementada:** `SlaPreprocessamentoServlet` e `SlaPreprocessamentoJob`, monitoramento de prazo com alertas | [Plano 10](../../docs/planos-salvador/10-sla-preprocessamento.md) · [Entrega](../../docs/entregas/10-sla-preprocessamento.md) · [Teste](../../docs/testes/10-sla-preprocessamento.md) |
-| Painel de controle operacional do pré-processamento | 5.5.3.1 | ⚠️ | **PoC parcial:** painel de SLA de 72 h (Plano 10) e painéis montáveis no Dashboard Builder; cobrem parte das alíneas a–n | [Plano 10](../../docs/planos-salvador/10-sla-preprocessamento.md), [Plano 20](../../docs/planos-salvador/20-dashboard-builder.md) |
-| Relatório mensal até 5º dia útil | 5.5.3.3 | ⚠️ | Relatório mensal automático no 5º dia útil via `RelatorioPreProcMensalJob`; aguardando migração | [Plano 29](../../docs/planos-salvador/29-kpis-relatorio-mensal.md) |
+| Painel de controle operacional do pré-processamento | 5.5.3.1 | ⚠️ | **PoC parcial:** painel dedicado com 14 métricas (a-e, g, j-l, n) via `PreProcessamentoServlet`, auto-refresh 60s, gráficos, tabela de operadores; h, i, m dependem de colunas ausentes | [Plano 10](../../docs/planos-salvador/10-sla-preprocessamento.md), [Plano 30](../../docs/planos-salvador/30-paineis-assertividade-preproc.md) · [Entrega 30](../../docs/entregas/30-paineis-assertividade-preproc.md) |
+| Relatório mensal até 5º dia útil | 5.5.3.3 | ⚠️ | Relatório mensal automático no 5º dia útil via `RelatorioPreProcMensalJob`; migração executada, teste pendente | [Plano 29](../../docs/planos-salvador/29-kpis-relatorio-mensal.md) · [Entrega 29](../../docs/entregas/29-kpis-relatorio-mensal.md) |
 | Vedação de alteração de arquivos originais | 5.5.4.2 | ✅ | Imagens originais em `veiculo_tempo_real_imagem`; ajustes apenas para visualização | — |
 | Log completo de pré-processamento (operador, timestamp, workstation, ação) | 5.5.4.5 | ⚠️ | **PoC parcial:** log de auditoria cobre operador/timestamp/ação; falta estação de trabalho | [Plano 01](../../docs/planos-salvador/01-log-auditoria.md) |
 | Retenção de logs por 5 anos após encerramento contratual | 5.5.4.6 | ✅ | **PoC implementada:** política de retenção configurável, `RetencaoJob` Quartz | [Plano 12](../../docs/planos-salvador/12-retencao-dados.md) · [Entrega](../../docs/entregas/12-retencao-dados.md) · [Teste](../../docs/testes/12-retencao-dados.md) |
 
-**Cobertura §5.5: 48%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~25%)
+**Cobertura §5.5: 52%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~25%)
 
 ---
 
@@ -169,7 +169,7 @@
 | Tempo máximo 4s entre leitura e alerta na plataforma | 5.7.9.1 | ⚠️ | Thread 2s; **PoC:** SLA de latência monitora tempo de resposta | [Plano 07](../../docs/planos-salvador/07-sla-latencia.md) · [Entrega](../../docs/entregas/07-sla-latencia.md) |
 | Vídeos operacionais time-lapse | 5.7.7 | ⚠️ | **PoC parcial:** `TimelapseServlet` e player de imagens no navegador; não gera arquivo de vídeo nem faz o descarte parametrizado de 72 h (5.7.7.5-6) | [Plano 17](../../docs/planos-salvador/17-timelapse.md) · [Entrega](../../docs/entregas/17-timelapse.md) · [Teste](../../docs/testes/17-timelapse.md) |
 
-**Cobertura §5.7: 45%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
+**Cobertura §5.7: 49%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
 
 ---
 
@@ -218,16 +218,16 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção, calculada sobre os 232 it
 
 | Módulo | Antes da PoC (estimativa) | Atual (matriz canônica) | Itens ✅ / ⚠️ / ❌ |
 |---|---|---|---|
-| 5.1 Controle de Acesso | ~40% | **89%** | 11 / 3 / 0 |
-| 5.2 Gestão e Classificação de Infrações | ~45% | **82%** | 27 / 10 / 2 |
+| 5.1 Controle de Acesso | ~40% | **93%** | 12 / 2 / 0 |
+| 5.2 Gestão e Classificação de Infrações | ~45% | **83%** | 28 / 9 / 2 |
 | 5.3 Alertas de Irregularidades | ~60% | **66%** | 11 / 15 / 2 |
-| 5.4 Inteligência de Dados | ~50% | **64%** | 11 / 20 / 2 |
-| 5.5 Pré-processamento de Imagens | ~25% | **48%** | 6 / 10 / 7 |
+| 5.4 Inteligência de Dados | ~50% | **68%** | 12 / 21 / 0 |
+| 5.5 Pré-processamento de Imagens | ~25% | **52%** | 7 / 10 / 6 |
 | 5.6 Infraestrutura de Comunicação | ~40% | **34%** | 8 / 6 / 18 |
-| 5.7 LAP | ~45% | **45%** | 11 / 12 / 15 |
+| 5.7 LAP | ~45% | **49%** | 11 / 15 / 12 |
 | 5.8 Datacenter / Disponibilidade | ~5% | **20%** | 1 / 8 / 16 |
 
-**Aderência global: 55%** (86 ✅ · 84 ⚠️ · 62 ❌ em 232 itens; estimativa anterior à PoC: ~39%)
+**Aderência global: 57%** (90 ✅ · 86 ⚠️ · 56 ❌ em 232 itens; estimativa anterior à PoC: ~39%)
 
 ### Gaps críticos resolvidos pela PoC
 1. ~~Dupla análise independente obrigatória (§5.2.3 e §5.5)~~ → **Plano 05**
@@ -242,9 +242,10 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção, calculada sobre os 232 it
 ### Gaps remanescentes prioritários
 1. Criptografia TLS end-to-end e em repouso (§5.6.3)
 2. Alta disponibilidade e PRD/PCN (§5.8)
-3. Videodetecção volumétrica de tráfego (§5.3.7.4)
-4. Relatório mensal automático de pré-processamento (§5.5.3.3)
-5. Retry automático de alertas em falha de comunicação (§5.3.5.3)
+3. Videodetecção volumétrica de tráfego (§5.3.7.4 d-e)
+4. Retry automático de alertas em falha de comunicação (§5.3.5.3)
+5. Time-lapse como vídeo + descarte 72h (§5.7.7.5-6)
+6. Socket/fallback do Captura (§5.2.2.1, §5.6.4 — depende de decisão externa)
 
 ---
 

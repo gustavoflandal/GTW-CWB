@@ -1,9 +1,9 @@
 # Aderência Comparativa — Antes e Após PoC TRANSALVADOR
 
-Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (Planos 01–22).
+Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (Planos 01–31).
 
 > **Fonte de status:** matriz canônica [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md); a coluna "Depois" repete o status dela (agregado quando a linha cobre vários itens). Detalhe por grupo: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)  
-> **Data da análise:** 2026-10-08 · **Revisão:** 2026-10-16 (correção da auditoria — [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md))  
+> **Data da análise:** 2026-10-08 · **Revisão:** 2026-10-16 (correção da auditoria — Planos 23–31)  
 > A coluna "Antes" é a avaliação de 2026-10-08; só foi corrigida onde a auditoria mostrou que a avaliação original já estava errada (ex.: 5.7.4.4, 5.6.7, 5.2.4.1-2).
 
 ---
@@ -14,15 +14,15 @@ Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salva
 
 | Módulo TR | Antes (estimativa) | Após (matriz canônica) | Planos que contribuem |
 |---|---|---|---|
-| §5.1 Controle de Acesso | 40% | **89%** | 01, 03, 04, 05, 09, 12 |
-| §5.2 Gestão e Classificação | 45% | **82%** | 02, 05, 06, 07, 08, 11, 14, 15, 18 |
-| §5.3 Alertas de Irregularidades | 60% | **66%** | 03, 04, 07, 09, 16, 19 |
-| §5.4 Inteligência de Dados | 50% | **64%** | 01, 11, 12, 13, 15, 16, 18, 20 |
-| §5.5 Pré-processamento | 25% | **48%** | 01, 05, 10, 12, 20 |
+| §5.1 Controle de Acesso | 40% | **93%** | 01, 03, 04, 05, 09, 12, 31 |
+| §5.2 Gestão e Classificação | 45% | **83%** | 02, 05, 06, 07, 08, 11, 14, 15, 18, 30 |
+| §5.3 Alertas de Irregularidades | 60% | **66%** | 03, 04, 07, 09, 16, 19, 28 |
+| §5.4 Inteligência de Dados | 50% | **68%** | 01, 11, 12, 13, 15, 16, 18, 20, 29, 31 |
+| §5.5 Pré-processamento | 25% | **52%** | 01, 05, 10, 12, 20, 29, 30 |
 | §5.6 Infraestrutura | 40% | **34%** | 07, 18 |
-| §5.7 LAP | 45% | **45%** | 07, 12, 13, 17 |
+| §5.7 LAP | 45% | **49%** | 07, 12, 13, 17, 27 |
 | §5.8 Datacenter | 5% | **20%** | 07, 18 |
-| **Global** | **39%** | **55%** | **Planos 01–22** |
+| **Global** | **39%** | **57%** | **Planos 01–31** |
 
 A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 5.6 e 5.7.7 que estavam fora da conta, e a maioria deles é de infraestrutura ou do equipamento de campo.
 
