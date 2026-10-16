@@ -350,6 +350,8 @@ function TratarRetornoVeiculo(jqXHR)
 
 	PopulaModalDetalheVeiculo(equipamento, faixa, dataFormatada, placa, velocidade, marca, modelo, classificacao)
 
+	CarregarPlacasLidas(idVeiculoGlobal);
+
 	var listaImagens = veiculo.find('listaImagens');
 	criarGaleriaImagens(listaImagens);
 }
@@ -532,57 +534,70 @@ function AlteraPlaca()
 	placa_alt = placa_alt.toUpperCase();
 	
 	if (placa_alt.length != 7){
-		alert('Quantidade de caracteres incorretos. Favor revisar!')
+		AlertModalCsx_E_TimeOut_8000ms_v2('Quantidade de caracteres incorretos. Favor revisar!', DESC_ERROR_CONTAINER_MODAL);
 		return;
 	}
-	
-	alert('Alterando placa do veículo:: ' + dados_orig + ' ==> ' + placa_alt);
-	
-    var dataString = "placa=" 		+ placa_alt + 
-					"&placa_orig=" 	+ dados_orig + 
-					"&id_veiculo=" 	+ document.getElementById("id_veic").innerHTML +
-					"&acao=alterarPlaca";
-    console.log(dataString);
-    
-    var urlExecuta = urlRoot + "MuralhaDigital/Veiculo";
 
-    $.ajax({
-        type: 		"POST",
-        url: 		urlExecuta,
-        data: 		dataString,
-        dataType:	"xml",
-           
-        //if received a response from the server
-        success: 	function( data, textStatus, jqXHR) 
-        {
-        	var event = jqXHR.responseText;
-        	var xmlDoc = $.parseXML( event );
-			var $xml = $(xmlDoc);
-    			
-			var sucesso = $xml.find('sucesso').text();
-			var msgResposta = $xml.find('msgResposta').text();
-			
-			sucesso = (sucesso === 'true' || sucesso === '');
+	// TR 5.7.5.2: motivo e justificativa obrigatórios para corrigir a placa.
+	JustificativaCorrecaoPlaca.pedir({
+		titulo: 'Corrigir placa',
+		resumo: 'Placa ' + (dados_orig || '(sem leitura)') + ' será alterada para ' + placa_alt + '.'
+	}, function (just) {
+		$.ajax({
+			type: 		"POST",
+			url: 		urlRoot + "MuralhaDigital/Veiculo",
+			data: 		{ acao: "alterarPlaca", placa: placa_alt, placa_orig: dados_orig,
+						  id_veiculo: document.getElementById("id_veic").innerHTML,
+						  id_motivo: just.idMotivo, justificativa: just.justificativa },
+			dataType:	"xml",
+			success: 	function( data, textStatus, jqXHR) 
+			{
+				var $xml = $($.parseXML(jqXHR.responseText));
+				var sucesso = $xml.find('sucesso').text();
+				var msgResposta = $xml.find('msgResposta').text();
+				sucesso = (sucesso === 'true' || sucesso === '');
 
-			if (sucesso) {
-				DesabilitarAlteracaoPlaca();
-				if (window.parent && window.parent !== window) {
-					window.parent.postMessage({ type: 'placaAlterada', placaAntiga: dados_orig, placaNova: placa_alt }, window.location.origin);
+				if (sucesso) {
+					DesabilitarAlteracaoPlaca();
+					if (window.parent && window.parent !== window) {
+						window.parent.postMessage({ type: 'placaAlterada', placaAntiga: dados_orig, placaNova: placa_alt }, window.location.origin);
+					}
+					VEICULO_POSSUI_PLACA = true;
+					PLACA = placa_alt;
+					CarregarPlacasLidas(document.getElementById("id_veic").innerHTML);
+					JustificativaCorrecaoPlaca.aviso(msgResposta || 'Placa alterada com sucesso!', 'sucesso');
+				} else {
+					JustificativaCorrecaoPlaca.aviso(msgResposta || 'Não foi possível alterar a placa.', 'erro');
 				}
-				VEICULO_POSSUI_PLACA = true;
-				PLACA = placa_alt;
-			} else {
-				alert("ERRO::> " + msgResposta);
+			},
+			error: 		function(jqXHR, textStatus, errorThrown)
+			{
+				console.error('Erro ao alterar placa', jqXHR.status);
+				JustificativaCorrecaoPlaca.aviso('Erro ao processar requisição ao servidor.', 'erro');
 			}
-        },
+		});
+	});
+}
 
-        error: 		function(jqXHR, textStatus, errorThrown)
-        {
-        	AlertCsx_E_TimeOut_8000ms('Erro ao processar requisição ao servidor!!');
-        },
-        beforeSend: function(jqXHR, settings){},
-        complete: 	function(jqXHR, textStatus){}
-    });
+/** Todas as placas lidas na passagem (TR 5.7.1.4): tração, frontal, reboques, com score e origem. */
+function CarregarPlacasLidas(idVeiculo)
+{
+	var $alvo = $('#placasLidasModal');
+	if (!$alvo.length || !idVeiculo) return;
+	$alvo.empty();
+	$.ajax({
+		type: 'GET', url: urlRoot + 'MuralhaDigital/CorrecaoPlaca', dataType: 'json',
+		data: { acao: 'placas', idVeiculo: idVeiculo },
+		success: function (d) {
+			if (!d.leituras || !d.leituras.length) return;
+			$alvo.append($('<span class="me-1">').text('Placas lidas:'));
+			d.leituras.forEach(function (l) {
+				var texto = l.tipo + ' ' + (l.placa || '(sem leitura)') + (l.score !== null && l.score !== undefined ? ' — score ' + l.score : '') + ' [' + l.origem + ']';
+				$alvo.append($('<span class="badge bg-light text-dark border me-1">').text(texto));
+			});
+		},
+		error: function (jqXHR) { console.error('Erro ao carregar placas lidas', jqXHR.status); }
+	});
 }
 
 function HabilitarAlteracaoPlaca()

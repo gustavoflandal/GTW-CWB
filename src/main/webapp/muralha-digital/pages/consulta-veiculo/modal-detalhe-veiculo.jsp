@@ -110,6 +110,7 @@
 											<input id="placaModal" class="form-control form-control-sm text-uppercase placa-modal" maxlength="7" disabled>
 											<button id="btnPlaca" type="button" class="btn btn-sm btn-warning form-control-sm" onclick="alterar_placa()">ALTERAR</button>
 										</div>
+										<div id="placasLidasModal" class="small mt-1"></div>
 									</div>
 					            </div><div class="col-sm-3">
 									<div class="form-group">
@@ -147,3 +148,4 @@
 		</div>
 	</div>
 </div>
+<script src="/muralha-digital/assets/js/justificativa-correcao-placa.js"></script>

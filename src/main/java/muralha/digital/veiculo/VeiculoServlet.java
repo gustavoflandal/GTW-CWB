@@ -225,11 +225,24 @@ public class VeiculoServlet extends HttpServlet
 	    		return;
 			}
 		
-			sucesso = VeiculoTempoReal.AlterarPlacaVeic(idVeiculo, strPlaca, idUsuario, strPlacaOrig); 
-			if (sucesso)
-				msg = "Placa alterada com sucesso!";
-			else
-				msg = "Falha ao alterar placa! Fale com a administração do sistema.";
+			// TR 5.7.5.2: correção com motivo e justificativa obrigatórios (Plano 27).
+			Integer idMotivo = null;
+			try { idMotivo = Integer.valueOf(request.getParameter("id_motivo")); } catch (Exception e) { /* validado pelo serviço */ }
+			try (java.sql.Connection conn = com.consilux.lib.Conexao.getConexao())
+			{
+				muralha.digital.ocr.CorrecaoPlacaService.Resultado res = muralha.digital.ocr.CorrecaoPlacaService.corrigir(conn,
+					new muralha.digital.ocr.CorrecaoPlacaService.Pedido(idVeiculo.toString(), strPlaca, null, null, idMotivo,
+						request.getParameter("justificativa"), muralha.digital.ocr.CorrecaoPlacaService.OrigemIntervencao.CONSULTA),
+					idUsuario, request.getRemoteAddr());
+				muralha.digital.auditoria.AuditoriaService.registrar(request, "Consulta de veiculos", "corrigir-placa", idVeiculo.toString(), res.descricao);
+				sucesso = true;
+				msg = res.confirmacao ? "Placa conferida." : "Placa alterada com sucesso!";
+			}
+			catch (IllegalArgumentException e)
+			{
+				sucesso = false;
+				msg = e.getMessage();
+			}
 			
 			respostaXML.EnviarRespostaRequisicaoXML(response, sucesso, msg);
 		}
