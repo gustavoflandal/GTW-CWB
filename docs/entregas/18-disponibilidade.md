@@ -1,7 +1,7 @@
 # Entrega — Plano 18: Auditoria de Disponibilidade dos Equipamentos
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 

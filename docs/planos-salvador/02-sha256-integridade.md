@@ -1,5 +1,7 @@
 # Hash SHA-256 na Recepção de Imagens — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans` para executar tarefa por tarefa.
 
 **Goal:** Calcular e armazenar hash SHA-256 de cada imagem recebida dos equipamentos; sinalizar registros com integridade comprometida e gerar alerta operacional.

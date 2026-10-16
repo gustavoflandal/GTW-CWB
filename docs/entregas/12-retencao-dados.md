@@ -1,7 +1,7 @@
 # Entrega — Plano 12: Política de Retenção de Dados
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 
@@ -12,6 +12,7 @@ Política configurável de retenção de dados com job Quartz para verificação
 - Plano [`12-retencao-dados.md`](../planos-salvador/12-retencao-dados.md) — Política de Retenção de Dados
 - **Requisitos TR:** §5.1.8 (retenção de logs durante vigência), §5.5.4.6 (retenção por 5 anos pós-contrato), §5.7.5.3 (retenção do histórico LAP)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1, §5 e §7
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §5, §7 e §14 (`config_chave_valor`; registro do job no `Agendador`)
 
 ## Arquivos produzidos
 

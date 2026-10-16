@@ -1,7 +1,7 @@
 # Entrega 07 — SLA de Latência
 
 **Data:** 2026-10-08  
-**Status:** ✅ Implementado — migração SQL pendente de execução manual
+**Status:** ✅ Implementado — migração `20261008_complementar.sql` executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md))
 
 ---
 
@@ -10,6 +10,7 @@
 - Plano [`07-sla-latencia.md`](../planos-salvador/07-sla-latencia.md) — SLA de Latência
 - **Requisitos TR:** §5.2.7.1–3 (telemetria operacional, monitoramento de equipamentos), §5.6.2.3 (tempo máximo 4s para eventos críticos), §5.7.9.1 (latência LAP→alerta)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2, §6 e §7
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §5, §11 e §15 (`config_chave_valor`; colunas `dt_captura_equipamento`/`dt_recepcao_servidor`/`equipamento` não existem)
 
 ## Escopo
 
@@ -54,10 +55,7 @@ Monitora a latência entre o momento de passagem do veículo (`data`) e a import
 
 ## Pendências
 
-- Migração `20261008_complementar.sql` pendente de execução manual:
-  ```powershell
-  sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_complementar.sql"
-  ```
+- ~~Migração `20261008_complementar.sql`~~ executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15).
 
 ---
 

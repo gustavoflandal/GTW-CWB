@@ -1,7 +1,7 @@
 # Entrega — Plano 11: Exportação Padronizada
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue²
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 

@@ -1,7 +1,7 @@
 # Entrega — Plano 19: Integracao com Sensores Externos (Waze/SAMU)
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 

@@ -80,7 +80,7 @@ Capítulo 5 do Termo de Referência: requisitos do Sistema de Gestão de Process
 
 ### [Análise de Aderência](analise-aderencia.md)
 
-Mapeamento detalhado da aderência do GTW/Muralha Digital aos requisitos do TR Salvador — gap analysis funcional, item a item.
+Mapeamento da aderência do GTW/Muralha Digital aos requisitos do TR Salvador, agrupado por requisito. Os status seguem a matriz canônica [`itens-edital-x-entregas.md`](../../docs/entregas/itens-edital-x-entregas.md) (232 itens do Capítulo 5), conferida pelo script [`validar_aderencia.py`](../../docs/referencia/scripts/validar_aderencia.py). O arquivo `analise-aderencia.pdf` é uma cópia de 2026-10-08 e está desatualizado; vale o `.md`.
 
 ### [Projeto de Adaptação](projeto-adaptacao.md)
 
@@ -116,4 +116,7 @@ Os planos detalhados de implementação de cada requisito estão em [`docs/plano
 | 17 | Timelapse | [17-timelapse.md](../../docs/planos-salvador/17-timelapse.md) |
 | 18 | Disponibilidade | [18-disponibilidade.md](../../docs/planos-salvador/18-disponibilidade.md) |
 | 19 | Sensores Externos | [19-sensores-externos.md](../../docs/planos-salvador/19-sensores-externos.md) |
+| 20 | Dashboard Builder Self-Service (entrega 21) | [20-dashboard-builder.md](../../docs/planos-salvador/20-dashboard-builder.md) |
+| 21 | Dashboard Builder — consulta SQL própria, sem Cube (sem entrega própria; ver entrega 21) | [21-dashboards-consulta-sql-sem-cube.md](../../docs/planos-salvador/21-dashboards-consulta-sql-sem-cube.md) |
 | 22 | Sistema de Gerenciamento de Chamados | [22-sistema-chamados.md](../../docs/planos-salvador/22-sistema-chamados.md) |
+| 23 | Correção da documentação de aderência (auditoria de 2026-10-16, Fase 1) | [23-correcao-documentacao-aderencia.md](../../docs/planos-salvador/23-correcao-documentacao-aderencia.md) |

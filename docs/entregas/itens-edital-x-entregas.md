@@ -1,286 +1,328 @@
 # Itens do Edital × Entregas — Capítulo 5 do TR TRANSALVADOR
 
-Relação de todos os itens do Capítulo 5 do Termo de Referência (Sistema de Gestão de Processamento de Dados de Fiscalização Eletrônica), em ordem crescente, com o arquivo de entrega desta pasta que implementou cada item.
+**Matriz canônica de aderência.** Este é o documento primário de situação de cada item do Capítulo 5 do Termo de Referência. [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md), [`aderencia-comparativa.md`](aderencia-comparativa.md) e [`rastreabilidade-tr.md`](rastreabilidade-tr.md) repetem os mesmos status; em caso de diferença, vale esta matriz.
+
+**Revisão:** 2026-10-16, após a auditoria que cruzou a documentação com o código (commit `06740f8`). Ver [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md) e [Entrega 23](23-correcao-documentacao-aderencia.md).
 
 ## Fontes
 
-- Itens: [`TR-Salvador-Sistema.md`](../../docs-editais/edital-salvador/TR-Salvador-Sistema.md) — uma linha por item numerado sem subitens numerados. O item 5.1.5 aparece por letra (a–e) porque cada letra foi atendida por uma entrega diferente.
-- Situação e entrega: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) (fonte primária) e [`rastreabilidade-tr.md`](rastreabilidade-tr.md), usada quando a análise de aderência não avalia o item.
-- Entrega 21 (Dashboard Builder) incorporada conforme [`21-dashboard-builder.md`](21-dashboard-builder.md).
+- Itens: [`TR-Salvador-Sistema.md`](../../docs-editais/edital-salvador/TR-Salvador-Sistema.md), uma linha por item numerado sem subitens numerados. O item 5.1.5 aparece por letra (a–e) porque cada letra foi atendida por uma entrega diferente. Nas seções 5.6 e 5.7.7 o `.md` resume os subitens em faixas (ex.: "5.6.3.1–4"); a numeração e o texto completos vêm do PDF [`TR Salvador - Sistema.pdf`](../../docs-editais/edital-salvador/TR%20Salvador%20-%20Sistema.pdf).
+- Situação: conferida no código. "✅" significa que a funcionalidade existe no código; **não** significa que os critérios de aceite da entrega foram executados (ver a coluna Status em [`README.md`](README.md)).
+- Conferência automática: [`docs/referencia/scripts/validar_aderencia.py`](../referencia/scripts/validar_aderencia.py) compara os status das quatro fontes e valida os links relativos.
 
 ## Legenda
 
-| Valor na coluna "Entrega" | Significado |
+| Situação | Significado |
 |---|---|
-| Nome do arquivo `.md` | Item implementado na entrega indicada |
-| Implementação Parcial | Item atendido em parte; quando houver, segue o arquivo da entrega que tratou a parte implementada |
-| Já atendido pelo GTW | Item que o sistema já atendia antes da PoC, sem entrega nova associada |
-| Não implementado | Item sem desenvolvimento |
-| † | Item que não constava da análise de aderência; situação atribuída nesta revisão, a partir do código e das entregas — recomenda-se conferência |
+| ✅ Implementado | Item implementado na entrega indicada |
+| ✅ Já atendido pelo GTW | Item que o sistema já atendia antes da PoC, sem entrega nova associada |
+| ⚠️ Parcial | Item atendido em parte; a coluna de evidência diz o que existe e o que falta |
+| ❌ Não implementado | Item sem desenvolvimento |
+| † | Situação atribuída por revisão do código, sem avaliação na análise de aderência original — recomenda-se conferência |
 | ‡ | Obrigação contratual, operacional ou do equipamento de campo, sem funcionalidade de software a desenvolver no sistema |
 
 ## Resumo
 
 | Situação | Itens | % |
 |---|---|---|
-| Implementado em entrega | 73 | 35% |
-| Implementação Parcial | 54 | 26% |
-| Já atendido pelo GTW | 34 | 16% |
-| Não implementado | 46 | 22% |
-| **Total** | **207** | 100% |
+| ✅ Implementado em entrega | 54 | 23% |
+| ✅ Já atendido pelo GTW | 32 | 14% |
+| ⚠️ Parcial | 84 | 36% |
+| ❌ Não implementado | 62 | 27% |
+| **Total** | **232** | 100% |
 
-Dos 46 itens não implementados, 25 são obrigações contratuais, operacionais ou do equipamento de campo (‡). 27 dos itens parciais têm entrega associada. 89 itens estão marcados com † para conferência.
+Em 2026-10-16 a matriz passou de 207 para 232 itens: entraram os 28 subitens de 5.6 e 5.7.7 que estavam omitidos (5.6.1.3–5, 5.6.2.4–5, 5.6.3.1–4, 5.6.4.4–5, 5.6.5.1–4, 5.6.6.2–4, 5.6.7.1–5, 5.7.7.2–6) e saíram as três linhas agregadas 5.6.3, 5.6.5 e 5.6.7.
+
+### Cobertura por seção do TR
+
+Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pelo script de validação (`--resumo`).
+
+| Seção | Itens | ✅ | ⚠️ | ❌ | Cobertura |
+|---|---|---|---|---|---|
+| 5.1 Controle de Acesso | 14 | 11 | 3 | 0 | 89% |
+| 5.2 Gestão e Classificação de Infrações | 39 | 27 | 10 | 2 | 82% |
+| 5.3 Alertas de Irregularidades | 28 | 11 | 15 | 2 | 66% |
+| 5.4 Inteligência de Dados | 33 | 11 | 20 | 2 | 64% |
+| 5.5 Pré-processamento de Imagens | 23 | 6 | 10 | 7 | 48% |
+| 5.6 Infraestrutura de Comunicação | 32 | 8 | 6 | 18 | 34% |
+| 5.7 LAP | 38 | 11 | 12 | 15 | 45% |
+| 5.8 Datacenter e Continuidade | 25 | 1 | 8 | 16 | 20% |
+| **Total** | **232** | **86** | **84** | **62** | **55%** |
 
 ## 5.1 — Princípios Gerais de Controle de Acesso
 
-| Item do edital | Entrega |
-|---|---|
-| 5.1.1 | Implementação Parcial — [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.1.2 | Já atendido pelo GTW † |
-| 5.1.3 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.1.4 | Implementação Parcial — [02-sha256-integridade.md](02-sha256-integridade.md), [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.1.5.a | [09-cpf-matricula.md](09-cpf-matricula.md) |
-| 5.1.5.b | Já atendido pelo GTW |
-| 5.1.5.c | [03-politica-senhas.md](03-politica-senhas.md) |
-| 5.1.5.d | [03-politica-senhas.md](03-politica-senhas.md) |
-| 5.1.5.e | [04-mfa-totp.md](04-mfa-totp.md) |
-| 5.1.6 | Já atendido pelo GTW |
-| 5.1.7 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.1.8 | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) |
-| 5.1.9 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.1.10 | [01-log-auditoria.md](01-log-auditoria.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.1.1 | ⚠️ Parcial | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.1.2 | ✅ Já atendido pelo GTW † | — |
+| 5.1.3 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.1.4 | ⚠️ Parcial † | [02-sha256-integridade.md](02-sha256-integridade.md), [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.1.5.a | ✅ Implementado | [09-cpf-matricula.md](09-cpf-matricula.md) |
+| 5.1.5.b | ✅ Já atendido pelo GTW | — |
+| 5.1.5.c | ✅ Implementado | [03-politica-senhas.md](03-politica-senhas.md) |
+| 5.1.5.d | ✅ Implementado | [03-politica-senhas.md](03-politica-senhas.md) |
+| 5.1.5.e | ✅ Implementado | [04-mfa-totp.md](04-mfa-totp.md) |
+| 5.1.6 | ✅ Já atendido pelo GTW | — |
+| 5.1.7 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.1.8 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) |
+| 5.1.9 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.1.10 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) — Tela `auditoria/consulta-log.jsp` exporta CSV e XLS; não há filtro por perfil nem por equipamento, nem exportação PDF |
 
 ## 5.2 — Funcionalidade de Gestão e Classificação de Infrações
 
-| Item do edital | Entrega |
-|---|---|
-| 5.2.1.1 | Já atendido pelo GTW |
-| 5.2.1.2 | [02-sha256-integridade.md](02-sha256-integridade.md) |
-| 5.2.1.3 | Implementação Parcial |
-| 5.2.1.4 | Já atendido pelo GTW |
-| 5.2.1.5 | Implementação Parcial |
-| 5.2.1.6 | Implementação Parcial — [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
-| 5.2.2.1 | Implementação Parcial |
-| 5.2.2.2 | Já atendido pelo GTW † |
-| 5.2.2.3 | [08-painel-assertividade.md](08-painel-assertividade.md) |
-| 5.2.2.4 | Já atendido pelo GTW |
-| 5.2.2.5 | Implementação Parcial |
-| 5.2.2.6 | [08-painel-assertividade.md](08-painel-assertividade.md) |
-| 5.2.3.1 | [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.2.3.2 | [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.2.3.3 | [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.2.3.4 | [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.2.3.5 | [05-dupla-analise.md](05-dupla-analise.md) |
-| 5.2.4.1 | [17-timelapse.md](17-timelapse.md) |
-| 5.2.4.2 | [17-timelapse.md](17-timelapse.md) |
-| 5.2.4.3 | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
-| 5.2.4.4 | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
-| 5.2.4.5 | Já atendido pelo GTW |
-| 5.2.5.1 | [14-gestao-lotes.md](14-gestao-lotes.md) |
-| 5.2.5.2 | Já atendido pelo GTW |
-| 5.2.5.3 | [14-gestao-lotes.md](14-gestao-lotes.md) |
-| 5.2.5.4 | [14-gestao-lotes.md](14-gestao-lotes.md) |
-| 5.2.5.5 | [14-gestao-lotes.md](14-gestao-lotes.md) |
-| 5.2.5.6 | [12-retencao-dados.md](12-retencao-dados.md) † |
-| 5.2.6.1 | Implementação Parcial † |
-| 5.2.6.2 | Implementação Parcial |
-| 5.2.6.3 | Não implementado † |
-| 5.2.6.4 | Não implementado † ‡ |
-| 5.2.7.1 | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
-| 5.2.7.2 | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
-| 5.2.7.3 | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
-| 5.2.8.1 | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.2.8.2 | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.2.8.3 | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
-| 5.2.8.4 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.2.1.1 | ✅ Já atendido pelo GTW | — |
+| 5.2.1.2 | ⚠️ Parcial | [02-sha256-integridade.md](02-sha256-integridade.md) — `JobSha256Imagem` calcula o hash depois que a imagem já foi gravada e grava `status_integridade = 'OK'` sem comparar com hash de origem; não há verificação na recepção |
+| 5.2.1.3 | ⚠️ Parcial | — |
+| 5.2.1.4 | ✅ Já atendido pelo GTW | — |
+| 5.2.1.5 | ⚠️ Parcial | — |
+| 5.2.1.6 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
+| 5.2.2.1 | ⚠️ Parcial | — |
+| 5.2.2.2 | ✅ Já atendido pelo GTW † | — |
+| 5.2.2.3 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md) |
+| 5.2.2.4 | ✅ Já atendido pelo GTW | — |
+| 5.2.2.5 | ⚠️ Parcial | — |
+| 5.2.2.6 | ⚠️ Parcial | [08-painel-assertividade.md](08-painel-assertividade.md) — Painel de assertividade sem atualização automática, sem volume processado, divergências e encaminhados para revisão, e sem alerta abaixo de 80% |
+| 5.2.3.1 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.2.3.2 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.2.3.3 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.2.3.4 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.2.3.5 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.2.4.1 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) — Tela de dupla análise e tela legada `proc_infracao.jsp` |
+| 5.2.4.2 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) — Zoom, brilho e contraste na tela legada `proc_infracao.jsp`; brilho e contraste em `dupla-analise.js`, sem alterar o original |
+| 5.2.4.3 | ✅ Implementado | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
+| 5.2.4.4 | ✅ Implementado | [06-obliteracao-imagens.md](06-obliteracao-imagens.md) |
+| 5.2.4.5 | ✅ Já atendido pelo GTW | — |
+| 5.2.5.1 | ✅ Implementado | [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 5.2.5.2 | ✅ Já atendido pelo GTW | — |
+| 5.2.5.3 | ✅ Implementado | [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 5.2.5.4 | ✅ Implementado | [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 5.2.5.5 | ✅ Implementado | [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 5.2.5.6 | ✅ Implementado † | [12-retencao-dados.md](12-retencao-dados.md) |
+| 5.2.6.1 | ⚠️ Parcial † | — |
+| 5.2.6.2 | ⚠️ Parcial | — |
+| 5.2.6.3 | ❌ Não implementado † | — |
+| 5.2.6.4 | ❌ Não implementado † ‡ | — |
+| 5.2.7.1 | ✅ Implementado | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.2.7.2 | ✅ Implementado | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.2.7.3 | ✅ Implementado | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.2.8.1 | ✅ Implementado | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.2.8.2 | ✅ Implementado | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.2.8.3 | ✅ Implementado | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
+| 5.2.8.4 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [21-dashboard-builder.md](21-dashboard-builder.md) — Atualização automática fixa; "tempo real" sem definição (intervalo e modo push ainda não configuráveis por painel) |
 
 ## 5.3 — Funcionalidade de Alertas de Irregularidades
 
-| Item do edital | Entrega |
-|---|---|
-| 5.3.1.1 | Já atendido pelo GTW |
-| 5.3.1.2 | Já atendido pelo GTW |
-| 5.3.1.3 | Implementação Parcial |
-| 5.3.1.4 | Já atendido pelo GTW |
-| 5.3.2.1 | Já atendido pelo GTW |
-| 5.3.2.2 | Já atendido pelo GTW |
-| 5.3.3.1 | Já atendido pelo GTW |
-| 5.3.3.2 | Já atendido pelo GTW |
-| 5.3.3.3 | Implementação Parcial † |
-| 5.3.3.4 | Já atendido pelo GTW |
-| 5.3.4.1 | Implementação Parcial † |
-| 5.3.4.2 | Implementação Parcial † |
-| 5.3.4.3 | Implementação Parcial † |
-| 5.3.5.1 | Implementação Parcial † |
-| 5.3.5.2 | Não implementado † ‡ |
-| 5.3.5.3 | Não implementado |
-| 5.3.6.1 | Já atendido pelo GTW † |
-| 5.3.6.2 | Já atendido pelo GTW † |
-| 5.3.6.3 | Implementação Parcial — [01-log-auditoria.md](01-log-auditoria.md) † |
-| 5.3.6.4 | [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
-| 5.3.7.1 | [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.2 | [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.3 | [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.4 | Não implementado |
-| 5.3.7.5 | Implementação Parcial — [07-sla-latencia.md](07-sla-latencia.md) |
-| 5.3.7.6 | Implementação Parcial † |
-| 5.3.7.7 | [16-exportacao-gis.md](16-exportacao-gis.md), [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.8 | Já atendido pelo GTW † |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.3.1.1 | ✅ Já atendido pelo GTW | — |
+| 5.3.1.2 | ✅ Já atendido pelo GTW | — |
+| 5.3.1.3 | ⚠️ Parcial | — |
+| 5.3.1.4 | ✅ Já atendido pelo GTW | — |
+| 5.3.2.1 | ⚠️ Parcial | `muralha.tipo_alerta_ocorrencia` só tem tipos veiculares; faltam estacionamento irregular, congestionamento/retenção, bloqueio de via e falha de equipamento |
+| 5.3.2.2 | ✅ Já atendido pelo GTW | — |
+| 5.3.3.1 | ✅ Já atendido pelo GTW | — |
+| 5.3.3.2 | ✅ Já atendido pelo GTW | — |
+| 5.3.3.3 | ⚠️ Parcial † | — |
+| 5.3.3.4 | ⚠️ Parcial | Destaque existe, mas cor e ícone estão fixos em `notificacao.js`; não são configuráveis pela CONTRATANTE |
+| 5.3.4.1 | ⚠️ Parcial † | — |
+| 5.3.4.2 | ⚠️ Parcial † | — |
+| 5.3.4.3 | ⚠️ Parcial † | — |
+| 5.3.5.1 | ⚠️ Parcial † | — |
+| 5.3.5.2 | ❌ Não implementado † ‡ | — |
+| 5.3.5.3 | ❌ Não implementado | — |
+| 5.3.6.1 | ✅ Já atendido pelo GTW † | — |
+| 5.3.6.2 | ⚠️ Parcial † | `consulta-alerta-ocorrencia` filtra por período, equipamento, tipo, status e placa; faltam localidade, usuário responsável e resultado do tratamento |
+| 5.3.6.3 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.3.6.4 | ⚠️ Parcial | Consulta de alertas exporta PDF e XLS por `utils/export-table.js`, sem CSV; a Entrega 11 não cobre alertas |
+| 5.3.7.1 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
+| 5.3.7.2 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
+| 5.3.7.3 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
+| 5.3.7.4 | ⚠️ Parcial | Alíneas a–c atendidas pelo legado (`OcupacaoTempo`, `RelatorioTaxaOcupacaoVia`, `FluxoTempo`); d (retenções) e e (alertas parametrizáveis) não implementadas |
+| 5.3.7.5 | ⚠️ Parcial | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md), [09-cpf-matricula.md](09-cpf-matricula.md) — Navegador, autenticação individualizada e perfis atendidos; criptografia (HTTPS) depende da configuração do deploy |
+| 5.3.7.6 | ⚠️ Parcial † | — |
+| 5.3.7.7 | ✅ Implementado | [16-exportacao-gis.md](16-exportacao-gis.md), [19-sensores-externos.md](19-sensores-externos.md) |
+| 5.3.7.8 | ⚠️ Parcial † | Priorização por `prioridade` do tipo; destaque visual fixo, não parametrizável |
 
 ## 5.4 — Funcionalidade de Inteligência de Dados e Apoio à Decisão Operacional
 
-| Item do edital | Entrega |
-|---|---|
-| 5.4.1.1 | Implementação Parcial |
-| 5.4.1.2 | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
-| 5.4.1.3 | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
-| 5.4.1.4 | Implementação Parcial † |
-| 5.4.2.1 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.2.2 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.2.3 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [18-disponibilidade.md](18-disponibilidade.md) † |
-| 5.4.2.4 | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
-| 5.4.2.5 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
-| 5.4.2.6 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.3.1 | Implementação Parcial — [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [21-dashboard-builder.md](21-dashboard-builder.md) † |
-| 5.4.3.2 | Implementação Parcial † |
-| 5.4.3.3 | Implementação Parcial — [15-kpis-configuraveis.md](15-kpis-configuraveis.md) † |
-| 5.4.3.4 | Implementação Parcial † |
-| 5.4.3.5 | Implementação Parcial — [15-kpis-configuraveis.md](15-kpis-configuraveis.md) † |
-| 5.4.3.6 | Implementação Parcial — [15-kpis-configuraveis.md](15-kpis-configuraveis.md) † |
-| 5.4.3.7 | Não implementado † |
-| 5.4.4.1 | Já atendido pelo GTW |
-| 5.4.4.2 | Já atendido pelo GTW |
-| 5.4.4.3 | Já atendido pelo GTW |
-| 5.4.4.4 | [16-exportacao-gis.md](16-exportacao-gis.md) |
-| 5.4.5.1 | [21-dashboard-builder.md](21-dashboard-builder.md) † |
-| 5.4.5.2 | [21-dashboard-builder.md](21-dashboard-builder.md) † |
-| 5.4.6.1 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.6.2 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.6.3 | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.7.1 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.2 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.3 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.4 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.5 | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.6 | Implementação Parcial — [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.4.7.7 | [01-log-auditoria.md](01-log-auditoria.md) |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.4.1.1 | ⚠️ Parcial | — |
+| 5.4.1.2 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.4.1.3 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.4.1.4 | ⚠️ Parcial † | — |
+| 5.4.2.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.2.2 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.2.3 | ✅ Implementado † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.4.2.4 | ⚠️ Parcial | [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [21-dashboard-builder.md](21-dashboard-builder.md) — Filtros e atualização simultânea no Dashboard Builder; exportação PNG e filtros por faixa horária/classificação veicular não verificados |
+| 5.4.2.5 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
+| 5.4.2.6 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.3.1 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
+| 5.4.3.2 | ⚠️ Parcial † | — |
+| 5.4.3.3 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.3.4 | ⚠️ Parcial † | — |
+| 5.4.3.5 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.3.6 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.3.7 | ❌ Não implementado † | — |
+| 5.4.4.1 | ✅ Já atendido pelo GTW | — |
+| 5.4.4.2 | ✅ Já atendido pelo GTW | — |
+| 5.4.4.3 | ✅ Já atendido pelo GTW | — |
+| 5.4.4.4 | ⚠️ Parcial | [16-exportacao-gis.md](16-exportacao-gis.md) — GeoJSON e KML apenas da camada de equipamentos; alertas, infrações e áreas não são exportados |
+| 5.4.5.1 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) — Relatórios legados e widgets TABLE do Dashboard Builder; cobertura das alíneas a–i não verificada |
+| 5.4.5.2 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) — Cobertura das alíneas não verificada |
+| 5.4.6.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
+| 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — 4 KPIs iniciais em `kpi_config`; o conjunto mínimo do item não está cadastrado |
+| 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — `kpi_config` só tem dois limiares (atenção e crítico); sem meta, histórico nem alerta automático |
+| 5.4.7.1 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — `sis_log_auditoria` é log de ações de **usuários**; os logs técnicos estão em `dbo.eventos_csx`, `dbo.status_conexao`, `dbo.status_energia` e `dbo.manutencao` (legado, consultados só pela tela GWT) |
+| 5.4.7.2 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — `sis_log_auditoria` é log de ações de **usuários**; os logs técnicos estão em `dbo.eventos_csx`, `dbo.status_conexao`, `dbo.status_energia` e `dbo.manutencao` (legado, consultados só pela tela GWT) |
+| 5.4.7.3 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Consulta só dos logs de usuários; os logs técnicos não têm tela Muralha |
+| 5.4.7.4 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Campos presentes em `sis_log_auditoria`; logs técnicos legados sem padronização |
+| 5.4.7.5 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Filtros e exportação só para logs de usuários; sem correlação temporal nem relatório técnico por equipamento |
+| 5.4.7.6 | ❌ Não implementado | Não há histórico de valor anterior/novo dos parâmetros; `RelatorioAlteracaoConfigEquip.doGet` está vazio |
+| 5.4.7.7 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) — Retenção configurável cobre `sis_log_auditoria`; logs técnicos legados sem política própria |
 
 ## 5.5 — Serviço de Pré-Processamento de Imagens
 
-| Item do edital | Entrega |
-|---|---|
-| 5.5.1.1 | Não implementado † ‡ |
-| 5.5.1.2 | Implementação Parcial — [02-sha256-integridade.md](02-sha256-integridade.md), [05-dupla-analise.md](05-dupla-analise.md) † |
-| 5.5.1.3 | Implementação Parcial |
-| 5.5.1.4 | Implementação Parcial — [05-dupla-analise.md](05-dupla-analise.md), [14-gestao-lotes.md](14-gestao-lotes.md) † |
-| 5.5.2.1 | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
-| 5.5.2.2 | Não implementado † ‡ |
-| 5.5.2.3 | Não implementado † ‡ |
-| 5.5.2.4 | Não implementado † ‡ |
-| 5.5.2.5 | Não implementado † ‡ |
-| 5.5.3.1 | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
-| 5.5.3.2 | Implementação Parcial — [10-sla-preprocessamento.md](10-sla-preprocessamento.md) † |
-| 5.5.3.3 | Não implementado |
-| 5.5.3.4 | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) † |
-| 5.5.3.5 | Implementação Parcial — [21-dashboard-builder.md](21-dashboard-builder.md) † |
-| 5.5.4.1 | Não implementado † ‡ |
-| 5.5.4.2 | Já atendido pelo GTW |
-| 5.5.4.3 | [17-timelapse.md](17-timelapse.md) † |
-| 5.5.4.4 | Implementação Parcial — [01-log-auditoria.md](01-log-auditoria.md) † |
-| 5.5.4.5 | Implementação Parcial — [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.5.4.6 | [12-retencao-dados.md](12-retencao-dados.md) |
-| 5.5.4.7 | Implementação Parcial — [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.5.4.8 | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md), [09-cpf-matricula.md](09-cpf-matricula.md) † |
-| 5.5.4.9 | [01-log-auditoria.md](01-log-auditoria.md), [14-gestao-lotes.md](14-gestao-lotes.md) † |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.5.1.1 | ❌ Não implementado † ‡ | — |
+| 5.5.1.2 | ⚠️ Parcial † | [02-sha256-integridade.md](02-sha256-integridade.md), [05-dupla-analise.md](05-dupla-analise.md) |
+| 5.5.1.3 | ⚠️ Parcial | — |
+| 5.5.1.4 | ⚠️ Parcial † | [05-dupla-analise.md](05-dupla-analise.md), [14-gestao-lotes.md](14-gestao-lotes.md) |
+| 5.5.2.1 | ✅ Implementado | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
+| 5.5.2.2 | ❌ Não implementado † ‡ | — |
+| 5.5.2.3 | ❌ Não implementado † ‡ | — |
+| 5.5.2.4 | ❌ Não implementado † ‡ | — |
+| 5.5.2.5 | ❌ Não implementado † ‡ | — |
+| 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md) — Painel de SLA de 72 h cobre parte das alíneas a–n |
+| 5.5.3.2 | ⚠️ Parcial † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
+| 5.5.3.3 | ❌ Não implementado | — |
+| 5.5.3.4 | ✅ Implementado † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
+| 5.5.3.5 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) |
+| 5.5.4.1 | ❌ Não implementado † ‡ | — |
+| 5.5.4.2 | ✅ Já atendido pelo GTW | — |
+| 5.5.4.3 | ⚠️ Parcial † | [05-dupla-analise.md](05-dupla-analise.md) — Brilho e contraste em `dupla-analise.js` e no legado; não existe inversão de cores |
+| 5.5.4.4 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.5.4.5 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) |
+| 5.5.4.6 | ✅ Implementado | [12-retencao-dados.md](12-retencao-dados.md) |
+| 5.5.4.7 | ⚠️ Parcial † | [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.5.4.8 | ✅ Implementado † | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md), [09-cpf-matricula.md](09-cpf-matricula.md) |
+| 5.5.4.9 | ✅ Implementado † | [01-log-auditoria.md](01-log-auditoria.md), [14-gestao-lotes.md](14-gestao-lotes.md) |
 
 ## 5.6 — Infraestrutura Sistêmica de Comunicação, Processamento e Transmissão de Dados
 
-| Item do edital | Entrega |
-|---|---|
-| 5.6.1.1 | Já atendido pelo GTW |
-| 5.6.1.2 | Não implementado |
-| 5.6.2.1 | Já atendido pelo GTW |
-| 5.6.2.2 | Já atendido pelo GTW † |
-| 5.6.2.3 | Implementação Parcial — [07-sla-latencia.md](07-sla-latencia.md) |
-| 5.6.3 | Não implementado |
-| 5.6.4.1 | Não implementado † ‡ |
-| 5.6.4.2 | Não implementado † ‡ |
-| 5.6.4.3 | Não implementado |
-| 5.6.5 | Não implementado † ‡ |
-| 5.6.6.1 | Implementação Parcial |
-| 5.6.7 | Já atendido pelo GTW |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.6.1.1 | ✅ Já atendido pelo GTW | — |
+| 5.6.1.2 | ❌ Não implementado | — |
+| 5.6.1.3 | ❌ Não implementado † ‡ | Dimensionamento dos enlaces é obrigação de infraestrutura |
+| 5.6.1.4 | ⚠️ Parcial † | SOAP/HTTP disponível; HTTPS depende da configuração do deploy |
+| 5.6.1.5 | ✅ Implementado † | [18-disponibilidade.md](18-disponibilidade.md) — `fcn_getAlertaLocaisOffLine`, `fcn_getAlertaLocaisConexaoInstavel` e painel de disponibilidade |
+| 5.6.2.1 | ✅ Já atendido pelo GTW | — |
+| 5.6.2.2 | ✅ Já atendido pelo GTW † | — |
+| 5.6.2.3 | ⚠️ Parcial | [07-sla-latencia.md](07-sla-latencia.md) |
+| 5.6.2.4 | ⚠️ Parcial † | Passagens chegam continuamente em `veiculo_tempo_real`; periodicidade não é parametrizável no sistema |
+| 5.6.2.5 | ✅ Já atendido pelo GTW † | `veiculo_tempo_real` recebe todas as passagens, com ou sem infração |
+| 5.6.3.1 | ❌ Não implementado † | Sem criptografia explícita nas transmissões (depende de TLS no deploy) |
+| 5.6.3.2 | ❌ Não implementado † | — |
+| 5.6.3.3 | ❌ Não implementado † | — |
+| 5.6.3.4 | ❌ Não implementado † ‡ | — |
+| 5.6.4.1 | ❌ Não implementado † ‡ | — |
+| 5.6.4.2 | ❌ Não implementado † ‡ | — |
+| 5.6.4.3 | ❌ Não implementado | — |
+| 5.6.4.4 | ❌ Não implementado † ‡ | Retransmissão é responsabilidade do Captura, fora deste repositório |
+| 5.6.4.5 | ❌ Não implementado † ‡ | — |
+| 5.6.5.1 | ❌ Não implementado † ‡ | Alimentação alternativa é requisito do equipamento |
+| 5.6.5.2 | ❌ Não implementado † ‡ | — |
+| 5.6.5.3 | ❌ Não implementado † ‡ | — |
+| 5.6.5.4 | ✅ Já atendido pelo GTW † | Falta e retorno de energia registrados em `dbo.status_energia` (legado) |
+| 5.6.6.1 | ⚠️ Parcial | — |
+| 5.6.6.2 | ❌ Não implementado † | Sem mecanismo de sincronismo documentado no sistema |
+| 5.6.6.3 | ❌ Não implementado † | — |
+| 5.6.6.4 | ❌ Não implementado † | — |
+| 5.6.7.1 | ✅ Já atendido pelo GTW † | `ConfigEquipWS`, tabelas `configuracao_equipamento*` |
+| 5.6.7.2 | ⚠️ Parcial † | Autenticação e perfis atendidos; rastreabilidade das alterações incompleta (ver 5.4.7.6) |
+| 5.6.7.3 | ❌ Não implementado † | Sem registro de valor anterior/novo por parâmetro |
+| 5.6.7.4 | ⚠️ Parcial † | Envio de listas e parâmetros por `ConfigEquipWS`; rastreabilidade incompleta |
+| 5.6.7.5 | ✅ Já atendido pelo GTW † | Parâmetros dos equipamentos alterados por `ConfigEquipWS`, sem mudança de código |
 
 ## 5.7 — Tecnologia de Leitura Automática de Placas Veiculares — LAP
 
-| Item do edital | Entrega |
-|---|---|
-| 5.7.1.1 | Já atendido pelo GTW |
-| 5.7.1.2 | Já atendido pelo GTW † |
-| 5.7.1.3 | Implementação Parcial † |
-| 5.7.1.4 | Não implementado † |
-| 5.7.2.1 | Implementação Parcial |
-| 5.7.2.2 | Não implementado † |
-| 5.7.2.3 | Não implementado † |
-| 5.7.2.4 | Não implementado † |
-| 5.7.2.5 | Não implementado † ‡ |
-| 5.7.3.1 | Não implementado † ‡ |
-| 5.7.3.2 | Não implementado † ‡ |
-| 5.7.3.3 | Já atendido pelo GTW † |
-| 5.7.4.1 | Implementação Parcial |
-| 5.7.4.2 | Implementação Parcial |
-| 5.7.4.3 | Implementação Parcial |
-| 5.7.4.4 | Já atendido pelo GTW |
-| 5.7.5.1 | Já atendido pelo GTW |
-| 5.7.5.2 | Implementação Parcial |
-| 5.7.5.3 | [12-retencao-dados.md](12-retencao-dados.md) |
-| 5.7.5.4 | Implementação Parcial † |
-| 5.7.6.1 | Já atendido pelo GTW † |
-| 5.7.6.2 | Implementação Parcial † |
-| 5.7.7.1 | [17-timelapse.md](17-timelapse.md) † |
-| 5.7.8.1 | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.7.8.2 | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.7.8.3 | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.7.9.1 | Implementação Parcial — [07-sla-latencia.md](07-sla-latencia.md) |
-| 5.7.9.2 | [07-sla-latencia.md](07-sla-latencia.md) † |
-| 5.7.9.3 | [07-sla-latencia.md](07-sla-latencia.md) † |
-| 5.7.10.1 | Não implementado † ‡ |
-| 5.7.10.2 | Não implementado † ‡ |
-| 5.7.10.3 | Não implementado † ‡ |
-| 5.7.10.4 | Não implementado † ‡ |
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.7.1.1 | ✅ Já atendido pelo GTW | — |
+| 5.7.1.2 | ✅ Já atendido pelo GTW † | — |
+| 5.7.1.3 | ⚠️ Parcial † | — |
+| 5.7.1.4 | ❌ Não implementado † | — |
+| 5.7.2.1 | ⚠️ Parcial | — |
+| 5.7.2.2 | ❌ Não implementado † | — |
+| 5.7.2.3 | ❌ Não implementado † | — |
+| 5.7.2.4 | ❌ Não implementado † | — |
+| 5.7.2.5 | ❌ Não implementado † ‡ | — |
+| 5.7.3.1 | ❌ Não implementado † ‡ | — |
+| 5.7.3.2 | ❌ Não implementado † ‡ | — |
+| 5.7.3.3 | ✅ Já atendido pelo GTW † | — |
+| 5.7.4.1 | ⚠️ Parcial | `ia.veiculo_caracteristica` não tem coluna de score; se o score chega, é só dentro de `dado_bruto` (a confirmar) |
+| 5.7.4.2 | ❌ Não implementado | Não há limiar de score parametrizável |
+| 5.7.4.3 | ⚠️ Parcial | `CorrecaoPlaca` trata divergências manualmente; não há encaminhamento por score |
+| 5.7.4.4 | ❌ Não implementado | Score não é armazenado como coluna nem metadado consultável |
+| 5.7.5.1 | ✅ Já atendido pelo GTW | — |
+| 5.7.5.2 | ⚠️ Parcial | — |
+| 5.7.5.3 | ✅ Implementado | [12-retencao-dados.md](12-retencao-dados.md) |
+| 5.7.5.4 | ⚠️ Parcial † | — |
+| 5.7.6.1 | ✅ Já atendido pelo GTW † | — |
+| 5.7.6.2 | ⚠️ Parcial † | — |
+| 5.7.7.1 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Player de imagens no navegador (`TimelapseServlet`); não gera arquivo de vídeo |
+| 5.7.7.2 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Sequência cronológica de imagens por equipamento, exibida no navegador; sem vídeo |
+| 5.7.7.3 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Finalidade atendida pelo player; sem vídeo gerado |
+| 5.7.7.4 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Reconstrução visual e validação temporal no player; sem vídeo nem vínculo com alertas |
+| 5.7.7.5 | ❌ Não implementado † | Sem descarte automático de vídeos |
+| 5.7.7.6 | ❌ Não implementado † | Sem parametrização do descarte |
+| 5.7.8.1 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.7.8.2 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.7.8.3 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.7.9.1 | ⚠️ Parcial | [07-sla-latencia.md](07-sla-latencia.md) |
+| 5.7.9.2 | ✅ Implementado † | [07-sla-latencia.md](07-sla-latencia.md) |
+| 5.7.9.3 | ✅ Implementado † | [07-sla-latencia.md](07-sla-latencia.md) |
+| 5.7.10.1 | ❌ Não implementado † ‡ | — |
+| 5.7.10.2 | ❌ Não implementado † ‡ | — |
+| 5.7.10.3 | ❌ Não implementado † ‡ | — |
+| 5.7.10.4 | ❌ Não implementado † ‡ | — |
 
 ## 5.8 — Infraestrutura de Datacenter, Disponibilidade e Continuidade Operacional
 
-| Item do edital | Entrega |
-|---|---|
-| 5.8.1.1 | Não implementado † ‡ |
-| 5.8.1.2 | Não implementado |
-| 5.8.1.3 | Não implementado † ‡ |
-| 5.8.1.4 | Não implementado † ‡ |
-| 5.8.1.5 | Não implementado † ‡ |
-| 5.8.2.1 | Implementação Parcial — [18-disponibilidade.md](18-disponibilidade.md) |
-| 5.8.2.2 | Não implementado † ‡ |
-| 5.8.2.3 | Implementação Parcial — [18-disponibilidade.md](18-disponibilidade.md) † |
-| 5.8.2.4 | Não implementado † ‡ |
-| 5.8.3.1 | Não implementado |
-| 5.8.3.2 | Não implementado † |
-| 5.8.3.3 | Não implementado |
-| 5.8.4.1 | Implementação Parcial — [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md) † |
-| 5.8.4.2 | Implementação Parcial — [04-mfa-totp.md](04-mfa-totp.md) † |
-| 5.8.4.3 | Implementação Parcial — [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) † |
-| 5.8.4.4 | Não implementado |
-| 5.8.5.1 | Não implementado |
-| 5.8.5.2 | Não implementado † |
-| 5.8.5.3 | Implementação Parcial — [12-retencao-dados.md](12-retencao-dados.md) † |
-| 5.8.5.4 | Não implementado |
-| 5.8.5.5 | Não implementado † ‡ |
-| 5.8.5.6 | Não implementado † |
-| 5.8.6.1 | Implementação Parcial — [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
-| 5.8.6.2 | [01-log-auditoria.md](01-log-auditoria.md), [18-disponibilidade.md](18-disponibilidade.md), [21-dashboard-builder.md](21-dashboard-builder.md) † |
-| 5.8.6.3 | Implementação Parcial — [18-disponibilidade.md](18-disponibilidade.md) † |
-
+| Item do edital | Situação | Entrega / evidência |
+|---|---|---|
+| 5.8.1.1 | ❌ Não implementado † ‡ | — |
+| 5.8.1.2 | ❌ Não implementado | — |
+| 5.8.1.3 | ❌ Não implementado † ‡ | — |
+| 5.8.1.4 | ❌ Não implementado † ‡ | — |
+| 5.8.1.5 | ❌ Não implementado † ‡ | — |
+| 5.8.2.1 | ⚠️ Parcial | [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.8.2.2 | ❌ Não implementado † ‡ | — |
+| 5.8.2.3 | ⚠️ Parcial † | [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.8.2.4 | ❌ Não implementado † ‡ | — |
+| 5.8.3.1 | ❌ Não implementado | — |
+| 5.8.3.2 | ❌ Não implementado † | — |
+| 5.8.3.3 | ❌ Não implementado | — |
+| 5.8.4.1 | ⚠️ Parcial † | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md) |
+| 5.8.4.2 | ⚠️ Parcial † | [04-mfa-totp.md](04-mfa-totp.md) |
+| 5.8.4.3 | ⚠️ Parcial † | [06-obliteracao-imagens.md](06-obliteracao-imagens.md), [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
+| 5.8.4.4 | ❌ Não implementado | — |
+| 5.8.5.1 | ❌ Não implementado | — |
+| 5.8.5.2 | ❌ Não implementado † | — |
+| 5.8.5.3 | ⚠️ Parcial † | [12-retencao-dados.md](12-retencao-dados.md) |
+| 5.8.5.4 | ❌ Não implementado | — |
+| 5.8.5.5 | ❌ Não implementado † ‡ | — |
+| 5.8.5.6 | ❌ Não implementado † | — |
+| 5.8.6.1 | ⚠️ Parcial | [07-sla-latencia.md](07-sla-latencia.md), [18-disponibilidade.md](18-disponibilidade.md) |
+| 5.8.6.2 | ✅ Implementado † | [01-log-auditoria.md](01-log-auditoria.md), [18-disponibilidade.md](18-disponibilidade.md), [21-dashboard-builder.md](21-dashboard-builder.md) |
+| 5.8.6.3 | ⚠️ Parcial † | [18-disponibilidade.md](18-disponibilidade.md) |
 ## Capítulo 7 — Central de Suporte Técnico (aba Sist. Chamado)
 
-Itens da aba "Sist. Chamado" de [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx); o Capítulo 7 do TR não está no repositório. A entrega 22 está implementada, aguardando a execução da migração e os testes integrados.
+Itens da aba "Sist. Chamado" de [`Atividades Edital Salvador 2026.xlsx`](../../docs-editais/edital-salvador/Atividades%20Edital%20Salvador%202026.xlsx); o Capítulo 7 do TR não está no repositório. A entrega 22 está implementada; as migrações foram executadas no `GTW_MURALHA_DEV` e o teste integrado de 2026-10-15 passou em 10 de 10 casos. Faltam os testes no navegador e com o perfil Gestor (ver a entrega).
 
 | Item do edital | Entrega |
 |---|---|

@@ -1,5 +1,7 @@
 # Exportação Padronizada (PDF/CSV/XLS) — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Implementar exportação padronizada de infrações em PDF (relatório formatado), CSV (dados brutos) e XLS (planilha) a partir do painel de gestão de infrações, com cabeçalho institucional e rodapé de integridade.

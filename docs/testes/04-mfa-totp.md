@@ -8,7 +8,7 @@
 
 ## Pré-requisito
 
-Execute as migrações dos Planos 03 e 04:
+As migrações já foram executadas no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md)). Em outro ambiente, execute:
 ```powershell
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_politica_senhas.sql"
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_mfa_totp.sql"
@@ -23,7 +23,7 @@ SELECT TOP 1 totp_secret, totp_habilitado FROM dbo.sis_usuario;
 -- Esperado: sem erro, totp_secret=NULL, totp_habilitado=0
 ```
 
-**Resultado:** pendente execução da migração
+**Resultado:** ⏳ pendente — migração já executada no DEV; teste ainda não executado
 
 ---
 

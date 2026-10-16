@@ -1,8 +1,10 @@
 # Gaps Amarelos Pendentes — Itens de Desenvolvimento
 
-**Data:** 2026-10-09  
+**Data:** 2026-10-09 · **Revisão:** 2026-10-16 (citações do TR conferidas com o texto literal de [`TR-Salvador-Sistema.md`](../../docs-editais/edital-salvador/TR-Salvador-Sistema.md) — [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md))  
 **Status:** 🟡 Parcialmente atendido — pendente de definição  
-**Fonte:** [`aderencia-comparativa.md`](aderencia-comparativa.md) · [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+**Fonte de status:** matriz canônica [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md) · [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)
+
+> As perguntas abaixo serão respondidas no fim da correção da auditoria, depois das fases de código (decisão de 2026-10-16).
 
 ---
 
@@ -48,7 +50,7 @@
 
 ### 3. §5.2.1.3 — Registro de recepção
 
-> *"O sistema deverá registrar automaticamente: a) identificação do equipamento de origem; b) data e horário da captura; c) data e horário da recepção; d) quantidade de registros por lote."*
+> *"5.2.1.3. O sistema deverá registrar automaticamente: a) identificação do equipamento de origem; b) data e horário da captura; c) data e horário da recepção; d) quantidade de registros recebidos; e) quantidade de registros íntegros; f) quantidade de registros rejeitados e respectivos motivos."*
 
 **Estado atual:** Dados parcialmente em `infracao`, `infracao_processo`, `eventos_csx`. Nem todos os campos exigidos estão explicitamente registrados (ex: data/hora de recepção distinta da captura).
 
@@ -140,7 +142,7 @@
 
 ### 8. §5.3.1.3 — Parametrização de alertas
 
-> *"O sistema deverá permitir parametrização individualizada dos tratamentos aplicáveis a cada categoria de alerta, incluindo: a) encaminhamento para fiscalização em campo; b) encaminhamento para análise operacional; c) geração automática de notificação; d) registro em base de dados."*
+> *"5.3.1.3. O sistema deverá permitir parametrização individualizada dos tratamentos aplicáveis a cada categoria de alerta, incluindo: a) encaminhamento para fiscalização em campo; b) encaminhamento para análise operacional; c) registro estatístico; d) integração com sistemas corporativos; e) geração de ocorrência operacional; f) priorização para auditoria; g) demais tratamentos definidos pela CONTRATANTE."*
 
 **Estado atual:** `config_grupo_permissao` e `ConfiguracaoSons` permitem configuração parcial. Não há tela para parametrizar o tratamento por categoria de alerta.
 
@@ -156,9 +158,9 @@
 
 ---
 
-### 9. §5.3.4 — Mapa interativo com clustering
+### 9. §5.3.4.2 — Mapa interativo com agrupamento
 
-> *"Os alertas deverão ser apresentados em mapa digital interativo, permitindo: a) visualização por região; b) filtros espaciais; c) agrupamento por concentração geográfica."*
+> *"5.3.4.2. O sistema deverá permitir: a) visualização de alertas por região; b) filtros espaciais; c) agrupamento de ocorrências; d) identificação de concentração de eventos; e) definição de áreas de interesse operacional."*
 
 **Estado atual:** Mapa Leaflet funcional com `mapa-interativo/`, `mancha-monitorada/`, `ponto-interesse/`. Sem agrupamento por concentração (clustering).
 
@@ -192,17 +194,17 @@
 
 ---
 
-### 11. §5.3.7.5 / §5.6.2.3 / §5.7.9.1 — Resposta ≤4s (consolidado)
+### 11. Capítulo 5, caput (d) / §5.2.2.1 / §5.6.2.3 / §5.7.9.1 — Resposta ≤4s (consolidado)
 
-> *"Tempo máximo de resposta de 4 segundos para eventos críticos e operações de Blitz Eletrônica."*
+> *"d) capacidade de resposta operacional em até 4 (quatro) segundos para eventos críticos e operações de Blitz Eletrônica."* (caput do Capítulo 5)
 >
-> *Aparece em três seções: §5.3.7.5 (alertas), §5.6.2.3 (transmissão) e §5.7.9.1 (LAP).*
+> *O prazo de 4 segundos aparece no caput do Capítulo 5 (alínea d), em §5.2.2.1 (pré-classificação), §5.6.2.3 (recepção pela Sala de Operações) e §5.7.9.1 (LAP). A versão anterior deste documento citava §5.3.7.5 por engano; esse item trata do acesso à plataforma via navegador.*
 
-**Estado atual:** Thread de 2s para alertas já existe. SLA de latência (Plano 07) monitora o tempo. Os três itens compartilham o mesmo requisito de 4s.
+**Estado atual:** Thread de 2s para alertas já existe. SLA de latência (Plano 07) monitora o tempo. Os quatro pontos do TR compartilham o mesmo requisito de 4s.
 
 **Perguntas:**
 
-**a)** O monitoramento de SLA de latência (Plano 07) já cobre o ciclo completo captura→alerta. Para resolver estes 3 itens, basta documentar que o SLA está sendo monitorado e que as métricas atendem, ou precisa de alguma garantia adicional (ex: circuit breaker, fallback)?
+**a)** O monitoramento de SLA de latência (Plano 07) já cobre o ciclo completo captura→alerta. Para resolver estes itens, basta documentar que o SLA está sendo monitorado e que as métricas atendem, ou precisa de alguma garantia adicional (ex: circuit breaker, fallback)?
 
 > **Resposta:**
 
@@ -216,7 +218,7 @@
 
 ### 12. §5.4.1.1 — Consolidação multifonte
 
-> *"A funcionalidade deverá consolidar automaticamente dados provenientes de: a) Equipamentos de Fiscalização; b) Gestão e Classificação; c) Alertas; d) fontes externas (Waze, sensores)."*
+> *"5.4.1.1. A funcionalidade deverá consolidar automaticamente dados provenientes, no mínimo: a) dos Equipamentos de Fiscalização Eletrônica dos Tipos A, B, C e D; b) da Funcionalidade de Gestão e Classificação de Infrações; c) da Funcionalidade de Alertas de Irregularidades; d) dos sistemas corporativos integrados autorizados pela CONTRATANTE; e) do sistema de estacionamento rotativo digital, quando integrado; f) de bases externas autorizadas pela CONTRATANTE, quando compatíveis."*
 
 **Estado atual:** Dados em tabelas separadas (`veiculo_tempo_real` 8,2M registros, `muralha.alerta`, `muralha.incidente_externo`). Sem pipeline de consolidação unificada.
 
@@ -232,13 +234,13 @@
 
 ---
 
-### 13. §5.4.2.4a-b — Filtros dinâmicos com atualização simultânea ✅ *Endereçado pelo Plano 20*
+### 13. §5.4.2.4a-b — Filtros dinâmicos com atualização simultânea 🟡 *Parcialmente endereçado pelo Plano 20*
 
 > *"Os dashboards deverão suportar: a) filtros dinâmicos por período, equipamento, localidade, faixa horária, tipo de infração e classificação veicular; b) atualização simultânea dos indicadores apresentados."*
 
 **Estado atual:** Filtros existem nos módulos PoC. A atualização simultânea (mudar um filtro e todos os gráficos/indicadores se atualizam) não é garantida em todos os dashboards.
 
-**Resolução planejada:** [Plano 20 — Dashboard Builder Self-Service](../../docs/planos-salvador/20-dashboard-builder.md). Cada widget terá filtros configuráveis por coluna do dataset, e o auto-refresh atualizará todos os widgets do painel simultaneamente.
+**Resolução planejada:** [Plano 20 — Dashboard Builder Self-Service](../../docs/planos-salvador/20-dashboard-builder.md). Cada widget terá filtros configuráveis por coluna do dataset, e o auto-refresh atualizará todos os widgets do painel simultaneamente. Situação em 2026-10-16: ⚠️ na matriz canônica (filtros por faixa horária e classificação veicular não verificados).
 
 **Perguntas (pendentes de definição de escopo):**
 
@@ -268,9 +270,9 @@
 
 ---
 
-### 15. §5.4.5 — Relatórios analíticos completos
+### 15. §5.4.5.1 — Relatórios analíticos completos
 
-> *"Relatórios analíticos e gerenciais: volume de tráfego, velocidade média, taxa de ocupação, índice de infrações, fluxo veicular por faixa horária, volume de alertas, distribuição geográfica, comparativos temporais, conformidade SLA."*
+> *"5.4.5.1. A funcionalidade deverá permitir geração de relatórios analíticos e gerenciais relacionados, no mínimo: a) ao volume de tráfego; b) à velocidade média operacional; c) à taxa de ocupação viária; d) ao comportamento infracional; e) ao desempenho dos equipamentos; f) aos indicadores de aproveitamento; g) às operações de fiscalização; h) à efetividade das ações operacionais; i) às funcionalidades integradas da solução."*
 
 **Estado atual:** ~35 relatórios existentes no módulo legado. Cobertura parcial dos indicadores exigidos.
 
@@ -326,7 +328,7 @@
 
 ### 18. §5.5.3.1 — Painel operacional de pré-processamento
 
-> *"Relatórios operacionais contemplando: volume recebido, pré-processado, validado, descartado, conformidade SLA, taxas de acerto, tempos, motivos de descarte, histórico de classificação."*
+> *"5.5.3.1. A CONTRATADA deverá disponibilizar relatórios operacionais e gerenciais relativos ao serviço de pré-processamento, contemplando, no mínimo: a) volume de registros recebidos; b) volume de registros pré-processados; c) volume de registros disponibilizados para validação; d) volume de registros descartados; e) índice de aproveitamento dos registros; f) tempo médio de processamento por registro e por lote; g) produtividade operacional por operador; h) taxa de divergência entre operadores; i) taxa de retrabalho operacional; j) quantidade de registros pendentes de processamento; k) backlog operacional; l) cumprimento dos níveis mínimos de serviço (SLA); m) motivos de descarte ou inconsistência classificados por categoria; n) histórico de classificação, reclassificação e validação operacional."*
 
 **Estado atual:** SLA de pré-processamento (Plano 10) serve como painel parcial. Faltam vários indicadores exigidos.
 
@@ -344,7 +346,7 @@
 
 ### 19. §5.5.4.5 — Log completo de pré-processamento
 
-> *"Registros de log contendo: a) identificação do usuário; b) data/horário; c) estação de trabalho; d) ação executada; e) resultado."*
+> *"5.5.4.5. Os registros de log deverão conter, no mínimo: a) identificação do usuário responsável; b) data e horário da operação; c) estação de trabalho utilizada; d) tipo de ação executada; e) identificação do registro analisado; f) classificação atribuída; g) alterações realizadas; h) justificativas operacionais registradas."*
 
 **Estado atual:** Log de auditoria (Plano 01) cobre operador/timestamp/ação. Falta o campo "estação de trabalho" (hostname/IP da máquina do operador).
 
@@ -354,7 +356,7 @@
 
 > **Resposta:**
 
-**b)** Basta adicionar esse campo ao log de auditoria existente (`muralha.log_auditoria`), ou precisa de tabela separada para logs de pré-processamento?
+**b)** Basta adicionar esse campo ao log de auditoria existente (`dbo.sis_log_auditoria`), ou precisa de tabela separada para logs de pré-processamento?
 
 > **Resposta:**
 
@@ -384,7 +386,7 @@
 
 > *"Indicador de confiança (score) atribuído automaticamente a cada leitura. Limiar parametrizável pela CONTRATANTE."*
 
-**Estado atual:** `ia.veiculo_caracteristica` tem score de confiança. O limiar não é parametrizável pela interface.
+**Estado atual:** `ia.veiculo_caracteristica` **não tem coluna de score** (colunas: `id_cor`, `id_classificacao`, `id_marca`, `id_modelo`, `id_tipo_especial`, `dado_bruto`). Se o score chega, é só dentro de `dado_bruto` ou do payload SOAP, a confirmar. Não há limiar parametrizável.
 
 **Perguntas:**
 

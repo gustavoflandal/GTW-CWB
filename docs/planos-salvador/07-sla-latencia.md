@@ -1,5 +1,7 @@
 # SLA de Latência ≤4s — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Depende de:** plano `01-log-auditoria.md` concluído.  
 > **Para agentes:** use `superpowers:executing-plans`.
 
@@ -14,7 +16,8 @@
 | Ref. TR | Requisito |
 |---|---|
 | §5.2.7 | Telemetria operacional em tempo real |
-| §5.3.7.5 | Resposta ≤4 segundos para eventos críticos / Blitz Eletrônica |
+| Cap. 5, caput (d) | Capacidade de resposta em até 4 segundos para eventos críticos e operações de Blitz Eletrônica |
+| §5.2.2.1 | Pré-classificação concluída em até 4 segundos do evento |
 | §5.6.2.3 | Tempo máximo 4s para eventos críticos/Blitz |
 | §5.7.9.1 | Tempo máximo 4s entre leitura e alerta na plataforma |
 | §5.8.6.1 | Monitoramento contínuo da infraestrutura |

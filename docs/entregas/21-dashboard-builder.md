@@ -1,7 +1,7 @@
 # Entrega 21 — Dashboard Builder Self-Service
 
 **Data:** 2026-10-13 (revisao da camada de consulta em 2026-10-14)  
-**Status:** ✅ Implementado
+**Status:** 🟡 Implementado — aguardando teste manual no navegador (último critério de aceite; revisão de 2026-10-16)
 
 ## Escopo
 

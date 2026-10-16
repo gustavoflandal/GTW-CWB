@@ -21,7 +21,7 @@ WHERE TABLE_SCHEMA='muralha' AND TABLE_NAME IN ('vtr_imagem_obliterada','infraca
 
 **Resultado esperado:** 2 tabelas retornadas.
 
-**Status:** ⏳ Aguarda execução da migração
+**Status:** ⏳ Aguarda teste manual (migração `20261008_complementar.sql` já executada no `GTW_MURALHA_DEV`, conferido em 2026-10-15)
 
 ---
 

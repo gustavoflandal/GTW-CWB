@@ -1,6 +1,8 @@
 # Dashboard Builder Self-Service — Plano de Implementação
 
-> **Status: Implementado** — Entrega: [21-dashboard-builder.md](../entregas/21-dashboard-builder.md)
+> **Status: Implementado** — Entrega: [21-dashboard-builder.md](../entregas/21-dashboard-builder.md) (a numeração difere: Plano 20 → Entrega 21 → Teste 20; a camada de consulta foi refeita pelo [Plano 21](21-dashboards-consulta-sql-sem-cube.md))
+>
+> **Bibliotecas vendorizadas (exceção aprovada em 2026-10-16):** ECharts, GridStack, AG Grid, SortableJS, AntV X6 e dagre, em `src/main/webapp/static/vendor/`, podem ser usadas pelo construtor e os stubs podem ser substituídos pelas versões reais. É a única exceção à regra "sem novos frameworks"; ver [`CLAUDE.md`](../../CLAUDE.md).
 >
 > **Para agentes:** use `superpowers:executing-plans`.
 

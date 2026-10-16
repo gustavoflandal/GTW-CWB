@@ -1,5 +1,7 @@
 # KPIs Configuráveis — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Permitir que administradores configurem quais KPIs aparecem no dashboard principal, com thresholds de alerta personalizáveis; exibir os KPIs selecionados em cards coloridos com indicador de status.

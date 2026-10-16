@@ -1,5 +1,7 @@
 # Exportação GIS (GeoJSON/KML) — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Exportar localização dos equipamentos de fiscalização e contagem de infrações em formato GeoJSON (para QGIS/ArcGIS) e KML (para Google Earth), permitindo análise geoespacial da cobertura de monitoramento.

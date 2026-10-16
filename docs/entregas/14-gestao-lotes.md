@@ -1,7 +1,7 @@
 # Entrega — Plano 14: Gestão de Lotes de Infrações
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 
@@ -12,6 +12,7 @@ Agrupamento de infrações pré-aprovadas em lotes para encaminhamento ao DETRAN
 - Plano [`14-gestao-lotes.md`](../planos-salvador/14-gestao-lotes.md) — Gestão de Lotes de Infrações
 - **Requisitos TR:** §5.2.5.1–5 (gestão de lotes, validação, bloqueio de envio sem validação)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §11 e §13 (vínculo com `veiculo_tempo_real.id` `uniqueidentifier`)
 
 ## Arquivos produzidos
 

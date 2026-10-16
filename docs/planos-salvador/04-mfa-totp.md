@@ -1,5 +1,7 @@
 # MFA / TOTP — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Depende de:** plano `03-politica-senhas.md` concluído.  
 > **Para agentes:** use `superpowers:executing-plans`.
 

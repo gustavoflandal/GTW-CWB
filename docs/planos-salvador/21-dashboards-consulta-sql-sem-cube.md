@@ -1,6 +1,6 @@
 # Construtor de Dashboards — Camada de Consulta SQL Própria (remoção do Cube Core)
 
-> **Status: Aprovado (2026-10-14)** — em execução.
+> **Status: Executado (2026-10-14)** — sem entrega própria: o resultado está registrado na [Entrega 21](../entregas/21-dashboard-builder.md), seção "Revisao 2026-10-14 (Plano 21)". A numeração completa (plano × entrega × teste) está em [`rastreabilidade-tr.md`](../entregas/rastreabilidade-tr.md#cobertura-por-plano).
 >
 > **Para agentes:** use `superpowers:executing-plans`. Execute as tarefas na ordem; cada uma termina com build verde (`..\.setup-gtw\build.ps1`) e testes TestNG passando.
 
@@ -46,9 +46,9 @@ Falhas encontradas, todas verificáveis no código atual:
 | 3 | O editor de filtros envia operadores SQL (`=`, `LIKE`, `IN`...), mas o Cube espera `equals`, `contains` etc. Qualquer filtro de widget falha. | [editor-filtros.js:68](../../src/main/webapp/static/js/dashboards/editor-filtros.js), [editor-widget.js:293](../../src/main/webapp/static/js/dashboards/editor-widget.js) |
 | 4 | Campos de dataset que não pertencem à tabela base são **descartados em silêncio** pelo Cube. Exemplo: `dataset_2` tem base `local_vigente`, mas pede `data`, `placa` e `velocidade`. | YAML servido por `/api/dash/interno/modelos` |
 | 5 | O `consulta_json` gravado nos widgets usa aliases sem prefixo (seed: `total_passagens`, `equipamento`), incompatíveis com o formato exigido pelo Cube. | [20261013_dash_fundacao.sql:300](../banco-de-dados/migracoes/20261013_dash_fundacao.sql) |
-| 6 | O isolamento por tenant não é aplicado: `queryRewrite` devolve a consulta intacta e o tenant está fixo em 1. | [cube/cube.js](../../cube/cube.js), [DashConsultaServlet.java:188-192](../../src/main/java/muralha/digital/dashboards/DashConsultaServlet.java) |
-| 7 | Para executar consultas sem Cube Store foi preciso ligar `CUBEJS_DEV_MODE=true`, o que **desliga a autenticação do Cube** (log: "Authentication checks are disabled"). | [docker-compose.cube.yml](../../docker-compose.cube.yml) |
-| 8 | Os ganhos que justificariam o Cube (pré-agregações e cache) não estão em uso: as pré-agregações foram removidas para o modelo compilar. | [GeradorModeloCube.java](../../src/main/java/muralha/digital/dashboards/GeradorModeloCube.java) |
+| 6 | O isolamento por tenant não é aplicado: `queryRewrite` devolve a consulta intacta e o tenant está fixo em 1. | `cube/cube.js` (removido na Tarefa 9), [DashConsultaServlet.java:188-192](../../src/main/java/muralha/digital/dashboards/DashConsultaServlet.java) |
+| 7 | Para executar consultas sem Cube Store foi preciso ligar `CUBEJS_DEV_MODE=true`, o que **desliga a autenticação do Cube** (log: "Authentication checks are disabled"). | `docker-compose.cube.yml` (removido na Tarefa 9) |
+| 8 | Os ganhos que justificariam o Cube (pré-agregações e cache) não estão em uso: as pré-agregações foram removidas para o modelo compilar. | `GeradorModeloCube.java` (removido na Tarefa 9) |
 
 **Conclusão:** o custo do Cube (Docker, segredo compartilhado, JWT, geração de YAML, regras do compilador) não traz benefício hoje e transforma erros de configuração em falhas difíceis de diagnosticar.
 
