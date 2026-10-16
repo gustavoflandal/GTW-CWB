@@ -1,7 +1,7 @@
 # Entrega — Plano 29: KPIs com Histórico, Alertas Analíticos e Relatório Mensal
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste no navegador.
+> **Status:** 🟡 Implementado — migração executada, aguardando teste no navegador.
 > **Fase:** 7 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -42,7 +42,7 @@ Histórico periódico de KPIs com snapshots horários, metas parametrizáveis po
 
 | Script | Situação |
 |---|---|
-| `20261016_kpis_relatorio_mensal.sql` | **Não executado — necessário** para os indicadores obrigatórios, metas, histórico, relatórios e menu. Sem ele, os 4 KPIs existentes continuam funcionando normalmente. |
+| `20261016_kpis_relatorio_mensal.sql` | **Executado (2026-10-16)** — 3 tabelas (`kpi_config_meta`, `kpi_historico`, `relatorio_periodico`), 8 KPIs obrigatórios, 12 metas, 5 parâmetros, menu criado (id_menu=393, id_infos=54). |
 
 ## Parâmetros (`muralha.config_chave_valor`)
 

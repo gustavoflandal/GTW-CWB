@@ -36,7 +36,11 @@ public class AssertividadeServlet extends HttpServlet {
             JsonObject totais = obterTotais(conn, dtInicio, dtFim);
             result.add("totais", totais);
 
-            result.addProperty("taxaConcordancia", calcularTaxaConcordancia(totais));
+            double taxa = calcularTaxaConcordancia(totais);
+            result.addProperty("taxaConcordancia", taxa);
+            result.addProperty("alertaAbaixo80", taxa > 0 && taxa < 80.0);
+
+            result.add("volumeProcessado", obterVolumeProcessado(conn, dtInicio, dtFim));
 
             result.add("ranking", obterRanking(conn, dtInicio, dtFim));
 
@@ -78,12 +82,41 @@ public class AssertividadeServlet extends HttpServlet {
         return totais;
     }
 
-    private double calcularTaxaConcordancia(JsonObject totais) {
+    static double calcularTaxaConcordancia(JsonObject totais) {
         int aprovadas = totais.has("PRE_APROVADA") ? totais.get("PRE_APROVADA").getAsInt() : 0;
         int desempate = totais.has("DESEMPATE") ? totais.get("DESEMPATE").getAsInt() : 0;
         int reprovadas = totais.has("REPROVADA") ? totais.get("REPROVADA").getAsInt() : 0;
         int total = aprovadas + desempate + reprovadas;
         return total > 0 ? (aprovadas * 100.0 / total) : 0.0;
+    }
+
+    private JsonObject obterVolumeProcessado(Connection conn, String dtInicio, String dtFim) throws Exception {
+        String sql =
+            "SELECT " +
+            "  COUNT(*) AS recebidos, " +
+            "  SUM(CASE WHEN vsa.status_analise IS NOT NULL THEN 1 ELSE 0 END) AS processados, " +
+            "  SUM(CASE WHEN vsa.status_analise = 'DESEMPATE' THEN 1 ELSE 0 END) AS divergencias, " +
+            "  SUM(CASE WHEN vsa.status_analise IN ('PRIMEIRA_ANALISE','AGUARDANDO_ANALISE') " +
+            "       OR vsa.status_analise IS NULL THEN 1 ELSE 0 END) AS revisao_manual " +
+            "FROM muralha.veiculo_tempo_real vtr " +
+            "LEFT JOIN muralha.vtr_status_analise vsa ON vsa.id_veiculo_tempo_real = vtr.id " +
+            "WHERE vtr.data >= COALESCE(CAST(? AS DATE), CAST(DATEADD(DAY,-7,GETDATE()) AS DATE)) " +
+            "  AND vtr.data < DATEADD(DAY, 1, COALESCE(CAST(? AS DATE), CAST(GETDATE() AS DATE)))";
+
+        JsonObject vol = new JsonObject();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setString(1, dtInicio);
+            ps.setString(2, dtFim);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    vol.addProperty("recebidos", rs.getLong("recebidos"));
+                    vol.addProperty("processados", rs.getLong("processados"));
+                    vol.addProperty("divergencias", rs.getLong("divergencias"));
+                    vol.addProperty("revisaoManual", rs.getLong("revisao_manual"));
+                }
+            }
+        }
+        return vol;
     }
 
     private JsonArray obterRanking(Connection conn, String dtInicio, String dtFim) throws Exception {
