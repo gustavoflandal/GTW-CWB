@@ -19,19 +19,26 @@ var DATA_HORA_PASSAGEM = '';
 let scale = 1;
 let brightness = 100;
 let contrast = 100;
+let invertido = false;
 let idVeiculoGlobal = null;
 
 function applyImageAdjustments() {
-    // Seleciona apenas a imagem dentro do item ativo do carrossel
     const activeImage = $('#galeriaImagensVeiculo .carousel-item.active img');
     if (activeImage.length) {
+        const inv = invertido ? ' invert(1)' : '';
         activeImage.css({
-            'filter': `brightness(${brightness}%) contrast(${contrast}%)`,
+            'filter': `brightness(${brightness}%) contrast(${contrast}%)` + inv,
             'transform': `scale(${scale})`,
-            'transition': 'transform 0.2s ease-out', // Adiciona uma transição suave para o zoom
+            'transition': 'transform 0.2s ease-out',
             'cursor': 'grab'
         });
     }
+}
+
+function toggleInverter() {
+    invertido = !invertido;
+    $('#btnInverter').toggleClass('active', invertido);
+    applyImageAdjustments();
 }
 
 function exportarImagem() {
@@ -189,9 +196,11 @@ function resetImageAdjustments() {
     scale = 1;
     brightness = 100;
     contrast = 100;
+    invertido = false;
 
     $('#brightness').val(100);
     $('#contrast').val(100);
+    $('#btnInverter').removeClass('active');
 
     $('#galeriaImagensVeiculo img').css({
         'filter': '',

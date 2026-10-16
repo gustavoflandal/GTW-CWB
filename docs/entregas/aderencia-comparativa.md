@@ -41,7 +41,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.1.6 | Perfis de acesso | ✅ | ✅ | Já existente |
 | 5.1.7-8 | Log de auditoria automático | ⚠️ | ✅ | Plano 01 |
 | 5.1.9 | Conteúdo mínimo do log | ⚠️ | ✅ | Plano 01 |
-| 5.1.10 | Consulta de log + exportação | ❌ | ⚠️ | Planos 01, 11 (sem filtro por perfil/equipamento, sem PDF) |
+| 5.1.10 | Consulta de log + exportação | ❌ | ✅ | Planos 01, 11, 31 (filtros por perfil/equipamento + PDF) |
 | 5.1.1 | Segregação de funções | ❌ | ⚠️ | Plano 05 (parcial) |
 | 5.1.5a | CPF/matrícula | ⚠️ | ✅ | Plano 09 |
 | 5.1 | Credenciais não compartilhadas | ⚠️ | ⚠️ | Sem enforcement |
@@ -114,7 +114,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.4.2.4d | Exportação dashboards | ⚠️ | ⚠️ | Plano 11 (PNG não verificado) |
 | 5.4.2.5 | Dashboards customizáveis | ❌ | ✅ | Planos 15 + 20 (Dashboard Builder) |
 | 5.4.4.1-3 | Análise espacial | ✅ | ✅ | Já existente |
-| 5.4.4.4 | Exportação GIS | ❌ | ⚠️ | Plano 16 (só equipamentos, GeoJSON/KML) |
+| 5.4.4.4 | Exportação GIS | ❌ | ✅ | Planos 16, 31 (3 camadas: equipamentos, alertas, infrações) |
 | 5.4.5 | Relatórios analíticos | ⚠️ | ⚠️ | Plano 20 (widgets TABLE) |
 | 5.4.6.1-3 | KPIs com metas/alertas | ❌ | ⚠️ | Plano 15 (sem meta, histórico e alerta) |
 | 5.4.7.1-7 | Repositório de logs | ⚠️ | ⚠️ | Plano 26 (logs técnicos unificados; sem trilha imutável; aguardando migração e teste) |

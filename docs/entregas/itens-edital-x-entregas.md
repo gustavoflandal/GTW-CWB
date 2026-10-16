@@ -66,7 +66,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.1.7 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md) |
 | 5.1.8 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) |
 | 5.1.9 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md) |
-| 5.1.10 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) — Tela `auditoria/consulta-log.jsp` exporta CSV e XLS; não há filtro por perfil nem por equipamento, nem exportação PDF |
+| 5.1.10 | ✅ Implementado | [01-log-auditoria.md](01-log-auditoria.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md), [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) — Filtros por perfil e equipamento + exportação PDF adicionados |
 
 ## 5.2 — Funcionalidade de Gestão e Classificação de Infrações
 
@@ -169,7 +169,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4.4.1 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.2 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.3 | ✅ Já atendido pelo GTW | — |
-| 5.4.4.4 | ⚠️ Parcial | [16-exportacao-gis.md](16-exportacao-gis.md) — GeoJSON e KML apenas da camada de equipamentos; alertas, infrações e áreas não são exportados |
+| 5.4.4.4 | ✅ Implementado | [16-exportacao-gis.md](16-exportacao-gis.md), [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) — GeoJSON e KML com 3 camadas: equipamentos, alertas e infrações |
 | 5.4.5.1 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatórios gerenciais cobrem a (tráfego), c (ocupação via KPI), e (equipamentos), f (aproveitamento), h (efetividade), i (funcionalidades integradas); b,d,g parciais |
 | 5.4.5.2 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Filtros por período (a), exportação CSV/XLS (c), emissão periódica automática (d); segmentação completa (b) e PDF (c parcial) na Fase 9 |
 | 5.4.6.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
@@ -203,7 +203,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.5.3.5 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) |
 | 5.5.4.1 | ❌ Não implementado † ‡ | — |
 | 5.5.4.2 | ✅ Já atendido pelo GTW | — |
-| 5.5.4.3 | ⚠️ Parcial † | [05-dupla-analise.md](05-dupla-analise.md) — Brilho e contraste em `dupla-analise.js` e no legado; não existe inversão de cores |
+| 5.5.4.3 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md), [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) — Brilho, contraste e inversão de cores em 3 telas de análise |
 | 5.5.4.4 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
 | 5.5.4.5 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) |
 | 5.5.4.6 | ✅ Implementado | [12-retencao-dados.md](12-retencao-dados.md) |

@@ -30,11 +30,14 @@ let brightness = 100;
 let contrast = 100;
 
 // Funções de ajuste de imagem 
+let invertido = false;
+
 function applyImageAdjustments() {
 	const activeImage = $('#galeriaImagensAlerta .carousel-item.active img');
 	if (activeImage.length) {
+		const inv = invertido ? ' invert(1)' : '';
 		activeImage.css({
-			'filter': `brightness(${brightness}%) contrast(${contrast}%)`,
+			'filter': `brightness(${brightness}%) contrast(${contrast}%)` + inv,
 			'transform': `scale(${scale})`,
 			'transition': 'transform 0.2s ease-out',
 			'cursor': 'grab'
@@ -42,15 +45,22 @@ function applyImageAdjustments() {
 	}
 }
 
+function toggleInverter() {
+	invertido = !invertido;
+	$('#btnInverter').toggleClass('active', invertido);
+	applyImageAdjustments();
+}
+
 function resetImageAdjustments() {
 	scale = 1;
 	brightness = 100;
 	contrast = 100;
+	invertido = false;
 
 	$('#brightness').val(99);
 	$('#contrast').val(99);
+	$('#btnInverter').removeClass('active');
 
-    // Reseta todas as imagens no carrossel para o caso de alguma ter ficado com zoom
 	$('#galeriaImagensAlerta img').css({
 		'filter': '',
 		'transform': ''

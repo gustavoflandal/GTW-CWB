@@ -78,6 +78,9 @@
 									<label for="contrast">Contraste</label> <input type="range"
 										id="contrast" min="0" max="200" value="100";>
 								</div>
+								<button id="btnInverter" class="btn btn-sm btn-outline-dark mt-1" onclick="toggleInverter()">
+									<i class="bi bi-circle-half"></i> Inverter
+								</button>
 							</div>
 
 						</div>
