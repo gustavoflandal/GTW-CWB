@@ -1,7 +1,7 @@
 # Entrega — Plano 24: Correções Pontuais da Auditoria
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando build, migração e teste (compilado e testado na nuvem só por partes; ver "Critérios de aceite").
+> **Status:** 🟡 Implementado — aguardando migração e teste manual (build e testes automatizados aprovados no Windows em 2026-10-16; ver "Critérios de aceite").
 > **Fase:** 2 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -33,8 +33,8 @@ As sete correções pontuais apontadas pela auditoria no código e nos scripts (
 
 ## Critérios de aceite
 
-- [ ] 1. `..\.setup-gtw\build.ps1` compila sem erro. Não executado na nuvem (o Maven depende do repositório privado da Consilux). Na nuvem, cada classe alterada foi compilada com `javac` (JDK 21, `--release 13`) contra as bibliotecas públicas do `pom.xml` e stubs de `Conexao`, `Acesso` e `Usuario`; `ConfiguracaoSonsServlet` não foi compilado.
-- [x] 2. Testes TestNG novos executados direto pelo TestNG 6.8.21 na nuvem (2026-10-16): `ConfiguracaoSonsPrioridadeTest` 4/4, `MapaConfigServletTest` 2/2, `IncidenteImportJobTest` 5/5, `RelatorioAlteracaoConfigEquipTest` 4/4.
+- [x] 1. `..\.setup-gtw\build.ps1` compila sem erro. Executado no Windows em 2026-10-16 sobre o `main` com a Fase 2 (`c8a43ce`): BUILD SUCCESS. (Na nuvem só tinha sido possível compilar classe a classe com `javac`.)
+- [x] 2. Testes TestNG novos executados direto pelo TestNG 6.8.21 na nuvem (2026-10-16): `ConfiguracaoSonsPrioridadeTest` 4/4, `MapaConfigServletTest` 2/2, `IncidenteImportJobTest` 5/5, `RelatorioAlteracaoConfigEquipTest` 4/4. Repetidos no Windows pelo Maven (`-Dtest=…`, junto com `ChamadoServiceRegrasTest` e `MontadorSqlTest`): 59/59.
 - [ ] 3. Roteiro manual [`docs/testes/24-correcoes-pontuais-auditoria.md`](../testes/24-correcoes-pontuais-auditoria.md) executado no Windows.
 - [x] 4. `python3 -I docs/referencia/scripts/validar_aderencia.py` sem erro.
 
