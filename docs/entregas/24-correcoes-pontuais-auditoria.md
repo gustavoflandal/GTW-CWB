@@ -1,7 +1,7 @@
 # Entrega — Plano 24: Correções Pontuais da Auditoria
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste manual (build e testes automatizados aprovados no Windows em 2026-10-16; ver "Critérios de aceite").
+> **Status:** 🟡 Implementado — aguardando teste manual (migrações executadas em 2026-10-16) (build e testes automatizados aprovados no Windows em 2026-10-16; ver "Critérios de aceite").
 > **Fase:** 2 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -28,8 +28,8 @@ As sete correções pontuais apontadas pela auditoria no código e nos scripts (
 
 | Script | Situação |
 |---|---|
-| `20261016_vtr_imagem_complemento.sql` | Não executado. No DEV a tabela já existe; o script só cria em ambiente novo |
-| `20261016_config_mapa_api_trecho.sql` | **Não executado — necessário** para a tela Mapa de situação do trânsito continuar mostrando os trechos |
+| `20261016_vtr_imagem_complemento.sql` | Executado (2026-10-16): "Ja existe", nada alterado |
+| `20261016_config_mapa_api_trecho.sql` | Executado (2026-10-16): chave inserida |
 
 ## Critérios de aceite
 
@@ -41,4 +41,4 @@ As sete correções pontuais apontadas pela auditoria no código e nos scripts (
 ## Pendências
 
 - **Item 2, relatório do menu 201:** a consulta mínima foi implementada enquanto a escolha não vinha. Em 2026-10-16 o dono do projeto decidiu desativar o menu se ele não tivesse finalidade: o menu não tem nenhum grupo em `sis_menu_direitos` e o histórico de parâmetros com valor anterior e novo passa a ser o da Fase 4 (5.4.7.6). O código do item 2 foi revertido e entrou `20261016_desativa_menu_201.sql` (pendente de execução). Como `fcn_VerificaAcesso` libera URL sem direitos cadastrados, o servlet passou a responder com aviso de desativação em vez da página em branco.
-- Executar `20261016_config_mapa_api_trecho.sql` antes de publicar a tela de situação do trânsito.
+- `20261016_config_mapa_api_trecho.sql` executado em 2026-10-16.

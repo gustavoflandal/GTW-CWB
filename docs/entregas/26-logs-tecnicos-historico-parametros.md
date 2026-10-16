@@ -1,7 +1,7 @@
 # Entrega — Plano 26: Repositório de Logs Técnicos e Histórico de Parâmetros
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste no navegador (build, testes automatizados e consulta real somente leitura no DEV aprovados).
+> **Status:** 🟡 Implementado — aguardando teste no navegador (build, testes, consulta real no DEV e migrações concluídos em 2026-10-16).
 > **Fase:** 4 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -38,8 +38,8 @@ Tela única de logs técnicos sobre as tabelas que já existem no legado e na Po
 
 | Script | Situação |
 |---|---|
-| `20261016_logs_tecnicos_parametro_historico.sql` | **Não executado — necessário** para o histórico de parâmetros, os parâmetros `LOG_TECNICO_*` (sem eles valem os padrões do código) e o menu. Sintaxe conferida com `SET PARSEONLY ON` |
-| `20261016_desativa_menu_201.sql` | **Não executado.** Sintaxe conferida com `SET PARSEONLY ON` |
+| `20261016_logs_tecnicos_parametro_historico.sql` | Executado (2026-10-16): tabela, 6 chaves e menus 387-388 |
+| `20261016_desativa_menu_201.sql` | Executado (2026-10-16): menu 201 com `Ativo = 0` |
 
 ## Parâmetros (`muralha.config_chave_valor`)
 
@@ -57,7 +57,8 @@ Tela única de logs técnicos sobre as tabelas que já existem no legado e na Po
 - [x] 1. `..\.setup-gtw\build.ps1` compila sem erro (Windows, 2026-10-16: BUILD SUCCESS).
 - [x] 2. Testes TestNG (Windows, 2026-10-16): `FontesLogTecnicoTest` 14 (normalização e consulta de cada fonte), `ClassificacaoCsxTest` 8, `CorrelacionadorIntervalosTest` 6, `HistoricoParametrosTest` 6, `FiltroERelatorioLogTecnicoTest` 8. Total 42/42; com os das fases anteriores, 128/128.
 - [x] 3. Consulta real no DEV, só leitura (jshell com o `ServicoLogTecnico` e conexão `setReadOnly`, 2026-10-16): 7 dias, todas as fontes → 7 568 eventos em 2,7 s; equipamento 1, energia/comunicação, ALERTA ou mais grave, 30 dias → 210 eventos em 1,1 s; linha do tempo de 2 dias do equipamento 1 → 2 124 eventos e 11 períodos (CONEXAO_SERVIDOR do Captura e COMUNICACAO de `status_conexao`); filtro por localidade funcionando; `PARAMETRO_HISTORICO` corretamente indicada como ausente. Comparação de ConfigEquip conferida com um `TConfigEquip` serializado pelo `SerializadorXML` (119 campos planificados).
-- [ ] 4. Migrações executadas (com autorização) e roteiro [`docs/testes/26-logs-tecnicos-historico-parametros.md`](../testes/26-logs-tecnicos-historico-parametros.md) executado no navegador.
+- [x] 4a. Migrações executadas no DEV (2026-10-16, com autorização): `parametro_historico` criada, 6 chaves, menus 387-388, menu 201 inativo.
+- [ ] 4b. Roteiro [`docs/testes/26-logs-tecnicos-historico-parametros.md`](../testes/26-logs-tecnicos-historico-parametros.md) executado no navegador.
 - [x] 5. `python -I docs/referencia/scripts/validar_aderencia.py` sem erro (planilha atualizada só na aba GTW-Muralha, células D114 e D153-D158).
 
 ## Situação dos itens do TR

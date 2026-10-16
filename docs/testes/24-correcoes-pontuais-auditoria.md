@@ -47,4 +47,4 @@ Com `WAZE_API_KEY`, `waze_api_url` e `waze_area_bbox` configurados, aguardar dua
 
 ## T06 — Script de `vtr_imagem_complemento`
 
-Rodar `20261016_vtr_imagem_complemento.sql` no DEV (com autorização). **Esperado:** "Ja existe: muralha.vtr_imagem_complemento (nada alterado)". ⏳ Pendente.
+Rodar `20261016_vtr_imagem_complemento.sql` no DEV (com autorização). **Esperado:** "Ja existe: muralha.vtr_imagem_complemento (nada alterado)". ✅ 2026-10-16.

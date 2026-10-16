@@ -25,7 +25,7 @@ SELECT chave, valor FROM muralha.config_chave_valor WHERE chave LIKE 'LOG[_]TECN
 SELECT Ativo FROM dbo.sis_menu WHERE id_menu = 201;
 ```
 
-**Esperado:** tabela criada, seis chaves, menu 201 com `Ativo = 0`. Rodar de novo só imprime "Ja existe"/"ja inativo". ⏳ Pendente.
+**Esperado:** tabela criada, seis chaves, menu 201 com `Ativo = 0`. Rodar de novo só imprime "Ja existe"/"ja inativo". ✅ 2026-10-16: tabela criada, seis chaves, menus 387-388, menu 201 com `Ativo = 0`.
 
 ## T03 — Eventos
 
