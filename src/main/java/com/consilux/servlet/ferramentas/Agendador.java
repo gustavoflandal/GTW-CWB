@@ -111,6 +111,7 @@ public class Agendador extends HttpServlet {
 
 	public static final String GRUPO_INTEGRIDADE = "Integridade";
 	public static final String JOB_SHA256_IMAGEM = "Calcula SHA-256 de Imagens";
+	public static final String JOB_OCR_REVISAO = "Avalia score de OCR e fila de revisao";
 
 	public static final String GRUPO_MONITORAMENTO = "Monitoramento";
 	public static final String JOB_SLA_LATENCIA = "Monitora SLA de Latência";
@@ -186,6 +187,7 @@ public class Agendador extends HttpServlet {
 			reajustaJobEnviaSmsAlertaMuralha();
 			reajustaJobEnviaSmsOcorrenciaMuralha();
 			reajustaJobSha256Imagem();
+			reajustaJobOcrRevisao();
 			reajustaJobSlaLatencia();
 			reajustaJobSlaPreprocessamento();
 			reajustaJobRetencao();
@@ -852,6 +854,21 @@ public class Agendador extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 	throws ServletException, IOException {
 		response.sendError(HttpServletResponse.SC_FORBIDDEN);
+	}
+
+	private static void reajustaJobOcrRevisao() throws SchedulerException {
+		if (!possuiJob(GRUPO_INTEGRIDADE, JOB_OCR_REVISAO)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.ocr.JobOcrRevisao.class)
+					.withIdentity(JOB_OCR_REVISAO, GRUPO_INTEGRIDADE)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_OCR_REVISAO, GRUPO_INTEGRIDADE)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job de score de OCR e revisao de placas agendada a cada 5 minutos.");
+		}
 	}
 
 	private static void reajustaJobSha256Imagem() throws SchedulerException {
