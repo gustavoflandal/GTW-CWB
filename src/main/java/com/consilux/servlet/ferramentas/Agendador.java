@@ -129,6 +129,13 @@ public class Agendador extends HttpServlet {
 	public static final String GRUPO_CHAMADOS = "Chamados";
 	public static final String JOB_CHAMADO_SLA = "Chamados SLA e fechamento automatico";
 	public static final String JOB_CHAMADO_EMAIL = "Chamados envio de e-mails";
+
+	public static final String GRUPO_KPI = "KPI";
+	public static final String JOB_KPI_SNAPSHOT = "Coleta snapshots de KPI";
+
+	public static final String GRUPO_RELATORIOS = "Relatorios";
+	public static final String JOB_RELATORIO_GERENCIAL = "Gera relatorio gerencial mensal";
+	public static final String JOB_RELATORIO_PREPROC = "Gera relatorio mensal pre-processamento";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -197,6 +204,9 @@ public class Agendador extends HttpServlet {
 			reajustaJobIncidenteImport();
 			reajustaJobChamadoSla();
 			reajustaJobChamadoEmail();
+			reajustaJobKpiSnapshot();
+			reajustaJobRelatorioGerencial();
+			reajustaJobRelatorioPreProc();
 
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -1005,6 +1015,51 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job Chamados e-mail agendada a cada 1 minuto.");
+		}
+	}
+
+	private static void reajustaJobKpiSnapshot() throws SchedulerException {
+		if (!possuiJob(GRUPO_KPI, JOB_KPI_SNAPSHOT)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.kpi.KpiSnapshotJob.class)
+					.withIdentity(JOB_KPI_SNAPSHOT, GRUPO_KPI)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_KPI_SNAPSHOT, GRUPO_KPI)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(60))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job KPI Snapshot agendada a cada 60 minutos.");
+		}
+	}
+
+	private static void reajustaJobRelatorioGerencial() throws SchedulerException {
+		if (!possuiJob(GRUPO_RELATORIOS, JOB_RELATORIO_GERENCIAL)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.relatorio.RelatorioGerencialJob.class)
+					.withIdentity(JOB_RELATORIO_GERENCIAL, GRUPO_RELATORIOS)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_RELATORIO_GERENCIAL, GRUPO_RELATORIOS)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1440))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Relatório Gerencial agendada a cada 24h.");
+		}
+	}
+
+	private static void reajustaJobRelatorioPreProc() throws SchedulerException {
+		if (!possuiJob(GRUPO_RELATORIOS, JOB_RELATORIO_PREPROC)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.relatorio.RelatorioPreProcMensalJob.class)
+					.withIdentity(JOB_RELATORIO_PREPROC, GRUPO_RELATORIOS)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_RELATORIO_PREPROC, GRUPO_RELATORIOS)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(1440))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Relatório Pré-Processamento agendada a cada 24h.");
 		}
 	}
 

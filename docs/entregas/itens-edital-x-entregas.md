@@ -163,18 +163,18 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4.3.2 | ⚠️ Parcial † | — |
 | 5.4.3.3 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
 | 5.4.3.4 | ⚠️ Parcial † | — |
-| 5.4.3.5 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.3.6 | ⚠️ Parcial † | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.3.7 | ❌ Não implementado † | — |
+| 5.4.3.5 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Alertas analíticos automáticos via KpiSnapshotJob quando KPI em WARN/CRIT; cooldown configurável |
+| 5.4.3.6 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Alíneas a-e cobertas pelos 8 KPIs obrigatórios: infrações, desempenho, disponibilidade, retenções, padrões |
+| 5.4.3.7 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório gerencial periódico com a-e: resumo, comparação, evolução, alertas, acompanhamento; aguardando migração |
 | 5.4.4.1 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.2 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.3 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.4 | ⚠️ Parcial | [16-exportacao-gis.md](16-exportacao-gis.md) — GeoJSON e KML apenas da camada de equipamentos; alertas, infrações e áreas não são exportados |
-| 5.4.5.1 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) — Relatórios legados e widgets TABLE do Dashboard Builder; cobertura das alíneas a–i não verificada |
-| 5.4.5.2 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) — Cobertura das alíneas não verificada |
+| 5.4.5.1 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatórios gerenciais cobrem a (tráfego), c (ocupação via KPI), e (equipamentos), f (aproveitamento), h (efetividade), i (funcionalidades integradas); b,d,g parciais |
+| 5.4.5.2 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Filtros por período (a), exportação CSV/XLS (c), emissão periódica automática (d); segmentação completa (b) e PDF (c parcial) na Fase 9 |
 | 5.4.6.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — 4 KPIs iniciais em `kpi_config`; o conjunto mínimo do item não está cadastrado |
-| 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — `kpi_config` só tem dois limiares (atenção e crítico); sem meta, histórico nem alerta automático |
+| 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — 12 KPIs (4 existentes + 8 obrigatórios a-h): infração/tráfego, variação temporal, disponibilidade, aproveitamento, efetividade, segurança viária, conformidade, SLA; aguardando migração |
+| 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Metas (a), limites atenção/crítico (b), alertas analíticos automáticos (c), histórico horário (d), gráfico Chart.js (e); aguardando migração |
 | 5.4.7.1 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Repositório central na tela Logs Técnicos: 12 fontes (`eventos_csx`, `status_conexao`, `status_energia`, `manutencao`, `log_alerta`, `log_processos`, disponibilidade, SLA, auditoria, históricos de parâmetros) lidas e normalizadas por `ServicoLogTecnico`, sem cópia; o recebimento continua nas tabelas do legado. Implementado, aguardando migração e teste no navegador |
 | 5.4.7.2 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Alíneas a-f cobertas pelas fontes existentes (equipamento, eventos, falhas/degradação, alterações de configuração, ações de usuário, ocorrências sistêmicas); nada novo é recebido além do que o legado já grava. Implementado, aguardando migração e teste no navegador |
 | 5.4.7.3 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Categorias energia, comunicação, sincronismo, hardware, software, sensor, parâmetro, intervenção técnica, processamento e usuário (alíneas a-i); "formação de lotes" (i) não tem fonte de log própria. Implementado, aguardando migração e teste no navegador |
@@ -196,9 +196,9 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.5.2.3 | ❌ Não implementado † ‡ | — |
 | 5.5.2.4 | ❌ Não implementado † ‡ | — |
 | 5.5.2.5 | ❌ Não implementado † ‡ | — |
-| 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md) — Painel de SLA de 72 h cobre parte das alíneas a–n |
-| 5.5.3.2 | ⚠️ Parcial † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
-| 5.5.3.3 | ❌ Não implementado | — |
+| 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — 14 métricas (a-n) coletadas pelo RelatorioPreProcMensalJob; aguardando migração |
+| 5.5.3.2 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Segmentação por período (a); filtros b-h na Fase 9 |
+| 5.5.3.3 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório mensal consolidado automático no 5o dia útil via RelatorioPreProcMensalJob; aguardando migração |
 | 5.5.3.4 | ✅ Implementado † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
 | 5.5.3.5 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) |
 | 5.5.4.1 | ❌ Não implementado † ‡ | — |

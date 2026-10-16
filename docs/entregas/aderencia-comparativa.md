@@ -128,7 +128,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.5.1.2g | Dupla análise | ❌ | ✅ | Plano 05 |
 | 5.5.2.1 | Prazo 72h | ❌ | ✅ | Plano 10 |
 | 5.5.3.1 | Painel operacional | ❌ | ⚠️ | Planos 10 + 20 (parte das alíneas a–n) |
-| 5.5.3.3 | Relatório mensal | ❌ | ❌ | Gap remanescente |
+| 5.5.3.3 | Relatório mensal | ❌ | ⚠️ | Plano 29 (RelatorioPreProcMensalJob, 5º dia útil) |
 | 5.5.4.2 | Vedação alteração original | ✅ | ✅ | Já existente |
 | 5.5.4.5 | Log completo | ⚠️ | ⚠️ | Plano 01 (parcial) |
 | 5.5.4.6 | Retenção 5 anos | ❌ | ✅ | Plano 12 |

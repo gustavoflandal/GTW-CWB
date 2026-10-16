@@ -85,9 +85,37 @@
     </button>
   </div>
   <div class="row g-3" id="kpiCards"></div>
+
+  <!-- Modal Histórico -->
+  <div class="modal fade" id="modalHistorico" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="histTitulo">Histórico</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-2 d-flex gap-2 align-items-center">
+            <label class="form-label mb-0">Período:</label>
+            <select class="form-select form-select-sm" id="histDias" style="width:auto">
+              <option value="7">7 dias</option>
+              <option value="30" selected>30 dias</option>
+              <option value="90">90 dias</option>
+            </select>
+            <span class="text-muted ms-auto" id="histMeta"></span>
+          </div>
+          <canvas id="histChart" height="240"></canvas>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Fechar</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <script>
 var ctx = '<%= request.getContextPath() %>';
 var COR_STATUS = { OK: '#198754', WARN: '#e8a317', CRIT: '#dc3545', ERRO: '#6c757d' };
@@ -130,6 +158,7 @@ function renderCard(kpi, hex) {
         '<div class="kpi-unidade">' + (kpi.unidade || '') + '</div>' +
         '<div class="kpi-status">' + badge(kpi, hex) + '</div>' +
         (kpi.descricao ? '<div class="kpi-desc">' + kpi.descricao + '</div>' : '') +
+        '<div class="mt-2"><button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:.7rem" onclick="abrirHistorico(' + kpi.id + ',\'' + kpi.nome.replace(/'/g,"&#39;") + '\')"><i class="bi bi-clock-history"></i> Histórico</button></div>' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -268,4 +297,71 @@ async function carregar() {
 
 carregar();
 setInterval(carregar, 60000);
+
+var histChartInstance = null;
+var histModalInstance = null;
+var histKpiAtual = null;
+
+async function abrirHistorico(idKpi, nome) {
+    histKpiAtual = idKpi;
+    document.getElementById('histTitulo').textContent = 'Histórico: ' + nome;
+    if (!histModalInstance) histModalInstance = new bootstrap.Modal(document.getElementById('modalHistorico'));
+    histModalInstance.show();
+    await carregarHistorico();
+}
+
+document.getElementById('histDias').addEventListener('change', carregarHistorico);
+
+async function carregarHistorico() {
+    if (!histKpiAtual) return;
+    var dias = document.getElementById('histDias').value;
+    var r = await fetch(ctx + '/MuralhaDigital/Kpi?acao=historico&idKpi=' + histKpiAtual + '&dias=' + dias);
+    var d = await r.json();
+    if (!d.ok) return;
+
+    var metaLabel = '';
+    if (d.meta && d.meta.meta != null) metaLabel = 'Meta: ' + Number(d.meta.meta).toLocaleString('pt-BR');
+    document.getElementById('histMeta').textContent = metaLabel;
+
+    var labels = (d.historico || []).map(function(h) {
+        var dt = new Date(h.dtColeta);
+        return dt.toLocaleDateString('pt-BR') + ' ' + dt.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+    });
+    var valores = (d.historico || []).map(function(h) { return h.valor; });
+    var cores = (d.historico || []).map(function(h) { return COR_STATUS[h.status] || COR_STATUS.ERRO; });
+
+    if (histChartInstance) histChartInstance.destroy();
+    var canvasEl = document.getElementById('histChart');
+    histChartInstance = new Chart(canvasEl, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Valor',
+                data: valores,
+                borderColor: '#0d75bf',
+                backgroundColor: 'rgba(13,117,191,.1)',
+                fill: true,
+                tension: 0.3,
+                pointRadius: 2,
+                pointBackgroundColor: cores
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false },
+                annotation: d.meta && d.meta.meta != null ? {
+                    annotations: {
+                        metaLine: { type: 'line', yMin: d.meta.meta, yMax: d.meta.meta, borderColor: '#198754', borderDash: [5,5], borderWidth: 1, label: { display: true, content: 'Meta', position: 'end' } }
+                    }
+                } : {}
+            },
+            scales: {
+                x: { display: true, ticks: { maxTicksLimit: 12, font: { size: 10 } } },
+                y: { beginAtZero: false }
+            }
+        }
+    });
+}
 </script>
