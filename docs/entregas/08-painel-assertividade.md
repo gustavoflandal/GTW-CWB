@@ -1,7 +1,7 @@
 # Entrega — Plano 08: Painel de Assertividade
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue (migração SQL pendente de execução manual)
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ---
 
@@ -31,5 +31,5 @@ Painel de controle que exibe a taxa de assertividade entre a pré-classificaçã
 
 ## Pendências
 
-- Migração SQL pendente de execução manual
+- ~~Migração SQL~~: o plano não tem script próprio; os dados de exemplo (`20261012_dados_assertividade.sql`) foram executados no `GTW_MURALHA_DEV`
 - Teste manual completo (ver `docs/testes/08-painel-assertividade.md`)

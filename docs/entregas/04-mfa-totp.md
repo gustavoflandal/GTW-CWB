@@ -2,7 +2,7 @@
 
 **Data de entrega:** 2026-10-08  
 **Commits:** `2500354` · `327d267` · `b38c1ec`  
-**Status:** ✅ Entregue (migração SQL pendente de execução manual)
+**Status:** ✅ Entregue — migração executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md))
 
 ---
 
@@ -11,13 +11,14 @@
 - Plano [`04-mfa-totp.md`](../planos-salvador/04-mfa-totp.md) — MFA/TOTP
 - **Requisitos TR:** §5.1.5.e (autenticação multifator nativa)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1 e §6 (colunas TOTP em tabela complementar em vez de `ALTER TABLE dbo.sis_usuario`)
 
 ## O que foi entregue
 
 ### Banco de dados
-- 2 novas colunas em `dbo.sis_usuario`: `totp_secret VARCHAR(200)`, `totp_habilitado BIT DEFAULT 0`
+- Colunas `totp_secret VARCHAR(200)` e `totp_habilitado BIT DEFAULT 0` na tabela complementar `dbo.sis_usuario_complemento` (sem `ALTER TABLE` em `dbo.sis_usuario`)
 - 1 novo parâmetro em `sis_senha_config`: `mfa_obrigatorio` (0/1)
-- Script: [`docs/banco-de-dados/migracoes/20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql)
+- Script: [`docs/banco-de-dados/migracoes/20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql) (só o `INSERT` de `mfa_obrigatorio` vale; as colunas vêm de `20261008_tabelas_complementares.sql`)
 
 ### Back-end
 | Arquivo | Responsabilidade |
@@ -56,7 +57,7 @@
 
 | # | Critério | Status |
 |---|---|---|
-| 1 | Colunas `totp_secret` e `totp_habilitado` adicionadas | ⏳ Aguarda migração |
+| 1 | Colunas `totp_secret` e `totp_habilitado` em `sis_usuario_complemento` | ✅ Existem no `GTW_MURALHA_DEV` (conferido em 2026-10-15) |
 | 2 | `TotpService.validar()` compatível com Google Authenticator | ✅ (RFC 6238, HMAC-SHA1, janela ±1) |
 | 3 | Tela de configuração exibe QR Code e valida código antes de ativar | ✅ |
 | 4 | Login com MFA habilitado redireciona para `mfa_codigo.jsp` | ✅ |

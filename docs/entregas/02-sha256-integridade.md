@@ -6,11 +6,14 @@
 
 ---
 
+> **Limitação conhecida (auditoria de 2026-10-16):** `JobSha256Imagem` calcula o hash depois que a imagem já está gravada e grava `status_integridade = 'OK'` em todos os casos, sem comparar com um hash de origem. A verificação na recepção exigida por §5.2.1.2 ainda não existe; por isso o item está ⚠️ na [matriz canônica](itens-edital-x-entregas.md). A correção está prevista na Fase 3 da correção da auditoria (ver [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md), seção "Próximas fases").
+
 ## Origem
 
 - Plano [`02-sha256-integridade.md`](../planos-salvador/02-sha256-integridade.md) — Hash SHA-256 de Integridade
 - **Requisitos TR:** §5.2.1.2 (verificação de integridade SHA-256 na recepção)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §11, §12 e §13 (schema real e PK `uniqueidentifier` de `veiculo_tempo_real_imagem`; hash em tabela complementar)
 
 ## O que foi entregue
 

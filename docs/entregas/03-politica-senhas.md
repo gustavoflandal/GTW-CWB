@@ -2,7 +2,7 @@
 
 **Data de entrega:** 2026-10-08  
 **Commits:** `f4adbf8` · `4729cd4` · `458282b` · `0887230`  
-**Status:** ✅ Entregue (migração SQL pendente de execução manual)
+**Status:** ✅ Entregue — migração executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md))
 
 ---
 
@@ -11,15 +11,14 @@
 - Plano [`03-politica-senhas.md`](../planos-salvador/03-politica-senhas.md) — Política de Senhas
 - **Requisitos TR:** §5.1.5.c (política parametrizável de senhas), §5.1.5.d (encerramento de sessão por inatividade)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1, §2, §6 e §9 (sessão por `SessaoConstantes.SESSAO_USUARIO`, colunas novas em tabela complementar em vez de `ALTER TABLE dbo.sis_usuario`)
 
 ## O que foi entregue
 
 ### Banco de dados
 - Tabela `dbo.sis_senha_config` — 8 parâmetros configuráveis (tamanho mínimo, complexidade, validade, histórico, tentativas, tempo de bloqueio)
-- 6 novas colunas em `dbo.sis_usuario`: `senha_hash`, `senha_historico`, `tentativas_invalidas`, `bloqueado_ate`, `dt_ultima_troca_senha`, `fl_troca_obrigatoria`
-- Script: [`docs/banco-de-dados/migracoes/20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql)
-
-> ⚠️ **Ação necessária:** executar a migração SQL manualmente antes de testar.
+- Colunas de senha na tabela complementar `dbo.sis_usuario_complemento` (sem `ALTER TABLE` em `dbo.sis_usuario`): `senha_hash`, `senha_historico`, `tentativas_invalidas`, `bloqueado_ate`, `senha_trocada_em`
+- Scripts: [`20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql) (só a tabela `sis_senha_config` e os `INSERT` valem; o `ALTER TABLE dbo.sis_usuario` do script está marcado como obsoleto) e [`20261008_tabelas_complementares.sql`](../banco-de-dados/migracoes/20261008_tabelas_complementares.sql) (cria `sis_usuario_complemento`)
 
 ### Back-end
 | Arquivo | Responsabilidade |
@@ -63,7 +62,7 @@
 
 | # | Critério | Status |
 |---|---|---|
-| 1 | `sis_senha_config` e colunas em `sis_usuario` criadas | ⏳ Aguarda execução da migração |
+| 1 | `sis_senha_config` e colunas em `sis_usuario_complemento` criadas | ✅ Existem no `GTW_MURALHA_DEV` (conferido em 2026-10-15) |
 | 2 | 5 tentativas inválidas bloqueiam a conta por 30 min | ✅ (build ok) |
 | 3 | Senha fraca rejeitada na tela de troca | ✅ (build ok) |
 | 4 | Login com senha expirada redireciona para troca | ✅ (build ok) |
@@ -85,14 +84,17 @@
 ## Como testar
 
 ```sql
--- Forçar expiração para teste:
-UPDATE dbo.sis_usuario
-SET dt_ultima_troca_senha = DATEADD(DAY,-91,CAST(SYSDATETIME() AS DATE))
-WHERE login = 'seu_login';
+-- Forçar expiração para teste (somente no DEV, com autorização):
+UPDATE c SET senha_trocada_em = DATEADD(DAY,-91,SYSDATETIME())
+FROM dbo.sis_usuario_complemento c
+JOIN dbo.sis_usuario u ON u.id_usuario = c.id_usuario
+WHERE u.login = 'seu_login';
 
 -- Verificar bloqueio após 5 tentativas erradas:
-SELECT login, tentativas_invalidas, bloqueado_ate
-FROM dbo.sis_usuario WHERE login = 'seu_login';
+SELECT u.login, c.tentativas_invalidas, c.bloqueado_ate
+FROM dbo.sis_usuario u
+JOIN dbo.sis_usuario_complemento c ON c.id_usuario = u.id_usuario
+WHERE u.login = 'seu_login';
 ```
 
 Testes detalhados: [`docs/testes/03-politica-senhas.md`](../testes/03-politica-senhas.md)

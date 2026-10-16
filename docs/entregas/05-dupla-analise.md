@@ -2,7 +2,7 @@
 
 **Data de entrega:** 2026-10-08  
 **Commits:** `7dfe25c` · `3b149b6` · `548aa68`  
-**Status:** ✅ Entregue (migração SQL pendente de execução manual)
+**Status:** ✅ Entregue — migração executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md))
 
 ---
 
@@ -11,6 +11,7 @@
 - Plano [`05-dupla-analise.md`](../planos-salvador/05-dupla-analise.md) — Dupla Análise Independente
 - **Requisitos TR:** §5.2.3.1–5 (dupla análise obrigatória, desempate, segregação de operadores), §5.5.1.2.g (dupla análise no pré-processamento)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2 e §5
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1, §2, §11 e §13 (sessão, autenticação, schema real de `veiculo_tempo_real`; status em tabela complementar em vez de `ALTER TABLE`)
 
 ## O que foi entregue
 

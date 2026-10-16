@@ -1,5 +1,7 @@
 # Painel de Assertividade da Pré-classificação — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Depende de:** plano `05-dupla-analise.md` concluído.  
 > **Para agentes:** use `superpowers:executing-plans`.
 

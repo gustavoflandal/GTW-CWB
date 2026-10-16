@@ -1,5 +1,7 @@
 # Anonimização de Placas (View LGPD) — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Criar view SQL que mascara os últimos 3 dígitos das placas (`ABC-****`) para acesso por perfis sem permissão de ver placa completa; implementar controle de acesso por perfil no servlet de consulta de passagens.

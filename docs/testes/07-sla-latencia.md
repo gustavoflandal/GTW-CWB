@@ -22,7 +22,7 @@ SELECT valor FROM muralha.config_chave_valor WHERE chave='sla_latencia_threshold
 
 **Resultado esperado:** Tabela `alerta_sla` existente; `valor='4000'`.
 
-**Status:** ⏳ Aguarda execução da migração
+**Status:** ⏳ Aguarda teste manual (migração `20261008_complementar.sql` já executada no `GTW_MURALHA_DEV`, conferido em 2026-10-15)
 
 ---
 

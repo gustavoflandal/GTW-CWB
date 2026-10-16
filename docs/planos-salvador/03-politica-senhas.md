@@ -1,5 +1,7 @@
 # Política de Senhas — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans` para executar tarefa por tarefa.
 
 **Goal:** Implementar política parametrizável de senhas: complexidade mínima, prazo de validade, histórico de reutilização e bloqueio automático após tentativas inválidas.

@@ -17,8 +17,8 @@ Executar na ordem abaixo. Cada script é independente, mas a ordem respeita depe
 | # | Script | Planos | Objetos criados | Status |
 |---|---|---|---|---|
 | 1 | [`20261008_log_auditoria.sql`](../banco-de-dados/migracoes/20261008_log_auditoria.sql) | 01 | Tabela `dbo.sis_log_auditoria` + índices | ✅ Executado |
-| 2 | [`20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql) | 03 | Tabela `dbo.sis_senha_config` (9 parâmetros), colunas em `dbo.sis_usuario` | ✅ Executado |
-| 3 | [`20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql) | 04 | Colunas `totp_secret`, `totp_habilitado` em `dbo.sis_usuario` | ✅ Executado |
+| 2 | [`20261008_politica_senhas.sql`](../banco-de-dados/migracoes/20261008_politica_senhas.sql) | 03 | Tabela `dbo.sis_senha_config` (9 parâmetros). As colunas de senha ficam em `dbo.sis_usuario_complemento` (script 5); o `ALTER TABLE dbo.sis_usuario` do script é obsoleto e **não** deve ser executado | ✅ Executado (só a parte válida) |
+| 3 | [`20261008_mfa_totp.sql`](../banco-de-dados/migracoes/20261008_mfa_totp.sql) | 04 | Parâmetro `mfa_obrigatorio`. As colunas `totp_secret` e `totp_habilitado` ficam em `dbo.sis_usuario_complemento` (script 5); o `ALTER TABLE dbo.sis_usuario` do script é obsoleto | ✅ Executado (só a parte válida) |
 | 4 | [`20261008_dupla_analise.sql`](../banco-de-dados/migracoes/20261008_dupla_analise.sql) | 05 | Tabela `muralha.infracao_analise` + constraint UNIQUE | ✅ Executado |
 | 5 | [`20261008_tabelas_complementares.sql`](../banco-de-dados/migracoes/20261008_tabelas_complementares.sql) | 02, 09, 11 | `muralha.vtr_imagem_complemento`, `dbo.sis_usuario_complemento` | ✅ Executado |
 | 6 | [`20261008_complementar.sql`](../banco-de-dados/migracoes/20261008_complementar.sql) | 05, 06, 07 | `muralha.vtr_status_analise`, `muralha.vtr_imagem_obliterada`, `muralha.infracao_imagem_obliteracao`, `muralha.alerta_sla`, config `sla_latencia_threshold_ms` | ✅ Executado |

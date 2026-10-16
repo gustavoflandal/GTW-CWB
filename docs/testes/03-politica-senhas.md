@@ -8,7 +8,7 @@
 
 ## Pré-requisito
 
-Execute a migração antes dos testes:
+As migrações já foram executadas no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md)). Em outro ambiente, execute:
 ```powershell
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_politica_senhas.sql"
 ```
@@ -23,7 +23,7 @@ SELECT * FROM dbo.sis_senha_config ORDER BY chave;
 --           validade_dias, historico_qtde, max_tentativas, bloqueio_minutos)
 ```
 
-**Resultado:** pendente execução da migração
+**Resultado:** ⏳ pendente — migração já executada no DEV; teste ainda não executado
 
 ---
 
@@ -36,7 +36,7 @@ FROM dbo.sis_usuario;
 -- Esperado: sem erro, valores NULL/0
 ```
 
-**Resultado:** pendente execução da migração
+**Resultado:** ⏳ pendente — migração já executada no DEV; teste ainda não executado
 
 ---
 

@@ -1,5 +1,7 @@
 # Log de Auditoria Centralizado — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans` para executar tarefa por tarefa com checkpoints.
 
 **Goal:** Criar serviço centralizado de auditoria que registre usuário, IP, timestamp, funcionalidade, operação e ID do registro em todas as ações críticas do sistema, com tela de consulta filtrada e exportação PDF/CSV/XLS.

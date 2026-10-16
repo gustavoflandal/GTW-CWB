@@ -1,7 +1,7 @@
 # Entrega 06 — Obliteração de Imagens (LGPD)
 
 **Data:** 2026-10-08  
-**Status:** ✅ Implementado — migração SQL pendente de execução manual
+**Status:** ✅ Implementado — migração `20261008_complementar.sql` executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md))
 
 ---
 
@@ -10,6 +10,7 @@
 - Plano [`06-obliteracao-imagens.md`](../planos-salvador/06-obliteracao-imagens.md) — Obliteração de Imagens (LGPD)
 - **Requisitos TR:** §5.2.4.3–4 (obliteração automática e manual de imagens, reversão com justificativa)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §2
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1, §2, §12 e §13 (cópia obliterada em tabela complementar, sem `ALTER TABLE` em `veiculo_tempo_real_imagem`)
 
 ## Escopo
 
@@ -56,10 +57,7 @@ Permite a obliteração manual de áreas sensíveis (rostos, ocupantes) em image
 
 ## Pendências
 
-- Migração `20261008_complementar.sql` pendente de execução manual:
-  ```powershell
-  sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_complementar.sql"
-  ```
+- ~~Migração `20261008_complementar.sql`~~ executada no `GTW_MURALHA_DEV` (conferido em 2026-10-15).
 - Obliteração automática (tipo `'A'`) não implementada neste plano.
 - Permissão específica `OBLITERACAO_REVERTER` não criada — reversão usa apenas autenticação de sessão.
 

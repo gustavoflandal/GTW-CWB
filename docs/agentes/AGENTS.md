@@ -99,8 +99,10 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `17-timelapse.md` | Time-lapse de passagens por equipamento | — |
 | `18-disponibilidade.md` | Disponibilidade de equipamentos (uptime) | 07 |
 | `19-sensores-externos.md` | Integração Waze/CSV, camada no mapa | — |
-| `20-dashboard-builder.md` | Dashboard Builder self-service | — |
+| `20-dashboard-builder.md` | Dashboard Builder self-service (entrega 21) | — |
+| `21-dashboards-consulta-sql-sem-cube.md` | Camada de consulta SQL própria do Dashboard Builder (remove o Cube Core); sem entrega própria, ver entrega 21 | 20 |
 | `22-sistema-chamados.md` | Sistema de chamados (7.2.3/7.2.4); documentação em [`docs/chamados/`](../chamados/) | 01, 11 |
+| `23-correcao-documentacao-aderencia.md` | Correção da documentação de aderência (Fase 1 da auditoria de 2026-10-16); matriz canônica em `docs/entregas/itens-edital-x-entregas.md` | — |
 
 ---
 

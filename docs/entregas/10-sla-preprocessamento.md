@@ -1,7 +1,7 @@
 # Entrega — Plano 10: SLA de Pré-processamento 72h
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue²
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 

@@ -1,6 +1,6 @@
 # Sistema de Gerenciamento de Chamados — Plano de Implementação
 
-> **Status:** Aprovado para execução — spec revisada em 2026-10-15.
+> **Status:** Executado (2026-10-15) — ver [Entrega 22](../entregas/22-sistema-chamados.md): migrações executadas no `GTW_MURALHA_DEV` e teste integrado com 10 de 10 casos aprovados; testes no navegador e com o perfil Gestor pendentes.
 > **Depende de:** Plano 01 (`AuditoriaService`), Plano 11 (exportação padronizada — padrão de CSV com SHA-256).
 > **Para agentes:** REQUIRED SUB-SKILL: use `superpowers:subagent-driven-development` (recomendado) ou `superpowers:executing-plans` para implementar tarefa a tarefa. Os passos usam checkbox (`- [ ]`).
 

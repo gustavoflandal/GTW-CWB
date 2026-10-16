@@ -1,7 +1,7 @@
 # Entrega — Plano 09: CPF e Matrícula
 
 **Data:** 2026-10-08  
-**Status:** ✅ Entregue²
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 
@@ -12,6 +12,7 @@ Tela administrativa para gerenciar CPF e matrícula dos usuários do sistema, co
 - Plano [`09-cpf-matricula.md`](../planos-salvador/09-cpf-matricula.md) — CPF e Matrícula no Cadastro de Usuários
 - **Requisitos TR:** §5.1.5.a (identificação vinculada a CPF/matrícula)
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) §1
+- **Errata aplicada:** [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1, §2 e §6 (CPF e matrícula em `dbo.sis_usuario_complemento`)
 
 ## Arquivos produzidos
 

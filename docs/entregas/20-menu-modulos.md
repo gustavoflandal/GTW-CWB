@@ -1,7 +1,7 @@
 # Entrega 20 — Registro dos Modulos no Menu da Interface
 
 **Data:** 2026-10-09  
-**Status:** ✅ Entregue
+**Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
 ## Escopo
 
@@ -9,7 +9,9 @@ Insercao das entradas de menu no banco de dados (`sis_menu`, `sis_menu_infos`, `
 
 ## Origem
 
-Pendencia recorrente identificada nas entregas anteriores (ex.: Plano 17 §Pendencias: "Registrar menu no banco via INSERT em `dbo.sis_menu_infos`"). Abrange todos os modulos com tela JSP propria que nao possuiam entrada no menu.
+- **Sem plano próprio.** Esta entrega nasceu da pendência registrada na execução do [Plano 17](../planos-salvador/17-timelapse.md), na seção [Pendências da Entrega 17](17-timelapse.md#pendencias): "Registrar menu no banco via INSERT em `dbo.sis_menu_infos`". A mesma pendência aparecia em outras entregas (ex.: [Entrega 05](05-dupla-analise.md#pendências)).
+- Abrange todos os modulos com tela JSP propria que nao possuiam entrada no menu.
+- Numeração: o número 20 desta entrega não corresponde ao Plano 20 (Dashboard Builder), cuja entrega é a [21](21-dashboard-builder.md). Ver [`rastreabilidade-tr.md`](rastreabilidade-tr.md#cobertura-por-plano).
 
 ## Modulos registrados
 

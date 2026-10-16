@@ -8,7 +8,7 @@
 
 ## Pré-requisito
 
-Execute as migrações:
+As migrações já foram executadas no `GTW_MURALHA_DEV` (conferido em 2026-10-15; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md)). Em outro ambiente, execute:
 ```powershell
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_dupla_analise.sql"
 sqlcmd -S 10.0.0.200 -d GTW_MURALHA_DEV -U consilux -P "..." -i "docs\banco-de-dados\migracoes\20261008_complementar.sql"
@@ -24,7 +24,7 @@ SELECT TOP 1 * FROM muralha.vtr_status_analise;
 -- Esperado: sem erro; vtr_status_analise inicialmente vazia (preenchida sob demanda via MERGE)
 ```
 
-**Resultado:** pendente execução da migração
+**Resultado:** ⏳ pendente — migração já executada no DEV; teste ainda não executado
 
 ---
 

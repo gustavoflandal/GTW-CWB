@@ -1,6 +1,6 @@
 # Documentação do GTW-CWB
 
-Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha Digital), Consilux Tecnologia. Esta pasta é a **base de conhecimento oficial** para qualquer implementação e para orientar subagents. Gerada em 2026-10-08 a partir do código e do banco `GTW_MURALHA_DEV`.
+Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha Digital), Consilux Tecnologia. Esta pasta é a **base de conhecimento oficial** para qualquer implementação e para orientar subagents. Gerada em 2026-10-08 a partir do código e do banco `GTW_MURALHA_DEV`; índice atualizado em 2026-10-16.
 
 > **Regras de ouro:** (1) a stack em `.setup-gtw` é imutável; (2) siga o padrão visual (`05`); (3) sem segredos no repositório; (4) banco somente leitura sem autorização; (5) todo código novo verifica sessão e permissão.
 
@@ -26,7 +26,7 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [01-stack-e-ambiente.md](requisitos/01-stack-e-ambiente.md) | Stack (`.setup-gtw`), versões, build/run/debug |
 | [02-arquitetura.md](requisitos/02-arquitetura.md) | Camadas, requisição, sessão, dados, WebSocket, jobs, SOAP |
 | [03-estrutura-do-projeto.md](requisitos/03-estrutura-do-projeto.md) | Árvore e onde colocar cada coisa |
-| [04-modulos-funcionais.md](requisitos/04-modulos-funcionais.md) | Catálogo funcional: módulos originais, 20 planos PoC Salvador (menus, telas, APIs, tabelas) |
+| [04-modulos-funcionais.md](requisitos/04-modulos-funcionais.md) | Catálogo funcional: módulos originais e planos PoC Salvador (menus, telas, APIs, tabelas) |
 | [05-padrao-visual.md](requisitos/05-padrao-visual.md) | **Design system**: cores, fontes, ícones, componentes, layout |
 | [06-padroes-de-codigo.md](requisitos/06-padroes-de-codigo.md) | Padrões Java/JSP/JS/SQL e anti-padrões |
 | [07-configuracao-e-segredos.md](requisitos/07-configuracao-e-segredos.md) | Arquivos de configuração, variáveis de ambiente |
@@ -39,6 +39,9 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
 | [chamados/](chamados/) | Sistema de Chamados (Plano 22): arquitetura, manual do usuário, sessões CH-1 a CH-3, relatórios |
+| [planos-salvador/](planos-salvador/) | 23 planos PoC Salvador (01–23) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
+| [entregas/](entregas/README.md) | Relatórios de entrega 01–23 e a matriz canônica de aderência ao TR ([`itens-edital-x-entregas.md`](entregas/itens-edital-x-entregas.md)) |
+| [testes/](testes/README.md) | Roteiros de teste manual por plano |
 | [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 
 ## Manutenção

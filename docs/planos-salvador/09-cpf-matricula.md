@@ -1,5 +1,7 @@
 # CPF e Matrícula no Cadastro de Usuários — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Adicionar campos `cpf` e `matricula` ao cadastro de usuários do sistema, com validação de formato no back-end e persistência em `dbo.sis_usuario`.

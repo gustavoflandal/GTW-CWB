@@ -1,5 +1,7 @@
 # Integração com Sensores Externos (Waze/SAMU) — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Importar periodicamente dados de incidentes de tráfego de fontes externas (Waze for Cities API, SAMU ou arquivo CSV) e correlacioná-los com registros de passagens para análise de contexto; exibir incidentes no mapa e cruzar com equipamentos afetados.

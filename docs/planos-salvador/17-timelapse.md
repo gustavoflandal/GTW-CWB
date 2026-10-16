@@ -1,5 +1,7 @@
 # Time-lapse de Passagens por Equipamento — Plano de Implementação
 
+> **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
+
 > **Para agentes:** use `superpowers:executing-plans`.
 
 **Goal:** Exibir sequência animada de imagens de passagens de um mesmo equipamento em um intervalo de tempo, permitindo análise visual de padrões de tráfego; navegação frame-a-frame e controle de velocidade.
