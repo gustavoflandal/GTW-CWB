@@ -26,7 +26,8 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 
 | Item TR | Requisito | Situação | Plano | Entrega | Teste |
 |---|---|---|---|---|---|
-| 5.2.1.2 | Verificacao SHA-256 de integridade | ⚠️ | [02](../planos-salvador/02-sha256-integridade.md) | [02](02-sha256-integridade.md) | [02](../testes/02-sha256-integridade.md) |
+| 5.2.1.2 | Verificacao SHA-256 de integridade | ⚠️ | [02](../planos-salvador/02-sha256-integridade.md), [25](../planos-salvador/25-integridade-sha256-recepcao.md) | [02](02-sha256-integridade.md), [25](25-integridade-sha256-recepcao.md) | [02](../testes/02-sha256-integridade.md), [25](../testes/25-integridade-sha256-recepcao.md) |
+| 5.2.1.3 | Registro de origem, captura, recepcao e quantidades (recebidos, integros, rejeitados com motivo) | ⚠️ | [25](../planos-salvador/25-integridade-sha256-recepcao.md) | [25](25-integridade-sha256-recepcao.md) | [25](../testes/25-integridade-sha256-recepcao.md) |
 | 5.2.2.3 | Indice minimo 80% de aderencia da pre-classificacao | ✅ | [08](../planos-salvador/08-painel-assertividade.md) | [08](08-painel-assertividade.md) | [08](../testes/08-painel-assertividade.md) |
 | 5.2.2.6 | Painel de controle com taxa de assertividade | ⚠️ | [08](../planos-salvador/08-painel-assertividade.md) | [08](08-painel-assertividade.md) | [08](../testes/08-painel-assertividade.md) |
 | 5.2.3.1–5 | Dupla analise independente, desempatador, log | ✅ | [05](../planos-salvador/05-dupla-analise.md) | [05](05-dupla-analise.md) | [05](../testes/05-dupla-analise.md) |
@@ -114,4 +115,5 @@ Itens do TR tratados por cada plano; "(parcial)" quando o item está ⚠️ na m
 | 22 | Sistema de Chamados | 22 | 22 | 7.2.3 (a–f), 7.2.4 |
 | 23 | Correção da documentação de aderência | 23 | 23 | Sem itens próprios: alinha a documentação ao código |
 | 24 | Correções pontuais da auditoria | 24 | 24 | Sem itens próprios: corrige defeitos (completa a Waze da Entrega 19) |
+| 25 | Integridade SHA-256 na recepção | 25 | 25 | 5.2.1.2 (parcial: conferência pronta, sem hash de origem enviado), 5.2.1.3 (parcial: aguardando migração e teste) |
 | — | Registro dos módulos no menu (pendência da Entrega 17) | 20 | — | Sem itens próprios |

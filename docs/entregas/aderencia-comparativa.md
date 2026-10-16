@@ -52,8 +52,8 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | Ref. TR | Requisito | Antes | Depois | Resolução |
 |---|---|---|---|---|
 | 5.2.1.1 | Recepção automática | ✅ | ✅ | Já existente |
-| 5.2.1.2 | SHA-256 integridade | ❌ | ⚠️ | Plano 02 (hash a posteriori, sem conferência) |
-| 5.2.1.3 | Registro de recepção | ⚠️ | ⚠️ | Parcial |
+| 5.2.1.2 | SHA-256 integridade | ❌ | ⚠️ | Planos 02 e 25 (conferência com hash de origem por equipamento; nenhum equipamento envia hash ainda) |
+| 5.2.1.3 | Registro de recepção | ⚠️ | ⚠️ | Plano 25 (a-f por imagem e por equipamento/dia; aguardando migração e teste) |
 | 5.2.1.4 | Indexação por tipo/equip/local | ✅ | ✅ | Já existente |
 | 5.2.1.5 | Recepção simultânea + margem | ⚠️ | ⚠️ | Sem métricas |
 | 5.2.1.6 | Registros fora do prazo | ❌ | ⚠️ | Plano 10 (parcial) |

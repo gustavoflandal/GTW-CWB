@@ -35,6 +35,7 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 20 — Dashboard Builder (entrega 21; inclui a revisão do Plano 21) | [20-dashboard-builder.md](20-dashboard-builder.md) | ⏳ Pendente (testes TestNG do módulo registrados na Entrega 21; roteiro no navegador pendente) |
 | 22 — Sistema de Chamados | [22-sistema-chamados.md](22-sistema-chamados.md) | ⏳ Parcial: teste integrado de 2026-10-15 com 10 de 10 casos aprovados; navegador e perfil Gestor pendentes |
 | 23 — Correção da documentação de aderência | [23-correcao-documentacao-aderencia.md](23-correcao-documentacao-aderencia.md) | ⏳ Pendente (script de validação executado na nuvem; roteiro a repetir no Windows) |
-| 24 — Correções pontuais da auditoria | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) | ⏳ Parcial: 15 testes TestNG aprovados na nuvem; roteiro manual pendente |
+| 24 — Correções pontuais da auditoria | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) | ⏳ Parcial: 15 testes TestNG aprovados na nuvem e no Windows; roteiro manual pendente |
+| 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
 
 Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

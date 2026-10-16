@@ -73,8 +73,8 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | Item do edital | Situação | Entrega / evidência |
 |---|---|---|
 | 5.2.1.1 | ✅ Já atendido pelo GTW | — |
-| 5.2.1.2 | ⚠️ Parcial | [02-sha256-integridade.md](02-sha256-integridade.md) — `JobSha256Imagem` calcula o hash depois que a imagem já foi gravada e grava `status_integridade = 'OK'` sem comparar com hash de origem; não há verificação na recepção |
-| 5.2.1.3 | ⚠️ Parcial | — |
+| 5.2.1.2 | ⚠️ Parcial | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) (corrige a [02](02-sha256-integridade.md)) — `JobSha256Imagem` compara o SHA-256 com o hash de origem configurado por equipamento e grava `INTEGRO`/`DIVERGENTE`/`SEM_CONFERENCIA`/`ERRO_LEITURA`, com alerta e auditoria na divergência. Parcial porque nenhum equipamento envia hash hoje (Fase 11) e a migração e o roteiro estão pendentes |
+| 5.2.1.3 | ⚠️ Parcial | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) — equipamento, captura, recepção e motivo por imagem em `muralha.vtr_imagem_integridade`; recebidos, íntegros e rejeitados por equipamento e dia em `muralha.v_integridade_recepcao` e na tela de integridade. Aguardando migração e teste |
 | 5.2.1.4 | ✅ Já atendido pelo GTW | — |
 | 5.2.1.5 | ⚠️ Parcial | — |
 | 5.2.1.6 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |

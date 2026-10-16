@@ -89,6 +89,11 @@ $b = New-Object byte[] 32
 - Chave `mapa_api_monitoramento_trecho` em `muralha.config_chave_valor`, valor `host[:porta]` (sem `http://` nem caminho). Criada por `docs/banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql` com o endereço que antes estava fixo em `utils/maps-config.js`.
 - Lida por `muralha.digital.mapas.MapaConfigServlet` (`/MuralhaDigital/MapaConfig?acao=obterApiMonitoramentoTrecho`), que recusa valor fora do formato; usada pela tela `pages/mapa-situacao-transito/`. Sem a chave, o mapa abre sem os trechos e o console do navegador avisa.
 
+### 4.2 Origem do hash de integridade das imagens
+
+- Chaves `INTEGRIDADE_ORIGEM_HASH` (`PAYLOAD_SOAP`, `DADO_BRUTO:<campo>` ou `AUSENTE`), `INTEGRIDADE_LOTE`, `INTEGRIDADE_JANELA_HORAS`, `INTEGRIDADE_ESPERA_HASH_MIN` e `INTEGRIDADE_ALERTA_HABILITADO` em `muralha.config_chave_valor`; exceções por equipamento em `muralha.equipamento_integridade_config`. Criadas por `docs/banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql`.
+- Lidas por `muralha.digital.integridade.ParametrosIntegridade` (valor inválido cai no padrão com aviso no log). A origem é editada na aba Configuração de `pages/monitoramento/integridade/` (`/MuralhaDigital/IntegridadeConfig`, grupo 42), com registro em `sis_log_auditoria`. Ver [Entrega 25](../entregas/25-integridade-sha256-recepcao.md).
+
 ## 5. Checklist ao criar uma nova integração
 1. Definir a credencial como variável de ambiente ou tag em `muralha-digital-config.xml` (+ campo em `Inicializacao`).
 2. Atualizar o `.example` com tag vazia e este documento.

@@ -6,7 +6,7 @@
 
 ---
 
-> **Limitação conhecida (auditoria de 2026-10-16):** `JobSha256Imagem` calcula o hash depois que a imagem já está gravada e grava `status_integridade = 'OK'` em todos os casos, sem comparar com um hash de origem. A verificação na recepção exigida por §5.2.1.2 ainda não existe; por isso o item está ⚠️ na [matriz canônica](itens-edital-x-entregas.md). A correção está prevista na Fase 3 da correção da auditoria (ver [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md), seção "Próximas fases").
+> **Limitação conhecida (auditoria de 2026-10-16):** `JobSha256Imagem` calculava o hash depois que a imagem já estava gravada e gravava `status_integridade = 'OK'` em todos os casos, sem comparar com um hash de origem. **Corrigido na [Entrega 25](25-integridade-sha256-recepcao.md)** (Fase 3): o job agora compara com o hash de origem configurado por equipamento e o legado `'OK'` vira `SEM_CONFERENCIA`. O item 5.2.1.2 continua ⚠️ na [matriz canônica](itens-edital-x-entregas.md) até os equipamentos enviarem o hash. As seções abaixo descrevem a versão de 2026-10-08.
 
 ## Origem
 

@@ -36,8 +36,8 @@
 | Requisito | Ref. TR | Status | Evidência no GTW-CWB | Resolução PoC |
 |---|---|---|---|---|
 | Recepção automática de registros dos equipamentos | 5.2.1.1 | ✅ | SOAP `CSXEventsWS`, `ConfigEquipWS`, jobs Quartz de processamento | — |
-| Verificação de integridade SHA-256 | 5.2.1.2 | ⚠️ | **PoC parcial:** `HashUtil` e o job Quartz `JobSha256Imagem` calculam o hash **depois** da gravação e gravam `status_integridade = 'OK'` sem comparar com um hash de origem; não há verificação na recepção. Tabela `vtr_imagem_complemento` | [Plano 02](../../docs/planos-salvador/02-sha256-integridade.md) · [Entrega](../../docs/entregas/02-sha256-integridade.md) · [Teste](../../docs/testes/02-sha256-integridade.md) |
-| Registro de: equipamento origem, data/hora captura/recepção, qtdes | 5.2.1.3 | ⚠️ | Dados parcialmente em `infracao`, `infracao_processo`, `eventos_csx` | — |
+| Verificação de integridade SHA-256 | 5.2.1.2 | ⚠️ | **PoC parcial:** o job Quartz `JobSha256Imagem` compara o SHA-256 da imagem gravada com o hash de origem configurado por equipamento (`PAYLOAD_SOAP`, `DADO_BRUTO:<campo>` ou `AUSENTE`) e grava `INTEGRO`, `DIVERGENTE`, `SEM_CONFERENCIA` ou `ERRO_LEITURA` em `muralha.vtr_imagem_integridade`; divergência gera alerta e auditoria. A conferência roda depois da gravação (a imagem é gravada por procedure externa) e nenhum equipamento envia hash hoje, então tudo fica `SEM_CONFERENCIA` até a Fase 11. Migração pendente | [Plano 02](../../docs/planos-salvador/02-sha256-integridade.md) · [Plano 25](../../docs/planos-salvador/25-integridade-sha256-recepcao.md) · [Entrega 25](../../docs/entregas/25-integridade-sha256-recepcao.md) · [Teste 25](../../docs/testes/25-integridade-sha256-recepcao.md) |
+| Registro de: equipamento origem, data/hora captura/recepção, qtdes | 5.2.1.3 | ⚠️ | **PoC parcial:** equipamento, captura, recepção, status e motivo por imagem em `muralha.vtr_imagem_integridade`; recebidos, íntegros e rejeitados (divergentes + erro de leitura) por equipamento e dia na view `muralha.v_integridade_recepcao` e na tela Integridade das Imagens. Migração e roteiro pendentes | [Plano 25](../../docs/planos-salvador/25-integridade-sha256-recepcao.md) · [Entrega 25](../../docs/entregas/25-integridade-sha256-recepcao.md) |
 | Indexação por tipo de infração, equipamento, localização, período, lote | 5.2.1.4 | ✅ | Tabelas `infracao`, `infracao_processo`, filtros nos servlets GTW | — |
 | Recepção simultânea de múltiplos equipamentos + margem 30% | 5.2.1.5 | ⚠️ | Pool JDBC max 400; sem métricas de capacidade documentadas | — |
 | Sinalização de registros fora do prazo | 5.2.1.6 | ⚠️ | **PoC parcial:** SLA de pré-processamento monitora prazos, mas sem flag individual por registro | [Plano 10](../../docs/planos-salvador/10-sla-preprocessamento.md) · [Entrega](../../docs/entregas/10-sla-preprocessamento.md) |
@@ -233,7 +233,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção, calculada sobre os 232 it
 1. ~~Dupla análise independente obrigatória (§5.2.3 e §5.5)~~ → **Plano 05**
 2. ~~Obliteração de imagens — LGPD (§5.2.4.3)~~ → **Plano 06**
 3. ~~Controle de política de senhas e MFA (§5.1.5)~~ → **Planos 03 e 04**
-4. Verificação de integridade SHA-256 (§5.2.1.2) → **Plano 02** (parcial: sem conferência na recepção)
+4. Verificação de integridade SHA-256 (§5.2.1.2) → **Planos 02 e 25** (parcial: conferência pronta; falta o equipamento enviar o hash, Fase 11)
 5. Painel de assertividade da pré-classificação (§5.2.2.6) → **Plano 08** (parcial: sem volume, divergências e alerta < 80%)
 6. ~~Conteúdo mínimo do log de auditoria (§5.1.9)~~ → **Plano 01**; consulta e exportação (§5.1.10) parciais
 7. ~~SLA de latência ≤4s monitorado (§5.6.2.3 / §5.7.9)~~ → **Plano 07**
