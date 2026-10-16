@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–25. As migrações da correção da auditoria (Planos 24 e 25) ainda **não** foram executadas (seção 1, "Correção da auditoria").
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–26. As migrações da correção da auditoria (Planos 24 a 26) ainda **não** foram executadas (seção 1, "Correção da auditoria").
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -59,6 +59,7 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 |---|---|---|---|
 | [`20261016_vtr_imagem_complemento.sql`](../banco-de-dados/migracoes/20261016_vtr_imagem_complemento.sql) | 24 | DDL idempotente de `muralha.vtr_imagem_complemento` (no DEV a tabela já existe; não faz nada) | ⏳ Pendente (opcional no DEV) |
 | [`20261016_config_mapa_api_trecho.sql`](../banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql) | 24 | Chave `mapa_api_monitoramento_trecho` | ⏳ **Pendente — necessário** para a tela Mapa de situação do trânsito |
+| [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para o histórico de parâmetros |
 | [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ⏳ Pendente |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário**: sem ele o `JobSha256Imagem` não confere nenhuma imagem |
 
@@ -159,6 +160,12 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | `INTEGRIDADE_JANELA_HORAS` | `24` | 25 | Só confere passagens capturadas nas últimas N horas |
 | `INTEGRIDADE_ESPERA_HASH_MIN` | `10` | 25 | Minutos esperando o hash de origem antes de concluir "não recebido" |
 | `INTEGRIDADE_ALERTA_HABILITADO` | `1` | 25 | 1 = divergência gera alerta em `muralha.alerta` |
+| `LOG_TECNICO_PERIODO_MAX_DIAS` | `31` | 26 | Período máximo das consultas de logs técnicos |
+| `LOG_TECNICO_PROCESSOS` | `NAO_FINALIZADOS` | 26 | `dbo.log_processos` na lista: `NENHUM`, `NAO_FINALIZADOS` ou `TODOS` |
+| `LOG_TECNICO_PROCESSO_ATRASO_MIN` | `30` | 26 | Minutos sem atualização para um processo contar como não finalizado |
+| `LOG_TECNICO_EXPORTACAO_MAX` | `50000` | 26 | Linhas máximas do CSV de logs técnicos |
+| `LOG_TECNICO_JANELA_CORRELACAO_MIN` | `10` | 26 | Janela (± minutos) da correlação temporal |
+| `PARAMETRO_HIST_IGNORAR_CONFIGEQUIP` | `dataHoraConfiguracao` | 26 | Campos do ConfigEquip fora do histórico de parâmetros |
 
 ---
 

@@ -117,8 +117,8 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.4.4.4 | Exportação GIS | ❌ | ⚠️ | Plano 16 (só equipamentos, GeoJSON/KML) |
 | 5.4.5 | Relatórios analíticos | ⚠️ | ⚠️ | Plano 20 (widgets TABLE) |
 | 5.4.6.1-3 | KPIs com metas/alertas | ❌ | ⚠️ | Plano 15 (sem meta, histórico e alerta) |
-| 5.4.7.1-7 | Repositório de logs | ⚠️ | ⚠️ | Plano 01 cobre só logs de usuários |
-| 5.4.7.6 | Histórico de configurações | ❌ | ❌ | Sem valor anterior/novo |
+| 5.4.7.1-7 | Repositório de logs | ⚠️ | ⚠️ | Plano 26 (logs técnicos unificados; sem trilha imutável; aguardando migração e teste) |
+| 5.4.7.6 | Histórico de configurações | ❌ | ⚠️ | Plano 26 (`parametro_historico`; aguardando migração e teste) |
 
 ### §5.5 — Pré-processamento
 

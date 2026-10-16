@@ -27,8 +27,8 @@
 |---|---|---|
 | ✅ Implementado em entrega | 54 | 23% |
 | ✅ Já atendido pelo GTW | 32 | 14% |
-| ⚠️ Parcial | 84 | 36% |
-| ❌ Não implementado | 62 | 27% |
+| ⚠️ Parcial | 85 | 37% |
+| ❌ Não implementado | 61 | 26% |
 | **Total** | **232** | 100% |
 
 Em 2026-10-16 a matriz passou de 207 para 232 itens: entraram os 28 subitens de 5.6 e 5.7.7 que estavam omitidos (5.6.1.3–5, 5.6.2.4–5, 5.6.3.1–4, 5.6.4.4–5, 5.6.5.1–4, 5.6.6.2–4, 5.6.7.1–5, 5.7.7.2–6) e saíram as três linhas agregadas 5.6.3, 5.6.5 e 5.6.7.
@@ -42,12 +42,12 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.1 Controle de Acesso | 14 | 11 | 3 | 0 | 89% |
 | 5.2 Gestão e Classificação de Infrações | 39 | 27 | 10 | 2 | 82% |
 | 5.3 Alertas de Irregularidades | 28 | 11 | 15 | 2 | 66% |
-| 5.4 Inteligência de Dados | 33 | 11 | 20 | 2 | 64% |
+| 5.4 Inteligência de Dados | 33 | 11 | 21 | 1 | 65% |
 | 5.5 Pré-processamento de Imagens | 23 | 6 | 10 | 7 | 48% |
 | 5.6 Infraestrutura de Comunicação | 32 | 8 | 6 | 18 | 34% |
 | 5.7 LAP | 38 | 11 | 12 | 15 | 45% |
 | 5.8 Datacenter e Continuidade | 25 | 1 | 8 | 16 | 20% |
-| **Total** | **232** | **86** | **84** | **62** | **55%** |
+| **Total** | **232** | **86** | **85** | **61** | **55%** |
 
 ## 5.1 — Princípios Gerais de Controle de Acesso
 
@@ -175,12 +175,12 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4.6.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
 | 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — 4 KPIs iniciais em `kpi_config`; o conjunto mínimo do item não está cadastrado |
 | 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) — `kpi_config` só tem dois limiares (atenção e crítico); sem meta, histórico nem alerta automático |
-| 5.4.7.1 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — `sis_log_auditoria` é log de ações de **usuários**; os logs técnicos estão em `dbo.eventos_csx`, `dbo.status_conexao`, `dbo.status_energia` e `dbo.manutencao` (legado, consultados só pela tela GWT) |
-| 5.4.7.2 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — `sis_log_auditoria` é log de ações de **usuários**; os logs técnicos estão em `dbo.eventos_csx`, `dbo.status_conexao`, `dbo.status_energia` e `dbo.manutencao` (legado, consultados só pela tela GWT) |
-| 5.4.7.3 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Consulta só dos logs de usuários; os logs técnicos não têm tela Muralha |
-| 5.4.7.4 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Campos presentes em `sis_log_auditoria`; logs técnicos legados sem padronização |
-| 5.4.7.5 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md) — Filtros e exportação só para logs de usuários; sem correlação temporal nem relatório técnico por equipamento |
-| 5.4.7.6 | ❌ Não implementado | Não há histórico de valor anterior/novo dos parâmetros; `RelatorioAlteracaoConfigEquip.doGet` está vazio |
+| 5.4.7.1 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Repositório central na tela Logs Técnicos: 12 fontes (`eventos_csx`, `status_conexao`, `status_energia`, `manutencao`, `log_alerta`, `log_processos`, disponibilidade, SLA, auditoria, históricos de parâmetros) lidas e normalizadas por `ServicoLogTecnico`, sem cópia; o recebimento continua nas tabelas do legado. Implementado, aguardando migração e teste no navegador |
+| 5.4.7.2 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Alíneas a-f cobertas pelas fontes existentes (equipamento, eventos, falhas/degradação, alterações de configuração, ações de usuário, ocorrências sistêmicas); nada novo é recebido além do que o legado já grava. Implementado, aguardando migração e teste no navegador |
+| 5.4.7.3 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Categorias energia, comunicação, sincronismo, hardware, software, sensor, parâmetro, intervenção técnica, processamento e usuário (alíneas a-i); "formação de lotes" (i) não tem fonte de log própria. Implementado, aguardando migração e teste no navegador |
+| 5.4.7.4 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Registro normalizado com data/hora, equipamento, usuário quando houver, descrição e referência à linha de origem; a rastreabilidade integral (e) depende das tabelas legadas, sem trilha imutável |
+| 5.4.7.5 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Filtros por período, equipamento, localidade, categoria e severidade; linha do tempo e correlação temporal; CSV com SHA-256, XLS e PDF; relatório técnico por equipamento; exportação e relatório auditados. Implementado, aguardando migração e teste no navegador |
+| 5.4.7.6 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — `muralha.parametro_historico` (data, parâmetro, valor anterior, valor novo, usuário, IP) alimentada pelo ConfigEquip (web service e importação), KPIs, retenção e configuração de integridade; as telas antigas seguem só com o texto de `config_chave_valor_hist`. Implementado, aguardando migração e teste no navegador |
 | 5.4.7.7 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) — Retenção configurável cobre `sis_log_auditoria`; logs técnicos legados sem política própria |
 
 ## 5.5 — Serviço de Pré-Processamento de Imagens

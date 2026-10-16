@@ -94,6 +94,11 @@ $b = New-Object byte[] 32
 - Chaves `INTEGRIDADE_ORIGEM_HASH` (`PAYLOAD_SOAP`, `DADO_BRUTO:<campo>` ou `AUSENTE`), `INTEGRIDADE_LOTE`, `INTEGRIDADE_JANELA_HORAS`, `INTEGRIDADE_ESPERA_HASH_MIN` e `INTEGRIDADE_ALERTA_HABILITADO` em `muralha.config_chave_valor`; exceções por equipamento em `muralha.equipamento_integridade_config`. Criadas por `docs/banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql`.
 - Lidas por `muralha.digital.integridade.ParametrosIntegridade` (valor inválido cai no padrão com aviso no log). A origem é editada na aba Configuração de `pages/monitoramento/integridade/` (`/MuralhaDigital/IntegridadeConfig`, grupo 42), com registro em `sis_log_auditoria`. Ver [Entrega 25](../entregas/25-integridade-sha256-recepcao.md).
 
+### 4.3 Logs técnicos e histórico de parâmetros
+
+- Chaves `LOG_TECNICO_PERIODO_MAX_DIAS`, `LOG_TECNICO_PROCESSOS`, `LOG_TECNICO_PROCESSO_ATRASO_MIN`, `LOG_TECNICO_EXPORTACAO_MAX`, `LOG_TECNICO_JANELA_CORRELACAO_MIN` e `PARAMETRO_HIST_IGNORAR_CONFIGEQUIP` em `muralha.config_chave_valor`, criadas por `docs/banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql`; sem elas valem os padrões de `muralha.digital.logtecnico.ParametrosLogTecnico`.
+- **Código novo que grava parâmetro** deve registrar o valor anterior e o novo com `HistoricoParametros.registrarSemFalhar` (ou `ConfigChaveValor.gravar(conn, chave, valor, ContextoAlteracao)` para `config_chave_valor`). Ver [Entrega 26](../entregas/26-logs-tecnicos-historico-parametros.md).
+
 ## 5. Checklist ao criar uma nova integração
 1. Definir a credencial como variável de ambiente ou tag em `muralha-digital-config.xml` (+ campo em `Inicializacao`).
 2. Atualizar o `.example` com tag vazia e este documento.
