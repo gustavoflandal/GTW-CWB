@@ -38,7 +38,44 @@ public class KpiServlet extends HttpServlet {
             conn = Conexao.getConexao();
             String acao = req.getParameter("acao");
 
-            if ("listarConfig".equals(acao)) {
+            if ("historico".equals(acao)) {
+                int idKpi = Integer.parseInt(req.getParameter("idKpi"));
+                int dias = 30;
+                try { dias = Integer.parseInt(req.getParameter("dias")); } catch (Exception ignored) {}
+                JsonArray historico = new JsonArray();
+                try (PreparedStatement ps2 = conn.prepareStatement(
+                        "SELECT valor, status, dt_coleta FROM muralha.kpi_historico " +
+                        "WHERE id_kpi = ? AND dt_coleta >= DATEADD(DAY, -?, GETDATE()) " +
+                        "ORDER BY dt_coleta")) {
+                    ps2.setInt(1, idKpi);
+                    ps2.setInt(2, dias);
+                    try (ResultSet rs2 = ps2.executeQuery()) {
+                        while (rs2.next()) {
+                            JsonObject h = new JsonObject();
+                            h.addProperty("valor", rs2.getDouble("valor"));
+                            h.addProperty("status", rs2.getString("status"));
+                            h.addProperty("dtColeta", rs2.getString("dt_coleta"));
+                            historico.add(h);
+                        }
+                    }
+                }
+                JsonObject metaObj = new JsonObject();
+                try (PreparedStatement ps3 = conn.prepareStatement(
+                        "SELECT meta, meta_minima, categoria FROM muralha.kpi_config_meta WHERE id_kpi = ?")) {
+                    ps3.setInt(1, idKpi);
+                    try (ResultSet rs3 = ps3.executeQuery()) {
+                        if (rs3.next()) {
+                            if (rs3.getObject("meta") != null) metaObj.addProperty("meta", rs3.getDouble("meta"));
+                            if (rs3.getObject("meta_minima") != null) metaObj.addProperty("metaMinima", rs3.getDouble("meta_minima"));
+                            metaObj.addProperty("categoria", rs3.getString("categoria"));
+                        }
+                    }
+                }
+                result.addProperty("ok", true);
+                result.add("historico", historico);
+                result.add("meta", metaObj);
+
+            } else if ("listarConfig".equals(acao)) {
                 JsonArray configs = new JsonArray();
                 try (PreparedStatement ps = conn.prepareStatement(
                         "SELECT id, nome, descricao, query_sql, unidade, " +
