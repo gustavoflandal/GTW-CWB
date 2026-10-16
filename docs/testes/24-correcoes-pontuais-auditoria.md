@@ -9,9 +9,9 @@ Roteiro para a [Entrega 24](../entregas/24-correcoes-pontuais-auditoria.md). Exe
 
 ## T01 — Testes automatizados
 
-Rodar pelo TestNG (como na Entrega 22, o provider `surefire-testng` não está no cache Maven offline) as classes `muralha.digital.notificacao.ConfiguracaoSonsPrioridadeTest`, `muralha.digital.mapas.MapaConfigServletTest` e `muralha.digital.sensores.IncidenteImportJobTest`.
+Rodar pelo TestNG (como na Entrega 22, o provider `surefire-testng` não está no cache Maven offline) as classes `muralha.digital.notificacao.ConfiguracaoSonsPrioridadeTest`, `muralha.digital.mapas.MapaConfigServletTest`, `muralha.digital.sensores.IncidenteImportJobTest` e `com.consilux.servlet.relatorio.RelatorioAlteracaoConfigEquipTest`.
 
-**Esperado:** 11 testes, 0 falhas. Na nuvem (2026-10-16): ✅ 11/11. No Windows: ⏳.
+**Esperado:** 15 testes, 0 falhas. Na nuvem (2026-10-16): ✅ 15/15. No Windows: ⏳.
 
 ## T02 — Prioridade de tipo de alerta
 
@@ -21,6 +21,12 @@ Em Configuração de monitoramento, escolher um tipo de alerta e:
 3. Gravar uma prioridade livre. **Esperado:** sucesso.
 
 ⏳ Pendente.
+
+## T02b — Relatório de alterações de configuração (menu 201)
+
+Abrir o menu "Relatório Alt. ConfigEquip", escolher um local e um período e clicar em Visualizar.
+
+**Esperado:** tabela com as versões do local e a configuração vigente, data e usuário da última alteração; "Nenhuma alteração no período" quando não houver; mensagem de erro para data inválida ou período acima de 366 dias. Antes a página ficava em branco. ⏳ Pendente.
 
 ## T03 — Log de auditoria com o usuário certo
 
