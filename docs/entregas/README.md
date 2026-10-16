@@ -31,6 +31,7 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 21 | Dashboard Builder Self-Service (Planos 20 e 21) | 2026-10-13 | 🟡 Implementado — aguardando teste no navegador | [21-dashboard-builder.md](21-dashboard-builder.md) |
 | 22 | Sistema de Gerenciamento de Chamados | 2026-10-15 | 🟡 Implementado — migrações executadas e teste integrado aprovado (10/10); faltam navegador e perfil Gestor | [22-sistema-chamados.md](22-sistema-chamados.md) |
 | 23 | Correção da documentação de aderência (Plano 23) | 2026-10-16 | 🟡 Implementado — aguardando validação no Windows | [23-correcao-documentacao-aderencia.md](23-correcao-documentacao-aderencia.md) |
+| 24 | Correções pontuais da auditoria (Plano 24) | 2026-10-16 | 🟡 Implementado — aguardando build, migração e teste | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) |
 
 > Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 

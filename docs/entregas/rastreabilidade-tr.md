@@ -113,4 +113,5 @@ Itens do TR tratados por cada plano; "(parcial)" quando o item está ⚠️ na m
 | 21 | Consulta SQL própria sem Cube | 21 (embutido) | 20 | Sem itens próprios: corrige a camada de consulta do Plano 20 |
 | 22 | Sistema de Chamados | 22 | 22 | 7.2.3 (a–f), 7.2.4 |
 | 23 | Correção da documentação de aderência | 23 | 23 | Sem itens próprios: alinha a documentação ao código |
+| 24 | Correções pontuais da auditoria | 24 | 24 | Sem itens próprios: corrige defeitos (completa a Waze da Entrega 19) |
 | — | Registro dos módulos no menu (pendência da Entrega 17) | 20 | — | Sem itens próprios |

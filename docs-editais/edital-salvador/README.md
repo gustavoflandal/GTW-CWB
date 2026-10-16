@@ -120,3 +120,4 @@ Os planos detalhados de implementação de cada requisito estão em [`docs/plano
 | 21 | Dashboard Builder — consulta SQL própria, sem Cube (sem entrega própria; ver entrega 21) | [21-dashboards-consulta-sql-sem-cube.md](../../docs/planos-salvador/21-dashboards-consulta-sql-sem-cube.md) |
 | 22 | Sistema de Gerenciamento de Chamados | [22-sistema-chamados.md](../../docs/planos-salvador/22-sistema-chamados.md) |
 | 23 | Correção da documentação de aderência (auditoria de 2026-10-16, Fase 1) | [23-correcao-documentacao-aderencia.md](../../docs/planos-salvador/23-correcao-documentacao-aderencia.md) |
+| 24 | Correções pontuais da auditoria (Fase 2) | [24-correcoes-pontuais-auditoria.md](../../docs/planos-salvador/24-correcoes-pontuais-auditoria.md) |
