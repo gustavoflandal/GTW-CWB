@@ -123,3 +123,4 @@ Os planos detalhados de implementação de cada requisito estão em [`docs/plano
 | 24 | Correções pontuais da auditoria (Fase 2) | [24-correcoes-pontuais-auditoria.md](../../docs/planos-salvador/24-correcoes-pontuais-auditoria.md) |
 | 25 | Integridade SHA-256 na recepção (Fase 3) | [25-integridade-sha256-recepcao.md](../../docs/planos-salvador/25-integridade-sha256-recepcao.md) |
 | 26 | Logs técnicos e histórico de parâmetros (Fase 4) | [26-logs-tecnicos-historico-parametros.md](../../docs/planos-salvador/26-logs-tecnicos-historico-parametros.md) |
+| 27 | Score de OCR, revisão automática e múltiplas placas (Fase 5) | [27-score-ocr-revisao-placas.md](../../docs/planos-salvador/27-score-ocr-revisao-placas.md) |

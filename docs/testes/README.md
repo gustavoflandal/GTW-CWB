@@ -38,5 +38,6 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 24 — Correções pontuais da auditoria | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) | ⏳ Parcial: 15 testes TestNG aprovados na nuvem e no Windows; roteiro manual pendente |
 | 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
 | 26 — Logs técnicos e histórico de parâmetros | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) | ⏳ Parcial: 42 testes TestNG e consulta real somente leitura aprovados no Windows; migração e roteiro no navegador pendentes |
+| 27 — Score de OCR e revisão de placas | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) | ⏳ Parcial: 32 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
 
 Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

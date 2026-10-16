@@ -60,7 +60,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.2.2.1 | Pré-classificação ≤4s | ⚠️ | ⚠️ | Sem SLA monitorado |
 | 5.2.2.3 | Aderência ≥80% | ❌ | ✅ | Plano 08 |
 | 5.2.2.4 | OCR/LAP com conferência | ✅ | ✅ | Já existente |
-| 5.2.2.5 | Encaminhamento por score | ⚠️ | ⚠️ | Sem automação |
+| 5.2.2.5 | Encaminhamento por score | ⚠️ | ⚠️ | Plano 27 (regra de divergência pronta; sem OCR central) |
 | 5.2.2.6 | Painel de assertividade | ❌ | ⚠️ | Plano 08 (sem volume, divergências, revisão e alerta < 80%) |
 | 5.2.3.2-3 | Dupla análise independente | ❌ | ✅ | Plano 05 |
 | 5.2.3.4 | Desempate por 3o operador | ❌ | ✅ | Plano 05 |
@@ -154,11 +154,11 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 |---|---|---|---|---|
 | 5.7.1.1 | Padrão Mercosul + anterior | ✅ | ✅ | Já existente |
 | 5.7.2.1 | Índice mínimo | ⚠️ | ⚠️ | Não aferido |
-| 5.7.4.1-2 | Score parametrizável | ⚠️ | ⚠️ | Sem coluna de score, sem limiar |
-| 5.7.4.3 | Encaminhamento por score | ⚠️ | ⚠️ | Sem automação |
-| 5.7.4.4 | Score permanente | ❌ | ❌ | Score não armazenado |
+| 5.7.4.1-2 | Score parametrizável | ⚠️ | ⚠️ | Plano 27 (score e limiar configuráveis; equipamentos não enviam score) |
+| 5.7.4.3 | Encaminhamento por score | ⚠️ | ⚠️ | Plano 27 (job e fila; sem score, nada é encaminhado) |
+| 5.7.4.4 | Score permanente | ❌ | ⚠️ | Plano 27 (`vtr_placa_leitura`; migração pendente) |
 | 5.7.5.1 | Rastreabilidade | ✅ | ✅ | Já existente |
-| 5.7.5.2 | Log de correção | ⚠️ | ⚠️ | Sem justificativa |
+| 5.7.5.2 | Log de correção | ⚠️ | ⚠️ | Plano 27 (justificativa obrigatória; migração pendente) |
 | 5.7.5.3 | Retenção 5 anos | ❌ | ✅ | Plano 12 |
 | 5.7.8 | Anonimização | ❌ | ✅ | Plano 13 |
 | 5.7.9.1 | Latência ≤4s | ⚠️ | ⚠️ | Plano 07 (monitoramento) |
