@@ -80,10 +80,10 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.2.1.6 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
 | 5.2.2.1 | ⚠️ Parcial | — |
 | 5.2.2.2 | ✅ Já atendido pelo GTW † | — |
-| 5.2.2.3 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md) |
+| 5.2.2.3 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Alerta visual quando assertividade < 80% (borda vermelha + banner) |
 | 5.2.2.4 | ✅ Já atendido pelo GTW | — |
 | 5.2.2.5 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Regra de divergência entre leitura embarcada e central encaminha para a fila de revisão; não existe OCR central para gerar a segunda leitura. Aguardando migração e teste no navegador |
-| 5.2.2.6 | ⚠️ Parcial | [08-painel-assertividade.md](08-painel-assertividade.md) — Painel de assertividade sem atualização automática, sem volume processado, divergências e encaminhados para revisão, e sem alerta abaixo de 80% |
+| 5.2.2.6 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Auto-refresh 30s, volume processado, divergências, revisão manual, alerta < 80% |
 | 5.2.3.1 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
 | 5.2.3.2 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
 | 5.2.3.3 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
@@ -196,7 +196,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.5.2.3 | ❌ Não implementado † ‡ | — |
 | 5.5.2.4 | ❌ Não implementado † ‡ | — |
 | 5.5.2.5 | ❌ Não implementado † ‡ | — |
-| 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — 14 métricas (a-n) coletadas pelo RelatorioPreProcMensalJob; aguardando migração |
+| 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Painel operacional com a-e, g, j-l, n em tempo real; h, i, m dependem de colunas ausentes em vtr_status_analise |
 | 5.5.3.2 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Segmentação por período (a); filtros b-h na Fase 9 |
 | 5.5.3.3 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório mensal consolidado automático no 5o dia útil via RelatorioPreProcMensalJob; aguardando migração |
 | 5.5.3.4 | ✅ Implementado † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |

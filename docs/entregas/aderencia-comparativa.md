@@ -61,7 +61,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.2.2.3 | Aderência ≥80% | ❌ | ✅ | Plano 08 |
 | 5.2.2.4 | OCR/LAP com conferência | ✅ | ✅ | Já existente |
 | 5.2.2.5 | Encaminhamento por score | ⚠️ | ⚠️ | Plano 27 (regra de divergência pronta; sem OCR central) |
-| 5.2.2.6 | Painel de assertividade | ❌ | ⚠️ | Plano 08 (sem volume, divergências, revisão e alerta < 80%) |
+| 5.2.2.6 | Painel de assertividade | ❌ | ✅ | Planos 08 + 30 (auto-refresh, volume, divergências, revisão manual, alerta < 80%) |
 | 5.2.3.2-3 | Dupla análise independente | ❌ | ✅ | Plano 05 |
 | 5.2.3.4 | Desempate por 3o operador | ❌ | ✅ | Plano 05 |
 | 5.2.4.1-2 | Interface de análise de imagens | ✅ | ✅ | Legado `proc_infracao.jsp` + Plano 05 (`dupla-analise.js`) |
