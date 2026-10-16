@@ -5,6 +5,9 @@ import com.consilux.model.Acesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import muralha.digital.logtecnico.ContextoAlteracao;
+import muralha.digital.logtecnico.HistoricoParametros;
+import muralha.digital.util.ConfigChaveValor;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -97,11 +100,15 @@ public class RetencaoServlet extends HttpServlet {
                 resp.getWriter().print(new Gson().toJson(result));
                 return;
             }
+            String anterior = ConfigChaveValor.obter(conn, "retencao_anos", null);
             try (PreparedStatement ps = conn.prepareStatement(
                     "UPDATE muralha.config_chave_valor SET valor = ? WHERE chave = 'retencao_anos'")) {
                 ps.setString(1, String.valueOf(anos));
                 ps.executeUpdate();
             }
+            HistoricoParametros.registrarSemFalhar(conn, HistoricoParametros.RECURSO_CONFIG, "retencao_anos",
+                HistoricoParametros.comparar("valor", anterior, String.valueOf(anos)),
+                ContextoAlteracao.de(req, "Retencao de dados"));
             result.addProperty("ok", true);
         } catch (Exception e) {
             result.addProperty("ok", false);

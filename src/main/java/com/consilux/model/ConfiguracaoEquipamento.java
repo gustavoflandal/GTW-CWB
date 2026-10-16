@@ -2054,8 +2054,13 @@ public class ConfiguracaoEquipamento {
 				throw new ModelException("Usuário sem permissão para criar nova Configurações do Equipamento!");
 		}
 
+		// Histórico de parâmetros (TR 5.4.7.6, Plano 26): só registra; nunca impede a gravação.
+		String xmlAnterior = muralha.digital.logtecnico.HistoricoConfigEquip.xmlVigente(vigente);
+
 		ConfiguracaoEquipamentoBroker bk = new ConfiguracaoEquipamentoBroker();
 		ret = bk.incluirConfiguracaoEquipamento(id_usuario, conf, tornarAtivo);
+
+		muralha.digital.logtecnico.HistoricoConfigEquip.registrar(vigente, xmlAnterior, conf, id_usuario);
 
 		return ret;
 	}

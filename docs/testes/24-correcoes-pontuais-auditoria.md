@@ -9,7 +9,7 @@ Roteiro para a [Entrega 24](../entregas/24-correcoes-pontuais-auditoria.md). Exe
 
 ## T01 — Testes automatizados
 
-Rodar pelo TestNG (como na Entrega 22, o provider `surefire-testng` não está no cache Maven offline) as classes `muralha.digital.notificacao.ConfiguracaoSonsPrioridadeTest`, `muralha.digital.mapas.MapaConfigServletTest`, `muralha.digital.sensores.IncidenteImportJobTest` e `com.consilux.servlet.relatorio.RelatorioAlteracaoConfigEquipTest`.
+Rodar pelo TestNG (como na Entrega 22, o provider `surefire-testng` não está no cache Maven offline) as classes `muralha.digital.notificacao.ConfiguracaoSonsPrioridadeTest`, `muralha.digital.mapas.MapaConfigServletTest`, `muralha.digital.sensores.IncidenteImportJobTest` (o `RelatorioAlteracaoConfigEquipTest` foi removido em 2026-10-16 com a desativação do menu 201; restam 11 testes).
 
 **Esperado:** 15 testes, 0 falhas. Na nuvem (2026-10-16): ✅ 15/15. No Windows (2026-10-16, Maven com `-Dtest=…`): ✅ 15/15. O provider `surefire-testng` está no cache Maven local; o comando está no [roteiro 25](25-integridade-sha256-recepcao.md#t01--testes-automatizados).
 
@@ -22,11 +22,9 @@ Em Configuração de monitoramento, escolher um tipo de alerta e:
 
 ⏳ Pendente.
 
-## T02b — Relatório de alterações de configuração (menu 201)
+## T02b — Relatório de alterações de configuração (menu 201) desativado
 
-Abrir o menu "Relatório Alt. ConfigEquip", escolher um local e um período e clicar em Visualizar.
-
-**Esperado:** tabela com as versões do local e a configuração vigente, data e usuário da última alteração; "Nenhuma alteração no período" quando não houver; mensagem de erro para data inválida ou período acima de 366 dias. Antes a página ficava em branco. ⏳ Pendente.
+Depois de `20261016_desativa_menu_201.sql`: o item "Relatório Alt. ConfigEquip" não aparece no menu do GTW clássico; abrir `/relatorio/RelatorioAlteracaoConfigEquip` direto mostra a mensagem "Relatório desativado…". ⏳ Pendente.
 
 ## T03 — Log de auditoria com o usuário certo
 

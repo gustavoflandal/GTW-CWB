@@ -17,7 +17,7 @@ As sete correções pontuais apontadas pela auditoria no código e nos scripts (
 | Item | Arquivos |
 |---|---|
 | 1. Prioridade de tipo de alerta | `src/main/java/muralha/digital/notificacao/ConfiguracaoSons.java`, `ConfiguracaoSonsServlet.java`, `src/main/webapp/muralha-digital/pages/configuracao-monitoramento/assets/js/configuracao.js`, teste `src/test/java/muralha/digital/notificacao/ConfiguracaoSonsPrioridadeTest.java` |
-| 2. Relatório do menu 201 | `src/main/java/com/consilux/servlet/relatorio/RelatorioAlteracaoConfigEquip.java`, `src/main/webapp/relatorio/res_alteracoes_configequip.jsp` (novo), teste `src/test/java/com/consilux/servlet/relatorio/RelatorioAlteracaoConfigEquipTest.java` |
+| 2. Relatório do menu 201 | **Desativado em 2026-10-16** (decisão do dono do projeto): `RelatorioAlteracaoConfigEquip.java` só avisa que o relatório foi desativado; `res_alteracoes_configequip.jsp` e `RelatorioAlteracaoConfigEquipTest` removidos (revertidos); script `docs/banco-de-dados/migracoes/20261016_desativa_menu_201.sql`. Ver [Entrega 26](26-logs-tecnicos-historico-parametros.md) |
 | 3. `AuditoriaService` | `src/main/java/muralha/digital/auditoria/AuditoriaService.java`, [`00c-errata-correcoes.md`](../planos-salvador/00c-errata-correcoes.md) §1 e §10 |
 | 4. `vtr_imagem_complemento` | `docs/banco-de-dados/migracoes/20261016_vtr_imagem_complemento.sql` (novo), `20261008_tabelas_complementares.sql` (cabeçalho), [`migracoes/README.md`](../banco-de-dados/migracoes/README.md) |
 | 5. IP fixo dos mapas | `src/main/java/muralha/digital/mapas/MapaConfigServlet.java` (novo), `src/main/webapp/muralha-digital/utils/maps-config.js`, `pages/mapa-situacao-transito/assets/js/mapa-situacao-transito.js`, `docs/banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql` (novo), [`07-configuracao-e-segredos.md`](../requisitos/07-configuracao-e-segredos.md) §4.1, teste `src/test/java/muralha/digital/mapas/MapaConfigServletTest.java` |
@@ -40,5 +40,5 @@ As sete correções pontuais apontadas pela auditoria no código e nos scripts (
 
 ## Pendências
 
-- **Item 2, relatório do menu 201:** foi implementada a opção recomendada (consulta mínima), porque a escolha pedida ao usuário ainda não veio. Se a escolha for desativar o menu, o commit do item 2 é revertido e entra um script que desativa o menu 201. O relatório mostra só a data e o usuário da última alteração; o valor anterior dos parâmetros não existe no banco e é o escopo da Fase 4 (5.4.7.6).
+- **Item 2, relatório do menu 201:** a consulta mínima foi implementada enquanto a escolha não vinha. Em 2026-10-16 o dono do projeto decidiu desativar o menu se ele não tivesse finalidade: o menu não tem nenhum grupo em `sis_menu_direitos` e o histórico de parâmetros com valor anterior e novo passa a ser o da Fase 4 (5.4.7.6). O código do item 2 foi revertido e entrou `20261016_desativa_menu_201.sql` (pendente de execução). Como `fcn_VerificaAcesso` libera URL sem direitos cadastrados, o servlet passou a responder com aviso de desativação em vez da página em branco.
 - Executar `20261016_config_mapa_api_trecho.sql` antes de publicar a tela de situação do trânsito.

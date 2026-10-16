@@ -33,6 +33,7 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 23 | Correção da documentação de aderência (Plano 23) | 2026-10-16 | 🟡 Implementado — aguardando validação no Windows | [23-correcao-documentacao-aderencia.md](23-correcao-documentacao-aderencia.md) |
 | 24 | Correções pontuais da auditoria (Plano 24) | 2026-10-16 | 🟡 Implementado — build e testes aprovados no Windows; aguardando migração e teste manual | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) |
 | 25 | Integridade SHA-256 na recepção (Plano 25) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) |
+| 26 | Logs técnicos e histórico de parâmetros (Plano 26) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) |
 
 > Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 

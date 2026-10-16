@@ -55,7 +55,7 @@ Mapeamento cruzado entre os itens do Termo de Referência (Cap. 5 + Anexo A PoC)
 | 5.4.2.5 | Dashboards customizaveis pela CONTRATANTE | ✅ | [20](../planos-salvador/20-dashboard-builder.md) | [21](21-dashboard-builder.md) | [20](../testes/20-dashboard-builder.md) |
 | 5.4.4.1–4 | Analise espacial, georreferenciamento e exportacao GIS | ⚠️ | [16](../planos-salvador/16-exportacao-gis.md) | [16](16-exportacao-gis.md) | [16](../testes/16-exportacao-gis.md) |
 | 5.4.6.1–3 | Indicadores operacionais configuraveis com metas e alertas | ⚠️ | [15](../planos-salvador/15-kpis-configuráveis.md) | [15](15-kpis-configuraveis.md) | [15](../testes/15-kpis-configuraveis.md) |
-| 5.4.7.1–7 | Repositorio central de logs | ⚠️ | [01](../planos-salvador/01-log-auditoria.md) | [01](01-log-auditoria.md) | [01](../testes/01-log-auditoria.md) |
+| 5.4.7.1–7 | Repositorio central de logs e historico de parametros | ⚠️ | [01](../planos-salvador/01-log-auditoria.md), [26](../planos-salvador/26-logs-tecnicos-historico-parametros.md) | [01](01-log-auditoria.md), [26](26-logs-tecnicos-historico-parametros.md) | [01](../testes/01-log-auditoria.md), [26](../testes/26-logs-tecnicos-historico-parametros.md) |
 
 ## 5.5 — Servico de Pre-Processamento
 
@@ -116,4 +116,5 @@ Itens do TR tratados por cada plano; "(parcial)" quando o item está ⚠️ na m
 | 23 | Correção da documentação de aderência | 23 | 23 | Sem itens próprios: alinha a documentação ao código |
 | 24 | Correções pontuais da auditoria | 24 | 24 | Sem itens próprios: corrige defeitos (completa a Waze da Entrega 19) |
 | 25 | Integridade SHA-256 na recepção | 25 | 25 | 5.2.1.2 (parcial: conferência pronta, sem hash de origem enviado), 5.2.1.3 (parcial: aguardando migração e teste) |
+| 26 | Logs técnicos e histórico de parâmetros | 26 | 26 | 5.4.7.1–7 (parcial), 5.4.7.6 (parcial: aguardando migração e teste), 5.2.7.2 (períodos início/fim) |
 | — | Registro dos módulos no menu (pendência da Entrega 17) | 20 | — | Sem itens próprios |
