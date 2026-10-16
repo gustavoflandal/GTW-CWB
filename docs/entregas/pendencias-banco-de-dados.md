@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–26. As migrações da correção da auditoria (Planos 24 a 26) ainda **não** foram executadas (seção 1, "Correção da auditoria").
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–26. As migrações da correção da auditoria (Planos 24 a 26) foram executadas no DEV em 2026-10-16, com autorização (seção 1, "Correção da auditoria").
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -53,15 +53,15 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261012_dados_assertividade.sql`](../banco-de-dados/migracoes/20261012_dados_assertividade.sql) | 08 | Dados de exemplo da tela de assertividade | ✅ Executado — **só DEV** |
 | [`20261012_dados_log_auditoria.sql`](../banco-de-dados/migracoes/20261012_dados_log_auditoria.sql) | 01 | Registros de exemplo no log de auditoria | ✅ Executado — **só DEV** |
 
-### Correção da auditoria (2026-10-16) — ⏳ pendentes de execução
+### Correção da auditoria (2026-10-16) — executadas em 2026-10-16
 
 | Script | Plano | Descrição | Status |
 |---|---|---|---|
-| [`20261016_vtr_imagem_complemento.sql`](../banco-de-dados/migracoes/20261016_vtr_imagem_complemento.sql) | 24 | DDL idempotente de `muralha.vtr_imagem_complemento` (no DEV a tabela já existe; não faz nada) | ⏳ Pendente (opcional no DEV) |
-| [`20261016_config_mapa_api_trecho.sql`](../banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql) | 24 | Chave `mapa_api_monitoramento_trecho` | ⏳ **Pendente — necessário** para a tela Mapa de situação do trânsito |
-| [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para o histórico de parâmetros |
-| [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ⏳ Pendente |
-| [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário**: sem ele o `JobSha256Imagem` não confere nenhuma imagem |
+| [`20261016_vtr_imagem_complemento.sql`](../banco-de-dados/migracoes/20261016_vtr_imagem_complemento.sql) | 24 | DDL idempotente de `muralha.vtr_imagem_complemento` (no DEV a tabela já existe; não faz nada) | ✅ Executado (2026-10-16): "Ja existe", nada alterado |
+| [`20261016_config_mapa_api_trecho.sql`](../banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql) | 24 | Chave `mapa_api_monitoramento_trecho` | ✅ Executado (2026-10-16): chave inserida |
+| [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16): tabela, 6 chaves e menus 387-388 |
+| [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ✅ Executado (2026-10-16): menu 201 com `Ativo = 0` |
+| [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
 
 ### Comando de execução
 

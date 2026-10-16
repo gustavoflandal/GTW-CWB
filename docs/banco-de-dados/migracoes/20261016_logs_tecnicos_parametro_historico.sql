@@ -26,6 +26,9 @@
 -- ============================================================
 
 SET NOCOUNT ON;
+-- sqlcmd usa QUOTED_IDENTIFIER OFF por padrão; tabelas com índice filtrado exigem ON.
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
 GO
 
 -- 1. Histórico de parâmetros ---------------------------------------------

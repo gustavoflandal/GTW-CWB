@@ -1,7 +1,7 @@
 # Entrega — Plano 25: Integridade SHA-256 na Recepção
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste (build e testes automatizados aprovados no Windows; migração não executada; roteiro no navegador pendente).
+> **Status:** 🟡 Implementado — aguardando teste no navegador (build, testes automatizados e migração concluídos em 2026-10-16).
 > **Fase:** 3 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -36,7 +36,7 @@ Conferência real de integridade das imagens recebidas (TR 5.2.1.2) e registro d
 
 | Script | Situação |
 |---|---|
-| `20261016_integridade_sha256_recepcao.sql` | **Não executado — necessário.** Sintaxe conferida no DEV com `SET PARSEONLY ON` (nada executado). Enquanto não rodar, o `JobSha256Imagem` registra um aviso e não confere nenhuma imagem (antes ele gravava `'OK'`). Converte 196,8 mil linhas `'OK'` em lotes de 20 mil |
+| `20261016_integridade_sha256_recepcao.sql` | Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
 
 ## Parâmetros (`muralha.config_chave_valor`)
 
@@ -52,7 +52,7 @@ Conferência real de integridade das imagens recebidas (TR 5.2.1.2) e registro d
 
 - [x] 1. `..\.setup-gtw\build.ps1` compila sem erro (Windows, 2026-10-16: BUILD SUCCESS).
 - [x] 2. Testes TestNG (Windows, 2026-10-16): `ConferenciaIntegridadeTest` 10, `OrigemHashTest` 6, `ProcessadorIntegridadeTest` 7, `FiltroIntegridadeTest` 8. Total 31/31, junto com os testes das fases anteriores: 90/90. Cobrem hash igual → `INTEGRO`; diferente → `DIVERGENTE` + alerta (um por passagem) + auditoria; origem ausente → `SEM_CONFERENCIA`; imagem vazia → `ERRO_LEITURA`.
-- [ ] 3. Migração executada no DEV, sem `'OK'` restante. Depende de autorização.
+- [x] 3. Migração executada no DEV (2026-10-16, com autorização): nenhuma linha `'OK'` restante em `vtr_imagem_complemento` (200 000 → `SEM_CONFERENCIA`, copiadas para `vtr_imagem_integridade`); `v_integridade_recepcao` responde.
 - [ ] 4. Roteiro [`docs/testes/25-integridade-sha256-recepcao.md`](../testes/25-integridade-sha256-recepcao.md) executado no navegador. Não executado: subir o Tomcat liga os jobs, que gravam no DEV.
 - [x] 5. `python -I docs/referencia/scripts/validar_aderencia.py` sem erro.
 
@@ -69,4 +69,5 @@ Conferência real de integridade das imagens recebidas (TR 5.2.1.2) e registro d
 - **Alertas de integridade não aparecem no popup operacional:** `spu_ObterNovosAlertasV2` exige veículo monitorado (`INNER JOIN cad_veiculo_monitorado`). A consulta de alertas (`spu_ObterDadosAlertaOcorrencia`) usa `LEFT JOIN` e deve listá-los sem placa, o que não foi testado. A exibição adequada (tipo, cor, ícone, tratativa) é escopo da Fase 6. A trigger `TRG_alerta_semelhanca_placa_after_insert` não age sem veículo monitorado.
 - A imagem é conferida depois de gravada pela `spu_veiculo_tempo_real_imagem` (sistema externo); não há recusa na recepção.
 - Imagens de passagens mais antigas que a janela não são conferidas (o legado convertido fica `SEM_CONFERENCIA`).
+- **Servidor com a versão antiga:** entre a consulta prévia (199 800 linhas `OK`) e a execução (200 000), o `JobSha256Imagem` antigo continuou gravando `OK` em algum Tomcat do DEV. Esse servidor precisa receber o build novo, senão volta a gravar `OK`.
 - `vtr_imagem_complemento.status_integridade` mantém `DEFAULT 'OK'` (mudar exige `ALTER TABLE`); nenhum código grava sem informar o status.

@@ -28,7 +28,7 @@ SELECT status_integridade, COUNT(*) FROM muralha.vtr_imagem_integridade GROUP BY
 SELECT chave, valor FROM muralha.config_chave_valor WHERE chave LIKE 'INTEGRIDADE[_]%';
 ```
 
-**Esperado:** nenhuma linha `OK`; as antigas como `SEM_CONFERENCIA` com o motivo "Hash calculado antes de 2026-10-16…"; cinco chaves. Rodar o script de novo só imprime "Ja existe". ⏳ Pendente.
+**Esperado:** nenhuma linha `OK`; as antigas como `SEM_CONFERENCIA` com o motivo "Hash calculado antes de 2026-10-16…"; cinco chaves. Rodar o script de novo só imprime "Ja existe". ✅ 2026-10-16: nenhum `OK`; 200 000 `SEM_CONFERENCIA` nas duas tabelas; cinco chaves; tipo de alerta `INTEGRIDADE` com prioridade 2; menus 384-386.
 
 ## T03 — Job com origem ausente
 
