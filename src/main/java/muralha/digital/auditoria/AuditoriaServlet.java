@@ -52,6 +52,8 @@ public class AuditoriaServlet extends HttpServlet {
             result.add("logins", buscarDistintos(conn, "login"));
             result.add("funcionalidades", buscarDistintos(conn, "funcionalidade"));
             result.add("operacoes", buscarDistintos(conn, "operacao"));
+            result.add("perfis", buscarPerfis(conn));
+            result.add("equipamentos", buscarEquipamentos(conn));
             result.addProperty("ok", true);
         } catch (Exception e) {
             result.addProperty("ok", false);
@@ -76,26 +78,83 @@ public class AuditoriaServlet extends HttpServlet {
         return arr;
     }
 
+    private JsonArray buscarPerfis(Connection conn) throws Exception {
+        JsonArray arr = new JsonArray();
+        String sql = "SELECT DISTINCT sg.id_grupo, RTRIM(sg.descricao) AS descricao " +
+                     "FROM dbo.sis_grupo sg " +
+                     "JOIN dbo.sis_usuario_grupo sug ON sug.id_grupo = sg.id_grupo " +
+                     "JOIN dbo.sis_log_auditoria la ON la.id_usuario = sug.id_usuario " +
+                     "ORDER BY descricao";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                JsonObject obj = new JsonObject();
+                obj.addProperty("id", rs.getInt("id_grupo"));
+                obj.addProperty("descricao", rs.getString("descricao"));
+                arr.add(obj);
+            }
+        }
+        return arr;
+    }
+
+    private JsonArray buscarEquipamentos(Connection conn) throws Exception {
+        JsonArray arr = new JsonArray();
+        String sql = "SELECT DISTINCT lv.id_local, RTRIM(lv.nome) AS nome " +
+                     "FROM local_vigente lv " +
+                     "WHERE lv.desativado = 0 " +
+                     "ORDER BY nome";
+        try (PreparedStatement ps = conn.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                JsonObject obj = new JsonObject();
+                obj.addProperty("id", rs.getInt("id_local"));
+                obj.addProperty("nome", rs.getString("nome"));
+                arr.add(obj);
+            }
+        }
+        return arr;
+    }
+
     private String consultar(HttpServletRequest req) {
         String login     = req.getParameter("login");
         String funcional = req.getParameter("funcionalidade");
         String operacao  = req.getParameter("operacao");
         String dtInicio  = req.getParameter("dtInicio");
         String dtFim     = req.getParameter("dtFim");
+        String perfil    = req.getParameter("perfil");
+        String equip     = req.getParameter("equipamento");
         String pagStr    = req.getParameter("pagina");
         int pagina       = pagStr != null ? Integer.parseInt(pagStr) : 1;
         int tamPag       = 50;
 
+        boolean temPerfil = perfil != null && !perfil.isEmpty();
+        boolean temEquip  = equip  != null && !equip.isEmpty();
+
         StringBuilder sql = new StringBuilder(
-            "SELECT id, id_usuario, login, dt_operacao, ip_terminal, " +
-            "funcionalidade, operacao, id_registro, descricao " +
-            "FROM dbo.sis_log_auditoria WHERE 1=1 ");
-        if (login     != null && !login.isEmpty())     sql.append("AND login = ? ");
-        if (funcional != null && !funcional.isEmpty()) sql.append("AND funcionalidade = ? ");
-        if (operacao  != null && !operacao.isEmpty())  sql.append("AND operacao = ? ");
-        if (dtInicio  != null && !dtInicio.isEmpty())  sql.append("AND dt_operacao >= ? ");
-        if (dtFim     != null && !dtFim.isEmpty())     sql.append("AND dt_operacao < DATEADD(day,1,?) ");
-        sql.append("ORDER BY dt_operacao DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
+            "SELECT la.id, la.id_usuario, la.login, la.dt_operacao, la.ip_terminal, " +
+            "la.funcionalidade, la.operacao, la.id_registro, la.descricao");
+        if (temPerfil) {
+            sql.append(", RTRIM(sg.descricao) AS perfil_grupo");
+        }
+        sql.append(" FROM dbo.sis_log_auditoria la ");
+
+        if (temPerfil) {
+            sql.append("JOIN dbo.sis_usuario_grupo sug ON sug.id_usuario = la.id_usuario ");
+            sql.append("JOIN dbo.sis_grupo sg ON sg.id_grupo = sug.id_grupo ");
+        }
+        if (temEquip) {
+            sql.append("JOIN dbo.sis_usuario su_eq ON su_eq.id_usuario = la.id_usuario ");
+        }
+
+        sql.append("WHERE 1=1 ");
+        if (login     != null && !login.isEmpty())     sql.append("AND la.login = ? ");
+        if (funcional != null && !funcional.isEmpty()) sql.append("AND la.funcionalidade = ? ");
+        if (operacao  != null && !operacao.isEmpty())  sql.append("AND la.operacao = ? ");
+        if (dtInicio  != null && !dtInicio.isEmpty())  sql.append("AND la.dt_operacao >= ? ");
+        if (dtFim     != null && !dtFim.isEmpty())     sql.append("AND la.dt_operacao < DATEADD(day,1,?) ");
+        if (temPerfil)                                 sql.append("AND sg.id_grupo = ? ");
+        if (temEquip)                                  sql.append("AND la.descricao LIKE ? ");
+        sql.append("ORDER BY la.dt_operacao DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
 
         JsonObject result = new JsonObject();
         JsonArray rows    = new JsonArray();
@@ -109,6 +168,8 @@ public class AuditoriaServlet extends HttpServlet {
                 if (operacao  != null && !operacao.isEmpty())  ps.setString(i++, operacao);
                 if (dtInicio  != null && !dtInicio.isEmpty())  ps.setString(i++, dtInicio);
                 if (dtFim     != null && !dtFim.isEmpty())     ps.setString(i++, dtFim);
+                if (temPerfil)                                 ps.setInt(i++, Integer.parseInt(perfil));
+                if (temEquip)                                  ps.setString(i++, "%" + equip + "%");
                 ps.setInt(i++, (pagina - 1) * tamPag);
                 ps.setInt(i,   tamPag);
                 try (ResultSet rs = ps.executeQuery()) {
@@ -122,6 +183,9 @@ public class AuditoriaServlet extends HttpServlet {
                         row.addProperty("operacao",    rs.getString("operacao"));
                         row.addProperty("idRegistro",  rs.getString("id_registro"));
                         row.addProperty("descricao",   rs.getString("descricao"));
+                        if (temPerfil) {
+                            row.addProperty("perfil",  rs.getString("perfil_grupo"));
+                        }
                         rows.add(row);
                     }
                 }

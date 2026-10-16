@@ -68,11 +68,18 @@ function preencherTela(inf) {
 
 function ajustarFiltro() {
   var b = $('#brilho').val(), c = $('#contraste').val();
-  $('#imgInfracao').css('filter', 'brightness(' + b + ') contrast(' + c + ')');
+  var inv = $('#btnInverter').hasClass('active') ? ' invert(1)' : '';
+  $('#imgInfracao').css('filter', 'brightness(' + b + ') contrast(' + c + ')' + inv);
+}
+
+function toggleInverter() {
+  $('#btnInverter').toggleClass('active');
+  ajustarFiltro();
 }
 
 function resetarFiltros() {
   $('#brilho').val(1); $('#contraste').val(1);
+  $('#btnInverter').removeClass('active');
   $('#imgInfracao').css('filter', '');
 }
 

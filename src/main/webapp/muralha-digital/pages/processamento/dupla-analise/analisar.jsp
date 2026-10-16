@@ -25,6 +25,9 @@
           Contraste: <input type="range" id="contraste" min="0.3" max="2" step="0.1"
                             value="1" oninput="ajustarFiltro()">
         </label>
+        <button id="btnInverter" class="btn btn-sm btn-outline-dark" onclick="toggleInverter()">
+          <i class="bi bi-circle-half"></i> Inverter
+        </button>
         <button class="btn btn-sm btn-outline-secondary" onclick="resetarFiltros()">
           <i class="bi bi-arrow-counterclockwise"></i> Resetar
         </button>
