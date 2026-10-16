@@ -1,8 +1,10 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–19.
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–22.
 
-> ✅ **16 migrações executadas (10 em 2026-10-09, 6 em 2026-10-13)** via `sqlcmd` no banco GTW_MURALHA_DEV.  
+> **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
+
+> ✅ **Migrações dos Planos 01–22 executadas no `GTW_MURALHA_DEV`** via `sqlcmd` (10 em 2026-10-09, ajustes de 2026-10-09 a 2026-10-12, 6 em 2026-10-13, 1 em 2026-10-14 e 4 do Sistema de Chamados em 2026-10-15). Os ajustes de dados `20261012_fix_encoding_kpi.sql` e `20261012_icones_menu_distintos.sql` não deixam rastro verificável.  
 > **Atenção:** todas as migrações usam `IF NOT EXISTS` / `IF COL_LENGTH(...) IS NULL` — podem ser reexecutadas com segurança (idempotentes).  
 > **Nenhuma migração faz ALTER TABLE** em tabelas existentes do sistema legado.
 
@@ -31,6 +33,25 @@ Executar na ordem abaixo. Cada script é independente, mas a ordem respeita depe
 | 15 | [`20261013_menu_catalogo_dados.sql`](../banco-de-dados/migracoes/20261013_menu_catalogo_dados.sql) | 20 | Menu 378, info 45 (Catálogo de Dados) | ✅ Executado |
 | 16 | [`20261013_dash_modelador_visual.sql`](../banco-de-dados/migracoes/20261013_dash_modelador_visual.sql) | 20 | Tabelas `dash.dataset_relacao`, `dash.dataset_modelador` (modelador visual) | ✅ Executado |
 | 17 | [`20261014_dados_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261014_dados_demonstracao_dashboards.sql) | 21 | Dados de demonstração: 3 datasets, 2 painéis, 16 widgets | ✅ Executado (2026-10-14) |
+| 18 | [`20261015_sistema_chamados.sql`](../banco-de-dados/migracoes/20261015_sistema_chamados.sql) | 22 | 7 tabelas `muralha.chamado*` | ✅ Executado (2026-10-15) |
+| 19 | [`20261015_sistema_chamados_seed.sql`](../banco-de-dados/migracoes/20261015_sistema_chamados_seed.sql) | 22 | Prioridades, categorias, grupos 107–109, menus 379–382 e chaves `chamado_*` | ✅ Executado (2026-10-15) |
+| 20 | [`20261015_sistema_chamados_admin.sql`](../banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql) | 22 | Menu/card de administração (383/49) e chave `chamado_grupo_admin` | ✅ Executado (2026-10-15) |
+| 21 | [`20261015_sistema_chamados_smtp.sql`](../banco-de-dados/migracoes/20261015_sistema_chamados_smtp.sql) | 22 | Chaves `chamado_smtp_*` (vazias) | ✅ Executado (2026-10-15) |
+
+Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -b -f 65001` (ver [`22-sistema-chamados.md`](22-sistema-chamados.md)). `20261015_usuarios_teste_chamados.sql` é exclusivo do DEV e **nunca** deve ser executado em homologação ou produção.
+
+### Menus, dados de exemplo e ajustes (2026-10-09 a 2026-10-12)
+
+| Script | Planos | Descrição | Status |
+|---|---|---|---|
+| [`20261009_menu_modulos_desenvolvidos.sql`](../banco-de-dados/migracoes/20261009_menu_modulos_desenvolvidos.sql) | 01–19 | Entradas de menu dos módulos com tela JSP (ver [`20-menu-modulos.md`](20-menu-modulos.md)) | ✅ Executado |
+| [`20261010_dashboard_builder.sql`](../banco-de-dados/migracoes/20261010_dashboard_builder.sql) | 20 | Dashboard Builder inicial (`muralha.dashboard_*`) e menus 376/377 | ✅ Executado |
+| [`20261012_kpi_cor_personalizada.sql`](../banco-de-dados/migracoes/20261012_kpi_cor_personalizada.sql) | 15 | Coluna `cor_personalizada` em `muralha.kpi_config` | ✅ Executado |
+| [`20261012_kpi_tipo_visual.sql`](../banco-de-dados/migracoes/20261012_kpi_tipo_visual.sql) | 15 | Coluna `tipo_visual` em `muralha.kpi_config` | ✅ Executado |
+| [`20261012_fix_encoding_kpi.sql`](../banco-de-dados/migracoes/20261012_fix_encoding_kpi.sql) | 15 | Corrige o nome do KPI "Pré-aprovadas (7d)" | Sem evidência verificável (correção de dados) |
+| [`20261012_icones_menu_distintos.sql`](../banco-de-dados/migracoes/20261012_icones_menu_distintos.sql) | — | Ícones distintos em `sis_menu_infos.src` | Sem evidência verificável (`UPDATE` de dados) |
+| [`20261012_dados_assertividade.sql`](../banco-de-dados/migracoes/20261012_dados_assertividade.sql) | 08 | Dados de exemplo da tela de assertividade | ✅ Executado — **só DEV** |
+| [`20261012_dados_log_auditoria.sql`](../banco-de-dados/migracoes/20261012_dados_log_auditoria.sql) | 01 | Registros de exemplo no log de auditoria | ✅ Executado — **só DEV** |
 
 ### Comando de execução
 
@@ -53,6 +74,9 @@ $scripts = @(
     "20261008_lotes_kpis.sql",
     "20261008_disponibilidade_incidentes.sql"
 )
+# Para os Planos 20–22, seguir a ordem do README das migrações
+# (docs/banco-de-dados/migracoes/README.md); os scripts do Sistema de Chamados
+# exigem -b -f 65001.
 
 foreach ($s in $scripts) {
     Write-Host "Executando $s ..."
@@ -76,7 +100,9 @@ foreach ($s in $scripts) {
 
 ## 3. Registro de Menus (`dbo.sis_menu_infos`)
 
-Após executar as migrações, registrar as novas telas no menu do sistema. Os INSERTs abaixo devem ser adaptados conforme a estrutura real de `dbo.sis_menu_infos` (verificar colunas `id_pai`, `ordem`, `nome`, `url`, `icone`).
+> ✅ Os menus abaixo já são criados por [`20261009_menu_modulos_desenvolvidos.sql`](../banco-de-dados/migracoes/20261009_menu_modulos_desenvolvidos.sql) (Planos 01–19); os do Dashboard Builder, por `20261010_dashboard_builder.sql`, `20261013_atualizar_menus_dashboard_builder.sql` e `20261013_menu_catalogo_dados.sql` (menus 376–378); os do Sistema de Chamados, pelos scripts `20261015_sistema_chamados_seed.sql` e `_admin.sql` (menus 379–383). Não há INSERT manual pendente.
+
+Telas dos Planos 01–19 com entrada de menu:
 
 | Plano | Tela | URL sugerida | Grupo de menu |
 |---|---|---|---|
@@ -111,6 +137,13 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | `disponibilidade_threshold_min` | `30` | 18 | Minutos sem passagem para considerar offline |
 | `waze_api_url` | _(vazio)_ | 19 | URL da API Waze for Cities |
 | `waze_area_bbox` | `-13.05,-38.58,-12.85,-38.35` | 19 | Bounding box de Salvador para filtro |
+| `chamado_sla_risco_percentual` | `80` | 22 | Percentual do prazo a partir do qual o chamado entra em risco de SLA |
+| `chamado_fechamento_auto_dias` | `5` | 22 | Dias para fechamento automático após a solução |
+| `chamado_diretorio_anexos` | `C:\Consilux\MuralhaDigital\chamados` | 22 | Diretório dos anexos dos chamados |
+| `chamado_anexo_max_mb` | `10` | 22 | Tamanho máximo de anexo (MB) |
+| `chamado_email_ativo` | `1` | 22 | 1 = envia e-mails de notificação dos chamados |
+| `chamado_grupo_*` | ids dos grupos | 22 | Grupos Solicitante, Gestor, Equipe e Administrador |
+| `chamado_smtp_*` | _(vazio)_ | 22 | SMTP próprio dos chamados; vazio usa o SMTP do `confGTW.xml` |
 
 ---
 
@@ -119,6 +152,7 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | Variável | Plano | Obrigatória | Descrição |
 |---|---|---|---|
 | `WAZE_API_KEY` | 19 | Não | Chave da API Waze for Cities. Sem ela, o job ignora silenciosamente |
+| `GTW_CHAMADO_CHAVE_SMTP` | 22 | Só com SMTP próprio dos chamados | Chave que cifra a senha do SMTP dos chamados (ver [`07-configuracao-e-segredos.md`](../requisitos/07-configuracao-e-segredos.md) §3.1) |
 
 ---
 
