@@ -2,7 +2,7 @@
 
 Scripts versionados (`AAAAMMDD_descricao.sql`). Regras: idempotentes, schema explícito, compatíveis com SQL Server 2016 (nível de compatibilidade do banco: 110), rollback comentado, sem dados reais, **nunca aplicados por agentes sem autorização humana explícita**. Ver [`docs/requisitos/10-guia-de-implementacao.md`](../../requisitos/10-guia-de-implementacao.md) §6 e [`docs/agentes/AGENTS.md`](../../agentes/AGENTS.md). Catálogo do banco: [`../README.md`](../README.md).
 
-Esta lista corresponde aos 33 scripts existentes na pasta em **2026-10-15**. A coluna "Situação no DEV" foi conferida em `GTW_MURALHA_DEV` com consultas somente leitura (existência de tabela/coluna, contagem de linhas de configuração e menus). "Sem evidência" significa que o script não deixa rastro verificável (UPDATE de dados) ou que o objeto que ele criaria não existe.
+Esta lista corresponde aos 33 scripts existentes na pasta em **2026-10-15**, mais os criados depois (seção "Correção da auditoria"). A coluna "Situação no DEV" foi conferida em `GTW_MURALHA_DEV` com consultas somente leitura (existência de tabela/coluna, contagem de linhas de configuração e menus). "Sem evidência" significa que o script não deixa rastro verificável (UPDATE de dados) ou que o objeto que ele criaria não existe.
 
 > Vários scripts de 2026-10-08 foram marcados como **OBSOLETO** no próprio cabeçalho: usavam `ALTER TABLE` em tabelas legadas (proibido) e foram substituídos por tabelas complementares. **Não execute** os trechos de `ALTER TABLE` desses scripts; veja o detalhe em [`docs/planos-salvador/00b-tabelas-complementares.md`](../../planos-salvador/00b-tabelas-complementares.md).
 
@@ -11,7 +11,7 @@ Esta lista corresponde aos 33 scripts existentes na pasta em **2026-10-15**. A c
 | Script | Plano | Descrição | Situação no DEV |
 |---|---|---|---|
 | `20261008_log_auditoria.sql` | 01 | `dbo.sis_log_auditoria` (log de auditoria centralizado) | Executado (tabela existe, 71 registros) |
-| `20261008_tabelas_complementares.sql` | 02/09 | `dbo.sis_usuario_complemento`, `muralha.vtr_complemento`, `muralha.vtr_imagem_complemento` | **Obsoleto**, mas as três tabelas existem no DEV (executado). Vale apenas `sis_usuario_complemento`; o cabeçalho manda descartar as duas `vtr_*` (hoje `vtr_imagem_complemento` tem ≈ 141,6 mil linhas, portanto não descartar sem decisão humana) |
+| `20261008_tabelas_complementares.sql` | 02/09 | `dbo.sis_usuario_complemento`, `muralha.vtr_complemento`, `muralha.vtr_imagem_complemento` | **Obsoleto**, mas as três tabelas existem no DEV (executado). Valem `sis_usuario_complemento` e `vtr_imagem_complemento` (usada pelo `JobSha256Imagem`, ≈ 141,6 mil linhas), esta agora com script próprio, `20261016_vtr_imagem_complemento.sql`. Só `vtr_complemento` está de fato sem uso; não descartar sem decisão humana |
 | `20261008_politica_senhas.sql` | 03 | `dbo.sis_senha_config` e seus parâmetros | **Obsoleto** (parcial): só a tabela `sis_senha_config` e os `INSERT` valem (existe, 9 chaves); não executar o `ALTER TABLE dbo.sis_usuario` |
 | `20261008_mfa_totp.sql` | 04 | Parâmetro `mfa_obrigatorio` em `sis_senha_config` | **Obsoleto** (parcial): só o `INSERT` vale; as colunas TOTP ficam em `sis_usuario_complemento` |
 | `20261008_dupla_analise.sql` | 05 | `muralha.infracao_analise` | **Obsoleto** (parcial): o `CREATE TABLE` vale (existe, 60 linhas); não executar o `ALTER TABLE` de `veiculo_tempo_real` |
@@ -69,6 +69,13 @@ Ordem sugerida (a mesma da criação): fundação → editor de dataset → obse
 | `20261015_sistema_chamados_admin.sql` | Menu/card de administração e grupo administrador | Executado (chave `chamado_grupo_admin` presente) |
 | `20261015_sistema_chamados_smtp.sql` | Configuração de SMTP dos chamados | Executado (6 chaves `chamado_smtp_*`) |
 | `20261015_usuarios_teste_chamados.sql` | Usuários de teste do módulo (perfis administrador e solicitante) | **Exclusivo do DEV**: o script recusa rodar em qualquer banco diferente de `GTW_MURALHA_DEV`; **nunca** executar em homologação ou produção. Sem evidência de execução em 2026-10-15 (nenhum usuário `TESTE.CHAMADO.*` encontrado) |
+
+## Correção da auditoria (2026-10-16)
+
+| Script | Plano | Descrição | Situação no DEV |
+|---|---|---|---|
+| `20261016_vtr_imagem_complemento.sql` | 24 (Plano 02) | DDL idempotente de `muralha.vtr_imagem_complemento`, antes só no script obsoleto | Não executado; a tabela já existe no DEV, então o script não faria nada |
+| `20261016_config_mapa_api_trecho.sql` | 24 | Chave `mapa_api_monitoramento_trecho` (endereço da API de trechos, antes fixo em `maps-config.js`) | **Não executado** — necessário para a tela Mapa de situação do trânsito |
 
 ## Como acrescentar uma migração
 

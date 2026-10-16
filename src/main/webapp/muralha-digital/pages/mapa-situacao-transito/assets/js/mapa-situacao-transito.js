@@ -47,10 +47,11 @@ function atualiza_mapa(){
 
 function obter_situacao_transito()
 {
+	obterIpApiMonitoramentoTrecho(function (endereco) {
 	$.ajax(
     {
         type: 		"GET",
-        url: 		"http://" + IP_API_MONITORAMENTO_TRECHO + "/obter-situacao-transito",
+        url: 		"http://" + endereco + "/obter-situacao-transito",
         dataType:	"json",
         success: function( data, a, b) {
 			
@@ -61,6 +62,7 @@ function obter_situacao_transito()
         	console.log("(obter_situacao_transito) Erro ao processar requisição ao servidor)!!");
         }
     });    			
+	});
 }
 
 function processa(data) 

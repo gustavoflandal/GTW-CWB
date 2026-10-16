@@ -45,24 +45,9 @@ public class IncidenteImportJob implements Job {
 
             JsonObject root = new Gson().fromJson(json, JsonObject.class);
             int importados = 0;
-
-            if (root.has("alerts")) {
-                JsonArray alerts = root.getAsJsonArray("alerts");
-                for (JsonElement el : alerts) {
-                    JsonObject alert = el.getAsJsonObject();
-                    String uuid = alert.has("uuid") ? alert.get("uuid").getAsString() : null;
-                    String tipo = alert.has("type") ? alert.get("type").getAsString() : "ALERT";
-                    String desc = alert.has("subtype") ? alert.get("subtype").getAsString() : null;
-                    double lat = 0, lng = 0;
-                    if (alert.has("location")) {
-                        JsonObject loc = alert.getAsJsonObject("location");
-                        lat = loc.get("y").getAsDouble();
-                        lng = loc.get("x").getAsDouble();
-                    }
-                    int sev = alert.has("reportRating") ? alert.get("reportRating").getAsInt() : 0;
-                    importados += inserirIncidente(conn, "WAZE", uuid, tipo, desc,
-                        lat, lng, sev, System.currentTimeMillis());
-                }
+            for (Incidente inc : extrair(root, System.currentTimeMillis())) {
+                importados += inserirIncidente(conn, "WAZE", inc.idExterno, inc.tipo, inc.descricao,
+                    inc.latitude, inc.longitude, inc.severidade, inc.epochMs);
             }
 
             System.out.println("[IncidenteImportJob] Importados " + importados + " incidentes.");
@@ -71,6 +56,115 @@ public class IncidenteImportJob implements Job {
         } finally {
             if (conn != null) try { conn.close(); } catch (Exception ignored) {}
         }
+    }
+
+    /** Incidente lido do feed da Waze, antes de gravar em muralha.incidente_externo. */
+    static final class Incidente {
+        final String idExterno;
+        final String tipo;
+        final String descricao;
+        final double latitude;
+        final double longitude;
+        final int severidade;
+        final long epochMs;
+
+        Incidente(String idExterno, String tipo, String descricao, double latitude,
+                double longitude, int severidade, long epochMs) {
+            this.idExterno = idExterno;
+            this.tipo = tipo;
+            this.descricao = descricao;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.severidade = severidade;
+            this.epochMs = epochMs;
+        }
+    }
+
+    static final int MAX_DESCRICAO = 500;
+
+    /**
+     * Converte os arrays "alerts" e "jams" do feed da Waze em incidentes.
+     * A data é o pubMillis do item (agora, se ausente), para que a chave única
+     * (fonte, id_externo, dt_ocorrencia) evite regravar o mesmo item a cada execução.
+     */
+    static java.util.List<Incidente> extrair(JsonObject root, long agoraMs) {
+        java.util.List<Incidente> lista = new java.util.ArrayList<>();
+        if (root == null) return lista;
+
+        if (root.has("alerts") && root.get("alerts").isJsonArray()) {
+            for (JsonElement el : root.getAsJsonArray("alerts")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject alert = el.getAsJsonObject();
+                String tipo = texto(alert, "type");
+                double lat = 0, lng = 0;
+                if (alert.has("location") && alert.get("location").isJsonObject()) {
+                    JsonObject loc = alert.getAsJsonObject("location");
+                    lat = numero(loc, "y");
+                    lng = numero(loc, "x");
+                }
+                lista.add(new Incidente(texto(alert, "uuid"), tipo != null ? tipo : "ALERT",
+                    texto(alert, "subtype"), lat, lng, (int) numero(alert, "reportRating"),
+                    data(alert, agoraMs)));
+            }
+        }
+
+        if (root.has("jams") && root.get("jams").isJsonArray()) {
+            for (JsonElement el : root.getAsJsonArray("jams")) {
+                if (!el.isJsonObject()) continue;
+                JsonObject jam = el.getAsJsonObject();
+                // Ponto central da linha do congestionamento
+                double lat = 0, lng = 0;
+                if (jam.has("line") && jam.get("line").isJsonArray() && jam.getAsJsonArray("line").size() > 0) {
+                    JsonArray linha = jam.getAsJsonArray("line");
+                    JsonElement meio = linha.get(linha.size() / 2);
+                    if (meio.isJsonObject()) {
+                        lat = numero(meio.getAsJsonObject(), "y");
+                        lng = numero(meio.getAsJsonObject(), "x");
+                    }
+                }
+                String id = texto(jam, "uuid");
+                if (id == null) id = texto(jam, "id");
+                lista.add(new Incidente(id, "JAM", descricaoJam(jam), lat, lng,
+                    (int) numero(jam, "level"), data(jam, agoraMs)));
+            }
+        }
+        return lista;
+    }
+
+    /** Ex.: "Av. Paralela, Salvador — nível 4, 12 km/h, atraso 240 s, 1500 m". */
+    static String descricaoJam(JsonObject jam) {
+        StringBuilder sb = new StringBuilder();
+        String rua = texto(jam, "street");
+        String cidade = texto(jam, "city");
+        if (rua != null) sb.append(rua);
+        if (cidade != null) sb.append(sb.length() > 0 ? ", " : "").append(cidade);
+        java.util.List<String> partes = new java.util.ArrayList<>();
+        if (jam.has("level")) partes.add("nível " + (int) numero(jam, "level"));
+        if (jam.has("speedKMH")) partes.add(Math.round(numero(jam, "speedKMH")) + " km/h");
+        if (jam.has("delay")) partes.add("atraso " + (int) numero(jam, "delay") + " s");
+        if (jam.has("length")) partes.add((int) numero(jam, "length") + " m");
+        if (!partes.isEmpty()) sb.append(sb.length() > 0 ? " — " : "").append(String.join(", ", partes));
+        String d = sb.toString();
+        return d.isEmpty() ? null : (d.length() > MAX_DESCRICAO ? d.substring(0, MAX_DESCRICAO) : d);
+    }
+
+    private static String texto(JsonObject o, String campo) {
+        JsonElement e = o.get(campo);
+        return (e != null && e.isJsonPrimitive()) ? e.getAsString() : null;
+    }
+
+    private static double numero(JsonObject o, String campo) {
+        JsonElement e = o.get(campo);
+        try {
+            return (e != null && e.isJsonPrimitive()) ? e.getAsDouble() : 0;
+        } catch (NumberFormatException ex) {
+            return 0;
+        }
+    }
+
+    private static long data(JsonObject o, long agoraMs) {
+        long pub = (long) numero(o, "pubMillis");
+        return pub > 0 ? pub : agoraMs;
     }
 
     private int inserirIncidente(Connection conn, String fonte, String idExt,

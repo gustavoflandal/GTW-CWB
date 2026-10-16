@@ -103,6 +103,7 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `21-dashboards-consulta-sql-sem-cube.md` | Camada de consulta SQL própria do Dashboard Builder (remove o Cube Core); sem entrega própria, ver entrega 21 | 20 |
 | `22-sistema-chamados.md` | Sistema de chamados (7.2.3/7.2.4); documentação em [`docs/chamados/`](../chamados/) | 01, 11 |
 | `23-correcao-documentacao-aderencia.md` | Correção da documentação de aderência (Fase 1 da auditoria de 2026-10-16); matriz canônica em `docs/entregas/itens-edital-x-entregas.md` | — |
+| `24-correcoes-pontuais-auditoria.md` | Correções pontuais da auditoria (Fase 2): prioridade de alerta, `AuditoriaService`, IP dos mapas, Waze `jams`, script de `vtr_imagem_complemento` | 23 |
 
 ---
 

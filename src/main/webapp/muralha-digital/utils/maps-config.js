@@ -1,5 +1,28 @@
 
-IP_API_MONITORAMENTO_TRECHO = "189.112.204.89:8003"
+// Endereço (host:porta) da API de situação do trânsito por trecho: vem da chave
+// mapa_api_monitoramento_trecho em muralha.config_chave_valor (ver 07-configuracao-e-segredos.md).
+var IP_API_MONITORAMENTO_TRECHO = null;
+
+function obterIpApiMonitoramentoTrecho(callback) {
+	if (IP_API_MONITORAMENTO_TRECHO) { callback(IP_API_MONITORAMENTO_TRECHO); return; }
+	$.ajax({
+		type: "GET",
+		url: "/MuralhaDigital/MapaConfig",
+		dataType: "json",
+		data: { acao: "obterApiMonitoramentoTrecho" },
+		success: function (data) {
+			if (data && data.endereco) {
+				IP_API_MONITORAMENTO_TRECHO = data.endereco;
+				callback(IP_API_MONITORAMENTO_TRECHO);
+			} else {
+				console.log("Chave mapa_api_monitoramento_trecho não configurada em muralha.config_chave_valor.");
+			}
+		},
+		error: function () {
+			console.log("Erro ao obter o endereço da API de monitoramento de trechos.");
+		}
+	});
+}
 
 //Configurações de centralização dos mapas
 var LatLngPadraoCuritiba = {

@@ -536,20 +536,50 @@ public class ConfiguracaoSons {
 		return result;
 	}
 	
-	public static ConfiguracaoSom ObterPrioridade(String idTipo) {
+	/**
+	 * SQL que procura outro tipo de alerta que já use a prioridade informada.
+	 * Com {@code excluirTipo}, ignora o próprio tipo que está sendo editado.
+	 */
+	static String sqlPrioridadeEmUso(boolean excluirTipo) {
+		return " SELECT TOP 1 prioridade FROM muralha.tipo_alerta_ocorrencia WHERE prioridade = ? "
+				+ (excluirTipo ? " AND id <> CAST(? AS UNIQUEIDENTIFIER) " : "");
+	}
+
+	/** Converte a prioridade digitada; devolve null se não for um inteiro. */
+	static Integer converterPrioridade(String prioridade) {
+		if (prioridade == null) return null;
+		try {
+			return Integer.valueOf(prioridade.trim());
+		} catch (NumberFormatException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Verifica se a prioridade já está cadastrada para outro tipo de alerta.
+	 * @param prioridade valor de prioridade digitado na tela
+	 * @param idTipo     tipo que está sendo editado (uniqueidentifier), ignorado na busca; pode ser vazio
+	 * @return a prioridade encontrada em outro tipo, ou prioridade 0 se não houver
+	 */
+	public static ConfiguracaoSom ObterPrioridade(String prioridade, String idTipo) {
 		ConfiguracaoSom result = new ConfiguracaoSom();
+		Integer valor = converterPrioridade(prioridade);
+		if (valor == null) {
+			return result;
+		}
+		boolean excluirTipo = idTipo != null && !idTipo.trim().isEmpty();
 		Connection conn = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
-		StringBuilder sbSQL = new StringBuilder();
 		
 		try {
 			conn = Conexao.getConexao();
 			
-			sbSQL.append(" SELECT  prioridade  FROM muralha.tipo_alerta_ocorrencia WHERE prioridade = ? ");			
-			
-			ps = conn.prepareStatement(sbSQL.toString());			
-			ps.setString(1, idTipo);			
+			ps = conn.prepareStatement(sqlPrioridadeEmUso(excluirTipo));
+			ps.setInt(1, valor);
+			if (excluirTipo) {
+				ps.setString(2, idTipo.trim());
+			}
 		
 			rs = ps.executeQuery();
 

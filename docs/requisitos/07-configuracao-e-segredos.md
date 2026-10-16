@@ -84,6 +84,11 @@ $b = New-Object byte[] 32
 ## 4. Parâmetros dinâmicos no banco (não são segredos)
 `muralha.config_chave_valor` (+ `_hist`), `muralha.config_grupo_permissao` (+ `historico_config_grupo_permissao`), `muralha.config_alarme*`, `config_alerta*`, `config_envio_tempo_real*`, `config_monitoramento_ao_vivo*`, `config_semelhanca_placa`, `config_mobile_silencio`; `dbo.configuracao*`. Edição via telas de configuração (`configuracao-monitoramento/`, `PermissoesFuncionalidade`, `ConfiguracaoInatividade`, `ConfiguracaoRadares`, `ConfiguracaoTempoOcrBlitz`, `ConfiguracaoTempo`).
 
+### 4.1 Endereço da API de situação do trânsito por trecho
+
+- Chave `mapa_api_monitoramento_trecho` em `muralha.config_chave_valor`, valor `host[:porta]` (sem `http://` nem caminho). Criada por `docs/banco-de-dados/migracoes/20261016_config_mapa_api_trecho.sql` com o endereço que antes estava fixo em `utils/maps-config.js`.
+- Lida por `muralha.digital.mapas.MapaConfigServlet` (`/MuralhaDigital/MapaConfig?acao=obterApiMonitoramentoTrecho`), que recusa valor fora do formato; usada pela tela `pages/mapa-situacao-transito/`. Sem a chave, o mapa abre sem os trechos e o console do navegador avisa.
+
 ## 5. Checklist ao criar uma nova integração
 1. Definir a credencial como variável de ambiente ou tag em `muralha-digital-config.xml` (+ campo em `Inicializacao`).
 2. Atualizar o `.example` com tag vazia e este documento.

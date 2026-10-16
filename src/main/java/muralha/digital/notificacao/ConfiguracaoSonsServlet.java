@@ -325,9 +325,12 @@ public class ConfiguracaoSonsServlet extends HttpServlet implements Servlet {
    protected void ObterPrioridade(HttpServletRequest request, HttpServletResponse response)
 	        throws ServletException, IOException {
 	    try {
-	    	String id = request.getParameter("id");	    	
+	    	// "prioridade" é o valor digitado; "id" é o nome antigo do mesmo parâmetro.
+	    	String prioridade = request.getParameter("prioridade");
+	    	if (prioridade == null) prioridade = request.getParameter("id");
+	    	String idTipo = request.getParameter("idTipo");
 	    	
-			ConfiguracaoSom prioridadeCadastrada = ConfiguracaoSons.ObterPrioridade(id);			
+			ConfiguracaoSom prioridadeCadastrada = ConfiguracaoSons.ObterPrioridade(prioridade, idTipo);			
 			response.setContentType("text/plain;charset=UTF-8");
 			response.getWriter().write(
 			    String.valueOf(prioridadeCadastrada.getPrioridade())

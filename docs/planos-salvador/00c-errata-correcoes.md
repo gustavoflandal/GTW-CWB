@@ -17,13 +17,13 @@ import com.consilux.infra.SessaoConstantes;
 Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
 
 // Campos reais (mapeados de dbo.sis_usuario):
-int    id     = usuario.getIdUsuario();   // coluna: id_usuario
+Integer id    = usuario.getId();          // coluna: id_usuario (com.consilux.model.Usuario não tem getIdUsuario)
 String login  = usuario.getUsuario();     // coluna: usuario
 String nome   = usuario.getNome();        // coluna: nome
 boolean ativo = usuario.isAtivo();        // coluna: ativo
 ```
 
-**Substituir em todos os planos:** toda reflexão `.getClass().getMethod("getId").invoke(u)` → `usuario.getIdUsuario()`.  
+**Substituir em todos os planos:** toda reflexão `.getClass().getMethod("getId").invoke(u)` → `usuario.getId()` (correção de 2026-10-16: a versão anterior desta errata dizia `getIdUsuario()`, que só existe em `muralha.digital.acessos.Usuario`, o objeto guardado em `"objUsuario"` pelas telas da Muralha).  
 **Substituir em todos os planos:** `getAttribute("usuario")` → `getAttribute(SessaoConstantes.SESSAO_USUARIO)`.
 
 ---
@@ -245,7 +245,7 @@ A tabela complementar `dbo.sis_usuario_complemento.senha_hash` é a **nova hash 
 ```java
 // Em AuditoriaService.registrar():
 Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-int idUsuario   = (usuario != null) ? usuario.getIdUsuario() : 0;
+Integer idUsuario = (usuario != null) ? usuario.getId() : null;
 String login    = (usuario != null) ? usuario.getUsuario()   : "sistema";
 ```
 
