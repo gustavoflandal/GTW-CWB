@@ -177,18 +177,21 @@ GO
 
 -- 8. Menus ------------------------------------------------------------------
 DECLARE @maxMenu INT = (SELECT ISNULL(MAX(id_menu), 0) FROM dbo.sis_menu);
+DECLARE @maxInfos INT = (SELECT ISNULL(MAX(id_infos), 0) FROM dbo.sis_menu_infos);
 
 IF NOT EXISTS (SELECT 1 FROM dbo.sis_menu WHERE acao = '/MuralhaDigital/TipoAlertaConfig')
 BEGIN
     SET @maxMenu = @maxMenu + 1;
-    INSERT INTO dbo.sis_menu (id_menu, Descricao, acao, Ativo, Tipo)
-    VALUES (@maxMenu, 'Configuração de Tipos de Alerta', '/MuralhaDigital/TipoAlertaConfig', 1, 'A');
+    SET @maxInfos = @maxInfos + 1;
 
-    INSERT INTO dbo.sis_menu_infos (id_menu, titulo, descricao, href, target, icone, menu_pai)
-    VALUES (@maxMenu, 'Tipos de Alerta', 'Configuração de tipos, criticidade, cores e tratamentos', '/MuralhaDigital/TipoAlertaConfig', '_self', 'bi-bell-fill', 15);
+    INSERT INTO dbo.sis_menu (id_menu, Descricao, acao, Tipo, nivel, menu, Ativo)
+    VALUES (@maxMenu, 'Configuracao de Tipos de Alerta', '/MuralhaDigital/TipoAlertaConfig', 'U', 1, 'Tipos de Alerta', 1);
+
+    INSERT INTO dbo.sis_menu_infos (id_infos, id_menu, src, descricao, href, descricao_detalhada, ordenacao, menu_pai)
+    VALUES (@maxInfos, @maxMenu, '/muralha-digital/assets/images/menu-icons/alertas.svg', 'Tipos de Alerta', '/MuralhaDigital/TipoAlertaConfig', 'Configuracao de tipos, criticidade, cores e tratamentos', 9, 15);
 
     INSERT INTO dbo.sis_menu_direitos (id_menu, id_grupo) VALUES (@maxMenu, 42);
-    PRINT 'Menu Tipos de Alerta criado: ' + CAST(@maxMenu AS VARCHAR);
+    PRINT 'Menu Tipos de Alerta criado: menu=' + CAST(@maxMenu AS VARCHAR) + ' infos=' + CAST(@maxInfos AS VARCHAR);
 END
 ELSE PRINT 'Menu Tipos de Alerta ja existe';
 GO
