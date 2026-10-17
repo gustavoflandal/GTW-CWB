@@ -1,0 +1,100 @@
+# Painel: Passagens por Hora, Faixa e Classificacao
+uuid: "d2a00001-sup4-4000-b001-000000000008"
+dashboard_title: "Passagens Veiculares"
+slug: passagens-veiculares
+description: >
+  Volume de passagens veiculares por hora, equipamento, faixa e
+  classificacao. Velocidade media ponderada e percentual Mercosul.
+published: true
+tags: ["oficial", "operacional"]
+refresh_frequency: 60
+
+filters:
+  - name: Periodo
+    type: time_range
+    required: true
+    default: "Last 7 days"
+    targets: ["__all__"]
+
+  - name: Equipamento
+    type: select
+    dataset: mat_passagens_hora
+    column: local_nome
+    targets: ["__all__"]
+
+  - name: Classificacao
+    type: select
+    dataset: mat_passagens_hora
+    column: classificacao
+    targets: ["__all__"]
+
+charts:
+  - name: "Total de Passagens"
+    viz_type: big_number_total
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    time_column: hora
+    width: 3
+    height: 1
+
+  - name: "Velocidade Media (km/h)"
+    viz_type: big_number_total
+    dataset: mat_passagens_hora
+    metric: velocidade_media_ponderada
+    time_column: hora
+    width: 3
+    height: 1
+
+  - name: "Equipamentos Ativos"
+    viz_type: big_number_total
+    dataset: mat_passagens_hora
+    metric: qtd_equipamentos
+    time_column: hora
+    width: 3
+    height: 1
+
+  - name: "% Placa Mercosul"
+    viz_type: big_number_total
+    dataset: mat_passagens_hora
+    metric: pct_mercosul
+    time_column: hora
+    width: 3
+    height: 1
+
+  - name: "Passagens por Hora"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    time_column: hora
+    time_grain: PT1H
+    width: 12
+    height: 3
+
+  - name: "Passagens por Classificacao"
+    viz_type: pie
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    groupby: ["classificacao"]
+    width: 6
+    height: 3
+
+  - name: "Ranking de Equipamentos"
+    viz_type: table
+    dataset: mat_passagens_hora
+    columns: ["local_nome"]
+    metrics: ["total_passagens", "velocidade_media_ponderada"]
+    orderby: [["total_passagens", "desc"]]
+    row_limit: 20
+    width: 6
+    height: 3
+
+  - name: "Passagens por Faixa e Hora"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    time_column: hora
+    time_grain: PT1H
+    groupby: ["faixa"]
+    stack: true
+    width: 12
+    height: 3

@@ -1,0 +1,92 @@
+# Painel: Infracoes por Equipamento e Enquadramento
+uuid: "d2a00001-sup4-4000-b001-000000000007"
+dashboard_title: "Infracoes"
+slug: infracoes
+description: >
+  Analise de infracoes: total por equipamento, enquadramento, excesso
+  medio, evolucao temporal e ranking dos pontos com mais ocorrencias.
+published: true
+tags: ["oficial", "operacional"]
+refresh_frequency: 60
+
+filters:
+  - name: Periodo
+    type: time_range
+    required: true
+    default: "Last 7 days"
+    targets: ["__all__"]
+
+  - name: Equipamento
+    type: select
+    dataset: mat_infracoes_dia
+    column: local_nome
+    targets: ["__all__"]
+
+  - name: Enquadramento
+    type: select
+    dataset: mat_infracoes_dia
+    column: enquadramento
+    targets: ["__all__"]
+
+charts:
+  - name: "Total de Infracoes"
+    viz_type: big_number_total
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    time_column: dia
+    width: 4
+    height: 1
+
+  - name: "Excesso Medio (km/h)"
+    viz_type: big_number_total
+    dataset: mat_infracoes_dia
+    metric: excesso_medio_ponderado
+    time_column: dia
+    width: 4
+    height: 1
+
+  - name: "Equipamentos com Infracoes"
+    viz_type: big_number_total
+    dataset: mat_infracoes_dia
+    metric: qtd_equipamentos_infracoes
+    time_column: dia
+    width: 4
+    height: 1
+
+  - name: "Infracoes por Dia"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    time_column: dia
+    time_grain: P1D
+    width: 6
+    height: 3
+
+  - name: "Infracoes por Enquadramento"
+    viz_type: pie
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    groupby: ["enquadramento"]
+    width: 6
+    height: 3
+
+  - name: "Ranking de Equipamentos"
+    viz_type: table
+    dataset: mat_infracoes_dia
+    columns: ["local_nome"]
+    metrics: ["total_infracoes", "excesso_medio_ponderado"]
+    orderby: [["total_infracoes", "desc"]]
+    row_limit: 20
+    width: 6
+    height: 3
+
+  - name: "Infracoes por Faixa"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    time_column: dia
+    time_grain: P1D
+    groupby: ["faixa"]
+    stack: true
+    width: 6
+    height: 3
