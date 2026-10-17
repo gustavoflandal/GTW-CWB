@@ -60,6 +60,8 @@ import muralha.digital.notificacao.JobEnviaEmailAlerta;
 import muralha.digital.notificacao.JobEnviaEmailOcorrencia;
 import muralha.digital.notificacao.JobEnviaSmsAlerta;
 import muralha.digital.notificacao.JobEnviaSmsOcorrencia;
+import muralha.digital.notificacao.JobRetryNotificacao;
+import muralha.digital.timelapse.JobTimelapseDescarte;
 
 public class Agendador extends HttpServlet {
 
@@ -136,6 +138,12 @@ public class Agendador extends HttpServlet {
 	public static final String GRUPO_RELATORIOS = "Relatorios";
 	public static final String JOB_RELATORIO_GERENCIAL = "Gera relatorio gerencial mensal";
 	public static final String JOB_RELATORIO_PREPROC = "Gera relatorio mensal pre-processamento";
+
+	public static final String GRUPO_RETRY_NOTIFICACAO = "RetryNotificacao";
+	public static final String JOB_RETRY_NOTIFICACAO = "Reenvio de notificacoes com falha";
+
+	public static final String GRUPO_TIMELAPSE = "Timelapse";
+	public static final String JOB_TIMELAPSE_DESCARTE = "Descarte de dados antigos de timelapse";
 	
 	private static Integer INTERVALO_EXECUCAO_EMAIL_MINUTOS = (Inicializacao.IntervaloExecucaoEmailMinutos == null ? 1 : Inicializacao.IntervaloExecucaoEmailMinutos);
 	private static Integer INTERVALO_EXECUCAO_SMS_MINUTOS = (Inicializacao.IntervaloExecucaoSmsMinutos == null ? 5 : Inicializacao.IntervaloExecucaoSmsMinutos);
@@ -207,6 +215,8 @@ public class Agendador extends HttpServlet {
 			reajustaJobKpiSnapshot();
 			reajustaJobRelatorioGerencial();
 			reajustaJobRelatorioPreProc();
+			reajustaJobRetryNotificacao();
+			reajustaJobTimelapseDescarte();
 
 			String modo_cav = ConfiguracaoProvider.getInstance().getConfiguracaoChaveValor().get("habilitar_funcionalidade_cav");
 			if(modo_cav != null && modo_cav.equals("1")) {
@@ -1060,6 +1070,38 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job Relatório Pré-Processamento agendada a cada 24h.");
+		}
+	}
+
+	private static void reajustaJobRetryNotificacao() throws SchedulerException {
+		if (EMAIL_ATIVO_MURALHA || SMS_ATIVO_MURALHA) {
+			if (!possuiJob(GRUPO_RETRY_NOTIFICACAO, JOB_RETRY_NOTIFICACAO)) {
+				JobDetail tarefa = JobBuilder.newJob(JobRetryNotificacao.class)
+						.withIdentity(JOB_RETRY_NOTIFICACAO, GRUPO_RETRY_NOTIFICACAO)
+						.build();
+				Trigger trigger = TriggerBuilder.newTrigger()
+						.withIdentity(JOB_RETRY_NOTIFICACAO, GRUPO_RETRY_NOTIFICACAO)
+						.startNow()
+						.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(5))
+						.build();
+				quartzScheduler.scheduleJob(tarefa, trigger);
+				logger.info("Job Retry de Notificações agendada a cada 5 min.");
+			}
+		}
+	}
+
+	private static void reajustaJobTimelapseDescarte() throws SchedulerException {
+		if (!possuiJob(GRUPO_TIMELAPSE, JOB_TIMELAPSE_DESCARTE)) {
+			JobDetail tarefa = JobBuilder.newJob(JobTimelapseDescarte.class)
+					.withIdentity(JOB_TIMELAPSE_DESCARTE, GRUPO_TIMELAPSE)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_TIMELAPSE_DESCARTE, GRUPO_TIMELAPSE)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(60))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Descarte Timelapse agendada a cada 60 min.");
 		}
 	}
 
