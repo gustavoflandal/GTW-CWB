@@ -18,9 +18,9 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 | [SUP-5](sessoes/SUP-05-permissoes-governanca.md) | Permissoes, colecoes e governanca | Implementada |
 | [SUP-6](sessoes/SUP-06-auditoria-observabilidade.md) | Auditoria e observabilidade | Implementada |
 | [SUP-7](sessoes/SUP-07-alertas-relatorios.md) | Alertas e relatorios agendados | Implementada |
-| SUP-8 | Mapas e analise espacial | Pendente |
-| SUP-9 | Embedding em telas do GTW | Pendente |
-| SUP-10 | Manual do usuario e capacitacao | Pendente |
+| [SUP-8](sessoes/SUP-08-mapas-analise-espacial.md) | Mapas e analise espacial | Implementada |
+| [SUP-9](sessoes/SUP-09-embedding.md) | Embedding em telas do GTW | Implementada |
+| [SUP-10](sessoes/SUP-10-manual-usuario.md) | Manual do usuario e capacitacao | Implementada |
 | SUP-11 | Producao: implantacao, backup e operacao | Pendente |
 | SUP-12 | Desempenho e carga | Pendente |
 | SUP-13 | Desligamento do Dashboard Builder | Pendente |
@@ -35,6 +35,14 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 - [SUP-5](relatorios/SESSAO-SUP-05-relatorio.md)
 - [SUP-6](relatorios/SESSAO-SUP-06-relatorio.md)
 - [SUP-7](relatorios/SESSAO-SUP-07-relatorio.md)
+- [SUP-8](relatorios/SESSAO-SUP-08-relatorio.md)
+- [SUP-9](relatorios/SESSAO-SUP-09-relatorio.md)
+- [SUP-10](relatorios/SESSAO-SUP-10-relatorio.md)
+
+## Documentacao
+
+- [Manual do Usuario](manual-usuario.md) — acesso, paineis, filtros, exportacao, alertas
+- [Guia do Administrador](guia-administrador.md) — Docker, provisioner, backup, troubleshooting
 
 ## Infraestrutura
 

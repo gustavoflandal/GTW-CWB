@@ -226,9 +226,34 @@ SMTP_SSL = os.environ.get("SMTP_SSL", "false").lower() == "true"
 SMTP_MAIL_FROM = os.environ.get("SMTP_MAIL_FROM", "analises@muralhadigital.local")
 
 # ---------------------------------------------------------------------------
-# Mapa — OpenStreetMap via deck.gl (sem Mapbox)
+# Mapa — OpenStreetMap via deck.gl (SUP-8)
 # ---------------------------------------------------------------------------
 MAPBOX_API_KEY = ""  # Não usado; tiles via OpenStreetMap
+
+DEFAULT_MAP_CENTER = [-12.9714, -38.5124]  # Salvador, BA
+DEFAULT_MAP_ZOOM = 12
+
+DECK_GL_DOT_SIZE = 300
+HTML_SANITIZATION = True
+
+# ---------------------------------------------------------------------------
+# Embedding — CORS para iframes do GTW (SUP-9)
+# ---------------------------------------------------------------------------
+TALISMAN_ENABLED = False
+HTTP_HEADERS = {
+    "X-Frame-Options": "ALLOWALL",
+}
+
+CORS_OPTIONS = {
+    "supports_credentials": True,
+    "allow_headers": ["*"],
+    "resources": ["/api/*", "/superset/guest_token/"],
+    "origins": [
+        os.environ.get("GTW_BASE_URL", "http://localhost:8080"),
+    ],
+}
+
+GUEST_TOKEN_JWT_EXP_SECONDS = 3600  # 1 hora (redundante, mantido por clareza)
 # =============================================================================
 # Fim da configuração
 # =============================================================================

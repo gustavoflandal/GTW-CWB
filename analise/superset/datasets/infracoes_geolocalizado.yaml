@@ -1,0 +1,70 @@
+# Dataset: Infrações Geolocalizadas (SUP-8)
+# Fonte: analise.mat_infracoes_dia com coordenadas do local
+uuid: "d1a00001-sup8-4000-a001-000000000001"
+table_name: v_infracoes_geolocalizado
+schema: analise
+folder: Mapas
+description: >
+  Infrações com coordenadas geográficas do equipamento para camadas
+  deck.gl (heatmap, scatter). Inclui enquadramento e excesso.
+main_dttm_col: dia
+cache_timeout: 300
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: lat
+    label: Latitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: lon
+    label: Longitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: enquadramento
+    label: Enquadramento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: total_infracoes
+    label: Total de Infrações
+    type: INT
+    groupby: false
+    filterable: true
+
+  - name: excesso_medio
+    label: Excesso Médio (km/h)
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+metrics:
+  - name: total_infracoes_geo
+    label: Total de Infrações
+    expression: "SUM(total_infracoes)"
+    metric_type: sum
+    d3_format: ",d"
+    description: Soma de infrações por ponto geográfico
+
+  - name: excesso_medio_geo
+    label: Excesso Médio (km/h)
+    expression: "AVG(excesso_medio)"
+    metric_type: avg
+    d3_format: ",.1f"
+    description: Média do excesso de velocidade por ponto
