@@ -1,0 +1,207 @@
+# Dataset: Pré-processamento (14 alíneas TR 5.5.3.1)
+# Fonte: analise.v_preprocessamento
+uuid: "d1a00001-sup3-4000-a001-000000000010"
+table_name: v_preprocessamento
+schema: analise
+folder: Pré-processamento
+description: >
+  Indicadores de pré-processamento de imagens conforme as 14 alíneas
+  do TR 5.5.3.1: recebidos, processados, descartados, aproveitamento,
+  tempo médio, produtividade, divergências, backlog e SLA 72h.
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: id_operador
+    label: ID Operador
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: operador
+    label: Operador
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: recebidos
+    label: "1. Recebidos"
+    type: INT
+    groupby: false
+    filterable: false
+    description: "TR 5.5.3.1-a: registros que entraram para análise"
+
+  - name: preprocessados
+    label: "2. Pré-processados"
+    type: INT
+    groupby: false
+    filterable: false
+    description: "TR 5.5.3.1-b: registros com análise concluída"
+
+  - name: disponibilizados
+    label: "3. Disponibilizados"
+    type: INT
+    groupby: false
+    filterable: false
+    description: "TR 5.5.3.1-c: registros com status final definido"
+
+  - name: descartados
+    label: "4. Descartados"
+    type: INT
+    groupby: false
+    filterable: false
+    description: "TR 5.5.3.1-d: registros reprovados"
+
+  - name: pct_aproveitamento
+    label: "5. Aproveitamento (%)"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+    description: "TR 5.5.3.1-e: % aprovados sobre recebidos"
+
+  - name: tempo_medio_min
+    label: "6. Tempo Médio (min)"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-f: média de minutos entre passagem e análise"
+
+  - name: produtividade
+    label: "7. Produtividade"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-g: registros analisados por operador"
+
+  - name: divergencias
+    label: "8. Divergências"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-h: infrações que foram para desempate"
+
+  - name: retrabalho
+    label: "9. Retrabalho"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-i: análises de sequência > 2"
+
+  - name: pendentes
+    label: "10. Pendentes"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-j: aguardando análise"
+
+  - name: backlog_24h
+    label: "11. Backlog >24h"
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: "TR 5.5.3.1-k: pendentes há mais de 24 horas"
+
+  - name: pct_sla_72h
+    label: "12. SLA 72h (%)"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+    description: "TR 5.5.3.1-l: % processados em até 72h"
+
+metrics:
+  - name: total_recebidos
+    label: Total Recebidos
+    expression: "SUM(recebidos)"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: "TR 5.5.3.1-a: total de registros recebidos"
+
+  - name: total_preprocessados
+    label: Total Pré-processados
+    expression: "SUM(preprocessados)"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+
+  - name: total_descartados
+    label: Total Descartados
+    expression: "SUM(descartados)"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+
+  - name: aproveitamento_global
+    label: Aproveitamento Global (%)
+    expression: >
+      100.0 * (SUM(recebidos) - SUM(descartados))
+      / NULLIF(SUM(recebidos), 0)
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: "TR 5.5.3.1-e: aproveitamento global no período"
+
+  - name: tempo_medio_global
+    label: Tempo Médio Global (min)
+    expression: "AVG(tempo_medio_min)"
+    metric_type: avg
+    d3_format: ",.0f"
+    certified_by: "Consilux / Edital Salvador"
+    description: "TR 5.5.3.1-f: média global do tempo de análise"
+
+  - name: produtividade_media
+    label: Produtividade Média por Operador
+    expression: "AVG(produtividade)"
+    metric_type: avg
+    d3_format: ",.0f"
+    certified_by: "Consilux / Edital Salvador"
+    description: "TR 5.5.3.1-g: média de registros analisados por operador"
+
+  - name: sla_72h_global
+    label: SLA 72h Global (%)
+    expression: >
+      100.0 * SUM(CAST(pct_sla_72h * recebidos / 100.0 AS INT))
+      / NULLIF(SUM(recebidos), 0)
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: "TR 5.5.3.1-l: SLA 72h ponderado pelo volume"
+
+  - name: total_pendentes
+    label: Total Pendentes
+    expression: "SUM(pendentes)"
+    metric_type: sum
+    d3_format: ",d"
+
+  - name: total_backlog
+    label: Total Backlog >24h
+    expression: "SUM(backlog_24h)"
+    metric_type: sum
+    d3_format: ",d"

@@ -12,12 +12,16 @@ RUN pip install --no-cache-dir \
     --target=/app/.venv/lib/python3.10/site-packages \
     pymssql==2.3.0 \
     psycopg2-binary==2.9.9 \
-    redis==5.0.8
+    redis==5.0.8 \
+    pyyaml==6.0.2
 
 # Configuração customizada do Superset
 COPY superset/superset_config.py /app/superset_config.py
 COPY superset/gtw_security.py /app/gtw_security.py
 COPY superset/provisionar.py /app/provisionar.py
+
+# Definições declarativas de datasets (SUP-3)
+COPY superset/datasets/ /app/datasets/
 
 # Variável que o Superset usa para localizar o arquivo de configuração
 ENV SUPERSET_CONFIG_PATH=/app/superset_config.py

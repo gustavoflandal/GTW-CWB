@@ -1,0 +1,83 @@
+# Dataset: Assertividade Diária (Dupla Análise)
+# Fonte: analise.v_assertividade_dia (Plano 05)
+uuid: "d1a00001-sup3-4000-a001-000000000009"
+table_name: v_assertividade_dia
+schema: analise
+folder: Pré-processamento
+description: >
+  Taxa de concordância na dupla análise independente de infrações,
+  por dia. Pré-aprovadas, reprovadas e desempates.
+  Fonte: Plano 05 (requisito TR 5.2.2.6, 5.2.3).
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: total_analisadas
+    label: Total Analisadas
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: pre_aprovadas
+    label: Pré-aprovadas
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: reprovadas
+    label: Reprovadas
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: desempate
+    label: Desempates
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: pct_assertividade
+    label: "% Assertividade"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+
+metrics:
+  - name: assertividade_media
+    label: Assertividade Média (%)
+    expression: >
+      100.0 * SUM(pre_aprovadas + reprovadas)
+      / NULLIF(SUM(total_analisadas), 0)
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: "Taxa de concordância: (aprovadas + reprovadas) / total analisadas"
+
+  - name: total_analisadas_sum
+    label: Total Analisadas
+    expression: "SUM(total_analisadas)"
+    metric_type: sum
+    d3_format: ",d"
+
+  - name: total_desempates
+    label: Total de Desempates
+    expression: "SUM(desempate)"
+    metric_type: sum
+    d3_format: ",d"
+    description: Infrações que foram para desempate (divergência entre analistas)
+
+  - name: pct_desempate
+    label: "% Desempate"
+    expression: "100.0 * SUM(desempate) / NULLIF(SUM(total_analisadas), 0)"
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Percentual de infrações que foram para desempate

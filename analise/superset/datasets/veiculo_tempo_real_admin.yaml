@@ -1,0 +1,83 @@
+# Dataset: Veículo Tempo Real (ADMIN ONLY)
+# Fonte: muralha.veiculo_tempo_real (tabela bruta, 8M+ linhas)
+# ATENÇÃO: Somente para papel Admin. Operadores NÃO devem usar este dataset.
+uuid: "d1a00001-sup3-4000-a001-000000000011"
+table_name: veiculo_tempo_real
+schema: muralha
+folder: Administração
+description: >
+  Tabela bruta de passagens veiculares (8M+ linhas). USO RESTRITO A
+  ADMINISTRADORES. Para análise, use o dataset 'Passagens por Hora'
+  (analise.mat_passagens_hora), que é pré-agregado e performático.
+main_dttm_col: data
+cache_timeout: 0
+warning_markdown: >
+  ⚠️ **Dataset bruto — uso restrito a administradores.**
+
+  Esta tabela contém mais de 8 milhões de linhas e consultas sem filtro
+  de período podem demorar vários minutos ou atingir o timeout.
+
+  **Sempre filtre por período (data)** e use o menor intervalo possível.
+
+  Para análises operacionais, prefira o dataset **Passagens por Hora**
+  (`analise.mat_passagens_hora`), que é pré-agregado por hora/local.
+is_admin_only: true
+
+columns:
+  - name: id
+    label: ID
+    type: UNIQUEIDENTIFIER
+    groupby: false
+    filterable: false
+
+  - name: data
+    label: Data/Hora
+    type: DATETIME
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: id_pista
+    label: Faixa
+    type: TINYINT
+    groupby: true
+    filterable: true
+
+  - name: classificacao
+    label: Classificação
+    type: CHAR
+    groupby: true
+    filterable: true
+
+  - name: velocidade
+    label: Velocidade (km/h)
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: placa_mercosul
+    label: Placa Mercosul
+    type: BIT
+    groupby: true
+    filterable: true
+
+metrics:
+  - name: contagem
+    label: Contagem
+    expression: "COUNT(*)"
+    metric_type: count
+    d3_format: ",d"
+    description: Total de registros (passagens)
+
+  - name: velocidade_media_bruta
+    label: Velocidade Média (km/h)
+    expression: "AVG(CAST(velocidade AS FLOAT))"
+    metric_type: avg
+    d3_format: ",.1f"
+    description: Média simples da velocidade (sem ponderação)

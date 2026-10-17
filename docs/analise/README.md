@@ -13,7 +13,7 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 |---|---|---|
 | [SUP-1](sessoes/SUP-01-fundacao.md) | Fundacao: plano, ambiente, SSO | Implementada |
 | [SUP-2](sessoes/SUP-02-camada-dados.md) | Camada de dados analitica | Concluida |
-| SUP-3 | Datasets, metricas e semantica | Pendente |
+| [SUP-3](sessoes/SUP-03-datasets-semantica.md) | Datasets, metricas e semantica | Implementada |
 | SUP-4 | Paineis operacionais padrao | Pendente |
 | SUP-5 | Permissoes, colecoes e governanca | Pendente |
 | SUP-6 | Auditoria e observabilidade | Pendente |
@@ -30,6 +30,7 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 
 - [SUP-1](relatorios/SESSAO-SUP-01-relatorio.md)
 - [SUP-2](relatorios/SESSAO-SUP-02-relatorio.md)
+- [SUP-3](relatorios/SESSAO-SUP-03-relatorio.md)
 
 ## Infraestrutura
 
