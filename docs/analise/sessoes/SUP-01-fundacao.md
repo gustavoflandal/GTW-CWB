@@ -21,14 +21,14 @@
 - [x] Criar `SsoAnaliseServletTest.java`
 - [x] Criar documentacao da sessao
 - [x] Build verde
-- [ ] Testar `docker compose up` (requer Docker instalado)
-- [ ] Testar SSO no navegador
+- [x] Testar `docker compose up`
+- [ ] Testar SSO no navegador (requer Tomcat + Docker simultaneos)
 
 ## Criterios de aceite
 
 | Criterio | Status |
 |---|---|
-| `docker compose up` sobe limpo | Pendente — requer Docker |
-| Usuario GTW entra no Superset sem senha nova | Pendente — requer Docker + Tomcat |
-| Testes TestNG verdes | Implementado |
-| Build do GTW verde | Implementado |
+| `docker compose up` sobe limpo | Concluido (17/10/2026) |
+| Usuario GTW entra no Superset sem senha nova | Pendente — requer Tomcat rodando junto |
+| Testes TestNG verdes | Concluido |
+| Build do GTW verde | Concluido |
