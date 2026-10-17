@@ -7,6 +7,8 @@ export function inicializarFiltroCruzado(opcoes) {
         registrarClique: registrarClique,
         obterFiltro: function() { return filtroAtivo; },
         limpar: limpar,
+        // Descarta o filtro sem recarregar (ex.: ao abrir outro painel).
+        resetar: function() { filtroAtivo = null; },
         estaAtivo: function() { return filtroAtivo !== null; }
     };
 }
@@ -15,16 +17,19 @@ function registrarClique(widgetId, chart, widget) {
     if (!chart || !chart.on) return;
 
     chart.on('click', function(params) {
-        if (!params.name && params.value == null) return;
+        // O valor bruto da categoria vem dos metadados do renderizador: o rotulo
+        // exibido pode estar formatado. Eixo de tempo e tratado pelo drill-down;
+        // mapa de calor, dispersao e gauge nao tem categoria para filtrar.
+        var meta = chart.getDom().__dashMeta;
+        if (!meta || meta.eixoEhTempo || params.componentType !== 'series') return;
 
-        var dimensao = null;
         var consulta = widget.consulta || {};
-        if (consulta.dimensions && consulta.dimensions.length > 0) {
-            dimensao = consulta.dimensions[0];
-        }
-        if (!dimensao) return;
+        var dimensao = meta.eixo;
+        if (!consulta.dimensions || consulta.dimensions.indexOf(dimensao) < 0) return;
 
-        var valor = params.name || String(params.value);
+        var bruto = meta.categorias[params.dataIndex];
+        if (bruto == null) return;
+        var valor = String(bruto);
 
         if (filtroAtivo && filtroAtivo.widgetId === widgetId &&
             filtroAtivo.dimensao === dimensao && filtroAtivo.valor === valor) {
@@ -32,10 +37,15 @@ function registrarClique(widgetId, chart, widget) {
             return;
         }
 
+        if (filtroAtivo && filtroAtivo.widgetId !== widgetId) {
+            atualizarIndicadorVisual(filtroAtivo.widgetId, false);
+        }
+
         filtroAtivo = {
             widgetId: widgetId,
             dimensao: dimensao,
-            valor: valor
+            valor: valor,
+            rotulo: meta.rotulosCategorias[params.dataIndex]
         };
 
         atualizarIndicadorVisual(widgetId, true);
@@ -59,18 +69,23 @@ function atualizarIndicadorVisual(widgetId, ativo) {
     if (!header) return;
 
     var badge = header.querySelector('.badge-filtro-cruzado');
-    if (ativo && !badge) {
-        badge = document.createElement('span');
-        badge.className = 'badge bg-warning text-dark badge-filtro-cruzado ms-2';
-        badge.style.fontSize = '0.7rem';
-        badge.innerHTML = '<i class="bi bi-funnel-fill"></i> Filtro ativo';
-        badge.style.cursor = 'pointer';
-        badge.addEventListener('click', function(e) {
-            e.stopPropagation();
-            limpar();
-        });
-        header.querySelector('span').appendChild(badge);
-    } else if (!ativo && badge) {
+    if (ativo) {
+        if (!badge) {
+            badge = document.createElement('span');
+            badge.className = 'badge bg-warning text-dark badge-filtro-cruzado ms-2';
+            badge.style.fontSize = '0.7rem';
+            badge.style.cursor = 'pointer';
+            badge.addEventListener('click', function(e) {
+                e.stopPropagation();
+                limpar();
+            });
+            header.querySelector('span').appendChild(badge);
+        }
+        badge.innerHTML = '<i class="bi bi-funnel-fill"></i> ';
+        badge.appendChild(document.createTextNode(filtroAtivo.rotulo || filtroAtivo.valor));
+        badge.title = 'Filtrando os demais widgets do mesmo dataset por "' +
+            (filtroAtivo.rotulo || filtroAtivo.valor) + '". Clique para remover o filtro.';
+    } else if (badge) {
         badge.remove();
     }
 }

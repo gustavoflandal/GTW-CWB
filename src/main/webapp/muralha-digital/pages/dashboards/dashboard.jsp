@@ -124,10 +124,10 @@
 			     		    <div class="col-12">
 							  <div class="input-group mb-3 my-1">
 								  <span class="p-2 bg-warning text-dark rounded-start"><strong>Categoria</strong></span>
-								  <select class="form-select" id="selTipoRelatorio" aria-label="Example select with button addon">
+								  <select class="form-select" id="selTipoRelatorio" aria-label="Categoria">
 								    <option value="1" selected>Fluxo Veicular</option>
-								    <option value="2">Infracoes</option>
-								    <option value="3">Ocorrencias</option>
+								    <option value="2">Infrações</option>
+								    <option value="3">Ocorrências</option>
 								  </select>
 								  <span class="p-2 bg-warning text-dark rounded-end">
 					  	   				<small><strong id="totalizador">Totalizador</strong></small>

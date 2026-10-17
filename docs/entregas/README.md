@@ -47,6 +47,7 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 
 ## Documentos de apoio
 
+- **Auditoria de dashboards e tooltips (2026-10-17):** [`auditoria-dashboards-tooltips.md`](auditoria-dashboards-tooltips.md) — correções no módulo de análises, no backend de consulta e exportação, no SSO do Superset e nos tooltips de interface; pendências de segurança em aberto
 - **Diagrama de arquitetura:** [`arquitetura-sistema.md`](../diagrama-arquitetura/arquitetura-sistema.md) — camadas, módulos PoC, jobs Quartz, schema ER e módulos legados (Mermaid)
 - **Matriz canônica de aderência (fonte primária):** [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md) — os 232 itens do Capítulo 5 do TR em ordem crescente, com situação (✅/⚠️/❌), entrega e evidência; cobertura por seção
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — os mesmos status, agrupados por requisito, com links para os artefatos

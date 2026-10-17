@@ -1,6 +1,8 @@
 import { api } from './api.js';
-import { renderizarWidget, tiposDisponiveis } from './widget-registry.js';
+import { renderizarWidget, tiposDisponiveis, ajustarConsultaAoTipo } from './widget-registry.js';
 import { criarEditorFiltros } from './editor-filtros.js';
+
+var VISUAL_PADRAO = { empilhado: false, rotulos: true, paleta: 'padrao', orientacao: 'vertical' };
 
 var estado = {
     idWidget: 0,
@@ -18,7 +20,7 @@ var estado = {
     dateRange: 'last 12 months',
     ordenacao: {},
     limite: 20,
-    visual: { empilhado: false, rotulos: true, paleta: 'padrao', orientacao: 'vertical' }
+    visual: Object.assign({}, VISUAL_PADRAO)
 };
 
 var editorFiltros = null;
@@ -119,9 +121,21 @@ function renderizarListaCampos(containerId, campos, tipo) {
         div.dataset.alias = c.alias;
         div.dataset.rotulo = c.rotulo;
         div.dataset.tipo = tipo;
+        div.title = descreverCampo(c, tipo);
         div.textContent = c.rotulo;
         container.appendChild(div);
     });
+}
+
+function descreverCampo(c, tipo) {
+    var papel = tipo === 'medida' ? 'Medida' : (tipo === 'tempo' ? 'Data/hora' : 'Dimensão');
+    var txt = papel + ' · campo "' + c.alias + '"';
+    if (tipo === 'medida' && c.agregacao && c.agregacao !== 'NONE') txt += ' · ' + c.agregacao;
+    return txt;
+}
+
+function ehCampoTempo(alias) {
+    return estado.tempos.some(function(t) { return t.alias === alias; });
 }
 
 function inicializarSortable() {
@@ -153,9 +167,23 @@ function inicializarSortable() {
 }
 
 function atualizarSelecao() {
-    estado.camposSelecionados.dimensoes = coletarAliases('zonaDimensoes');
+    var tempoSolto = null;
+    function semTempo(alias) {
+        if (ehCampoTempo(alias)) { tempoSolto = alias; return false; }
+        return true;
+    }
+    estado.camposSelecionados.dimensoes = coletarAliases('zonaDimensoes').filter(semTempo);
     estado.camposSelecionados.medidas = coletarAliases('zonaMedidas');
-    estado.camposSelecionados.series = coletarAliases('zonaSeries');
+    estado.camposSelecionados.series = coletarAliases('zonaSeries').filter(semTempo);
+
+    // Data/hora como dimensao agruparia por instante exato; usa-se a dimensao temporal.
+    if (tempoSolto) {
+        estado.timeDimension = tempoSolto;
+        if (!estado.granularidade) {
+            estado.granularidade = 'month';
+            document.getElementById('selGranularidade').value = 'month';
+        }
+    }
 }
 
 function coletarAliases(containerId) {
@@ -193,12 +221,14 @@ function renderizarOpcoesVisuais() {
     container.innerHTML =
         '<div class="row g-2">' +
         '<div class="col-md-3"><label class="form-label">Paleta</label>' +
-        '<select class="form-select form-select-sm" id="optPaleta"><option value="padrao">Padrao</option><option value="azul">Azul</option><option value="verde">Verde</option></select></div>' +
-        '<div class="col-md-3"><label class="form-label">Orientacao</label>' +
+        '<select class="form-select form-select-sm" id="optPaleta"><option value="padrao">Padrão</option><option value="azul">Azul</option><option value="verde">Verde</option></select></div>' +
+        '<div class="col-md-3"><label class="form-label">Orientação</label>' +
         '<select class="form-select form-select-sm" id="optOrientacao"><option value="vertical">Vertical</option><option value="horizontal">Horizontal</option></select></div>' +
-        '<div class="col-md-3"><div class="form-check mt-4"><input class="form-check-input" type="checkbox" id="optRotulos" checked><label class="form-check-label" for="optRotulos">Rotulos</label></div></div>' +
-        '<div class="col-md-3"><div class="form-check mt-4"><input class="form-check-input" type="checkbox" id="optEmpilhado"><label class="form-check-label" for="optEmpilhado">Empilhado</label></div></div>' +
+        '<div class="col-md-3"><div class="form-check mt-4"><input class="form-check-input" type="checkbox" id="optRotulos" checked><label class="form-check-label" for="optRotulos" title="Exibe o valor sobre cada barra, ponto ou fatia">Rótulos</label></div></div>' +
+        '<div class="col-md-3"><div class="form-check mt-4"><input class="form-check-input" type="checkbox" id="optEmpilhado"><label class="form-check-label" for="optEmpilhado" title="Empilha as séries em vez de exibi-las lado a lado">Empilhado</label></div></div>' +
         '</div>';
+
+    sincronizarOpcoesVisuais();
 
     container.addEventListener('change', function() {
         estado.visual.paleta = document.getElementById('optPaleta').value;
@@ -207,6 +237,15 @@ function renderizarOpcoesVisuais() {
         estado.visual.empilhado = document.getElementById('optEmpilhado').checked;
         agendarPreview();
     });
+}
+
+function sincronizarOpcoesVisuais() {
+    var v = estado.visual || {};
+    var el;
+    if ((el = document.getElementById('optPaleta'))) el.value = v.paleta || 'padrao';
+    if ((el = document.getElementById('optOrientacao'))) el.value = v.orientacao || 'vertical';
+    if ((el = document.getElementById('optRotulos'))) el.checked = v.rotulos !== false;
+    if ((el = document.getElementById('optEmpilhado'))) el.checked = !!v.empilhado;
 }
 
 function toggleZonasPivot() {
@@ -278,12 +317,12 @@ function montarConsulta() {
         }
     }
 
-    if (estado.timeDimension && estado.tempos.length > 0) {
-        consulta.timeDimensions = [{
-            dimension: estado.timeDimension,
-            granularity: estado.granularidade,
-            dateRange: estado.dateRange
-        }];
+    // Sem granularidade o tempo so filtra o periodo; sem os dois, nao entra na consulta.
+    if (estado.timeDimension && estado.tempos.length > 0 && (estado.granularidade || estado.dateRange)) {
+        var td = { dimension: estado.timeDimension };
+        if (estado.granularidade) td.granularity = estado.granularidade;
+        if (estado.dateRange) td.dateRange = estado.dateRange;
+        consulta.timeDimensions = [td];
     }
 
     if (editorFiltros) {
@@ -312,7 +351,8 @@ async function executarPreview() {
         return;
     }
 
-    var consulta = montarConsulta();
+    var widgetBase = { tipo: estado.tipo, titulo: estado.titulo, visual: estado.visual };
+    var consulta = ajustarConsultaAoTipo(widgetBase, montarConsulta());
     if (consulta.measures.length === 0 && estado.tipo !== 'tabela') {
         previewEl.innerHTML = '<div class="text-muted text-center p-3">Arraste ao menos uma medida.</div>';
         return;
@@ -326,16 +366,15 @@ async function executarPreview() {
     });
 
     if (!resp.ok) {
-        previewEl.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ' + (resp.erro || 'Erro na consulta') + '</div>';
+        previewEl.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(resp.erro || 'Erro na consulta') + '</div>';
         return;
     }
 
-    var widget = {
-        tipo: estado.tipo,
-        titulo: estado.titulo,
+    var widget = Object.assign({}, widgetBase, {
         consulta: consulta,
-        visual: estado.visual
-    };
+        visual: visualParaSalvar(),
+        anotacao: resp.annotation || null
+    });
 
     previewEl.innerHTML = '';
     previewEl.style.height = '350px';
@@ -351,18 +390,10 @@ async function executarPreview() {
     }
 }
 
-async function salvar(fechar) {
-    if (!estado.idDataset) {
-        alert('Selecione um dataset.');
-        return;
-    }
-    if (!estado.titulo.trim()) {
-        alert('Informe o titulo do widget.');
-        return;
-    }
-
-    var consulta = montarConsulta();
+function visualParaSalvar() {
     var visual = Object.assign({}, estado.visual);
+    delete visual.pivot;
+    delete visual.series;
     if (estado.tipo === 'pivot') {
         visual.pivot = {
             linhas: estado.pivotConfig.linhas,
@@ -370,7 +401,25 @@ async function salvar(fechar) {
             valores: estado.pivotConfig.valores,
             subtotais: estado.pivotConfig.subtotais
         };
+    } else if (estado.camposSelecionados.series.length > 0) {
+        // As series vao junto das dimensoes na consulta; guarda-se quais sao para reabrir o editor.
+        visual.series = estado.camposSelecionados.series.slice();
     }
+    return visual;
+}
+
+async function salvar(fechar) {
+    if (!estado.idDataset) {
+        alert('Selecione um dataset.');
+        return;
+    }
+    if (!estado.titulo.trim()) {
+        alert('Informe o título do widget.');
+        return;
+    }
+
+    var consulta = montarConsulta();
+    var visual = visualParaSalvar();
     var dados = {
         acao: 'salvar',
         id: estado.idWidget,
@@ -411,7 +460,8 @@ async function carregarWidget(idWidget) {
     estado.idDataset = w.idDataset;
     estado.titulo = w.titulo;
     estado.tipo = w.tipo;
-    estado.visual = w.visual || estado.visual;
+    estado.visual = Object.assign({}, VISUAL_PADRAO, w.visual || {});
+    sincronizarOpcoesVisuais();
 
     document.getElementById('selDataset').value = w.idDataset;
     document.getElementById('inpTitulo').value = w.titulo;
@@ -423,20 +473,31 @@ async function carregarWidget(idWidget) {
     await carregarCamposDataset(w.idDataset);
 
     var consulta = w.consulta || {};
-    if (consulta.dimensions) {
-        consulta.dimensions.forEach(function(d) { adicionarCampoZona('zonaDimensoes', d); });
+    var visual = w.visual || {};
+    if (w.tipo === 'pivot') {
+        var pv = visual.pivot || {};
+        (pv.linhas || []).forEach(function(a) { adicionarCampoZona('zonaPivotLinhas', a); });
+        (pv.colunas || []).forEach(function(a) { adicionarCampoZona('zonaPivotColunas', a); });
+        (pv.valores || []).forEach(function(a) { adicionarCampoZona('zonaPivotValores', a); });
+        var chk = document.getElementById('chkSubtotais');
+        if (chk) chk.checked = pv.subtotais !== false;
+        toggleZonasPivot();
+        atualizarSelecaoPivot();
+    } else {
+        var series = visual.series || [];
+        (consulta.dimensions || []).forEach(function(d) {
+            adicionarCampoZona(series.indexOf(d) >= 0 ? 'zonaSeries' : 'zonaDimensoes', d);
+        });
+        (consulta.measures || []).forEach(function(m) { adicionarCampoZona('zonaMedidas', m); });
     }
-    if (consulta.measures) {
-        consulta.measures.forEach(function(m) { adicionarCampoZona('zonaMedidas', m); });
-    }
-    if (consulta.timeDimensions && consulta.timeDimensions[0]) {
-        var td = consulta.timeDimensions[0];
-        estado.timeDimension = td.dimension;
-        estado.granularidade = td.granularity || 'month';
-        estado.dateRange = td.dateRange || 'last 12 months';
-        document.getElementById('selGranularidade').value = estado.granularidade;
-        document.getElementById('selDateRange').value = estado.dateRange;
-    }
+
+    // Periodo/granularidade ausentes no widget salvo significam "sem agrupamento"/"todo o periodo".
+    var td = (consulta.timeDimensions || [])[0] || null;
+    if (td) estado.timeDimension = td.dimension;
+    estado.granularidade = td && td.granularity ? td.granularity : '';
+    estado.dateRange = td && typeof td.dateRange === 'string' ? td.dateRange : '';
+    document.getElementById('selGranularidade').value = estado.granularidade;
+    document.getElementById('selDateRange').value = estado.dateRange;
     if (consulta.limit) {
         estado.limite = consulta.limit;
         document.getElementById('inpLimite').value = consulta.limit;
@@ -458,10 +519,20 @@ function adicionarCampoZona(zonaId, alias) {
     if (!campo) return;
 
     var zona = document.getElementById(zonaId);
+    if (!zona) return;
+    var tipo = estado.medidas.indexOf(campo) >= 0 ? 'medida' : (estado.tempos.indexOf(campo) >= 0 ? 'tempo' : 'dimensao');
     var div = document.createElement('div');
     div.className = 'campo-arraste badge bg-light text-dark border me-1 mb-1';
     div.dataset.alias = campo.alias;
     div.dataset.rotulo = campo.rotulo;
+    div.dataset.tipo = tipo;
+    div.title = descreverCampo(campo, tipo);
     div.textContent = campo.rotulo;
     zona.appendChild(div);
+}
+
+function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.appendChild(document.createTextNode(String(s == null ? '' : s)));
+    return d.innerHTML;
 }

@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
 import java.util.logging.Logger;
@@ -35,8 +36,9 @@ public class SsoAnaliseServlet extends HttpServlet {
     }
 
     private void validar(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession(false) != null
-                ? (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO)
+        HttpSession sessao = req.getSession(false);
+        Usuario usuario = sessao != null
+                ? (Usuario) sessao.getAttribute(SessaoConstantes.SESSAO_USUARIO)
                 : null;
 
         if (usuario == null) {

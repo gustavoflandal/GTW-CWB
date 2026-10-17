@@ -50,7 +50,7 @@
 			    		<div class="form-group">
 		                	<label for="placaConsulta" class="form-label">Placa:</label>
 							<input name="placa" id="placaConsulta" placeholder="Ex.: AAA1111" type="text" maxlength="7" class="form-control text-uppercase placa-caracter-coringa-2"
-									data-bs-toggle="tooltip" data-bs-placement="left" data-bs-original-title="É possível utilizar caracter coringa para substituir algum carcater da placa, por exemplo AA*11*1">
+									data-bs-toggle="tooltip" data-bs-placement="left" data-bs-title="É possível usar o caractere curinga (*) para substituir caracteres da placa, por exemplo: AA*11*1">
 						</div>
 					</div>
                 </div>

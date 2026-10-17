@@ -1,3 +1,5 @@
+import { rotuloCampo, infoTempo, colunasVisiveis, formatarCelula } from './comum.js';
+
 export function renderizarTabela(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
@@ -8,18 +10,37 @@ export function renderizarTabela(elemento, widget, dados) {
     var visual = widget.visual || {};
     var itensPorPagina = visual.itensPorPagina || 15;
     var paginaAtual = 0;
-    var keys = Object.keys(dados[0]);
+    var ordem = { chave: null, desc: false };
+    var keys = colunasVisiveis(widget, dados);
+    var tempo = infoTempo(widget, dados);
     var totalPaginas = Math.ceil(dados.length / itensPorPagina);
+
+    function ordenados() {
+        if (!ordem.chave) return dados;
+        var k = ordem.chave;
+        var fator = ordem.desc ? -1 : 1;
+        return dados.slice().sort(function(a, b) {
+            var va = a[k], vb = b[k];
+            if (va == null && vb == null) return 0;
+            if (va == null) return 1;
+            if (vb == null) return -1;
+            if (typeof va === 'number' && typeof vb === 'number') return (va - vb) * fator;
+            return String(va).localeCompare(String(vb), 'pt-BR', { numeric: true }) * fator;
+        });
+    }
 
     function renderizar() {
         var inicio = paginaAtual * itensPorPagina;
-        var fatia = dados.slice(inicio, inicio + itensPorPagina);
+        var fatia = ordenados().slice(inicio, inicio + itensPorPagina);
 
         var html = '<div style="overflow-x:auto">';
         html += '<table class="table table-sm table-striped table-hover mb-2" style="font-size:0.85rem">';
         html += '<thead class="table-light"><tr>';
         for (var i = 0; i < keys.length; i++) {
-            html += '<th style="white-space:nowrap">' + escapeHtml(keys[i]) + '</th>';
+            var seta = ordem.chave === keys[i] ? (ordem.desc ? ' <i class="bi bi-caret-down-fill"></i>' : ' <i class="bi bi-caret-up-fill"></i>') : '';
+            var aria = ordem.chave === keys[i] ? (ordem.desc ? 'descending' : 'ascending') : 'none';
+            html += '<th style="white-space:nowrap;cursor:pointer" data-col="' + i + '" aria-sort="' + aria + '" title="Clique para ordenar">' +
+                escapeHtml(rotuloCampo(widget, keys[i])) + seta + '</th>';
         }
         html += '</tr></thead><tbody>';
 
@@ -27,8 +48,8 @@ export function renderizarTabela(elemento, widget, dados) {
             html += '<tr>';
             for (var c = 0; c < keys.length; c++) {
                 var val = fatia[r][keys[c]];
-                var texto = val != null ? String(val) : '';
-                html += '<td>' + escapeHtml(texto) + '</td>';
+                var alinhamento = typeof val === 'number' ? ' style="text-align:right"' : '';
+                html += '<td' + alinhamento + '>' + escapeHtml(formatarCelula(widget, keys[c], val, tempo)) + '</td>';
             }
             html += '</tr>';
         }
@@ -57,6 +78,15 @@ export function renderizarTabela(elemento, widget, dados) {
 
         elemento.innerHTML = html;
 
+        elemento.querySelectorAll('th[data-col]').forEach(function(th) {
+            th.addEventListener('click', function() {
+                var k = keys[parseInt(th.dataset.col)];
+                ordem = { chave: k, desc: ordem.chave === k ? !ordem.desc : false };
+                paginaAtual = 0;
+                renderizar();
+            });
+        });
+
         elemento.querySelectorAll('[data-pg]').forEach(function(el) {
             el.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -74,6 +104,6 @@ export function renderizarTabela(elemento, widget, dados) {
 
 function escapeHtml(str) {
     var div = document.createElement('div');
-    div.appendChild(document.createTextNode(str));
+    div.appendChild(document.createTextNode(str == null ? '' : String(str)));
     return div.innerHTML;
 }

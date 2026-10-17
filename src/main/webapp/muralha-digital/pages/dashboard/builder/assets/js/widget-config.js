@@ -185,7 +185,7 @@ function adicionarFiltro(filtro) {
         '<option value="LIKE"' + (filtro && filtro.operador === 'LIKE' ? ' selected' : '') + '>LIKE</option>' +
         '</select></div>' +
         '<div class="col-4"><input type="text" class="form-control form-control-sm filtro-val" value="' + (filtro ? filtro.valor : '') + '" placeholder="Valor"></div>' +
-        '<div class="col-1"><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest(\'.filtro-row\').remove()"><i class="bi bi-x"></i></button></div>';
+        '<div class="col-1"><button type="button" class="btn btn-sm btn-outline-danger" onclick="this.closest(\'.filtro-row\').remove()" title="Remover filtro" aria-label="Remover filtro"><i class="bi bi-x"></i></button></div>';
     container.appendChild(row);
 }
 

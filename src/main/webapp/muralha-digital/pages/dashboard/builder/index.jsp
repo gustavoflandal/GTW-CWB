@@ -14,6 +14,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
@@ -73,7 +74,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="modalPainelTitle">Novo Painel</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="painelId">
@@ -108,7 +109,7 @@
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title">Configurar Widget</h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="widgetId">
@@ -220,7 +221,7 @@
 
                 <!-- Filtros -->
                 <div class="mb-3">
-                    <label class="form-label">Filtros <button type="button" class="btn btn-sm btn-outline-secondary" onclick="adicionarFiltro()"><i class="bi bi-plus"></i></button></label>
+                    <div class="d-flex align-items-center gap-2 mb-2"><span class="form-label mb-0">Filtros</span> <button type="button" class="btn btn-sm btn-outline-secondary" onclick="adicionarFiltro()" title="Adicionar filtro" aria-label="Adicionar filtro"><i class="bi bi-plus"></i></button></div>
                     <div id="filtrosContainer"></div>
                 </div>
             </div>

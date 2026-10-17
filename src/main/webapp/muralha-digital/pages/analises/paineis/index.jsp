@@ -126,7 +126,7 @@
                         <i class="bi bi-plus-square"></i> Widget
                     </button>
                     <div class="btn-group">
-                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" title="Mais ações do painel" aria-label="Mais ações do painel">
                             <i class="bi bi-gear"></i>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
@@ -175,7 +175,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title"><i class="bi bi-clock-history"></i> Historico de Versoes</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body" id="listaVersoes">
                 <div class="text-center text-muted p-3">Carregando...</div>
@@ -185,6 +185,7 @@
 </div>
 
 <!-- Vendor -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/static/vendor/echarts/echarts.min.js"></script>
 <script src="/static/vendor/gridstack/gridstack-all.min.js?v=10.1.2"></script>
 <script src="/static/vendor/ag-grid/ag-grid-community.min.js"></script>
@@ -231,7 +232,7 @@
 
         var versoes = await listarVersoes();
         if (!versoes || versoes.length === 0) {
-            el.innerHTML = '<div class="text-center text-muted">Nenhuma versao salva</div>';
+            el.innerHTML = '<div class="text-center text-muted">Nenhuma versão salva</div>';
             return;
         }
 
@@ -239,11 +240,11 @@
         for (var i = 0; i < versoes.length; i++) {
             var v = versoes[i];
             html += '<div class="list-group-item d-flex justify-content-between align-items-center">';
-            html += '<div><strong>v' + (v.versao || v.id) + '</strong>';
-            if (v.autor) html += ' <small class="text-muted">por ' + v.autor + '</small>';
-            if (v.criadoEm) html += '<br><small class="text-muted">' + v.criadoEm + '</small>';
+            html += '<div><strong>v' + escapeHtml(v.versao || v.id) + '</strong>';
+            if (v.autorNome) html += ' <small class="text-muted">por ' + escapeHtml(v.autorNome) + '</small>';
+            if (v.criadoEm) html += '<br><small class="text-muted">' + escapeHtml(formatarDataHora(v.criadoEm)) + '</small>';
             html += '</div>';
-            html += '<button class="btn btn-sm btn-outline-primary btn-restaurar" data-id="' + v.id + '">Restaurar</button>';
+            html += '<button class="btn btn-sm btn-outline-primary btn-restaurar" data-id="' + escapeHtml(v.id) + '" title="Restaurar o painel para a versão ' + escapeHtml(v.versao || v.id) + '">Restaurar</button>';
             html += '</div>';
         }
         html += '</div>';
@@ -251,13 +252,25 @@
 
         el.querySelectorAll('.btn-restaurar').forEach(function(btn) {
             btn.addEventListener('click', function() {
-                if (confirm('Restaurar esta versao?')) {
+                if (confirm('Restaurar esta versão?')) {
                     restaurarVersao(parseInt(this.dataset.id));
                     modal.hide();
                 }
             });
         });
     });
+
+    function escapeHtml(s) {
+        var d = document.createElement('div');
+        d.appendChild(document.createTextNode(String(s == null ? '' : s)));
+        return d.innerHTML;
+    }
+
+    // criado_em chega como texto do SQL Server ("2026-10-17 14:35:12.123").
+    function formatarDataHora(t) {
+        var m = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec(String(t));
+        return m ? m[3] + '/' + m[2] + '/' + m[1] + ' ' + m[4] + ':' + m[5] : String(t);
+    }
 
     document.getElementById('seletorRefresh').addEventListener('change', function() {
         salvarPainel();

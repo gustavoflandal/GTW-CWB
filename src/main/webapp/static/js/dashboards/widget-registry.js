@@ -35,7 +35,7 @@ export function renderizarWidget(elemento, widget, dados) {
     if (!fn) {
         elemento.innerHTML =
             '<div class="text-center text-danger p-3">' +
-            '<i class="bi bi-exclamation-triangle"></i> Tipo de widget nao suportado: ' +
+            '<i class="bi bi-exclamation-triangle"></i> Tipo de widget não suportado: ' +
             escapeHtml(tipo) + '</div>';
         return;
     }
@@ -43,21 +43,40 @@ export function renderizarWidget(elemento, widget, dados) {
     fn(elemento, widget, dados);
 }
 
+// Tipos que exibem um valor por categoria (ou um valor unico): agrupar tambem por
+// tempo repetiria cada categoria uma vez por periodo e o KPI mostraria so o
+// primeiro periodo. Para eles o tempo atua apenas como filtro de periodo.
+var TIPOS_SEM_EIXO_TEMPO = ['pizza', 'rosca', 'funil', 'gauge', 'kpi'];
+
+/** Ajusta a consulta salva ao tipo do widget antes de envia-la ao backend. */
+export function ajustarConsultaAoTipo(widget, consulta) {
+    if (!consulta || !consulta.timeDimensions || consulta.timeDimensions.length === 0) return consulta;
+    var tipo = widget.tipo || 'barras';
+    var visual = widget.visual || {};
+    var semEixo = TIPOS_SEM_EIXO_TEMPO.indexOf(tipo) >= 0 && !(tipo === 'kpi' && visual.comparacao);
+    if (tipo === 'heatmap' && consulta.dimensions && consulta.dimensions.length >= 2) semEixo = true;
+    if (!semEixo) return consulta;
+
+    var nova = JSON.parse(JSON.stringify(consulta));
+    nova.timeDimensions.forEach(function(td) { delete td.granularity; });
+    return nova;
+}
+
 export function tiposDisponiveis() {
     return [
         { tipo: 'barras',     rotulo: 'Barras',        icone: 'bi-bar-chart' },
         { tipo: 'linhas',     rotulo: 'Linhas',        icone: 'bi-graph-up' },
-        { tipo: 'area',       rotulo: 'Area',          icone: 'bi-graph-up-arrow' },
+        { tipo: 'area',       rotulo: 'Área',          icone: 'bi-graph-up-arrow' },
         { tipo: 'pizza',      rotulo: 'Pizza',         icone: 'bi-pie-chart' },
         { tipo: 'rosca',      rotulo: 'Rosca',         icone: 'bi-bullseye' },
-        { tipo: 'dispersao',  rotulo: 'Dispersao',     icone: 'bi-scatter' },
+        { tipo: 'dispersao',  rotulo: 'Dispersão',     icone: 'bi-dot' },
         { tipo: 'combinado',  rotulo: 'Combinado',     icone: 'bi-bar-chart-line' },
         { tipo: 'funil',      rotulo: 'Funil',         icone: 'bi-funnel' },
         { tipo: 'gauge',      rotulo: 'Gauge',         icone: 'bi-speedometer2' },
         { tipo: 'heatmap',    rotulo: 'Mapa de Calor', icone: 'bi-grid-3x3' },
         { tipo: 'kpi',        rotulo: 'KPI',           icone: 'bi-123' },
         { tipo: 'tabela',     rotulo: 'Tabela',        icone: 'bi-table' },
-        { tipo: 'pivot',      rotulo: 'Tabela Dinamica', icone: 'bi-grid-3x3-gap' }
+        { tipo: 'pivot',      rotulo: 'Tabela Dinâmica', icone: 'bi-grid-3x3-gap' }
     ];
 }
 

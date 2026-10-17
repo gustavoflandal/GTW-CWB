@@ -1,6 +1,7 @@
 import { api } from './api.js';
 import { estado } from './estado.js';
-import { renderizarWidget } from './widget-registry.js';
+import { renderizarWidget, ajustarConsultaAoTipo } from './widget-registry.js';
+import { rotuloCampo, infoTempo, colunasVisiveis, formatarCelula } from './widgets/comum.js';
 import { inicializarFiltrosGlobais, aplicarFiltrosAConsulta } from './filtros-globais.js';
 import { inicializarFiltroCruzado, aplicarFiltroCruzadoAConsulta } from './filtro-cruzado.js';
 import { inicializarDrillDown, aplicarDrillAConsulta } from './drill-down.js';
@@ -83,6 +84,9 @@ export async function abrirPainel(id) {
 
     painelAtual = r.painel;
     estado.set({ painel: r.painel });
+    // Filtro cruzado e drill-down pertencem aos widgets renderizados; recomecam a cada abertura.
+    filtroCruzado.resetar();
+    drillDown.limparTodos();
 
     document.getElementById('tituloPainel').textContent = r.painel.nome;
     var breadcrumb = document.getElementById('breadcrumbPainel');
@@ -182,7 +186,7 @@ function criarCardWidget(w) {
             '<div class="d-flex align-items-center gap-2">' +
             '<span class="widget-atualizando spinner-border spinner-border-sm text-secondary d-none" role="status" title="Atualizando"></span>' +
             '<div class="dropdown">' +
-                '<button class="btn btn-sm btn-link p-0 text-body-secondary" data-bs-toggle="dropdown">' +
+                '<button class="btn btn-sm btn-link p-0 text-body-secondary" data-bs-toggle="dropdown" title="Ações do widget" aria-label="Ações do widget">' +
                     '<i class="bi bi-three-dots-vertical"></i>' +
                 '</button>' +
                 '<ul class="dropdown-menu dropdown-menu-end">' +
@@ -262,7 +266,7 @@ async function carregarDadosWidget(widget) {
     }
 
     try {
-        var consulta = widget.consulta || {};
+        var consulta = ajustarConsultaAoTipo(widget, widget.consulta || {});
 
         if (filtrosGlobais) {
             consulta = aplicarFiltrosAConsulta(consulta, filtrosGlobais.obterFiltros());
@@ -291,12 +295,12 @@ async function carregarDadosWidget(widget) {
         var tempoMs = Math.round(performance.now() - inicio);
         var cacheHit = r.cacheHit || false;
         if (footerEl) {
-            var footerHtml = '<span>' + tempoMs + 'ms</span>';
+            var footerHtml = '<span title="Tempo de resposta da consulta">' + tempoMs + ' ms</span>';
             if (cacheHit) {
-                footerHtml += ' <span class="text-success" title="Cache hit"><i class="bi bi-lightning-charge-fill"></i></span>';
+                footerHtml += ' <span class="text-success" title="Resultado em cache (consulta repetida nos últimos minutos)" aria-label="Resultado em cache"><i class="bi bi-lightning-charge-fill"></i></span>';
             }
             if (tempoMs > 5000) {
-                footerHtml += ' <span class="text-warning" title="Consulta lenta (>' + 5 + 's)"><i class="bi bi-exclamation-triangle-fill"></i></span>';
+                footerHtml += ' <span class="text-warning" title="Consulta lenta (mais de 5 s)" aria-label="Consulta lenta"><i class="bi bi-exclamation-triangle-fill"></i></span>';
             }
             footerEl.innerHTML = footerHtml;
         }
@@ -314,9 +318,13 @@ async function carregarDadosWidget(widget) {
             return;
         }
 
+        // O renderizador recebe a consulta efetivamente enviada (granularidade do drill,
+        // filtros) e os rotulos dos campos (annotation), usados em eixos, legendas e tooltips.
+        var widgetRender = Object.assign({}, widget, { consulta: consulta, anotacao: r.annotation || null });
+
         // Reaproveita a instancia do ECharts (setOption) para o grafico trocar sem piscar.
         if (!echarts.getInstanceByDom(graficoEl)) graficoEl.innerHTML = '';
-        renderizarWidget(graficoEl, widget, r.data);
+        renderizarWidget(graficoEl, widgetRender, r.data);
         graficoEl.dataset.renderizado = '1';
 
         var chart = echarts.getInstanceByDom(graficoEl);
@@ -326,7 +334,7 @@ async function carregarDadosWidget(widget) {
             drillDown.registrar(widget.id, chart, widget);
         }
 
-        gerarTabelaAuxiliar(widget.id, r.data);
+        gerarTabelaAuxiliar(widget.id, widgetRender, r.data);
 
     } catch (e) {
         if (seq !== sequenciaCarga[widget.id]) return;
@@ -357,19 +365,22 @@ function recarregarTodosWidgets() {
     atualizarBadgeAtualizado();
 }
 
-function gerarTabelaAuxiliar(widgetId, data) {
+function gerarTabelaAuxiliar(widgetId, widget, data) {
     var el = document.getElementById('tabela-' + widgetId);
     if (!el || !data || data.length === 0) return;
 
-    var keys = Object.keys(data[0]);
+    var keys = colunasVisiveis(widget, data);
+    var tempo = infoTempo(widget, data);
     var html = '<table class="table table-sm table-striped mb-0" style="font-size:0.8rem"><thead><tr>';
-    for (var i = 0; i < keys.length; i++) html += '<th>' + escapeHtml(keys[i]) + '</th>';
+    for (var i = 0; i < keys.length; i++) html += '<th>' + escapeHtml(rotuloCampo(widget, keys[i])) + '</th>';
     html += '</tr></thead><tbody>';
     var max = Math.min(data.length, 100);
     for (var j = 0; j < max; j++) {
         html += '<tr>';
         for (var k = 0; k < keys.length; k++) {
-            html += '<td>' + (data[j][keys[k]] != null ? escapeHtml(String(data[j][keys[k]])) : '') + '</td>';
+            var v = data[j][keys[k]];
+            html += '<td' + (typeof v === 'number' ? ' style="text-align:right"' : '') + '>' +
+                escapeHtml(formatarCelula(widget, keys[k], v, tempo)) + '</td>';
         }
         html += '</tr>';
     }
@@ -465,13 +476,17 @@ export async function novoPainel() {
 
 export async function salvarPainel() {
     if (!painelAtual) return;
+    var refreshSeg = parseInt(document.getElementById('seletorRefresh').value) || 0;
     var r = await api.post('/api/dash/paineis', {
         acao: 'salvarPainel',
         id: painelAtual.id,
         nome: painelAtual.nome,
-        refreshSeg: parseInt(document.getElementById('seletorRefresh').value)
+        refreshSeg: refreshSeg
     });
     if (r.ok) {
+        // A nova frequencia vale ja, sem precisar reabrir o painel.
+        painelAtual.refreshSeg = refreshSeg;
+        configurarRefresh(refreshSeg);
         mostrarSucesso('Painel salvo');
     } else {
         mostrarErro(r.erro);
@@ -570,18 +585,19 @@ function renderizarBadgeAtualizado() {
         texto = 'Atualizado agora';
         cor = 'success';
     } else if (diffMin < 5) {
-        texto = 'Atualizado ha ' + diffMin + ' min';
+        texto = 'Atualizado há ' + diffMin + ' min';
         cor = 'success';
     } else if (diffMin < 15) {
-        texto = 'Atualizado ha ' + diffMin + ' min';
+        texto = 'Atualizado há ' + diffMin + ' min';
         cor = 'warning';
     } else {
-        texto = 'Atualizado ha ' + diffMin + ' min';
+        texto = 'Atualizado há ' + diffMin + ' min';
         cor = 'danger';
     }
 
     el.className = 'badge bg-' + cor + '-subtle text-' + cor + ' ms-2';
     el.innerHTML = '<i class="bi bi-clock"></i> ' + texto;
+    el.title = 'Última atualização dos dados: ' + new Date(ultimaAtualizacao).toLocaleString('pt-BR');
     el.style.display = 'inline-block';
 }
 

@@ -3,6 +3,7 @@ package muralha.digital.dashboards;
 import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.google.gson.*;
+import muralha.digital.dashboards.consulta.MontadorSql;
 import muralha.digital.auditoria.AuditoriaService;
 
 import javax.servlet.annotation.WebServlet;
@@ -415,7 +416,10 @@ public class DashCatalogoServlet extends HttpServlet {
             }
         }
 
-        // Executar amostra (nomes vem do catalogo, nao do usuario)
+        // Os nomes vem do catalogo, que e editavel pela tela: valida antes de montar o SQL.
+        schemaFisico = MontadorSql.identificador(schemaFisico);
+        nomeFisico = MontadorSql.identificador(nomeFisico);
+
         JsonArray colunas = new JsonArray();
         JsonArray linhas = new JsonArray();
         try (PreparedStatement ps = conn.prepareStatement(

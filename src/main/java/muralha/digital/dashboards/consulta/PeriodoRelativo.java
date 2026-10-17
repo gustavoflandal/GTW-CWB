@@ -68,6 +68,7 @@ public final class PeriodoRelativo {
             case "last 6 months":  return dias(inicioMes.minusMonths(5), amanha);
             case "last 12 months": return dias(inicioMes.minusMonths(11), amanha);
             case "this year":      return dias(hoje.withDayOfYear(1), amanha);
+            case "last year":      return dias(hoje.withDayOfYear(1).minusYears(1), hoje.withDayOfYear(1));
             default:
                 throw new ErroConsulta("Periodo nao suportado: " + valor);
         }

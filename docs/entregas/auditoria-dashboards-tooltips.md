@@ -1,0 +1,127 @@
+# Auditoria — Módulo de Dashboards: tooltips e referências cruzadas
+
+> **Data:** 2026-10-17
+> **Status:** 🟡 Correções implementadas — aguardando migração da demonstração, build no Windows e teste no navegador. Itens de segurança listados em "Pendências" seguem **abertos**.
+> **Escopo:** módulo novo de análises (`static/js/dashboards/`, `pages/analises/`, `muralha.digital.dashboards`), dashboard legado (`pages/dashboards/`, `pages/dashboard/`), tooltips de interface do Muralha Digital e integração Superset (`analise/superset/`).
+
+## Origem
+
+- Plano: [`20-dashboard-builder.md`](../planos-salvador/20-dashboard-builder.md)
+- Plano: [`21-dashboards-consulta-sql-sem-cube.md`](../planos-salvador/21-dashboards-consulta-sql-sem-cube.md)
+- Plano: [`23-analises-superset.md`](../planos-salvador/23-analises-superset.md)
+
+## Resumo
+
+O backend de consulta já devolvia, em `annotation`, o rótulo amigável de cada campo, mas nenhum widget o usava. Por isso os tooltips, legendas, eixos e cabeçalhos mostravam o alias técnico (`total_passagens`), datas cruas (`2026-01-01T00:00:00.000`) e números no formato americano (`12,345.6`). Além disso, o editor sempre agrupava por mês quando o dataset tinha data, o que fazia o KPI exibir só o mês mais antigo e as barras e pizzas repetirem cada categoria uma vez por mês.
+
+Foram corrigidos 39 defeitos, além dos dados de demonstração. Os itens de segurança (autorização, IDOR) e parte do Superset ficaram como pendências: dependem de decisão sobre perfis de acesso.
+
+## Corrigido
+
+### Tooltips e gráficos do módulo de análises
+
+| Sev. | Defeito | Correção |
+|---|---|---|
+| Crítico | KPI e gauge mostravam o valor do **mês mais antigo**, não o total: o editor sempre mandava `timeDimensions` com granularidade mês | Editor ganhou "Sem agrupamento" e "Todo o período"; KPI, gauge, pizza, rosca e funil usam a data só como filtro (`ajustarConsultaAoTipo`) |
+| Crítico | Barras, pizza e funil repetiam a mesma categoria uma vez por mês, e o tooltip não indicava o mês | `montarSeries` (`widgets/comum.js`): tempo e dimensão viram eixo e série |
+| Crítico | Tabela dinâmica (pivot) sempre quebrava: `cabecalhos.size()` em array JS | `cabecalhos.length` |
+| Crítico | Drill-down trocava a granularidade sem filtrar o período clicado: "out/2026 [Semana]" mostrava as semanas do ano todo | O clique passa a filtrar o intervalo do período (`intervaloDoPeriodo`) |
+| Alto | Tooltips, legendas e cabeçalhos com alias técnico | Painel e editor repassam `annotation` (`widget.anotacao`); `rotuloCampo` |
+| Alto | Números no formato americano no tooltip, nos rótulos, no gauge e no KPI ("1.2K") | `valueFormatter` e formatadores em pt-BR |
+| Alto | Datas ISO cruas no eixo e no tooltip | `formatarTempo` por granularidade (`jan/2026`, `2º tri/2026`, `05/01/2026`) |
+| Alto | XSS nos tooltips do heatmap e da dispersão (formatter em função, sem escape) | `escapeHtml` em todos os formatters de função |
+| Alto | Zona "Cores / Séries" sem efeito e perdida ao reabrir o widget | Série vira `dimensions[1]` e é guardada em `visual.series` |
+| Alto | Ao editar um KPI salvo, o editor acrescentava "mês / últimos 12 meses" | Período e granularidade ausentes são restaurados como vazios |
+| Alto | Pivot reabria sem linhas, colunas e valores; salvar apagava a configuração | Zonas do pivot restauradas |
+| Alto | Opções visuais (paleta, rótulos, empilhado) não refletiam o widget salvo e eram sobrescritas | `sincronizarOpcoesVisuais` |
+| Alto | Filtro cruzado e drill-down disparavam no mesmo clique; filtro com valor formatado ou com "0,1,123" (heatmap) | Valor bruto via `__dashMeta`; tempo → drill, categoria → filtro cruzado |
+| Médio | Campo de data arrastado para o Eixo X agrupava por instante exato | Vira a dimensão temporal do widget |
+| Médio | Editor oferecia "OU" nos filtros, mas a consulta usava "E" (o backend rejeita OR) | Opção removida; o texto informa "Todas as condições (E)" |
+| Médio | Editor oferecia "Ano passado", que o backend rejeitava (400) | `last year` em `PeriodoRelativo` (+ teste) |
+| Médio | Tabela e "Ver como tabela" com cabeçalho técnico e coluna de data duplicada | Rótulos, valores pt-BR e coluna única de tempo |
+| Médio | Manual prometia ordenação na Tabela, que não existia | Clique no cabeçalho ordena (`aria-sort`) |
+| Médio | Mudança de frequência de atualização só valia após reabrir o painel | `configurarRefresh` ao salvar |
+| Médio | Filtro cruzado e drill continuavam valendo ao trocar de painel | Reiniciados em `abrirPainel` |
+| Médio | Faixas do gauge ignoravam o mínimo | Fração calculada entre `min` e `max` |
+| Baixo | Ícone `bi-scatter` não existe no Bootstrap Icons 1.11.1 (Dispersão sem ícone) | `bi-dot` |
+| Baixo | Rodapé "Cache hit"; textos sem acento em telas tocadas | "Resultado em cache"; acentuação |
+
+### Backend e integrações
+
+| Sev. | Defeito | Correção |
+|---|---|---|
+| Crítico | **SSO do Superset nunca autenticava**: `(Usuario) req.getSession(false)` convertia a sessão em `Usuario` (`ClassCastException`, HTTP 500 em todo `auth_request`) | Cast corrigido em `SsoAnaliseServlet`; teste real com Mockito (antes era tautológico) |
+| Crítico | Exportação CSV/XLSX do widget e ZIP do painel saíam **só com cabeçalho** (`dados = new JsonArray()`) | Executa a consulta pelo mesmo motor do painel |
+| Crítico | Injeção SQL de segunda ordem: nomes do catálogo (editáveis pela tela) concatenados em `amostraTabela` e `verificarCardinalidade` | `MontadorSql.identificador` antes de montar o SQL |
+| Crítico | Builder legado: colunas de `colunas_json` (gravado pelo usuário) entre colchetes sem escapar `]` | Lista de colunas aceita só identificadores simples |
+| Alto | Corpos JSON da API lidos como ISO-8859-1: rótulos e filtros com acento gravados corrompidos (aparecem assim nos tooltips) | `CodificacaoUtf8Filter` em `/api/dash/*` |
+| Alto | Histórico de versões e compartilhamentos sempre falhavam: `JOIN ... u.id` (a PK é `id_usuario`); a tela lia `autor`, o servidor enviava `autorNome` | SQL e chave corrigidos; data formatada; escape |
+| Alto | Nome do arquivo exportado quebrava (`StringIndexOutOfBounds`) com acento ou parênteses | `ExportacaoService.nomeArquivo` (+ teste) |
+| Alto | Superset: 34 dos 60 gráficos oficiais (30 big numbers e 4 pizzas) sem dados, pois liam `metric` e o provisionador gravava só `metrics` | `params["metric"]` para os tipos de métrica única |
+| Alto | SweetAlert2 não carregado no modelador de datasets, nos KPIs e no builder: validar, salvar e publicar davam `ReferenceError` | Inclusão do padrão (`sweetalert2@11`) |
+
+### Dashboard legado e tooltips de interface
+
+| Sev. | Defeito | Correção |
+|---|---|---|
+| Alto | Calendário de intensidade em ISO-8859-1 dentro de página UTF-8 ("Ter�a-Feira", "S�bado") | Arquivo convertido para UTF-8 |
+| Médio | "Comparativo diário passagens × infrações" empilhava grandezas diferentes (a altura somava passagens + infrações) | Barras lado a lado, `locale: 'pt-BR'` |
+| Médio | Tooltip de "Apenas placas em comum" nunca inicializado e dentro do `<label>` (clicar no ícone alternava o filtro) | Botão fora do label + inicialização |
+| Médio | Tooltip da consulta de veículos expunha "Para testes há dados para a data de 15/09/2025…" | Texto de teste removido; `tabindex`/`aria-label` |
+| Médio | Tooltips com erros: "carcater coringa", "após a Confirmar a Irregularidade" | Textos revisados (`data-bs-title`) |
+| Baixo | Botões só com ícone sem `title`/`aria-label` (menu do widget, menu do painel, remover condição/filtro/campo, zoom, fechar) | Rótulos acessíveis |
+| Baixo | `aria-label="Example select with button addon"` (texto de exemplo do Bootstrap) | "Categoria" |
+
+### Demonstração (painéis 101 e 102)
+
+Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql), **não executado**:
+
+- Todos os widgets usam os mesmos "últimos 12 meses". Antes, os KPIs somavam todo o histórico e as linhas só 12 meses, então os totais não batiam. O filtro global "De/Até" também só alcançava as linhas e áreas.
+- "Vel. Média Infrações" dizia "km/h acima do limite", mas mostra a velocidade média considerada.
+- "Alertas Ativos" contava todos os alertas.
+- Rótulos de campo, títulos e nomes passam a ter acentuação.
+
+## Verificação
+
+| Verificação | Resultado |
+|---|---|
+| Testes Java dos pacotes `dashboards` e `analise.SsoAnalise` (compilados com Gson, POI 4.1.1, Servlet 3.0 e stubs do legado) | 101/101 |
+| `SsoAnaliseServletTest` contra o servlet original | Falha com `ClassCastException`, como esperado |
+| Harness Node + jsdom com o ECharts 5.5.0 vendorizado (SSR/SVG): 16 cenários de widgets, tooltips, drill e filtro cruzado | 16/16 |
+| Harness do editor com o HTML real do `editor.jsp` (séries, KPI, pivot) | 3/3; os 3 falham no código original |
+| `node --check` em todo JS alterado; `py_compile` em `provisionar.py` | OK |
+
+**Não verificado aqui:** o build Maven completo (dependências no repositório interno da Consilux) e o navegador. Rodar `..\.setup-gtw\build.ps1` e testar os painéis 101 e 102 após a migração.
+
+## Pendências (não corrigidas)
+
+| Sev. | Item | Recomendação |
+|---|---|---|
+| Crítico | **Autorização inexistente em `/api/dash/*`**: `Acesso.verificaAcesso` libera quando a URI não está em `sis_menu` (`cnt == 0`), e nenhuma rota `/api/dash/*` está cadastrada | Cadastrar as ações em `sis_menu`/`sis_menu_direitos` (catálogo só para administradores) ou checar o grupo no servlet; responder 401/403 em JSON |
+| Crítico | **IDOR**: compartilhar, revogar, excluir widget, atualizar layout, restaurar versão (de outro painel), salvar dataset de outro usuário; leitura de painéis, widgets, datasets e exportações sem checar o dono | Uma checagem única de quem pode ver ou editar, amarrando o pai no `WHERE` e conferindo as linhas afetadas |
+| Crítico | **Chave do Google Maps versionada** em 17 arquivos (ex.: `pages/dashboards/dashboard.jsp:22`) | Revogar e recriar a chave, restringir por referrer e servir pela configuração (padrão do `MapaConfigServlet`) |
+| Alto | Amostra do catálogo lê `TOP 5 *` de qualquer tabela cadastrada (ex.: `dbo.sis_usuario`, com `senha_hash`); a flag `sensivel` não é aplicada | Restringir a administradores e omitir colunas sensíveis |
+| Alto | `salvarModelador` grava `id_usuario = 1` fixo; o modelador lê `id_tabela` e `coluna_origem`, mas o servidor envia camelCase (o dataset abre vazio) | Corrigir o contrato e gravar o usuário da sessão |
+| Alto | Superset: filtros nativos com `datasetId` não resolvido, views de mapa com colunas inexistentes, RLS com coluna inexistente, procedures `sp_carga_*` × `spu_carga_*`, `X-Frame-Options: ALLOWALL`, `GuestTokenServlet` sem permissão | Ver o relatório da auditoria do Superset; portar os construtores do `demo_dashboards.py` para o `provisionar.py` |
+| Médio | Mensagens de exceção do SQL Server devolvidas ao cliente; ausência de log4j no pacote | Mensagem genérica + log |
+| Médio | Popup Leaflet e card do builder legado sem escape (`widget-renderer.js:49,166`); XSS menores em `datasets/index.jsp`, `dataset-editor.js`, `kpis/index.jsp` | Escapar texto vindo do banco |
+| Médio | Tooltips Bootstrap 4 (`data-toggle`) nos botões de boletim e registro de fato, que nunca funcionam; Bootstrap carregado duas vezes em `tratar-alerta.jsp` | Migrar para `data-bs-*` e remover a carga duplicada |
+| Baixo | CSV exportado com cabeçalho técnico e decimal com ponto | Usar os rótulos e o formato pt-BR |
+| Baixo | Arquivos mortos: `pages/dashboards/assets/charts/apexcharts.min.js` (sem uso), `3d-bar/backup/` (inclui imagem de banco de imagens) | Remover |
+
+## Arquivos
+
+- **Widgets e núcleo:**
+  - `static/js/dashboards/widgets/comum.js` (novo) e todos os renderizadores em `widgets/`;
+  - `widget-registry.js`, `painel.js`, `editor-widget.js`, `editor-filtros.js`, `drill-down.js`, `filtro-cruzado.js`, `dataset-editor.js`.
+- **Telas:**
+  - `pages/analises/{widgets/editor.jsp, paineis/index.jsp, datasets/modelador.jsp, catalogo/index.jsp, manual.jsp}`;
+  - `pages/dashboard/{kpis/index.jsp, builder/index.jsp, builder/assets/js/widget-config.js}`;
+  - `pages/dashboards/{dashboard.jsp, calendario-intensidade.jsp, assets/js/grafico-comp-diario-fluxo-X-infracoes.js}`;
+  - `pages/{veiculos-correlacionados, consulta-veiculo, consulta-veiculo-de-carga, alerta-tratativa}`.
+- **Java:**
+  - `CodificacaoUtf8Filter` (novo), `ExportacaoDashboardServlet`, `ExportacaoService`, `HistoricoVersaoService`, `CompartilhamentoService`, `DashCatalogoServlet`, `DatasetServlet`;
+  - `consulta/MontadorSql`, `consulta/PeriodoRelativo`, `dashboard/DashboardBuilderServlet`, `analise/SsoAnaliseServlet`.
+- **Testes:** `PeriodoRelativoTest`, `ExportacaoServiceTest`, `SsoAnaliseServletTest`.
+- **Superset:** `analise/superset/provisionar.py`.
+- **Migração:** `docs/banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql`.

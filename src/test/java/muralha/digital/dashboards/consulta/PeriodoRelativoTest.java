@@ -40,6 +40,7 @@ public class PeriodoRelativoTest {
         verificar(resolver(p, "last 6 months"), "2026-05-01T00:00", "2026-10-15T00:00");
         verificar(resolver(p, "last 12 months"), "2025-11-01T00:00", "2026-10-15T00:00");
         verificar(resolver(p, "this year"), "2026-01-01T00:00", "2026-10-15T00:00");
+        verificar(resolver(p, "last year"), "2025-01-01T00:00", "2026-01-01T00:00");
     }
 
     @Test
@@ -48,6 +49,7 @@ public class PeriodoRelativoTest {
         verificar(resolver(p, "yesterday"), "2026-12-31T00:00", "2027-01-01T00:00");
         verificar(resolver(p, "last month"), "2026-12-01T00:00", "2027-01-01T00:00");
         verificar(resolver(p, "this year"), "2027-01-01T00:00", "2027-01-02T00:00");
+        verificar(resolver(p, "last year"), "2026-01-01T00:00", "2027-01-01T00:00");
     }
 
     @Test
