@@ -72,6 +72,13 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ⏳ Pendente |
 | [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ⏳ Pendente |
 
+### Plano 23 — Análises Superset (2026-10-17)
+
+| Script | Plano | Descrição | Status |
+|---|---|---|---|
+| [`20261016_analise_fundacao.sql`](../banco-de-dados/migracoes/20261016_analise_fundacao.sql) | 23 (SUP-1) | Schema `analise`, tabela `carga_log`, config `SUPERSET_URL`, menu 395 | ✅ Executado (2026-10-16) |
+| [`20261017_analise_camada_dados.sql`](../banco-de-dados/migracoes/20261017_analise_camada_dados.sql) | 23 (SUP-2) | 2 tabelas materializadas, 8 views, 2 stored procedures no schema `analise` | ✅ Executado (2026-10-17) |
+
 ### Comando de execução
 
 ```powershell

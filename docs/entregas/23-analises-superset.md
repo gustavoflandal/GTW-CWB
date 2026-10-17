@@ -6,13 +6,14 @@
 
 ## Status
 
-**Em andamento** — SUP-1 (Fundacao) implementada.
+**Em andamento** — SUP-1 e SUP-2 concluidas.
 
 ## Sessoes concluidas
 
 | Sessao | Data | Resumo |
 |---|---|---|
 | SUP-1 | 2026-10-16 | Fundacao: estrutura Docker, SsoAnaliseServlet, migracao de schema, documentacao |
+| SUP-2 | 2026-10-17 | Camada de dados: 2 tabelas materializadas, 8 views, 2 stored procedures |
 
 ## Artefatos
 
@@ -39,7 +40,8 @@
 
 | Script | Objetos |
 |---|---|
-| `20261016_analise_fundacao.sql` | Schema `analise`, tabela `analise.carga_log`, chave `SUPERSET_URL`, menus 390-391 |
+| `20261016_analise_fundacao.sql` | Schema `analise`, tabela `analise.carga_log`, chave `SUPERSET_URL`, menus 395/56 |
+| `20261017_analise_camada_dados.sql` | `mat_passagens_hora`, `mat_infracoes_dia`, 8 views analiticas, 2 procedures de carga |
 
 ### Testes
 
@@ -49,7 +51,8 @@
 
 ## Pendencias
 
-- [ ] Executar migracao `20261016_analise_fundacao.sql` no banco DEV
-- [ ] Testar `docker compose up` com `.env` preenchido
+- [x] Executar migracao `20261016_analise_fundacao.sql` no banco DEV
+- [x] Testar `docker compose up` com `.env` preenchido
+- [x] Executar migracao `20261017_analise_camada_dados.sql` no banco DEV
 - [ ] Testar login SSO no navegador (usuario GTW -> Superset sem senha)
-- [ ] Sessoes SUP-2 a SUP-14
+- [ ] Sessoes SUP-3 a SUP-14
