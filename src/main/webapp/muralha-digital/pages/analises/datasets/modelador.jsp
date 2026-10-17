@@ -57,9 +57,9 @@
     <button class="btn btn-outline-secondary" id="btnRefazer" title="Refazer (Ctrl+Y)"><i class="bi bi-arrow-clockwise"></i></button>
     <div class="separator"></div>
     <button class="btn btn-outline-secondary" id="btnAlinhar" title="Alinhar automaticamente"><i class="bi bi-grid-3x3-gap"></i> Alinhar</button>
-    <button class="btn btn-outline-secondary" id="btnZoomIn" title="Zoom +"><i class="bi bi-zoom-in"></i></button>
-    <button class="btn btn-outline-secondary" id="btnZoomOut" title="Zoom -"><i class="bi bi-zoom-out"></i></button>
-    <button class="btn btn-outline-secondary" id="btnZoomReset" title="Zoom 100%"><i class="bi bi-arrows-fullscreen"></i></button>
+    <button class="btn btn-outline-secondary" id="btnZoomIn" title="Aumentar zoom" aria-label="Aumentar zoom"><i class="bi bi-zoom-in"></i></button>
+    <button class="btn btn-outline-secondary" id="btnZoomOut" title="Diminuir zoom" aria-label="Diminuir zoom"><i class="bi bi-zoom-out"></i></button>
+    <button class="btn btn-outline-secondary" id="btnZoomReset" title="Zoom 100% e centralizar" aria-label="Zoom 100% e centralizar"><i class="bi bi-aspect-ratio"></i></button>
     <div class="separator"></div>
     <select id="visibilidade" class="form-select form-select-sm" style="width:120px;">
         <option value="privado">Privado</option>
@@ -114,7 +114,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title">Adicionar Relacao</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
@@ -142,6 +142,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/static/vendor/x6/x6.js"></script>
 <script src="/static/vendor/dagre/dagre.min.js"></script>
 

@@ -3,6 +3,7 @@ package muralha.digital.dashboards;
 import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.google.gson.*;
+import muralha.digital.dashboards.consulta.MontadorSql;
 import muralha.digital.auditoria.AuditoriaService;
 
 import javax.servlet.annotation.WebServlet;
@@ -462,7 +463,11 @@ public class DatasetServlet extends HttpServlet {
             return result;
         }
 
-        // Verificar duplicatas na origem (nomes vem do catalogo, nao do usuario)
+        // Os nomes vem do catalogo, que e editavel pela tela: valida antes de montar o SQL.
+        for (String nome : new String[]{colOrigem, schemaOrigem, tabelaOrigem, colDestino, schemaDestino, tabelaDestino}) {
+            MontadorSql.identificador(nome);
+        }
+
         long dupOrigem = 0;
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT TOP 1 [" + colOrigem + "] FROM [" + schemaOrigem + "].[" + tabelaOrigem + "] " +

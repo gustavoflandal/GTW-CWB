@@ -3,6 +3,12 @@ package muralha.digital.dashboards;
 import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.google.gson.*;
+import muralha.digital.dashboards.consulta.ConsultaDashboard;
+import muralha.digital.dashboards.consulta.DatasetResolvido;
+import muralha.digital.dashboards.consulta.ExecutorConsulta;
+import muralha.digital.dashboards.consulta.MontadorSql;
+import muralha.digital.dashboards.consulta.PeriodoRelativo;
+import muralha.digital.dashboards.consulta.ResolvedorDataset;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
@@ -18,6 +24,8 @@ public class ExportacaoDashboardServlet extends HttpServlet {
 
     private final ExportacaoService exportacaoService = new ExportacaoService();
     private final PivotService pivotService = new PivotService();
+    private final MontadorSql montador = new MontadorSql(new PeriodoRelativo());
+    private final ExecutorConsulta executor = new ExecutorConsulta();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -215,8 +223,11 @@ public class ExportacaoDashboardServlet extends HttpServlet {
         }
         if (consulta.has("timeDimensions")) {
             for (var el : consulta.getAsJsonArray("timeDimensions")) {
-                String dim = el.getAsJsonObject().get("dimension").getAsString();
-                if (!cabecalhos.contains(dim)) cabecalhos.add(dim);
+                JsonObject td = el.getAsJsonObject();
+                // Sem granularidade o tempo so filtra o periodo e nao vira coluna.
+                if (!td.has("granularity") || td.get("granularity").isJsonNull()) continue;
+                String dim = td.get("dimension").getAsString();
+                if (!cabecalhos.contains(dim)) cabecalhos.add(0, dim);
             }
         }
 
@@ -226,16 +237,16 @@ public class ExportacaoDashboardServlet extends HttpServlet {
             result.rotulos.add(aliasRotulo.getOrDefault(c, c));
         }
 
-        result.dados = new JsonArray();
+        // Mesmo motor do painel: as linhas exportadas sao as que o widget exibe.
+        ConsultaDashboard q = ConsultaDashboard.deJson(consulta, result.idDataset);
+        DatasetResolvido ds = ResolvedorDataset.carregar(conn, result.idDataset);
+        result.dados = executor.executar(conn, montador.montar(ds, q)).dados;
 
         return result;
     }
 
     private String sanitizar(String nome) {
-        if (nome == null) return "dados";
-        return nome.replaceAll("[^a-zA-Z0-9_\\-\\s]", "")
-                   .replaceAll("\\s+", "_")
-                   .substring(0, Math.min(nome.length(), 50));
+        return ExportacaoService.nomeArquivo(nome, 50);
     }
 
     private static class WidgetComDados {

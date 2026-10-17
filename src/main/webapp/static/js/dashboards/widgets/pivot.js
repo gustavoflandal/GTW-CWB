@@ -1,4 +1,5 @@
 import { api } from '../api.js';
+import { rotuloCampo } from './comum.js';
 
 export function renderizarPivot(elemento, widget, dados) {
     if (!elemento) return;
@@ -16,7 +17,7 @@ export function renderizarPivot(elemento, widget, dados) {
     var subtotais = configPivot.subtotais !== false;
 
     if (linhas.length === 0 && colunas.length === 0) {
-        renderizarTabelaSimples(elemento, dados);
+        renderizarTabelaSimples(elemento, dados, widget);
         return;
     }
 
@@ -31,27 +32,27 @@ export function renderizarPivot(elemento, widget, dados) {
             elemento.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(resp.erro || 'Erro no pivot') + '</div>';
             return;
         }
-        renderizarAgGrid(elemento, resp.cabecalhos, resp.dados, visual);
+        renderizarAgGrid(elemento, resp.cabecalhos || [], resp.dados || [], widget);
     }).catch(function(err) {
         elemento.innerHTML = '<div class="text-danger text-center p-3">' + escapeHtml(err.message) + '</div>';
     });
 }
 
-function renderizarAgGrid(elemento, cabecalhos, dados, visual) {
+function renderizarAgGrid(elemento, cabecalhos, dados, widget) {
     elemento.innerHTML = '';
 
     if (typeof agGrid === 'undefined') {
-        renderizarTabelaHtml(elemento, cabecalhos, dados);
+        renderizarTabelaHtml(elemento, cabecalhos, dados, widget);
         return;
     }
 
     var columnDefs = [];
-    for (var i = 0; i < cabecalhos.size(); i++) {
+    for (var i = 0; i < cabecalhos.length; i++) {
         var h = cabecalhos[i];
         var isNum = dados.length > 0 && typeof dados[0][h] === 'number';
         var def = {
             field: h,
-            headerName: h,
+            headerName: rotuloCampo(widget, h),
             sortable: true,
             resizable: true
         };
@@ -90,18 +91,18 @@ function renderizarAgGrid(elemento, cabecalhos, dados, visual) {
     });
 }
 
-function renderizarTabelaSimples(elemento, dados) {
+function renderizarTabelaSimples(elemento, dados, widget) {
     if (!dados || dados.length === 0) return;
     var keys = Object.keys(dados[0]);
-    renderizarTabelaHtml(elemento, keys, dados);
+    renderizarTabelaHtml(elemento, keys, dados, widget);
 }
 
-function renderizarTabelaHtml(elemento, cabecalhos, dados) {
+function renderizarTabelaHtml(elemento, cabecalhos, dados, widget) {
     var html = '<div style="overflow:auto;height:100%">';
     html += '<table class="table table-sm table-striped table-bordered mb-0" style="font-size:0.8rem">';
     html += '<thead style="position:sticky;top:0;z-index:1"><tr>';
     for (var i = 0; i < cabecalhos.length; i++) {
-        html += '<th style="white-space:nowrap;background:var(--bs-table-bg,#fff)">' + escapeHtml(cabecalhos[i]) + '</th>';
+        html += '<th style="white-space:nowrap;background:var(--bs-table-bg,#fff)">' + escapeHtml(rotuloCampo(widget, cabecalhos[i])) + '</th>';
     }
     html += '</tr></thead><tbody>';
 

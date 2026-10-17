@@ -80,7 +80,7 @@
        class="btn btn-sm btn-outline-secondary ms-auto">
       <i class="bi bi-gear me-1"></i>Configurar
     </a>
-    <button class="btn btn-sm btn-primary" onclick="carregar()">
+    <button class="btn btn-sm btn-primary" onclick="carregar()" title="Atualizar KPIs" aria-label="Atualizar KPIs">
       <i class="bi bi-arrow-clockwise"></i>
     </button>
   </div>
@@ -92,7 +92,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="histTitulo">Histórico</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
         <div class="modal-body">
           <div class="mb-2 d-flex gap-2 align-items-center">
@@ -114,6 +114,7 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/3.0.1/chartjs-plugin-annotation.min.js"></script>
 <script>

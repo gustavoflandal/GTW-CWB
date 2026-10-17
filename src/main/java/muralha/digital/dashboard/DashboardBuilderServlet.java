@@ -630,7 +630,10 @@ public class DashboardBuilderServlet extends HttpServlet {
         try {
             JsonArray arr = JsonParser.parseString(colunasJsonStr).getAsJsonArray();
             for (JsonElement el : arr) {
-                validas.add(el.getAsJsonObject().get("nome").getAsString());
+                String nome = el.getAsJsonObject().get("nome").getAsString();
+                // colunas_json e gravado pelo usuario e cada nome vai entre colchetes no SQL:
+                // so identificadores simples entram (um "]" fecharia o colchete).
+                if (nome.matches("^[A-Za-z_][A-Za-z0-9_]*$")) validas.add(nome);
             }
         } catch (Exception ignored) {}
         return validas;

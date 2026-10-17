@@ -1,36 +1,36 @@
+import { htmlVazio, garantirAltura, escapeHtml, formatarNumero, medidasDe, rotuloCampo, aplicarOpcao } from './comum.js';
+
 export function renderizarGauge(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
-        elemento.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--bs-secondary-color)"><div><i class="bi bi-inbox" style="font-size:2rem"></i><div>Sem dados</div></div></div>';
+        elemento.innerHTML = htmlVazio();
         return;
     }
-    if (elemento.clientHeight < 100) elemento.style.height = '300px';
+    garantirAltura(elemento);
 
     var visual = widget.visual || {};
-    var consulta = widget.consulta || {};
-    var keys = Object.keys(dados[0]);
+    var valueKey = medidasDe(widget, dados)[0] || Object.keys(dados[0])[0];
+    var nome = widget.titulo || rotuloCampo(widget, valueKey);
 
-    var valueKey = (consulta.measures && consulta.measures[0]) || null;
-    if (!valueKey) { for (var k of keys) { if (typeof dados[0][k] === 'number') { valueKey = k; break; } } }
-    if (!valueKey) valueKey = keys[0];
-
-    var valor = dados[0][valueKey] || 0;
+    var valor = dados[0][valueKey] == null ? 0 : dados[0][valueKey];
     var min = visual.min || 0;
     var max = visual.max || 100;
 
     var option = {
-        tooltip: { formatter: '{a}: {c}' },
+        tooltip: {
+            formatter: function(p) { return escapeHtml(rotuloCampo(widget, valueKey)) + ': <b>' + formatarNumero(p.value) + '</b>'; }
+        },
         series: [{
-            name: widget.titulo || valueKey,
+            name: nome,
             type: 'gauge',
             min: min,
             max: max,
             detail: {
-                formatter: '{value}',
+                formatter: function(v) { return formatarNumero(v); },
                 fontSize: 20,
                 offsetCenter: [0, '70%']
             },
-            data: [{ value: valor, name: widget.titulo || valueKey }],
+            data: [{ value: valor, name: nome }],
             axisLine: {
                 lineStyle: {
                     width: 15,
@@ -41,28 +41,19 @@ export function renderizarGauge(elemento, widget, dados) {
                     ]
                 }
             },
+            axisLabel: { formatter: function(v) { return formatarNumero(v, 0); } },
             pointer: { length: '60%', width: 6 },
             title: { fontSize: 13, offsetCenter: [0, '90%'] }
         }]
     };
 
-    if (visual.faixas) {
-        try {
-            var faixas = visual.faixas;
-            var cores = [];
-            for (var i = 0; i < faixas.length; i++) {
-                cores.push([faixas[i].ate / max, faixas[i].cor]);
-            }
-            option.series[0].axisLine.lineStyle.color = cores;
-        } catch (e) { /* usa faixas padrao */ }
+    if (visual.faixas && visual.faixas.length > 0) {
+        // Faixas absolutas convertidas para a fracao do arco entre min e max.
+        var amplitude = (max - min) || 1;
+        option.series[0].axisLine.lineStyle.color = visual.faixas.map(function(f) {
+            return [Math.min(1, Math.max(0, (f.ate - min) / amplitude)), f.cor];
+        });
     }
 
-    try {
-        if (typeof echarts === 'undefined') { elemento.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ECharts nao carregado</div>'; return; }
-        var chart = echarts.getInstanceByDom(elemento) || echarts.init(elemento);
-        chart.setOption(option, true);
-        if (!elemento.__observadorResize) { elemento.__observadorResize = new ResizeObserver(function() { var c = echarts.getInstanceByDom(elemento); if (c) c.resize(); }); elemento.__observadorResize.observe(elemento); }
-    } catch (e) {
-        elemento.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> Erro: ' + e.message + '</div>';
-    }
+    aplicarOpcao(elemento, option);
 }

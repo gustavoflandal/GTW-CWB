@@ -17,11 +17,11 @@
 	<!-- 			  <th scope="col">Semana</th> -->
 		          <th scope="col"><small>Domingo</small></th>
 		          <th scope="col"><small>Segunda-Feira</small></th>
-		          <th scope="col"><small>Terça-Feira</small></th>
+		          <th scope="col"><small>TerÃ§a-Feira</small></th>
 		          <th scope="col"><small>Quarta-Feira</small></th>
 		          <th scope="col"><small>Quinta-Feira</small></th>
 		          <th scope="col"><small>Sexta-Feira</small></th>
-		          <th scope="col"><small>Sábado</small></th>
+		          <th scope="col"><small>SÃ¡bado</small></th>
 		        </tr>
 		      </thead>
 		      <tbody></tbody>

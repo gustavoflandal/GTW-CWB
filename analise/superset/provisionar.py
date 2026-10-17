@@ -441,6 +441,9 @@ def _provisionar_chart(sessao, conexao, dashboard, chart_def: dict):
     return slice_obj
 
 
+VIZ_METRICA_UNICA = {"big_number_total", "big_number", "pie", "funnel", "gauge_chart", "heatmap_v2"}
+
+
 def _montar_chart_params(chart_def: dict, dataset) -> dict:
     params = {
         "datasource": f"{dataset.id}__table",
@@ -453,6 +456,9 @@ def _montar_chart_params(chart_def: dict, dataset) -> dict:
         metrics = [metric]
     if metrics:
         params["metrics"] = metrics
+        # Big number, pizza, funil, gauge e heatmap leem "metric" (singular) no form_data.
+        if chart_def["viz_type"] in VIZ_METRICA_UNICA:
+            params["metric"] = metric or metrics[0]
 
     groupby = chart_def.get("groupby", [])
     if groupby:

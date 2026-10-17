@@ -1,3 +1,5 @@
+import { rotuloCampo, infoTempo } from './comum.js';
+
 export function renderizarKpi(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
@@ -13,14 +15,19 @@ export function renderizarKpi(elemento, widget, dados) {
     if (!valueKey) { for (var k of keys) { if (typeof dados[0][k] === 'number') { valueKey = k; break; } } }
     if (!valueKey) valueKey = keys[0];
 
-    var valor = dados[0][valueKey];
+    // Com comparacao, a consulta vem agrupada por tempo em ordem crescente:
+    // o valor atual e a ultima linha e o anterior, a penultima.
+    var comTempo = visual.comparacao && infoTempo(widget, dados) && dados.length > 1;
+    var linhaAtual = comTempo ? dados[dados.length - 1] : dados[0];
+    var linhaAnterior = comTempo ? dados[dados.length - 2] : null;
+    var valor = linhaAtual[valueKey];
     var valorFormatado = formatarValor(valor, visual.formato);
 
     var cor = '#0d75bf';
     var badgeTexto = '';
     var badgeCor = '';
     if (visual.thresholds && visual.thresholds.length > 0) {
-        var ths = visual.thresholds.sort(function(a, b) { return a.valor - b.valor; });
+        var ths = visual.thresholds.slice().sort(function(a, b) { return a.valor - b.valor; });
         for (var i = ths.length - 1; i >= 0; i--) {
             if (valor >= ths[i].valor) {
                 cor = ths[i].cor || cor;
@@ -36,7 +43,7 @@ export function renderizarKpi(elemento, widget, dados) {
         }
     }
 
-    var subtitulo = visual.subtitulo || widget.titulo || valueKey;
+    var subtitulo = visual.subtitulo || widget.titulo || rotuloCampo(widget, valueKey);
     var icone = visual.icone || 'bi-graph-up';
 
     var html = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:1rem;text-align:center">';
@@ -48,14 +55,14 @@ export function renderizarKpi(elemento, widget, dados) {
         html += '<span class="badge mt-2" style="background:' + escapeHtml(badgeCor) + ';font-size:0.75rem">' + escapeHtml(badgeTexto) + '</span>';
     }
 
-    if (visual.comparacao && dados.length > 1) {
-        var valorAnterior = dados[1][valueKey] || 0;
-        if (valorAnterior !== 0) {
-            var variacao = ((valor - valorAnterior) / valorAnterior * 100).toFixed(1);
+    if (linhaAnterior) {
+        var valorAnterior = linhaAnterior[valueKey] || 0;
+        if (valorAnterior !== 0 && typeof valor === 'number') {
+            var variacao = (valor - valorAnterior) / Math.abs(valorAnterior) * 100;
             var seta = variacao >= 0 ? 'bi-arrow-up' : 'bi-arrow-down';
             var corVariacao = variacao >= 0 ? '#28a745' : '#dc3545';
-            html += '<div style="font-size:0.8rem;margin-top:0.5rem;color:' + corVariacao + '">';
-            html += '<i class="bi ' + seta + '"></i> ' + variacao + '%</div>';
+            html += '<div style="font-size:0.8rem;margin-top:0.5rem;color:' + corVariacao + '" title="Variação em relação ao período anterior">';
+            html += '<i class="bi ' + seta + '"></i> ' + variacao.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%</div>';
         }
     }
 
@@ -72,9 +79,8 @@ function formatarValor(valor, formato) {
     if (formato === 'percentual') return valor.toLocaleString('pt-BR', { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + '%';
     if (formato === 'moeda') return 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-    if (valor >= 1000000) return (valor / 1000000).toFixed(1) + 'M';
-    if (valor >= 1000) return (valor / 1000).toFixed(1) + 'K';
-    return typeof valor === 'number' ? valor.toLocaleString('pt-BR') : String(valor);
+    if (Math.abs(valor) >= 10000) return valor.toLocaleString('pt-BR', { notation: 'compact', maximumFractionDigits: 1 });
+    return valor.toLocaleString('pt-BR', { maximumFractionDigits: 2 });
 }
 
 function escapeHtml(str) {

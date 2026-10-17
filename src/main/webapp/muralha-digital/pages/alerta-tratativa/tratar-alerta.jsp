@@ -266,7 +266,7 @@
 							<div class="mb-2">
 								<div id="tooltipAcaoProcedimento" class="d-grid gap-2"
 									data-bs-toggle="tooltip" data-bs-placement="auto"
-									data-bs-original-title="A inclusão de Ações e Procedimentos será habilitada após a Confirmar a Irregularidade">
+									tabindex="0" data-bs-title="As ações do supervisionado serão habilitadas após confirmar a irregularidade.">
 									<button id="btnAbrirModalAcaoProcedimento" type="button"
 										class="btn btn-primary" data-bs-toggle="modal"
 										data-bs-target="#modalAlertaAcaoProcedimento"
