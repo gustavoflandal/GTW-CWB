@@ -26,6 +26,9 @@ COPY superset/dashboards/ /app/dashboards/
 COPY superset/governanca/ /app/governanca/
 COPY superset/alertas/ /app/alertas/
 
+# Painéis de demonstração com dados reais
+COPY superset/demo/ /app/demo/
+
 # Variável que o Superset usa para localizar o arquivo de configuração
 ENV SUPERSET_CONFIG_PATH=/app/superset_config.py
 

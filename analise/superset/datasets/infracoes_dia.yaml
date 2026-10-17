@@ -1,6 +1,6 @@
 # Dataset: Infrações por Dia (materializada)
 # Fonte: analise.mat_infracoes_dia (procedure spu_carga_infracoes_dia)
-uuid: "d1a00001-sup3-4000-a001-000000000002"
+uuid: "d1a00001-5003-4000-a001-000000000002"
 table_name: mat_infracoes_dia
 schema: analise
 folder: Infrações

@@ -41,7 +41,30 @@ public final class ReferenciaEdital {
             Map.entry(381, List.of("7.2.3.d", "7.2.3.f")),
             Map.entry(382, List.of("7.2.3.a")),
             // Categoria "Sistema de Chamados" na tela inicial (agrupa os cards 379, 381 e 382)
-            Map.entry(383, List.of("7.2.3", "7.2.4"))
+            Map.entry(383, List.of("7.2.3", "7.2.4")),
+            // Plano 23 — Superset / Analises (id fixo na migracao)
+            Map.entry(395, List.of("5.2.8.4", "5.4.2.1-6", "5.4.3.5-7", "5.4.4.1-3", "5.4.5.1-2", "5.4.6.1-3", "5.5.3.1-4"))
+    );
+
+    private static final Map<String, List<String>> ITENS_POR_HREF = Map.ofEntries(
+            // Plano 23 / SUP-6 — Tipos de Alerta (id_menu dinamico)
+            Map.entry("/MuralhaDigital/TipoAlertaConfig",
+                    List.of("5.3.1.3", "5.3.2.1", "5.3.3.3-4", "5.3.4.2-3", "5.3.6", "5.3.7.4 d-e", "5.3.7.6", "5.3.7.8")),
+            // Plano 23 / SUP-7 — Relatorios Gerenciais (id_menu dinamico)
+            Map.entry("/MuralhaDigital/RelatorioGerencial",
+                    List.of("5.4.3.5-7", "5.4.5.1-2", "5.4.6.2-3", "5.5.3.1-3")),
+            // Plano 23 / SUP-8 — Painel de Pre-Processamento (id_menu dinamico)
+            Map.entry("/MuralhaDigital/PreProcessamento",
+                    List.of("5.2.2.3", "5.2.2.6", "5.5.3.1")),
+            // Plano 25 — Conferencia SHA-256 na recepcao das imagens (id_menu dinamico)
+            Map.entry("/muralha-digital/pages/monitoramento/integridade/index.jsp",
+                    List.of("5.2.1.2", "5.2.1.3 a-f")),
+            // Plano 26 — Logs tecnicos e historico de parametros (id_menu dinamico)
+            Map.entry("/muralha-digital/pages/monitoramento/logs-tecnicos/index.jsp",
+                    List.of("5.4.7.1-7", "5.2.7.2", "5.2.7.3")),
+            // Plano 27 — Score de OCR e revisao de placas (id_menu dinamico)
+            Map.entry("/muralha-digital/pages/processamento/revisao-placas/index.jsp",
+                    List.of("5.2.2.5", "5.7.1.4", "5.7.4.1-4", "5.7.5.1-2", "5.7.5.4"))
     );
 
     private ReferenciaEdital() {
@@ -51,9 +74,20 @@ public final class ReferenciaEdital {
         return ITENS_POR_MENU.getOrDefault(idMenu, Collections.emptyList());
     }
 
-    /** Texto da caixa exibida ao passar o mouse no asterisco (com quebras de linha em HTML). */
+    public static List<String> itensPorHref(String href) {
+        if (href == null) return Collections.emptyList();
+        return ITENS_POR_HREF.getOrDefault(href, Collections.emptyList());
+    }
+
     public static String titulo(int idMenu) {
-        List<String> itens = itens(idMenu);
+        return tituloFromItens(itens(idMenu));
+    }
+
+    public static String tituloPorHref(String href) {
+        return tituloFromItens(itensPorHref(href));
+    }
+
+    private static String tituloFromItens(List<String> itens) {
         if (itens.isEmpty()) {
             return "";
         }

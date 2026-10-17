@@ -829,6 +829,8 @@ def _provisionar_alerta(sessao, conexao, definicao: dict, dry_run: bool = False)
         report = ReportSchedule(
             name=nome,
             type=tipo,
+            crontab=definicao.get("crontab", "0 * * * *"),
+            timezone=definicao.get("timezone", "America/Bahia"),
         )
         if al_uuid:
             report.uuid = uuid_mod.UUID(al_uuid)

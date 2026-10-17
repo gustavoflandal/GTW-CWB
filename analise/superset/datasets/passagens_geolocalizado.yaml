@@ -1,6 +1,6 @@
 # Dataset: Passagens Geolocalizadas (SUP-8)
 # Fonte: analise.mat_passagens_hora com coordenadas do local
-uuid: "d1a00001-sup8-4000-a001-000000000002"
+uuid: "d1a00001-5008-4000-a001-000000000002"
 table_name: v_passagens_geolocalizado
 schema: analise
 folder: Mapas

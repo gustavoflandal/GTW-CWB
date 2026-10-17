@@ -56,15 +56,24 @@
     </label>
     <select id="selectDashboard" class="form-select form-select-sm">
       <option value="">Selecione um painel...</option>
+      <optgroup label="Demonstração (dados reais)">
+        <option value="demo-fluxo-veicular">Fluxo Veicular</option>
+        <option value="demo-infracoes">Fiscalização e Infrações</option>
+        <option value="demo-trafego-historico">Tráfego Histórico</option>
+        <option value="demo-mobilidade-waze">Mobilidade Urbana (Waze)</option>
+        <option value="demo-alertas-veiculos">Alertas de Veículos de Interesse</option>
+      </optgroup>
+      <optgroup label="Painéis operacionais">
       <option value="kpis-operacionais">KPIs Operacionais</option>
-      <option value="assertividade">Assertividade</option>
+      <option value="assertividade-dupla-analise">Assertividade</option>
       <option value="sla-latencia">SLA de Latência</option>
       <option value="disponibilidade-equipamentos">Disponibilidade de Equipamentos</option>
-      <option value="preprocessamento">Pré-processamento</option>
+      <option value="preprocessamento-imagens">Pré-processamento</option>
       <option value="alertas">Alertas</option>
       <option value="infracoes">Infrações</option>
       <option value="passagens-veiculares">Passagens Veiculares</option>
       <option value="mapa-equipamentos-infracoes">Mapa de Equipamentos</option>
+      </optgroup>
     </select>
     <a id="btnAbrirSuperset" href="#" target="_blank"
        class="btn btn-outline-primary btn-sm analise-btn-abrir" style="display:none;">
@@ -88,4 +97,7 @@
   </div>
 </div>
 
+<script>
+  var supersetBaseUrl = '${not empty supersetBaseUrl ? supersetBaseUrl : "http://localhost:8088"}';
+</script>
 <script src="${pageContext.request.contextPath}/muralha-digital/pages/analise/assets/js/embedding.js"></script>

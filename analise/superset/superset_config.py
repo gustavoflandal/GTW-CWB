@@ -225,12 +225,20 @@ if _STATSD_HOST:
 # Retenção do action log (dias)
 SUPERSET_LOG_VIEW = True
 
-# Consultas SQL — log de execução
-QUERY_LOGGER = True
+# Consultas SQL — log de execução (o Superset exige uma função, não um booleano)
+def QUERY_LOGGER(database, query, schema=None, client=None, security_manager=None, log_params=None):
+    import logging as _logging
+    usuario = getattr(getattr(g, "user", None), "username", "sistema")
+    _logging.getLogger("superset.query_log").info(
+        "consulta usuario=%s banco=%s schema=%s tamanho=%d",
+        usuario, getattr(database, "database_name", "?"), schema, len(query or ""),
+    )
 
 # ---------------------------------------------------------------------------
-# CSRF e sessão
+# CSRF, reCAPTCHA e sessão
 # ---------------------------------------------------------------------------
+RECAPTCHA_PUBLIC_KEY = ""
+RECAPTCHA_PRIVATE_KEY = ""
 WTF_CSRF_ENABLED = True
 WTF_CSRF_EXEMPT_LIST = [
     "superset.views.core.log",

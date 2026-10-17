@@ -1,6 +1,6 @@
 # Dataset: Alertas
 # Fonte: analise.v_alertas (view sobre muralha.alerta, sem dados pessoais)
-uuid: "d1a00001-sup3-4000-a001-000000000003"
+uuid: "d1a00001-5003-4000-a001-000000000003"
 table_name: v_alertas
 schema: analise
 folder: Alertas

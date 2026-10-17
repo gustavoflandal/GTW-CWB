@@ -1,5 +1,5 @@
 # Alerta: SLA de latência abaixo de 95% (TR 5.4.3.x)
-uuid: "a1000001-sup7-4000-b001-000000000002"
+uuid: "a1000001-5007-4000-b001-000000000002"
 name: "SLA de latência abaixo de 95%"
 description: >
   Dispara quando o percentual de janelas dentro do SLA de latência

@@ -24,6 +24,15 @@ services:
         condition: service_started
     volumes:
       - superset_home:/app/superset_home
+      # DEV: monta arquivos locais para iteração rápida (sem rebuild)
+      - ./superset/gtw_security.py:/app/gtw_security.py:ro
+      - ./superset/superset_config.py:/app/superset_config.py:ro
+      - ./superset/provisionar.py:/app/provisionar.py:ro
+      - ./superset/datasets:/app/datasets:ro
+      - ./superset/dashboards:/app/dashboards:ro
+      - ./superset/governanca:/app/governanca:ro
+      - ./superset/alertas:/app/alertas:ro
+      - ./superset/demo:/app/demo:ro
     networks:
       - analise_net
     # Nenhuma porta publicada — só nginx alcança o Superset
@@ -140,7 +149,8 @@ services:
     ports:
       - "8088:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # DEV: SSO desabilitado e usuário fixo; produção sobrescreve com default.conf
+      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - superset
     networks:

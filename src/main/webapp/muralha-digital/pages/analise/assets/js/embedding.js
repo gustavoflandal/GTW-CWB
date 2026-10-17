@@ -8,8 +8,9 @@
 (function () {
   'use strict';
 
-  var SUPERSET_BASE = '/analise';
-  var GUEST_TOKEN_URL = contextPath + '/MuralhaDigital/AnaliseGuestToken';
+  var SUPERSET_BASE = (typeof supersetBaseUrl !== 'undefined' && supersetBaseUrl) ? supersetBaseUrl : '/analise';
+  var ctxPath = (typeof urlRoot !== 'undefined') ? urlRoot : '';
+  var GUEST_TOKEN_URL = ctxPath + '/MuralhaDigital/AnaliseGuestToken';
 
   var selectDashboard = document.getElementById('selectDashboard');
   var frameAnalise = document.getElementById('frameAnalise');
@@ -34,7 +35,8 @@
     loadingAnalise.style.display = '';
     btnAbrir.style.display = 'none';
 
-    var url = SUPERSET_BASE + '/superset/dashboard/' + slug + '/?standalone=3';
+    // standalone=2 oculta menu e título do Superset, mas mantém a barra de filtros nativos
+    var url = SUPERSET_BASE + '/superset/dashboard/' + slug + '/?standalone=2';
 
     frameAnalise.src = url;
 

@@ -1,6 +1,6 @@
 # Dataset: Equipamentos
 # Fonte: analise.v_equipamentos (cadastro de locais)
-uuid: "d1a00001-sup3-4000-a001-000000000004"
+uuid: "d1a00001-5003-4000-a001-000000000004"
 table_name: v_equipamentos
 schema: analise
 folder: Equipamentos

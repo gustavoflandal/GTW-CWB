@@ -1,6 +1,6 @@
 # Dataset: Infrações Geolocalizadas (SUP-8)
 # Fonte: analise.mat_infracoes_dia com coordenadas do local
-uuid: "d1a00001-sup8-4000-a001-000000000001"
+uuid: "d1a00001-5008-4000-a001-000000000001"
 table_name: v_infracoes_geolocalizado
 schema: analise
 folder: Mapas

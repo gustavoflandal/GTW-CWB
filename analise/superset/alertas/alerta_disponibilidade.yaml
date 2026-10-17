@@ -1,5 +1,5 @@
 # Alerta: Disponibilidade abaixo de 95% (TR 5.2.x)
-uuid: "a1000001-sup7-4000-b001-000000000001"
+uuid: "a1000001-5007-4000-b001-000000000001"
 name: "Disponibilidade abaixo de 95%"
 description: >
   Dispara quando a disponibilidade média dos equipamentos nas últimas 24h

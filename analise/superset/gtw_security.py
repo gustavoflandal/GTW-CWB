@@ -84,7 +84,8 @@ class GtwSecurityManager(SupersetSecurityManager):
             return None
 
         # Sem cabeçalhos — verificar se já tem sessão Flask válida
-        if g.user and g.user.is_authenticated:
+        usuario = getattr(g, "user", None)
+        if usuario and getattr(usuario, "is_authenticated", False):
             return None
 
         # Nenhuma sessão válida — redirecionar ao login do GTW
@@ -130,9 +131,10 @@ class GtwSecurityManager(SupersetSecurityManager):
         grupos_raw = request.headers.get(_HEADER_GRUPOS, "")
         self._sincronizar_papeis(usuario, grupos_raw)
 
-        # Definir na sessão Flask
+        # Definir na sessão Flask e no contexto da requisição
         from flask_login import login_user
         login_user(usuario)
+        g.user = usuario
 
     def _sincronizar_papeis(self, usuario, grupos_csv: str):
         """

@@ -46,12 +46,21 @@ public class Menu
 		this.descDetalhada = descDetalhada;
 	}
 	public boolean isAtendeEdital() {
-		return !ReferenciaEdital.itens(idMenu).isEmpty();
+		return !getItensEditalList().isEmpty();
 	}
 	public String getTituloEdital() {
-		return ReferenciaEdital.titulo(idMenu);
+		java.util.List<String> itens = getItensEditalList();
+		if (itens.isEmpty()) return "";
+		return "Itens do edital (TR TRANSALVADOR):<br>" + String.join("<br>", itens);
 	}
 	public String getItensEditalTexto() {
-		return String.join(", ", ReferenciaEdital.itens(idMenu));
+		return String.join(", ", getItensEditalList());
+	}
+	private java.util.List<String> getItensEditalList() {
+		java.util.List<String> itens = ReferenciaEdital.itens(idMenu);
+		if (itens.isEmpty()) {
+			itens = ReferenciaEdital.itensPorHref(href);
+		}
+		return itens;
 	}
 }

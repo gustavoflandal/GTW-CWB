@@ -1,5 +1,5 @@
 # Alerta: Alertas críticos pendentes (TR 5.4.3.5)
-uuid: "a1000001-sup7-4000-b001-000000000004"
+uuid: "a1000001-5007-4000-b001-000000000004"
 name: "Alertas críticos sem tratamento"
 description: >
   Dispara quando existem alertas com severidade crítica sem tratamento
