@@ -4,6 +4,8 @@
 > **Status:** 🟡 Implementado — migração executada, aguardando teste no navegador.
 > **Fase:** 6 de 11 da correção da auditoria de 2026-10-16.
 
+> **Gap aberto em 2026-10-17:** não há JSP de configuração (o card abre o JSON do servlet), e quatro tipos estão com cor, ícone ou prioridade inconsistentes. Há um contorno temporário para a demonstração. Ver [gap-tipos-alerta-ajuste-demo.md](gap-tipos-alerta-ajuste-demo.md).
+
 ## Escopo
 
 Tipos de alerta operacionais (estacionamento irregular, congestionamento/retenção, bloqueio de via, falha de equipamento), criticidade e cor/ícone configuráveis pela CONTRATANTE, tratamentos parametrizáveis com execução automática, detecção de retenção/congestionamento por regra sobre dados de tráfego horários, filtros avançados no histórico de alertas (localidade, usuário responsável, resultado do tratamento) e exportação CSV.

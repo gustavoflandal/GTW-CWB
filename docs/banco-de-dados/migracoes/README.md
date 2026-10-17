@@ -82,6 +82,14 @@ Ordem sugerida (a mesma da criação): fundação → editor de dataset → obse
 | `20261016_ocr_score_revisao_placas.sql` | 27 | `vtr_placa_leitura`, `equipamento_ocr_config`, `vtr_ocr_avaliacao`, `vtr_revisao_placa`, `motivo_correcao_placa` (7 motivos), `vtr_correcao_justificativa`, chaves `OCR_*`, cópia de 30 dias de placas (~850 mil linhas no DEV), menus. Rodar com `sqlcmd -b -f 65001` | **Não executado** — necessário para a fila e a justificativa em tabela. Sintaxe conferida com `SET PARSEONLY ON` |
 | `20261017_corrige_rotulos_demonstracao_dashboards.sql` | 20/21 (auditoria de 2026-10-17) | Demonstração do Dashboard Builder (painéis 101-102): período único de 12 meses em todos os widgets, títulos que não batiam com a métrica, rótulos acentuados dos datasets 101-103. Só altera linhas da demonstração em `dash.*`. Rodar com `sqlcmd -b -f 65001` | **Não executado** |
 
+## Superset, menus e demonstração (2026-10-17)
+
+| Script | Plano | Descrição | Situação no DEV |
+|---|---|---|---|
+| `20261017_fix_icone_superset.sql` | 23 | Ícone do card Análises (id_menu 395), direitos dos grupos 41 e 42, chave `SUPERSET_BASE_URL` | Executado (2026-10-17) |
+| `20261017_icones_integridade_logs_revisao.sql` | 25, 26 e 27 | Ícones próprios dos cards Integridade, Logs Técnicos e Revisão de Placas (só `sis_menu_infos.src`, pelo `href`) | Executado (2026-10-17) |
+| `20261017_tipo_alerta_ajuste_demo.sql` | 28 | **Contorno temporário:** tabela nova `muralha.tipo_alerta_ajuste_demo` com 5 ajustes de cor, ícone, prioridade e descrição dos tipos de alerta; nenhuma tabela existente é alterada. Ver [gap](../../entregas/gap-tipos-alerta-ajuste-demo.md). Rodar com `sqlcmd -b -f 65001` | Executado (2026-10-17): tabela criada, 5 ajustes ativos |
+
 ## Como acrescentar uma migração
 
 1. Nomear `AAAAMMDD_descricao.sql`, com cabeçalho (plano, data, ordem de execução e rollback comentado).
