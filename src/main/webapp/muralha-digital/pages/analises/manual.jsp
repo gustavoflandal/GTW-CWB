@@ -392,6 +392,10 @@
             &bull; Em <strong>Dimensão Temporal</strong>, escolha a <strong>Granularidade</strong> <em>Dia</em>
         </blockquote>
 
+        <p>Cada zona aceita só o que faz sentido: <strong>Eixo Y / Medidas</strong> e <strong>Valores</strong> recebem medidas;
+        as demais recebem dimensões e campos de data. Enquanto você arrasta, as zonas que aceitam o campo ficam em destaque.
+        Para tirar um campo de uma zona, clique no <strong>×</strong> ao lado do nome. O mesmo campo não entra duas vezes na mesma zona.</p>
+
         <p>Um campo de data arrastado para <strong>Eixo X</strong> passa a ser a <strong>dimensão temporal</strong> do widget:
         os valores são agrupados pela <strong>Granularidade</strong> escolhida (dia, semana, mês, trimestre ou ano).
         Com <strong>Sem agrupamento</strong>, a data serve apenas para filtrar o <strong>Período</strong>; com

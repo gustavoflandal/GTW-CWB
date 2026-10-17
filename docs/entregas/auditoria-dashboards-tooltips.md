@@ -46,6 +46,22 @@ Foram corrigidos 39 defeitos, além dos dados de demonstração. Os itens de seg
 | Baixo | Ícone `bi-scatter` não existe no Bootstrap Icons 1.11.1 (Dispersão sem ícone) | `bi-dot` |
 | Baixo | Rodapé "Cache hit"; textos sem acento em telas tocadas | "Resultado em cache"; acentuação |
 
+### Editor de novo widget (revisão de 2026-10-17, segunda rodada)
+
+O fluxo de **criar** um widget não funcionava como esperado. O teste anterior cobria só a edição.
+
+| Sev. | Defeito | Correção |
+|---|---|---|
+| Crítico | Arrastar e soltar rodava sobre um *stub* de 4 KB (`PLACEHOLDER` no cabeçalho): o campo solto ficava semitransparente, não havia como removê-lo, o mesmo campo entrava várias vezes, uma medida caía em "Eixo X" sem aviso e, a cada troca de dataset, os handlers se acumulavam (uma soltura inseria N cópias) | SortableJS 1.15.0 real em `static/vendor/sortablejs/` (exceção aprovada no CLAUDE.md); instâncias criadas uma só vez; cada zona aceita só os tipos certos (`group.put`), destaque das zonas válidas durante o arraste, botão × para remover, sem repetição |
+| Crítico | Trocar o dataset mantinha os campos antigos nas zonas: a consulta falhava com "Campo não existe no dataset" | Zonas e seleção limpas ao trocar |
+| Alto | Granularidade "Mês" por padrão: um gráfico de barras novo nascia com 12 séries (uma por mês) | Padrão "Sem agrupamento"; o mês entra sozinho ao soltar um campo de data no Eixo X ou ao escolher Linhas/Área sem dimensão, e sai quando o motivo some |
+| Alto | Mudar granularidade, período, limite ou filtros não atualizava o preview | Preview refeito em todas essas mudanças |
+| Médio | Salvar sem medida gravava um widget vazio; validações com `alert()` | Validação de medida (tabela pode ter só dimensões; pivot exige Valores); SweetAlert2 |
+| Médio | Widget novo era gravado em (0,0), sobre o primeiro do painel | `WidgetService.salvar` coloca o novo widget abaixo dos existentes |
+| Médio | Editor aberto sem painel (`dashboardId`) só falhava ao salvar ("Sem permissao neste painel") | Aviso na tela e botões de salvar desabilitados; mensagem quando não há dataset publicado |
+| Baixo | Datasets com mais de um campo de data não permitiam escolher qual usar | Seletor "Campo de data" (aparece só quando há mais de um) |
+| Baixo | Tipos de visualização sem descrição; rótulos sem acento | Tooltip com a descrição de cada tipo; textos revisados |
+
 ### Backend e integrações
 
 | Sev. | Defeito | Correção |
@@ -88,7 +104,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
 | Testes Java dos pacotes `dashboards` e `analise.SsoAnalise` (compilados com Gson, POI 4.1.1, Servlet 3.0 e stubs do legado) | 101/101 |
 | `SsoAnaliseServletTest` contra o servlet original | Falha com `ClassCastException`, como esperado |
 | Harness Node + jsdom com o ECharts 5.5.0 vendorizado (SSR/SVG): 16 cenários de widgets, tooltips, drill e filtro cruzado | 16/16 |
-| Harness do editor com o HTML real do `editor.jsp` (séries, KPI, pivot) | 3/3; os 3 falham no código original |
+| Harness do editor com o HTML real do `editor.jsp` e o SortableJS real (novo widget, sem painel, séries, KPI, pivot) | 5/5; o cenário "novo widget" e os 3 de edição falham no código original |
 | `node --check` em todo JS alterado; `py_compile` em `provisionar.py` | OK |
 
 **Não verificado aqui:** o build Maven completo (dependências no repositório interno da Consilux) e o navegador. Rodar `..\.setup-gtw\build.ps1` e testar os painéis 101 e 102 após a migração.
@@ -112,6 +128,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
 ## Arquivos
 
 - **Widgets e núcleo:**
+  - `static/vendor/sortablejs/Sortable.min.js` (SortableJS 1.15.0 real, no lugar do stub) e `LICENSE.txt`;
   - `static/js/dashboards/widgets/comum.js` (novo) e todos os renderizadores em `widgets/`;
   - `widget-registry.js`, `painel.js`, `editor-widget.js`, `editor-filtros.js`, `drill-down.js`, `filtro-cruzado.js`, `dataset-editor.js`.
 - **Telas:**
@@ -120,7 +137,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
   - `pages/dashboards/{dashboard.jsp, calendario-intensidade.jsp, assets/js/grafico-comp-diario-fluxo-X-infracoes.js}`;
   - `pages/{veiculos-correlacionados, consulta-veiculo, consulta-veiculo-de-carga, alerta-tratativa}`.
 - **Java:**
-  - `CodificacaoUtf8Filter` (novo), `ExportacaoDashboardServlet`, `ExportacaoService`, `HistoricoVersaoService`, `CompartilhamentoService`, `DashCatalogoServlet`, `DatasetServlet`;
+  - `CodificacaoUtf8Filter` (novo), `WidgetService`, `ExportacaoDashboardServlet`, `ExportacaoService`, `HistoricoVersaoService`, `CompartilhamentoService`, `DashCatalogoServlet`, `DatasetServlet`;
   - `consulta/MontadorSql`, `consulta/PeriodoRelativo`, `dashboard/DashboardBuilderServlet`, `analise/SsoAnaliseServlet`.
 - **Testes:** `PeriodoRelativoTest`, `ExportacaoServiceTest`, `SsoAnaliseServletTest`.
 - **Superset:** `analise/superset/provisionar.py`.

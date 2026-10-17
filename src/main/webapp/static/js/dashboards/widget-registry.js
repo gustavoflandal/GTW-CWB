@@ -64,19 +64,19 @@ export function ajustarConsultaAoTipo(widget, consulta) {
 
 export function tiposDisponiveis() {
     return [
-        { tipo: 'barras',     rotulo: 'Barras',        icone: 'bi-bar-chart' },
-        { tipo: 'linhas',     rotulo: 'Linhas',        icone: 'bi-graph-up' },
-        { tipo: 'area',       rotulo: 'Área',          icone: 'bi-graph-up-arrow' },
-        { tipo: 'pizza',      rotulo: 'Pizza',         icone: 'bi-pie-chart' },
-        { tipo: 'rosca',      rotulo: 'Rosca',         icone: 'bi-bullseye' },
-        { tipo: 'dispersao',  rotulo: 'Dispersão',     icone: 'bi-dot' },
-        { tipo: 'combinado',  rotulo: 'Combinado',     icone: 'bi-bar-chart-line' },
-        { tipo: 'funil',      rotulo: 'Funil',         icone: 'bi-funnel' },
-        { tipo: 'gauge',      rotulo: 'Gauge',         icone: 'bi-speedometer2' },
-        { tipo: 'heatmap',    rotulo: 'Mapa de Calor', icone: 'bi-grid-3x3' },
-        { tipo: 'kpi',        rotulo: 'KPI',           icone: 'bi-123' },
-        { tipo: 'tabela',     rotulo: 'Tabela',        icone: 'bi-table' },
-        { tipo: 'pivot',      rotulo: 'Tabela Dinâmica', icone: 'bi-grid-3x3-gap' }
+        { tipo: 'barras',     rotulo: 'Barras',        icone: 'bi-bar-chart',       descricao: 'Compara quantidades entre categorias' },
+        { tipo: 'linhas',     rotulo: 'Linhas',        icone: 'bi-graph-up',        descricao: 'Evolução ao longo do tempo' },
+        { tipo: 'area',       rotulo: 'Área',          icone: 'bi-graph-up-arrow',  descricao: 'Evolução com ênfase no volume' },
+        { tipo: 'pizza',      rotulo: 'Pizza',         icone: 'bi-pie-chart',       descricao: 'Proporção entre poucas categorias' },
+        { tipo: 'rosca',      rotulo: 'Rosca',         icone: 'bi-bullseye',        descricao: 'Igual à pizza, com o centro vazio' },
+        { tipo: 'dispersao',  rotulo: 'Dispersão',     icone: 'bi-dot',             descricao: 'Correlação entre duas medidas' },
+        { tipo: 'combinado',  rotulo: 'Combinado',     icone: 'bi-bar-chart-line',  descricao: 'Barras e linha no mesmo gráfico' },
+        { tipo: 'funil',      rotulo: 'Funil',         icone: 'bi-funnel',          descricao: 'Etapas sequenciais, da maior para a menor' },
+        { tipo: 'gauge',      rotulo: 'Gauge',         icone: 'bi-speedometer2',    descricao: 'Indicador tipo velocímetro' },
+        { tipo: 'heatmap',    rotulo: 'Mapa de Calor', icone: 'bi-grid-3x3',        descricao: 'Intensidade em grade (duas dimensões)' },
+        { tipo: 'kpi',        rotulo: 'KPI',           icone: 'bi-123',             descricao: 'Número em destaque' },
+        { tipo: 'tabela',     rotulo: 'Tabela',        icone: 'bi-table',           descricao: 'Dados tabulares com ordenação' },
+        { tipo: 'pivot',      rotulo: 'Tabela Dinâmica', icone: 'bi-grid-3x3-gap', descricao: 'Linhas × colunas × valores' }
     ];
 }
 

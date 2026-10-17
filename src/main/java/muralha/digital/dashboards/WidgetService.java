@@ -43,6 +43,20 @@ public class WidgetService {
         int gridH = dados.has("gridH") ? dados.get("gridH").getAsInt() : 3;
         int ordem = dados.has("ordem") ? dados.get("ordem").getAsInt() : 0;
 
+        if (novo && !dados.has("gridY")) {
+            // Um widget novo entra abaixo dos existentes, nao sobre o primeiro (0,0).
+            try (PreparedStatement ps = conn.prepareStatement(
+                    "SELECT ISNULL(MAX(grid_y + grid_h), 0), COUNT(*) FROM dash.widget WHERE id_dashboard = ?")) {
+                ps.setInt(1, idDashboard);
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (rs.next()) {
+                        gridY = rs.getInt(1);
+                        if (!dados.has("ordem")) ordem = rs.getInt(2);
+                    }
+                }
+            }
+        }
+
         if (novo) {
             try (PreparedStatement ps = conn.prepareStatement(
                     "INSERT INTO dash.widget " +
