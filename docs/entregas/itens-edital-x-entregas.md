@@ -27,8 +27,8 @@
 |---|---|---|
 | ✅ Implementado em entrega | 54 | 23% |
 | ✅ Já atendido pelo GTW | 32 | 14% |
-| ⚠️ Parcial | 88 | 38% |
-| ❌ Não implementado | 58 | 25% |
+| ⚠️ Parcial | 91 | 39% |
+| ❌ Não implementado | 55 | 24% |
 | **Total** | **232** | 100% |
 
 Em 2026-10-16 a matriz passou de 207 para 232 itens: entraram os 28 subitens de 5.6 e 5.7.7 que estavam omitidos (5.6.1.3–5, 5.6.2.4–5, 5.6.3.1–4, 5.6.4.4–5, 5.6.5.1–4, 5.6.6.2–4, 5.6.7.1–5, 5.7.7.2–6) e saíram as três linhas agregadas 5.6.3, 5.6.5 e 5.6.7.
@@ -41,11 +41,11 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 |---|---|---|---|---|---|
 | 5.1 Controle de Acesso | 14 | 12 | 2 | 0 | 93% |
 | 5.2 Gestão e Classificação de Infrações | 39 | 28 | 9 | 2 | 83% |
-| 5.3 Alertas de Irregularidades | 28 | 11 | 15 | 2 | 66% |
+| 5.3 Alertas de Irregularidades | 28 | 11 | 16 | 1 | 68% |
 | 5.4 Inteligência de Dados | 33 | 12 | 21 | 0 | 68% |
 | 5.5 Pré-processamento de Imagens | 23 | 7 | 10 | 6 | 52% |
 | 5.6 Infraestrutura de Comunicação | 32 | 8 | 6 | 18 | 34% |
-| 5.7 LAP | 38 | 11 | 15 | 12 | 49% |
+| 5.7 LAP | 38 | 11 | 17 | 10 | 51% |
 | 5.8 Datacenter e Continuidade | 25 | 1 | 8 | 16 | 20% |
 | **Total** | **232** | **90** | **86** | **56** | **57%** |
 
@@ -131,7 +131,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.3.4.3 | ⚠️ Parcial † | — |
 | 5.3.5.1 | ⚠️ Parcial † | — |
 | 5.3.5.2 | ❌ Não implementado † ‡ | — |
-| 5.3.5.3 | ❌ Não implementado | — |
+| 5.3.5.3 | ⚠️ Parcial | [32-retry-notificacao.md](32-retry-notificacao.md) — retry automático com até N tentativas configuráveis; aguardando migração e teste |
 | 5.3.6.1 | ✅ Já atendido pelo GTW † | — |
 | 5.3.6.2 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — filtros de localidade, responsável e resultado adicionados; aguardando migração e teste |
 | 5.3.6.3 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
@@ -149,7 +149,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 
 | Item do edital | Situação | Entrega / evidência |
 |---|---|---|
-| 5.4.1.1 | ⚠️ Parcial | — |
+| 5.4.1.1 | ⚠️ Parcial | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) — view consolidada 4 fontes, servlet e tela; aguardando migração e teste |
 | 5.4.1.2 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.4.1.3 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.4.1.4 | ⚠️ Parcial † | — |
@@ -278,8 +278,8 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.7.7.2 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Sequência cronológica de imagens por equipamento, exibida no navegador; sem vídeo |
 | 5.7.7.3 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Finalidade atendida pelo player; sem vídeo gerado |
 | 5.7.7.4 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Reconstrução visual e validação temporal no player; sem vídeo nem vínculo com alertas |
-| 5.7.7.5 | ❌ Não implementado † | Sem descarte automático de vídeos |
-| 5.7.7.6 | ❌ Não implementado † | Sem parametrização do descarte |
+| 5.7.7.5 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — descarte automático parametrizado (72h padrão); aguardando migração e teste |
+| 5.7.7.6 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — TIMELAPSE_RETENCAO_HORAS configurável via config_chave_valor; aguardando migração e teste |
 | 5.7.8.1 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.7.8.2 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.7.8.3 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |

@@ -39,8 +39,8 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
 | [chamados/](chamados/) | Sistema de Chamados (Plano 22): arquitetura, manual do usuário, sessões CH-1 a CH-3, relatórios |
-| [planos-salvador/](planos-salvador/) | 31 planos PoC Salvador (01–31) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
-| [entregas/](entregas/README.md) | Relatórios de entrega 01–31 e a matriz canônica de aderência ao TR ([`itens-edital-x-entregas.md`](entregas/itens-edital-x-entregas.md)) |
+| [planos-salvador/](planos-salvador/) | 34 planos PoC Salvador (01–34) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
+| [entregas/](entregas/README.md) | Relatórios de entrega 01–34 e a matriz canônica de aderência ao TR ([`itens-edital-x-entregas.md`](entregas/itens-edital-x-entregas.md)) |
 | [testes/](testes/README.md) | Roteiros de teste manual por plano |
 | [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 

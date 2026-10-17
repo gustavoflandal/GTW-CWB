@@ -39,6 +39,9 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 29 | KPIs com Histórico, Alertas Analíticos e Relatório Mensal (Plano 29) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) |
 | 30 | Painéis de Assertividade e Pré-Processamento (Plano 30) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) |
 | 31 | Acabamentos de Baixo Custo (Plano 31) | 2026-10-16 | 🟡 Build OK — aguardando teste no navegador | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) |
+| 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
+| 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
+| 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |
 
 > Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 

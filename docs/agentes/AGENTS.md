@@ -111,6 +111,9 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `29-kpis-relatorio-mensal.md` | KPIs obrigatórios + relatório mensal (Fase 7): `kpi_historico`, `KpiSnapshotJob`, metas parametrizáveis, alertas analíticos, `RelatorioGerencialJob`, `RelatorioPreProcMensalJob` (5º dia útil) | 15 |
 | `30-paineis-assertividade-preproc.md` | Painéis de assertividade e pré-processamento (Fase 8): auto-refresh, volume/divergência/revisão, alerta <80%, `PreProcessamentoServlet` com 14 métricas de 5.5.3.1 | 08, 10 |
 | `31-acabamentos-baixo-custo.md` | Acabamentos de baixo custo (Fase 9): filtros perfil/equipamento + PDF no log de auditoria, 3 camadas GIS (alertas, infrações), inversão de cores em 3 telas de análise | 01, 16 |
+| `32-retry-notificacao.md` | Retry de notificações em falha de comunicação (§5.3.5.3) | — |
+| `33-timelapse-descarte.md` | Descarte automático de time-lapse (§5.7.7.5-6) | 17 |
+| `34-consolidacao-multifonte.md` | Consolidação de dados multifonte (§5.4.1.1) | 19 |
 
 ---
 

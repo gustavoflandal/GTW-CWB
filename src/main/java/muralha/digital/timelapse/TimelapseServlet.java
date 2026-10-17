@@ -1,8 +1,10 @@
 package muralha.digital.timelapse;
 
+import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.consilux.model.Mensagem;
+import com.consilux.model.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -99,6 +101,10 @@ public class TimelapseServlet extends HttpServlet {
                 result.addProperty("total", frames.size());
                 result.add("frames", frames);
 
+                if (frames.size() > 0) {
+                    registrarSessaoCache(conn, idLocal, dtInicio, dtFim, frames.size(), req);
+                }
+
             } else {
                 result.addProperty("ok", false);
                 result.addProperty("erro", "acao invalida");
@@ -110,5 +116,27 @@ public class TimelapseServlet extends HttpServlet {
             if (conn != null) try { conn.close(); } catch (Exception ignored) {}
         }
         resp.getWriter().print(new Gson().toJson(result));
+    }
+
+    private void registrarSessaoCache(Connection conn, int idLocal,
+            String dtInicio, String dtFim, int totalFrames, HttpServletRequest req) {
+        try {
+            Usuario usuario = (Usuario) req.getSession()
+                    .getAttribute(SessaoConstantes.SESSAO_USUARIO);
+            int idUsuario = usuario != null ? usuario.getId() : 0;
+
+            String sql = "INSERT INTO muralha.timelapse_cache " +
+                "(id_local, dt_inicio, dt_fim, total_frames, id_usuario) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, idLocal);
+                ps.setString(2, dtInicio != null ? dtInicio : "1900-01-01");
+                ps.setString(3, dtFim != null ? dtFim : "2099-12-31");
+                ps.setInt(4, totalFrames);
+                ps.setInt(5, idUsuario);
+                ps.executeUpdate();
+            }
+        } catch (Exception e) {
+            // Falha no cache não deve impedir a consulta
+        }
     }
 }

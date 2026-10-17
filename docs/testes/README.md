@@ -43,5 +43,8 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 29 — KPIs, Histórico e Relatório Mensal | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) | ⏳ Parcial: 16 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 30 — Painéis de Assertividade e Pré-Processamento | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) | ⏳ Parcial: 8 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 31 — Acabamentos de Baixo Custo | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) | ⏳ Parcial: 6 testes TestNG aprovados no Windows; roteiro no navegador pendente |
+| 32 — Retry de notificações | [32-retry-notificacao.md](32-retry-notificacao.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
+| 33 — Descarte automático de time-lapse | [33-timelapse-descarte.md](33-timelapse-descarte.md) | ⏳ Parcial: 6 testes TestNG; migração e roteiro no navegador pendentes |
+| 34 — Consolidação de dados multifonte | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
 
 Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

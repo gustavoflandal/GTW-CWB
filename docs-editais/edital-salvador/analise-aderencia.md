@@ -81,17 +81,17 @@
 | Destaque visual para alertas críticos | 5.3.3.4 | ⚠️ | `ConfiguracaoSons` e prioridade na tela; cor e ícone fixos em `notificacao.js`, não configuráveis pela CONTRATANTE | — |
 | Mapa interativo com filtros espaciais e áreas de interesse | 5.3.4 | ⚠️ | `mapa-interativo/`, `mancha-monitorada/`, `ponto-interesse/` — funcional, sem agrupamento por concentração | — |
 | Encaminhamento para dispositivos móveis | 5.3.5.1d | ⚠️ | SMS/e-mail via Twilio/SendGrid; sem app móvel dedicado | — |
-| Reenvio automático em caso de falha de comunicação | 5.3.5.3 | ❌ | Não implementado | — |
+| Reenvio automático em caso de falha de comunicação | 5.3.5.3 | ⚠️ | **PoC parcial:** retry automático com até N tentativas configuráveis (`RETRY_NOTIFICACAO_MAX`); aguardando migração e teste | [Plano 32](../../docs/planos-salvador/32-retry-notificacao.md) · [Entrega 32](../../docs/entregas/32-retry-notificacao.md) |
 | Histórico integral exportável (PDF/CSV/XLS) | 5.3.6.4 | ⚠️ | A consulta de alertas exporta PDF e XLS por `utils/export-table.js` (legado), sem CSV. A Entrega 11 não cobre alertas | — |
 | Integração com sensores meteorológicos, PMV, sensores de tráfego | 5.3.7.1-2 | ✅ | **PoC implementada:** `IncidenteImportJob` (Waze), `IncidenteServlet` GeoJSON | [Plano 19](../../docs/planos-salvador/19-sensores-externos.md) · [Entrega](../../docs/entregas/19-sensores-externos.md) · [Teste](../../docs/testes/19-sensores-externos.md) |
 | Integração com Google Maps/Waze para contextualização | 5.3.7.3 | ✅ | **PoC implementada:** camada de incidentes Waze no mapa Leaflet | [Plano 19](../../docs/planos-salvador/19-sensores-externos.md) · [Entrega](../../docs/entregas/19-sensores-externos.md) · [Teste](../../docs/testes/19-sensores-externos.md) |
 | Análise volumétrica de tráfego: contagem, fluxo por faixa, ocupação | 5.3.7.4a-c | ⚠️ | Legado: `com.consilux.model.relatorio.OcupacaoTempo`, `com.consilux.model.relatorio.FluxoTempo`, `muralha.digital.relatorios.RelatorioTaxaOcupacaoVia` (dados dos próprios equipamentos; sem videodetecção dedicada) | — |
-| Análise volumétrica: retenções/congestionamentos e alertas parametrizáveis | 5.3.7.4d-e | ❌ | Não implementado | — |
+| Análise volumétrica: retenções/congestionamentos e alertas parametrizáveis | 5.3.7.4d-e | ⚠️ | **PoC implementada:** detecção de retenção via `veiculo_sumarizado`, alertas parametrizáveis por tipo | [Plano 28](../../docs/planos-salvador/28-alertas-operacionais.md) · [Entrega 28](../../docs/entregas/28-alertas-operacionais.md) |
 | Acesso via navegador com autenticação individualizada, perfis e criptografia | 5.3.7.5 | ⚠️ | Navegador, autenticação individual e perfis atendidos; criptografia (HTTPS) depende da configuração do deploy | [Plano 03](../../docs/planos-salvador/03-politica-senhas.md) · [Entrega 03](../../docs/entregas/03-politica-senhas.md), [Entrega 04](../../docs/entregas/04-mfa-totp.md), [Entrega 09](../../docs/entregas/09-cpf-matricula.md) |
 | Resposta ≤4 segundos para eventos críticos/Blitz Eletrônica | Cap. 5, caput, alínea d | ⚠️ | Thread de alertas com ciclo de 2 s; **PoC:** SLA de latência monitora o tempo (ver também 5.2.2.1, 5.6.2.3 e 5.7.9.1) | [Plano 07](../../docs/planos-salvador/07-sla-latencia.md) · [Entrega](../../docs/entregas/07-sla-latencia.md) |
 | Mapas, gráficos, indicadores visuais | 5.3.7.7 | ✅ | **PoC:** exportação GIS + camada de incidentes no mapa | [Plano 16](../../docs/planos-salvador/16-exportacao-gis.md), [Plano 19](../../docs/planos-salvador/19-sensores-externos.md) |
 
-**Cobertura §5.3: 66%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~60%)
+**Cobertura §5.3: 68%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~60%)
 
 ---
 
@@ -99,7 +99,7 @@
 
 | Requisito | Ref. TR | Status | Evidência no GTW-CWB | Resolução PoC |
 |---|---|---|---|---|
-| Consolidação de dados de múltiplas fontes (equipamentos, sistemas) | 5.4.1.1 | ⚠️ | `veiculo_tempo_real` (8,2M), `muralha.alerta`; sem pipeline de consolidação multifonte | — |
+| Consolidação de dados de múltiplas fontes (equipamentos, sistemas) | 5.4.1.1 | ⚠️ | **PoC parcial:** view consolidada 4 fontes (`veiculo_tempo_real`, alertas, incidentes, disponibilidade), servlet e tela de inteligência; aguardando migração e teste | [Plano 34](../../docs/planos-salvador/34-consolidacao-multifonte.md) · [Entrega 34](../../docs/entregas/34-consolidacao-multifonte.md) |
 | Conformidade LGPD (anonimização, finalidade, necessidade) | 5.4.1.2-3 | ✅ | **PoC implementada:** view anonimizada `muralha.v_vtr_anonimizado`, `ConsultaAnonimizadaServlet` | [Plano 13](../../docs/planos-salvador/13-anonimizacao-placas.md) · [Entrega](../../docs/entregas/13-anonimizacao-placas.md) · [Teste](../../docs/testes/13-anonimizacao-placas.md) |
 | Dashboards analíticos interativos via navegador | 5.4.2.1-2 | ✅ | `dashboards/`, `painel-informacoes/`, Chart.js. **PoC:** KPIs configuráveis | [Plano 15](../../docs/planos-salvador/15-kpis-configuráveis.md) · [Entrega](../../docs/entregas/15-kpis-configuraveis.md) · [Teste](../../docs/testes/15-kpis-configuraveis.md) |
 | Disponibilidade da solução | 5.4.2.3.e | ✅ | **PoC implementada:** painel de disponibilidade com uptime %, auto-refresh | [Plano 18](../../docs/planos-salvador/18-disponibilidade.md) · [Entrega](../../docs/entregas/18-disponibilidade.md) · [Teste](../../docs/testes/18-disponibilidade.md) |
@@ -167,9 +167,9 @@
 | Retenção do histórico por 5 anos pós-contrato | 5.7.5.3 | ✅ | **PoC implementada:** política de retenção configurável abrange LAP | [Plano 12](../../docs/planos-salvador/12-retencao-dados.md) · [Entrega](../../docs/entregas/12-retencao-dados.md) |
 | Anonimização de placas para fins estatísticos (LGPD) | 5.7.8 | ✅ | **PoC implementada:** view `v_vtr_anonimizado`, `ConsultaAnonimizadaServlet` | [Plano 13](../../docs/planos-salvador/13-anonimizacao-placas.md) · [Entrega](../../docs/entregas/13-anonimizacao-placas.md) · [Teste](../../docs/testes/13-anonimizacao-placas.md) |
 | Tempo máximo 4s entre leitura e alerta na plataforma | 5.7.9.1 | ⚠️ | Thread 2s; **PoC:** SLA de latência monitora tempo de resposta | [Plano 07](../../docs/planos-salvador/07-sla-latencia.md) · [Entrega](../../docs/entregas/07-sla-latencia.md) |
-| Vídeos operacionais time-lapse | 5.7.7 | ⚠️ | **PoC parcial:** `TimelapseServlet` e player de imagens no navegador; não gera arquivo de vídeo nem faz o descarte parametrizado de 72 h (5.7.7.5-6) | [Plano 17](../../docs/planos-salvador/17-timelapse.md) · [Entrega](../../docs/entregas/17-timelapse.md) · [Teste](../../docs/testes/17-timelapse.md) |
+| Vídeos operacionais time-lapse | 5.7.7 | ⚠️ | **PoC parcial:** `TimelapseServlet` e player de imagens no navegador; não gera arquivo de vídeo. Descarte automático parametrizado (72h padrão) implementado pelo Plano 33; aguardando migração e teste | [Plano 17](../../docs/planos-salvador/17-timelapse.md), [Plano 33](../../docs/planos-salvador/33-timelapse-descarte.md) · [Entrega 17](../../docs/entregas/17-timelapse.md), [Entrega 33](../../docs/entregas/33-timelapse-descarte.md) |
 
-**Cobertura §5.7: 49%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
+**Cobertura §5.7: 51%** (matriz canônica, 2026-10-16; estimativa anterior à PoC: ~45%)
 
 ---
 
@@ -220,11 +220,11 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção, calculada sobre os 232 it
 |---|---|---|---|
 | 5.1 Controle de Acesso | ~40% | **93%** | 12 / 2 / 0 |
 | 5.2 Gestão e Classificação de Infrações | ~45% | **83%** | 28 / 9 / 2 |
-| 5.3 Alertas de Irregularidades | ~60% | **66%** | 11 / 15 / 2 |
+| 5.3 Alertas de Irregularidades | ~60% | **68%** | 11 / 16 / 1 |
 | 5.4 Inteligência de Dados | ~50% | **68%** | 12 / 21 / 0 |
 | 5.5 Pré-processamento de Imagens | ~25% | **52%** | 7 / 10 / 6 |
 | 5.6 Infraestrutura de Comunicação | ~40% | **34%** | 8 / 6 / 18 |
-| 5.7 LAP | ~45% | **49%** | 11 / 15 / 12 |
+| 5.7 LAP | ~45% | **51%** | 11 / 17 / 10 |
 | 5.8 Datacenter / Disponibilidade | ~5% | **20%** | 1 / 8 / 16 |
 
 **Aderência global: 57%** (90 ✅ · 86 ⚠️ · 56 ❌ em 232 itens; estimativa anterior à PoC: ~39%)
@@ -243,9 +243,8 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção, calculada sobre os 232 it
 1. Criptografia TLS end-to-end e em repouso (§5.6.3)
 2. Alta disponibilidade e PRD/PCN (§5.8)
 3. Videodetecção volumétrica de tráfego (§5.3.7.4 d-e)
-4. Retry automático de alertas em falha de comunicação (§5.3.5.3)
-5. Time-lapse como vídeo + descarte 72h (§5.7.7.5-6)
-6. Socket/fallback do Captura (§5.2.2.1, §5.6.4 — depende de decisão externa)
+4. Relatório mensal automático de pré-processamento (§5.5.3.3)
+5. Socket/fallback do Captura (§5.2.2.1, §5.6.4 — depende de decisão externa)
 
 ---
 

@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–31. As migrações dos Planos 24 a 26 e 28 a 30 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria"). O Plano 31 não requer migração.
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–34. As migrações dos Planos 24 a 26 e 28 a 30 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria"). O Plano 31 não requer migração.
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -66,6 +66,21 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_alertas_operacionais.sql`](../banco-de-dados/migracoes/20261016_alertas_operacionais.sql) | 28 | 3 tabelas (`tipo_alerta_config`, `tipo_alerta_tratamento`, `alerta_retencao`), 4 tipos operacionais, configs de cor/ícone, tratamentos seed, 6 parâmetros `RETENCAO_*`, menu 392. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
 | [`20261016_kpis_relatorio_mensal.sql`](../banco-de-dados/migracoes/20261016_kpis_relatorio_mensal.sql) | 29 | 3 tabelas (`kpi_config_meta`, `kpi_historico`, `relatorio_periodico`), 8 KPIs obrigatórios, 12 metas, 5 parâmetros, menu 393. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
 | [`20261016_paineis_assertividade_preproc.sql`](../banco-de-dados/migracoes/20261016_paineis_assertividade_preproc.sql) | 30 | Menu do painel de pré-processamento (394/55). Sem criação de tabelas | ✅ Executado (2026-10-16) |
+
+### Gaps finais — Planos 32–34 (2026-10-16)
+
+| Script | Plano | Descrição | Status |
+|---|---|---|---|
+| [`20261016_retry_notificacao.sql`](../banco-de-dados/migracoes/20261016_retry_notificacao.sql) | 32 | Retry de notificações em falha de comunicação: tabela de controle de tentativas, chaves `RETRY_NOTIFICACAO_*` | ⏳ Pendente |
+| [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ⏳ Pendente |
+| [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ⏳ Pendente |
+
+### Plano 23 — Análises Superset (2026-10-17)
+
+| Script | Plano | Descrição | Status |
+|---|---|---|---|
+| [`20261016_analise_fundacao.sql`](../banco-de-dados/migracoes/20261016_analise_fundacao.sql) | 23 (SUP-1) | Schema `analise`, tabela `carga_log`, config `SUPERSET_URL`, menu 395 | ✅ Executado (2026-10-16) |
+| [`20261017_analise_camada_dados.sql`](../banco-de-dados/migracoes/20261017_analise_camada_dados.sql) | 23 (SUP-2) | 2 tabelas materializadas, 8 views, 2 stored procedures no schema `analise` | ✅ Executado (2026-10-17) |
 
 ### Comando de execução
 
@@ -185,6 +200,12 @@ Estas configurações são inseridas automaticamente pelas migrações com valor
 | `KPI_ALERTA_COOLDOWN_MIN` | `360` | 29 | Cooldown entre alertas analíticos do mesmo KPI |
 | `RELATORIO_GERENCIAL_DIA` | `1` | 29 | Dia do mês para gerar o relatório gerencial |
 | `RELATORIO_PREPROC_DIA_UTIL` | `5` | 29 | N-ésimo dia útil para gerar o relatório de pré-processamento |
+| `RETRY_NOTIFICACAO_MAX` | `3` | 32 | Número máximo de tentativas de reenvio |
+| `RETRY_NOTIFICACAO_INTERVALO_MIN` | `5` | 32 | Intervalo mínimo entre tentativas (minutos) |
+| `RETRY_NOTIFICACAO_HABILITADO` | `1` | 32 | 1 = retry automático habilitado |
+| `TIMELAPSE_RETENCAO_HORAS` | `72` | 33 | Horas de retenção antes do descarte automático |
+| `TIMELAPSE_DESCARTE_HABILITADO` | `1` | 33 | 1 = descarte automático habilitado |
+| `CONSOLIDACAO_FONTES_HABILITADO` | `1` | 34 | 1 = consolidação multifonte habilitada |
 
 ---
 
