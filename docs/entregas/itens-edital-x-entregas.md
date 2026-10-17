@@ -39,15 +39,15 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 
 | Seção | Itens | ✅ | ⚠️ | ❌ | Cobertura |
 |---|---|---|---|---|---|
-| 5.1 Controle de Acesso | 14 | 11 | 3 | 0 | 89% |
-| 5.2 Gestão e Classificação de Infrações | 39 | 27 | 10 | 2 | 82% |
+| 5.1 Controle de Acesso | 14 | 12 | 2 | 0 | 93% |
+| 5.2 Gestão e Classificação de Infrações | 39 | 28 | 9 | 2 | 83% |
 | 5.3 Alertas de Irregularidades | 28 | 11 | 16 | 1 | 68% |
-| 5.4 Inteligência de Dados | 33 | 11 | 21 | 1 | 65% |
-| 5.5 Pré-processamento de Imagens | 23 | 6 | 10 | 7 | 48% |
+| 5.4 Inteligência de Dados | 33 | 12 | 21 | 0 | 68% |
+| 5.5 Pré-processamento de Imagens | 23 | 7 | 10 | 6 | 52% |
 | 5.6 Infraestrutura de Comunicação | 32 | 8 | 6 | 18 | 34% |
 | 5.7 LAP | 38 | 11 | 17 | 10 | 51% |
 | 5.8 Datacenter e Continuidade | 25 | 1 | 8 | 16 | 20% |
-| **Total** | **232** | **86** | **91** | **55** | **57%** |
+| **Total** | **232** | **90** | **86** | **56** | **57%** |
 
 ## 5.1 — Princípios Gerais de Controle de Acesso
 

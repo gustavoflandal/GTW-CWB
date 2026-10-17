@@ -35,10 +35,10 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 25 | Integridade SHA-256 na recepção (Plano 25) | 2026-10-16 | 🟡 Implementado — migração executada; aguardando teste no navegador | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) |
 | 26 | Logs técnicos e histórico de parâmetros (Plano 26) | 2026-10-16 | 🟡 Implementado — migrações executadas; aguardando teste no navegador | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) |
 | 27 | Score de OCR, revisão automática e múltiplas placas (Plano 27) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) |
-| 28 | Alertas operacionais (Plano 28) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [28-alertas-operacionais.md](28-alertas-operacionais.md) |
-| 29 | KPIs e relatório mensal (Plano 29) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) |
-| 30 | Painéis de assertividade e pré-processamento (Plano 30) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) |
-| 31 | Acabamentos de baixo custo (Plano 31) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) |
+| 28 | Alertas Operacionais (Plano 28) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [28-alertas-operacionais.md](28-alertas-operacionais.md) |
+| 29 | KPIs com Histórico, Alertas Analíticos e Relatório Mensal (Plano 29) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) |
+| 30 | Painéis de Assertividade e Pré-Processamento (Plano 30) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) |
+| 31 | Acabamentos de Baixo Custo (Plano 31) | 2026-10-16 | 🟡 Build OK — aguardando teste no navegador | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) |
 | 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
 | 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
 | 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |

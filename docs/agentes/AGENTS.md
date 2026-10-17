@@ -107,10 +107,10 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `25-integridade-sha256-recepcao.md` | Integridade SHA-256 na recepção (Fase 3): conferência com hash de origem por equipamento, `vtr_imagem_integridade`, view de contadores, tela `monitoramento/integridade` | 02, 24 |
 | `26-logs-tecnicos-historico-parametros.md` | Logs técnicos (Fase 4): 12 fontes normalizadas em `muralha.digital.logtecnico`, tela `monitoramento/logs-tecnicos`, `parametro_historico` e helper `HistoricoParametros` (use-o ao gravar parâmetros) | 01, 07, 10, 18 |
 | `27-score-ocr-revisao-placas.md` | Score de OCR (Fase 5): `vtr_placa_leitura` (N placas, score, origem), fila `vtr_revisao_placa`, `JobOcrRevisao`, `CorrecaoPlacaService` (use-o para qualquer correção de placa: exige motivo e justificativa) | 26 |
-| `28-alertas-operacionais.md` | Alertas operacionais (Fase 6): tipos, criticidade, cor/ícone configuráveis, filtros, exportação CSV | 23 |
-| `29-kpis-relatorio-mensal.md` | KPIs obrigatórios e relatório mensal (Fase 7): 8 KPIs a-h, `KpiSnapshotJob`, relatório mensal automático | 15 |
-| `30-paineis-assertividade-preproc.md` | Painéis de assertividade e pré-processamento (Fase 8): alerta visual < 80%, auto-refresh 30s | 08 |
-| `31-acabamentos-baixo-custo.md` | Acabamentos de baixo custo (Fase 9): filtros por perfil/equipamento, PDF, brilho/contraste, GIS 3 camadas | — |
+| `28-alertas-operacionais.md` | Alertas operacionais (Fase 6): tipos operacionais (estacionamento, congestionamento, bloqueio, falha), tratamentos parametrizáveis, detecção de retenção via `veiculo_sumarizado`, filtros avançados no histórico, CSV | 01, 19 |
+| `29-kpis-relatorio-mensal.md` | KPIs obrigatórios + relatório mensal (Fase 7): `kpi_historico`, `KpiSnapshotJob`, metas parametrizáveis, alertas analíticos, `RelatorioGerencialJob`, `RelatorioPreProcMensalJob` (5º dia útil) | 15 |
+| `30-paineis-assertividade-preproc.md` | Painéis de assertividade e pré-processamento (Fase 8): auto-refresh, volume/divergência/revisão, alerta <80%, `PreProcessamentoServlet` com 14 métricas de 5.5.3.1 | 08, 10 |
+| `31-acabamentos-baixo-custo.md` | Acabamentos de baixo custo (Fase 9): filtros perfil/equipamento + PDF no log de auditoria, 3 camadas GIS (alertas, infrações), inversão de cores em 3 telas de análise | 01, 16 |
 | `32-retry-notificacao.md` | Retry de notificações em falha de comunicação (§5.3.5.3) | — |
 | `33-timelapse-descarte.md` | Descarte automático de time-lapse (§5.7.7.5-6) | 17 |
 | `34-consolidacao-multifonte.md` | Consolidação de dados multifonte (§5.4.1.1) | 19 |
