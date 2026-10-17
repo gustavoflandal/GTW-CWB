@@ -100,6 +100,16 @@ public class ExportacaoServiceTest {
         assertEquals(zip[1] & 0xFF, 0x4B, "PK signature");
     }
 
+    @Test
+    public void nomeArquivoRemoveAcentosSemEstourarTamanho() {
+        // Antes o corte usava o tamanho do titulo original sobre o texto ja limpo.
+        assertEquals(ExportacaoService.nomeArquivo("Distribuição por Classificação (Hoje)", 50),
+                "Distribuicao_por_Classificacao_Hoje");
+        assertEquals(ExportacaoService.nomeArquivo("Infrações por Período", 8), "Infracoe");
+        assertEquals(ExportacaoService.nomeArquivo("(((", 50), "dados");
+        assertEquals(ExportacaoService.nomeArquivo(null, 50), "dados");
+    }
+
     private JsonArray criarDados() {
         JsonArray arr = new JsonArray();
         JsonObject r1 = new JsonObject();

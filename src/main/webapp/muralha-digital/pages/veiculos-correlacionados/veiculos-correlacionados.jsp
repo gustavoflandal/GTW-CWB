@@ -191,9 +191,12 @@
                     <div class="d-flex align-items-center gap-2">
                         <label class="form-check-label" for="chk-correlacao-comum">
                             Apenas placas em comum
-                            <i class="bi bi-info-circle" data-bs-toggle="tooltip" data-bs-placement="top" 
-                               title="Exibe apenas veículos que correlacionam com TODAS as placas alvo pesquisadas."></i>
                         </label>
+                        <button type="button" class="btn btn-link p-0 text-body-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                data-bs-title="Exibe apenas veículos que correlacionam com TODAS as placas alvo pesquisadas."
+                                aria-label="Exibe apenas veículos que correlacionam com TODAS as placas alvo pesquisadas.">
+                            <i class="bi bi-info-circle"></i>
+                        </button>
                         <div class="form-check form-switch m-0">
                             <input class="form-check-input" type="checkbox" id="chk-correlacao-comum">
                         </div>
@@ -498,6 +501,9 @@
   <jsp:include page="/muralha-digital/pages/registro_fato/comBoletim/modal/modal-registroDeFato.jsp" />
   <script>
         document.addEventListener('DOMContentLoaded', async function () {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+                bootstrap.Tooltip.getOrCreateInstance(el);
+            });
             $('.selectpicker:visible').selectpicker();
             await inicializarConfiguracaoCorrelacaoAsync();
             await aplicarIntervaloRapidoAsync('7');

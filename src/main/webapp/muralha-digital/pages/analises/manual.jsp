@@ -357,7 +357,7 @@
                 <tr><td><strong>Area</strong></td><td><i class="bi bi-graph-up-arrow"></i></td><td>Tendencias com enfase no volume</td></tr>
                 <tr><td><strong>Pizza</strong></td><td><i class="bi bi-pie-chart"></i></td><td>Proporcoes (maximo 7-8 fatias)</td></tr>
                 <tr><td><strong>Rosca</strong></td><td><i class="bi bi-bullseye"></i></td><td>Igual a pizza, com espaco central</td></tr>
-                <tr><td><strong>Dispersao</strong></td><td><i class="bi bi-scatter"></i></td><td>Correlacao entre duas medidas</td></tr>
+                <tr><td><strong>Dispersao</strong></td><td><i class="bi bi-dot"></i></td><td>Correlacao entre duas medidas</td></tr>
                 <tr><td><strong>Combinado</strong></td><td><i class="bi bi-bar-chart-line"></i></td><td>Barras + linhas no mesmo grafico</td></tr>
                 <tr><td><strong>Funil</strong></td><td><i class="bi bi-funnel"></i></td><td>Processos com etapas sequenciais</td></tr>
                 <tr><td><strong>Gauge</strong></td><td><i class="bi bi-speedometer2"></i></td><td>Indicador tipo velocimetro</td></tr>
@@ -388,15 +388,25 @@
             <strong>Exemplo — Linhas "Passagens por Dia e Equipamento":</strong><br>
             &bull; Arraste <code>data</code> para <strong>Eixo X</strong><br>
             &bull; Arraste <code>total_passagens</code> para <strong>Eixo Y</strong><br>
-            &bull; Arraste <code>equipamento</code> para <strong>Cores / Series</strong>
+            &bull; Arraste <code>equipamento</code> para <strong>Cores / Series</strong><br>
+            &bull; Em <strong>Dimensão Temporal</strong>, escolha a <strong>Granularidade</strong> <em>Dia</em>
         </blockquote>
+
+        <p>Um campo de data arrastado para <strong>Eixo X</strong> passa a ser a <strong>dimensão temporal</strong> do widget:
+        os valores são agrupados pela <strong>Granularidade</strong> escolhida (dia, semana, mês, trimestre ou ano).
+        Com <strong>Sem agrupamento</strong>, a data serve apenas para filtrar o <strong>Período</strong>; com
+        <strong>Todo o período</strong>, nenhum recorte de data é aplicado. KPI, gauge, pizza, rosca e funil
+        usam a data só como filtro de período, para que cada categoria apareça uma única vez.</p>
+
+        <p>Ao passar o mouse sobre um gráfico, o <strong>tooltip</strong> mostra o nome amigável do campo, o período
+        (ex.: <em>out/2026</em>) e o valor no formato brasileiro (ex.: <em>12.345,6</em>).</p>
 
         <p>O <strong>preview automatico</strong> atualiza a cada alteracao (apos meio segundo).</p>
 
         <h3>6.4 Filtros (Opcional)</h3>
         <div class="step-item"><span class="step-number">1</span><p>Na secao <strong>Filtros</strong>, clique em <strong>+ Condicao</strong></p></div>
         <div class="step-item"><span class="step-number">2</span><p>Selecione <strong>Campo</strong>, <strong>Operador</strong> e digite o <strong>Valor</strong></p></div>
-        <div class="step-item"><span class="step-number">3</span><p>Escolha <strong>E</strong> (todas verdadeiras) ou <strong>OU</strong> (basta uma) para combinar condicoes</p></div>
+        <div class="step-item"><span class="step-number">3</span><p>As condições são combinadas com <strong>E</strong>: o widget mostra apenas os registros que atendem a todas elas</p></div>
 
         <h3>6.5 Opcoes Visuais</h3>
         <table class="table table-bordered table-sm">
@@ -554,8 +564,8 @@
                 <tr><td><strong>Dashboard</strong></td><td>Sinonimo de Painel — tela com graficos, tabelas e KPIs</td></tr>
                 <tr><td><strong>Dataset</strong></td><td>Modelo de dados que define quais tabelas e colunas alimentam os widgets</td></tr>
                 <tr><td><strong>Dimensao</strong></td><td>Campo usado para agrupar ou categorizar dados (eixo X)</td></tr>
-                <tr><td><strong>Drill-down</strong></td><td>Clicar em um elemento do grafico para ver dados mais detalhados</td></tr>
-                <tr><td><strong>Filtro cruzado</strong></td><td>Clicar em um grafico filtra automaticamente os outros widgets</td></tr>
+                <tr><td><strong>Drill-down</strong></td><td>Em gráficos com o tempo no eixo, clicar em um período (ex.: um mês) mostra esse período no nível seguinte (semanas, dias...); o caminho aparece acima do gráfico para voltar</td></tr>
+                <tr><td><strong>Filtro cruzado</strong></td><td>Clicar em uma categoria (barra, fatia) filtra os demais widgets do mesmo dataset; o selo amarelo no título remove o filtro</td></tr>
                 <tr><td><strong>KPI</strong></td><td>Key Performance Indicator — indicador numerico destacado</td></tr>
                 <tr><td><strong>Medida</strong></td><td>Campo numerico que sera somado, contado ou calculado (eixo Y)</td></tr>
                 <tr><td><strong>Painel</strong></td><td>Tela do dashboard que contem um ou mais widgets em grade</td></tr>

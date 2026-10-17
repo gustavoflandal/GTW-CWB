@@ -54,9 +54,9 @@ public class CompartilhamentoService {
         JsonArray arr = new JsonArray();
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT c.id, c.id_usuario, c.id_perfil, c.nivel, c.criado_em, " +
-                "u.nome AS nome_usuario " +
+                "RTRIM(u.nome) AS nome_usuario " +
                 "FROM dash.compartilhamento c " +
-                "LEFT JOIN dbo.sis_usuario u ON c.id_usuario = u.id " +
+                "LEFT JOIN dbo.sis_usuario u ON c.id_usuario = u.id_usuario " +
                 "WHERE c.tipo_recurso=? AND c.id_recurso=? ORDER BY c.criado_em")) {
             ps.setString(1, tipoRecurso);
             ps.setInt(2, idRecurso);

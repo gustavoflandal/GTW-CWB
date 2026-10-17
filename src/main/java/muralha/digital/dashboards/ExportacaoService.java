@@ -161,8 +161,21 @@ public class ExportacaoService {
     }
 
     private String sanitizarNomeArquivo(String nome) {
-        return nome.replaceAll("[^a-zA-Z0-9_\\-\\s]", "")
-                   .replaceAll("\\s+", "_")
-                   .substring(0, Math.min(nome.length(), 60));
+        return nomeArquivo(nome, 60);
+    }
+
+    /**
+     * Nome de arquivo seguro para Content-Disposition: remove acentos (Infrações -> Infracoes),
+     * troca espacos por "_" e corta no tamanho maximo depois de limpar.
+     */
+    static String nomeArquivo(String nome, int max) {
+        if (nome == null) return "dados";
+        String limpo = java.text.Normalizer.normalize(nome, java.text.Normalizer.Form.NFD)
+                .replaceAll("\\p{M}", "")
+                .replaceAll("[^a-zA-Z0-9_\\-\\s]", "")
+                .trim()
+                .replaceAll("\\s+", "_");
+        if (limpo.isEmpty()) return "dados";
+        return limpo.substring(0, Math.min(limpo.length(), max));
     }
 }

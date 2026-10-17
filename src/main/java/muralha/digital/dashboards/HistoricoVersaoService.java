@@ -31,9 +31,9 @@ public class HistoricoVersaoService {
         JsonObject result = new JsonObject();
         JsonArray arr = new JsonArray();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT hv.id, hv.versao, hv.id_autor, hv.criado_em, u.nome AS autor_nome " +
+                "SELECT hv.id, hv.versao, hv.id_autor, hv.criado_em, RTRIM(u.nome) AS autor_nome " +
                 "FROM dash.historico_versao hv " +
-                "LEFT JOIN dbo.sis_usuario u ON hv.id_autor = u.id " +
+                "LEFT JOIN dbo.sis_usuario u ON hv.id_autor = u.id_usuario " +
                 "WHERE hv.tipo_recurso=? AND hv.id_recurso=? ORDER BY hv.versao DESC")) {
             ps.setString(1, tipoRecurso);
             ps.setInt(2, idRecurso);

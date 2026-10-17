@@ -419,7 +419,7 @@ function renderizarCamposCalculados() {
                 '<br><small class="text-muted">' + c.expressao + '</small>' +
                 ' <span class="badge bg-secondary">' + c.tipoCampo + '</span>' +
             '</div>' +
-            '<button class="btn btn-sm btn-outline-danger btn-remover-calc" data-idx="' + i + '">' +
+            '<button class="btn btn-sm btn-outline-danger btn-remover-calc" data-idx="' + i + '" title="Remover campo calculado" aria-label="Remover campo calculado">' +
                 '<i class="bi bi-trash"></i></button>';
         container.appendChild(div);
     }

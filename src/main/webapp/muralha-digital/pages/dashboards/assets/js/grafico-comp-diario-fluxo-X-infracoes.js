@@ -34,6 +34,7 @@ function CriarGraficoCompPassagensInfracoes()
 		options: 
 		{
 		    responsive: true,
+		    locale: 'pt-BR',
 		    interaction: {
 		      mode: 'index',
 		      intersect: false,
@@ -44,12 +45,14 @@ function CriarGraficoCompPassagensInfracoes()
 		        text: 'Comparativo diário entre passagens e infrações'
 		      }
 		    },
+		    // Lado a lado: infracoes sao um subconjunto das passagens, empilhar somaria grandezas diferentes.
 		    scales: {
 		      x: {
-		        stacked: true,
+		        stacked: false,
 		      },
 		      y: {
-		        stacked: true
+		        stacked: false,
+		        beginAtZero: true
 		      }
 		    }
   		},

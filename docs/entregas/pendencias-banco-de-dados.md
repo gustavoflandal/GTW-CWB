@@ -82,6 +82,12 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_analise_fundacao.sql`](../banco-de-dados/migracoes/20261016_analise_fundacao.sql) | 23 (SUP-1) | Schema `analise`, tabela `carga_log`, config `SUPERSET_URL`, menu 395 | ✅ Executado (2026-10-16) |
 | [`20261017_analise_camada_dados.sql`](../banco-de-dados/migracoes/20261017_analise_camada_dados.sql) | 23 (SUP-2) | 2 tabelas materializadas, 8 views, 2 stored procedures no schema `analise` | ✅ Executado (2026-10-17) |
 
+### Auditoria de dashboards e tooltips (2026-10-17)
+
+| Script | Plano | Descrição | Status |
+|---|---|---|---|
+| [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql) | 20/21 | Demonstração do Dashboard Builder: período único de 12 meses, títulos coerentes com a métrica, rótulos acentuados. Ver [auditoria](auditoria-dashboards-tooltips.md) | ⏳ Pendente |
+
 ### Comando de execução
 
 ```powershell

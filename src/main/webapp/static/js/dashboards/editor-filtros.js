@@ -18,11 +18,9 @@ function renderizar(container, estado, campos) {
     var grupoId = 'fg-' + (++contadorGrupo);
     var html = '<div class="filtro-grupo border rounded p-2 mb-2" data-gid="' + grupoId + '">';
     html += '<div class="d-flex align-items-center gap-2 mb-2">';
-    html += '<select class="form-select form-select-sm" style="width:80px" data-role="operador">';
-    html += '<option value="AND"' + (estado.operador === 'AND' ? ' selected' : '') + '>E</option>';
-    html += '<option value="OR"' + (estado.operador === 'OR' ? ' selected' : '') + '>OU</option>';
-    html += '</select>';
-    html += '<button class="btn btn-outline-primary btn-sm" data-role="addCondicao"><i class="bi bi-plus-lg"></i> Condicao</button>';
+    // O motor de consulta combina as condicoes apenas com E (grupos OU sao rejeitados).
+    html += '<small class="text-body-secondary" title="Todas as condições precisam ser atendidas">Todas as condições (E)</small>';
+    html += '<button class="btn btn-outline-primary btn-sm" data-role="addCondicao"><i class="bi bi-plus-lg"></i> Condição</button>';
     html += '</div>';
 
     html += '<div data-role="listaCondicoes">';
@@ -75,7 +73,7 @@ function renderizarCondicao(cond, campos) {
 
     var valorStr = cond.valor != null ? String(cond.valor) : '';
     html += '<input type="text" class="form-control form-control-sm" style="width:35%" data-role="valor" placeholder="Valor" value="' + escapeAttr(valorStr) + '">';
-    html += '<button class="btn btn-outline-danger btn-sm" data-role="remCondicao"><i class="bi bi-x"></i></button>';
+    html += '<button class="btn btn-outline-danger btn-sm" data-role="remCondicao" title="Remover condição" aria-label="Remover condição"><i class="bi bi-x"></i></button>';
     html += '</div>';
     return html;
 }

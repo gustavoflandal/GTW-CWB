@@ -149,7 +149,7 @@
 <div class="offcanvas offcanvas-end" style="width:500px" id="ocCatalogo" tabindex="-1">
     <div class="offcanvas-header">
         <h5 class="offcanvas-title" id="ocTitulo">Formulario</h5>
-        <button class="btn-close" data-bs-dismiss="offcanvas"></button>
+        <button class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar"></button>
     </div>
     <div class="offcanvas-body" id="ocCorpo"></div>
 </div>

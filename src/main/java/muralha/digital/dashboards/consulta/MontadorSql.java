@@ -739,7 +739,7 @@ public final class MontadorSql {
         return c.rotulo != null ? c.rotulo : c.alias;
     }
 
-    static String identificador(String nome) {
+    public static String identificador(String nome) {
         if (nome == null || !IDENTIFICADOR.matcher(nome).matches()) {
             throw new ErroConsulta("Identificador invalido no catalogo: " + nome);
         }

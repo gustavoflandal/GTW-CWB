@@ -144,7 +144,8 @@
                     <div class="row g-2">
                         <div class="col-md-6">
                             <label class="form-label">Granularidade</label>
-                            <select class="form-select form-select-sm" id="selGranularidade">
+                            <select class="form-select form-select-sm" id="selGranularidade" title="Agrupa os valores por período. &quot;Sem agrupamento&quot; usa a data apenas para filtrar o período.">
+                                <option value="">Sem agrupamento</option>
                                 <option value="day">Dia</option>
                                 <option value="week">Semana</option>
                                 <option value="month" selected>Mes</option>
@@ -155,6 +156,7 @@
                         <div class="col-md-6">
                             <label class="form-label">Periodo</label>
                             <select class="form-select form-select-sm" id="selDateRange">
+                                <option value="">Todo o período</option>
                                 <option value="today">Hoje</option>
                                 <option value="yesterday">Ontem</option>
                                 <option value="last 7 days">Ultimos 7 dias</option>
