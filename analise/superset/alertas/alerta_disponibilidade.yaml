@@ -1,0 +1,28 @@
+# Alerta: Disponibilidade abaixo de 95% (TR 5.2.x)
+uuid: "a1000001-5007-4000-b001-000000000001"
+name: "Disponibilidade abaixo de 95%"
+description: >
+  Dispara quando a disponibilidade média dos equipamentos nas últimas 24h
+  cai abaixo do limiar de 95% definido no TR.
+type: alert
+active: true
+crontab: "*/15 * * * *"
+timezone: "America/Bahia"
+
+database: "GTW Muralha Digital (somente leitura)"
+sql: >
+  SELECT AVG(pct_disponibilidade) AS valor
+  FROM analise.v_disponibilidade_dia
+  WHERE dia >= CAST(DATEADD(DAY, -1, GETDATE()) AS DATE)
+
+validator_type: operator
+validator_config:
+  op: "<"
+  threshold: 95.0
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "operacao@muralhadigital.local"
+grace_period: 3600
+log_retention: 90

@@ -1,6 +1,6 @@
 # Dataset: Áreas Monitoradas (GeoJSON)
 # Fonte: analise.v_areas_monitoradas_geojson
-uuid: "d1a00001-sup3-4000-a001-000000000005"
+uuid: "d1a00001-5003-4000-a001-000000000005"
 table_name: v_areas_monitoradas_geojson
 schema: analise
 folder: Equipamentos

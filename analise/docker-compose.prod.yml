@@ -86,10 +86,55 @@ services:
         max-file: "3"
 
   # ---------------------------------------------------------------------------
-  # Nginx — proxy reverso
+  # Celery Worker — alertas e relatórios
+  # ---------------------------------------------------------------------------
+  celery-worker:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    healthcheck:
+      test: ["CMD-SHELL", "celery -A superset.tasks.celery_app:app inspect ping --timeout 10 || exit 1"]
+      interval: 30s
+      timeout: 15s
+      retries: 5
+      start_period: 60s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ---------------------------------------------------------------------------
+  # Celery Beat — agendador
+  # ---------------------------------------------------------------------------
+  celery-beat:
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # ---------------------------------------------------------------------------
+  # Nginx — proxy reverso (SUP-11: suporte a TLS)
+  # Para TLS: descomentar volumes de ssl.conf e certificados abaixo
   # ---------------------------------------------------------------------------
   nginx:
     restart: always
+    # TLS: descomentar para habilitar HTTPS na porta 443
+    # ports:
+    #   - "443:443"
+    volumes:
+      # Substitui o default.dev.conf do compose base: SSO via auth_request ativo
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    #   - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf:ro
+    #   - ./nginx/ssl/:/etc/nginx/ssl/:ro
     deploy:
       resources:
         limits:

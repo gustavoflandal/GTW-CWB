@@ -1,5 +1,6 @@
 # =============================================================================
 # superset_config.py — Configuração do Apache Superset 6.0 (Análises GTW-CWB)
+# SUP-1 a SUP-12
 #
 # Todos os segredos vêm de variáveis de ambiente (.env).
 # Não colocar valores sensíveis diretamente neste arquivo.
@@ -9,6 +10,8 @@ import os
 import json
 import sys
 from datetime import timedelta
+
+from flask import g
 
 # Garante que /app esteja no path para importar gtw_security.py
 if "/app" not in sys.path:
@@ -53,6 +56,16 @@ EXPLORE_FORM_DATA_CACHE_CONFIG = {
 RESULTS_BACKEND = None  # Usa o cache padrão do Redis para resultados do SQL Lab
 
 # ---------------------------------------------------------------------------
+# Cache de thumbnails (SUP-12)
+# ---------------------------------------------------------------------------
+THUMBNAIL_CACHE_CONFIG = {
+    "CACHE_TYPE": "RedisCache",
+    "CACHE_DEFAULT_TIMEOUT": 3600,
+    "CACHE_KEY_PREFIX": "superset_thumb_",
+    "CACHE_REDIS_URL": _REDIS_URL,
+}
+
+# ---------------------------------------------------------------------------
 # Celery (alertas, relatórios agendados)
 # ---------------------------------------------------------------------------
 class CeleryConfig:
@@ -80,7 +93,33 @@ CELERY_CONFIG = CeleryConfig
 ROW_LIMIT = 10000
 SQLLAB_TIMEOUT = 30  # segundos
 SQL_MAX_ROW = 10000
+SQLLAB_CTAS_NO_LIMIT = True
 PREVENT_UNSAFE_DB_CONNECTIONS = True
+
+# ---------------------------------------------------------------------------
+# Desempenho — consultas assíncronas e pool de conexões (SUP-12)
+# ---------------------------------------------------------------------------
+SQLLAB_ASYNC_TIME_LIMIT_SEC = 120
+SIP_15_ENABLED = True
+
+SQLALCHEMY_ENGINE_OPTIONS = {
+    "pool_size": 5,
+    "max_overflow": 10,
+    "pool_timeout": 30,
+    "pool_recycle": 1800,
+    "pool_pre_ping": True,
+}
+
+# Limitar carga de dashboards pesados
+DASHBOARD_AUTO_REFRESH_INTERVALS = [
+    [0, "Sem auto-refresh"],
+    [60, "1 minuto"],
+    [300, "5 minutos"],
+    [900, "15 minutos"],
+]
+
+# Chart data — timeout e cache
+SUPERSET_WEBSERVER_TIMEOUT = int(os.environ.get("SUPERSET_WEBSERVER_TIMEOUT", "60"))
 
 # ---------------------------------------------------------------------------
 # Autenticação — Remote User (SSO via cabeçalhos do nginx)
@@ -103,6 +142,15 @@ FEATURE_FLAGS = {
     "EMBEDDED_SUPERSET": True,        # Embedding de painéis no GTW
     "ALERT_REPORTS": True,            # Alertas e relatórios agendados
     "ENABLE_TEMPLATE_PROCESSING": True,  # Templates Jinja nos SQL
+    "TAGGING_SYSTEM": True,           # Tags para organização (SUP-5)
+    "ALERT_REPORT_TABS": True,        # Abas de alertas na interface (SUP-7)
+}
+
+# ---------------------------------------------------------------------------
+# Row Level Security — Jinja para filtros dinâmicos (SUP-5)
+# ---------------------------------------------------------------------------
+JINJA_CONTEXT_ADDONS = {
+    "current_username": lambda: g.user.username if hasattr(g, "user") and g.user else "anon",
 }
 
 # ---------------------------------------------------------------------------
@@ -156,8 +204,41 @@ GUEST_TOKEN_HEADER_NAME = "X-GuestToken"
 GUEST_TOKEN_JWT_EXP_SECONDS = 3600  # 1 hora
 
 # ---------------------------------------------------------------------------
-# CSRF e sessão
+# Auditoria e observabilidade (SUP-6)
 # ---------------------------------------------------------------------------
+
+# Log de ações — registra quem acessou qual dashboard/gráfico
+FAB_LOG_LEVEL = os.environ.get("SUPERSET_LOG_LEVEL", "INFO")
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s — %(message)s"
+LOG_LEVEL = FAB_LOG_LEVEL
+
+# StatsD — métricas de performance (opcional, via .env)
+_STATSD_HOST = os.environ.get("STATSD_HOST", "")
+if _STATSD_HOST:
+    from superset.stats_logger import StatsdStatsLogger
+    STATS_LOGGER = StatsdStatsLogger(
+        host=_STATSD_HOST,
+        port=int(os.environ.get("STATSD_PORT", "8125")),
+        prefix="superset",
+    )
+
+# Retenção do action log (dias)
+SUPERSET_LOG_VIEW = True
+
+# Consultas SQL — log de execução (o Superset exige uma função, não um booleano)
+def QUERY_LOGGER(database, query, schema=None, client=None, security_manager=None, log_params=None):
+    import logging as _logging
+    usuario = getattr(getattr(g, "user", None), "username", "sistema")
+    _logging.getLogger("superset.query_log").info(
+        "consulta usuario=%s banco=%s schema=%s tamanho=%d",
+        usuario, getattr(database, "database_name", "?"), schema, len(query or ""),
+    )
+
+# ---------------------------------------------------------------------------
+# CSRF, reCAPTCHA e sessão
+# ---------------------------------------------------------------------------
+RECAPTCHA_PUBLIC_KEY = ""
+RECAPTCHA_PRIVATE_KEY = ""
 WTF_CSRF_ENABLED = True
 WTF_CSRF_EXEMPT_LIST = [
     "superset.views.core.log",
@@ -190,9 +271,34 @@ SMTP_SSL = os.environ.get("SMTP_SSL", "false").lower() == "true"
 SMTP_MAIL_FROM = os.environ.get("SMTP_MAIL_FROM", "analises@muralhadigital.local")
 
 # ---------------------------------------------------------------------------
-# Mapa — OpenStreetMap via deck.gl (sem Mapbox)
+# Mapa — OpenStreetMap via deck.gl (SUP-8)
 # ---------------------------------------------------------------------------
 MAPBOX_API_KEY = ""  # Não usado; tiles via OpenStreetMap
+
+DEFAULT_MAP_CENTER = [-12.9714, -38.5124]  # Salvador, BA
+DEFAULT_MAP_ZOOM = 12
+
+DECK_GL_DOT_SIZE = 300
+HTML_SANITIZATION = True
+
+# ---------------------------------------------------------------------------
+# Embedding — CORS para iframes do GTW (SUP-9)
+# ---------------------------------------------------------------------------
+TALISMAN_ENABLED = False
+HTTP_HEADERS = {
+    "X-Frame-Options": "ALLOWALL",
+}
+
+CORS_OPTIONS = {
+    "supports_credentials": True,
+    "allow_headers": ["*"],
+    "resources": ["/api/*", "/superset/guest_token/"],
+    "origins": [
+        os.environ.get("GTW_BASE_URL", "http://localhost:8080"),
+    ],
+}
+
+GUEST_TOKEN_JWT_EXP_SECONDS = 3600  # 1 hora (redundante, mantido por clareza)
 # =============================================================================
 # Fim da configuração
 # =============================================================================

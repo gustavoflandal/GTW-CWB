@@ -262,6 +262,95 @@ VALUES
 
 ---
 
+## Fase 6 — Analises com Superset (Plano 23)
+
+> **Pre-requisitos adicionais:**
+> 1. Docker e Docker Compose instalados
+> 2. Stack Superset rodando: `cd analise && docker compose up -d`
+> 3. `.env` preenchido (copiar de `.env.exemplo`)
+> 4. Migracoes SQL executadas (fundacao, camada dados, mapas geo)
+> 5. Provisionamento executado: `docker compose exec superset python /app/provisionar.py`
+
+### 6.1 — Infraestrutura Docker (SUP-1)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T01 | Stack sobe | `docker compose up -d` → `docker compose ps` | 6 servicos "Up" (superset, postgres, redis, nginx, celery-worker, celery-beat) | [ ] |
+| 23-T02 | Health check | `./scripts/healthcheck.sh` | Todos [OK] | [ ] |
+| 23-T03 | Nginx responde | `curl http://localhost:8088/nginx-health` | "ok" | [ ] |
+
+### 6.2 — SSO e Autenticacao (SUP-1, SUP-5)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T04 | Login SSO | Login no GTW → acessar menu Analises | Superset abre sem pedir senha | [ ] |
+| 23-T05 | Sem sessao | Aba anonima → `http://localhost:8088/` | Redireciona para login do GTW | [ ] |
+| 23-T06 | Papel correto | Login como operador → verificar papel no Superset | Papel "Operador" atribuido | [ ] |
+| 23-T07 | RLS operador | Login como operador → abrir dashboard | Dados filtrados por regiao do operador | [ ] |
+
+### 6.3 — Datasets e Metricas (SUP-2, SUP-3)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T08 | Datasets provisionados | Superset > Data > Datasets | 13 datasets (11 base + 2 geo) | [ ] |
+| 23-T09 | Metricas certificadas | Clicar em dataset > aba Metrics | Metricas com icone de certificado | [ ] |
+| 23-T10 | Conexao SQL Server | Superset > Data > Databases > GTW_MURALHA_DEV > Test Connection | "Connection looks good!" | [ ] |
+
+### 6.4 — Dashboards e Graficos (SUP-4)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T11 | 9 dashboards | Superset > Dashboards | 9 paineis operacionais visiveis | [ ] |
+| 23-T12 | Filtros nativos | Abrir dashboard > usar filtro de periodo | Graficos atualizam conforme filtro | [ ] |
+| 23-T13 | Cross-filter | Clicar em barra de grafico | Demais graficos filtram pelo valor clicado | [ ] |
+| 23-T14 | Exportacao CSV | Grafico > menu (...) > Export to CSV | Arquivo CSV baixado com dados corretos | [ ] |
+
+### 6.5 — Governanca e Tags (SUP-5, SUP-6)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T15 | Tags | Superset > Dashboards > filtrar por tag "oficial" | Dashboards com tag exibidos | [ ] |
+| 23-T16 | Papeis custom | Settings > List Roles | Operador, Gestor, Auditor presentes | [ ] |
+| 23-T17 | Action log | Settings > Action Log | Registros de acesso recentes | [ ] |
+
+### 6.6 — Alertas e Relatorios (SUP-7)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T18 | Alertas provisionados | Settings > Alert & Report | 4 alertas + 3 relatorios | [ ] |
+| 23-T19 | Celery ativo | `docker compose exec celery-worker celery -A superset.tasks.celery_app:app inspect active` | Resposta sem erro | [ ] |
+| 23-T20 | E-mail de alerta | Configurar SMTP → aguardar execucao | E-mail recebido (requer SMTP funcional) | [ ] |
+
+### 6.7 — Mapas e Georreferenciamento (SUP-8)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T21 | Mapa com pontos | Abrir dashboard com grafico de mapa | Pontos em Salvador/BA, tiles OpenStreetMap | [ ] |
+| 23-T22 | Tooltip no mapa | Hover sobre ponto no mapa | Informacoes do local/equipamento | [ ] |
+
+### 6.8 — Embedding no GTW (SUP-9)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T23 | Tela embedding | Acessar `/muralha-digital/pages/analise/embedding.jsp` | Seletor de dashboards + iframe | [ ] |
+| 23-T24 | Guest token | Selecionar dashboard → carregar | Dashboard exibido dentro do iframe sem erro | [ ] |
+
+### 6.9 — Producao e Backup (SUP-11)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T25 | Backup | `./scripts/backup.sh ./backups` | Arquivo .tar.gz criado em ./backups/ | [ ] |
+| 23-T26 | Restore | Parar stack → `./scripts/restore.sh <arquivo>` → verificar | Stack restaurado com dados intactos | [ ] |
+
+### 6.10 — Coexistencia Builder (SUP-13)
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 23-T27 | Builder funcional | Acessar `/muralha-digital/pages/dashboard/builder/` | Builder carrega sem erro | [ ] |
+| 23-T28 | Dashboards legados | Acessar `/muralha-digital/pages/dashboards/dashboard.jsp` | Dashboard legado carrega sem erro | [ ] |
+
+---
+
 ## Resumo de Aceite
 
 | Fase | Planos | Total testes | Aceitos |
@@ -271,10 +360,11 @@ VALUES
 | 3 — Identidade e Compliance | 09–13 | 31 | 2/31 |
 | 4 — Gestão e Analytics | 14–16 | 24 | 2/24 |
 | 5 — Monitoramento e Integração | 17–19 | 24 | 2/24 |
-| **Total** | **01–19** | **121** | **13/121** |
+| 6 — Analises com Superset | 23 | 28 | 0/28 |
+| **Total** | **01–19, 23** | **149** | **13/149** |
 
 > **13 testes de banco de dados** verificados via `sqlcmd` em 2026-10-09.  
-> **108 testes restantes** requerem servidor rodando + browser.
+> **136 testes restantes** requerem servidor rodando + browser (108 GTW + 28 Superset).
 
 ---
 

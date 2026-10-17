@@ -1,14 +1,18 @@
 package muralha.digital.analise;
 
 import com.consilux.infra.SessaoConstantes;
+import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.consilux.model.Usuario;
+import muralha.digital.util.ConfigChaveValor;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.Connection;
 import java.util.logging.Logger;
 
 @WebServlet("/MuralhaDigital/SsoAnalise")
@@ -18,7 +22,7 @@ public class SsoAnaliseServlet extends HttpServlet {
     private static final Logger LOG = Logger.getLogger(SsoAnaliseServlet.class.getName());
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         String acao = req.getParameter("acao");
 
         if ("validar".equals(acao)) {
@@ -48,7 +52,7 @@ public class SsoAnaliseServlet extends HttpServlet {
         LOG.fine("[Muralha] SSO Analise: validacao OK para " + usuario.getUsuario());
     }
 
-    private void abrir(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void abrir(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         if (!new Acesso(req, resp, true).verificaAcesso(false)) {
             resp.sendRedirect(req.getContextPath() + "/login/abertura-sistemas.jsp");
             return;
@@ -62,15 +66,25 @@ public class SsoAnaliseServlet extends HttpServlet {
             return;
         }
 
-        String supersetUrl = req.getParameter("destino");
-        if (supersetUrl == null || supersetUrl.isEmpty()) {
-            supersetUrl = "/";
-        }
+        String supersetBase = obterBaseUrl();
+        req.setAttribute("supersetBaseUrl", supersetBase);
 
         LOG.info("[Muralha] SSO Analise: usuario " + usuario.getUsuario()
-                + " acessando analises, destino=" + supersetUrl);
+                + " acessando analises, base=" + supersetBase);
 
-        resp.sendRedirect(supersetUrl);
+        req.getRequestDispatcher("/muralha-digital/pages/analise/embedding.jsp")
+           .forward(req, resp);
+    }
+
+    private static final String DEFAULT_SUPERSET_URL = "http://localhost:8088";
+
+    private String obterBaseUrl() {
+        try (Connection conn = Conexao.getConexao()) {
+            return ConfigChaveValor.obter(conn, "SUPERSET_BASE_URL", DEFAULT_SUPERSET_URL);
+        } catch (Exception e) {
+            LOG.warning("[Muralha] SSO Analise: erro ao ler SUPERSET_BASE_URL — usando padrao: " + e.getMessage());
+            return DEFAULT_SUPERSET_URL;
+        }
     }
 
     private String obterGrupos(HttpServletRequest req) {

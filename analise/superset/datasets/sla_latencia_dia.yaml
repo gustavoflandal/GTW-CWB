@@ -1,6 +1,6 @@
 # Dataset: SLA de Latência Diário
 # Fonte: analise.v_sla_latencia_dia (Plano 07)
-uuid: "d1a00001-sup3-4000-a001-000000000007"
+uuid: "d1a00001-5003-4000-a001-000000000007"
 table_name: v_sla_latencia_dia
 schema: analise
 folder: SLA

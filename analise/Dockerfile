@@ -20,9 +20,14 @@ COPY superset/superset_config.py /app/superset_config.py
 COPY superset/gtw_security.py /app/gtw_security.py
 COPY superset/provisionar.py /app/provisionar.py
 
-# Definições declarativas de datasets (SUP-3) e dashboards (SUP-4)
+# Definições declarativas (SUP-3 a SUP-7)
 COPY superset/datasets/ /app/datasets/
 COPY superset/dashboards/ /app/dashboards/
+COPY superset/governanca/ /app/governanca/
+COPY superset/alertas/ /app/alertas/
+
+# Painéis de demonstração com dados reais
+COPY superset/demo/ /app/demo/
 
 # Variável que o Superset usa para localizar o arquivo de configuração
 ENV SUPERSET_CONFIG_PATH=/app/superset_config.py

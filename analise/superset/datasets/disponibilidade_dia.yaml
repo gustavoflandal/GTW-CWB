@@ -1,6 +1,6 @@
 # Dataset: Disponibilidade Diária
 # Fonte: analise.v_disponibilidade_dia (Plano 18)
-uuid: "d1a00001-sup3-4000-a001-000000000006"
+uuid: "d1a00001-5003-4000-a001-000000000006"
 table_name: v_disponibilidade_dia
 schema: analise
 folder: SLA

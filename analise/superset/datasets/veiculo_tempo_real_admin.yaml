@@ -1,7 +1,7 @@
 # Dataset: Veículo Tempo Real (ADMIN ONLY)
 # Fonte: muralha.veiculo_tempo_real (tabela bruta, 8M+ linhas)
 # ATENÇÃO: Somente para papel Admin. Operadores NÃO devem usar este dataset.
-uuid: "d1a00001-sup3-4000-a001-000000000011"
+uuid: "d1a00001-5003-4000-a001-000000000011"
 table_name: veiculo_tempo_real
 schema: muralha
 folder: Administração

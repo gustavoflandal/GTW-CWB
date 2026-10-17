@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # =============================================================================
-# provisionar.py — Provisionamento declarativo do Superset (SUP-1 a SUP-4)
+# provisionar.py — Provisionamento declarativo do Superset (SUP-1 a SUP-7)
 #
 # Cria a conexão com o banco SQL Server e provisiona datasets, métricas,
-# dashboards e gráficos a partir dos YAMLs em /app/datasets/ e /app/dashboards/.
+# dashboards, gráficos, tags, RLS, papéis e alertas/relatórios a partir
+# dos YAMLs em /app/datasets/, /app/dashboards/, /app/governanca/ e /app/alertas/.
 #
 # Idempotente: verifica existência antes de criar; atualiza se já existir.
 #
@@ -30,6 +31,8 @@ logger = logging.getLogger(__name__)
 NOME_CONEXAO = "GTW Muralha Digital (somente leitura)"
 DATASETS_DIR = os.environ.get("SUPERSET_DATASETS_DIR", "/app/datasets")
 DASHBOARDS_DIR = os.environ.get("SUPERSET_DASHBOARDS_DIR", "/app/dashboards")
+GOVERNANCA_DIR = os.environ.get("SUPERSET_GOVERNANCA_DIR", "/app/governanca")
+ALERTAS_DIR = os.environ.get("SUPERSET_ALERTAS_DIR", "/app/alertas")
 
 # ---------------------------------------------------------------------------
 # 1. Conexão com o banco GTW (SUP-1 — inalterado)
@@ -599,12 +602,310 @@ def _montar_position_json(definicao: dict, slices: list) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# 5. Orquestração
+# 5. Governança: tags, papéis e RLS (SUP-5)
+# ---------------------------------------------------------------------------
+
+def _provisionar_governanca(sessao, conexao, dry_run: bool = False):
+    import yaml
+
+    tags_path = os.path.join(GOVERNANCA_DIR, "tags.yaml")
+    papeis_path = os.path.join(GOVERNANCA_DIR, "papeis.yaml")
+    rls_path = os.path.join(GOVERNANCA_DIR, "rls.yaml")
+
+    if os.path.isfile(tags_path):
+        with open(tags_path, "r", encoding="utf-8") as f:
+            tags_def = yaml.safe_load(f)
+        if tags_def:
+            _provisionar_tags(sessao, tags_def.get("tags", []), dry_run=dry_run)
+
+    if os.path.isfile(papeis_path):
+        with open(papeis_path, "r", encoding="utf-8") as f:
+            papeis_def = yaml.safe_load(f)
+        if papeis_def:
+            _provisionar_papeis(sessao, papeis_def.get("papeis", []), dry_run=dry_run)
+
+    if os.path.isfile(rls_path):
+        with open(rls_path, "r", encoding="utf-8") as f:
+            rls_def = yaml.safe_load(f)
+        if rls_def:
+            _provisionar_rls(sessao, conexao, rls_def.get("regras", []), dry_run=dry_run)
+
+
+def _provisionar_tags(sessao, tags_list: list, dry_run: bool = False):
+    from superset.tags.models import Tag, TagType
+
+    for tag_def in tags_list:
+        nome = tag_def["name"]
+        descricao = tag_def.get("description", "")
+
+        tag = sessao.query(Tag).filter(Tag.name == nome, Tag.type == TagType.custom).first()
+
+        if dry_run:
+            acao = "ATUALIZAR" if tag else "CRIAR"
+            logger.info("[DRY-RUN] %s tag '%s'", acao, nome)
+            continue
+
+        if not tag:
+            tag = Tag(name=nome, type=TagType.custom, description=descricao)
+            sessao.add(tag)
+            logger.info("Tag '%s' criada.", nome)
+        else:
+            tag.description = descricao
+            logger.info("Tag '%s' já existe — atualizada.", nome)
+
+    sessao.flush()
+
+
+def _provisionar_papeis(sessao, papeis_list: list, dry_run: bool = False):
+    from flask_appbuilder.security.sqla.models import Role
+    from superset.extensions import security_manager
+
+    for papel_def in papeis_list:
+        nome = papel_def["name"]
+        descricao = papel_def.get("description", "")
+
+        papel = sessao.query(Role).filter(Role.name == nome).first()
+
+        if dry_run:
+            acao = "ATUALIZAR" if papel else "CRIAR"
+            logger.info("[DRY-RUN] %s papel '%s'", acao, nome)
+            continue
+
+        if not papel:
+            base_name = papel_def.get("copy_from")
+            if base_name:
+                base_role = sessao.query(Role).filter(Role.name == base_name).first()
+                if base_role:
+                    papel = security_manager.add_role(nome)
+                    papel.permissions = list(base_role.permissions)
+                    logger.info("Papel '%s' criado (cópia de '%s').", nome, base_name)
+                else:
+                    papel = security_manager.add_role(nome)
+                    logger.warning("Papel base '%s' não encontrado — '%s' criado vazio.", base_name, nome)
+            else:
+                papel = security_manager.add_role(nome)
+                logger.info("Papel '%s' criado.", nome)
+        else:
+            logger.info("Papel '%s' já existe.", nome)
+
+    sessao.flush()
+
+
+def _provisionar_rls(sessao, conexao, regras_list: list, dry_run: bool = False):
+    from superset.connectors.sqla.models import SqlaTable, RowLevelSecurityFilter
+    from flask_appbuilder.security.sqla.models import Role
+
+    for regra in regras_list:
+        nome = regra["name"]
+        clause = regra["clause"]
+        datasets_nomes = regra.get("datasets", [])
+        roles_nomes = regra.get("roles", [])
+
+        if not datasets_nomes:
+            logger.info("RLS '%s' sem datasets — ignorando.", nome)
+            continue
+
+        rls = (
+            sessao.query(RowLevelSecurityFilter)
+            .filter(RowLevelSecurityFilter.name == nome)
+            .first()
+        )
+
+        if dry_run:
+            acao = "ATUALIZAR" if rls else "CRIAR"
+            logger.info("[DRY-RUN] %s RLS '%s'", acao, nome)
+            continue
+
+        datasets = []
+        for ds_name in datasets_nomes:
+            ds = (
+                sessao.query(SqlaTable)
+                .filter(SqlaTable.table_name == ds_name, SqlaTable.database_id == conexao.id)
+                .first()
+            )
+            if ds:
+                datasets.append(ds)
+            else:
+                logger.warning("Dataset '%s' não encontrado para RLS '%s'.", ds_name, nome)
+
+        roles = []
+        for role_name in roles_nomes:
+            role = sessao.query(Role).filter(Role.name == role_name).first()
+            if role:
+                roles.append(role)
+            else:
+                logger.warning("Papel '%s' não encontrado para RLS '%s'.", role_name, nome)
+
+        if not rls:
+            rls = RowLevelSecurityFilter(
+                name=nome,
+                clause=clause,
+                filter_type="Regular",
+                description=regra.get("description", ""),
+            )
+            sessao.add(rls)
+            sessao.flush()
+            logger.info("RLS '%s' criada.", nome)
+        else:
+            rls.clause = clause
+            rls.description = regra.get("description", "")
+            logger.info("RLS '%s' já existe — atualizada.", nome)
+
+        rls.tables = datasets
+        rls.roles = roles
+
+    sessao.flush()
+
+
+# ---------------------------------------------------------------------------
+# 6. Auditoria: limpeza do action log (SUP-6)
+# ---------------------------------------------------------------------------
+
+def _limpar_action_log(sessao, dias_retencao: int = 90, dry_run: bool = False):
+    from superset.models.core import Log
+    from datetime import datetime, timedelta
+
+    limite = datetime.utcnow() - timedelta(days=dias_retencao)
+
+    qtd = sessao.query(Log).filter(Log.dttm < limite).count()
+
+    if dry_run:
+        logger.info("[DRY-RUN] LIMPARIA %d entradas do action log (>%d dias).", qtd, dias_retencao)
+        return
+
+    if qtd > 0:
+        sessao.query(Log).filter(Log.dttm < limite).delete(synchronize_session=False)
+        logger.info("Action log: %d entradas removidas (>%d dias).", qtd, dias_retencao)
+    else:
+        logger.info("Action log: nenhuma entrada para limpar (>%d dias).", dias_retencao)
+
+
+# ---------------------------------------------------------------------------
+# 7. Alertas e relatórios agendados (SUP-7)
+# ---------------------------------------------------------------------------
+
+def _provisionar_alertas(sessao, conexao, dry_run: bool = False):
+    alertas_yamls = _carregar_yamls(ALERTAS_DIR)
+    if not alertas_yamls:
+        logger.info("Nenhum YAML de alerta/relatório encontrado em '%s'.", ALERTAS_DIR)
+        return
+
+    for defn in alertas_yamls:
+        _provisionar_alerta(sessao, conexao, defn, dry_run=dry_run)
+
+
+def _provisionar_alerta(sessao, conexao, definicao: dict, dry_run: bool = False):
+    from superset.reports.models import (
+        ReportSchedule,
+        ReportScheduleType,
+        ReportRecipients,
+        ReportRecipientType,
+    )
+    from superset.models.dashboard import Dashboard
+
+    nome = definicao["name"]
+    tipo_str = definicao.get("type", "alert")
+    al_uuid = definicao.get("uuid")
+    arquivo = definicao.get("_arquivo", "?")
+
+    tipo = (
+        ReportScheduleType.ALERT
+        if tipo_str == "alert"
+        else ReportScheduleType.REPORT
+    )
+
+    report = (
+        sessao.query(ReportSchedule)
+        .filter(ReportSchedule.name == nome)
+        .first()
+    )
+
+    if dry_run:
+        acao = "ATUALIZAR" if report else "CRIAR"
+        logger.info("[DRY-RUN] %s %s '%s' (%s)", acao, tipo_str, nome, arquivo)
+        return
+
+    if not report:
+        report = ReportSchedule(
+            name=nome,
+            type=tipo,
+            crontab=definicao.get("crontab", "0 * * * *"),
+            timezone=definicao.get("timezone", "America/Bahia"),
+        )
+        if al_uuid:
+            report.uuid = uuid_mod.UUID(al_uuid)
+        sessao.add(report)
+        sessao.flush()
+        logger.info("%s '%s' criado (id=%d).", tipo_str.capitalize(), nome, report.id)
+    else:
+        report.type = tipo
+        logger.info("%s '%s' já existe (id=%d) — atualizando.", tipo_str.capitalize(), nome, report.id)
+
+    report.description = definicao.get("description", "")
+    report.active = definicao.get("active", True)
+    report.crontab = definicao.get("crontab", "0 * * * *")
+    report.timezone = definicao.get("timezone", "America/Bahia")
+    report.grace_period = definicao.get("grace_period", 3600)
+    report.log_retention = definicao.get("log_retention", 90)
+
+    if tipo == ReportScheduleType.ALERT:
+        report.database_id = conexao.id
+        report.sql = definicao.get("sql", "")
+        report.validator_type = definicao.get("validator_type", "operator")
+        validator_cfg = definicao.get("validator_config", {})
+        report.validator_config_json = json.dumps(validator_cfg, ensure_ascii=False)
+
+    if tipo == ReportScheduleType.REPORT:
+        dash_slug = definicao.get("dashboard_slug")
+        if dash_slug:
+            dashboard = (
+                sessao.query(Dashboard)
+                .filter(Dashboard.slug == dash_slug)
+                .first()
+            )
+            if dashboard:
+                report.dashboard_id = dashboard.id
+            else:
+                logger.warning("Dashboard '%s' não encontrado para relatório '%s'.", dash_slug, nome)
+
+        report.report_format = definicao.get("report_format", "png")
+
+    recipients_defs = definicao.get("recipients", [])
+    existing_recipients = {r.recipient_config_json: r for r in (report.recipients or [])}
+    new_recipients = []
+
+    for rec_def in recipients_defs:
+        rec_type_str = rec_def.get("type", "email")
+        rec_type = (
+            ReportRecipientType.EMAIL
+            if rec_type_str == "email"
+            else ReportRecipientType.SLACK
+        )
+        config = json.dumps({"target": rec_def["target"]}, ensure_ascii=False)
+
+        if config in existing_recipients:
+            new_recipients.append(existing_recipients[config])
+        else:
+            recipient = ReportRecipients(
+                type=rec_type,
+                recipient_config_json=config,
+            )
+            new_recipients.append(recipient)
+
+    report.recipients = new_recipients
+
+    sessao.flush()
+
+
+# ---------------------------------------------------------------------------
+# 8. Orquestração
 # ---------------------------------------------------------------------------
 
 def provisionar(
     datasets_only: bool = False,
     dashboards_only: bool = False,
+    alertas_only: bool = False,
+    cleanup_log: bool = False,
     dry_run: bool = False,
 ):
     from superset.app import create_app
@@ -616,8 +917,8 @@ def provisionar(
 
         sessao = superset_db.session
 
-        skip_conexao = datasets_only or dashboards_only
-        if not skip_conexao:
+        skip_conexao = datasets_only or dashboards_only or alertas_only
+        if not skip_conexao and not cleanup_log:
             conexao = _obter_ou_criar_conexao(sessao)
         else:
             from superset.models.core import Database
@@ -626,17 +927,26 @@ def provisionar(
                 .filter(Database.database_name == NOME_CONEXAO)
                 .first()
             )
-            if not conexao:
+            if not conexao and not cleanup_log:
                 logger.error(
                     "Conexão '%s' não encontrada. Execute sem flags primeiro.",
                     NOME_CONEXAO,
                 )
                 sys.exit(1)
 
+        if cleanup_log:
+            _limpar_action_log(sessao, dry_run=dry_run)
+            if not dry_run:
+                sessao.commit()
+            return
+
         qtd_datasets = 0
         qtd_dashboards = 0
+        qtd_alertas = 0
 
-        if not dashboards_only:
+        etapa_geral = not (datasets_only or dashboards_only or alertas_only)
+
+        if etapa_geral or datasets_only:
             definicoes = _carregar_yamls(DATASETS_DIR)
             for defn in definicoes:
                 _provisionar_dataset(sessao, conexao, defn, dry_run=dry_run)
@@ -644,16 +954,24 @@ def provisionar(
                 _restringir_admin_only(sessao, conexao, definicoes)
             qtd_datasets = len(definicoes)
 
-        if not datasets_only:
+        if etapa_geral or dashboards_only:
             _provisionar_dashboards(sessao, conexao, dry_run=dry_run)
             qtd_dashboards = len(_carregar_yamls(DASHBOARDS_DIR))
+
+        if etapa_geral:
+            _provisionar_governanca(sessao, conexao, dry_run=dry_run)
+
+        if etapa_geral or alertas_only:
+            _provisionar_alertas(sessao, conexao, dry_run=dry_run)
+            qtd_alertas = len(_carregar_yamls(ALERTAS_DIR))
 
         if not dry_run:
             sessao.commit()
             logger.info(
-                "Provisionamento concluído: %d datasets, %d dashboards.",
+                "Provisionamento concluído: %d datasets, %d dashboards, %d alertas/relatórios.",
                 qtd_datasets,
                 qtd_dashboards,
+                qtd_alertas,
             )
         else:
             logger.info("[DRY-RUN] Nenhuma alteração gravada.")
@@ -663,12 +981,16 @@ if __name__ == "__main__":
     args = sys.argv[1:]
     datasets_only = "--datasets-only" in args
     dashboards_only = "--dashboards-only" in args
+    alertas_only = "--alertas-only" in args
+    cleanup_log = "--cleanup-log" in args
     dry_run = "--dry-run" in args
 
     try:
         provisionar(
             datasets_only=datasets_only,
             dashboards_only=dashboards_only,
+            alertas_only=alertas_only,
+            cleanup_log=cleanup_log,
             dry_run=dry_run,
         )
     except Exception as erro:

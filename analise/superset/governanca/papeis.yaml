@@ -1,0 +1,36 @@
+# Papéis customizados do Superset para o GTW-CWB (SUP-5)
+#
+# Papéis padrão do Superset (não recriados aqui):
+#   Admin   — acesso total (SQL Lab, gerenciar usuários, configurações)
+#   Alpha   — cria dashboards, explora datasets, sem gerenciar usuários
+#   Gamma   — visualiza dashboards publicados, sem SQL Lab
+#   Public  — acesso anônimo (desabilitado)
+#
+# Papéis customizados adicionados pelo provisioner:
+
+papeis:
+  - name: Operador
+    description: >
+      Visualiza dashboards operacionais publicados. Sem acesso a SQL Lab,
+      sem criação de dashboards ou gráficos. Papel padrão para operadores
+      do sistema de trânsito.
+    copy_from: Gamma
+    permissions_remove:
+      - can_write on Chart
+      - can_write on Dashboard
+
+  - name: Gestor
+    description: >
+      Acesso completo aos dashboards, pode criar gráficos e explorar dados.
+      Sem acesso ao SQL Lab. Para gestores e coordenadores.
+    copy_from: Alpha
+    permissions_remove:
+      - can_access on SqlLab
+
+  - name: Auditor
+    description: >
+      Acesso somente leitura a todos os dashboards e ao log de ações.
+      Para auditoria e compliance.
+    copy_from: Gamma
+    permissions_add:
+      - can_read on Log

@@ -1,0 +1,19 @@
+# Relatório agendado: Resumo diário operacional (TR 5.4.2.x)
+uuid: "e1000001-5007-4000-b001-000000000001"
+name: "Resumo Diário — KPIs Operacionais"
+description: >
+  Envia screenshot do dashboard KPIs Operacionais por e-mail
+  todo dia às 07:00 (antes do início do turno).
+type: report
+active: true
+crontab: "0 7 * * *"
+timezone: "America/Bahia"
+
+dashboard_slug: kpis-operacionais
+report_format: png
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "gestao@muralhadigital.local"
+log_retention: 90

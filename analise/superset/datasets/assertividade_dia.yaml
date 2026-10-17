@@ -1,6 +1,6 @@
 # Dataset: Assertividade Diária (Dupla Análise)
 # Fonte: analise.v_assertividade_dia (Plano 05)
-uuid: "d1a00001-sup3-4000-a001-000000000009"
+uuid: "d1a00001-5003-4000-a001-000000000009"
 table_name: v_assertividade_dia
 schema: analise
 folder: Pré-processamento

@@ -1,0 +1,28 @@
+# Alerta: Assertividade abaixo de 80% (TR 5.5.3.x)
+uuid: "a1000001-5007-4000-b001-000000000003"
+name: "Assertividade abaixo de 80%"
+description: >
+  Dispara quando a assertividade média do pré-processamento cai
+  abaixo de 80% nas últimas 24h.
+type: alert
+active: true
+crontab: "*/30 * * * *"
+timezone: "America/Bahia"
+
+database: "GTW Muralha Digital (somente leitura)"
+sql: >
+  SELECT AVG(pct_assertividade) AS valor
+  FROM analise.v_assertividade_dia
+  WHERE dia >= CAST(DATEADD(DAY, -1, GETDATE()) AS DATE)
+
+validator_type: operator
+validator_config:
+  op: "<"
+  threshold: 80.0
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "preprocessamento@muralhadigital.local"
+grace_period: 7200
+log_retention: 90

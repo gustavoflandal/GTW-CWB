@@ -24,6 +24,15 @@ services:
         condition: service_started
     volumes:
       - superset_home:/app/superset_home
+      # DEV: monta arquivos locais para iteração rápida (sem rebuild)
+      - ./superset/gtw_security.py:/app/gtw_security.py:ro
+      - ./superset/superset_config.py:/app/superset_config.py:ro
+      - ./superset/provisionar.py:/app/provisionar.py:ro
+      - ./superset/datasets:/app/datasets:ro
+      - ./superset/dashboards:/app/dashboards:ro
+      - ./superset/governanca:/app/governanca:ro
+      - ./superset/alertas:/app/alertas:ro
+      - ./superset/demo:/app/demo:ro
     networks:
       - analise_net
     # Nenhuma porta publicada — só nginx alcança o Superset
@@ -90,6 +99,48 @@ services:
       - analise_net
 
   # ---------------------------------------------------------------------------
+  # Celery Worker — executa alertas e relatórios agendados (SUP-7)
+  # ---------------------------------------------------------------------------
+  celery-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      SUPERSET_CONFIG_PATH: /app/superset_config.py
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    command: ["celery", "--app=superset.tasks.celery_app:app", "worker", "--pool=prefork", "--concurrency=2", "--max-tasks-per-child=128", "-Ofair", "--loglevel=INFO"]
+    volumes:
+      - superset_home:/app/superset_home
+    networks:
+      - analise_net
+
+  # ---------------------------------------------------------------------------
+  # Celery Beat — agendador de tarefas periódicas (SUP-7)
+  # ---------------------------------------------------------------------------
+  celery-beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: .env
+    environment:
+      SUPERSET_CONFIG_PATH: /app/superset_config.py
+    depends_on:
+      postgres:
+        condition: service_started
+      redis:
+        condition: service_started
+    command: ["celery", "--app=superset.tasks.celery_app:app", "beat", "--pidfile=", "--schedule=/tmp/celerybeat-schedule", "--loglevel=INFO"]
+    volumes:
+      - superset_home:/app/superset_home
+    networks:
+      - analise_net
+
+  # ---------------------------------------------------------------------------
   # Nginx — proxy reverso; única porta publicada do stack.
   # Valida autenticação via auth_request ao GTW antes de encaminhar ao Superset.
   # ---------------------------------------------------------------------------
@@ -98,7 +149,8 @@ services:
     ports:
       - "8088:80"
     volumes:
-      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+      # DEV: SSO desabilitado e usuário fixo; produção sobrescreve com default.conf
+      - ./nginx/default.dev.conf:/etc/nginx/conf.d/default.conf:ro
     depends_on:
       - superset
     networks:

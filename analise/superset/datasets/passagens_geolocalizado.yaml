@@ -1,0 +1,64 @@
+# Dataset: Passagens Geolocalizadas (SUP-8)
+# Fonte: analise.mat_passagens_hora com coordenadas do local
+uuid: "d1a00001-5008-4000-a001-000000000002"
+table_name: v_passagens_geolocalizado
+schema: analise
+folder: Mapas
+description: >
+  Passagens veiculares com coordenadas geográficas do equipamento
+  para camadas deck.gl (heatmap de fluxo).
+main_dttm_col: hora
+cache_timeout: 300
+
+columns:
+  - name: hora
+    label: Hora
+    type: DATETIME
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: lat
+    label: Latitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: lon
+    label: Longitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: total_passagens
+    label: Total de Passagens
+    type: INT
+    groupby: false
+    filterable: true
+
+  - name: velocidade_media
+    label: Velocidade Média (km/h)
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+metrics:
+  - name: total_passagens_geo
+    label: Total de Passagens
+    expression: "SUM(total_passagens)"
+    metric_type: sum
+    d3_format: ",d"
+    description: Soma de passagens por ponto geográfico
+
+  - name: velocidade_media_geo
+    label: Velocidade Média (km/h)
+    expression: "AVG(velocidade_media)"
+    metric_type: avg
+    d3_format: ",.1f"
+    description: Média de velocidade por ponto

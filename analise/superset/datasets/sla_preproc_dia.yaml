@@ -1,6 +1,6 @@
 # Dataset: SLA de Pré-processamento Diário
 # Fonte: analise.v_sla_preproc_dia (Plano 10)
-uuid: "d1a00001-sup3-4000-a001-000000000008"
+uuid: "d1a00001-5003-4000-a001-000000000008"
 table_name: v_sla_preproc_dia
 schema: analise
 folder: SLA
