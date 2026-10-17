@@ -21,10 +21,10 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 | [SUP-8](sessoes/SUP-08-mapas-analise-espacial.md) | Mapas e analise espacial | Implementada |
 | [SUP-9](sessoes/SUP-09-embedding.md) | Embedding em telas do GTW | Implementada |
 | [SUP-10](sessoes/SUP-10-manual-usuario.md) | Manual do usuario e capacitacao | Implementada |
-| SUP-11 | Producao: implantacao, backup e operacao | Pendente |
-| SUP-12 | Desempenho e carga | Pendente |
-| SUP-13 | Desligamento do Dashboard Builder | Pendente |
-| SUP-14 | Homologacao e PoC do edital | Pendente |
+| [SUP-11](sessoes/SUP-11-producao.md) | Producao: implantacao, backup e operacao | Implementada |
+| [SUP-12](sessoes/SUP-12-desempenho.md) | Desempenho e carga | Implementada |
+| [SUP-13](sessoes/SUP-13-coexistencia-builder.md) | Coexistencia: Dashboard Builder e Superset | Implementada |
+| [SUP-14](sessoes/SUP-14-homologacao.md) | Homologacao e PoC do edital | Implementada |
 
 ## Relatorios
 
@@ -38,6 +38,10 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 - [SUP-8](relatorios/SESSAO-SUP-08-relatorio.md)
 - [SUP-9](relatorios/SESSAO-SUP-09-relatorio.md)
 - [SUP-10](relatorios/SESSAO-SUP-10-relatorio.md)
+- [SUP-11](relatorios/SESSAO-SUP-11-relatorio.md)
+- [SUP-12](relatorios/SESSAO-SUP-12-relatorio.md)
+- [SUP-13](relatorios/SESSAO-SUP-13-relatorio.md)
+- [SUP-14](relatorios/SESSAO-SUP-14-relatorio.md)
 
 ## Documentacao
 

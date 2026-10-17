@@ -1,5 +1,6 @@
 # =============================================================================
 # superset_config.py — Configuração do Apache Superset 6.0 (Análises GTW-CWB)
+# SUP-1 a SUP-12
 #
 # Todos os segredos vêm de variáveis de ambiente (.env).
 # Não colocar valores sensíveis diretamente neste arquivo.
@@ -55,6 +56,16 @@ EXPLORE_FORM_DATA_CACHE_CONFIG = {
 RESULTS_BACKEND = None  # Usa o cache padrão do Redis para resultados do SQL Lab
 
 # ---------------------------------------------------------------------------
+# Cache de thumbnails (SUP-12)
+# ---------------------------------------------------------------------------
+THUMBNAIL_CACHE_CONFIG = {
+    "CACHE_TYPE": "RedisCache",
+    "CACHE_DEFAULT_TIMEOUT": 3600,
+    "CACHE_KEY_PREFIX": "superset_thumb_",
+    "CACHE_REDIS_URL": _REDIS_URL,
+}
+
+# ---------------------------------------------------------------------------
 # Celery (alertas, relatórios agendados)
 # ---------------------------------------------------------------------------
 class CeleryConfig:
@@ -82,7 +93,33 @@ CELERY_CONFIG = CeleryConfig
 ROW_LIMIT = 10000
 SQLLAB_TIMEOUT = 30  # segundos
 SQL_MAX_ROW = 10000
+SQLLAB_CTAS_NO_LIMIT = True
 PREVENT_UNSAFE_DB_CONNECTIONS = True
+
+# ---------------------------------------------------------------------------
+# Desempenho — consultas assíncronas e pool de conexões (SUP-12)
+# ---------------------------------------------------------------------------
+SQLLAB_ASYNC_TIME_LIMIT_SEC = 120
+SIP_15_ENABLED = True
+
+SQLALCHEMY_ENGINE_OPTIONS = {
+    "pool_size": 5,
+    "max_overflow": 10,
+    "pool_timeout": 30,
+    "pool_recycle": 1800,
+    "pool_pre_ping": True,
+}
+
+# Limitar carga de dashboards pesados
+DASHBOARD_AUTO_REFRESH_INTERVALS = [
+    [0, "Sem auto-refresh"],
+    [60, "1 minuto"],
+    [300, "5 minutos"],
+    [900, "15 minutos"],
+]
+
+# Chart data — timeout e cache
+SUPERSET_WEBSERVER_TIMEOUT = int(os.environ.get("SUPERSET_WEBSERVER_TIMEOUT", "60"))
 
 # ---------------------------------------------------------------------------
 # Autenticação — Remote User (SSO via cabeçalhos do nginx)

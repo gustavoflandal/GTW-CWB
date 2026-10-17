@@ -6,7 +6,7 @@
 
 ## Status
 
-**Em andamento** — SUP-1 a SUP-10 concluidas.
+**Concluida** — SUP-1 a SUP-14 implementadas.
 
 ## Sessoes concluidas
 
@@ -22,6 +22,10 @@
 | SUP-8 | 2026-10-17 | Mapas: 2 datasets geolocalizados, migracao SQL, centro Salvador, tiles OpenStreetMap |
 | SUP-9 | 2026-10-17 | Embedding: GuestTokenServlet (JWT), embedding.jsp com iframe, CORS configurado |
 | SUP-10 | 2026-10-17 | Manual do usuario (8 secoes) e guia do administrador (Docker, backup, troubleshooting) |
+| SUP-11 | 2026-10-17 | Producao: deploy, backup/restore, healthcheck, TLS nginx, recarga materializadas |
+| SUP-12 | 2026-10-17 | Desempenho: cache thumbnails, pool conexoes, async queries, auto-refresh controlado |
+| SUP-13 | 2026-10-17 | Coexistencia: Dashboard Builder e Superset ativos em paralelo, documentacao de migracao |
+| SUP-14 | 2026-10-17 | Homologacao: 28 testes manuais, checklist contra TR, mapeamento itens 5.2/5.4/5.5 |
 
 ## Artefatos
 
@@ -51,6 +55,12 @@
 | `docs/analise/guia-administrador.md` | Guia do administrador (Docker, provisioner, backup) |
 | `analise/nginx/default.conf` | Configuracao nginx com auth_request para SSO |
 | `analise/.env.exemplo` | Template de variaveis de ambiente |
+| `analise/scripts/deploy.sh` | Script de deploy com validacao, backup e provisionamento |
+| `analise/scripts/backup.sh` | Backup PostgreSQL + YAMLs com rotacao 30 dias |
+| `analise/scripts/restore.sh` | Restauracao completa a partir de backup |
+| `analise/scripts/healthcheck.sh` | Health check de todos os servicos (texto/JSON) |
+| `analise/scripts/refresh-materialized.sh` | Recarga de tabelas materializadas |
+| `analise/nginx/ssl.conf.exemplo` | Configuracao nginx com TLS |
 
 ### Migracoes SQL
 
@@ -81,4 +91,6 @@
 - [ ] Validar envio de e-mail (requer SMTP configurado)
 - [ ] Executar migracao `20261017_analise_mapas_geo.sql` no banco DEV
 - [ ] Testar embedding de dashboard no GTW (iframe + guest token)
-- [ ] Sessoes SUP-11 a SUP-14
+- [ ] Testar scripts de producao (deploy.sh, backup.sh, healthcheck.sh)
+- [ ] Executar roteiro de testes manuais — Fase 6 (28 testes Superset)
+- [ ] Homologacao com cliente (checklist SUP-14)

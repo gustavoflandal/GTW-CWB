@@ -122,10 +122,17 @@ services:
         max-file: "3"
 
   # ---------------------------------------------------------------------------
-  # Nginx — proxy reverso
+  # Nginx — proxy reverso (SUP-11: suporte a TLS)
+  # Para TLS: descomentar volumes de ssl.conf e certificados abaixo
   # ---------------------------------------------------------------------------
   nginx:
     restart: always
+    # TLS: descomentar para habilitar HTTPS na porta 443
+    # ports:
+    #   - "443:443"
+    # volumes:
+    #   - ./nginx/ssl.conf:/etc/nginx/conf.d/ssl.conf:ro
+    #   - ./nginx/ssl/:/etc/nginx/ssl/:ro
     deploy:
       resources:
         limits:

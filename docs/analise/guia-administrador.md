@@ -131,19 +131,72 @@ print('E-mail enviado com sucesso')
 "
 ```
 
-## 8. Backup
+## 8. Backup e restauração
 
-### Metadados (PostgreSQL)
+### Backup automatizado (recomendado)
 ```bash
-docker compose exec postgres pg_dump -U superset superset > backup_superset_$(date +%Y%m%d).sql
+cd analise/
+./scripts/backup.sh                    # salva em ./backups/
+./scripts/backup.sh /mnt/nfs/backups   # destino customizado
+```
+
+O script exporta PostgreSQL (formato custom compactado), YAMLs declarativos e configs. Rotação automática de 30 dias.
+
+### Agenda de backup (crontab)
+```
+0 2 * * * cd /opt/analise && ./scripts/backup.sh /mnt/backups >> /var/log/superset-backup.log 2>&1
 ```
 
 ### Restaurar
 ```bash
-docker compose exec -T postgres psql -U superset superset < backup_superset_20261017.sql
+./scripts/restore.sh ./backups/superset_20261017_020000.tar.gz
 ```
 
-## 9. Troubleshooting
+### Backup manual (alternativa)
+```bash
+docker compose exec postgres pg_dump -U superset superset > backup_superset_$(date +%Y%m%d).sql
+```
+
+## 9. Deploy em produção
+
+### Primeiro deploy
+```bash
+cd analise/
+cp .env.exemplo .env
+# Editar .env com valores reais
+./scripts/deploy.sh
+```
+
+### Atualização
+```bash
+cd analise/
+git pull
+./scripts/deploy.sh --rebuild
+```
+
+### TLS (HTTPS)
+1. Copiar `nginx/ssl.conf.exemplo` para `nginx/ssl.conf`
+2. Colocar certificado em `nginx/ssl/cert.pem` e chave em `nginx/ssl/key.pem`
+3. Descomentar volumes no `docker-compose.prod.yml` (seção nginx)
+4. `docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d nginx`
+
+### Health check
+```bash
+./scripts/healthcheck.sh         # saída legível
+./scripts/healthcheck.sh --json  # para monitoramento
+```
+
+### Recarga de tabelas materializadas
+```bash
+./scripts/refresh-materialized.sh
+```
+
+Agenda sugerida (crontab):
+```
+*/30 * * * * cd /opt/analise && ./scripts/refresh-materialized.sh >> /var/log/superset-refresh.log 2>&1
+```
+
+## 10. Troubleshooting
 
 | Problema | Solução |
 |---|---|
