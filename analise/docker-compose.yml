@@ -43,21 +43,22 @@ services:
         condition: service_started
       redis:
         condition: service_started
-    command: >
-      bash -c "
+    command:
+      - bash
+      - -c
+      - |
         echo '>>> Migrando banco de metadados do Superset...' &&
         superset db upgrade &&
         echo '>>> Criando usuário administrador...' &&
         superset fab create-admin \
-          --username \"$$SUPERSET_ADMIN_USERNAME\" \
-          --password \"$$SUPERSET_ADMIN_PASSWORD\" \
-          --firstname \"$$SUPERSET_ADMIN_FIRST_NAME\" \
-          --lastname \"$$SUPERSET_ADMIN_LAST_NAME\" \
-          --email \"$$SUPERSET_ADMIN_EMAIL\" || true &&
+          --username "$SUPERSET_ADMIN_USERNAME" \
+          --password "$SUPERSET_ADMIN_PASSWORD" \
+          --firstname "$SUPERSET_ADMIN_FIRST_NAME" \
+          --lastname "$SUPERSET_ADMIN_LAST_NAME" \
+          --email "$SUPERSET_ADMIN_EMAIL" || true &&
         echo '>>> Inicializando papéis padrão...' &&
         superset init &&
         echo '>>> Inicialização concluída.'
-      "
     volumes:
       - superset_home:/app/superset_home
     networks:

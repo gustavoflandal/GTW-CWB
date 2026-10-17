@@ -7,7 +7,12 @@
 
 import os
 import json
+import sys
 from datetime import timedelta
+
+# Garante que /app esteja no path para importar gtw_security.py
+if "/app" not in sys.path:
+    sys.path.insert(0, "/app")
 
 # ---------------------------------------------------------------------------
 # Segurança
@@ -87,7 +92,8 @@ AUTH_USER_REGISTRATION = True
 AUTH_USER_REGISTRATION_ROLE = "Gamma"  # Papel padrão para novos usuários
 
 # Gerenciador de segurança customizado que lê os cabeçalhos X-GTW-*
-CUSTOM_SECURITY_MANAGER = "gtw_security.GtwSecurityManager"
+from gtw_security import GtwSecurityManager
+CUSTOM_SECURITY_MANAGER = GtwSecurityManager
 
 # ---------------------------------------------------------------------------
 # Feature flags

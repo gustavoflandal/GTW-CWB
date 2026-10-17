@@ -7,7 +7,9 @@ FROM apache/superset:6.0.0
 USER root
 
 # Drivers e dependências Python com versões fixadas
+# Superset 6.0 usa venv em /app/.venv sem pip; instala com pip do sistema no target do venv
 RUN pip install --no-cache-dir \
+    --target=/app/.venv/lib/python3.10/site-packages \
     pymssql==2.3.0 \
     psycopg2-binary==2.9.9 \
     redis==5.0.8
