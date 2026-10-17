@@ -1,0 +1,137 @@
+# Dataset: Alertas
+# Fonte: analise.v_alertas (view sobre muralha.alerta, sem dados pessoais)
+uuid: "d1a00001-sup3-4000-a001-000000000003"
+table_name: v_alertas
+schema: analise
+folder: Alertas
+description: >
+  Alertas do sistema Muralha Digital com tipo, prioridade, status e
+  responsável. Exclui placa e dados pessoais (LGPD).
+main_dttm_col: dt_alerta
+cache_timeout: 60
+
+columns:
+  - name: dt_alerta
+    label: Data do Alerta
+    type: DATETIME
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: tipo
+    label: Tipo
+    type: VARCHAR
+    groupby: true
+    filterable: true
+    description: Identificador do tipo de alerta
+
+  - name: tipo_descricao
+    label: Descrição do Tipo
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: critico
+    label: Crítico
+    type: BIT
+    groupby: true
+    filterable: true
+    description: "1 = alerta de criticidade alta"
+
+  - name: prioridade
+    label: Prioridade
+    type: INT
+    groupby: true
+    filterable: true
+    description: "Prioridade numérica (menor = mais urgente)"
+
+  - name: status
+    label: Status
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: origem
+    label: Origem
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: descartado
+    label: Descartado
+    type: BIT
+    groupby: true
+    filterable: true
+    description: "1 = alerta descartado"
+
+  - name: motivo_descarte
+    label: Motivo do Descarte
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: data_descarte
+    label: Data do Descarte
+    type: DATETIME
+    is_dttm: true
+    groupby: false
+    filterable: true
+
+  - name: tratado
+    label: Tratado
+    type: BIT
+    groupby: true
+    filterable: true
+    description: "1 = alerta com responsável atribuído"
+
+  - name: usuario_responsavel
+    label: Responsável
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: observacao
+    label: Observação
+    type: VARCHAR
+    groupby: false
+    filterable: false
+
+metrics:
+  - name: total_alertas
+    label: Total de Alertas
+    expression: "COUNT(*)"
+    metric_type: count
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Total de alertas no período
+
+  - name: alertas_criticos
+    label: Alertas Críticos
+    expression: "SUM(CAST(critico AS INT))"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Alertas com criticidade alta
+
+  - name: pct_descartados
+    label: "% Descartados"
+    expression: "100.0 * SUM(descartado) / NULLIF(COUNT(*), 0)"
+    metric_type: percentage
+    d3_format: ",.1f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Percentual de alertas descartados
+
+  - name: pct_tratados
+    label: "% Tratados"
+    expression: "100.0 * SUM(tratado) / NULLIF(COUNT(*), 0)"
+    metric_type: percentage
+    d3_format: ",.1f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Percentual de alertas com responsável
+
+  - name: alertas_pendentes
+    label: Alertas Pendentes
+    expression: "SUM(CASE WHEN tratado = 0 AND descartado = 0 THEN 1 ELSE 0 END)"
+    metric_type: sum
+    d3_format: ",d"
+    description: Alertas sem responsável e não descartados

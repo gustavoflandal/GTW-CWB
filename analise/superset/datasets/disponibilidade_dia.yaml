@@ -1,0 +1,86 @@
+# Dataset: Disponibilidade Diária
+# Fonte: analise.v_disponibilidade_dia (Plano 18)
+uuid: "d1a00001-sup3-4000-a001-000000000006"
+table_name: v_disponibilidade_dia
+schema: analise
+folder: SLA
+description: >
+  Disponibilidade diária dos equipamentos: verificações realizadas,
+  verificações OK e percentual de disponibilidade. Fonte: Plano 18.
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: verificacoes
+    label: Verificações
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: verificacoes_ok
+    label: Verificações OK
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: pct_disponibilidade
+    label: "% Disponibilidade"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+
+  - name: max_minutos_offline
+    label: Máx. Min. Offline
+    type: INT
+    groupby: false
+    filterable: false
+    description: Maior período offline no dia (minutos)
+
+metrics:
+  - name: media_disponibilidade
+    label: Disponibilidade Média (%)
+    expression: "AVG(pct_disponibilidade)"
+    metric_type: avg
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Média do percentual de disponibilidade
+
+  - name: total_verificacoes
+    label: Total de Verificações
+    expression: "SUM(verificacoes)"
+    metric_type: sum
+    d3_format: ",d"
+
+  - name: total_verificacoes_ok
+    label: Verificações OK
+    expression: "SUM(verificacoes_ok)"
+    metric_type: sum
+    d3_format: ",d"
+
+  - name: pct_disponibilidade_global
+    label: Disponibilidade Global (%)
+    expression: "100.0 * SUM(verificacoes_ok) / NULLIF(SUM(verificacoes), 0)"
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Disponibilidade global — verificações OK / total

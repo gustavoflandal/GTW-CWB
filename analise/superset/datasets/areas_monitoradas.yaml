@@ -1,0 +1,38 @@
+# Dataset: Áreas Monitoradas (GeoJSON)
+# Fonte: analise.v_areas_monitoradas_geojson
+uuid: "d1a00001-sup3-4000-a001-000000000005"
+table_name: v_areas_monitoradas_geojson
+schema: analise
+folder: Equipamentos
+description: >
+  Áreas monitoradas com polígono GeoJSON para camada deck.gl nos mapas.
+main_dttm_col: null
+cache_timeout: 600
+
+columns:
+  - name: id
+    label: ID
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: nome
+    label: Nome da Área
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: dados_json
+    label: GeoJSON
+    type: NVARCHAR
+    groupby: false
+    filterable: false
+    description: Polígono da área em formato GeoJSON
+
+metrics:
+  - name: total_areas
+    label: Total de Áreas
+    expression: "COUNT(*)"
+    metric_type: count
+    d3_format: ",d"
+    description: Áreas monitoradas ativas

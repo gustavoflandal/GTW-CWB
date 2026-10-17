@@ -1,0 +1,80 @@
+# Dataset: SLA de Pré-processamento Diário
+# Fonte: analise.v_sla_preproc_dia (Plano 10)
+uuid: "d1a00001-sup3-4000-a001-000000000008"
+table_name: v_sla_preproc_dia
+schema: analise
+folder: SLA
+description: >
+  SLA de pré-processamento 72h: pendentes, backlog acima de 24/48/72h
+  e percentual dentro do SLA. Fonte: Plano 10 (requisito TR 5.5).
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: snapshots
+    label: Snapshots
+    type: INT
+    groupby: false
+    filterable: false
+    description: Quantidade de medições no dia
+
+  - name: media_pendentes
+    label: Média Pendentes
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: max_acima_72h
+    label: Máx. Acima 72h
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: max_acima_48h
+    label: Máx. Acima 48h
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: max_acima_24h
+    label: Máx. Acima 24h
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: pct_dentro_sla
+    label: "% Dentro SLA"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+
+metrics:
+  - name: sla_preproc_medio
+    label: SLA Pré-proc. Médio (%)
+    expression: "AVG(pct_dentro_sla)"
+    metric_type: avg
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Média do percentual dentro do SLA de 72h
+
+  - name: media_pendentes_global
+    label: Pendentes (média)
+    expression: "AVG(media_pendentes)"
+    metric_type: avg
+    d3_format: ",.0f"
+    description: Média de registros pendentes por dia
+
+  - name: pior_backlog_72h
+    label: Pior Backlog >72h
+    expression: "MAX(max_acima_72h)"
+    metric_type: max
+    d3_format: ",d"
+    description: Maior backlog acima de 72h observado

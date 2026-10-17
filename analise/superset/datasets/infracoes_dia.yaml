@@ -1,0 +1,117 @@
+# Dataset: Infrações por Dia (materializada)
+# Fonte: analise.mat_infracoes_dia (procedure spu_carga_infracoes_dia)
+uuid: "d1a00001-sup3-4000-a001-000000000002"
+table_name: mat_infracoes_dia
+schema: analise
+folder: Infrações
+description: >
+  Agregação diária de infrações por equipamento, faixa e enquadramento.
+  Atualizada por procedure incremental (janela 7 dias). Sem dados pessoais.
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+    description: Data da agregação
+
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: faixa
+    label: Faixa
+    type: TINYINT
+    groupby: true
+    filterable: true
+
+  - name: id_enquadramento
+    label: ID Enquadramento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: enquadramento
+    label: Enquadramento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+    description: Descrição do tipo de infração
+
+  - name: limite
+    label: Limite (km/h)
+    type: INT
+    groupby: false
+    filterable: true
+    description: Limite de velocidade no ponto
+
+  - name: total
+    label: Infrações
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: excesso_medio
+    label: Excesso Médio (km/h)
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.1f"
+    description: Excesso médio de velocidade acima do limite
+
+  - name: lat
+    label: Latitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: lon
+    label: Longitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+metrics:
+  - name: total_infracoes
+    label: Total de Infrações
+    expression: "SUM(total)"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Soma de infrações no período selecionado
+
+  - name: excesso_medio_ponderado
+    label: Excesso Médio Ponderado (km/h)
+    expression: >
+      SUM(excesso_medio * total) / NULLIF(SUM(CASE WHEN excesso_medio IS NOT NULL
+      THEN total ELSE 0 END), 0)
+    metric_type: avg
+    d3_format: ",.1f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Excesso médio ponderado pelo volume de infrações
+
+  - name: qtd_enquadramentos
+    label: Tipos de Enquadramento
+    expression: "COUNT(DISTINCT id_enquadramento)"
+    metric_type: count_distinct
+    d3_format: ",d"
+    description: Quantidade distinta de tipos de infração
+
+  - name: qtd_equipamentos_infracoes
+    label: Equipamentos com Infrações
+    expression: "COUNT(DISTINCT id_local)"
+    metric_type: count_distinct
+    d3_format: ",d"
+    description: Equipamentos que registraram infrações no período

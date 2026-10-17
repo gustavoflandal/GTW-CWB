@@ -1,0 +1,90 @@
+# Dataset: SLA de Latência Diário
+# Fonte: analise.v_sla_latencia_dia (Plano 07)
+uuid: "d1a00001-sup3-4000-a001-000000000007"
+table_name: v_sla_latencia_dia
+schema: analise
+folder: SLA
+description: >
+  SLA de latência diário: janelas avaliadas, cumprimento e percentil 95
+  do tempo de resposta. Fonte: Plano 07 (requisito TR 5.2.7).
+main_dttm_col: dia
+cache_timeout: 60
+
+columns:
+  - name: dia
+    label: Dia
+    type: DATE
+    is_dttm: true
+    groupby: true
+    filterable: true
+
+  - name: janelas_avaliadas
+    label: Janelas Avaliadas
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: janelas_ok
+    label: Janelas OK
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: janelas_violacao
+    label: Janelas com Violação
+    type: INT
+    groupby: false
+    filterable: false
+
+  - name: pct_cumprimento
+    label: "% Cumprimento SLA"
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.2f"
+
+  - name: media_p95_ms
+    label: Média P95 (ms)
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+    description: Média do percentil 95 do tempo de resposta
+
+  - name: threshold_ms
+    label: Limiar (ms)
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+
+  - name: total_passagens
+    label: Passagens Avaliadas
+    type: INT
+    groupby: false
+    filterable: false
+    d3_format: ",d"
+
+metrics:
+  - name: pct_sla_cumprido
+    label: SLA Cumprido (%)
+    expression: "100.0 * SUM(janelas_ok) / NULLIF(SUM(janelas_avaliadas), 0)"
+    metric_type: percentage
+    d3_format: ",.2f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Percentual de janelas dentro do limiar de latência
+
+  - name: media_p95
+    label: Latência P95 Média (ms)
+    expression: "AVG(media_p95_ms)"
+    metric_type: avg
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Média do percentil 95 do tempo de resposta
+
+  - name: total_violacoes
+    label: Total de Violações
+    expression: "SUM(janelas_violacao)"
+    metric_type: sum
+    d3_format: ",d"
+    description: Total de janelas que violaram o SLA

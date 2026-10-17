@@ -1,0 +1,134 @@
+# Dataset: Passagens por Hora (materializada)
+# Fonte: analise.mat_passagens_hora (procedure spu_carga_passagens_hora)
+uuid: "d1a00001-sup3-4000-a001-000000000001"
+table_name: mat_passagens_hora
+schema: analise
+folder: Passagens
+description: >
+  Agregação horária de passagens veiculares por equipamento, faixa,
+  classificação e tipo de placa (Mercosul/padrão). Atualizada por
+  procedure incremental (janela 25h). Sem dados pessoais.
+main_dttm_col: hora
+default_endpoint: ""
+cache_timeout: 60
+
+columns:
+  - name: hora
+    label: Hora
+    type: DATETIME2
+    is_dttm: true
+    groupby: true
+    filterable: true
+    description: Hora da agregação (truncada)
+
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+    description: Identificador do local/equipamento
+
+  - name: local_nome
+    label: Equipamento
+    type: VARCHAR
+    groupby: true
+    filterable: true
+    description: Nome do equipamento
+
+  - name: faixa
+    label: Faixa
+    type: TINYINT
+    groupby: true
+    filterable: true
+    description: Faixa de tráfego (0 = sem faixa)
+
+  - name: classificacao
+    label: Classificação
+    type: CHAR
+    groupby: true
+    filterable: true
+    description: "Classificação veicular (L=Leve, P=Pesado, M=Moto, etc.)"
+
+  - name: placa_mercosul
+    label: Placa Mercosul
+    type: BIT
+    groupby: true
+    filterable: true
+    description: "1 = placa Mercosul, 0 = padrão antigo"
+
+  - name: passagens
+    label: Passagens
+    type: INT
+    groupby: false
+    filterable: false
+    description: Quantidade de passagens na hora/local/faixa/classificação
+
+  - name: soma_velocidade
+    label: Soma Velocidade
+    type: BIGINT
+    groupby: false
+    filterable: false
+    description: Soma das velocidades (para cálculo de média)
+
+  - name: velocidade_media
+    label: Velocidade Média (km/h)
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    d3_format: ",.1f"
+    description: Coluna computada — soma_velocidade / passagens
+
+  - name: lat
+    label: Latitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    description: Latitude do equipamento
+
+  - name: lon
+    label: Longitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+    description: Longitude do equipamento
+
+metrics:
+  - name: total_passagens
+    label: Total de Passagens
+    expression: "SUM(passagens)"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Soma de todas as passagens no período selecionado
+
+  - name: velocidade_media_ponderada
+    label: Velocidade Média Ponderada (km/h)
+    expression: "CAST(SUM(soma_velocidade) AS FLOAT) / NULLIF(SUM(passagens), 0)"
+    metric_type: avg
+    d3_format: ",.1f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Média ponderada da velocidade (soma_velocidade / passagens)
+
+  - name: passagens_por_faixa
+    label: Passagens por Faixa (média)
+    expression: "CAST(SUM(passagens) AS FLOAT) / NULLIF(COUNT(DISTINCT faixa), 0)"
+    metric_type: avg
+    d3_format: ",.0f"
+    description: Média de passagens por faixa no período
+
+  - name: qtd_equipamentos
+    label: Equipamentos Ativos
+    expression: "COUNT(DISTINCT id_local)"
+    metric_type: count_distinct
+    d3_format: ",d"
+    description: Quantidade de equipamentos com passagens no período
+
+  - name: pct_mercosul
+    label: "% Placa Mercosul"
+    expression: >
+      100.0 * SUM(CASE WHEN placa_mercosul = 1 THEN passagens ELSE 0 END)
+      / NULLIF(SUM(passagens), 0)
+    metric_type: percentage
+    d3_format: ",.1f"
+    certified_by: "Consilux / Edital Salvador"
+    description: Percentual de passagens com placa Mercosul

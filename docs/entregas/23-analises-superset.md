@@ -6,7 +6,7 @@
 
 ## Status
 
-**Em andamento** — SUP-1 e SUP-2 concluidas.
+**Em andamento** — SUP-1, SUP-2 e SUP-3 concluidas.
 
 ## Sessoes concluidas
 
@@ -14,6 +14,7 @@
 |---|---|---|
 | SUP-1 | 2026-10-16 | Fundacao: estrutura Docker, SsoAnaliseServlet, migracao de schema, documentacao |
 | SUP-2 | 2026-10-17 | Camada de dados: 2 tabelas materializadas, 8 views, 2 stored procedures |
+| SUP-3 | 2026-10-17 | Datasets e semantica: 11 datasets declarativos (YAML), 42 metricas, 24 certificadas, provisioner idempotente |
 
 ## Artefatos
 
@@ -32,7 +33,8 @@
 | `analise/docker-compose.prod.yml` | Override de producao (restart, limites, healthchecks) |
 | `analise/superset/superset_config.py` | Configuracao do Superset (cache, auth, formatos, idioma) |
 | `analise/superset/gtw_security.py` | Security manager customizado para SSO via cabecalhos GTW |
-| `analise/superset/provisionar.py` | Script de provisionamento inicial (conexao com banco GTW) |
+| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao + datasets/metricas a partir de YAML |
+| `analise/superset/datasets/*.yaml` | 11 definicoes de datasets com colunas, metricas e metadados em PT-BR |
 | `analise/nginx/default.conf` | Configuracao nginx com auth_request para SSO |
 | `analise/.env.exemplo` | Template de variaveis de ambiente |
 
@@ -55,4 +57,6 @@
 - [x] Testar `docker compose up` com `.env` preenchido
 - [x] Executar migracao `20261017_analise_camada_dados.sql` no banco DEV
 - [ ] Testar login SSO no navegador (usuario GTW -> Superset sem senha)
-- [ ] Sessoes SUP-3 a SUP-14
+- [ ] Testar provisionamento de datasets (`python /app/provisionar.py`)
+- [ ] Validar metricas certificadas contra SQL de referencia
+- [ ] Sessoes SUP-4 a SUP-14

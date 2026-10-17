@@ -1,0 +1,81 @@
+# Dataset: Equipamentos
+# Fonte: analise.v_equipamentos (cadastro de locais)
+uuid: "d1a00001-sup3-4000-a001-000000000004"
+table_name: v_equipamentos
+schema: analise
+folder: Equipamentos
+description: >
+  Cadastro de equipamentos (locais) com coordenadas geográficas,
+  status de atividade (24h) e área monitorada associada.
+main_dttm_col: null
+cache_timeout: 300
+
+columns:
+  - name: id_local
+    label: ID Equipamento
+    type: INT
+    groupby: true
+    filterable: true
+
+  - name: nome
+    label: Nome
+    type: VARCHAR
+    groupby: true
+    filterable: true
+
+  - name: lat
+    label: Latitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: lon
+    label: Longitude
+    type: DECIMAL
+    groupby: false
+    filterable: false
+
+  - name: tipo
+    label: Tipo
+    type: VARCHAR
+    groupby: true
+    filterable: true
+    description: Tipo do equipamento
+
+  - name: ativo_24h
+    label: Ativo (24h)
+    type: BIT
+    groupby: true
+    filterable: true
+    description: "1 = equipamento com passagens nas últimas 24 horas"
+
+  - name: area_monitorada
+    label: Área Monitorada
+    type: VARCHAR
+    groupby: true
+    filterable: true
+    description: Nome da área monitorada associada
+
+metrics:
+  - name: total_equipamentos
+    label: Total de Equipamentos
+    expression: "COUNT(*)"
+    metric_type: count
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Total de equipamentos cadastrados
+
+  - name: equipamentos_ativos
+    label: Equipamentos Ativos (24h)
+    expression: "SUM(CAST(ativo_24h AS INT))"
+    metric_type: sum
+    d3_format: ",d"
+    certified_by: "Consilux / Edital Salvador"
+    description: Equipamentos com passagens nas últimas 24h
+
+  - name: pct_ativos
+    label: "% Ativos"
+    expression: "100.0 * SUM(CAST(ativo_24h AS INT)) / NULLIF(COUNT(*), 0)"
+    metric_type: percentage
+    d3_format: ",.1f"
+    description: Percentual de equipamentos ativos
