@@ -62,6 +62,13 @@ O fluxo de **criar** um widget não funcionava como esperado. O teste anterior c
 | Baixo | Datasets com mais de um campo de data não permitiam escolher qual usar | Seletor "Campo de data" (aparece só quando há mais de um) |
 | Baixo | Tipos de visualização sem descrição; rótulos sem acento | Tooltip com a descrição de cada tipo; textos revisados |
 
+Terceira rodada (teste em navegador real, Chromium 141 via Playwright):
+
+| Sev. | Defeito | Correção |
+|---|---|---|
+| Crítico | O botão × de remover era um ícone de fonte (`bi-x-lg`, Bootstrap Icons via CDN): sem a fonte carregada ficava com largura zero — invisível e sem clique. Resultado: campo solto não saía mais da zona | `<button>` com o caractere "×" e estilo próprio em CSS; funciona sem fonte de ícones e pelo teclado |
+| Alto | Módulos JS do dashboard sem controle de cache: após uma atualização o navegador podia misturar arquivos novos e antigos (ex.: stub antigo do Sortable em cache com o editor novo, que então quebrava em `Sortable.get`) | `SemCacheScriptsDashboardFilter` (`no-cache, must-revalidate` em `/static/js/dashboards/*`) e `?v=1.15.0` no script do Sortable |
+
 ### Backend e integrações
 
 | Sev. | Defeito | Correção |
@@ -105,6 +112,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
 | `SsoAnaliseServletTest` contra o servlet original | Falha com `ClassCastException`, como esperado |
 | Harness Node + jsdom com o ECharts 5.5.0 vendorizado (SSR/SVG): 16 cenários de widgets, tooltips, drill e filtro cruzado | 16/16 |
 | Harness do editor com o HTML real do `editor.jsp` e o SortableJS real (novo widget, sem painel, séries, KPI, pivot) | 5/5; o cenário "novo widget" e os 3 de edição falham no código original |
+| **Navegador real** (Chromium 141 headless, Playwright, arraste com o mouse): soltar em zona certa/errada, repetição, ×, teclado, reordenar, soltar fora, trocar dataset, salvar, pivot, editar existente, sem erros de JS | 16/16 |
 | `node --check` em todo JS alterado; `py_compile` em `provisionar.py` | OK |
 
 **Não verificado aqui:** o build Maven completo (dependências no repositório interno da Consilux) e o navegador. Rodar `..\.setup-gtw\build.ps1` e testar os painéis 101 e 102 após a migração.
@@ -137,7 +145,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
   - `pages/dashboards/{dashboard.jsp, calendario-intensidade.jsp, assets/js/grafico-comp-diario-fluxo-X-infracoes.js}`;
   - `pages/{veiculos-correlacionados, consulta-veiculo, consulta-veiculo-de-carga, alerta-tratativa}`.
 - **Java:**
-  - `CodificacaoUtf8Filter` (novo), `WidgetService`, `ExportacaoDashboardServlet`, `ExportacaoService`, `HistoricoVersaoService`, `CompartilhamentoService`, `DashCatalogoServlet`, `DatasetServlet`;
+  - `CodificacaoUtf8Filter` e `SemCacheScriptsDashboardFilter` (novos), `WidgetService`, `ExportacaoDashboardServlet`, `ExportacaoService`, `HistoricoVersaoService`, `CompartilhamentoService`, `DashCatalogoServlet`, `DatasetServlet`;
   - `consulta/MontadorSql`, `consulta/PeriodoRelativo`, `dashboard/DashboardBuilderServlet`, `analise/SsoAnaliseServlet`.
 - **Testes:** `PeriodoRelativoTest`, `ExportacaoServiceTest`, `SsoAnaliseServletTest`.
 - **Superset:** `analise/superset/provisionar.py`.

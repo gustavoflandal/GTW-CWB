@@ -307,17 +307,13 @@ function inicializarArrastar() {
             onUpdate: function() { aoAlterarZonas(); }
         });
 
+        // Delegado na zona: vale para chips soltos agora e para os restaurados na edicao.
         el.addEventListener('click', function(e) {
             var btn = e.target.closest('.remover-campo');
             if (!btn) return;
             e.preventDefault();
+            e.stopPropagation();
             removerChip(btn);
-        });
-        el.addEventListener('keydown', function(e) {
-            if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('remover-campo')) {
-                e.preventDefault();
-                removerChip(e.target);
-            }
         });
     });
 }
@@ -367,16 +363,19 @@ function aoAlterarZonas() {
     agendarPreview();
 }
 
-/** Chip dentro de uma zona: ganha o botao de remover. */
+/**
+ * Chip dentro de uma zona: ganha o botao de remover. E um <button> com o caractere
+ * "×" (nao um icone de fonte): fica visivel e clicavel mesmo sem o Bootstrap Icons.
+ */
 function decorarChipZona(chip) {
     chip.style.opacity = '';
     if (chip.querySelector('.remover-campo')) return;
-    var x = document.createElement('i');
-    x.className = 'bi bi-x-lg remover-campo';
-    x.setAttribute('role', 'button');
-    x.setAttribute('tabindex', '0');
+    var x = document.createElement('button');
+    x.type = 'button';
+    x.className = 'remover-campo';
     x.setAttribute('aria-label', 'Remover ' + (chip.dataset.rotulo || 'campo'));
-    x.title = 'Remover';
+    x.title = 'Remover ' + (chip.dataset.rotulo || 'campo');
+    x.textContent = '\u00d7';
     chip.appendChild(x);
 }
 

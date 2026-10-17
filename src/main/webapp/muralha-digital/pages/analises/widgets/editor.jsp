@@ -27,8 +27,27 @@
         font-size: 0.8rem !important;
     }
     .campo-arraste:active { cursor: grabbing; }
-    .zona-drop .remover-campo { margin-left: 0.35rem; font-size: 0.65rem; opacity: 0.6; cursor: pointer; }
-    .zona-drop .remover-campo:hover, .zona-drop .remover-campo:focus { opacity: 1; color: var(--bs-danger); }
+    /* Botao "×" de remover: sem icone de fonte, para funcionar mesmo sem o Bootstrap Icons. */
+    .zona-drop .remover-campo {
+        margin-left: 0.4rem;
+        width: 1.1rem;
+        height: 1.1rem;
+        padding: 0;
+        border: 1px solid transparent;
+        border-radius: 50%;
+        background: transparent;
+        color: inherit;
+        font-size: 0.95rem;
+        line-height: 1;
+        opacity: 0.6;
+        cursor: pointer;
+    }
+    .zona-drop .remover-campo:hover, .zona-drop .remover-campo:focus-visible {
+        opacity: 1;
+        color: var(--bs-danger);
+        border-color: var(--bs-danger);
+        outline: none;
+    }
     .tipo-check .form-check-label { cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 0.25rem; }
     .tipo-check .form-check-input:checked + .form-check-label { background: rgba(13,117,191,0.1); font-weight: 600; }
     #previewWidget { min-height: 300px; border: 1px solid var(--bs-border-color); border-radius: 0.375rem; }
@@ -238,7 +257,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/static/vendor/sortablejs/Sortable.min.js"></script>
+<script src="/static/vendor/sortablejs/Sortable.min.js?v=1.15.0"></script>
 <script src="/static/vendor/echarts/echarts.min.js"></script>
 <script src="/static/vendor/ag-grid/ag-grid-community.min.js"></script>
 <script type="module" src="/static/js/dashboards/editor-widget.js"></script>
