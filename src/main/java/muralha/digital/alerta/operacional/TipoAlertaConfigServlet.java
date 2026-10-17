@@ -137,11 +137,24 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     static List<Map<String, Object>> listarConfigs(Connection conn) throws SQLException {
         List<Map<String, Object>> lista = new ArrayList<>();
-        String sql = "SELECT t.id, t.tipo, t.descricao, t.prioridade, t.tarefa_ativa, "
-            + "ISNULL(c.critico, 0) AS critico, c.cor, c.icone "
-            + "FROM muralha.tipo_alerta_ocorrencia t "
-            + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
-            + "ORDER BY t.prioridade, t.tipo";
+        // Ajuste temporário de demonstração: sobrepõe sem alterar as tabelas existentes
+        // (gap em docs/entregas/gap-tipos-alerta-ajuste-demo.md)
+        boolean ajuste = existeAjusteDemo(conn);
+        String sql = ajuste
+            ? "SELECT t.id, t.tipo, COALESCE(a.descricao, t.descricao) AS descricao, "
+                + "COALESCE(a.prioridade, t.prioridade) AS prioridade, t.tarefa_ativa, "
+                + "COALESCE(a.critico, c.critico, 0) AS critico, COALESCE(a.cor, c.cor) AS cor, "
+                + "COALESCE(a.icone, c.icone) AS icone, "
+                + "CASE WHEN a.id_tipo_alerta_ocorrencia IS NULL THEN 0 ELSE 1 END AS ajustado "
+                + "FROM muralha.tipo_alerta_ocorrencia t "
+                + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
+                + "LEFT JOIN muralha.tipo_alerta_ajuste_demo a ON a.id_tipo_alerta_ocorrencia = t.id AND a.ativo = 1 "
+                + "ORDER BY COALESCE(a.prioridade, t.prioridade), t.tipo"
+            : "SELECT t.id, t.tipo, t.descricao, t.prioridade, t.tarefa_ativa, "
+                + "ISNULL(c.critico, 0) AS critico, c.cor, c.icone, 0 AS ajustado "
+                + "FROM muralha.tipo_alerta_ocorrencia t "
+                + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
+                + "ORDER BY t.prioridade, t.tipo";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -154,10 +167,19 @@ public class TipoAlertaConfigServlet extends HttpServlet {
                 m.put("critico", rs.getBoolean("critico"));
                 m.put("cor", rs.getString("cor"));
                 m.put("icone", rs.getString("icone"));
+                if (rs.getInt("ajustado") == 1) m.put("ajusteTemporario", true);
                 lista.add(m);
             }
         }
         return lista;
+    }
+
+    private static boolean existeAjusteDemo(Connection conn) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT CASE WHEN OBJECT_ID('muralha.tipo_alerta_ajuste_demo', 'U') IS NULL THEN 0 ELSE 1 END");
+             ResultSet rs = ps.executeQuery()) {
+            return rs.next() && rs.getInt(1) == 1;
+        }
     }
 
     private static List<Map<String, Object>> listarTratamentos(Connection conn, UUID idTipo) throws SQLException {
