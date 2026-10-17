@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–34. As migrações dos Planos 24 a 26 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria").
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–34. Todas as migrações foram executadas no DEV em 2026-10-16, com autorização.
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -62,15 +62,15 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16): tabela, 6 chaves e menus 387-388 |
 | [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ✅ Executado (2026-10-16): menu 201 com `Ativo = 0` |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
-| [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para a fila de revisão e a justificativa em tabela |
+| [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16): tabelas já existiam (idempotente), parâmetros e menus conferidos |
 
 ### Gaps finais — Planos 32–34 (2026-10-16)
 
 | Script | Plano | Descrição | Status |
 |---|---|---|---|
-| [`20261016_retry_notificacao.sql`](../banco-de-dados/migracoes/20261016_retry_notificacao.sql) | 32 | Retry de notificações em falha de comunicação: tabela de controle de tentativas, chaves `RETRY_NOTIFICACAO_*` | ⏳ Pendente |
-| [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ⏳ Pendente |
-| [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ⏳ Pendente |
+| [`20261016_retry_notificacao.sql`](../banco-de-dados/migracoes/20261016_retry_notificacao.sql) | 32 | Retry de notificações em falha de comunicação: tabela de controle de tentativas, chaves `RETRY_NOTIFICACAO_*` | ✅ Executado (2026-10-16): tabela `notificacao_retry`, 3 chaves |
+| [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ✅ Executado (2026-10-16): tabela `timelapse_cache`, 2 chaves |
+| [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ✅ Executado (2026-10-16): view `v_dados_consolidados`, 1 chave |
 
 ### Comando de execução
 
