@@ -6,7 +6,7 @@
 
 ## Status
 
-**Em andamento** — SUP-1, SUP-2 e SUP-3 concluidas.
+**Em andamento** — SUP-1, SUP-2, SUP-3 e SUP-4 concluidas.
 
 ## Sessoes concluidas
 
@@ -15,6 +15,7 @@
 | SUP-1 | 2026-10-16 | Fundacao: estrutura Docker, SsoAnaliseServlet, migracao de schema, documentacao |
 | SUP-2 | 2026-10-17 | Camada de dados: 2 tabelas materializadas, 8 views, 2 stored procedures |
 | SUP-3 | 2026-10-17 | Datasets e semantica: 11 datasets declarativos (YAML), 42 metricas, 24 certificadas, provisioner idempotente |
+| SUP-4 | 2026-10-17 | Paineis operacionais: 9 dashboards declarativos (YAML), 60 graficos, 8 tipos de visualizacao, provisioner estendido |
 
 ## Artefatos
 
@@ -33,8 +34,9 @@
 | `analise/docker-compose.prod.yml` | Override de producao (restart, limites, healthchecks) |
 | `analise/superset/superset_config.py` | Configuracao do Superset (cache, auth, formatos, idioma) |
 | `analise/superset/gtw_security.py` | Security manager customizado para SSO via cabecalhos GTW |
-| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao + datasets/metricas a partir de YAML |
+| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao + datasets/metricas + dashboards/graficos a partir de YAML |
 | `analise/superset/datasets/*.yaml` | 11 definicoes de datasets com colunas, metricas e metadados em PT-BR |
+| `analise/superset/dashboards/*.yaml` | 9 dashboards operacionais com graficos, native filters e conditional formatting |
 | `analise/nginx/default.conf` | Configuracao nginx com auth_request para SSO |
 | `analise/.env.exemplo` | Template de variaveis de ambiente |
 
@@ -59,4 +61,6 @@
 - [ ] Testar login SSO no navegador (usuario GTW -> Superset sem senha)
 - [ ] Testar provisionamento de datasets (`python /app/provisionar.py`)
 - [ ] Validar metricas certificadas contra SQL de referencia
-- [ ] Sessoes SUP-4 a SUP-14
+- [ ] Testar provisionamento de dashboards (`python /app/provisionar.py --dashboards-only`)
+- [ ] Validar layout dos dashboards no navegador
+- [ ] Sessoes SUP-5 a SUP-14

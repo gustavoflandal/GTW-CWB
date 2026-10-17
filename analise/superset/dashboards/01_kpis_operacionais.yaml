@@ -1,0 +1,112 @@
+# Painel: KPIs Operacionais (Plano 15)
+uuid: "d2a00001-sup4-4000-b001-000000000001"
+dashboard_title: "KPIs Operacionais"
+slug: kpis-operacionais
+description: >
+  Visao consolidada dos indicadores-chave do Muralha Digital:
+  passagens, infracoes, alertas, disponibilidade, latencia,
+  assertividade e pre-processamento.
+published: true
+tags: ["oficial", "operacional"]
+refresh_frequency: 60
+certified_by: "Consilux / Edital Salvador"
+
+filters:
+  - name: Periodo
+    type: time_range
+    required: true
+    default: "Last 7 days"
+    targets: ["__all__"]
+
+  - name: Equipamento
+    type: select
+    dataset: v_equipamentos
+    column: nome
+    targets: ["__all__"]
+
+charts:
+  - name: "Total de Passagens"
+    viz_type: big_number_total
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    time_column: hora
+    header_font_size: 0.4
+    subheader_font_size: 0.15
+    width: 2
+    height: 1
+
+  - name: "Total de Infracoes"
+    viz_type: big_number_total
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    time_column: dia
+    width: 2
+    height: 1
+
+  - name: "Total de Alertas"
+    viz_type: big_number_total
+    dataset: v_alertas
+    metric: total_alertas
+    time_column: dt_alerta
+    width: 2
+    height: 1
+
+  - name: "Disponibilidade Media (%)"
+    viz_type: big_number_total
+    dataset: v_disponibilidade_dia
+    metric: pct_disponibilidade_global
+    time_column: dia
+    width: 2
+    height: 1
+
+  - name: "SLA Latencia (%)"
+    viz_type: big_number_total
+    dataset: v_sla_latencia_dia
+    metric: pct_sla_cumprido
+    time_column: dia
+    width: 2
+    height: 1
+
+  - name: "Assertividade (%)"
+    viz_type: big_number_total
+    dataset: v_assertividade_dia
+    metric: assertividade_media
+    time_column: dia
+    width: 2
+    height: 1
+
+  - name: "Passagens por Hora"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_passagens_hora
+    metric: total_passagens
+    time_column: hora
+    time_grain: PT1H
+    width: 6
+    height: 2
+
+  - name: "Infracoes por Dia"
+    viz_type: echarts_timeseries_bar
+    dataset: mat_infracoes_dia
+    metric: total_infracoes
+    time_column: dia
+    time_grain: P1D
+    groupby: ["enquadramento"]
+    width: 6
+    height: 2
+
+  - name: "Evolucao Diaria dos KPIs"
+    viz_type: echarts_timeseries_line
+    dataset: v_sla_latencia_dia
+    metrics: ["pct_sla_cumprido"]
+    time_column: dia
+    time_grain: P1D
+    width: 12
+    height: 2
+
+layout:
+  type: grid
+  columns: 12
+  rows:
+    - [total_passagens, total_infracoes, total_alertas, disponibilidade, sla_latencia, assertividade]
+    - [passagens_hora, infracoes_dia]
+    - [evolucao_kpis]
