@@ -37,8 +37,8 @@ SELECT
     a.data               AS dt_evento,
     CAST(NULL AS VARCHAR(15)) AS placa,
     tao.tipo             AS tipo_evento,
-    a.latitude,
-    a.longitude,
+    CAST(NULL AS DECIMAL(10,6)) AS latitude,
+    CAST(NULL AS DECIMAL(10,6)) AS longitude,
     tao.descricao        AS descricao
 FROM muralha.alerta a
 JOIN muralha.tipo_alerta_ocorrencia tao ON tao.id = a.id_tipo_alerta_ocorrencia
@@ -47,16 +47,16 @@ UNION ALL
 
 SELECT
     'INCIDENTE_WAZE'     AS fonte,
-    CAST(i.id AS VARCHAR(36)) AS id_registro,
+    CAST(ie.id AS VARCHAR(36)) AS id_registro,
     CAST(NULL AS INT)    AS id_local,
     CAST(NULL AS VARCHAR(100)) AS equipamento,
-    i.dt_publicacao      AS dt_evento,
+    ie.dt_ocorrencia     AS dt_evento,
     CAST(NULL AS VARCHAR(15)) AS placa,
-    i.tipo               AS tipo_evento,
-    i.latitude,
-    i.longitude,
-    i.subtipo            AS descricao
-FROM muralha.incidente i
+    ie.tipo              AS tipo_evento,
+    ie.latitude,
+    ie.longitude,
+    CAST(ie.descricao AS VARCHAR(200)) AS descricao
+FROM muralha.incidente_externo ie
 
 UNION ALL
 
