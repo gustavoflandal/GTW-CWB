@@ -35,6 +35,13 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 25 | Integridade SHA-256 na recepção (Plano 25) | 2026-10-16 | 🟡 Implementado — migração executada; aguardando teste no navegador | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) |
 | 26 | Logs técnicos e histórico de parâmetros (Plano 26) | 2026-10-16 | 🟡 Implementado — migrações executadas; aguardando teste no navegador | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) |
 | 27 | Score de OCR, revisão automática e múltiplas placas (Plano 27) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) |
+| 28 | Alertas operacionais (Plano 28) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [28-alertas-operacionais.md](28-alertas-operacionais.md) |
+| 29 | KPIs e relatório mensal (Plano 29) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) |
+| 30 | Painéis de assertividade e pré-processamento (Plano 30) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) |
+| 31 | Acabamentos de baixo custo (Plano 31) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) |
+| 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
+| 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
+| 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |
 
 > Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 
@@ -43,7 +50,7 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 - **Diagrama de arquitetura:** [`arquitetura-sistema.md`](../diagrama-arquitetura/arquitetura-sistema.md) — camadas, módulos PoC, jobs Quartz, schema ER e módulos legados (Mermaid)
 - **Matriz canônica de aderência (fonte primária):** [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md) — os 232 itens do Capítulo 5 do TR em ordem crescente, com situação (✅/⚠️/❌), entrega e evidência; cobertura por seção
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — os mesmos status, agrupados por requisito, com links para os artefatos
-- **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (estimativa de 39% antes da PoC; 55% hoje pela matriz canônica)
+- **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (estimativa de 39% antes da PoC; 57% hoje pela matriz canônica)
 - **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
 - **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 121 testes consolidados em trilha sequencial (13/121 aceitos)
 - **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste

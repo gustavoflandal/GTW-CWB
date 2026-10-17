@@ -39,5 +39,12 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
 | 26 — Logs técnicos e histórico de parâmetros | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) | ⏳ Parcial: 42 testes TestNG e consulta real somente leitura aprovados no Windows; migração e roteiro no navegador pendentes |
 | 27 — Score de OCR e revisão de placas | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) | ⏳ Parcial: 32 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
+| 28 — Alertas operacionais | [28-alertas-operacionais.md](28-alertas-operacionais.md) | ⏳ Pendente |
+| 29 — KPIs e relatório mensal | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) | ⏳ Pendente |
+| 30 — Painéis de assertividade e pré-processamento | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) | ⏳ Pendente |
+| 31 — Acabamentos de baixo custo | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) | ⏳ Pendente |
+| 32 — Retry de notificações | [32-retry-notificacao.md](32-retry-notificacao.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
+| 33 — Descarte automático de time-lapse | [33-timelapse-descarte.md](33-timelapse-descarte.md) | ⏳ Parcial: 6 testes TestNG; migração e roteiro no navegador pendentes |
+| 34 — Consolidação de dados multifonte | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
 
 Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

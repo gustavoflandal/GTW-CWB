@@ -1,6 +1,6 @@
 # Aderência Comparativa — Antes e Após PoC TRANSALVADOR
 
-Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (Planos 01–22).
+Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salvador (Capítulo 5), comparando o estado anterior (base `main` pré-PoC) com o estado atual (Planos 01–34).
 
 > **Fonte de status:** matriz canônica [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md); a coluna "Depois" repete o status dela (agregado quando a linha cobre vários itens). Detalhe por grupo: [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md)  
 > **Data da análise:** 2026-10-08 · **Revisão:** 2026-10-16 (correção da auditoria — [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md))  
@@ -16,13 +16,13 @@ Visão tabular da evolução da aderência do GTW-CWB aos requisitos do TR Salva
 |---|---|---|---|
 | §5.1 Controle de Acesso | 40% | **89%** | 01, 03, 04, 05, 09, 12 |
 | §5.2 Gestão e Classificação | 45% | **82%** | 02, 05, 06, 07, 08, 11, 14, 15, 18 |
-| §5.3 Alertas de Irregularidades | 60% | **66%** | 03, 04, 07, 09, 16, 19 |
-| §5.4 Inteligência de Dados | 50% | **64%** | 01, 11, 12, 13, 15, 16, 18, 20 |
+| §5.3 Alertas de Irregularidades | 60% | **68%** | 03, 04, 07, 09, 16, 19, 28, 32 |
+| §5.4 Inteligência de Dados | 50% | **65%** | 01, 11, 12, 13, 15, 16, 18, 20, 34 |
 | §5.5 Pré-processamento | 25% | **48%** | 01, 05, 10, 12, 20 |
 | §5.6 Infraestrutura | 40% | **34%** | 07, 18 |
-| §5.7 LAP | 45% | **45%** | 07, 12, 13, 17 |
+| §5.7 LAP | 45% | **51%** | 07, 12, 13, 17, 27, 33 |
 | §5.8 Datacenter | 5% | **20%** | 07, 18 |
-| **Global** | **39%** | **55%** | **Planos 01–22** |
+| **Global** | **39%** | **57%** | **Planos 01–34** |
 
 A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 5.6 e 5.7.7 que estavam fora da conta, e a maioria deles é de infraestrutura ou do equipamento de campo.
 
@@ -93,11 +93,11 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.3.3.4 | Destaque visual | ⚠️ | ⚠️ | Cor e ícone fixos em `notificacao.js` |
 | 5.3.4 | Mapa interativo | ⚠️ | ⚠️ | Sem clustering |
 | 5.3.5.1d | Mobile | ⚠️ | ⚠️ | Sem app dedicado |
-| 5.3.5.3 | Retry de alertas | ❌ | ❌ | Gap remanescente |
+| 5.3.5.3 | Retry de alertas | ❌ | ⚠️ | Plano 32 (retry automático com N tentativas configuráveis) |
 | 5.3.6.4 | Histórico exportável | ⚠️ | ⚠️ | PDF/XLS por `export-table.js`, sem CSV |
 | 5.3.7.1-2 | Sensores externos | ❌ | ✅ | Plano 19 |
 | 5.3.7.3 | Integração Waze | ⚠️ | ✅ | Plano 19 |
-| 5.3.7.4 | Análise volumétrica | ⚠️ | ⚠️ | a–c no legado; d–e gap remanescente |
+| 5.3.7.4 | Análise volumétrica | ⚠️ | ⚠️ | a–c no legado; d–e implementados pelo Plano 28 |
 | 5.3.7.5 | Acesso via navegador com autenticação e criptografia | ⚠️ | ⚠️ | Planos 03, 04, 09; HTTPS depende do deploy |
 | Cap. 5, caput d | Resposta ≤4s | ⚠️ | ⚠️ | Plano 07 (monitoramento) |
 | 5.3.7.7 | Mapas e indicadores | — | ✅ | Planos 16, 19 |
@@ -106,7 +106,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 
 | Ref. TR | Requisito | Antes | Depois | Resolução |
 |---|---|---|---|---|
-| 5.4.1.1 | Consolidação multifonte | ⚠️ | ⚠️ | Sem pipeline |
+| 5.4.1.1 | Consolidação multifonte | ⚠️ | ⚠️ | Plano 34 (view consolidada 4 fontes, servlet e tela) |
 | 5.4.1.2-3 | LGPD (anonimização) | ⚠️ | ✅ | Plano 13 |
 | 5.4.2.1-2 | Dashboards interativos | ✅ | ✅ | Plano 15 |
 | 5.4.2.3.e | Disponibilidade | — | ✅ | Plano 18 |
@@ -162,7 +162,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.7.5.3 | Retenção 5 anos | ❌ | ✅ | Plano 12 |
 | 5.7.8 | Anonimização | ❌ | ✅ | Plano 13 |
 | 5.7.9.1 | Latência ≤4s | ⚠️ | ⚠️ | Plano 07 (monitoramento) |
-| 5.7.7 | Time-lapse | ❌ | ⚠️ | Plano 17 (player, sem vídeo nem descarte) |
+| 5.7.7 | Time-lapse | ❌ | ⚠️ | Plano 17 (player), Plano 33 (descarte automático 72h) |
 
 ### §5.8 — Datacenter
 
@@ -186,12 +186,12 @@ Contagem das linhas da seção 2 (recalculada em 2026-10-16).
 | Transição | Quantidade |
 |---|---|
 | ❌ → ✅ (gap resolvido) | **13** |
-| ❌ → ⚠️ (gap parcialmente resolvido) | **11** |
+| ❌ → ⚠️ (gap parcialmente resolvido) | **12** |
 | ⚠️ → ✅ (parcial → completo) | **10** |
 | — → ✅ (não avaliado antes) | **3** |
 | ✅ → ✅ (já atendia) | **25** |
 | ⚠️ → ⚠️ (sem mudança) | **32** |
-| ❌ → ❌ (gap remanescente) | **13** |
+| ❌ → ❌ (gap remanescente) | **12** |
 | **Total de linhas analisadas** | **107** |
 
 ---
@@ -202,17 +202,14 @@ Contagem das linhas da seção 2 (recalculada em 2026-10-16).
 |---|---|---|---|
 | 1 | Criptografia TLS em trânsito e repouso | §5.6.3 | Infraestrutura/deploy |
 | 2 | Alta disponibilidade e PRD/PCN | §5.8.3, §5.8.5 | Infraestrutura/operação |
-| 3 | Videodetecção volumétrica de tráfego | §5.3.7.4 | Nova funcionalidade |
-| 4 | Relatório mensal automático | §5.5.3.3 | Desenvolvimento |
-| 5 | Retry de alertas em falha de comunicação | §5.3.5.3 | Desenvolvimento |
-| 6 | Redundância lógica e física | §5.6.1.2 | Infraestrutura |
-| 7 | Datacenter Tier III | §5.8.1.2 | Infraestrutura |
-| 8 | RTO ≤4h / RPO ≤1h | §5.8.3.3 | Operação |
-| 9 | Monitoramento de infraestrutura completo | §5.8.6.1 | Observabilidade |
-| 10 | Consolidação multifonte | §5.4.1.1 | Pipeline de dados |
-| 11 | Armazenamento local 6h (firmware) | §5.6.4.3 | Equipamentos |
+| 3 | Relatório mensal automático | §5.5.3.3 | Desenvolvimento |
+| 4 | Redundância lógica e física | §5.6.1.2 | Infraestrutura |
+| 5 | Datacenter Tier III | §5.8.1.2 | Infraestrutura |
+| 6 | RTO ≤4h / RPO ≤1h | §5.8.3.3 | Operação |
+| 7 | Monitoramento de infraestrutura completo | §5.8.6.1 | Observabilidade |
+| 8 | Armazenamento local 6h (firmware) | §5.6.4.3 | Equipamentos |
 
-> Dos 11 gaps remanescentes, **7 são de infraestrutura/operação** (não resolvíveis via código da aplicação) e **4 são de desenvolvimento** (endereçáveis em ondas futuras).
+> Dos 8 gaps remanescentes, **7 são de infraestrutura/operação** (não resolvíveis via código da aplicação) e **1 é de desenvolvimento** (endereçável em ondas futuras). Os Planos 28 (§5.3.7.4d-e), 32 (§5.3.5.3) e 34 (§5.4.1.1) endereçaram 3 gaps que antes constavam nesta lista.
 
 ---
 
