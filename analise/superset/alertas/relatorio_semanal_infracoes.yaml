@@ -1,0 +1,19 @@
+# Relatório agendado: Infrações semanal (TR 5.4.2.x)
+uuid: "r1000001-sup7-4000-b001-000000000002"
+name: "Resumo Semanal — Infrações"
+description: >
+  Envia screenshot do dashboard de Infrações por e-mail
+  toda segunda-feira às 08:00.
+type: report
+active: true
+crontab: "0 8 * * 1"
+timezone: "America/Bahia"
+
+dashboard_slug: infracoes
+report_format: png
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "gestao@muralhadigital.local"
+log_retention: 90

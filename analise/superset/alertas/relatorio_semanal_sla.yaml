@@ -1,0 +1,19 @@
+# Relatório agendado: SLA semanal (TR 5.4.2.x)
+uuid: "r1000001-sup7-4000-b001-000000000003"
+name: "Resumo Semanal — SLA e Disponibilidade"
+description: >
+  Envia screenshots dos dashboards de SLA de Latência e
+  Disponibilidade por e-mail toda segunda-feira às 08:30.
+type: report
+active: true
+crontab: "30 8 * * 1"
+timezone: "America/Bahia"
+
+dashboard_slug: sla-latencia
+report_format: png
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "gestao@muralhadigital.local"
+log_retention: 90

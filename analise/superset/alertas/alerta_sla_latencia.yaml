@@ -1,0 +1,30 @@
+# Alerta: SLA de latência abaixo de 95% (TR 5.4.3.x)
+uuid: "a1000001-sup7-4000-b001-000000000002"
+name: "SLA de latência abaixo de 95%"
+description: >
+  Dispara quando o percentual de janelas dentro do SLA de latência
+  cai abaixo de 95% nas últimas 24h.
+type: alert
+active: true
+crontab: "*/15 * * * *"
+timezone: "America/Bahia"
+
+database: "GTW Muralha Digital (somente leitura)"
+sql: >
+  SELECT
+    CAST(SUM(CASE WHEN dentro_sla = 1 THEN 1 ELSE 0 END) AS FLOAT)
+    / NULLIF(COUNT(*), 0) * 100 AS valor
+  FROM analise.v_sla_latencia_dia
+  WHERE dia >= CAST(DATEADD(DAY, -1, GETDATE()) AS DATE)
+
+validator_type: operator
+validator_config:
+  op: "<"
+  threshold: 95.0
+
+owners: ["admin"]
+recipients:
+  - type: email
+    target: "operacao@muralhadigital.local"
+grace_period: 3600
+log_retention: 90

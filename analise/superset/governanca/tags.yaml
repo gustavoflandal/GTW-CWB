@@ -1,0 +1,26 @@
+# Tags para organização de dashboards e datasets (SUP-5)
+#
+# Tags são o mecanismo de coleções do Superset — permitem agrupar
+# dashboards por contexto operacional ou área temática.
+
+tags:
+  - name: oficial
+    description: "Dashboards e datasets homologados pela Consilux / Edital Salvador"
+
+  - name: operacional
+    description: "Painéis de acompanhamento operacional em tempo real"
+
+  - name: sla
+    description: "Indicadores de SLA, latência e disponibilidade"
+
+  - name: fiscalizacao
+    description: "Infrações, passagens e pré-processamento"
+
+  - name: manutencao
+    description: "Equipamentos, disponibilidade e alertas técnicos"
+
+  - name: georreferenciado
+    description: "Mapas e análise espacial (deck.gl)"
+
+  - name: administrativo
+    description: "Datasets e painéis restritos à administração"

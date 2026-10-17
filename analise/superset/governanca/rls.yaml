@@ -1,0 +1,29 @@
+# Row Level Security — regras de acesso por linha (SUP-5)
+#
+# Cada regra restringe quais linhas um papel pode ver em determinados datasets.
+# O Superset injeta a cláusula WHERE automaticamente.
+
+regras:
+  - name: "Restringir por região do operador"
+    description: >
+      Operadores veem apenas dados da sua região (área monitorada).
+      A coluna area_monitorada_id é populada via {{ current_username() }}
+      usando a tabela de vínculo operador→região do GTW.
+    clause: "area_monitorada_id IN (SELECT am.id FROM analise.v_usuario_area_monitorada am WHERE am.usuario = '{{ current_username() }}')"
+    roles:
+      - Operador
+    datasets:
+      - mat_passagens_hora
+      - mat_infracoes_dia
+      - v_alertas
+      - v_disponibilidade_dia
+
+  - name: "Auditores veem tudo (sem filtro)"
+    description: >
+      Auditores e Admin não têm restrição por região.
+      Esta regra existe como documentação — roles sem RLS veem tudo.
+    clause: "1=1"
+    roles:
+      - Auditor
+      - Admin
+    datasets: []

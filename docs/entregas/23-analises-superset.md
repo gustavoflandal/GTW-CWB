@@ -6,7 +6,7 @@
 
 ## Status
 
-**Em andamento** — SUP-1, SUP-2, SUP-3 e SUP-4 concluidas.
+**Em andamento** — SUP-1 a SUP-7 concluidas.
 
 ## Sessoes concluidas
 
@@ -16,6 +16,9 @@
 | SUP-2 | 2026-10-17 | Camada de dados: 2 tabelas materializadas, 8 views, 2 stored procedures |
 | SUP-3 | 2026-10-17 | Datasets e semantica: 11 datasets declarativos (YAML), 42 metricas, 24 certificadas, provisioner idempotente |
 | SUP-4 | 2026-10-17 | Paineis operacionais: 9 dashboards declarativos (YAML), 60 graficos, 8 tipos de visualizacao, provisioner estendido |
+| SUP-5 | 2026-10-17 | Governanca: 3 papeis customizados, 7 tags, RLS por regiao, Jinja context |
+| SUP-6 | 2026-10-17 | Auditoria: log estruturado, StatsD opcional, action log com retencao 90 dias |
+| SUP-7 | 2026-10-17 | Alertas: 4 alertas + 3 relatorios agendados, celery-worker e celery-beat no Compose |
 
 ## Artefatos
 
@@ -34,9 +37,11 @@
 | `analise/docker-compose.prod.yml` | Override de producao (restart, limites, healthchecks) |
 | `analise/superset/superset_config.py` | Configuracao do Superset (cache, auth, formatos, idioma) |
 | `analise/superset/gtw_security.py` | Security manager customizado para SSO via cabecalhos GTW |
-| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao + datasets/metricas + dashboards/graficos a partir de YAML |
+| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao, datasets, dashboards, tags, RLS, papeis, alertas |
 | `analise/superset/datasets/*.yaml` | 11 definicoes de datasets com colunas, metricas e metadados em PT-BR |
 | `analise/superset/dashboards/*.yaml` | 9 dashboards operacionais com graficos, native filters e conditional formatting |
+| `analise/superset/governanca/*.yaml` | 3 papeis, 7 tags, 2 regras RLS declarativas |
+| `analise/superset/alertas/*.yaml` | 4 alertas SQL + 3 relatorios agendados (screenshot de dashboard) |
 | `analise/nginx/default.conf` | Configuracao nginx com auth_request para SSO |
 | `analise/.env.exemplo` | Template de variaveis de ambiente |
 
@@ -63,4 +68,7 @@
 - [ ] Validar metricas certificadas contra SQL de referencia
 - [ ] Testar provisionamento de dashboards (`python /app/provisionar.py --dashboards-only`)
 - [ ] Validar layout dos dashboards no navegador
-- [ ] Sessoes SUP-5 a SUP-14
+- [ ] Testar papeis e RLS com usuarios distintos
+- [ ] Testar alertas e relatorios (`python /app/provisionar.py --alertas-only`)
+- [ ] Validar envio de e-mail (requer SMTP configurado)
+- [ ] Sessoes SUP-8 a SUP-14

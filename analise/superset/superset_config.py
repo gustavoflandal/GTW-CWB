@@ -10,6 +10,8 @@ import json
 import sys
 from datetime import timedelta
 
+from flask import g
+
 # Garante que /app esteja no path para importar gtw_security.py
 if "/app" not in sys.path:
     sys.path.insert(0, "/app")
@@ -103,6 +105,15 @@ FEATURE_FLAGS = {
     "EMBEDDED_SUPERSET": True,        # Embedding de painéis no GTW
     "ALERT_REPORTS": True,            # Alertas e relatórios agendados
     "ENABLE_TEMPLATE_PROCESSING": True,  # Templates Jinja nos SQL
+    "TAGGING_SYSTEM": True,           # Tags para organização (SUP-5)
+    "ALERT_REPORT_TABS": True,        # Abas de alertas na interface (SUP-7)
+}
+
+# ---------------------------------------------------------------------------
+# Row Level Security — Jinja para filtros dinâmicos (SUP-5)
+# ---------------------------------------------------------------------------
+JINJA_CONTEXT_ADDONS = {
+    "current_username": lambda: g.user.username if hasattr(g, "user") and g.user else "anon",
 }
 
 # ---------------------------------------------------------------------------
@@ -154,6 +165,31 @@ GUEST_TOKEN_JWT_SECRET = os.environ.get("SUPERSET_SECRET_KEY", SECRET_KEY)
 GUEST_TOKEN_JWT_ALGO = "HS256"
 GUEST_TOKEN_HEADER_NAME = "X-GuestToken"
 GUEST_TOKEN_JWT_EXP_SECONDS = 3600  # 1 hora
+
+# ---------------------------------------------------------------------------
+# Auditoria e observabilidade (SUP-6)
+# ---------------------------------------------------------------------------
+
+# Log de ações — registra quem acessou qual dashboard/gráfico
+FAB_LOG_LEVEL = os.environ.get("SUPERSET_LOG_LEVEL", "INFO")
+LOG_FORMAT = "%(asctime)s [%(levelname)s] %(name)s — %(message)s"
+LOG_LEVEL = FAB_LOG_LEVEL
+
+# StatsD — métricas de performance (opcional, via .env)
+_STATSD_HOST = os.environ.get("STATSD_HOST", "")
+if _STATSD_HOST:
+    from superset.stats_logger import StatsdStatsLogger
+    STATS_LOGGER = StatsdStatsLogger(
+        host=_STATSD_HOST,
+        port=int(os.environ.get("STATSD_PORT", "8125")),
+        prefix="superset",
+    )
+
+# Retenção do action log (dias)
+SUPERSET_LOG_VIEW = True
+
+# Consultas SQL — log de execução
+QUERY_LOGGER = True
 
 # ---------------------------------------------------------------------------
 # CSRF e sessão
