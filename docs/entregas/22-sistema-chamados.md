@@ -3,6 +3,8 @@
 **Data:** 2026-10-15  
 **Status:** Implementado — migração executada no `GTW_MURALHA_DEV` em 2026-10-15 e teste integrado executado em 2026-10-15 (10 de 10 casos passaram)
 
+> **Atualização de 2026-10-18** ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): Os cards Relatórios de Chamados e Configuração de Chamados foram retirados da categoria Sistema de Chamados; as telas são abertas pelos botões **Relatórios** (Gestor, Equipe, Administrador) e **Configuração** (Administrador) da tela Chamados. O asterisco do card Chamados passou a incluir 7.2.3.d.
+
 ## Escopo
 
 Módulo de chamados (central de suporte técnico) integrado ao Muralha Digital: abertura com classificação de prioridade, acompanhamento por status com atualização a cada 30 s, histórico integral, relatórios por período/categoria/equipamento/prioridade, avaliação do atendimento, exportação CSV/XLSX/PDF e número de protocolo único com confirmação automática por e-mail. CONTRATANTE (perfis Solicitante e Gestor do contrato) e CONTRATADA (perfil Equipe técnica) usam o mesmo sistema. SLA em horas corridas 24x7, com pausa enquanto o chamado aguarda o solicitante.
@@ -46,7 +48,7 @@ Os scripts SQL foram executados no banco de desenvolvimento e o roteiro integrad
 | `src/main/webapp/muralha-digital/pages/chamados/relatorios.jsp` | Indicadores com Chart.js, tabela e exportação |
 | `src/main/webapp/muralha-digital/pages/chamados/configuracao.jsp` | Abas Parâmetros de SLA, Perfis de acesso, Prioridades e prazos, Categorias e E-mail (SMTP) (administrador) |
 | `src/main/webapp/muralha-digital/assets/js/chamados/` | Scripts das telas (`chamados-comum.js`, `-lista`, `-detalhe`, `-relatorios`, `-configuracao`) |
-| `src/main/java/muralha/digital/acessos/ReferenciaEdital.java` | Itens específicos para os cards 379 (7.2.3.a/b/c/e/f, 7.2.4), 381 (7.2.3.d) e 382 (7.2.4); a categoria 383 não tem asterisco desde 2026-10-18 (só itens específicos, sem número de título) |
+| `src/main/java/muralha/digital/acessos/ReferenciaEdital.java` | Itens específicos no card 379 Chamados (7.2.3.a a 7.2.3.f e 7.2.4), que também dá acesso aos Relatórios e à Configuração; a categoria 383 não tem asterisco (só itens específicos, sem número de título) |
 | `src/test/java/muralha/digital/chamado/` | Testes TestNG das regras do módulo |
 | `docs/testes/22-sistema-chamados.md` | Roteiro de testes manuais e registro da execução de 2026-10-15 |
 
@@ -71,7 +73,7 @@ Verificados:
 
 - [x] Build compila sem erros
 - [x] 123 testes TestNG passando (módulo `chamado`, inclusive `CifraSegredoTest` e `ConfiguracaoSmtpChamadoTest`, + 5 de `ReferenciaEditalTest`)
-- [x] Cards 379, 381 e 382 com referência aos itens específicos do edital em `ReferenciaEdital` (revisão de 2026-10-18)
+- [x] Card 379 com referência aos itens específicos do edital em `ReferenciaEdital` (revisão de 2026-10-18)
 - [x] Migrações `20261015_sistema_chamados.sql`, `_seed.sql`, `_admin.sql` e `_smtp.sql` executadas no `GTW_MURALHA_DEV`
 - [x] SMTP dos chamados pelo administrador (Tarefa 19, teste por HTTP em 2026-10-15): senha gravada como `v1:…`, nunca devolvida pelo GET; e-mail de teste com host inválido devolve erro legível; sem a chave no servidor, senha nova recusada; configuração devolvida ao `confGTW.xml` ao final ([caso T20](../testes/22-sistema-chamados.md#t20--e-mail-smtp-dos-chamados-complemento))
 

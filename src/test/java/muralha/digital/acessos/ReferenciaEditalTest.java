@@ -46,10 +46,7 @@ public class ReferenciaEditalTest {
 
     @Test
     public void funcionalidadesComCardTemReferencia() {
-        for (int idMenu = 366; idMenu <= 378; idMenu++) {
-            assertFalse(ReferenciaEdital.itens(idMenu).isEmpty(), "id_menu " + idMenu + " sem referencia ao edital");
-        }
-        for (int idMenu : new int[] {379, 381, 382, 395}) {
+        for (int idMenu : new int[] {366, 367, 368, 369, 370, 371, 373, 374, 375, 376, 377, 379, 395}) {
             assertFalse(ReferenciaEdital.itens(idMenu).isEmpty(), "id_menu " + idMenu + " sem referencia ao edital");
         }
         for (String href : HREFS_DINAMICOS) {
@@ -61,7 +58,8 @@ public class ReferenciaEditalTest {
     public void referenciasConferidasComOTexto() {
         assertEquals(ReferenciaEdital.itens(368), List.of("5.2.2.6"));
         assertEquals(ReferenciaEdital.itens(369), List.of("5.5.2.1"));
-        assertEquals(ReferenciaEdital.itens(381), List.of("7.2.3.d"));
+        assertEquals(ReferenciaEdital.itens(371), List.of("5.4.6.1", "5.4.6.3"));
+        assertTrue(ReferenciaEdital.itens(379).contains("7.2.3.d"));
         assertEquals(ReferenciaEdital.itensPorHref("/muralha-digital/pages/monitoramento/integridade/index.jsp"),
                 List.of("5.2.1.2", "5.2.1.3"));
     }
@@ -69,7 +67,10 @@ public class ReferenciaEditalTest {
     @Test
     public void categoriaEMenuSemCardNaoTemAsterisco() {
         assertTrue(ReferenciaEdital.itens(383).isEmpty(), "categoria Sistema de Chamados");
-        assertTrue(ReferenciaEdital.itens(380).isEmpty(), "Detalhe do Chamado não tem card");
+        // Telas sem card: abertas por botão de outra tela (o asterisco fica no card dessa tela)
+        for (int idMenu : new int[] {372, 378, 380, 381, 382}) {
+            assertTrue(ReferenciaEdital.itens(idMenu).isEmpty(), "id_menu " + idMenu + " não tem card");
+        }
     }
 
     @Test

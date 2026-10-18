@@ -15,8 +15,8 @@
 | 8 | Dashboards → Painel Informativo, Dashboards | submenu (`menu_pai=1`) |
 | — | Painéis de Análise → Painéis, Catálogo de Datasets | submenu (itens 376/377, infos 43/44 — Plano 20) |
 | 9 | Blitz Digital → Cadastro, Blitz Ostensiva, Abordagem | submenu (`menu_pai=29`) |
-| — | Catálogo de Dados (menu 378, info 45) | `analises/catalogo/index.jsp` (sob Cadastro e Configuração, menu_pai=16) |
-| 99 | Cadastro e Configuração → Guarnição, Ponto de Interesse, Configuração, Catálogo de Dados | submenu (`menu_pai=16`) |
+| — | Catálogo de Dados (menu 378, sem card desde 2026-10-18) | `analises/catalogo/index.jsp`, aberto pelo botão **Catálogo de Dados** do Catálogo de Datasets |
+| 99 | Cadastro e Configuração → Gestão de Lotes, Catálogo de Datasets, Ponto de Interesse, Configuração de Monitoramento | submenu (`menu_pai=16`). Sem card desde 2026-10-18 (abertas por botão da tela do módulo): Guarnição (Central de Atendimento → Gerenciar Guarnições → Gerenciar), Configuração de KPIs (KPIs → Configurar) e Catálogo de Dados |
 | — | **Relatórios** (menu separado, `sis_menu_relatorio_infos`, ~35 itens) e **Gráficos** (`sis_menu_graficos_infos`, 5 itens) | `pages/relatorios/*` |
 
 Home: `login/abertura-sistemas.jsp` → `login/muralha_principal.jsp?menu_info_pai=<id>` (cards por menu). A navbar (`cabecalho_bootstrap_simples.jsp`) mostra Processamento, Relatórios, Gráficos, GTW, Pesquisa Rápida, sino/envelope de alertas e menu do usuário.
@@ -234,7 +234,7 @@ Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2
 
 | Item | Detalhe |
 |---|---|
-| Menus | 383 (categoria "Sistema de Chamados" na tela inicial, `sis_menu_infos` 49), com os cards 379 (Chamados), 381 (Relatórios de Chamados) e 382 (Configuração de Chamados, só administrador); 380 (Detalhe do Chamado, sem card) |
+| Menus | 383 (categoria "Sistema de Chamados" na tela inicial, `sis_menu_infos` 49), com o card 379 (Chamados); 381 (Relatórios de Chamados) e 382 (Configuração de Chamados, só administrador) são abertos pelos botões Relatórios e Configuração da tela Chamados (sem card desde 2026-10-18); 380 (Detalhe do Chamado, sem card) |
 | Telas (`pages/chamados/`) | `index.jsp` (lista, filtros, modal "Novo chamado", exportação), `detalhe.jsp` (histórico e ações), `relatorios.jsp` (indicadores e gráfico), `configuracao.jsp` (parâmetros de SLA, perfis de acesso, prioridades e categorias) |
 | Servlets | `/MuralhaDigital/Chamado`, `/MuralhaDigital/ChamadoRelatorio`, `/MuralhaDigital/ChamadoConfig` |
 | Jobs Quartz | `ChamadoSlaJob` (5 min: marcas de SLA e fechamento automático), `ChamadoEmailJob` (1 min: fila de e-mails) |

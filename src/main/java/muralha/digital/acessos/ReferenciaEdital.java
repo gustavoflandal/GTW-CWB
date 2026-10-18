@@ -17,17 +17,16 @@ public final class ReferenciaEdital {
             Map.entry(368, List.of("5.2.2.6")),         // Assertividade — painel de controle operacional
             Map.entry(369, List.of("5.5.2.1")),         // SLA de Pré-processamento — prazo de 72 horas
             Map.entry(370, List.of("5.2.5.1")),         // Gestão de Lotes — organização dos registros em lotes
-            Map.entry(371, List.of("5.4.6.1")),         // KPIs — cálculo e acompanhamento contínuo de indicadores
-            Map.entry(372, List.of("5.4.6.3")),         // Configuração de KPIs — indicadores parametrizáveis
+            // KPIs — acompanhamento de indicadores · parametrização (botão "Configurar" do painel)
+            Map.entry(371, List.of("5.4.6.1", "5.4.6.3")),
             Map.entry(373, List.of("5.7.7.1")),         // Time-lapse — vídeos operacionais sintéticos
             Map.entry(374, List.of("5.2.7.1")),         // Disponibilidade — monitoramento do estado dos equipamentos
             Map.entry(375, List.of("5.3.7.3")),         // Mapa de Incidentes — integração com Waze/Google Maps
             Map.entry(376, List.of("5.4.2.5")),         // Painéis de Análise — dashboards personalizados
-            Map.entry(377, List.of("5.4.2.4.e")),       // Catálogo de Datasets — parametrização de indicadores e painéis
-            Map.entry(378, List.of("5.4.2.4.e")),       // Catálogo de Dados — parametrização de indicadores e painéis
-            Map.entry(379, List.of("7.2.3.a", "7.2.3.b", "7.2.3.c", "7.2.3.e", "7.2.3.f", "7.2.4")), // Chamados
-            Map.entry(381, List.of("7.2.3.d")),         // Relatórios de Chamados
-            Map.entry(382, List.of("7.2.4")),           // Configuração de Chamados — prazos de atendimento e resolução
+            // Catálogo de Datasets (dá acesso ao Catálogo de Dados) — parametrização de indicadores e painéis
+            Map.entry(377, List.of("5.4.2.4.e")),
+            // Chamados (botões Relatórios e Configuração dão acesso às demais telas do módulo)
+            Map.entry(379, List.of("7.2.3.a", "7.2.3.b", "7.2.3.c", "7.2.3.d", "7.2.3.e", "7.2.3.f", "7.2.4")),
             Map.entry(395, List.of("5.4.2.1"))          // Análises (Superset) — dashboards analíticos interativos
     );
 

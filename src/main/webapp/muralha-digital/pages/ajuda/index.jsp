@@ -116,7 +116,7 @@
         <tbody>
           <tr><td><a href="#registros"><strong>Registro de Fato</strong></a></td><td>Registro de fatos com boletim de ocorrência.</td></tr>
           <tr><td><a href="#monitoramento"><strong>Monitoramento</strong></a></td><td>Veículos monitorados, alertas e ocorrências, veículos em tempo real, vídeo.</td></tr>
-          <tr><td><a href="#atendimento-ocorrencias"><strong>Central de Atendimento</strong></a></td><td>Atendimento de ocorrências.</td></tr>
+          <tr><td><a href="#atendimento-ocorrencias"><strong>Central de Atendimento</strong></a></td><td>Atendimento de ocorrências e gestão das guarnições.</td></tr>
           <tr><td><a href="#consultas"><strong>Consulta de Veículos</strong></a></td><td>Consulta de passagens, veículos de carga e revisão de placas.</td></tr>
           <tr><td><a href="#mapas"><strong>Mapas</strong></a></td><td>Áreas monitoradas, mapa interativo, calor, equipamentos, incidentes e quantitativos.</td></tr>
           <tr><td><a href="#analise"><strong>Análise de Dados</strong></a></td><td>Indicadores de qualidade e operação, auditoria, logs, relatórios gerenciais e plataforma de análises.</td></tr>
@@ -124,7 +124,7 @@
           <tr><td><a href="#paineis-analise"><strong>Painéis de Análise</strong></a></td><td>Painéis montados pelo próprio usuário com widgets.</td></tr>
           <tr><td><a href="#blitz"><strong>Blitz Digital</strong></a></td><td>Cadastro de blitz, blitz ostensiva e abordagens.</td></tr>
           <tr><td><a href="#chamados"><strong>Sistema de Chamados</strong></a></td><td>Abertura e acompanhamento de chamados técnicos, relatórios e configuração.</td></tr>
-          <tr><td><a href="#cadastro"><strong>Cadastro e Configuração</strong></a></td><td>Guarnições, KPIs, lotes, catálogos de dados, pontos de interesse e configuração.</td></tr>
+          <tr><td><a href="#cadastro"><strong>Cadastro e Configuração</strong></a></td><td>Gestão de lotes, catálogo de datasets (e de dados), pontos de interesse e configuração do monitoramento.</td></tr>
         </tbody>
       </table>
 
@@ -206,6 +206,10 @@
     <div class="card-body">
       <p class="caminho">Tela Inicial → Central de Atendimento</p>
       <p>Quando um alerta resulta em ação de campo, uma <strong>ocorrência</strong> é registrada com local, horário, guarnição envolvida, relato e boletim vinculado. A Central permite abrir, acompanhar, editar e finalizar ocorrências.</p>
+
+      <h6 id="guarnicoes">6.1 Guarnições</h6>
+      <p class="caminho">Central de Atendimento → botão <strong>Gerenciar Guarnições</strong> → <strong>Gerenciar</strong></p>
+      <p>O botão <strong>Gerenciar Guarnições</strong> mostra a disponibilidade das equipes de campo; nessa janela, <strong>Gerenciar</strong> abre o cadastro de guarnições: composição (membros e viatura), situação (ativa ou inativa) e área de atuação.</p>
     </div>
   </div>
 
@@ -370,12 +374,16 @@
       <p>Indicadores gerais do sistema: total de passagens, alertas, situação dos equipamentos e gráficos de tendência. A partir dele abre-se o <a href="#calendario-intensidade">Calendário de Intensidade</a>.</p>
 
       <h6 id="dashboard-kpis">10.3 KPIs</h6>
-      <p>Indicadores de desempenho configurados em <a href="#config-kpis">Configuração de KPIs</a>, com cor conforme os limites ideal e de alerta, e atualização automática.</p>
+      <p>Indicadores de desempenho com cor conforme os limites ideal e de alerta, e atualização automática.</p>
       <ol>
         <li>Acompanhe os cards dos indicadores; passe o mouse sobre os gráficos para ver valores.</li>
         <li>Clique em <strong>Histórico</strong> em um KPI para ver sua evolução (7, 30 ou 90 dias) com a linha de meta.</li>
       </ol>
       <p>Quando um KPI entra em situação de alerta ou crítica, o sistema registra um alerta analítico automaticamente.</p>
+
+      <h6 id="config-kpis">10.3.1 Configuração de KPIs</h6>
+      <p class="caminho">Dashboards → KPIs → botão <strong>Configurar</strong></p>
+      <p>Define os indicadores exibidos no painel: nome, descrição, unidade, ordem, consulta SQL (deve retornar a coluna <code>valor</code>), limite ideal, limite de alerta, forma de exibição, cor e se o KPI está ativo.</p>
     </div>
   </div>
 
@@ -449,9 +457,11 @@
       </ol>
 
       <h6 id="chamados-relatorios">13.2 Relatórios de Chamados</h6>
+      <p class="caminho">Chamados → botão <strong>Relatórios</strong> (perfis Gestor, Equipe e Administrador)</p>
       <p>Indicadores por período, categoria, equipamento e prioridade, com agrupamento escolhido: total, resolvidos, cancelados, % de SLA de atendimento e de resolução, tempo médio de atendimento (TMA) e de resolução (TMR). Exportação em CSV, XLSX e PDF.</p>
 
-      <h6 id="chamados-configuracao">13.3 Configuração de Chamados (administrador)</h6>
+      <h6 id="chamados-configuracao">13.3 Configuração de Chamados</h6>
+      <p class="caminho">Chamados → botão <strong>Configuração</strong> (perfil Administrador)</p>
       <p>Abas <strong>Parâmetros de SLA</strong> (percentual de risco e fechamento automático), <strong>Perfis de acesso</strong>, <strong>Prioridades e prazos</strong>, <strong>Categorias</strong> e <strong>E-mail (SMTP)</strong>.</p>
     </div>
   </div>
@@ -462,13 +472,9 @@
     <div class="card-body">
       <p class="caminho">Tela Inicial → Cadastro e Configuração</p>
 
-      <h6 id="guarnicoes">14.1 Guarnição</h6>
-      <p>Cadastro das equipes de campo que atendem alertas e ocorrências: composição (membros e viatura), situação (ativa ou inativa) e área de atuação.</p>
+      <p class="small text-muted">A configuração de KPIs, o cadastro de guarnições e o Catálogo de Dados são abertos pelos botões das telas a que pertencem (<a href="#config-kpis">KPIs</a>, <a href="#guarnicoes">Central de Atendimento</a> e <a href="#catalogo-dados">Catálogo de Datasets</a>).</p>
 
-      <h6 id="config-kpis">14.2 Configuração de KPIs</h6>
-      <p>Defina os indicadores exibidos em <a href="#dashboard-kpis">KPIs</a>: nome, descrição, unidade, ordem, consulta SQL (deve retornar a coluna <code>valor</code>), limite ideal, limite de alerta, forma de exibição, cor e se o KPI está ativo.</p>
-
-      <h6 id="gestao-lotes">14.3 Gestão de Lotes</h6>
+      <h6 id="gestao-lotes">14.1 Gestão de Lotes</h6>
       <p>Agrupa infrações pré-aprovadas em lotes para encaminhamento ao órgão de trânsito.</p>
       <ol>
         <li>Crie um lote e inclua as infrações (placa, local, pista e data da captura).</li>
@@ -476,13 +482,14 @@
         <li>A lista mostra código, descrição, situação, datas de criação e envio e a quantidade de infrações de cada lote.</li>
       </ol>
 
-      <h6 id="catalogo-datasets">14.4 Catálogo de Datasets</h6>
+      <h6 id="catalogo-datasets">14.2 Catálogo de Datasets</h6>
       <p>Datasets usados pelos <a href="#paineis-analise">Painéis de Análise</a>: nome, tabela base, situação e versão. Os datasets são montados no modelador visual a partir das tabelas do Catálogo de Dados, sem digitar SQL.</p>
 
-      <h6 id="catalogo-dados">14.5 Catálogo de Dados</h6>
+      <h6 id="catalogo-dados">14.2.1 Catálogo de Dados</h6>
+      <p class="caminho">Cadastro e Configuração → Catálogo de Datasets → botão <strong>Catálogo de Dados</strong></p>
       <p>Descrição das tabelas disponíveis para análise: rótulo, schema e nome, chave primária e situação; as colunas (nome físico, tipo, papel sugerido e indicação de <strong>dado pessoal sensível</strong>) e os relacionamentos entre tabelas (origem, destino, colunas e cardinalidade).</p>
 
-      <h6 id="pontos-interesse">14.6 Cadastro de Ponto de Interesse</h6>
+      <h6 id="pontos-interesse">14.3 Cadastro de Ponto de Interesse</h6>
       <p>Cadastre locais relevantes (bancos, órgãos públicos, escolas) no mapa.</p>
       <ol>
         <li>Abra <strong>Cadastro e Configuração → Cadastro Ponto de Interesse</strong>.</li>
@@ -490,7 +497,7 @@
         <li>Preencha nome, descrição, tipo e equipamentos associados e salve.</li>
       </ol>
 
-      <h6 id="config-monitoramento">14.7 Configuração</h6>
+      <h6 id="config-monitoramento">14.4 Configuração de Monitoramento</h6>
       <p>Regras de monitoramento: faixas de velocidade para alertas, horários de operação, tipos de veículo monitorados e áreas de interesse.</p>
     </div>
   </div>

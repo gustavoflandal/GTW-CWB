@@ -218,6 +218,8 @@ Snapshot de 2026-10-08 de GTW_MURALHA_DEV. Modelo: `sis_menu` (funcionalidade/a�
 
 ## sis_menu_infos (menu Processamento)
 
+> 2026-10-18 ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): sem card os menus 306 Guarnição, 372 Configuração de KPIs, 378 Catálogo de Dados, 381 Relatórios de Chamados e 382 Configuração de Chamados — abertos pelos botões da tela do módulo (Central de Atendimento, KPIs, Catálogo de Datasets e Chamados); menus e permissões continuam ativos.
+
 | id_infos | id_menu | descricao | href | ordenacao | menu_pai |
 |---|---|---|---|---|---|
 | 13 | 308 | Registro de Fato | /muralha-digital/pages/registro_fato/comBoletim/consulta.jsp | 1 |  |
@@ -240,9 +242,8 @@ Snapshot de 2026-10-08 de GTW_MURALHA_DEV. Modelo: `sis_menu` (funcionalidade/a�
 | 5 | 227 | Quantitativos em camadas | /muralha-digital/pages/mapa-alertas-ocorrencias/mapa-alertas-ocorr.jsp | 9 | 7 |
 | 20 | 315 | Perfil Comportamental | /muralha-digital/pages/perfil-comportamental/perfil-comportamental.jsp | 25 | 15 |
 | 14 | 309 | Análise de Correlacionamentos | /muralha-digital/pages/veiculos-correlacionados/veiculos-correlacionados.jsp | 26 | 15 |
-| 11 | 306 | Guarnição | /muralha-digital/pages/guarnicao/listagem-guarnicoes.jsp | 5 | 16 |
 | 8 | 234 | Cadastro Ponto de Interesse | /muralha-digital/pages/ponto-interesse/consulta-ponto-interesse.jsp | 11 | 16 |
-| 9 | 235 | Configuração | /muralha-digital/pages/configuracao-monitoramento/configuracao.jsp | 14 | 16 |
+| 9 | 235 | Configuração de Monitoramento | /muralha-digital/pages/configuracao-monitoramento/configuracao.jsp | 14 | 16 |
 | 3 | 225 | Veículos Monitorados | /muralha-digital/pages/monitorado/consulta.jsp | 2 | 17 |
 | 2 | 224 | Alerta e Ocorrência | /muralha-digital/pages/consulta-alerta-ocorrencia/consulta.jsp | 3 | 17 |
 | 4 | 226 | Veículos em Tempo Real | /muralha-digital/pages/veiculo-tempo-real/veiculos-passagem.jsp | 7 | 17 |
@@ -254,7 +255,6 @@ Snapshot de 2026-10-08 de GTW_MURALHA_DEV. Modelo: `sis_menu` (funcionalidade/a�
 | 32 | 343 | Abordagem | /muralha-digital/pages/blitz-abordagem/listagem-abordagem.jsp | 3 | 29 |
 | 43 | 376 | Painéis de Análise | /muralha-digital/pages/analises/paineis/lista.jsp | 8 |  |
 | 44 | 377 | Catálogo de Datasets | /muralha-digital/pages/analises/datasets/index.jsp | 9 |  |
-| 45 | 378 | Catalogo de Dados | /muralha-digital/pages/analises/catalogo/index.jsp | 10 | 16 |
 
 
 ## sis_menu_relatorio_infos (menu Relatórios)
