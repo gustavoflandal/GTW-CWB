@@ -3,6 +3,8 @@
 **Data:** 2026-10-09  
 **Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
+> **Atualização de 2026-10-18** ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): Os cards Configuração de KPIs (372), Catálogo de Dados (378), Guarnição (306), Relatórios de Chamados (381) e Configuração de Chamados (382) foram retirados; as telas são abertas pelos botões dos módulos (KPIs, Catálogo de Datasets, Central de Atendimento e Chamados).
+
 ## Escopo
 
 Insercao das entradas de menu no banco de dados (`sis_menu`, `sis_menu_infos`, `sis_menu_direitos`) para que os 10 modulos desenvolvidos nos Planos 01–19 fiquem acessiveis pela interface web da Muralha Digital.

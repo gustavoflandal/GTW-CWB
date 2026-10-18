@@ -435,7 +435,7 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Catalogo de Dados
 - Endpoints chamados: `/api/dash/catalogo` (ações: listarTabelas, listarColunas, listarRelacoes, salvarTabela, salvarColuna, salvarRelacao, excluirRelacao)
-- Menu: 378 (Cadastro e Configuração, menu_pai=16)
+- Menu: 378, sem card desde 2026-10-18; aberto pelo botão **Catálogo de Dados** do Catálogo de Datasets (`analises/datasets/index.jsp`)
 
 ## auditoria
 

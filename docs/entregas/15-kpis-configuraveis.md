@@ -3,6 +3,8 @@
 **Data:** 2026-10-08  
 **Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
+> **Atualização de 2026-10-18** ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): A Configuração de KPIs não tem mais card em Cadastro e Configuração; é aberta pelo botão **Configurar** do painel KPIs (mesmas permissões, grupos 41 e 42).
+
 ## Escopo
 
 Dashboard de KPIs configuráveis com thresholds de alerta personalizáveis, CRUD de configuração e atualização automática.

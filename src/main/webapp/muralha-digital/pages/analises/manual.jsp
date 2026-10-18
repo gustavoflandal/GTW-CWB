@@ -138,7 +138,7 @@
         <ul>
             <li><strong>Paineis de Analise</strong> — galeria de paineis (dashboards)</li>
             <li><strong>Catalogo de Datasets</strong> — lista de datasets criados</li>
-            <li><strong>Cadastro e Configuracao &gt; Catalogo de Dados</strong> — gerenciamento de tabelas (admin)</li>
+            <li><strong>Cadastro e Configuracao &gt; Catalogo de Datasets &gt; botao Catalogo de Dados</strong> — gerenciamento de tabelas (admin)</li>
         </ul>
 
         <!-- ============================================================ -->
@@ -147,7 +147,7 @@
         <blockquote><strong>Quem faz:</strong> apenas o administrador. Se o catalogo ja estiver configurado, pule para a <a href="#dataset">Etapa 2</a>.</blockquote>
 
         <h3 id="cat-tabela">3.1 Cadastrar uma Tabela</h3>
-        <div class="step-item"><span class="step-number">1</span><p>No menu lateral, clique em <strong>Cadastro e Configuracao</strong> &gt; <strong>Catalogo de Dados</strong></p></div>
+        <div class="step-item"><span class="step-number">1</span><p>Na tela inicial, abra <strong>Cadastro e Configuracao</strong> &gt; <strong>Catalogo de Datasets</strong> e clique no botao <strong>Catalogo de Dados</strong></p></div>
         <div class="step-item"><span class="step-number">2</span><p>Na aba <strong>Tabelas</strong>, clique no botao <strong>Nova Tabela</strong> (canto superior direito)</p></div>
         <div class="step-item"><span class="step-number">3</span><p>Preencha o formulario no painel lateral:</p></div>
 

@@ -71,7 +71,7 @@ Apos o login, o menu lateral esquerdo exibe as opcoes. Localize:
 
 - **Paineis de Analise** — abre a galeria de paineis (dashboards)
 - **Catalogo de Datasets** — lista de datasets criados
-- **Cadastro e Configuracao > Catalogo de Dados** — gerenciamento de tabelas (admin)
+- **Catalogo de Datasets > botao Catalogo de Dados** — gerenciamento de tabelas (admin)
 
 ---
 
@@ -85,8 +85,8 @@ e colunas estao disponiveis para montar datasets.
 
 ### 3.1 Acessar o Catalogo
 
-1. No menu lateral, clique em **Cadastro e Configuracao**
-2. Clique em **Catalogo de Dados**
+1. Na tela inicial, abra **Cadastro e Configuracao > Catalogo de Datasets**
+2. Clique no botao **Catalogo de Dados**
 3. A tela abre com tres abas: **Tabelas**, **Colunas** e **Relacoes**
 
 ### 3.2 Cadastrar uma Tabela

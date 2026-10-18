@@ -3,6 +3,8 @@
 **Data:** 2026-10-13 (revisao da camada de consulta em 2026-10-14)  
 **Status:** 🟡 Implementado — aguardando teste manual no navegador (último critério de aceite; revisão de 2026-10-16)
 
+> **Atualização de 2026-10-18** ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): O Catálogo de Dados não tem mais card em Cadastro e Configuração; é aberto pelo botão **Catálogo de Dados** do Catálogo de Datasets (mesmas permissões).
+
 ## Escopo
 
 Modulo de criacao de dashboards dinamicos onde qualquer usuario autorizado (grupos 11/41/42) pode montar paineis personalizados com widgets configuraveis: cards KPI, graficos Chart.js (barra, linha, pizza, rosca, area, dispersao, funil, gauge, heatmap, combinado), tabelas de dados, tabelas pivot e mapas Leaflet. Os dados vem de um catalogo de datasets, sem que o usuario final precise escrever SQL. As consultas sao montadas pelo Java a partir do catalogo (SQL parametrizado, executado direto no SQL Server), com auditoria e observabilidade.
