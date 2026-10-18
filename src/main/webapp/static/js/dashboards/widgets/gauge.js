@@ -1,9 +1,9 @@
-import { htmlVazio, garantirAltura, escapeHtml, formatarNumero, medidasDe, rotuloCampo, aplicarOpcao } from './comum.js';
+import { htmlVazio, mostrarHtml, garantirAltura, escapeHtml, formatarNumero, medidasDe, rotuloCampo, aplicarOpcao } from './comum.js';
 
 export function renderizarGauge(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
-        elemento.innerHTML = htmlVazio();
+        mostrarHtml(elemento, htmlVazio());
         return;
     }
     garantirAltura(elemento);

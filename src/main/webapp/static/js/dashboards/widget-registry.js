@@ -10,6 +10,7 @@ import { renderizarHeatmap } from './widgets/heatmap.js';
 import { renderizarKpi } from './widgets/kpi.js';
 import { renderizarTabela } from './widgets/tabela.js';
 import { renderizarPivot } from './widgets/pivot.js';
+import { descartarGrafico } from './widgets/comum.js';
 
 const REGISTRO = {
     barras:     renderizarBarras,
@@ -27,11 +28,16 @@ const REGISTRO = {
     pivot:      renderizarPivot
 };
 
+// Tipos que escrevem HTML no elemento (nao ECharts).
+var TIPOS_HTML = ['kpi', 'tabela', 'pivot'];
+
 export function renderizarWidget(elemento, widget, dados) {
     if (!elemento) return;
 
     var tipo = widget.tipo || 'barras';
     var fn = REGISTRO[tipo];
+    // Um grafico anterior no mesmo elemento precisa ser descartado antes de outro conteudo.
+    if (!fn || TIPOS_HTML.indexOf(tipo) >= 0) descartarGrafico(elemento);
     if (!fn) {
         elemento.innerHTML =
             '<div class="text-center text-danger p-3">' +
