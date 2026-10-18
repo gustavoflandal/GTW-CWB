@@ -357,7 +357,7 @@
 																		  data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom"
 																		  data-bs-custom-class="tooltip-edital"
 																		  data-bs-title="<c:out value='${menu.tituloEdital}'/>"
-																		  aria-label="Itens do edital: <c:out value='${menu.itensEditalTexto}'/>">*</span>
+																		  aria-label="Edital, TR <c:out value='${menu.itensEditalTexto}'/>">*</span>
 																</p>
 															</c:if>
 														</div>
