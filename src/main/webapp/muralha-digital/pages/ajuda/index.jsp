@@ -7,6 +7,13 @@
   .secao-help h6 { margin-top: 1.1rem; font-weight: 600; }
   .secao-help h6:first-child { margin-top: 0; }
   .caminho { font-size: .85rem; color: #6c757d; }
+  /* Ajuda contextual: a seção da tela de origem fica visível e destacada */
+  [id] { scroll-margin-top: 1rem; }
+  .alvo-ajuda { outline: 3px solid #0d75bf; outline-offset: 4px; border-radius: .25rem;
+                background-color: rgba(13, 117, 191, .08); transition: background-color 1s, outline-color 1s; }
+  tr.alvo-ajuda > td { background-color: rgba(13, 117, 191, .12); }
+  .alvo-ajuda.alvo-ajuda-fim { outline-color: transparent; background-color: transparent; }
+  tr.alvo-ajuda.alvo-ajuda-fim > td { background-color: transparent; }
 </style>
 
 <div class="container py-4" style="max-width: 960px;">
@@ -136,7 +143,7 @@
           <tr><td><strong>Processamento</strong></td><td>Lista os mesmos módulos da Tela Inicial, para acesso rápido de qualquer tela.</td></tr>
           <tr><td><strong>Relatórios</strong> e <strong>Gráficos</strong></td><td>Relatórios e gráficos estatísticos (<a href="#relatorios">seção 15</a>).</td></tr>
           <tr><td><strong>GTW</strong></td><td>Acesso à consulta de veículos do sistema GTW clássico.</td></tr>
-          <tr><td><i class="bi bi-question-circle"></i> Ajuda</td><td>Abre esta Central de Ajuda na seção da tela atual.</td></tr>
+          <tr><td><i class="bi bi-question-circle"></i> Ajuda</td><td>Abre esta Central de Ajuda já posicionada e destacada na seção da tela atual (na tela inicial ou numa categoria, na seção da categoria).</td></tr>
           <tr><td><i class="bi bi-moon-stars"></i> Tema</td><td>Alterna entre modo claro e escuro (<a href="#modo-escuro">seção 17</a>).</td></tr>
           <tr><td><i class="fas fa-envelope text-warning"></i> Envelope (laranja)</td><td>Quantidade de alertas ainda não tratados; abre a lista de lembretes.</td></tr>
           <tr><td><i class="fas fa-bell text-warning"></i> Sino (laranja)</td><td>Alertas sob sua responsabilidade ainda sem assinatura; abre a consulta já filtrada.</td></tr>
@@ -513,35 +520,36 @@
         <thead class="table-light"><tr><th>Relatório</th><th>Conteúdo</th></tr></thead>
         <tbody>
           <tr><td colspan="2" class="table-secondary"><strong>Tráfego</strong></td></tr>
-          <tr><td>Quantidade de Passagens</td><td>Volume de passagens por período, equipamento ou faixa horária.</td></tr>
-          <tr><td>Relatório de Fluxo de Passagens Veiculares</td><td>Fluxo de passagens ao longo do período.</td></tr>
-          <tr><td>Relatório Fluxo Mensal por Classificação</td><td>Fluxo mensal separado por classificação do veículo.</td></tr>
-          <tr><td>Relatório de Fluxo Veicular por Rota</td><td>Fluxo de veículos nas rotas definidas.</td></tr>
-          <tr><td>Relatório de Passagem Veicular por Rota</td><td>Passagens de veículos por rota, com mapa.</td></tr>
-          <tr><td>Velocidade Média</td><td>Velocidade média por equipamento e período.</td></tr>
-          <tr><td>Distribuição por Faixa de Velocidade</td><td>Quantidade de veículos por faixa de velocidade.</td></tr>
-          <tr><td>Distribuição por Porte Veicular</td><td>Distribuição dos veículos por porte.</td></tr>
-          <tr><td>Taxa de Ocupação da Via</td><td>Ocupação por via/equipamento ao longo do tempo.</td></tr>
-          <tr><td>Relatório Estatístico de Evolução Semanal</td><td>Evolução semanal dos indicadores.</td></tr>
-          <tr><td>Relatório de Permanência dos Veículos em Área Monitorada</td><td>Tempo de permanência de veículos nas áreas cadastradas em Mapas.</td></tr>
+          <tr id="rel-quantidade-passagens"><td>Quantidade de Passagens</td><td>Volume de passagens por período, equipamento ou faixa horária.</td></tr>
+          <tr id="rel-fluxo-passagens"><td>Relatório de Fluxo de Passagens Veiculares</td><td>Fluxo de passagens ao longo do período.</td></tr>
+          <tr id="rel-fluxo-mensal"><td>Relatório Fluxo Mensal por Classificação</td><td>Fluxo mensal separado por classificação do veículo.</td></tr>
+          <tr id="rel-fluxo-rota"><td>Relatório de Fluxo Veicular por Rota</td><td>Fluxo de veículos nas rotas definidas.</td></tr>
+          <tr id="rel-passagem-rota"><td>Relatório de Passagem Veicular por Rota</td><td>Passagens de veículos por rota, com mapa.</td></tr>
+          <tr id="rel-velocidade-media"><td>Velocidade Média</td><td>Velocidade média por equipamento e período.</td></tr>
+          <tr id="rel-faixa-velocidade"><td>Distribuição por Faixa de Velocidade</td><td>Quantidade de veículos por faixa de velocidade.</td></tr>
+          <tr id="rel-porte-veicular"><td>Distribuição por Porte Veicular</td><td>Distribuição dos veículos por porte.</td></tr>
+          <tr id="rel-ocupacao-via"><td>Taxa de Ocupação da Via</td><td>Ocupação por via/equipamento ao longo do tempo.</td></tr>
+          <tr id="rel-evolucao-semanal"><td>Relatório Estatístico de Evolução Semanal</td><td>Evolução semanal dos indicadores.</td></tr>
+          <tr id="rel-permanencia"><td>Relatório de Permanência dos Veículos em Área Monitorada</td><td>Tempo de permanência de veículos nas áreas cadastradas em Mapas.</td></tr>
           <tr><td colspan="2" class="table-secondary"><strong>Alertas e irregularidades</strong></td></tr>
-          <tr><td>Relatório Detalhado de Alertas</td><td>Alertas com detalhes da tratativa.</td></tr>
-          <tr><td>Relatório Detalhado de Alertas e Irregularidades</td><td>Alertas e irregularidades em um único relatório.</td></tr>
-          <tr><td>Relatório Detalhado de Irregularidades</td><td>Irregularidades (ocorrências) registradas.</td></tr>
-          <tr><td>Relatório Estatístico de Alertas e Alarmes Gerados</td><td>Estatísticas consolidadas de alertas e alarmes.</td></tr>
+          <tr id="rel-alertas-detalhado"><td>Relatório Detalhado de Alertas</td><td>Alertas com detalhes da tratativa.</td></tr>
+          <tr id="rel-alertas-irregularidades"><td>Relatório Detalhado de Alertas e Irregularidades</td><td>Alertas e irregularidades em um único relatório.</td></tr>
+          <tr id="rel-irregularidades"><td>Relatório Detalhado de Irregularidades</td><td>Irregularidades (ocorrências) registradas.</td></tr>
+          <tr id="rel-extrato-alertas"><td>Extrato de Alertas e Irregularidades</td><td>Extrato dos alertas e irregularidades do período.</td></tr>
+          <tr id="rel-estatistico-alarmes"><td>Relatório Estatístico de Alertas e Alarmes Gerados</td><td>Estatísticas consolidadas de alertas e alarmes.</td></tr>
           <tr id="rel-acoes-alarmes"><td>Relatório de Ações de Alarmes</td><td>Ações tomadas sobre os alarmes gerados.</td></tr>
-          <tr><td>Relatório de Veículos Monitorados por Modelo</td><td>Veículos monitorados agrupados por modelo.</td></tr>
+          <tr id="rel-monitorados-modelo"><td>Relatório de Veículos Monitorados por Modelo</td><td>Veículos monitorados agrupados por modelo.</td></tr>
           <tr><td colspan="2" class="table-secondary"><strong>Registro de fatos</strong></td></tr>
-          <tr><td>Relatório de Fatos Registrados por Tipo e Intervalo</td><td>Distribuição dos fatos por tipo e período.</td></tr>
-          <tr><td>Relatório Estatístico para Principais Tipos de Fato</td><td>Estatística dos tipos de fato mais frequentes.</td></tr>
-          <tr><td>Relatório Estatístico por Tipo de Fato Registrado</td><td>Estatística por tipo de fato, com mapa.</td></tr>
-          <tr><td>Relatório de Pendências nos Registros de Fato</td><td>Registros de fato com pendências.</td></tr>
+          <tr id="rel-fatos-tipo-intervalo"><td>Relatório de Fatos Registrados por Tipo e Intervalo</td><td>Distribuição dos fatos por tipo e período.</td></tr>
+          <tr id="rel-principais-tipos-fato"><td>Relatório Estatístico para Principais Tipos de Fato</td><td>Estatística dos tipos de fato mais frequentes.</td></tr>
+          <tr id="rel-tipo-fato"><td>Relatório Estatístico por Tipo de Fato Registrado</td><td>Estatística por tipo de fato, com mapa.</td></tr>
+          <tr id="rel-pendencias-fato"><td>Relatório de Pendências nos Registros de Fato</td><td>Registros de fato com pendências.</td></tr>
           <tr><td colspan="2" class="table-secondary"><strong>Auditoria e operação</strong></td></tr>
           <tr id="rel-auditoria"><td>Relatório de Auditoria</td><td>Operações realizadas no sistema.</td></tr>
-          <tr><td>Relatório de Sessão</td><td>Sessões de usuário: login, logout e duração.</td></tr>
+          <tr id="rel-sessao"><td>Relatório de Sessão</td><td>Sessões de usuário: login, logout e duração.</td></tr>
           <tr id="rel-pesquisa-veiculos"><td>Relatório de Pesquisas de Veículos Efetuadas</td><td>Pesquisas de veículos feitas pelos operadores.</td></tr>
           <tr id="rel-placas"><td>Relatório de Correção de Placas Veiculares</td><td>Correções de placa feitas, por equipamento e período.</td></tr>
-          <tr><td>Relatório Imagens Exportadas</td><td>Imagens de passagens exportadas pelos usuários.</td></tr>
+          <tr id="rel-imagens-exportadas"><td>Relatório Imagens Exportadas</td><td>Imagens de passagens exportadas pelos usuários.</td></tr>
         </tbody>
       </table>
 
@@ -549,11 +557,11 @@
       <table class="table table-sm table-bordered">
         <thead class="table-light"><tr><th>Gráfico</th><th>Conteúdo</th></tr></thead>
         <tbody>
-          <tr><td>Veículos por Período</td><td>Quantidade de veículos ao longo do período.</td></tr>
-          <tr><td>Veículos por Porte Veicular</td><td>Distribuição dos veículos por porte.</td></tr>
-          <tr><td>Velocidade Média</td><td>Evolução da velocidade média.</td></tr>
-          <tr><td>Distribuição Ocorrência por Faixa de Velocidade</td><td>Ocorrências por faixa de velocidade.</td></tr>
-          <tr><td>Ocorrência por Porte Veicular</td><td>Ocorrências por porte do veículo.</td></tr>
+          <tr id="graf-veiculos-periodo"><td>Veículos por Período</td><td>Quantidade de veículos ao longo do período.</td></tr>
+          <tr id="graf-veiculos-porte"><td>Veículos por Porte Veicular</td><td>Distribuição dos veículos por porte.</td></tr>
+          <tr id="graf-velocidade-media"><td>Velocidade Média</td><td>Evolução da velocidade média.</td></tr>
+          <tr id="graf-ocorrencia-faixa"><td>Distribuição Ocorrência por Faixa de Velocidade</td><td>Ocorrências por faixa de velocidade.</td></tr>
+          <tr id="graf-ocorrencia-porte"><td>Ocorrência por Porte Veicular</td><td>Ocorrências por porte do veículo.</td></tr>
         </tbody>
       </table>
 
@@ -610,6 +618,7 @@
           <tr id="exportacao-passagens"><td>Exportação de Passagens</td><td>Exportação em massa de dados de passagens (CSV/Excel).</td><td><code>/muralha-digital/pages/relatorios/exportacao-passagens/index.jsp</code></td></tr>
           <tr id="passagens-anonimizadas"><td>Passagens Anonimizadas</td><td>Passagens com placa parcialmente oculta, para uso estatístico (LGPD).</td><td><code>/muralha-digital/pages/consulta/passagens-anonimizadas/index.jsp</code></td></tr>
           <tr id="correlacao"><td>Correlação de Passagens</td><td>Correlação entre passagens de diferentes equipamentos para identificar rotas.</td><td><code>/muralha-digital/pages/correlacao/correlacao.jsp</code></td></tr>
+          <tr id="consolidacao"><td>Consolidação de Dados Multifonte</td><td>Registros das várias fontes de dados em um só lugar: totais por fonte e consulta por fonte, período e limite de linhas.</td><td><code>/muralha-digital/pages/inteligencia/consolidacao/index.jsp</code></td></tr>
           <tr id="juncao-base"><td>Junção de Base</td><td>Cruzamento de listas externas (CSV, planilhas) com as passagens do sistema.</td><td><code>/muralha-digital/pages/juncao-base/consulta.jsp</code></td></tr>
           <tr id="blitz-eletronica"><td>Blitz Eletrônica</td><td>Veículos irregulares detectados automaticamente pelos equipamentos.</td><td><code>/muralha-digital/pages/blitz-eletronica/veiculos-irregulares.jsp</code></td></tr>
           <tr id="mapa-transito"><td>Mapa de Situação de Trânsito</td><td>Camada de trânsito com dados dos sensores e de fontes externas.</td><td><code>/muralha-digital/pages/mapa-situacao-transito/mapa-situacao-transito.jsp</code></td></tr>
@@ -636,7 +645,7 @@
   </div>
 
   <div class="text-center text-muted mb-4">
-    <small>Cinturão de Segurança — Muralha Digital &copy; Consilux · Ajuda revisada em 17/10/2026</small>
+    <small>Cinturão de Segurança — Muralha Digital &copy; Consilux · Ajuda revisada em 18/10/2026</small>
   </div>
 </div>
 
@@ -650,4 +659,22 @@ function filtrarSections() {
   });
   document.getElementById('sumario').style.display = termo ? 'none' : '';
 }
+
+// Ajuda contextual: o botão de ajuda de cada tela abre esta página com #<seção> (ajuda-contexto.js).
+// Rola até a seção depois do carregamento completo (fontes e ícones mudam a altura da página) e a destaca.
+function irParaSecaoDaUrl() {
+  var id = decodeURIComponent(window.location.hash.replace(/^#/, ''));
+  var alvo = id ? document.getElementById(id) : null;
+  if (!alvo) return;
+  var busca = document.getElementById('campoBusca');
+  if (busca.value) { busca.value = ''; filtrarSections(); }
+  document.querySelectorAll('.alvo-ajuda').forEach(function(el) {
+    el.classList.remove('alvo-ajuda', 'alvo-ajuda-fim');
+  });
+  alvo.scrollIntoView({ block: 'start' });
+  alvo.classList.add('alvo-ajuda');
+  setTimeout(function() { alvo.classList.add('alvo-ajuda-fim'); }, 4000);
+}
+window.addEventListener('load', irParaSecaoDaUrl);
+window.addEventListener('hashchange', irParaSecaoDaUrl);
 </script>
