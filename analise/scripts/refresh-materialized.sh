@@ -25,10 +25,12 @@ DB_PASS="${GTW_DB_PASSWORD:?GTW_DB_PASSWORD nao definido}"
 
 echo "[$(date)] Iniciando recarga das tabelas materializadas..."
 
-sqlcmd -S "$DB_HOST" -d "$DB_NAME" -U "$DB_USER" -P "$DB_PASS" -Q "
-SET QUOTED_IDENTIFIER ON;
-EXEC analise.sp_carga_passagens_hora;
-EXEC analise.sp_carga_infracoes_dia;
+# Janelas padrão: 25 h (passagens) e 7 dias (infrações). Para recarregar um período:
+#   EXEC analise.spu_carga_passagens_hora @dt_inicio = '2026-01-01', @dt_fim = '2026-02-01';
+sqlcmd -S "$DB_HOST" -d "$DB_NAME" -U "$DB_USER" -P "$DB_PASS" -b -I -Q "
+EXEC analise.spu_carga_passagens_hora;
+EXEC analise.spu_carga_infracoes_dia;
+EXEC analise.spu_carga_areas_monitoradas;
 " 2>&1
 
 echo "[$(date)] Recarga concluida."

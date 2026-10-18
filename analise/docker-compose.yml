@@ -29,10 +29,9 @@ services:
       - ./superset/superset_config.py:/app/superset_config.py:ro
       - ./superset/provisionar.py:/app/provisionar.py:ro
       - ./superset/datasets:/app/datasets:ro
-      - ./superset/dashboards:/app/dashboards:ro
       - ./superset/governanca:/app/governanca:ro
       - ./superset/alertas:/app/alertas:ro
-      - ./superset/demo:/app/demo:ro
+      - ./superset/paineis:/app/paineis:ro
     networks:
       - analise_net
     # Nenhuma porta publicada — só nginx alcança o Superset

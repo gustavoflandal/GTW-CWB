@@ -13,8 +13,8 @@ database: "GTW Muralha Digital (somente leitura)"
 sql: >
   SELECT COUNT(*) AS valor
   FROM analise.v_alertas
-  WHERE severidade = 'critico'
-    AND status = 'pendente'
+  WHERE critico = 1
+    AND status = 'PENDENTE'
     AND dt_alerta <= DATEADD(HOUR, -2, GETDATE())
 
 validator_type: operator

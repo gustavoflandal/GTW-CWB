@@ -37,20 +37,24 @@ docker compose logs -f celery-beat
 
 ## 3. Provisionamento
 
-O provisionamento cria datasets, dashboards, papéis, tags, RLS e alertas a partir dos YAMLs:
+O provisionamento tem duas partes:
+
+- **`provisionar.py`**: conexão, datasets da camada `analise`, papéis, tags, RLS e alertas/relatórios, a partir dos YAMLs de `superset/datasets/`, `superset/governanca/` e `superset/alertas/`.
+- **`paineis/operacionais.py` e `paineis/demonstracao.py`**: datasets dos painéis (`gtw_*`, SQL em `superset/paineis/datasets/`), gráficos e dashboards. Ao final, cada script executa a consulta de cada gráfico e falha se algum vier sem dados.
+
+Numa instalação nova, a ordem é esta, porque os relatórios agendados apontam para os painéis pelo slug (o `scripts/deploy.sh` já segue essa ordem):
 
 ```bash
-# Tudo de uma vez
 docker compose exec superset python /app/provisionar.py
-
-# Apenas datasets
-docker compose exec superset python /app/provisionar.py --datasets-only
-
-# Apenas dashboards
-docker compose exec superset python /app/provisionar.py --dashboards-only
-
-# Apenas alertas e relatórios
+docker compose exec superset python /app/paineis/operacionais.py
+docker compose exec superset python /app/paineis/demonstracao.py
 docker compose exec superset python /app/provisionar.py --alertas-only
+
+# Só revalidar os painéis publicados, sem regravar
+docker compose exec superset python /app/paineis/operacionais.py --validar
+
+# Apenas datasets dos YAMLs
+docker compose exec superset python /app/provisionar.py --datasets-only
 
 # Simulação (não grava)
 docker compose exec superset python /app/provisionar.py --dry-run

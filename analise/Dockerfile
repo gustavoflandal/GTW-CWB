@@ -22,12 +22,11 @@ COPY superset/provisionar.py /app/provisionar.py
 
 # Definições declarativas (SUP-3 a SUP-7)
 COPY superset/datasets/ /app/datasets/
-COPY superset/dashboards/ /app/dashboards/
 COPY superset/governanca/ /app/governanca/
 COPY superset/alertas/ /app/alertas/
 
-# Painéis de demonstração com dados reais
-COPY superset/demo/ /app/demo/
+# Painéis operacionais e de demonstração (publicados por /app/paineis/*.py)
+COPY superset/paineis/ /app/paineis/
 
 # Variável que o Superset usa para localizar o arquivo de configuração
 ENV SUPERSET_CONFIG_PATH=/app/superset_config.py
