@@ -25,18 +25,47 @@ public class ConfigETratamentoTest {
     }
 
     @Test
-    public void corValidaAceitaFormatos() {
-        assertTrue(ConfigTipoAlerta.corValida("orange"));
-        assertTrue(ConfigTipoAlerta.corValida("#FF5733"));
-        assertTrue(ConfigTipoAlerta.corValida("toast-danger"));
+    public void corValidaAceitaSoAsCoresDoPopup() {
+        for (String cor : new String[] {"error", "orange", "warning", "success", "info", "purple", "brown", "pink"}) {
+            assertTrue(ConfigTipoAlerta.corValida(cor), cor);
+        }
         assertTrue(ConfigTipoAlerta.corValida(null));
         assertTrue(ConfigTipoAlerta.corValida(""));
     }
 
     @Test
     public void corInvalidaEhRecusada() {
+        assertFalse(ConfigTipoAlerta.corValida("#FF5733"));
+        assertFalse(ConfigTipoAlerta.corValida("toast-danger"));
         assertFalse(ConfigTipoAlerta.corValida("cor com espaço"));
         assertFalse(ConfigTipoAlerta.corValida("cor;injection"));
+    }
+
+    @Test
+    public void iconeAceitaSoClassesDoBootstrapIcons() {
+        assertTrue(ConfigTipoAlerta.iconeValido("bi-eye"));
+        assertTrue(ConfigTipoAlerta.iconeValido("bi-exclamation-triangle-fill"));
+        assertTrue(ConfigTipoAlerta.iconeValido(null));
+        assertFalse(ConfigTipoAlerta.iconeValido("fa-bell"));
+        assertFalse(ConfigTipoAlerta.iconeValido("bi-eye\" onmouseover=\"x"));
+        assertFalse(ConfigTipoAlerta.iconeValido("bi-"));
+    }
+
+    @Test
+    public void tratamentosExecutaveisPeloSistema() {
+        assertTrue(TratamentoAlerta.REGISTRO_ESTATISTICO.isExecutavel());
+        assertTrue(TratamentoAlerta.PRIORIZAR_AUDITORIA.isExecutavel());
+        assertTrue(TratamentoAlerta.GERAR_OCORRENCIA.isExecutavel());
+        assertFalse(TratamentoAlerta.CAMPO.isExecutavel());
+        assertFalse(TratamentoAlerta.OUTRO.isExecutavel());
+    }
+
+    @Test
+    public void parametrosDoTratamentoDevemSerObjetoJson() {
+        assertTrue(TipoAlertaConfigServlet.parametrosValidos(null));
+        assertTrue(TipoAlertaConfigServlet.parametrosValidos("{\"equipe\":\"GTO\"}"));
+        assertFalse(TipoAlertaConfigServlet.parametrosValidos("[1,2]"));
+        assertFalse(TipoAlertaConfigServlet.parametrosValidos("texto livre"));
     }
 
     @Test

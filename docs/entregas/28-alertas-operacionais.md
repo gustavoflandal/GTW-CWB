@@ -4,7 +4,7 @@
 > **Status:** 🟡 Implementado — migração executada, aguardando teste no navegador.
 > **Fase:** 6 de 11 da correção da auditoria de 2026-10-16.
 
-> **Gap aberto em 2026-10-17:** não há JSP de configuração (o card abre o JSON do servlet), e quatro tipos estão com cor, ícone ou prioridade inconsistentes. Há um contorno temporário para a demonstração. Ver [gap-tipos-alerta-ajuste-demo.md](gap-tipos-alerta-ajuste-demo.md).
+> **Atualização de 2026-10-18:** criada a tela de configuração (`pages/tipos-alerta/`). Os tratamentos automáticos passaram a ser executados (`JobTratamentoAutomatico`, a cada minuto). A listagem ficou disponível para o aviso de todos os operadores, e o ícone passou a aparecer no aviso. O contorno temporário foi removido. Ver [gap-tipos-alerta-ajuste-demo.md](gap-tipos-alerta-ajuste-demo.md).
 
 ## Escopo
 

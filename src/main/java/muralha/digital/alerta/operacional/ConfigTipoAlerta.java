@@ -1,5 +1,8 @@
 package muralha.digital.alerta.operacional;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /** Configuração complementar de um tipo de alerta: criticidade, cor, ícone. */
@@ -29,8 +32,29 @@ public class ConfigTipoAlerta {
     public void setCor(String cor) { this.cor = cor; }
     public void setIcone(String icone) { this.icone = icone; }
 
+    /** Cores que o popup de notificação sabe exibir (toastr + classes de notificacao.css), com o rótulo da tela. */
+    public static final Map<String, String> CORES;
+    static {
+        Map<String, String> m = new LinkedHashMap<>();
+        m.put("error", "Vermelho");
+        m.put("orange", "Laranja");
+        m.put("warning", "Amarelo");
+        m.put("success", "Verde");
+        m.put("info", "Azul");
+        m.put("purple", "Roxo");
+        m.put("brown", "Marrom");
+        m.put("pink", "Rosa");
+        CORES = Collections.unmodifiableMap(m);
+    }
+
     public static boolean corValida(String cor) {
         if (cor == null || cor.trim().isEmpty()) return true;
-        return cor.trim().matches("^[a-zA-Z0-9#_-]{1,30}$");
+        return CORES.containsKey(cor.trim());
+    }
+
+    /** Classe do Bootstrap Icons (ex.: bi-exclamation-triangle-fill). */
+    public static boolean iconeValido(String icone) {
+        if (icone == null || icone.trim().isEmpty()) return true;
+        return icone.trim().matches("^bi-[a-z0-9]+(-[a-z0-9]+)*$") && icone.trim().length() <= 50;
     }
 }

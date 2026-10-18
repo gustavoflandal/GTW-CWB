@@ -1,0 +1,29 @@
+/* Tela Tipos de Alerta — cores iguais às do aviso de alerta (toastr + notificacao.css) */
+#telaTiposAlerta .previa-alerta {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .3rem .6rem;
+    border-radius: .35rem;
+    color: #fff;
+    font-size: .85rem;
+    font-weight: 600;
+    max-width: 22rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+#telaTiposAlerta .previa-sem-cor { background-color: #6c757d; }
+#telaTiposAlerta .previa-error   { background-color: #bd362f; }
+#telaTiposAlerta .previa-orange  { background-color: orange; }
+#telaTiposAlerta .previa-warning { background-color: #f89406; }
+#telaTiposAlerta .previa-success { background-color: #51a351; }
+#telaTiposAlerta .previa-info    { background-color: #2f96b4; }
+#telaTiposAlerta .previa-purple  { background-color: purple; }
+#telaTiposAlerta .previa-brown   { background-color: #795548; }
+#telaTiposAlerta .previa-pink    { background-color: #e83e8c; }
+
+#telaTiposAlerta .campo-icone { min-width: 13rem; }
+#telaTiposAlerta .campo-cor { min-width: 8rem; }
+#telaTiposAlerta tr.alterado { background-color: #fff8e1; }
+#modalTratamentos textarea { font-family: Consolas, Monaco, 'Courier New', monospace; font-size: .8rem; }
