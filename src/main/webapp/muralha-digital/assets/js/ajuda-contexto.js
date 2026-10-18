@@ -1,5 +1,7 @@
 (function() {
   'use strict';
+  // Trecho do endereço da tela -> seção da Central de Ajuda (id em pages/ajuda/index.jsp).
+  // Vence o trecho mais longo encontrado no endereço.
   var mapa = {
     'dashboard/builder':              'dashboard-builder',
     'dashboard/kpis':                 'dashboard-kpis',
@@ -50,6 +52,7 @@
     'admin/kpis':                     'config-kpis',
     'admin/cpf-matricula':            'cpf-matricula',
     'admin/retencao':                 'retencao-dados',
+    'inteligencia/consolidacao':      'consolidacao',
     'processamento/dupla-analise':    'dupla-analise',
     'processamento/lotes':            'gestao-lotes',
     'correcao-placas-lote':           'correcao-placas',
@@ -78,25 +81,69 @@
     'registro_fato':                  'registros-fato',
     'boletim':                        'boletins',
     'assinatura':                     'assinatura-digital',
+    // Menu Relatórios: cada relatório aponta para a sua linha na seção 15.1
+    'relatorios/quantidade-passagens':                  'rel-quantidade-passagens',
+    'relatorios/relatorio-fluxo-passagens-veiculares':  'rel-fluxo-passagens',
+    'relatorios/fluxo-mensal-classificacao':            'rel-fluxo-mensal',
+    'relatorios/relatorio-fluxo-veicular-rota':         'rel-fluxo-rota',
+    'relatorios/relatorio-passagens-rota-leaflet':      'rel-passagem-rota',
+    'relatorios/relatorio-pesquisa-rota-leaflet':       'rel-passagem-rota',
+    'relatorios/velocidade-media':                      'rel-velocidade-media',
+    'relatorios/distribuicao-faixa-velocidade':         'rel-faixa-velocidade',
+    'relatorios/distribuicao-porte-veicular':           'rel-porte-veicular',
+    'relatorios/taxa-ocupacao-via':                     'rel-ocupacao-via',
+    'relatorios/relatorio-evolucao-semanal':            'rel-evolucao-semanal',
+    'relatorios/permanencia-veiculo':                   'rel-permanencia',
+    'relatorios/alertas-detalhado':                     'rel-alertas-detalhado',
+    'relatorios/relatorio-detalhado-alertas':           'rel-alertas-irregularidades',
+    'relatorios/ocorrencias-detalhado':                 'rel-irregularidades',
+    'relatorios/extrato-alerta-ocorrencia':             'rel-extrato-alertas',
+    'relatorios/relatorio-estatistico-alarmes':         'rel-estatistico-alarmes',
+    'relatorios/relatorio-veiculos-monitorados-modelo': 'rel-monitorados-modelo',
+    'relatorios/relatorio-distribuicao-fatos':          'rel-fatos-tipo-intervalo',
+    'relatorios/relatorio-estatistico-fato':            'rel-principais-tipos-fato',
+    'relatorios/relatorio-estatistico-tipo-fatos':      'rel-tipo-fato',
+    'relatorios/relatorio-pendencias':                  'rel-pendencias-fato',
+    'relatorios/sessao-usuario':                        'rel-sessao',
+    'relatorios/imagens-exportadas':                    'rel-imagens-exportadas',
     'relatorios/exportacao':          'exportacao-passagens',
     'relatorios/placas-veiculares':   'rel-placas',
     'relatorios/acoes-alarmes':       'rel-acoes-alarmes',
     'relatorios/auditoria':           'rel-auditoria',
     'relatorios/pesquisa-veiculos':   'rel-pesquisa-veiculos',
+    // Menu Gráficos: seção 15.2
+    'relatorios/grafico-veiculos-porte':        'graf-veiculos-porte',
+    'relatorios/grafico-veiculos':              'graf-veiculos-periodo',
+    'relatorios/grafico-velocidade-media':      'graf-velocidade-media',
+    'relatorios/grafico-ocorrencia-faixa-vel':  'graf-ocorrencia-faixa',
+    'relatorios/grafico-ocorrencia-porte-veic': 'graf-ocorrencia-porte',
     'relatorios':                     'relatorios'
   };
+
+  // Tela inicial e categorias (muralha_principal.jsp?menu_info_pai=N): seção da categoria no manual.
+  var categorias = {
+    '1': 'dashboards', '6': 'consultas', '7': 'mapas', '15': 'analise', '16': 'cadastro',
+    '17': 'monitoramento', '29': 'blitz', '49': 'chamados'
+  };
+
+  function secaoDaTela(path, search) {
+    if (path.indexOf('muralha_principal.jsp') !== -1) {
+      var pai = new URLSearchParams(search).get('menu_info_pai');
+      return (pai && categorias[pai]) || 'home';
+    }
+    var keys = Object.keys(mapa);
+    keys.sort(function(a, b) { return b.length - a.length; });
+    for (var i = 0; i < keys.length; i++) {
+      if (path.indexOf(keys[i]) !== -1) return mapa[keys[i]];
+    }
+    return null;
+  }
 
   window.addEventListener('DOMContentLoaded', function() {
     var link = document.getElementById('btnAjuda');
     if (!link) return;
-    var path = window.location.pathname;
-    var keys = Object.keys(mapa);
-    keys.sort(function(a, b) { return b.length - a.length; });
-    for (var i = 0; i < keys.length; i++) {
-      if (path.indexOf(keys[i]) !== -1) {
-        link.href = '/muralha-digital/pages/ajuda/index.jsp#' + mapa[keys[i]];
-        return;
-      }
-    }
+    if (window.location.pathname.indexOf('/pages/ajuda/') !== -1) return;
+    var secao = secaoDaTela(window.location.pathname, window.location.search);
+    if (secao) link.href = '/muralha-digital/pages/ajuda/index.jsp#' + secao;
   });
 })();

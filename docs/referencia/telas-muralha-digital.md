@@ -407,6 +407,7 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - Caminho: `muralha-digital/pages/ajuda`
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Ajuda contextual
+- Ajuda contextual: o botão de ajuda da barra superior (`cabecalho_bootstrap_simples.jsp` e `muralha_abertura_bootstrap.jsp`) recebe de `muralha-digital/assets/js/ajuda-contexto.js` o endereço `index.jsp#<seção>` da tela atual. O mapa liga trechos do endereço da tela a ids do manual, e o trecho mais longo vence. A tela inicial e as categorias (`muralha_principal.jsp?menu_info_pai=N`) apontam para a seção da categoria, e cada relatório ou gráfico para a sua linha nas seções 15.1 e 15.2. Ao abrir, a Central de Ajuda rola até a seção e a destaca por 4 segundos. Uma tela nova precisa de uma entrada no mapa e de um id correspondente em `pages/ajuda/index.jsp`.
 
 ## analises/datasets
 
