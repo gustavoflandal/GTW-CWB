@@ -1,12 +1,12 @@
 import {
-    htmlVazio, garantirAltura, escapeHtml, formatarNumero, formatarTempo, infoTempo,
+    htmlVazio, mostrarHtml, garantirAltura, escapeHtml, formatarNumero, formatarTempo, infoTempo,
     medidasDe, rotuloCampo, aplicarOpcao, ROTULO_NULO
 } from './comum.js';
 
 export function renderizarHeatmap(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
-        elemento.innerHTML = htmlVazio();
+        mostrarHtml(elemento, htmlVazio());
         return;
     }
     garantirAltura(elemento);
@@ -24,7 +24,7 @@ export function renderizarHeatmap(elemento, widget, dados) {
     if (!dim2) { for (var k2 of keys) { if (typeof dados[0][k2] === 'string' && k2 !== dim1) { dim2 = k2; break; } } }
 
     if (!dim1 || !valueKey) {
-        elemento.innerHTML = '<div class="text-warning text-center p-3"><i class="bi bi-info-circle"></i> O mapa de calor precisa de ao menos 1 dimensão e 1 medida</div>';
+        mostrarHtml(elemento, '<div class="text-warning text-center p-3"><i class="bi bi-info-circle"></i> O mapa de calor precisa de ao menos 1 dimensão e 1 medida</div>');
         return;
     }
     if (!dim2) dim2 = dim1;

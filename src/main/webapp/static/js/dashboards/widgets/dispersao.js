@@ -1,12 +1,12 @@
 import {
-    htmlVazio, garantirAltura, obterPaleta, escapeHtml, formatarNumero, eixoValor,
+    htmlVazio, mostrarHtml, garantirAltura, obterPaleta, escapeHtml, formatarNumero, eixoValor,
     rotuloCampo, aplicarOpcao, ROTULO_NULO
 } from './comum.js';
 
 export function renderizarDispersao(elemento, widget, dados) {
     if (!elemento) return;
     if (!dados || dados.length === 0) {
-        elemento.innerHTML = htmlVazio();
+        mostrarHtml(elemento, htmlVazio());
         return;
     }
     garantirAltura(elemento);

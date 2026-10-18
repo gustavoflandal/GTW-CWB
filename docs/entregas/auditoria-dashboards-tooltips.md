@@ -68,6 +68,7 @@ Terceira rodada (teste em navegador real, Chromium 141 via Playwright):
 |---|---|---|
 | Crítico | O botão × de remover era um ícone de fonte (`bi-x-lg`, Bootstrap Icons via CDN): sem a fonte carregada ficava com largura zero — invisível e sem clique. Resultado: campo solto não saía mais da zona | `<button>` com o caractere "×" e estilo próprio em CSS; funciona sem fonte de ícones e pelo teclado |
 | Alto | Módulos JS do dashboard sem controle de cache: após uma atualização o navegador podia misturar arquivos novos e antigos (ex.: stub antigo do Sortable em cache com o editor novo, que então quebrava em `Sortable.get`) | `SemCacheScriptsDashboardFilter` (`no-cache, must-revalidate` em `/static/js/dashboards/*`) e `?v=1.15.0` no script do Sortable |
+| Crítico | **Preview só desenhava uma vez**: ao trocar o tipo (barras → linhas…), o editor substituía o conteúdo do preview sem descartar a instância do ECharts presa ao elemento; o ECharts reaproveitava a instância, cujo canvas já tinha saído da tela, e nada aparecia — nem voltando ao tipo inicial | `descartarGrafico`/`mostrarHtml` em `comum.js` (todo conteúdo HTML descarta o gráfico antes); `aplicarOpcao` recria a instância quando o canvas sumiu; o registro descarta o gráfico antes de KPI/tabela/pivot |
 
 ### Backend e integrações
 
@@ -112,7 +113,7 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
 | `SsoAnaliseServletTest` contra o servlet original | Falha com `ClassCastException`, como esperado |
 | Harness Node + jsdom com o ECharts 5.5.0 vendorizado (SSR/SVG): 16 cenários de widgets, tooltips, drill e filtro cruzado | 16/16 |
 | Harness do editor com o HTML real do `editor.jsp` e o SortableJS real (novo widget, sem painel, séries, KPI, pivot) | 5/5; o cenário "novo widget" e os 3 de edição falham no código original |
-| **Navegador real** (Chromium 141 headless, Playwright, arraste com o mouse): soltar em zona certa/errada, repetição, ×, teclado, reordenar, soltar fora, trocar dataset, salvar, pivot, editar existente, sem erros de JS | 16/16 |
+| **Navegador real** (Chromium 141 headless, Playwright, arraste com o mouse): soltar em zona certa/errada, repetição, ×, teclado, reordenar, soltar fora, trocar dataset, trocar o tipo com canvas e série conferidos a cada troca, "Ver como tabela"/"Atualizar", salvar, pivot, editar existente, sem erros de JS | 17/17; a troca de tipo falha no código anterior |
 | `node --check` em todo JS alterado; `py_compile` em `provisionar.py` | OK |
 
 **Não verificado aqui:** o build Maven completo (dependências no repositório interno da Consilux) e o navegador. Rodar `..\.setup-gtw\build.ps1` e testar os painéis 101 e 102 após a migração.

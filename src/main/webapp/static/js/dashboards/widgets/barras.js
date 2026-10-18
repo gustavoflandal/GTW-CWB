@@ -4,7 +4,7 @@
  * Trata estados: vazio e erro.
  */
 import {
-    htmlVazio, garantirAltura, montarSeries, registrarMeta, obterPaleta,
+    htmlVazio, mostrarHtml, garantirAltura, montarSeries, registrarMeta, obterPaleta,
     tooltipEixo, eixoValor, rotuloValor, aplicarOpcao
 } from './comum.js';
 
@@ -12,7 +12,7 @@ export function renderizarBarras(elemento, widget, dados) {
     if (!elemento) return;
 
     if (!dados || dados.length === 0) {
-        elemento.innerHTML = htmlVazio();
+        mostrarHtml(elemento, htmlVazio());
         return;
     }
     garantirAltura(elemento);

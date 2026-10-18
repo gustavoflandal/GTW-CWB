@@ -9,6 +9,7 @@
 import { api } from './api.js';
 import { renderizarWidget, tiposDisponiveis, ajustarConsultaAoTipo } from './widget-registry.js';
 import { criarEditorFiltros } from './editor-filtros.js';
+import { descartarGrafico, mostrarHtml } from './widgets/comum.js';
 
 var URL_PAINEL = '/muralha-digital/pages/analises/paineis/index.jsp?id=';
 var URL_DATASETS = '/muralha-digital/pages/analises/datasets/index.jsp';
@@ -593,7 +594,9 @@ async function executarPreview() {
         return;
     }
 
-    previewEl.innerHTML = '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Carregando...</span></div></div>';
+    // O grafico anterior e descartado antes de o conteudo ser trocado; sem isso o ECharts
+    // reaproveitaria uma instancia cujo canvas ja saiu da tela e o preview ficaria em branco.
+    mostrarHtml(previewEl, '<div class="text-center p-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Carregando...</span></div></div>');
 
     var resp = await api.post('/api/dash/consultas', {
         datasetId: estado.idDataset,
@@ -601,7 +604,7 @@ async function executarPreview() {
     });
 
     if (!resp.ok) {
-        previewEl.innerHTML = '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(resp.erro || 'Erro na consulta') + '</div>';
+        mostrarHtml(previewEl, '<div class="text-danger text-center p-3"><i class="bi bi-exclamation-triangle"></i> ' + escapeHtml(resp.erro || 'Erro na consulta') + '</div>');
         return;
     }
 
@@ -611,7 +614,7 @@ async function executarPreview() {
         anotacao: resp.annotation || null
     });
 
-    previewEl.innerHTML = '';
+    mostrarHtml(previewEl, '');
     previewEl.style.height = '350px';
     renderizarWidget(previewEl, widget, resp.data || []);
 
@@ -619,6 +622,7 @@ async function executarPreview() {
     if (btnTabela) {
         btnTabela.onclick = function() {
             var wTabela = Object.assign({}, widget, { tipo: 'tabela' });
+            descartarGrafico(previewEl);
             previewEl.style.height = 'auto';
             renderizarWidget(previewEl, wTabela, resp.data || []);
         };
@@ -774,7 +778,7 @@ function mostrarPreviewMensagem(html) {
     var previewEl = document.getElementById('previewWidget');
     if (!previewEl) return;
     previewEl.style.height = '';
-    previewEl.innerHTML = '<div class="text-muted text-center p-4">' + html + '</div>';
+    mostrarHtml(previewEl, '<div class="text-muted text-center p-4">' + html + '</div>');
 }
 
 function bloquearEditor(mensagem) {

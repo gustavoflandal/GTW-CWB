@@ -247,13 +247,36 @@ export function rotuloValor(extra) {
     return Object.assign({ formatter: function(p) { return formatarNumero(p.value); } }, extra || {});
 }
 
+/**
+ * Descarta a instancia do ECharts presa ao elemento, se houver. Obrigatorio antes de
+ * trocar o innerHTML do elemento: senao a instancia continua registrada, o proximo
+ * setOption desenha num canvas que ja saiu da tela e nada aparece.
+ */
+export function descartarGrafico(elemento) {
+    if (typeof echarts === 'undefined' || !elemento) return;
+    var inst = echarts.getInstanceByDom(elemento);
+    if (inst) inst.dispose();
+}
+
+/** Substitui o conteudo do elemento por HTML, descartando o grafico que estivesse nele. */
+export function mostrarHtml(elemento, html) {
+    descartarGrafico(elemento);
+    elemento.innerHTML = html;
+}
+
 export function aplicarOpcao(elemento, option) {
     if (typeof echarts === 'undefined') {
         elemento.innerHTML = htmlErro('ECharts não carregado');
         return;
     }
     try {
-        var chart = echarts.getInstanceByDom(elemento) || echarts.init(elemento);
+        var chart = echarts.getInstanceByDom(elemento);
+        // Instancia cujo canvas foi removido (alguem trocou o innerHTML): recria.
+        if (chart && !elemento.querySelector('canvas, svg')) {
+            chart.dispose();
+            chart = null;
+        }
+        if (!chart) chart = echarts.init(elemento);
         chart.setOption(option, true);
         if (!elemento.__observadorResize) {
             elemento.__observadorResize = new ResizeObserver(function() {
@@ -263,7 +286,7 @@ export function aplicarOpcao(elemento, option) {
             elemento.__observadorResize.observe(elemento);
         }
     } catch (e) {
-        elemento.innerHTML = htmlErro('Erro: ' + e.message);
+        mostrarHtml(elemento, htmlErro('Erro: ' + e.message));
     }
 }
 
