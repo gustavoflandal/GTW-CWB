@@ -13,6 +13,7 @@ var possui_bo_alerta = '';
 var listaVeiculosMonitorarSomenteEste = [];
 var TEMPO_MAXIMO_EMISSAO = 1; // Valor padrão em minutos
 var _mapaCorTipoAlerta = null;
+var _mapaIconeTipoAlerta = {};
 
 function carregarCoresTipoAlerta() {
 	if (_mapaCorTipoAlerta !== null) return;
@@ -24,11 +25,19 @@ function carregarCoresTipoAlerta() {
 			if (Array.isArray(data)) {
 				data.forEach(function(t) {
 					if (t.cor) _mapaCorTipoAlerta[t.tipo] = t.cor;
+					if (t.icone && /^bi-[a-z0-9]+(-[a-z0-9]+)*$/.test(t.icone)) _mapaIconeTipoAlerta[t.tipo] = t.icone;
 				});
 			}
 		},
 		error: function() { _mapaCorTipoAlerta = {}; }
 	});
+}
+
+// Ícone configurado em Tipos de Alerta, exibido antes do título do aviso.
+function tituloComIcone(tituloAlerta) {
+	carregarCoresTipoAlerta();
+	var icone = _mapaIconeTipoAlerta[tituloAlerta];
+	return icone ? '<i class="bi ' + icone + ' me-1"></i>' + tituloAlerta : tituloAlerta;
 }
 
 // Função helper para detectar e tratar redirecionamentos de autenticação
@@ -671,7 +680,7 @@ function showAlerta(msg, tipoAlertaNotificacao, tituloAlerta) {
 		break;
    }
 
-   const tt = toastr[tipoAlertaNotificacao](msg, tituloAlerta, { toastClass });
+   const tt = toastr[tipoAlertaNotificacao](msg, tituloComIcone(tituloAlerta), { toastClass });
    toasts.push(tt);
 }
 

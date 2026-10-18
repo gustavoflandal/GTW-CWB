@@ -5,11 +5,14 @@ import com.consilux.model.Acesso;
 import com.consilux.model.Usuario;
 import com.consilux.infra.SessaoConstantes;
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import muralha.digital.logtecnico.AlteracaoParametro;
 import muralha.digital.logtecnico.ContextoAlteracao;
 import muralha.digital.logtecnico.HistoricoParametros;
 import muralha.digital.auditoria.AuditoriaService;
 import org.apache.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -21,38 +24,57 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Configuração dos tipos de alerta (Plano 28): criticidade, cor, ícone e tratamentos.
+ * Sem "acao" abre a tela; "listar" alimenta também o popup de notificação de todos os operadores.
+ */
 @WebServlet("/MuralhaDigital/TipoAlertaConfig")
 public class TipoAlertaConfigServlet extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
     private static final Logger logger = Logger.getLogger(TipoAlertaConfigServlet.class);
     private static final Gson gson = new Gson();
+    private static final String TELA = "/muralha-digital/pages/tipos-alerta/index.jsp";
+    private static final String RECURSO_TIPO = "TIPO_ALERTA";
+    private static final String RECURSO_TRATAMENTO = "TIPO_ALERTA_TRATAMENTO";
+    private static final int MAX_PARAMETROS = 2000;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
         if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+
+        String acao = req.getParameter("acao");
+        // A listagem é lida pelo popup de notificação de qualquer operador logado; o restante exige a permissão da tela.
+        if (!"listar".equals(acao) && !new Acesso(req, resp, true).verificaAcesso(false)) return;
+
+        if (acao == null || acao.isEmpty()) {
+            req.getRequestDispatcher(TELA).forward(req, resp);
+            return;
+        }
 
         resp.setContentType("application/json;charset=UTF-8");
-        String acao = req.getParameter("acao");
-        if (acao == null) acao = "listar";
-
         try (Connection conn = Conexao.getConexao()) {
             switch (acao) {
                 case "listar":
                     resp.getWriter().write(gson.toJson(listarConfigs(conn)));
                     break;
-                case "tratamentos":
-                    String idTipo = req.getParameter("idTipo");
-                    if (idTipo == null) { resp.sendError(400, "idTipo obrigatório"); return; }
-                    resp.getWriter().write(gson.toJson(listarTratamentos(conn, UUID.fromString(idTipo))));
+                case "tratamentos": {
+                    UUID idTipo = uuid(req.getParameter("idTipo"));
+                    if (idTipo == null) { resp.sendError(400, "idTipo inválido"); return; }
+                    resp.getWriter().write(gson.toJson(listarTratamentos(conn, idTipo)));
+                    break;
+                }
+                case "catalogo":
+                    resp.getWriter().write(gson.toJson(catalogo()));
                     break;
                 default:
-                    resp.sendError(400, "Ação desconhecida: " + acao);
+                    resp.sendError(400, "Ação desconhecida");
             }
         } catch (Exception e) {
             logger.error("Erro em TipoAlertaConfigServlet GET: " + e.getMessage(), e);
@@ -76,36 +98,46 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
             switch (acao) {
                 case "salvarConfig": {
-                    String idTipo = req.getParameter("idTipo");
+                    UUID idTipo = uuid(req.getParameter("idTipo"));
                     boolean critico = "1".equals(req.getParameter("critico"));
-                    String cor = req.getParameter("cor");
-                    String icone = req.getParameter("icone");
+                    String cor = vazioParaNulo(req.getParameter("cor"));
+                    String icone = vazioParaNulo(req.getParameter("icone"));
 
-                    if (idTipo == null) { resp.sendError(400, "idTipo obrigatório"); return; }
+                    if (idTipo == null) { resp.sendError(400, "idTipo inválido"); return; }
                     if (!ConfigTipoAlerta.corValida(cor)) { resp.sendError(400, "Cor inválida"); return; }
+                    if (!ConfigTipoAlerta.iconeValido(icone)) { resp.sendError(400, "Ícone inválido"); return; }
+                    if (!tipoExiste(conn, idTipo)) { resp.sendError(404, "Tipo de alerta não encontrado"); return; }
 
-                    salvarConfig(conn, UUID.fromString(idTipo), critico, cor, icone, ctx);
+                    salvarConfig(conn, idTipo, critico, cor, icone, ctx);
                     resultado.put("ok", true);
                     AuditoriaService.registrar(req, "tipo-alerta-config", "salvar",
-                        idTipo, "critico=" + critico + " cor=" + cor + " icone=" + icone);
+                        idTipo.toString(), "critico=" + critico + " cor=" + cor + " icone=" + icone);
                     break;
                 }
                 case "salvarTratamento": {
-                    String idTipo = req.getParameter("idTipo");
+                    UUID idTipo = uuid(req.getParameter("idTipo"));
                     String tratamento = req.getParameter("tratamento");
                     boolean automatico = "1".equals(req.getParameter("automatico"));
-                    String parametrosJson = req.getParameter("parametrosJson");
+                    String parametrosJson = vazioParaNulo(req.getParameter("parametrosJson"));
                     boolean ativo = !"0".equals(req.getParameter("ativo"));
 
                     if (idTipo == null || tratamento == null) {
                         resp.sendError(400, "idTipo e tratamento obrigatórios"); return;
                     }
-                    TratamentoAlerta.interpretar(tratamento);
+                    TratamentoAlerta t = TratamentoAlerta.interpretar(tratamento);
+                    if (t == null) { resp.sendError(400, "Tratamento obrigatório"); return; }
+                    if (automatico && !t.isExecutavel()) {
+                        resp.sendError(400, "Este tratamento depende do operador e não pode ser automático"); return;
+                    }
+                    if (!parametrosValidos(parametrosJson)) {
+                        resp.sendError(400, "Parâmetros devem ser um objeto JSON de até " + MAX_PARAMETROS + " caracteres"); return;
+                    }
+                    if (!tipoExiste(conn, idTipo)) { resp.sendError(404, "Tipo de alerta não encontrado"); return; }
 
-                    salvarTratamento(conn, UUID.fromString(idTipo), tratamento, automatico, parametrosJson, ativo);
+                    salvarTratamento(conn, idTipo, t.name(), automatico, parametrosJson, ativo, ctx);
                     resultado.put("ok", true);
                     AuditoriaService.registrar(req, "tipo-alerta-tratamento", "salvar",
-                        idTipo, tratamento + " auto=" + automatico);
+                        idTipo.toString(), t.name() + " ativo=" + ativo + " auto=" + automatico);
                     break;
                 }
                 case "novoTipo": {
@@ -122,7 +154,7 @@ public class TipoAlertaConfigServlet extends HttpServlet {
                     break;
                 }
                 default:
-                    resp.sendError(400, "Ação desconhecida: " + acao);
+                    resp.sendError(400, "Ação desconhecida");
                     return;
             }
 
@@ -137,24 +169,15 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     static List<Map<String, Object>> listarConfigs(Connection conn) throws SQLException {
         List<Map<String, Object>> lista = new ArrayList<>();
-        // Ajuste temporário de demonstração: sobrepõe sem alterar as tabelas existentes
-        // (gap em docs/entregas/gap-tipos-alerta-ajuste-demo.md)
-        boolean ajuste = existeAjusteDemo(conn);
-        String sql = ajuste
-            ? "SELECT t.id, t.tipo, COALESCE(a.descricao, t.descricao) AS descricao, "
-                + "COALESCE(a.prioridade, t.prioridade) AS prioridade, t.tarefa_ativa, "
-                + "COALESCE(a.critico, c.critico, 0) AS critico, COALESCE(a.cor, c.cor) AS cor, "
-                + "COALESCE(a.icone, c.icone) AS icone, "
-                + "CASE WHEN a.id_tipo_alerta_ocorrencia IS NULL THEN 0 ELSE 1 END AS ajustado "
-                + "FROM muralha.tipo_alerta_ocorrencia t "
-                + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
-                + "LEFT JOIN muralha.tipo_alerta_ajuste_demo a ON a.id_tipo_alerta_ocorrencia = t.id AND a.ativo = 1 "
-                + "ORDER BY COALESCE(a.prioridade, t.prioridade), t.tipo"
-            : "SELECT t.id, t.tipo, t.descricao, t.prioridade, t.tarefa_ativa, "
-                + "ISNULL(c.critico, 0) AS critico, c.cor, c.icone, 0 AS ajustado "
-                + "FROM muralha.tipo_alerta_ocorrencia t "
-                + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
-                + "ORDER BY t.prioridade, t.tipo";
+        String sql = "SELECT t.id, t.tipo, t.descricao, t.prioridade, t.tarefa_ativa, "
+            + "ISNULL(c.critico, 0) AS critico, c.cor, c.icone, "
+            + "(SELECT COUNT(*) FROM muralha.tipo_alerta_tratamento x "
+            + "  WHERE x.id_tipo_alerta_ocorrencia = t.id AND x.ativo = 1) AS tratamentos, "
+            + "(SELECT COUNT(*) FROM muralha.tipo_alerta_tratamento x "
+            + "  WHERE x.id_tipo_alerta_ocorrencia = t.id AND x.ativo = 1 AND x.automatico = 1) AS automaticos "
+            + "FROM muralha.tipo_alerta_ocorrencia t "
+            + "LEFT JOIN muralha.tipo_alerta_config c ON c.id_tipo_alerta_ocorrencia = t.id "
+            + "ORDER BY t.prioridade, t.tipo";
         try (PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
@@ -167,19 +190,34 @@ public class TipoAlertaConfigServlet extends HttpServlet {
                 m.put("critico", rs.getBoolean("critico"));
                 m.put("cor", rs.getString("cor"));
                 m.put("icone", rs.getString("icone"));
-                if (rs.getInt("ajustado") == 1) m.put("ajusteTemporario", true);
+                m.put("tratamentos", rs.getInt("tratamentos"));
+                m.put("automaticos", rs.getInt("automaticos"));
                 lista.add(m);
             }
         }
         return lista;
     }
 
-    private static boolean existeAjusteDemo(Connection conn) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT CASE WHEN OBJECT_ID('muralha.tipo_alerta_ajuste_demo', 'U') IS NULL THEN 0 ELSE 1 END");
-             ResultSet rs = ps.executeQuery()) {
-            return rs.next() && rs.getInt(1) == 1;
+    private static Map<String, Object> catalogo() {
+        List<Map<String, Object>> tratamentos = new ArrayList<>();
+        for (TratamentoAlerta t : TratamentoAlerta.values()) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("codigo", t.name());
+            m.put("descricao", t.getDescricao());
+            m.put("executavel", t.isExecutavel());
+            tratamentos.add(m);
         }
+        List<Map<String, String>> cores = new ArrayList<>();
+        for (Map.Entry<String, String> e : ConfigTipoAlerta.CORES.entrySet()) {
+            Map<String, String> m = new LinkedHashMap<>();
+            m.put("codigo", e.getKey());
+            m.put("rotulo", e.getValue());
+            cores.add(m);
+        }
+        Map<String, Object> r = new LinkedHashMap<>();
+        r.put("tratamentos", tratamentos);
+        r.put("cores", cores);
+        return r;
     }
 
     private static List<Map<String, Object>> listarTratamentos(Connection conn, UUID idTipo) throws SQLException {
@@ -205,6 +243,19 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     private static void salvarConfig(Connection conn, UUID idTipo, boolean critico,
                                      String cor, String icone, ContextoAlteracao ctx) throws SQLException {
+        Map<String, String> antes = new LinkedHashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT critico, cor, icone FROM muralha.tipo_alerta_config WHERE id_tipo_alerta_ocorrencia = ?")) {
+            ps.setString(1, idTipo.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    antes.put("critico", String.valueOf(rs.getBoolean("critico")));
+                    antes.put("cor", rs.getString("cor"));
+                    antes.put("icone", rs.getString("icone"));
+                }
+            }
+        }
+
         try (PreparedStatement ps = conn.prepareStatement(
                 "MERGE muralha.tipo_alerta_config AS t "
                 + "USING (SELECT ? AS id_tipo) AS s ON t.id_tipo_alerta_ocorrencia = CAST(s.id_tipo AS uniqueidentifier) "
@@ -215,19 +266,39 @@ public class TipoAlertaConfigServlet extends HttpServlet {
             ps.setBoolean(2, critico);
             ps.setString(3, cor);
             ps.setString(4, icone);
-            ps.setInt(5, ctx.getIdUsuario());
+            ps.setObject(5, ctx.getIdUsuario());
             ps.setBoolean(6, critico);
             ps.setString(7, cor);
             ps.setString(8, icone);
-            ps.setInt(9, ctx.getIdUsuario());
+            ps.setObject(9, ctx.getIdUsuario());
             ps.executeUpdate();
         }
-        HistoricoParametros.registrarSemFalhar(conn, "TIPO_ALERTA", idTipo.toString(),
-            HistoricoParametros.comparar("critico", null, String.valueOf(critico)), ctx);
+
+        Map<String, String> depois = new LinkedHashMap<>();
+        depois.put("critico", String.valueOf(critico));
+        depois.put("cor", cor);
+        depois.put("icone", icone);
+        List<AlteracaoParametro> alteracoes = HistoricoParametros.comparar(antes, depois);
+        HistoricoParametros.registrarSemFalhar(conn, RECURSO_TIPO, idTipo.toString(), alteracoes, ctx);
     }
 
-    private static void salvarTratamento(Connection conn, UUID idTipo, String tratamento,
-                                         boolean automatico, String parametrosJson, boolean ativo) throws SQLException {
+    private static void salvarTratamento(Connection conn, UUID idTipo, String tratamento, boolean automatico,
+                                         String parametrosJson, boolean ativo, ContextoAlteracao ctx) throws SQLException {
+        Map<String, String> antes = new LinkedHashMap<>();
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT automatico, parametros_json, ativo FROM muralha.tipo_alerta_tratamento "
+                + "WHERE id_tipo_alerta_ocorrencia = ? AND tratamento = ?")) {
+            ps.setString(1, idTipo.toString());
+            ps.setString(2, tratamento);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    antes.put(tratamento + ".ativo", String.valueOf(rs.getBoolean("ativo")));
+                    antes.put(tratamento + ".automatico", String.valueOf(rs.getBoolean("automatico")));
+                    antes.put(tratamento + ".parametros", rs.getString("parametros_json"));
+                }
+            }
+        }
+
         try (PreparedStatement ps = conn.prepareStatement(
                 "MERGE muralha.tipo_alerta_tratamento AS t "
                 + "USING (SELECT ? AS id_tipo, ? AS trat) AS s "
@@ -246,6 +317,13 @@ public class TipoAlertaConfigServlet extends HttpServlet {
             ps.setBoolean(9, ativo);
             ps.executeUpdate();
         }
+
+        Map<String, String> depois = new LinkedHashMap<>();
+        depois.put(tratamento + ".ativo", String.valueOf(ativo));
+        depois.put(tratamento + ".automatico", String.valueOf(automatico));
+        depois.put(tratamento + ".parametros", parametrosJson);
+        HistoricoParametros.registrarSemFalhar(conn, RECURSO_TRATAMENTO, idTipo.toString(),
+            HistoricoParametros.comparar(antes, depois), ctx);
     }
 
     private static UUID criarTipo(Connection conn, String tipo, String descricao) throws SQLException {
@@ -259,5 +337,38 @@ public class TipoAlertaConfigServlet extends HttpServlet {
             ps.executeUpdate();
         }
         return id;
+    }
+
+    private static boolean tipoExiste(Connection conn, UUID idTipo) throws SQLException {
+        try (PreparedStatement ps = conn.prepareStatement(
+                "SELECT 1 FROM muralha.tipo_alerta_ocorrencia WHERE id = ?")) {
+            ps.setString(1, idTipo.toString());
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
+
+    static boolean parametrosValidos(String json) {
+        if (json == null) return true;
+        if (json.length() > MAX_PARAMETROS) return false;
+        try {
+            return JsonParser.parseString(json).isJsonObject();
+        } catch (RuntimeException e) {
+            return false;
+        }
+    }
+
+    private static UUID uuid(String valor) {
+        if (valor == null) return null;
+        try {
+            return UUID.fromString(valor.trim());
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
+    }
+
+    private static String vazioParaNulo(String valor) {
+        return valor == null || valor.trim().isEmpty() ? null : valor.trim();
     }
 }

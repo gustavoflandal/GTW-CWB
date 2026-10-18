@@ -108,9 +108,13 @@ done
 # 6. Provisionamento
 # -------------------------------------------------------------------------
 echo ""
-echo "[6/6] Provisionamento (datasets, dashboards, alertas)..."
+echo "[6/6] Provisionamento (conexao, datasets, governanca, paineis, alertas)..."
 
 docker compose exec -T superset python /app/provisionar.py
+docker compose exec -T superset python /app/paineis/operacionais.py
+docker compose exec -T superset python /app/paineis/demonstracao.py
+# Relatorios agendados apontam para os paineis pelo slug: rodar depois dos paineis.
+docker compose exec -T superset python /app/provisionar.py --alertas-only
 echo "  Provisionamento concluido."
 
 # -------------------------------------------------------------------------

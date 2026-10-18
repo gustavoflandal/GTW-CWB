@@ -1,13 +1,14 @@
--- Infrações registradas (nível de registro)
--- Fonte: dbo.infracao + dbo.enquadramento + dbo.local (testes excluídos)
+-- Infrações registradas (nível de registro, para análises por hora e faixa de excesso)
+-- Fonte: dbo.infracao + dbo.enquadramento; equipamento pela versão da própria infração
+-- (analise.v_local_versao). Excluídas as imagens de teste (enquadramento 1).
 SELECT
     i.data AS data_infracao,
     RIGHT('0' + CAST(DATEPART(HOUR, i.data) AS varchar(2)), 2) + 'h' AS hora_dia,
     CASE DATEDIFF(DAY, '19000107', CAST(i.data AS date)) % 7
         WHEN 0 THEN N'1-Dom' WHEN 1 THEN N'2-Seg' WHEN 2 THEN N'3-Ter' WHEN 3 THEN N'4-Qua'
         WHEN 4 THEN N'5-Qui' WHEN 5 THEN N'6-Sex' ELSE N'7-Sáb' END AS dia_semana,
-    LTRIM(ISNULL(RTRIM(l.nome), 'Equipamento ' + CAST(i.id_local AS varchar(10)))) AS equipamento,
-    'Faixa ' + CAST(i.pista AS varchar(3)) AS faixa,
+    LTRIM(ISNULL(lv.nome, 'Equipamento ' + CAST(i.id_local AS varchar(10)))) AS equipamento,
+    N'Faixa ' + CAST(i.pista AS nvarchar(3)) AS faixa,
     CASE i.id_enquadramento
         WHEN 74550 THEN N'Velocidade até 20% acima'
         WHEN 74630 THEN N'Velocidade 20% a 50% acima'
@@ -33,7 +34,6 @@ SELECT
          WHEN i.velocidade_considerada - i.velocidade_limite <= 40 THEN N'31-40 km/h'
          ELSE N'Acima de 40 km/h' END AS faixa_excesso
 FROM dbo.infracao i
-LEFT JOIN dbo.local l ON l.id_local = i.id_local AND l.sequencia_local = i.sequencia_local
+LEFT JOIN analise.v_local_versao lv ON lv.id_local = i.id_local AND lv.sequencia_local = i.sequencia_local
 LEFT JOIN dbo.enquadramento e ON e.id_enquadramento = i.id_enquadramento
 WHERE i.id_enquadramento <> 1
-  AND ISNULL(l.nome, '') NOT LIKE 'Teste%'

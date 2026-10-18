@@ -11,7 +11,8 @@ timezone: "America/Bahia"
 
 database: "GTW Muralha Digital (somente leitura)"
 sql: >
-  SELECT AVG(pct_assertividade) AS valor
+  -- Sem análises no período não há o que avaliar: retorna 100 para não disparar.
+  SELECT ISNULL(AVG(pct_assertividade), 100) AS valor
   FROM analise.v_assertividade_dia
   WHERE dia >= CAST(DATEADD(DAY, -1, GETDATE()) AS DATE)
 

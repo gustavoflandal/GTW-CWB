@@ -51,7 +51,7 @@ public class Menu
 	public String getTituloEdital() {
 		java.util.List<String> itens = getItensEditalList();
 		if (itens.isEmpty()) return "";
-		return "Itens do edital (TR TRANSALVADOR):<br>" + String.join("<br>", itens);
+		return "TR " + String.join("<br>TR ", itens);
 	}
 	public String getItensEditalTexto() {
 		return String.join(", ", getItensEditalList());

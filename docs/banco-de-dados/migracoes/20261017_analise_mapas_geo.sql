@@ -1,4 +1,8 @@
 -- =============================================================================
+-- OBSOLETA (2026-10-17) — NÃO EXECUTAR. Usa colunas inexistentes (dbo.local.latitude,
+-- mat_*.total_infracoes) e a tabela inexistente analise.area_monitorada_grupo; nunca rodou.
+-- As views geolocalizadas foram criadas por 20261017_analise_correcao_camada.sql.
+-- =============================================================================
 -- Migração: Views geolocalizadas para análise espacial (SUP-8)
 -- Banco: GTW_MURALHA_DEV
 -- Data: 2026-10-17

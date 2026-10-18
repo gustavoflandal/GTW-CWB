@@ -44,9 +44,9 @@
 | `analise/docker-compose.prod.yml` | Override de producao (restart, limites, healthchecks) |
 | `analise/superset/superset_config.py` | Configuracao do Superset (cache, auth, formatos, idioma) |
 | `analise/superset/gtw_security.py` | Security manager customizado para SSO via cabecalhos GTW |
-| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao, datasets, dashboards, tags, RLS, papeis, alertas |
+| `analise/superset/provisionar.py` | Provisionamento declarativo: conexao, datasets, tags, RLS, papeis, alertas |
 | `analise/superset/datasets/*.yaml` | 13 definicoes de datasets (11 base + 2 geolocalizados) |
-| `analise/superset/dashboards/*.yaml` | 9 dashboards operacionais com graficos, native filters e conditional formatting |
+| `analise/superset/paineis/` | Painéis (2026-10-17): `construtor.py`, `fontes.py`, `operacionais.py` (9 painéis), `demonstracao.py` (5 painéis), `diagnostico.py` e SQLs `datasets/gtw_*.sql` sobre a camada `analise`. Substituíram os YAMLs de `superset/dashboards/` — ver [gap-camada-analise-superset.md](gap-camada-analise-superset.md) |
 | `analise/superset/governanca/*.yaml` | 3 papeis, 7 tags, 2 regras RLS declarativas |
 | `analise/superset/alertas/*.yaml` | 4 alertas SQL + 3 relatorios agendados (screenshot de dashboard) |
 | `muralha.digital.analise.GuestTokenServlet` | Servlet que gera JWT guest token para embedding de dashboards |
@@ -84,12 +84,12 @@
 - [ ] Testar login SSO no navegador (usuario GTW -> Superset sem senha)
 - [ ] Testar provisionamento de datasets (`python /app/provisionar.py`)
 - [ ] Validar metricas certificadas contra SQL de referencia
-- [ ] Testar provisionamento de dashboards (`python /app/provisionar.py --dashboards-only`)
+- [x] Publicar e validar os painéis (`python /app/paineis/operacionais.py` e `demonstracao.py`): 122 gráficos com dados em 2026-10-17
 - [ ] Validar layout dos dashboards no navegador
 - [ ] Testar papeis e RLS com usuarios distintos
 - [ ] Testar alertas e relatorios (`python /app/provisionar.py --alertas-only`)
 - [ ] Validar envio de e-mail (requer SMTP configurado)
-- [ ] Executar migracao `20261017_analise_mapas_geo.sql` no banco DEV
+- [x] ~~Executar migracao `20261017_analise_mapas_geo.sql`~~ — obsoleta; substituída por `20261017_analise_correcao_camada.sql` e `20261017_analise_versao_equipamento.sql`, executadas no DEV em 2026-10-17
 - [ ] Testar embedding de dashboard no GTW (iframe + guest token)
 - [ ] Testar scripts de producao (deploy.sh, backup.sh, healthcheck.sh)
 - [ ] Executar roteiro de testes manuais — Fase 6 (28 testes Superset)
