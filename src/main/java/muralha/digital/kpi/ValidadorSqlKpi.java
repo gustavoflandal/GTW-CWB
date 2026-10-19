@@ -10,10 +10,19 @@ public final class ValidadorSqlKpi {
     public static final int TAMANHO_MAXIMO = 4000;
     public static final int TIMEOUT_SEGUNDOS = 30;
 
+    /*
+     * Palavras inteiras sem usar \b: o T-SQL separa "1DELETE" em "1" + "DELETE", entao um digito antes
+     * da palavra nao a protege. A lista inclui os iniciadores de comando que nunca aparecem dentro de um
+     * SELECT, pois o T-SQL nao exige ";" entre comandos.
+     */
+    private static final String ANTES = "(?<![A-Za-z_@#$])";
+    private static final String DEPOIS = "(?![A-Za-z0-9_@#$])";
     private static final Pattern PROIBIDAS = Pattern.compile(
-            "\\b(INSERT|UPDATE|DELETE|MERGE|DROP|ALTER|CREATE|TRUNCATE|EXEC|EXECUTE|GRANT|REVOKE|DENY|INTO|"
-            + "OPENROWSET|OPENQUERY|OPENDATASOURCE|OPENXML|BULK|SHUTDOWN|WAITFOR|DBCC|BACKUP|RESTORE|KILL|RECONFIGURE|USE)\\b"
-            + "|\\b(XP|SP)_\\w*",
+            ANTES + "(INSERT|UPDATE|DELETE|MERGE|DROP|ALTER|CREATE|TRUNCATE|EXEC|EXECUTE|GRANT|REVOKE|DENY|INTO|"
+            + "OPENROWSET|OPENQUERY|OPENDATASOURCE|OPENXML|BULK|SHUTDOWN|WAITFOR|DBCC|BACKUP|RESTORE|KILL|RECONFIGURE|USE|"
+            + "DECLARE|SET|IF|WHILE|BEGIN|COMMIT|ROLLBACK|SAVE|GOTO|RAISERROR|THROW|PRINT|DISABLE|ENABLE|SETUSER|REVERT|"
+            + "UPDATETEXT|WRITETEXT|CHECKPOINT|OPEN|FETCH|DEALLOCATE)" + DEPOIS
+            + "|" + ANTES + "(XP|SP)_\\w*",
             Pattern.CASE_INSENSITIVE);
 
     private ValidadorSqlKpi() {}
