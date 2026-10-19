@@ -176,6 +176,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 | [FUN-11](#fun-11-inconsistências-menores) | Baixa | Várias | Filtro de imagem teste, status inexistente, textos | Não |
 | [DES-01](#des-01-consultas-pesadas-sem-materialização) | Média | Pré-Processamento, KPIs, Superset | Varreduras de ≈8 mi linhas a cada 60 s | Sim |
 | [IMP-01](#imp-01-tela-de-gestão-de-grupos-e-direitos) | Média | Usuários | Não há tela de grupos e direitos por grupo | Não (usa tabelas existentes) |
+| [SEG-11](#seg-11-telas-e-servlets-novos-sem-registro) | Alta | Módulos novos (todos) | 22 telas e 32 servlets novos sem registro em `sis_menu` (ver §7) | Sim |
 
 ---
 
@@ -374,6 +375,11 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Regras:** toda alteração gravada no `AuditoriaService`; sem migração de estrutura, porque usa as tabelas existentes; um menu "Gestão de Acessos" (novo `sis_menu` com card, por script).
 - **Aceite:** um administrador cria um grupo, inclui usuários, marca direitos e o card aparece para os membros sem script.
 
+### SEG-11 Telas e servlets novos sem registro
+- **Problema:** das telas e servlets criados depois da importação do projeto (2026-10-08), 22 JSPs e 32 servlets não estão em `sis_menu`. Pelo *fail-open* (§1.2), ficam abertos a qualquer usuário logado, inclusive telas que a Central de Ajuda descreve como "apenas administradores". O inventário completo está no §7.
+- **Proposta:** uma migração que registra cada tela sensível como `sis_menu` (com ou sem card) e dá o direito aos grupos decididos (§7.5), mais a verificação estrita do SEG-01 nos servlets.
+- **Aceite:** todas as linhas do §7.3 e do §7.4 com "Registrar" passam a ter menu e direitos, e um usuário fora dos grupos é barrado ao digitar o endereço.
+
 ---
 
 ## 5. Ordem sugerida
@@ -408,7 +414,7 @@ flowchart LR
 
 | Fase | Itens | Dependências |
 |---|---|---|
-| 1 | SEG-01 a SEG-05, SEG-07 a SEG-10 | Autorização para executar as migrações de direitos no DEV |
+| 1 | SEG-01 a SEG-05, SEG-07 a SEG-11 | Autorização para executar as migrações de direitos no DEV |
 | 2 | FUN-01 a FUN-05 | FUN-02 depende da definição do conteúdo do relatório mensal; FUN-03 (integração DETRAN) depende do contratante |
 | 3 | SEG-06, FUN-06, DES-01 | Definição do recorte por área do Operador e das regras dos indicadores |
 | 4 | IMP-01, FUN-07 a FUN-11 | SEG-01 (a tela nova usa a verificação estrita) |
@@ -429,3 +435,95 @@ Todas estão por escrever, exceto a do SEG-08. Nenhuma foi executada.
 | FUN-06 | `AAAAMMDD_analise_v_preprocessamento.sql` | Nova definição da view |
 | DES-01 | `AAAAMMDD_analise_materializacoes_trafego.sql` | Tabelas `mat_*` e procedures de carga |
 | IMP-01 | `AAAAMMDD_menu_gestao_acessos.sql` | Menu e card "Gestão de Acessos" para o grupo 11 |
+| SEG-11 | `AAAAMMDD_registro_modulos_novos.sql` | Menus sem card das telas do §7.3 e §7.4 marcadas "Registrar", com os direitos do §7.5 |
+
+---
+
+## 7. Registro e atribuição dos módulos novos
+
+> Verificação de 2026-10-19. Considerados "novos" os JSPs em `muralha-digital/pages/` e os servlets em `muralha.digital` criados depois do commit de importação `4985d5f` (2026-10-08): 42 JSPs e 41 servlets. Cada URL foi comparada com `sis_menu.acao` (sem a query), `sis_menu_infos` (card) e `sis_menu_direitos` (grupos). A tabela `sis_menu_url`, que o legado usa para associar URLs extras a um menu, está vazia.
+
+### 7.1 Resumo
+
+| Situação | Telas | Servlets |
+|---|---|---|
+| Registrada, com card e direitos | 15 | 3 (392–394, que também são o card da tela) |
+| Registrada, sem card (aberta por botão) e com direitos | 5 | 5 (385, 386, 388, 390, 391) |
+| Registrada, mas a `acao` não casa com a URI | — | 1 (395, ver SEG-02) |
+| **Sem registro** | **22** (16 a registrar, 6 sem necessidade) | **32** (3 com controle próprio) |
+| Prevista e não executada | menu 396 "Análises – Abrir no Superset" (SEG-08) | — |
+
+```mermaid
+flowchart LR
+    N["83 arquivos novos (42 JSP + 41 servlets)"] --> R["Registrados em sis_menu: 29"]
+    N --> S["Sem registro: 54"]
+    R --> C["Com card: 15 telas + 3 servlets"]
+    R --> B["Sem card, por botao: 5 telas + 5 servlets"]
+    R --> X["acao nao casa: 395"]
+    S --> SS["Telas a registrar: 16"]
+    S --> SA["Telas sem necessidade de registro: 6"]
+    S --> SV["Servlets: 32 (fail-open, 3 com controle proprio)"]
+    SS --> FO["Abertas a qualquer usuario logado"]
+    SV --> FO
+```
+
+### 7.2 Registradas
+
+| Menu | Tela | Card (módulo) | Grupos | Observação |
+|---|---|---|---|---|
+| 366–369, 373, 374, 384, 387 | Log de Auditoria, SLA de Latência, Assertividade, SLA Pré-proc., Time-lapse, Disponibilidade, Integridade, Logs Técnicos | Análise de Dados | 41, 42 | Sem o grupo 11 (SEG-07) |
+| 392, 393, 394 | Tipos de Alerta, Relatórios Gerenciais, Pré-Processamento | Análise de Dados (`acao` = servlet) | 42 | As JSPs para as quais os servlets encaminham não estão registradas (§7.3) |
+| 395 | Análises | Análise de Dados | 41, 42 | `acao` com `?acao=abrir` (SEG-02) |
+| 370 | Gestão de Lotes | Cadastro e Configuração | 41, 42 | Servlet `/MuralhaDigital/Lote` sem registro |
+| 371 / 372 | Dashboard KPIs / Configuração de KPIs | Dashboards / sem card | 41, 42 | Configuração aberta ao grupo 41 (SEG-07) |
+| 375 | Mapa de Incidentes Externos | Mapas | 41, 42 | — |
+| 376 / 377 / 378 | Painéis de Análise / Catálogo de Datasets / Catálogo de Dados | Tela inicial / Cadastro e Configuração / sem card | 11, 41, 42 | — |
+| 379–383 | Chamados, Detalhe, Relatórios, Configuração, card Sistema de Chamados | Sistema de Chamados | 11, 107, 108, 109 (Relatórios: 11, 108, 109; Configuração: 11) | Servlets com controle próprio por perfil |
+| 385, 386, 388 | Integridade – consulta / configuração; Logs Técnicos – consulta | sem card (servlet) | 41, 42 / 42 / 41, 42 | — |
+| 389 / 390 / 391 | Revisão de Placas / fila / Score de OCR | Consulta de Veículos / sem card | 41, 42 / 41, 42 / 42 | — |
+
+### 7.3 Telas sem registro
+
+| Tela | Caminho (`/muralha-digital/pages/…`) | Como é aberta | Recomendação |
+|---|---|---|---|
+| Retenção de Dados (LGPD) | `admin/retencao/index.jsp` | Só pelo endereço (Central de Ajuda §16.7) | **Registrar**: sem card, grupo 11 |
+| CPF / Matrícula | `admin/cpf-matricula/index.jsp` | Só pelo endereço | **Registrar**: sem card, grupo 11 |
+| Cadastro de Datasets (versão anterior) | `admin/datasets/index.jsp` | Só pelo endereço; a Ajuda diz "apenas administradores" | **Registrar**: sem card, grupo 11 |
+| Dashboard Builder (versão anterior) | `dashboard/builder/index.jsp` | Só pelo endereço | **Registrar**: sem card, grupos 11, 41, 42 (os mesmos do 376); ou desativar |
+| Exportação de Passagens | `relatorios/exportacao-passagens/index.jsp` | Só pelo endereço | **Registrar**: exportação em massa de passagens; grupos a decidir (42 e 11 sugeridos) |
+| Passagens Anonimizadas | `consulta/passagens-anonimizadas/index.jsp` | Só pelo endereço | **Registrar**: grupos 41, 42 e 11 |
+| Consolidação de Dados Multifonte | `inteligencia/consolidacao/index.jsp` | Só pelo endereço | **Registrar**: grupos 41, 42 e 11 |
+| Dupla Análise – fila / analisar | `processamento/dupla-analise/fila.jsp`, `analisar.jsp` | Só pelo endereço; `analisar.jsp` não é referenciada por nenhum arquivo | **Registrar** as duas: grupos 41, 42 e 11 |
+| Tipos de Alerta (JSP) | `tipos-alerta/index.jsp` | Pelo servlet do menu 392 | **Registrar** com os grupos do 392: aberta direto pelo endereço, a JSP não passa pela verificação do servlet |
+| Relatórios Gerenciais (JSP) | `relatorios/gerencial/index.jsp` | Pelo servlet do menu 393 | **Registrar** com os grupos do 393 (mesmo motivo) |
+| Pré-Processamento (JSP) | `monitoramento/pre-processamento/index.jsp` | Pelo servlet do menu 394 | **Registrar** com os grupos do 394 (mesmo motivo) |
+| Painel (editor) / editor de widget | `analises/paineis/index.jsp`, `analises/widgets/editor.jsp` | Pela lista de painéis (376) | Registrar com os grupos do 376 |
+| Editor / modelador de dataset | `analises/datasets/editor.jsp`, `modelador.jsp` | Pelo Catálogo de Datasets (377) | Registrar com os grupos do 377 |
+| Análises (embedding) | `analise/embedding.jsp` | Encaminhada pelo `SsoAnaliseServlet` | Não precisa: sem o encaminhamento, a página não tem dados |
+| Configurar MFA | `meu-perfil/configurar-mfa.jsp` | Só pelo endereço (a Ajuda informa) | Não restringir, porque vale para todo usuário; **criar atalho** (menu do usuário) |
+| Manuais e Central de Ajuda | `analise/manual.jsp`, `analises/manual.jsp`, `chamados/manual.jsp`, `ajuda/index.jsp` | Botões "Manual" e "Ajuda" | Não precisa: conteúdo para todo usuário logado |
+
+### 7.4 Servlets sem registro
+
+Todos verificam a sessão. A permissão só é verificada quando a URI está registrada, o que não é o caso de nenhum deles.
+
+| Servlet (URL) | Controle hoje | Recomendação |
+|---|---|---|
+| `Chamado`, `ChamadoRelatorio`, `ChamadoConfig` | Próprio, pelos perfis do Sistema de Chamados (`ChamadoConfig` exige administrador) | Manter |
+| `/api/dash/catalogo` | Sessão; parte das ações exige administrador | Manter e aplicar a verificação estrita nas demais ações |
+| `AnaliseGuestToken` | Só sessão; o `embedding.js` não chama | Restringir aos grupos do 395 ou remover se não for usado |
+| `Lote`, `Kpi` | Só sessão | Verificação estrita contra 370, 371 e 372 (SEG-03) |
+| `Retencao`, `UsuarioCpfMatricula`, `DashboardBuilder`, `Dataset`, `/api/dash/datasets` | Só sessão | Verificação estrita contra as telas do §7.3 (grupo 11) |
+| `Exportacao`, `ConsultaAnonimizada`, `Consolidacao`, `InfracaoAnalise` | Só sessão | Verificação estrita contra as telas correspondentes |
+| `Assertividade`, `Auditoria`, `Disponibilidade`, `SlaLatencia`, `SlaPreprocessamento`, `Timelapse`, `Gis`, `Incidente`, `MapaConfig`, `Obliteracao` | Só sessão | Verificação estrita contra o menu da tela que os consome (366–375) |
+| `/api/dash/{consultas,paineis,widgets,exportar}` | Só sessão | Verificação estrita contra 376 e 377 |
+| `MfaConfig`, `/api/dash/health` | Só sessão | Manter (próprio usuário / monitoramento) |
+
+### 7.5 Atribuição a decidir
+
+O responsável precisa definir:
+1. **Grupo 11 Administradores:** incluir em todas as telas novas de Análise de Dados, KPIs e Gestão de Lotes (SEG-07)?
+2. **Exportação de Passagens e Consolidação:** quais grupos podem exportar e consultar dados em massa?
+3. **Dupla Análise:** fica com os grupos 41 e 42, ou ganha um grupo próprio de analistas?
+4. **Dashboard Builder e Cadastro de Datasets (versões anteriores):** manter registrados para o grupo 11 ou desativar?
+5. **Configuração de KPIs (372):** retirar o grupo 41?
