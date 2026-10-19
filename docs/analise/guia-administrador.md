@@ -223,11 +223,14 @@ git pull
 ```
 
 ### Recarga de tabelas materializadas
+As tabelas materializadas (`analise.mat_*`) são recarregadas pelo próprio GTW a cada 30 minutos, pelo job `CargaAnaliseJob` (agendado em `Agendador`, grupo `Analise`, job `CargaAnalise`). Ele executa `analise.spu_carga_passagens_hora`, `analise.spu_carga_infracoes_dia` e `analise.spu_carga_areas_monitoradas` com as janelas padrão (25 h de passagens e 7 dias de infrações). O resultado de cada carga fica registrado em `analise.carga_log`.
+
+O `refresh-materialized.sh` passa a servir apenas para recarga manual ou de um período específico (não é mais necessário agendá-lo no crontab):
 ```bash
 ./scripts/refresh-materialized.sh
 ```
 
-Agenda sugerida (crontab):
+Agenda em crontab (alternativa, somente se o GTW não executar o job; evite usar os dois ao mesmo tempo):
 ```
 */30 * * * * cd /opt/analise && ./scripts/refresh-materialized.sh >> /var/log/superset-refresh.log 2>&1
 ```

@@ -136,6 +136,9 @@ public class Agendador extends HttpServlet {
 	public static final String GRUPO_KPI = "KPI";
 	public static final String JOB_KPI_SNAPSHOT = "Coleta snapshots de KPI";
 
+	public static final String GRUPO_ANALISE = "Analise";
+	public static final String JOB_CARGA_ANALISE = "CargaAnalise";
+
 	public static final String GRUPO_RELATORIOS = "Relatorios";
 	public static final String JOB_RELATORIO_GERENCIAL = "Gera relatorio gerencial mensal";
 	public static final String JOB_RELATORIO_PREPROC = "Gera relatorio mensal pre-processamento";
@@ -215,6 +218,7 @@ public class Agendador extends HttpServlet {
 			reajustaJobChamadoSla();
 			reajustaJobChamadoEmail();
 			reajustaJobKpiSnapshot();
+			reajustaJobCargaAnalise();
 			reajustaJobRelatorioGerencial();
 			reajustaJobRelatorioPreProc();
 			reajustaJobRetryNotificacao();
@@ -1057,6 +1061,21 @@ public class Agendador extends HttpServlet {
 					.build();
 			quartzScheduler.scheduleJob(tarefa, trigger);
 			logger.info("Job KPI Snapshot agendada a cada 60 minutos.");
+		}
+	}
+
+	private static void reajustaJobCargaAnalise() throws SchedulerException {
+		if (!possuiJob(GRUPO_ANALISE, JOB_CARGA_ANALISE)) {
+			JobDetail tarefa = JobBuilder.newJob(muralha.digital.analise.CargaAnaliseJob.class)
+					.withIdentity(JOB_CARGA_ANALISE, GRUPO_ANALISE)
+					.build();
+			Trigger trigger = TriggerBuilder.newTrigger()
+					.withIdentity(JOB_CARGA_ANALISE, GRUPO_ANALISE)
+					.startNow()
+					.withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(30))
+					.build();
+			quartzScheduler.scheduleJob(tarefa, trigger);
+			logger.info("Job Carga Analise agendada a cada 30 minutos.");
 		}
 	}
 
