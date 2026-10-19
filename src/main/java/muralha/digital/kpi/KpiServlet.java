@@ -8,6 +8,8 @@ import muralha.digital.acessos.ControleAcesso;
 import muralha.digital.logtecnico.ContextoAlteracao;
 import muralha.digital.logtecnico.HistoricoParametros;
 
+import org.apache.log4j.Logger;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +28,7 @@ import java.util.Map;
 public class KpiServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(KpiServlet.class);
     static final String ACAO_CONFIG = "/muralha-digital/pages/admin/kpis/index.jsp";
 
     @Override
@@ -132,19 +135,20 @@ public class KpiServlet extends HttpServlet {
                         try (PreparedStatement kpiPs = conn.prepareStatement(sql.trim())) {
                             kpiPs.setQueryTimeout(ValidadorSqlKpi.TIMEOUT_SEGUNDOS);
                             try (ResultSet kpiRs = kpiPs.executeQuery()) {
-                            if (kpiRs.next()) {
-                                double valor = kpiRs.getDouble("valor");
-                                kpi.addProperty("valor", valor);
-                                String status;
-                                if (thOk > thWarn) {
-                                    status = valor >= thOk ? "OK" : valor >= thWarn ? "WARN" : "CRIT";
-                                } else {
-                                    status = valor <= thOk ? "OK" : valor <= thWarn ? "WARN" : "CRIT";
+                                if (kpiRs.next()) {
+                                    double valor = kpiRs.getDouble("valor");
+                                    kpi.addProperty("valor", valor);
+                                    String status;
+                                    if (thOk > thWarn) {
+                                        status = valor >= thOk ? "OK" : valor >= thWarn ? "WARN" : "CRIT";
+                                    } else {
+                                        status = valor <= thOk ? "OK" : valor <= thWarn ? "WARN" : "CRIT";
+                                    }
+                                    kpi.addProperty("status", status);
                                 }
-                                kpi.addProperty("status", status);
-                            }
                             }
                         } catch (Exception e) {
+                            logger.warn("Erro ao executar KPI id=" + kpi.get("id").getAsInt() + ": " + e.getMessage());
                             kpi.addProperty("status", "ERRO");
                         }
                         kpis.add(kpi);

@@ -23,8 +23,8 @@ public final class ValidadorSqlKpi {
         if (sql == null || sql.trim().isEmpty()) return "Informe a consulta SQL.";
         String s = sql.trim();
         if (s.length() > TAMANHO_MAXIMO) return "A consulta passa de " + TAMANHO_MAXIMO + " caracteres.";
-        String semLiterais = removerLiterais(s);
-        if (semLiterais == null) return "Há um texto entre aspas sem fechamento.";
+        String semLiterais = neutralizarDelimitados(s);
+        if (semLiterais == null) return "Há um texto ou identificador sem fechamento.";
         if (semLiterais.contains("--") || semLiterais.contains("/*")) return "Comentários não são permitidos na consulta.";
         if (!semLiterais.toUpperCase(Locale.ROOT).startsWith("SELECT")) return "A consulta deve começar com SELECT.";
         if (semLiterais.indexOf(';') >= 0) return "Use uma única consulta, sem ponto e vírgula.";
@@ -33,20 +33,27 @@ public final class ValidadorSqlKpi {
         return null;
     }
 
-    /** Troca o conteudo dos literais '...' (com '' escapado) por espacos; null se um literal nao fechar. */
-    static String removerLiterais(String s) {
+    /**
+     * Troca por espacos o conteudo de literais '...' (escape ''), identificadores [...] (escape ]]) e
+     * identificadores "..." (escape ""), mantendo os delimitadores; null se algum nao fechar.
+     */
+    static String neutralizarDelimitados(String s) {
         StringBuilder sb = new StringBuilder(s.length());
-        boolean dentro = false;
+        char fecha = 0;
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if (c == '\'') {
-                if (dentro && i + 1 < s.length() && s.charAt(i + 1) == '\'') { sb.append("  "); i++; continue; }
-                dentro = !dentro;
-                sb.append('\'');
+            if (fecha == 0) {
+                if (c == '\'' || c == '"') fecha = c;
+                else if (c == '[') fecha = ']';
+                sb.append(c);
+            } else if (c == fecha) {
+                if (i + 1 < s.length() && s.charAt(i + 1) == fecha) { sb.append("  "); i++; continue; }
+                fecha = 0;
+                sb.append(c);
             } else {
-                sb.append(dentro ? ' ' : c);
+                sb.append(' ');
             }
         }
-        return dentro ? null : sb.toString();
+        return fecha != 0 ? null : sb.toString();
     }
 }

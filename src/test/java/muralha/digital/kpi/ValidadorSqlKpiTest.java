@@ -17,7 +17,11 @@ public class ValidadorSqlKpiTest {
             {"SELECT TOP 1 percentil95_ms AS valor FROM muralha.alerta_sla ORDER BY janela_fim DESC"},
             {"  select 'DELETE; DROP' AS rotulo, 1 AS valor  "},
             {"SELECT data_alt AS valor FROM muralha.veiculo_tempo_real"},
-            {"SELECT COUNT(*) AS valor FROM muralha.status_alerta WHERE UPPER(descricao) <> 'PENDENTE'"}
+            {"SELECT COUNT(*) AS valor FROM muralha.status_alerta WHERE UPPER(descricao) <> 'PENDENTE'"},
+            {"SELECT COUNT(*) AS [valor] FROM muralha.alerta"},
+            {"SELECT 1 AS \"valor\""},
+            {"SELECT 1 AS [a]]b] FROM muralha.alerta"},
+            {"SELECT 'it''s' AS rotulo, 1 AS valor"}
         };
     }
 
@@ -40,7 +44,10 @@ public class ValidadorSqlKpiTest {
             {"SELECT 'aberto AS valor"},
             {"SELECT xp_cmdshell AS valor"},
             {"WITH c AS (SELECT 1 AS valor) SELECT valor FROM c"},
-            {"SELECT 1 AS valor WAITFOR DELAY '00:00:10'"}
+            {"SELECT 1 AS valor WAITFOR DELAY '00:00:10'"},
+            {"SELECT 1 AS [a']; DROP TABLE muralha.kpi_config; SELECT 1 AS [b']"},
+            {"SELECT 1 AS \"a'\"; DELETE FROM x; SELECT 1 AS \"b'\""},
+            {"SELECT 1 AS [aberto"}
         };
     }
 
