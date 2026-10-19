@@ -35,6 +35,7 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [10-guia-de-implementacao.md](requisitos/10-guia-de-implementacao.md) | Receitas passo a passo e Definição de Pronto |
 | [11-glossario.md](requisitos/11-glossario.md) | Termos e siglas |
 | [12-riscos-e-debitos-tecnicos.md](requisitos/12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
+| [auditoria/](auditoria/) | Auditoria de código de 2026-10-19: [relatório](auditoria/2026-10-19-relatorio-auditoria.md), [sugestões de melhoria](auditoria/2026-10-19-sugestoes-melhoria.md), [prompt de code review e correção](auditoria/2026-10-19-prompt-code-review-correcoes.md) |
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 788 tabelas, 826 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
