@@ -54,6 +54,7 @@ Observações de higiene: ~156 tabelas com sufixo `_test*`, `bkp`, `backup`, `_a
 | [`tabelas/<schema>/<grupo>.md`](tabelas/) | 65 arquivos agrupados pelo prefixo do nome: colunas (tipo, null, identity, default), PK/índices, FKs de saída e "referenciada por", contagem de linhas. Prefixos com < 4 tabelas vão em `outros.md` |
 | [`objetos-programaveis.md`](objetos-programaveis.md) | Catálogo das views/procedures/funções/triggers: parâmetros, **objetos referenciados**, datas de criação/alteração |
 | [`codigo-sql/`](codigo-sql/) | **Código-fonte** de cada objeto (826 arquivos em `views/ procedures/ funcoes/ triggers/` — `<schema>.<nome>.sql`) |
+| [`estrutura-dados-por-tela.md`](estrutura-dados-por-tela.md) | Estrutura de dados que abastece cada tela dos módulos Análise de Dados, Dashboards (KPIs) e Gestão de Lotes: endpoints, tabelas/colunas, jobs de carga e diagramas Mermaid |
 | [`dominios.md`](dominios.md) | Valores de 46 tabelas de domínio pequenas (tipos, status, situações, categorias, prioridades…) |
 | [`scripts/extrair-catalogo.ps1`](scripts/extrair-catalogo.ps1) | Regenera `tabelas/`, `codigo-sql/`, `objetos-programaveis.md` e `dominios.md` (somente SELECT) |
 | [`../referencia/menus-e-permissoes.md`](../referencia/menus-e-permissoes.md) | Conteúdo de `sis_grupo`, `sis_menu*` (menus e direitos) |
