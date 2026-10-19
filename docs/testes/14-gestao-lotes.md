@@ -45,11 +45,11 @@ Data: 2026-10-08
 
 ---
 
-## T04 — Enviar lote para DETRAN
+## T04 — Marcar lote como enviado
 
 **Procedimento:**
 1. Clicar no olho de um lote RASCUNHO
-2. Clicar "Enviar para DETRAN"
+2. Clicar "Marcar como enviado"
 3. Confirmar
 
 **Resultado esperado:** SweetAlert de sucesso. Status muda para ENVIADO. Data de envio preenchida. Botão Enviar desaparece.

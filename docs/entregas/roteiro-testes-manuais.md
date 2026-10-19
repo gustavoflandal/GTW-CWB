@@ -170,7 +170,7 @@ Documento consolidado com todos os testes manuais dos Planos 01–19, organizado
 | 14-T02 | Tela carrega | Acessar `/muralha-digital/pages/processamento/lotes/index.jsp` | Tabela de lotes + botão "Novo Lote" | [ ] |
 | 14-T03 | Criar lote | "Novo Lote" → descrição → Confirmar | Código gerado; status RASCUNHO | [ ] |
 | 14-T04 | Ver itens | Clicar olho de um lote | Modal com tabela de itens | [ ] |
-| 14-T05 | Enviar lote | Olho → "Enviar para DETRAN" → Confirmar | Status ENVIADO; data preenchida | [ ] |
+| 14-T05 | Enviar lote | Olho → "Marcar como enviado" → Confirmar | Status ENVIADO; data preenchida | [ ] |
 | 14-T06 | Cancelar lote | Olho de lote RASCUNHO → "Cancelar Lote" | Status CANCELADO | [ ] |
 | 14-T07 | Lote enviado imutável | Olho de lote ENVIADO | Botões Enviar/Cancelar ausentes | [ ] |
 | 14-T08 | Sem sessão | Aba anônima → `GET /MuralhaDigital/Lote?acao=listar` | Acesso negado | [ ] |

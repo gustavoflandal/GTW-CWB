@@ -42,6 +42,7 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
 | 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
 | 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |
+| 35 | Correções de segurança e funcionais, fases 1 e 2 (Plano 35) | 2026-10-19 | 🟡 Implementado — aguardando teste no navegador | [35-correcoes-seguranca-funcionais.md](35-correcoes-seguranca-funcionais.md) |
 
 > Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 

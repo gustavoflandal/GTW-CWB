@@ -155,21 +155,21 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 
 | ID | Prioridade | Tela / área | Problema | Migração? |
 |---|---|---|---|---|
-| [SEG-01](#seg-01-verificação-de-acesso-fail-open-nos-servlets-novos) | Alta | Servlets novos | Fail-open: as URIs dos servlets não estão em `sis_menu` | Sim. **Parcial (2026-10-19):** 33 servlets registrados com direitos; falta a verificação estrita no código |
+| [SEG-01](#seg-01-verificação-de-acesso-fail-open-nos-servlets-novos) | Alta | Servlets novos | Fail-open: as URIs dos servlets não estão em `sis_menu` | ✅ Corrigido (2026-10-19, plano 35). Sim (33 servlets registrados com direitos em 2026-10-19); verificação estrita no código aplicada |
 | [SEG-02](#seg-02-acao-com-query-string-não-casa-com-a-uri) | Alta | Análises (395) e mais 14 menus | `acao` com `?…` nunca casa com a URI | Sim. ✅ **395 corrigido (2026-10-19)**; os outros 14 são cards de módulo, legados ou externos |
-| [SEG-03](#seg-03-gestão-de-lotes-e-kpis-sem-permissão-por-ação) | Alta | Gestão de Lotes, KPIs | Só sessão; sem permissão por ação | Sim. **Parcial (2026-10-19):** servlets exigem os grupos 11, 41 e 42; falta separar leitura e escrita |
-| [SEG-04](#seg-04-sql-livre-na-configuração-de-kpis) | Alta | Configuração de KPIs | SQL livre executado; validação só por `startsWith("SELECT")` | Sim |
-| [SEG-05](#seg-05-xss-armazenado) | Alta | Log de Auditoria, Relatórios Gerenciais, KPIs | HTML montado sem escape | Não |
+| [SEG-03](#seg-03-gestão-de-lotes-e-kpis-sem-permissão-por-ação) | Alta | Gestão de Lotes, KPIs | Só sessão; sem permissão por ação | ✅ Corrigido (2026-10-19, plano 35). Sim; servlets exigem o direito da tela; leitura e escrita da Gestão de Lotes não foram separadas |
+| [SEG-04](#seg-04-sql-livre-na-configuração-de-kpis) | Alta | Configuração de KPIs | SQL livre executado; validação só por `startsWith("SELECT")` | ✅ Corrigido (2026-10-19, plano 35). Sim |
+| [SEG-05](#seg-05-xss-armazenado) | Alta | Log de Auditoria, Relatórios Gerenciais, KPIs | HTML montado sem escape | ✅ Corrigido (2026-10-19, plano 35). Não |
 | [SEG-06](#seg-06-rls-do-superset-quebrada) | Alta | Plataforma de Análises | RLS do Operador aponta para view e coluna inexistentes | Sim |
 | [SEG-07](#seg-07-direitos-dos-administradores-e-da-configuração-de-kpis) | Média | Direitos | Grupo 11 sem direito às telas; Config. de KPIs aberta ao grupo 41 | Sim. ✅ **Executado (2026-10-19)** |
 | [SEG-08](#seg-08-botão-abrir-no-superset) | Média | Análises | Migração do menu 396 pendente | Sim. ✅ **Executado (2026-10-19)** |
-| [SEG-09](#seg-09-hash-de-senha-em-log-e-na-resposta-do-login) | Média | Login | Hash da senha em log de debug e na resposta | Não |
-| [SEG-10](#seg-10-tipos-de-alerta-acaolistar-sem-permissão) | Baixa | Tipos de Alerta | `acao=listar` sem checar permissão | Não |
-| [FUN-01](#fun-01-relatoriogerencialjob-consulta-tabela-inexistente) | Alta | Relatórios Gerenciais | Job lê `muralha.sis_log_auditoria` (não existe) | Não |
-| [FUN-02](#fun-02-relatoriopreprocmensaljob-usa-colunas-inexistentes) | Alta | Relatórios Gerenciais | Job usa colunas inexistentes de `vtr_status_analise` | Talvez |
-| [FUN-03](#fun-03-gestão-de-lotes-incompleta) | Alta | Gestão de Lotes | Não inclui infrações; envio sem itens; sem integração DETRAN | Sim |
-| [FUN-04](#fun-04-kpis-sem-snapshot) | Média | KPIs | KPIs 5, 7, 8, 9 e 11 sem histórico | A investigar |
-| [FUN-05](#fun-05-cargas-da-camada-analise-paradas) | Média | Plataforma de Análises | Cargas paradas desde 2026-10-17; agendamento não encontrado | Não |
+| [SEG-09](#seg-09-hash-de-senha-em-log-e-na-resposta-do-login) | Média | Login | Hash da senha em log de debug e na resposta | ✅ Corrigido (2026-10-19, plano 35). Não |
+| [SEG-10](#seg-10-tipos-de-alerta-acaolistar-sem-permissão) | Baixa | Tipos de Alerta | `acao=listar` sem checar permissão | ✅ Corrigido (2026-10-19, plano 35). Não |
+| [FUN-01](#fun-01-relatoriogerencialjob-consulta-tabela-inexistente) | Alta | Relatórios Gerenciais | Job lê `muralha.sis_log_auditoria` (não existe) | ✅ Corrigido (2026-10-19, plano 35). Não |
+| [FUN-02](#fun-02-relatoriopreprocmensaljob-usa-colunas-inexistentes) | Alta | Relatórios Gerenciais | Job usa colunas inexistentes de `vtr_status_analise` | ✅ Corrigido (2026-10-19, plano 35). Talvez |
+| [FUN-03](#fun-03-gestão-de-lotes-incompleta) | Alta | Gestão de Lotes | Não inclui infrações; envio sem itens; sem integração DETRAN | ✅ Corrigido (2026-10-19, plano 35). Sim |
+| [FUN-04](#fun-04-kpis-sem-snapshot) | Média | KPIs | KPIs 5, 7, 8, 9 e 11 sem histórico | ✅ Corrigido (2026-10-19, plano 35). A investigar |
+| [FUN-05](#fun-05-cargas-da-camada-analise-paradas) | Média | Plataforma de Análises | Cargas paradas desde 2026-10-17; agendamento não encontrado | ✅ Corrigido (2026-10-19, plano 35). Não |
 | [FUN-06](#fun-06-v_preprocessamento-incompleta) | Média | Plataforma de Análises | Colunas nulas e métrica divergente | Sim |
 | [FUN-07](#fun-07-sla-de-latência-com-limite-fixo-no-front) | Média | SLA de Latência | Limite fixo no JS, média × P95, sem context path | Não |
 | [FUN-08](#fun-08-disponibilidade-ignora-equipamentos-parados) | Média | Disponibilidade | Equipamento sem passagem há 7 dias nunca é "offline" | Talvez |
@@ -185,6 +185,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 ## 4. Itens
 
 ### SEG-01 Verificação de acesso fail-open nos servlets novos
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Criada a classe `ControleAcesso` (`muralha.digital.acessos`) com verificação estrita, e os 30 servlets dos módulos novos passaram a usá-la. `Acesso` não foi alterado. Ver [entrega 35](../entregas/35-correcoes-seguranca-funcionais.md).
 - **Problema:** os servlets `/MuralhaDigital/Lote`, `/MuralhaDigital/Kpi`, `/MuralhaDigital/SsoAnalise` e outros chamam `verificaAcesso`. Como suas URIs não estão em `sis_menu`, `cnt = 0` e o acesso é liberado. Há 78 menus com `acao` preenchida e sem nenhum direito.
 - **Evidência:** [`Acesso.java:161`](../../src/main/java/com/consilux/model/Acesso.java) e [`Acesso.java:179`](../../src/main/java/com/consilux/model/Acesso.java) (usa `getRequestURI()`); [`LoteServlet.java:31`](../../src/main/java/muralha/digital/lote/LoteServlet.java); [`KpiServlet.java:32`](../../src/main/java/muralha/digital/kpi/KpiServlet.java).
 - **Proposta:**
@@ -207,6 +208,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** um usuário sem o grupo 41/42 é redirecionado ao abrir `/MuralhaDigital/SsoAnalise?acao=abrir`.
 
 ### SEG-03 Gestão de Lotes e KPIs sem permissão por ação
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** `LoteServlet` e `KpiServlet` exigem o direito da tela; a configuração de KPIs (leitura e gravação) exige o direito do menu 372. Leitura e escrita da Gestão de Lotes seguem com o mesmo direito (menu 370). Ver [entrega 35](../entregas/35-correcoes-seguranca-funcionais.md).
 - **Problema:** todas as ações de `LoteServlet` (`listar`, `itens`, `criar`, `adicionarInfracoes`, `enviar`, `cancelar`) e de `KpiServlet` (incluindo gravar a configuração) exigem só sessão, por causa do SEG-01.
 - **Evidência:** [`LoteServlet.java:31`](../../src/main/java/muralha/digital/lote/LoteServlet.java), [`LoteServlet.java:101`](../../src/main/java/muralha/digital/lote/LoteServlet.java), [`KpiServlet.java:164`](../../src/main/java/muralha/digital/kpi/KpiServlet.java).
 - **Proposta:**
@@ -216,6 +218,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** o `POST` de configuração de KPI com um usuário sem o direito 372 devolve 403 e é registrado na auditoria.
 
 ### SEG-04 SQL livre na Configuração de KPIs
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Criado o `ValidadorSqlKpi` (uma consulta `SELECT`, sem palavras e funções proibidas), com timeout de 30 s, usado no servlet e no `KpiSnapshotJob`. O login de banco somente leitura continua pendente com o DBA.
 - **Problema:** o `query_sql` digitado na tela é gravado e depois executado pelo painel e pelo `KpiSnapshotJob`. A única validação é `sql.toUpperCase().startsWith("SELECT")`, que aceita `SELECT 1; DELETE …`, `SELECT … INTO` e funções com efeito colateral.
 - **Evidência:** [`KpiServlet.java:125`](../../src/main/java/muralha/digital/kpi/KpiServlet.java), [`KpiServlet.java:175`](../../src/main/java/muralha/digital/kpi/KpiServlet.java).
 - **Proposta:**
@@ -226,6 +229,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** gravar `SELECT 1; DELETE FROM x` é recusado com mensagem; um `SELECT` válido continua funcionando.
 
 ### SEG-05 XSS armazenado
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Escape aplicado nas telas de KPIs, Configuração de KPIs, Relatórios Gerenciais e Log de Auditoria. O teste no navegador (KPI de teste com HTML no nome) está pendente.
 - **Problema:** textos vindos do banco são inseridos no HTML sem escape:
   - Log de Auditoria: `descricao` e usuário;
   - Relatórios Gerenciais: conteúdo dos relatórios;
@@ -261,6 +265,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Proposta:** executar no DEV com autorização, junto com o SEG-07, porque o script também dá o menu 395 ao grupo 11.
 
 ### SEG-09 Hash de senha em log e na resposta do login
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Removido o hash do log de debug e da resposta do login. Nenhuma tela fora de `GtwWidgets/` usava o campo.
 - **Problema:** o `doPost` registra `senhaMD5` em `logger.debug`, e a resposta do login devolve `senhaMD5`.
 - **Evidência:** [`UsuarioServlet.java:85`](../../src/main/java/muralha/digital/acessos/UsuarioServlet.java) e [`UsuarioServlet.java:218`](../../src/main/java/muralha/digital/acessos/UsuarioServlet.java).
 - **Proposta:**
@@ -268,11 +273,13 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
   - Verificar se o front-end usa o campo devolvido antes de removê-lo da resposta: é código legado, e a correção é pontual.
 
 ### SEG-10 Tipos de Alerta: `acao=listar` sem permissão
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** `acao=aparencia` (só sessão) devolve os campos do popup; `listar` e as demais ações exigem o direito. A verificação de acesso no navegador (403 em `listar` e 200 em `aparencia`) está pendente.
 - **Problema:** `listar` dispensa a verificação de acesso, porque o popup de notificação usa essa ação.
 - **Evidência:** [`TipoAlertaConfigServlet.java:54`](../../src/main/java/muralha/digital/alerta/operacional/TipoAlertaConfigServlet.java).
 - **Proposta:** manter a dispensa, mas devolver só os campos que o popup usa (sem os parâmetros de configuração), ou criar uma ação específica do popup.
 
 ### FUN-01 RelatorioGerencialJob consulta tabela inexistente
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** `RelatorioGerencialJob` passou a consultar `dbo.sis_log_auditoria` (`dt_operacao`) e `desativado = 0`. A linha em `relatorio_periodico` depende da execução do job no DEV.
 - **Problema:** o job consulta `muralha.sis_log_auditoria` com a coluna `data`. A tabela real é `dbo.sis_log_auditoria`, com `dt_operacao`. Por isso `muralha.relatorio_periodico` tem 0 linhas e a tela fica vazia.
 - **Evidência:** [`RelatorioGerencialJob.java:174`](../../src/main/java/muralha/digital/relatorio/RelatorioGerencialJob.java).
 - **Proposta:**
@@ -282,6 +289,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** depois da execução manual do job no DEV, existe uma linha em `relatorio_periodico` e a tela a exibe.
 
 ### FUN-02 RelatorioPreProcMensalJob usa colunas inexistentes
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Reescrito sobre `infracao_analise` e `vtr_status_analise`, sem colunas novas. Os volumes da seção de recebidos continuam ancorados na data da passagem.
 - **Problema:** o job usa `data_analise`, `resultado_ia`, `revisado`, `motivo_descarte` e `id_usuario` de `muralha.vtr_status_analise`. A tabela só tem `id_veiculo_tempo_real` e `status_analise`.
 - **Evidência:** [`RelatorioPreProcMensalJob.java`](../../src/main/java/muralha/digital/relatorio/RelatorioPreProcMensalJob.java), consultas nas linhas 84, 112, 151, 180, 205, 230, 284 e 305.
 - **Proposta:**
@@ -291,6 +299,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** o job roda sem `SQLException` e grava o relatório do mês.
 
 ### FUN-03 Gestão de Lotes incompleta
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Modal "Adicionar infrações", bloqueio de envio sem itens, auditoria em `enviar` e `cancelar` e botão "Marcar como enviado". A FK de `id_infracao` não foi criada (a existência é validada no código) e a integração com o DETRAN continua fora do escopo. O fluxo no navegador está pendente.
 - **Problema:**
   - Nenhuma tela chama `adicionarInfracoes`, então `lote_infracao_item` está vazia e todo lote fica sem itens.
   - `enviar` aceita lote vazio e só muda o status para ENVIADO: não há integração com o DETRAN nem código que grave CONFIRMADO.
@@ -306,6 +315,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** é possível criar um lote, incluir infrações, ver os itens e enviar; um lote vazio não é enviado.
 
 ### FUN-04 KPIs sem snapshot
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** A causa eram colunas inexistentes no `query_sql` dos KPIs 5, 7, 8, 9 e 11. Corrigido pela migração [`20261019_kpis_corrige_consultas.sql`](../banco-de-dados/migracoes/20261019_kpis_corrige_consultas.sql), executada no DEV. Falhas por KPI agora vão para o log.
 - **Problema:** os KPIs 5, 7, 8, 9 e 11 não têm linhas em `muralha.kpi_historico`; os KPIs 1–4, 6, 10 e 12 têm. Causa não verificada.
 - **Proposta:**
   - Executar o `query_sql` de cada um no DEV (só leitura) e ver os logs do `KpiSnapshotJob`. Hipóteses: erro de SQL, retorno nulo ou KPI inativo.
@@ -313,6 +323,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** cada KPI ativo tem snapshot a cada execução do job, ou o motivo da falha fica registrado.
 
 ### FUN-05 Cargas da camada `analise` paradas
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Criado o `CargaAnaliseJob`, agendado a cada 30 minutos no `Agendador` e documentado no [guia do administrador](../analise/guia-administrador.md).
 - **Problema:** o `analise.carga_log` não registra execução depois de 2026-10-17 22:39, e o agendamento de `refresh-materialized.sh` não foi encontrado.
 - **Proposta:** definir o agendamento (job Quartz no GTW chamando as `spu_carga_*`, ou cron/serviço no stack Docker) e documentá-lo no [guia do administrador](../analise/guia-administrador.md).
 
