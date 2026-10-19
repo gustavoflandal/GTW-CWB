@@ -1,6 +1,5 @@
 package muralha.digital.analise;
 
-import com.consilux.infra.SessaoConstantes;
 import com.consilux.model.Usuario;
 import com.google.gson.JsonObject;
 import muralha.digital.acessos.ControleAcesso;
@@ -32,15 +31,8 @@ public class GuestTokenServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = obterUsuario(req);
-        if (usuario == null) {
-            resp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            resp.setContentType("application/json; charset=UTF-8");
-            resp.getWriter().write("{\"erro\":\"Sessão inválida\"}");
-            return;
-        }
-
         if (!ControleAcesso.exigir(req, resp)) return;
+        Usuario usuario = ControleAcesso.usuario(req);
 
         String dashboardId = req.getParameter("dashboardId");
         if (dashboardId == null || dashboardId.trim().isEmpty()) {
@@ -125,11 +117,6 @@ public class GuestTokenServlet extends HttpServlet {
         mac.init(spec);
         byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
         return Base64.getUrlEncoder().withoutPadding().encodeToString(hash);
-    }
-
-    private Usuario obterUsuario(HttpServletRequest req) {
-        if (req.getSession(false) == null) return null;
-        return (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
     }
 
     private String obterSegredo() {

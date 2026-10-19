@@ -128,4 +128,27 @@ public class ControleAcessoTest {
         assertFalse(ControleAcesso.exigir(pedido(null, "/MuralhaDigital/Lote"), resp));
         verify(resp).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
+
+    @Test
+    public void exigirSessaoComUsuarioLiberaSemConsultarDireitoNemRegistrar() throws Exception {
+        int[] chamadas = {0};
+        ControleAcesso.definirParaTestes((acao, id) -> { chamadas[0]++; return false; }, r -> chamadas[0]++);
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        assertTrue(ControleAcesso.exigirSessao(pedido(usuario(7), "/MuralhaDigital/TipoAlertaConfig"), resp));
+        assertEquals(chamadas[0], 0);
+        verify(resp, never()).setStatus(anyInt());
+    }
+
+    @Test
+    public void exigirSessaoSemSessaoResponde401EmJson() throws Exception {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getSession(false)).thenReturn(null);
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        StringWriter corpo = new StringWriter();
+        when(resp.getWriter()).thenReturn(new PrintWriter(corpo));
+        assertFalse(ControleAcesso.exigirSessao(req, resp));
+        verify(resp).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        verify(req, never()).getSession();
+        assertEquals(corpo.toString(), "{\"ok\":false,\"erro\":\"Sessão expirada. Faça login novamente.\"}");
+    }
 }

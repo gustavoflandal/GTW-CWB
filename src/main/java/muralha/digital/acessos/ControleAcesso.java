@@ -83,6 +83,13 @@ public final class ControleAcesso {
         return sessao == null ? null : (Usuario) sessao.getAttribute(SessaoConstantes.SESSAO_USUARIO);
     }
 
+    /** Exige so a sessao com usuario logado, sem consultar direito nem gravar log de acesso. Responde 401 em JSON. */
+    public static boolean exigirSessao(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        if (usuario(req) != null) return true;
+        responder(resp, HttpServletResponse.SC_UNAUTHORIZED, "Sessão expirada. Faça login novamente.");
+        return false;
+    }
+
     /** Exige direito ao proprio servlet (servletPath). Responde 401/403 em JSON. */
     public static boolean exigir(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         return exigir(req, resp, req.getServletPath());

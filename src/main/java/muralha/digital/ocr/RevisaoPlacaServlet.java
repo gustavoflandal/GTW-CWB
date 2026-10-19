@@ -1,6 +1,5 @@
 package muralha.digital.ocr;
 
-import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
 import muralha.digital.acessos.ControleAcesso;
 import com.consilux.model.Usuario;
@@ -37,8 +36,6 @@ public class RevisaoPlacaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
         if (!ControleAcesso.exigir(req, resp)) { return; }
 
         String acao = req.getParameter("acao");
@@ -83,9 +80,8 @@ public class RevisaoPlacaServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
         if (!ControleAcesso.exigir(req, resp)) { return; }
+        Usuario usuario = ControleAcesso.usuario(req);
 
         if (!"corrigir".equals(req.getParameter("acao"))) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação inválida ou não informada.");

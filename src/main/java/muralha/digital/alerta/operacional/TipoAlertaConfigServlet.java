@@ -1,8 +1,6 @@
 package muralha.digital.alerta.operacional;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Usuario;
-import com.consilux.infra.SessaoConstantes;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import muralha.digital.acessos.ControleAcesso;
@@ -46,9 +44,6 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-
         String acao = req.getParameter("acao");
         // A aparência (cor e ícone) é lida pelo popup de notificação de qualquer operador logado; o restante exige o direito da tela.
         if (acao == null || acao.isEmpty()) {
@@ -56,7 +51,7 @@ public class TipoAlertaConfigServlet extends HttpServlet {
             req.getRequestDispatcher(TELA).forward(req, resp);
             return;
         }
-        if (!"aparencia".equals(acao) && !ControleAcesso.exigir(req, resp)) return;
+        if ("aparencia".equals(acao) ? !ControleAcesso.exigirSessao(req, resp) : !ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json;charset=UTF-8");
         try (Connection conn = Conexao.getConexao()) {
@@ -87,8 +82,6 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
         if (!ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json;charset=UTF-8");

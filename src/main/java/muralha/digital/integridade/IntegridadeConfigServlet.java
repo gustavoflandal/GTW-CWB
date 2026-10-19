@@ -1,6 +1,5 @@
 package muralha.digital.integridade;
 
-import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
 import muralha.digital.acessos.ControleAcesso;
 import com.consilux.model.Usuario;
@@ -37,8 +36,6 @@ public class IntegridadeConfigServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
         if (!ControleAcesso.exigir(req, resp)) { return; }
 
         if (!"listar".equals(req.getParameter("acao"))) {
@@ -85,9 +82,8 @@ public class IntegridadeConfigServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
         if (!ControleAcesso.exigir(req, resp)) { return; }
+        Usuario usuario = ControleAcesso.usuario(req);
 
         String acao = req.getParameter("acao");
         OrigemHash origem;
