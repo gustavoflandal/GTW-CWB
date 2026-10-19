@@ -185,7 +185,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 ## 4. Itens
 
 ### SEG-01 Verificação de acesso fail-open nos servlets novos
-- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Criada a classe `ControleAcesso` (`muralha.digital.acessos`) com verificação estrita, e os 30 servlets dos módulos novos passaram a usá-la. `Acesso` não foi alterado. Ver [entrega 35](../entregas/35-correcoes-seguranca-funcionais.md).
+- **Situação:** ✅ **corrigido em 2026-10-19 (plano 35).** Criada a classe `ControleAcesso` (`muralha.digital.acessos`) com verificação estrita, e os 34 servlets dos módulos novos passaram a usá-la (o `SsoAnaliseServlet` usa `possuiDireito`). `Acesso` não foi alterado. Ver [entrega 35](../entregas/35-correcoes-seguranca-funcionais.md).
 - **Problema:** os servlets `/MuralhaDigital/Lote`, `/MuralhaDigital/Kpi`, `/MuralhaDigital/SsoAnalise` e outros chamam `verificaAcesso`. Como suas URIs não estão em `sis_menu`, `cnt = 0` e o acesso é liberado. Há 78 menus com `acao` preenchida e sem nenhum direito.
 - **Evidência:** [`Acesso.java:161`](../../src/main/java/com/consilux/model/Acesso.java) e [`Acesso.java:179`](../../src/main/java/com/consilux/model/Acesso.java) (usa `getRequestURI()`); [`LoteServlet.java:31`](../../src/main/java/muralha/digital/lote/LoteServlet.java); [`KpiServlet.java:32`](../../src/main/java/muralha/digital/kpi/KpiServlet.java).
 - **Proposta:**

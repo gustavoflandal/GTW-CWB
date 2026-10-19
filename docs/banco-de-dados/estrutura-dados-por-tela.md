@@ -1624,12 +1624,13 @@ flowchart LR
 #### Fluxo de dados
 | Elemento da tela | Endpoint (`acao`) | Fonte no banco | Observação |
 |---|---|---|---|
-| Tabela de lotes (Código, Descrição, Status, Criação, Envio, Infrações) | `GET /MuralhaDigital/Lote?acao=listar` (qualquer valor diferente de `itens` cai neste ramo) | `muralha.lote_infracao` + subconsulta `COUNT(*)` em `muralha.lote_infracao_item` por `id_lote` | `ORDER BY id DESC`; datas formatadas `CONVERT(...,120)`. |
+| Tabela de lotes (Código, Descrição, Status, Criação, Envio, Infrações) | `GET /MuralhaDigital/Lote?acao=listar` (qualquer valor diferente de `itens` e `disponiveis` cai neste ramo) | `muralha.lote_infracao` + subconsulta `COUNT(*)` em `muralha.lote_infracao_item` por `id_lote` | `ORDER BY id DESC`; datas formatadas `CONVERT(...,120)`. |
 | Botão "Novo Lote" (Swal com descrição) | `POST acao=criar` | INSERT em `muralha.lote_infracao` (`codigo` = `LOTE-yyyyMMddHHmmss`, `descricao`, `id_usuario_criou` da sessão) | Registra auditoria (`AuditoriaService.registrar`, "Lote"/"criar"). |
-| Modal do lote: itens (ID, Placa, Local, Pista, Data Captura) | `GET acao=itens&idLote=` | `muralha.lote_infracao_item` JOIN `muralha.veiculo_tempo_real` (`vtr.id = li.id_infracao`) | Campos: `placa`, `id_local`, `id_pista`, `data`. |
-| Botão "Marcar como enviado" (só se RASCUNHO; antes "Enviar para DETRAN") | `POST acao=enviar` | UPDATE `lote_infracao` SET `status='ENVIADO'`, `dt_envio=SYSDATETIME()`, `id_usuario_enviou` WHERE `status='RASCUNHO'` | Recusa lote sem itens. Auditoria "Lote enviado para DETRAN" só quando altera a linha. Não há integração real com o DETRAN no código; apenas muda o status (plano 35). |
-| Botão "Cancelar Lote" (só se RASCUNHO) | `POST acao=cancelar` | UPDATE `lote_infracao` SET `status='CANCELADO'` WHERE `status='RASCUNHO'` | Sem auditoria. |
-| (sem elemento na tela) | `POST acao=adicionarInfracoes&idLote&ids=` | INSERT em `lote_infracao_item` evitando duplicar `id_infracao` já em qualquer lote | Nenhum JS/JSP do repositório chama esta ação. |
+| Modal do lote: itens (ID, Placa, Local, Pista, Data Captura) | `GET acao=itens&idLote=` | `muralha.lote_infracao_item` LEFT JOIN `muralha.veiculo_tempo_real` (`vtr.id = li.id_infracao`) | Campos: `placa`, `id_local`, `id_pista`, `data`; o item aparece mesmo sem a passagem correspondente. |
+| Botão "Marcar como enviado" (só se RASCUNHO; antes "Enviar para DETRAN") | `POST acao=enviar` | UPDATE `lote_infracao` SET `status='ENVIADO'`, `dt_envio=SYSDATETIME()`, `id_usuario_enviou` WHERE `status='RASCUNHO'` | Recusa lote sem itens. Auditoria "Lote marcado como enviado (sem integração com o DETRAN)" só quando altera a linha. Não há integração real com o DETRAN no código; apenas muda o status (plano 35). |
+| Botão "Cancelar Lote" (só se RASCUNHO) | `POST acao=cancelar` | UPDATE `lote_infracao` SET `status='CANCELADO'` WHERE `status='RASCUNHO'` | Auditoria "Lote cancelado" só quando altera a linha. |
+| Modal "Adicionar infrações": lista de disponíveis (filtro e seleção) | `GET acao=disponiveis` | `muralha.vtr_status_analise` (`status_analise = 'PRE_APROVADA'`) LEFT JOIN `muralha.veiculo_tempo_real`, sem as que já estão em algum lote (`NOT EXISTS` em `lote_infracao_item`) | `TOP 500`, `ORDER BY vtr.data`. |
+| Modal "Adicionar infrações": botão de inclusão | `POST acao=adicionarInfracoes&idLote&ids=` | INSERT em `lote_infracao_item` só de infração `PRE_APROVADA` e que não esteja em nenhum lote | Só para lote em RASCUNHO; transacional; devolve adicionados e ignorados; auditoria "Lote"/"adicionar" quando inclui alguma. |
 
 #### Estrutura de dados
 **`muralha.lote_infracao`** (tabela, 1 linha: 1 em RASCUNHO). PK `id` (identity).

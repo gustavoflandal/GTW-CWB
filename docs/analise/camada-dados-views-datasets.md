@@ -181,7 +181,7 @@ Convenção: "Origem" lista tabelas e views lidas diretamente; "Tabelas finais" 
 
 ## 3. Tabelas materializadas e procedures de carga
 
-Execução: [`refresh-materialized.sh`](../../analise/scripts/refresh-materialized.sh) chama, em sequência, `spu_carga_passagens_hora`, `spu_carga_infracoes_dia` e `spu_carga_areas_monitoradas` com `sqlcmd`. O script sugere agendamento no cron a cada 30 minutos (`*/30 * * * *`); a existência efetiva desse agendamento não foi verificada. Cada procedure grava uma linha em `analise.carga_log` (também em caso de erro, capturado por `TRY/CATCH`).
+Execução: [`refresh-materialized.sh`](../../analise/scripts/refresh-materialized.sh) chama, em sequência, `spu_carga_passagens_hora`, `spu_carga_infracoes_dia` e `spu_carga_areas_monitoradas` com `sqlcmd`. No GTW, o `CargaAnaliseJob` (Quartz) chama as mesmas procedures a cada 30 minutos, e o script fica para a recarga manual ou de um período (ver o [guia do administrador](guia-administrador.md)). O script ainda sugere agendamento no cron a cada 30 minutos (`*/30 * * * *`); se esse agendamento externo existir, a carga será duplicada. Cada procedure grava uma linha em `analise.carga_log` (também em caso de erro, capturado por `TRY/CATCH`).
 
 | Tabela materializada | Procedure | Origens | Janela / estratégia | Chave de granularidade |
 |---|---|---|---|---|

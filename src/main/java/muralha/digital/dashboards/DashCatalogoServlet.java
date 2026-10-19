@@ -16,7 +16,8 @@ import java.sql.ResultSetMetaData;
 
 /**
  * CRUD do catalogo de tabelas, colunas e relacoes.
- * Acesso restrito a administradores (CATALOGO_ADMIN).
+ * Acesso: exige sessao e o direito ao proprio servlet (/api/dash/catalogo, via ControleAcesso.exigir);
+ * nao ha checagem de perfil administrador (CATALOGO_ADMIN).
  */
 @WebServlet("/api/dash/catalogo")
 public class DashCatalogoServlet extends HttpServlet {
