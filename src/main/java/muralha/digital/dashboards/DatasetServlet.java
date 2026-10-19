@@ -1,7 +1,7 @@
 package muralha.digital.dashboards;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.*;
 import muralha.digital.dashboards.consulta.MontadorSql;
 import muralha.digital.auditoria.AuditoriaService;
@@ -26,14 +26,13 @@ public class DatasetServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json; charset=UTF-8");
-        Acesso acesso = new Acesso(req, resp, true);
-        if (!acesso.verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         JsonObject result = new JsonObject();
         Connection conn = null;
         try {
             conn = Conexao.getConexao();
-            int idUsuario = acesso.getUsuario().getId();
+            int idUsuario = ControleAcesso.usuario(req).getId();
             int tenantId = 1;
             String acao = req.getParameter("acao");
 
@@ -77,14 +76,13 @@ public class DatasetServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("application/json; charset=UTF-8");
-        Acesso acesso = new Acesso(req, resp, true);
-        if (!acesso.verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         JsonObject result = new JsonObject();
         Connection conn = null;
         try {
             conn = Conexao.getConexao();
-            int idUsuario = acesso.getUsuario().getId();
+            int idUsuario = ControleAcesso.usuario(req).getId();
             int tenantId = 1;
 
             StringBuilder body = new StringBuilder();

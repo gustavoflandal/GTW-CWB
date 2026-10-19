@@ -1,7 +1,7 @@
 package muralha.digital.imagem;
 
 import com.consilux.infra.SessaoConstantes;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.consilux.model.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -16,7 +16,7 @@ public class ObliteracaoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json; charset=UTF-8");
         Gson gson = new Gson();

@@ -1,8 +1,7 @@
 package muralha.digital.sensores;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
-import com.consilux.model.Mensagem;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,10 +22,7 @@ public class IncidenteServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) {
-            new Mensagem(resp).showErro("Acesso negado", "/login/abertura-sistemas.jsp");
-            return;
-        }
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         String acao = req.getParameter("acao");
         Connection conn = null;

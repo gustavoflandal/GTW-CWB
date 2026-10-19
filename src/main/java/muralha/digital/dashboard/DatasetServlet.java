@@ -1,7 +1,7 @@
 package muralha.digital.dashboard;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -23,7 +23,7 @@ public class DatasetServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();
@@ -112,7 +112,7 @@ public class DatasetServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();

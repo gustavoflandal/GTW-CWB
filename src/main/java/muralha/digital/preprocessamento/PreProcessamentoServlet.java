@@ -1,7 +1,7 @@
 package muralha.digital.preprocessamento;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -22,10 +22,10 @@ public class PreProcessamentoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
-
         String acao = req.getParameter("acao");
-        if (acao == null) {
+        boolean tela = acao == null || acao.isEmpty();
+        if (tela ? !ControleAcesso.exigirTela(req, resp) : !ControleAcesso.exigir(req, resp)) return;
+        if (tela) {
             req.setAttribute("titulo", "Painel de Pré-Processamento");
             try {
                 req.getRequestDispatcher("/muralha-digital/pages/monitoramento/pre-processamento/index.jsp")

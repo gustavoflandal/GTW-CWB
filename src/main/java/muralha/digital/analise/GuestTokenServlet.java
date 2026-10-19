@@ -3,6 +3,7 @@ package muralha.digital.analise;
 import com.consilux.infra.SessaoConstantes;
 import com.consilux.model.Usuario;
 import com.google.gson.JsonObject;
+import muralha.digital.acessos.ControleAcesso;
 
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
@@ -38,6 +39,8 @@ public class GuestTokenServlet extends HttpServlet {
             resp.getWriter().write("{\"erro\":\"Sessão inválida\"}");
             return;
         }
+
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         String dashboardId = req.getParameter("dashboardId");
         if (dashboardId == null || dashboardId.trim().isEmpty()) {
