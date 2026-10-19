@@ -95,4 +95,4 @@
     <div id="paginacao" class="d-flex gap-2 mt-2"></div>
 </div>
 
-<script src="/muralha-digital/assets/js/auditoria/consulta-log.js?v=3"></script>
+<script src="/muralha-digital/assets/js/auditoria/consulta-log.js?v=4"></script>

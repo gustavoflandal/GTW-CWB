@@ -108,7 +108,7 @@ function corValida(c) { return typeof c === 'string' && /^#[0-9a-fA-F]{3,8}$/.te
 async function carregar() {
   var r = await fetch(ctx + '/MuralhaDigital/Kpi?acao=listarConfig');
   var d = await r.json();
-  if (!d.ok) { Swal.fire('Erro', d.erro, 'error'); return; }
+  if (!d.ok) { Swal.fire({title: 'Erro', text: d.erro, icon: 'error'}); return; }
 
   kpiData = d.configs || [];
   var tbody = document.getElementById('tblKpis');
@@ -173,7 +173,7 @@ async function salvar() {
     Swal.fire({icon: 'success', title: 'KPI salvo', timer: 1500, showConfirmButton: false});
     carregar();
   } else {
-    Swal.fire('Erro', d.erro, 'error');
+    Swal.fire({title: 'Erro', text: d.erro, icon: 'error'});
   }
 }
 

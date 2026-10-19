@@ -120,7 +120,7 @@ function vazio(v) {
 }
 
 function mostrarErro(d) {
-  Swal.fire('Erro', (d && d.erro) || 'Não foi possível concluir a operação.', 'error');
+  Swal.fire({title: 'Erro', text: (d && d.erro) || 'Não foi possível concluir a operação.', icon: 'error'});
 }
 
 async function chamar(url, opcoes) {

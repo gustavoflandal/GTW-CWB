@@ -270,7 +270,7 @@ async function carregar() {
   limparGauges();
   var r = await fetch(ctx + '/MuralhaDigital/Kpi');
   var d = await r.json();
-  if (!d.ok) { Swal.fire('Erro', d.erro, 'error'); return; }
+  if (!d.ok) { Swal.fire({title: 'Erro', text: d.erro, icon: 'error'}); return; }
 
   var container = document.getElementById('kpiCards');
   container.innerHTML = '';
