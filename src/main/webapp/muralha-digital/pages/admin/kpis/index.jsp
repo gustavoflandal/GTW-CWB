@@ -101,6 +101,10 @@ var ctx = '<%= request.getContextPath() %>';
 var kpiData = [];
 var LABEL_VISUAL = {card:'Card',compacto:'Compacto',medidor:'Medidor',progresso:'Progresso'};
 
+function escaparHtml(v) { var d = document.createElement('div'); d.textContent = v == null ? '' : String(v); return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+function corValida(c) { return typeof c === 'string' && /^#[0-9a-fA-F]{3,8}$/.test(c); }
+
 async function carregar() {
   var r = await fetch(ctx + '/MuralhaDigital/Kpi?acao=listarConfig');
   var d = await r.json();
@@ -112,13 +116,13 @@ async function carregar() {
   kpiData.forEach(function(c, idx) {
     tbody.insertAdjacentHTML('beforeend',
       '<tr>' +
-        '<td>' + c.ordem + '</td>' +
-        '<td>' + c.nome + '</td>' +
-        '<td>' + (c.unidade || '') + '</td>' +
-        '<td>' + c.thOk + '</td>' +
-        '<td>' + c.thWarn + '</td>' +
+        '<td>' + escaparHtml(c.ordem) + '</td>' +
+        '<td>' + escaparHtml(c.nome) + '</td>' +
+        '<td>' + escaparHtml(c.unidade) + '</td>' +
+        '<td>' + escaparHtml(c.thOk) + '</td>' +
+        '<td>' + escaparHtml(c.thWarn) + '</td>' +
         '<td>' + (LABEL_VISUAL[c.tipoVisual] || 'Card') + '</td>' +
-        '<td>' + (c.corPersonalizada
+        '<td>' + (corValida(c.corPersonalizada)
           ? '<span class="d-inline-block rounded-circle" style="width:16px;height:16px;background:' + c.corPersonalizada + '"></span> Fixa'
           : '<span class="text-muted">Auto</span>') + '</td>' +
         '<td><span class="badge bg-' + (c.ativo ? 'success' : 'secondary') + '">' +

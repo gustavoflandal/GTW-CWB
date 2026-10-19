@@ -112,7 +112,7 @@ var BADGE_COR = {
 function escaparHtml(v) {
   var d = document.createElement('div');
   d.textContent = v == null ? '' : String(v);
-  return d.innerHTML;
+  return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 }
 
 function vazio(v) {
