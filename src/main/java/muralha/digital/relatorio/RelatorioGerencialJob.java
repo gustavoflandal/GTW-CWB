@@ -170,11 +170,11 @@ public class RelatorioGerencialJob implements Job {
     private JsonArray alertasAnaliticos(Connection conn, LocalDate inicio, LocalDate fim) throws SQLException {
         JsonArray arr = new JsonArray();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT funcionalidade, operacao, id_registro, descricao, data " +
-                "FROM muralha.sis_log_auditoria " +
+                "SELECT id_registro, descricao, CONVERT(VARCHAR(19), dt_operacao, 120) AS data " +
+                "FROM dbo.sis_log_auditoria " +
                 "WHERE funcionalidade = 'KPI' AND operacao = 'ALERTA_ANALITICO' " +
-                "AND data >= ? AND data < DATEADD(DAY, 1, ?) " +
-                "ORDER BY data DESC")) {
+                "AND dt_operacao >= ? AND dt_operacao < DATEADD(DAY, 1, ?) " +
+                "ORDER BY dt_operacao DESC")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
@@ -225,7 +225,7 @@ public class RelatorioGerencialJob implements Job {
         }
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT COUNT(DISTINCT id_local) AS total_equipamentos " +
-                "FROM dbo.local_vigente WHERE ativo = 1")) {
+                "FROM dbo.local_vigente WHERE desativado = 0")) {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) obj.addProperty("totalEquipamentos", rs.getInt("total_equipamentos"));
             }
