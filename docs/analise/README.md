@@ -47,6 +47,7 @@ Plataforma de criacao de dashboards e exploracao self-service baseada no [Apache
 
 - [Manual do Usuario](manual-usuario.md) — acesso, paineis, filtros, exportacao, alertas
 - [Guia do Administrador](guia-administrador.md) — Docker, provisioner, backup, troubleshooting
+- [Camada de dados](camada-dados-views-datasets.md) — views, datasets e tabelas de origem
 
 ## Infraestrutura
 
