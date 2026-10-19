@@ -1,11 +1,9 @@
 package muralha.digital.alerta.operacional;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
-import com.consilux.model.Usuario;
-import com.consilux.infra.SessaoConstantes;
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
+import muralha.digital.acessos.ControleAcesso;
 import muralha.digital.logtecnico.AlteracaoParametro;
 import muralha.digital.logtecnico.ContextoAlteracao;
 import muralha.digital.logtecnico.HistoricoParametros;
@@ -31,7 +29,7 @@ import java.util.UUID;
 
 /**
  * Configuração dos tipos de alerta (Plano 28): criticidade, cor, ícone e tratamentos.
- * Sem "acao" abre a tela; "listar" alimenta também o popup de notificação de todos os operadores.
+ * Sem "acao" abre a tela; "aparencia" alimenta o popup de notificação de todos os operadores.
  */
 @WebServlet("/MuralhaDigital/TipoAlertaConfig")
 public class TipoAlertaConfigServlet extends HttpServlet {
@@ -46,21 +44,21 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-
         String acao = req.getParameter("acao");
-        // A listagem é lida pelo popup de notificação de qualquer operador logado; o restante exige a permissão da tela.
-        if (!"listar".equals(acao) && !new Acesso(req, resp, true).verificaAcesso(false)) return;
-
+        // A aparência (cor e ícone) é lida pelo popup de notificação de qualquer operador logado; o restante exige o direito da tela.
         if (acao == null || acao.isEmpty()) {
+            if (!ControleAcesso.exigirTela(req, resp)) return;
             req.getRequestDispatcher(TELA).forward(req, resp);
             return;
         }
+        if ("aparencia".equals(acao) ? !ControleAcesso.exigirSessao(req, resp) : !ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json;charset=UTF-8");
         try (Connection conn = Conexao.getConexao()) {
             switch (acao) {
+                case "aparencia":
+                    resp.getWriter().write(gson.toJson(aparencia(listarConfigs(conn))));
+                    break;
                 case "listar":
                     resp.getWriter().write(gson.toJson(listarConfigs(conn)));
                     break;
@@ -84,9 +82,7 @@ public class TipoAlertaConfigServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         resp.setContentType("application/json;charset=UTF-8");
         String acao = req.getParameter("acao");
@@ -165,6 +161,19 @@ public class TipoAlertaConfigServlet extends HttpServlet {
             logger.error("Erro em TipoAlertaConfigServlet POST: " + e.getMessage(), e);
             resp.sendError(500);
         }
+    }
+
+    /** Mantém só o que o popup de notificação precisa: tipo, cor e ícone. */
+    static List<Map<String, Object>> aparencia(List<Map<String, Object>> configs) {
+        List<Map<String, Object>> lista = new ArrayList<>();
+        for (Map<String, Object> c : configs) {
+            Map<String, Object> m = new LinkedHashMap<>();
+            m.put("tipo", c.get("tipo"));
+            m.put("cor", c.get("cor"));
+            m.put("icone", c.get("icone"));
+            lista.add(m);
+        }
+        return lista;
     }
 
     static List<Map<String, Object>> listarConfigs(Connection conn) throws SQLException {

@@ -1,7 +1,7 @@
 package muralha.digital.gis;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -22,7 +22,7 @@ public class GisServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
         String formato = req.getParameter("formato");
         String camada  = req.getParameter("camada");

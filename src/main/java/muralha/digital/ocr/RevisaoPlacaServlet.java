@@ -1,8 +1,7 @@
 package muralha.digital.ocr;
 
-import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.consilux.model.Usuario;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -37,9 +36,7 @@ public class RevisaoPlacaServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) { return; }
+        if (!ControleAcesso.exigir(req, resp)) { return; }
 
         String acao = req.getParameter("acao");
         try (Connection conn = Conexao.getConexao()) {
@@ -83,9 +80,8 @@ public class RevisaoPlacaServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) { return; }
+        if (!ControleAcesso.exigir(req, resp)) { return; }
+        Usuario usuario = ControleAcesso.usuario(req);
 
         if (!"corrigir".equals(req.getParameter("acao"))) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Ação inválida ou não informada.");

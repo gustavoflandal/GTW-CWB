@@ -4,6 +4,7 @@ import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
 import com.consilux.model.Acesso;
 import com.consilux.model.Usuario;
+import muralha.digital.acessos.ControleAcesso;
 import muralha.digital.util.ConfigChaveValor;
 
 import javax.servlet.ServletException;
@@ -14,8 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.logging.Logger;
 
 @WebServlet("/MuralhaDigital/SsoAnalise")
@@ -91,17 +90,7 @@ public class SsoAnaliseServlet extends HttpServlet {
      * Ao contrario do padrao de telas, nega quando a funcionalidade nao esta cadastrada ou em erro.
      */
     private boolean podeAbrirSuperset(Usuario usuario) {
-        try (Connection conn = Conexao.getConexao();
-             PreparedStatement ps = conn.prepareStatement("SELECT cnt, acesso FROM dbo.fcn_VerificaAcesso(?, ?)")) {
-            ps.setString(1, ACAO_ABRIR_SUPERSET);
-            ps.setInt(2, usuario.getId());
-            try (ResultSet rs = ps.executeQuery()) {
-                return rs.next() && rs.getInt("cnt") > 0 && rs.getInt("acesso") > 0;
-            }
-        } catch (Exception e) {
-            LOG.warning("[Muralha] SSO Analise: erro ao verificar permissao de abrir no Superset — negando: " + e.getMessage());
-            return false;
-        }
+        return ControleAcesso.possuiDireito(ACAO_ABRIR_SUPERSET, usuario.getId());
     }
 
     private String obterBaseUrl() {

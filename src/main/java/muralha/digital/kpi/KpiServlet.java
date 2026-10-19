@@ -1,12 +1,14 @@
 package muralha.digital.kpi;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import muralha.digital.acessos.ControleAcesso;
 import muralha.digital.logtecnico.ContextoAlteracao;
 import muralha.digital.logtecnico.HistoricoParametros;
+
+import org.apache.log4j.Logger;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,17 +28,20 @@ import java.util.Map;
 public class KpiServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private static final Logger logger = Logger.getLogger(KpiServlet.class);
+    static final String ACAO_CONFIG = "/muralha-digital/pages/admin/kpis/index.jsp";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        String acao = req.getParameter("acao");
+        if (!ControleAcesso.exigir(req, resp)) return;
+        if ("listarConfig".equals(acao) && !ControleAcesso.exigir(req, resp, ACAO_CONFIG)) return;
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();
         Connection conn = null;
         try {
             conn = Conexao.getConexao();
-            String acao = req.getParameter("acao");
 
             if ("historico".equals(acao)) {
                 int idKpi = Integer.parseInt(req.getParameter("idKpi"));
@@ -121,26 +126,29 @@ public class KpiServlet extends HttpServlet {
                         kpi.addProperty("thOk", thOk);
                         kpi.addProperty("thWarn", thWarn);
 
-                        String sql = rs.getString("query_sql").trim();
-                        if (!sql.toUpperCase().startsWith("SELECT")) {
+                        String sql = rs.getString("query_sql");
+                        if (ValidadorSqlKpi.validar(sql) != null) {
                             kpi.addProperty("status", "ERRO");
                             kpis.add(kpi);
                             continue;
                         }
-                        try (PreparedStatement kpiPs = conn.prepareStatement(sql);
-                             ResultSet kpiRs = kpiPs.executeQuery()) {
-                            if (kpiRs.next()) {
-                                double valor = kpiRs.getDouble("valor");
-                                kpi.addProperty("valor", valor);
-                                String status;
-                                if (thOk > thWarn) {
-                                    status = valor >= thOk ? "OK" : valor >= thWarn ? "WARN" : "CRIT";
-                                } else {
-                                    status = valor <= thOk ? "OK" : valor <= thWarn ? "WARN" : "CRIT";
+                        try (PreparedStatement kpiPs = conn.prepareStatement(sql.trim())) {
+                            kpiPs.setQueryTimeout(ValidadorSqlKpi.TIMEOUT_SEGUNDOS);
+                            try (ResultSet kpiRs = kpiPs.executeQuery()) {
+                                if (kpiRs.next()) {
+                                    double valor = kpiRs.getDouble("valor");
+                                    kpi.addProperty("valor", valor);
+                                    String status;
+                                    if (thOk > thWarn) {
+                                        status = valor >= thOk ? "OK" : valor >= thWarn ? "WARN" : "CRIT";
+                                    } else {
+                                        status = valor <= thOk ? "OK" : valor <= thWarn ? "WARN" : "CRIT";
+                                    }
+                                    kpi.addProperty("status", status);
                                 }
-                                kpi.addProperty("status", status);
                             }
                         } catch (Exception e) {
+                            logger.warn("Erro ao executar KPI id=" + kpi.get("id").getAsInt() + ": " + e.getMessage());
                             kpi.addProperty("status", "ERRO");
                         }
                         kpis.add(kpi);
@@ -161,7 +169,7 @@ public class KpiServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp) || !ControleAcesso.exigir(req, resp, ACAO_CONFIG)) return;
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();
@@ -171,13 +179,15 @@ public class KpiServlet extends HttpServlet {
             String acao = req.getParameter("acao");
 
             if ("salvar".equals(acao)) {
-                String sql = req.getParameter("querySql").trim();
-                if (!sql.toUpperCase().startsWith("SELECT")) {
+                String sql = req.getParameter("querySql");
+                String erroSql = ValidadorSqlKpi.validar(sql);
+                if (erroSql != null) {
                     result.addProperty("ok", false);
-                    result.addProperty("erro", "query_sql deve iniciar com SELECT");
+                    result.addProperty("erro", erroSql);
                     resp.getWriter().print(new Gson().toJson(result));
                     return;
                 }
+                sql = sql.trim();
 
                 String idStr = req.getParameter("id");
                 String tipoVisual = req.getParameter("tipoVisual");

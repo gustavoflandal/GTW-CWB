@@ -48,7 +48,8 @@ public class KpiSnapshotJob implements Job {
                     Double metaMin = rs.getObject("meta_minima") != null ? rs.getDouble("meta_minima") : null;
                     boolean gerarAlerta = rs.getObject("gerar_alerta") == null || rs.getBoolean("gerar_alerta");
 
-                    if (sql == null || !sql.trim().toUpperCase().startsWith("SELECT")) continue;
+                    String erroSql = ValidadorSqlKpi.validar(sql);
+                    if (erroSql != null) { logger.warn("KPI id=" + idKpi + " (" + nome + ") ignorado: " + erroSql); continue; }
 
                     try {
                         double valor = executarQuery(conn, sql.trim());
@@ -71,9 +72,11 @@ public class KpiSnapshotJob implements Job {
     }
 
     private double executarQuery(Connection conn, String sql) throws SQLException {
-        try (PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getDouble("valor");
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setQueryTimeout(ValidadorSqlKpi.TIMEOUT_SEGUNDOS);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) return rs.getDouble("valor");
+            }
         }
         return 0;
     }

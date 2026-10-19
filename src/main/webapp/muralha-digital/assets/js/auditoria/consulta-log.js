@@ -5,6 +5,8 @@ $(function() {
     carregarFiltros();
 });
 
+function escaparHtml(v) { var d = document.createElement('div'); d.textContent = v == null ? '' : String(v); return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
 function carregarFiltros() {
     $.getJSON('/MuralhaDigital/Auditoria', { acao: 'listarFiltros' })
      .done(function(data) {
@@ -26,7 +28,7 @@ function preencherSelect(seletor, valores) {
     sel.empty().append('<option value="">' + textoDefault + '</option>');
     if (valores) {
         valores.forEach(function(v) {
-            sel.append('<option value="' + v + '">' + v + '</option>');
+            sel.append('<option value="' + escaparHtml(v) + '">' + escaparHtml(v) + '</option>');
         });
     }
 }
@@ -37,7 +39,7 @@ function preencherSelectObj(seletor, lista, campoVal, campoLabel) {
     sel.empty().append('<option value="">' + textoDefault + '</option>');
     if (lista) {
         lista.forEach(function(item) {
-            sel.append('<option value="' + item[campoVal] + '">' + item[campoLabel] + '</option>');
+            sel.append('<option value="' + escaparHtml(item[campoVal]) + '">' + escaparHtml(item[campoLabel]) + '</option>');
         });
     }
 }
@@ -68,13 +70,13 @@ function buscar(pag) {
             data.registros.forEach(function(r) {
                 tbody.append(
                     '<tr>' +
-                    '<td>' + (r.dtOperacao || '') + '</td>' +
-                    '<td>' + (r.login || '') + '</td>' +
-                    '<td>' + (r.ip || '') + '</td>' +
-                    '<td>' + (r.funcional || '') + '</td>' +
-                    '<td>' + (r.operacao || '') + '</td>' +
-                    '<td>' + (r.idRegistro || '') + '</td>' +
-                    '<td>' + (r.descricao || '') + '</td>' +
+                    '<td>' + escaparHtml(r.dtOperacao) + '</td>' +
+                    '<td>' + escaparHtml(r.login) + '</td>' +
+                    '<td>' + escaparHtml(r.ip) + '</td>' +
+                    '<td>' + escaparHtml(r.funcional) + '</td>' +
+                    '<td>' + escaparHtml(r.operacao) + '</td>' +
+                    '<td>' + escaparHtml(r.idRegistro) + '</td>' +
+                    '<td>' + escaparHtml(r.descricao) + '</td>' +
                     '</tr>'
                 );
             });

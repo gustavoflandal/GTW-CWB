@@ -1,7 +1,7 @@
 package muralha.digital.dashboards;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.*;
 import muralha.digital.dashboards.consulta.ConsultaDashboard;
 import muralha.digital.dashboards.consulta.DatasetResolvido;
@@ -36,10 +36,9 @@ public class DashConsultaServlet extends HttpServlet {
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();
 
-        Acesso acesso = new Acesso(req, resp, true);
-        if (!acesso.verificaAcesso(false)) return;
+        if (!ControleAcesso.exigir(req, resp)) return;
 
-        int idUsuario = acesso.getUsuario().getId();
+        int idUsuario = ControleAcesso.usuario(req).getId();
         int idDataset = 0;
         int idWidget = 0;
         String consultaJson = null;

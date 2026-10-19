@@ -1,7 +1,7 @@
 package muralha.digital.dashboard;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -41,9 +41,8 @@ public class DashboardBuilderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Acesso acesso = new Acesso(req, resp, true);
-        if (!acesso.verificaAcesso(false)) return;
-        int idUsuario = acesso.getUsuario().getId();
+        if (!ControleAcesso.exigir(req, resp)) return;
+        int idUsuario = ControleAcesso.usuario(req).getId();
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();
@@ -129,9 +128,8 @@ public class DashboardBuilderServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Acesso acesso = new Acesso(req, resp, true);
-        if (!acesso.verificaAcesso(false)) return;
-        int idUsuario = acesso.getUsuario().getId();
+        if (!ControleAcesso.exigir(req, resp)) return;
+        int idUsuario = ControleAcesso.usuario(req).getId();
 
         resp.setContentType("application/json; charset=UTF-8");
         JsonObject result = new JsonObject();

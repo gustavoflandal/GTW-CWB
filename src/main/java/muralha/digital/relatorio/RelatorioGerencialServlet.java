@@ -1,7 +1,7 @@
 package muralha.digital.relatorio;
 
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -27,10 +27,10 @@ public class RelatorioGerencialServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) return;
-
         String acao = req.getParameter("acao");
         if (acao == null) acao = "";
+        boolean tela = acao.isEmpty();
+        if (tela ? !ControleAcesso.exigirTela(req, resp) : !ControleAcesso.exigir(req, resp)) return;
 
         switch (acao) {
             case "listar": listar(req, resp); break;

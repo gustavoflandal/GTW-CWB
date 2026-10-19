@@ -1,9 +1,7 @@
 package muralha.digital.integridade;
 
-import com.consilux.infra.SessaoConstantes;
 import com.consilux.lib.Conexao;
-import com.consilux.model.Acesso;
-import com.consilux.model.Usuario;
+import muralha.digital.acessos.ControleAcesso;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -45,9 +43,7 @@ public class IntegridadeRecepcaoServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-        Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) { return; }
+        if (!ControleAcesso.exigir(req, resp)) { return; }
 
         String acao = req.getParameter("acao");
         FiltroIntegridade filtro;

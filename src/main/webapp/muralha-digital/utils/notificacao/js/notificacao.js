@@ -18,7 +18,7 @@ var _mapaIconeTipoAlerta = {};
 function carregarCoresTipoAlerta() {
 	if (_mapaCorTipoAlerta !== null) return;
 	$.ajax({
-		url: '/MuralhaDigital/TipoAlertaConfig?acao=listar',
+		url: '/MuralhaDigital/TipoAlertaConfig?acao=aparencia',
 		type: 'GET', async: false, dataType: 'json',
 		success: function(data) {
 			_mapaCorTipoAlerta = {};

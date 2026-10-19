@@ -1,5 +1,7 @@
 # Manual do Usuário — Análises (Superset)
 
+> Este conteúdo é publicado no sistema em `pages/analise/manual.jsp` (botão Manual da tela de Análises); mantenha os dois iguais.
+
 ## 1. Acesso
 
 O módulo de Análises é acessado pelo menu **Análises** no sistema GTW / Muralha Digital. O login é automático (SSO) — basta estar logado no GTW.
@@ -15,7 +17,7 @@ O módulo de Análises é acessado pelo menu **Análises** no sistema GTW / Mura
 
 ## 2. Painéis disponíveis
 
-Os painéis consultam a camada `analise` do banco do GTW. O nome e as coordenadas de cada equipamento são os da versão do cadastro vigente na data do registro. Os dados ficam em cache de 15 minutos a 1 hora, e as tabelas materializadas são recarregadas pelo script `refresh-materialized.sh`.
+Os painéis consultam a camada `analise` do banco do GTW. O nome e as coordenadas de cada equipamento são os da versão do cadastro vigente na data do registro. Os dados ficam em cache de 10 minutos a 1 hora, e as tabelas materializadas são recarregadas pelo script `refresh-materialized.sh`.
 
 ### Painéis operacionais
 
@@ -42,7 +44,6 @@ Os filtros ficam na barra lateral à esquerda de cada painel:
 1. **Período**: sem filtro por padrão (todo o histórico); escolha um intervalo para restringir.
 2. **Equipamento, Tipo, Status, Operador etc.**: filtros específicos de cada painel.
 3. **Filtro cruzado**: clicar em uma barra ou fatia filtra os demais gráficos do painel.
-3. **Cross-filter**: clique em um gráfico para filtrar os demais automaticamente.
 
 ### Como aplicar um filtro
 
@@ -103,7 +104,7 @@ R: Confira se o filtro de período ou um filtro cruzado não excluiu todos os re
 R: Seu perfil pode não ter acesso. Solicite ao administrador do sistema.
 
 **P: Os dados estão desatualizados.**
-R: Os resultados ficam em cache de 15 minutos a 1 hora (conforme o painel). As tabelas materializadas são recarregadas pelo `refresh-materialized.sh` (sugestão: a cada 30 minutos).
+R: Os resultados ficam em cache de 10 minutos a 1 hora (conforme o painel). As tabelas materializadas são recarregadas pelo `refresh-materialized.sh` (sugestão: a cada 30 minutos).
 
 **P: Como criar um novo gráfico?**
 R: Apenas perfis Gestor e Administrador podem criar gráficos. Acesse o Superset diretamente e use o menu **+ > Chart**.

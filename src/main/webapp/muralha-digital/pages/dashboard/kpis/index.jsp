@@ -129,8 +129,10 @@ function limparGauges() {
   gaugeCharts = [];
 }
 
+function escaparHtml(v) { var d = document.createElement('div'); d.textContent = v == null ? '' : String(v); return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
 function hexDoKpi(kpi) {
-  if (kpi.corPersonalizada) return kpi.corPersonalizada;
+  if (kpi.corPersonalizada && /^#[0-9a-fA-F]{3,8}$/.test(kpi.corPersonalizada)) return kpi.corPersonalizada;
   return COR_STATUS[kpi.status] || COR_STATUS.ERRO;
 }
 
@@ -140,7 +142,7 @@ function rgba(hex, a) {
 
 function badge(kpi, hex) {
   return '<span class="kpi-badge" style="color:' + hex + ';background:' + rgba(hex, .1) + '">' +
-    '<span class="dot"></span>' + (LABEL_STATUS[kpi.status] || '') + '</span>';
+    '<span class="dot"></span>' + escaparHtml(LABEL_STATUS[kpi.status] || '') + '</span>';
 }
 
 function fmtVal(kpi) {
@@ -154,12 +156,12 @@ function renderCard(kpi, hex) {
     '<div class="card kpi-widget kpi-card h-100">' +
       '<div class="kpi-accent" style="background:' + hex + '"></div>' +
       '<div class="kpi-body">' +
-        '<div class="kpi-titulo">' + kpi.nome + '</div>' +
+        '<div class="kpi-titulo">' + escaparHtml(kpi.nome) + '</div>' +
         '<div class="kpi-valor" style="color:' + hex + '">' + valor + '</div>' +
-        '<div class="kpi-unidade">' + (kpi.unidade || '') + '</div>' +
+        '<div class="kpi-unidade">' + escaparHtml(kpi.unidade) + '</div>' +
         '<div class="kpi-status">' + badge(kpi, hex) + '</div>' +
-        (kpi.descricao ? '<div class="kpi-desc">' + kpi.descricao + '</div>' : '') +
-        '<div class="mt-2"><button class="btn btn-sm btn-outline-secondary py-0 px-2" style="font-size:.7rem" onclick="abrirHistorico(' + kpi.id + ',\'' + kpi.nome.replace(/'/g,"&#39;") + '\')"><i class="bi bi-clock-history"></i> Histórico</button></div>' +
+        (kpi.descricao ? '<div class="kpi-desc">' + escaparHtml(kpi.descricao) + '</div>' : '') +
+        '<div class="mt-2"><button class="btn btn-sm btn-outline-secondary py-0 px-2 btn-historico" style="font-size:.7rem" data-id="' + escaparHtml(kpi.id) + '" data-nome="' + escaparHtml(kpi.nome) + '"><i class="bi bi-clock-history"></i> Histórico</button></div>' +
       '</div>' +
     '</div>' +
   '</div>';
@@ -175,9 +177,9 @@ function renderCompacto(kpi, hex) {
           '<i class="bi ' + (ICONE_STATUS[kpi.status] || 'bi-bar-chart-fill') + '"></i>' +
         '</div>' +
         '<div class="kpi-info">' +
-          '<div class="kpi-titulo">' + kpi.nome + '</div>' +
+          '<div class="kpi-titulo">' + escaparHtml(kpi.nome) + '</div>' +
           '<div><span class="kpi-valor" style="color:' + hex + '">' + valor + '</span>' +
-            '<span class="kpi-unidade">' + (kpi.unidade || '') + '</span></div>' +
+            '<span class="kpi-unidade">' + escaparHtml(kpi.unidade) + '</span></div>' +
         '</div>' +
         '<div class="kpi-badge-col">' + badge(kpi, hex) + '</div>' +
       '</div>' +
@@ -187,17 +189,17 @@ function renderCompacto(kpi, hex) {
 
 /* ── Medidor ── */
 function renderMedidor(kpi, hex) {
-  var cid = 'gauge_' + kpi.id;
+  var cid = 'gauge_' + Number(kpi.id);
   var valor = fmtVal(kpi);
   return '<div class="col-xl-3 col-md-4 col-sm-6">' +
     '<div class="card kpi-widget kpi-medidor h-100">' +
       '<div class="kpi-body">' +
-        '<div class="kpi-titulo">' + kpi.nome + '</div>' +
+        '<div class="kpi-titulo">' + escaparHtml(kpi.nome) + '</div>' +
         '<div class="gauge-wrap">' +
           '<canvas id="' + cid + '" width="160" height="88"></canvas>' +
           '<div class="gauge-center">' +
             '<div class="gv" style="color:' + hex + '">' + valor + '</div>' +
-            '<div class="gu">' + (kpi.unidade || '') + '</div>' +
+            '<div class="gu">' + escaparHtml(kpi.unidade) + '</div>' +
           '</div>' +
         '</div>' +
         '<div class="kpi-rodape">' + badge(kpi, hex) + '</div>' +
@@ -250,15 +252,15 @@ function renderProgresso(kpi, hex) {
     '<div class="card kpi-widget kpi-progresso h-100">' +
       '<div class="kpi-body">' +
         '<div class="kpi-header">' +
-          '<div class="kpi-titulo">' + kpi.nome + '</div>' +
+          '<div class="kpi-titulo">' + escaparHtml(kpi.nome) + '</div>' +
           badge(kpi, hex) +
         '</div>' +
         '<div class="progress">' +
           '<div class="progress-bar" style="width:' + pct + '%;background:linear-gradient(90deg,' + rgba(hex,.7) + ',' + hex + ')">' +
-            valor + ' ' + (kpi.unidade || '') +
+            valor + ' ' + escaparHtml(kpi.unidade) +
           '</div>' +
         '</div>' +
-        (kpi.descricao ? '<div class="kpi-desc">' + kpi.descricao + '</div>' : '') +
+        (kpi.descricao ? '<div class="kpi-desc">' + escaparHtml(kpi.descricao) + '</div>' : '') +
       '</div>' +
     '</div>' +
   '</div>';
@@ -268,7 +270,7 @@ async function carregar() {
   limparGauges();
   var r = await fetch(ctx + '/MuralhaDigital/Kpi');
   var d = await r.json();
-  if (!d.ok) { Swal.fire('Erro', d.erro, 'error'); return; }
+  if (!d.ok) { Swal.fire({title: 'Erro', text: d.erro, icon: 'error'}); return; }
 
   var container = document.getElementById('kpiCards');
   container.innerHTML = '';
@@ -302,6 +304,12 @@ setInterval(carregar, 60000);
 var histChartInstance = null;
 var histModalInstance = null;
 var histKpiAtual = null;
+
+document.getElementById('kpiCards').addEventListener('click', function(e) {
+    var btn = e.target.closest('.btn-historico');
+    if (!btn) return;
+    abrirHistorico(btn.dataset.id, btn.dataset.nome);
+});
 
 async function abrirHistorico(idKpi, nome) {
     histKpiAtual = idKpi;

@@ -82,7 +82,7 @@ public class UsuarioServlet extends HttpServlet
        	
        	try
        	{
-       		logger.debug("doPost - " + usuario + " - " + senhaMD5 + " - " + acao);
+       		logger.debug("doPost - " + usuario + " - " + acao);
        		
 	       	if(acao.equals("login"))
 	       	{
@@ -215,7 +215,6 @@ public class UsuarioServlet extends HttpServlet
 		}
 
 		myObj.addProperty("validacao", resultado != null);
-		myObj.addProperty("senhaMD5", senhaMD5);
 		myObj.addProperty("usuario", usuario);
 		myObj.addProperty("paginaInicial", resultado != null ? resultado.getPaginaInicial() : "");
 

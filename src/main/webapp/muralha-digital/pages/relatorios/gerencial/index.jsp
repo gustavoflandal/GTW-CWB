@@ -81,6 +81,8 @@ async function carregar() {
     }
 }
 
+function escaparHtml(v) { var d = document.createElement('div'); d.textContent = v == null ? '' : String(v); return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
 function renderTabela() {
     var tbody = document.getElementById('tblRelatorios');
     if (!relData || relData.length === 0) {
@@ -94,13 +96,13 @@ function renderTabela() {
             ? '<span class="badge bg-info">Pré-Processamento</span>'
             : '<span class="badge bg-primary">Gerencial</span>';
         html += '<tr>' +
-            '<td>' + r.titulo + '</td>' +
+            '<td>' + escaparHtml(r.titulo) + '</td>' +
             '<td>' + tipoBadge + '</td>' +
-            '<td>' + r.periodoInicio + ' a ' + r.periodoFim + '</td>' +
-            '<td>' + r.dtGeracao + '</td>' +
-            '<td>' + r.geradoPor + '</td>' +
+            '<td>' + escaparHtml(r.periodoInicio) + ' a ' + escaparHtml(r.periodoFim) + '</td>' +
+            '<td>' + escaparHtml(r.dtGeracao) + '</td>' +
+            '<td>' + escaparHtml(r.geradoPor) + '</td>' +
             '<td class="text-center">' +
-                '<button class="btn btn-sm btn-outline-primary" onclick="verDetalhe(' + r.id + ')">' +
+                '<button class="btn btn-sm btn-outline-primary" onclick="verDetalhe(' + Number(r.id) + ')">' +
                 '<i class="bi bi-eye"></i></button>' +
             '</td></tr>';
     }
@@ -129,8 +131,8 @@ async function verDetalhe(id) {
 
 function renderDetalhe(d) {
     var dados = d.dados;
-    var html = '<div class="mb-3"><small class="text-muted">Período: ' + d.periodoInicio + ' a ' + d.periodoFim +
-        ' | Gerado: ' + d.dtGeracao + '</small></div>';
+    var html = '<div class="mb-3"><small class="text-muted">Período: ' + escaparHtml(d.periodoInicio) + ' a ' + escaparHtml(d.periodoFim) +
+        ' | Gerado: ' + escaparHtml(d.dtGeracao) + '</small></div>';
 
     if (d.tipo === 'PRE_PROCESSAMENTO') {
         html += secao('Volumes', [
@@ -226,9 +228,9 @@ function renderDetalhe(d) {
 }
 
 function secao(titulo, linhas) {
-    var html = '<h6 class="mt-3 mb-2">' + titulo + '</h6><table class="table table-sm table-bordered"><tbody>';
+    var html = '<h6 class="mt-3 mb-2">' + escaparHtml(titulo) + '</h6><table class="table table-sm table-bordered"><tbody>';
     for (var i = 0; i < linhas.length; i++) {
-        html += '<tr><td class="fw-semibold" style="width:40%">' + linhas[i][0] + '</td><td>' + linhas[i][1] + '</td></tr>';
+        html += '<tr><td class="fw-semibold" style="width:40%">' + escaparHtml(linhas[i][0]) + '</td><td>' + escaparHtml(linhas[i][1]) + '</td></tr>';
     }
     return html + '</tbody></table>';
 }
