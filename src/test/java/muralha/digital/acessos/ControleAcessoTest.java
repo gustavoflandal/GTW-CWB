@@ -101,4 +101,31 @@ public class ControleAcessoTest {
         ControleAcesso.exigir(pedido(usuario(7), "/MuralhaDigital/Lote"), mock(HttpServletResponse.class));
         assertEquals(chamadas[0], 1);
     }
+
+    @Test
+    public void negacaoAuditadaUmaVezComAcaoCerta() throws Exception {
+        java.util.List<String> acoes = new java.util.ArrayList<>();
+        ControleAcesso.definirParaTestes((acao, id) -> false, r -> {}, (req, acao, u) -> acoes.add(acao));
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        when(resp.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
+        ControleAcesso.exigir(pedido(usuario(7), "/MuralhaDigital/Lote"), resp);
+        assertEquals(acoes, java.util.Collections.singletonList("/MuralhaDigital/Lote"));
+    }
+
+    @Test
+    public void negacaoNaoAuditadaQuandoHaDireito() throws Exception {
+        int[] chamadas = {0};
+        ControleAcesso.definirParaTestes((acao, id) -> true, r -> {}, (req, acao, u) -> chamadas[0]++);
+        ControleAcesso.exigir(pedido(usuario(7), "/MuralhaDigital/Lote"), mock(HttpServletResponse.class));
+        assertEquals(chamadas[0], 0);
+    }
+
+    @Test
+    public void sessaoSemUsuarioResponde401() throws Exception {
+        ControleAcesso.definirParaTestes((acao, id) -> true, r -> {});
+        HttpServletResponse resp = mock(HttpServletResponse.class);
+        when(resp.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
+        assertFalse(ControleAcesso.exigir(pedido(null, "/MuralhaDigital/Lote"), resp));
+        verify(resp).setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
 }

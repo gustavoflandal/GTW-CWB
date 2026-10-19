@@ -29,23 +29,35 @@ public final class ControleAcesso {
     /** Consulta de direito (troca nos testes). */
     public interface VerificadorDireito { boolean possui(String acao, int idUsuario); }
 
+    /** Auditoria da negacao de acesso (troca nos testes). */
+    public interface AuditorNegacao { void registrar(HttpServletRequest req, String acao, Usuario usuario); }
+
     private static final VerificadorDireito VERIFICADOR_PADRAO = ControleAcesso::consultarBanco;
+    private static final AuditorNegacao AUDITOR_PADRAO = ControleAcesso::auditarNegacao;
     /** Mantem o log de acesso que o Acesso legado grava no construtor. */
     private static final Consumer<HttpServletRequest> REGISTRADOR_PADRAO = r -> new Acesso(r, null, true);
 
     private static volatile VerificadorDireito verificador = VERIFICADOR_PADRAO;
     private static volatile Consumer<HttpServletRequest> registrador = REGISTRADOR_PADRAO;
+    private static volatile AuditorNegacao auditor = AUDITOR_PADRAO;
 
     private ControleAcesso() {}
 
+    /** Troca verificador e registrador; a auditoria de negacao vira no-op. */
     public static void definirParaTestes(VerificadorDireito v, Consumer<HttpServletRequest> r) {
+        definirParaTestes(v, r, (req, acao, usuario) -> {});
+    }
+
+    public static void definirParaTestes(VerificadorDireito v, Consumer<HttpServletRequest> r, AuditorNegacao a) {
         verificador = v;
         registrador = r;
+        auditor = a;
     }
 
     public static void restaurarPadrao() {
         verificador = VERIFICADOR_PADRAO;
         registrador = REGISTRADOR_PADRAO;
+        auditor = AUDITOR_PADRAO;
     }
 
     public static boolean possuiDireito(String acao, int idUsuario) {
@@ -83,9 +95,10 @@ public final class ControleAcesso {
             responder(resp, HttpServletResponse.SC_UNAUTHORIZED, "Sessão expirada. Faça login novamente.");
             return false;
         }
+        // Como no legado, o log de acesso e gravado tambem quando o acesso e negado.
         registrador.accept(req);
         if (possuiDireito(acao, usuario.getId())) return true;
-        registrarNegacao(req, acao, usuario);
+        auditor.registrar(req, acao, usuario);
         responder(resp, HttpServletResponse.SC_FORBIDDEN, "Sem permissão para esta funcionalidade.");
         return false;
     }
@@ -94,15 +107,16 @@ public final class ControleAcesso {
     public static boolean exigirTela(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Usuario usuario = usuario(req);
         if (usuario == null) { resp.sendRedirect("/login/login.jsp"); return false; }
+        // Como no legado, o log de acesso e gravado tambem quando o acesso e negado.
         registrador.accept(req);
         String acao = req.getServletPath();
         if (possuiDireito(acao, usuario.getId())) return true;
-        registrarNegacao(req, acao, usuario);
+        auditor.registrar(req, acao, usuario);
         resp.sendRedirect("/login/gtw_principal.jsp");
         return false;
     }
 
-    private static void registrarNegacao(HttpServletRequest req, String acao, Usuario usuario) {
+    private static void auditarNegacao(HttpServletRequest req, String acao, Usuario usuario) {
         try {
             AuditoriaService.registrar(req, "acesso", "negado", acao,
                     "Acesso negado a " + acao + " para o usuario " + usuario.getId());
