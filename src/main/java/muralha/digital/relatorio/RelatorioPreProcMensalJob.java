@@ -79,7 +79,7 @@ public class RelatorioPreProcMensalJob implements Job {
                 "COUNT(*) AS recebidos, " +
                 "SUM(CASE WHEN vsa.status_analise IS NOT NULL AND vsa.status_analise <> 'AGUARDANDO_ANALISE' THEN 1 ELSE 0 END) AS processados, " +
                 "SUM(CASE WHEN vsa.status_analise IN ('PRE_APROVADA','APROVADA') THEN 1 ELSE 0 END) AS disponibilizados, " +
-                "SUM(CASE WHEN vsa.status_analise = 'DESCARTADA' THEN 1 ELSE 0 END) AS descartados " +
+                "SUM(CASE WHEN vsa.status_analise IN ('REPROVADA','DESCARTADA') THEN 1 ELSE 0 END) AS descartados " +
                 "FROM muralha.veiculo_tempo_real vtr " +
                 "LEFT JOIN muralha.vtr_status_analise vsa ON vsa.id_veiculo_tempo_real = vtr.id " +
                 "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?)")) {
@@ -107,15 +107,17 @@ public class RelatorioPreProcMensalJob implements Job {
 
         // (f) Tempo médio de processamento por registro
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT AVG(DATEDIFF(SECOND, vtr.data, vsa.data_analise)) AS tempo_medio_seg " +
-                "FROM muralha.veiculo_tempo_real vtr " +
-                "JOIN muralha.vtr_status_analise vsa ON vsa.id_veiculo_tempo_real = vtr.id " +
-                "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?) " +
-                "AND vsa.data_analise IS NOT NULL")) {
+                "SELECT AVG(CAST(DATEDIFF(SECOND, vtr.data, ia.dt_analise) AS FLOAT)) AS tempo_medio_seg " +
+                "FROM muralha.infracao_analise ia " +
+                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = ia.id_infracao " +
+                "WHERE ia.sequencia = 1 AND vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?)")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) dados.addProperty("tempoMedioProcessamentoSeg", rs.getDouble("tempo_medio_seg"));
+                if (rs.next()) {
+                    double tempoMedio = rs.getDouble("tempo_medio_seg");
+                    dados.addProperty("tempoMedioProcessamentoSeg", rs.wasNull() ? 0.0 : tempoMedio);
+                }
             }
         }
 
@@ -147,13 +149,10 @@ public class RelatorioPreProcMensalJob implements Job {
     private JsonObject produtividadePorOperador(Connection conn, LocalDate inicio, LocalDate fim) throws SQLException {
         JsonObject obj = new JsonObject();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT vsa.id_usuario, u.nome, COUNT(*) AS total_analisados " +
-                "FROM muralha.vtr_status_analise vsa " +
-                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = vsa.id_veiculo_tempo_real " +
-                "LEFT JOIN dbo.sis_usuario u ON u.id_usuario = vsa.id_usuario " +
-                "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?) " +
-                "AND vsa.id_usuario IS NOT NULL " +
-                "GROUP BY vsa.id_usuario, u.nome ORDER BY total_analisados DESC")) {
+                "SELECT ia.id_usuario, COUNT(*) AS total_analisados " +
+                "FROM muralha.infracao_analise ia " +
+                "WHERE ia.dt_analise >= ? AND ia.dt_analise < DATEADD(DAY, 1, ?) " +
+                "GROUP BY ia.id_usuario ORDER BY total_analisados DESC")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
@@ -176,11 +175,10 @@ public class RelatorioPreProcMensalJob implements Job {
         JsonObject obj = new JsonObject();
         try (PreparedStatement ps = conn.prepareStatement(
                 "SELECT COUNT(*) AS total, " +
-                "SUM(CASE WHEN vsa.resultado_ia <> vsa.status_analise THEN 1 ELSE 0 END) AS divergentes " +
-                "FROM muralha.vtr_status_analise vsa " +
-                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = vsa.id_veiculo_tempo_real " +
-                "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?) " +
-                "AND vsa.resultado_ia IS NOT NULL AND vsa.status_analise IS NOT NULL")) {
+                "SUM(CASE WHEN a1.classificacao <> a2.classificacao THEN 1 ELSE 0 END) AS divergentes " +
+                "FROM muralha.infracao_analise a1 " +
+                "JOIN muralha.infracao_analise a2 ON a2.id_infracao = a1.id_infracao AND a2.sequencia = 2 " +
+                "WHERE a1.sequencia = 1 AND a2.dt_analise >= ? AND a2.dt_analise < DATEADD(DAY, 1, ?)")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
@@ -200,11 +198,11 @@ public class RelatorioPreProcMensalJob implements Job {
     private JsonObject retrabalho(Connection conn, LocalDate inicio, LocalDate fim) throws SQLException {
         JsonObject obj = new JsonObject();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT COUNT(*) AS total, " +
-                "SUM(CASE WHEN vsa.revisado = 1 THEN 1 ELSE 0 END) AS retrabalhados " +
-                "FROM muralha.vtr_status_analise vsa " +
-                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = vsa.id_veiculo_tempo_real " +
-                "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?)")) {
+                "SELECT COUNT(DISTINCT ia.id_infracao) AS total, " +
+                "COUNT(DISTINCT CASE WHEN ia.sequencia >= 3 OR vsa.status_analise = 'DESEMPATE' THEN ia.id_infracao END) AS retrabalhados " +
+                "FROM muralha.infracao_analise ia " +
+                "LEFT JOIN muralha.vtr_status_analise vsa ON vsa.id_veiculo_tempo_real = ia.id_infracao " +
+                "WHERE ia.dt_analise >= ? AND ia.dt_analise < DATEADD(DAY, 1, ?)")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
@@ -280,12 +278,13 @@ public class RelatorioPreProcMensalJob implements Job {
     private JsonObject motivosDescarte(Connection conn, LocalDate inicio, LocalDate fim) throws SQLException {
         JsonObject obj = new JsonObject();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT COALESCE(vsa.motivo_descarte, 'Sem motivo') AS motivo, COUNT(*) AS total " +
+                "SELECT COALESCE(NULLIF(LTRIM(RTRIM(ult.justificativa)), ''), 'Sem motivo') AS motivo, COUNT(*) AS total " +
                 "FROM muralha.vtr_status_analise vsa " +
-                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = vsa.id_veiculo_tempo_real " +
-                "WHERE vsa.status_analise = 'DESCARTADA' " +
-                "AND vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?) " +
-                "GROUP BY vsa.motivo_descarte ORDER BY total DESC")) {
+                "CROSS APPLY (SELECT TOP 1 ia.justificativa, ia.dt_analise FROM muralha.infracao_analise ia " +
+                "WHERE ia.id_infracao = vsa.id_veiculo_tempo_real ORDER BY ia.sequencia DESC) ult " +
+                "WHERE vsa.status_analise IN ('REPROVADA', 'DESCARTADA') " +
+                "AND ult.dt_analise >= ? AND ult.dt_analise < DATEADD(DAY, 1, ?) " +
+                "GROUP BY COALESCE(NULLIF(LTRIM(RTRIM(ult.justificativa)), ''), 'Sem motivo') ORDER BY total DESC")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
             try (ResultSet rs = ps.executeQuery()) {
@@ -301,10 +300,11 @@ public class RelatorioPreProcMensalJob implements Job {
     private JsonObject historicoClassificacao(Connection conn, LocalDate inicio, LocalDate fim) throws SQLException {
         JsonObject obj = new JsonObject();
         try (PreparedStatement ps = conn.prepareStatement(
-                "SELECT COALESCE(vsa.status_analise, 'AGUARDANDO_ANALISE') AS classificacao, COUNT(*) AS total " +
+                "SELECT vsa.status_analise AS classificacao, COUNT(*) AS total " +
                 "FROM muralha.vtr_status_analise vsa " +
-                "JOIN muralha.veiculo_tempo_real vtr ON vtr.id = vsa.id_veiculo_tempo_real " +
-                "WHERE vtr.data >= ? AND vtr.data < DATEADD(DAY, 1, ?) " +
+                "WHERE EXISTS (SELECT 1 FROM muralha.infracao_analise ia " +
+                "WHERE ia.id_infracao = vsa.id_veiculo_tempo_real " +
+                "AND ia.dt_analise >= ? AND ia.dt_analise < DATEADD(DAY, 1, ?)) " +
                 "GROUP BY vsa.status_analise ORDER BY total DESC")) {
             ps.setDate(1, java.sql.Date.valueOf(inicio));
             ps.setDate(2, java.sql.Date.valueOf(fim));
