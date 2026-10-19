@@ -36,7 +36,7 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [11-glossario.md](requisitos/11-glossario.md) | Termos e siglas |
 | [12-riscos-e-debitos-tecnicos.md](requisitos/12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
 | [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 788 tabelas, 826 objetos programáveis, código SQL, domínios |
-| [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões |
+| [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões; [guia de correções](referencia/guia-correcoes-analise-kpis-lotes.md) de Análise de Dados, KPIs, Gestão de Lotes e acessos |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
 | [chamados/](chamados/) | Sistema de Chamados (Plano 22): arquitetura, manual do usuário, sessões CH-1 a CH-3, relatórios |
 | [planos-salvador/](planos-salvador/) | 34 planos PoC Salvador (01–34) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
