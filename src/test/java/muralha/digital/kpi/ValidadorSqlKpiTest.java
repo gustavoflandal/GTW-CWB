@@ -26,7 +26,10 @@ public class ValidadorSqlKpiTest {
             {"SELECT COUNT(*) AS valor FROM OPENJSON('[1,2]')"},
             {"SELECT offset, dataset, ativo_set, setor, ifood, begin_at AS valor FROM muralha.alerta"},
             {"SELECT 1 AS valor FROM muralha.alerta WHERE descricao = 'DECLARE SET IF'"},
-            {"SELECT COUNT(*) AS valor FROM muralha.alerta a WHERE a.id_set = 1 AND a.updated_at IS NOT NULL"}
+            {"SELECT COUNT(*) AS valor FROM muralha.alerta a WHERE a.id_set = 1 AND a.updated_at IS NOT NULL"},
+            {"SELECT DATEADD(DAY, -1, GETDATE()) AS valor, target, movel, receiver_id, sendo FROM muralha.alerta"},
+            {"SELECT COUNT(*) AS valor FROM muralha.alerta WHERE descricao = 'END CONVERSATION'"},
+            {"SELECT CASE WHEN 1 = 1 THEN 1 ELSE 0 END AS valor"}
         };
     }
 
@@ -76,7 +79,29 @@ public class ValidadorSqlKpiTest {
             {"SELECT 1 AS valor DEALLOCATE c"},
             {"SELECT 1 AS valor UPDATETEXT x.y @p 0 NULL 'z'"},
             {"SELECT 1 AS valor WRITETEXT x.y @p 'z'"},
-            {"SELECT 1xp_cmdshell AS valor"}
+            {"SELECT 1xp_cmdshell AS valor"},
+            {"SELECT 1 DECLARE@x INT"},
+            {"SELECT 1 SET@x=1"},
+            {"SELECT 1 EXEC@p"},
+            {"SELECT 1 DELETE#t"},
+            {"SELECT 1 DECLARE@p NVARCHAR(99)SET@p='sys.sp_executesql'EXEC@p N'DROP TABLE x'"},
+            {"SELECT 1 INSERT#t VALUES(1)"},
+            {"SELECT 1 DROP TABLE#t"},
+            {"SELECT 1 AS valor EXEC('DROP TABLE x')"},
+            {"SELECT 1 AS valor EXEC[dbo].[proc]"},
+            {"SELECT 1 AS valor EXEC\"dbo\".\"proc\""},
+            {"SELECT 1 AS valor EXEC'proc'"},
+            {"SELECT 1 AS valor EXEC N'proc'"},
+            {"SELECT 1 AS valor DELETE$x"},
+            {"SELECT 1 AS valor@DELETE FROM x"},
+            {"SELECT 1 AS valor#DELETE FROM x"},
+            {"SELECT 1 AS valor$DELETE FROM x"},
+            {"SELECT 1 AS valor SEND ON CONVERSATION @h"},
+            {"SELECT 1 AS valor RECEIVE TOP(1) * FROM q"},
+            {"SELECT 1 AS valor MOVE CONVERSATION @h TO @g"},
+            {"SELECT 1 AS valor GET CONVERSATION GROUP @g FROM q"},
+            {"SELECT 1 AS valor ADD SIGNATURE TO p BY CERTIFICATE c"},
+            {"SELECT 1 AS valor END CONVERSATION @h"}
         };
     }
 
