@@ -88,6 +88,7 @@ Executar no banco `GTW_MURALHA_DEV` via SSMS ou sqlcmd:
 | `20261016_analise_fundacao.sql` | Schema, carga_log, config, menus |
 | `20261017_analise_camada_dados.sql` | Tabelas materializadas, views, procedures |
 | `20261017_analise_mapas_geo.sql` | Views geolocalizadas, vínculo usuário-área |
+| `20261019_analise_permissao_abrir_superset.sql` | Funcionalidade 396 "Analises - Abrir no Superset" (direito do grupo 11) e direito do grupo 11 à tela de Análises (395) |
 
 ## 6. Papéis e permissões
 
@@ -105,6 +106,17 @@ Configurado no `.env`:
 ```json
 GTW_GRUPOS_PAPEIS={"11":"Admin","41":"Alpha","42":"Gamma","50":"Operador","51":"Gestor"}
 ```
+
+### Botão "Abrir no Superset" na tela de Análises
+
+O botão só é gerado para quem tem direito à funcionalidade **"Analises - Abrir no Superset"** (`dbo.sis_menu`, `id_menu = 396`, ação `/MuralhaDigital/SsoAnalise/abrir-superset`). O `SsoAnaliseServlet` verifica o direito com `dbo.fcn_VerificaAcesso` e **nega** se a funcionalidade não estiver cadastrada. Por padrão, só o grupo 11 (Administradores) tem o direito. Para conceder a outro grupo ou usuário:
+
+```sql
+INSERT INTO dbo.sis_menu_direitos (id_grupo, id_usuario, id_menu) VALUES (<id_grupo>, NULL, 396);   -- por grupo
+INSERT INTO dbo.sis_menu_direitos (id_grupo, id_usuario, id_menu) VALUES (NULL, <id_usuario>, 396); -- por usuário
+```
+
+Esconder o botão não bloqueia o endereço do Superset: quem acessar a porta do Superset diretamente continua sujeito ao login e aos papéis do próprio Superset.
 
 ### Row Level Security
 
