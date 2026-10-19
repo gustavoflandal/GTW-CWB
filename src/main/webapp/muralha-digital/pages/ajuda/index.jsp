@@ -357,6 +357,7 @@
         <li>Abra o card <strong>Análises</strong> e escolha um painel na lista <strong>Painel</strong>. O grupo <em>Demonstração (dados reais)</em> traz Fluxo Veicular, Fiscalização e Infrações, Tráfego Histórico, Mobilidade Urbana (Waze) e Alertas de Veículos de Interesse; o grupo <em>Painéis operacionais</em> traz os painéis de KPIs, assertividade, SLA, disponibilidade, pré-processamento, alertas, infrações, passagens e mapa.</li>
         <li>Use a barra de filtros do painel (período e dimensões) e clique em barras ou fatias para aplicar <strong>filtro cruzado</strong> nos demais gráficos.</li>
         <li>O botão <strong>Abrir no Superset</strong> abre o painel em uma nova aba, com as ferramentas completas da plataforma. Ele só aparece para o administrador do sistema ou para quem recebeu o direito <em>Analises - Abrir no Superset</em>.</li>
+        <li>O manual completo está no botão <strong>Manual</strong> da tela de Análises.</li>
       </ol>
       <p class="small text-muted">Os painéis consultam o banco ao vivo; a primeira abertura de um painel pode levar alguns segundos e as seguintes usam cache. O acesso usa o mesmo login do sistema.</p>
 

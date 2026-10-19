@@ -35,6 +35,12 @@ docker compose logs -f celery-worker
 docker compose logs -f celery-beat
 ```
 
+### Acesso em desenvolvimento
+
+No `docker-compose.yml` de desenvolvimento, o nginx usa `nginx/default.dev.conf` (porta 8088). Esse arquivo **desabilita o SSO** (`auth_request` comentado) e injeta uma identidade fixa de administrador: `X-GTW-Usuario: administrador`, `X-GTW-UserId: 1`, `X-GTW-Grupos: 11` (grupo 11 = Admin). Qualquer pessoa que alcance a porta 8088 entra como administrador, portanto não exponha esse stack fora da máquina de desenvolvimento. A produção usa `nginx/default.conf`, com `auth_request` ao `SsoAnaliseServlet`, montado pelo `docker-compose.prod.yml`.
+
+Para entrar pela tela de login do próprio Superset, use `SUPERSET_ADMIN_USERNAME` e `SUPERSET_ADMIN_PASSWORD` definidos no `.env` local. Nunca registre essas senhas em documentação ou no git.
+
 ## 3. Provisionamento
 
 O provisionamento tem duas partes:
@@ -68,27 +74,33 @@ docker compose exec superset python /app/provisionar.py --cleanup-log
 | Variável | Descrição |
 |---|---|
 | `SUPERSET_SECRET_KEY` | Chave secreta (obrigatória, única) |
-| `SUPERSET_ADMIN_*` | Credenciais do admin inicial |
+| `SUPERSET_ADMIN_*` | Credenciais do admin inicial (`USERNAME`, `PASSWORD`, `FIRST_NAME`, `LAST_NAME`, `EMAIL`) |
 | `GTW_DB_*` | Conexão com SQL Server (somente leitura) |
-| `POSTGRES_*` | Banco de metadados do Superset |
+| `POSTGRES_*` | Banco de metadados do Superset (`POSTGRES_USER`, `POSTGRES_PASSWORD`) |
+| `SUPERSET_DB_URI` | URI SQLAlchemy do banco de metadados (PostgreSQL) |
 | `REDIS_URL` | Cache e broker Celery |
 | `GTW_GRUPOS_PAPEIS` | JSON: mapeamento grupo GTW → papel Superset |
 | `GTW_SSO_HMAC_SECRET` | Segredo HMAC compartilhado com SsoAnaliseServlet |
 | `GTW_BASE_URL` | URL base do GTW para redirecionamento |
-| `SMTP_*` | Servidor de e-mail para alertas e relatórios |
+| `SMTP_*` | Servidor de e-mail para alertas e relatórios (`SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`, `SMTP_MAIL_FROM`, `SMTP_STARTTLS`, `SMTP_SSL`) |
 | `SUPERSET_LOG_LEVEL` | Nível de log (INFO, DEBUG, WARNING) |
 | `STATSD_HOST` | Host do StatsD (vazio = desabilitado) |
+| `STATSD_PORT` | Porta do StatsD (padrão 8125) |
+| `SUPERSET_WEBSERVER_TIMEOUT` | Timeout do webserver Gunicorn, em segundos (padrão 60) |
 
 ## 5. Migrações SQL
 
-Executar no banco `GTW_MURALHA_DEV` via SSMS ou sqlcmd:
+Executar no banco `GTW_MURALHA_DEV` somente com autorização, via `sqlcmd` (`-b -I -f 65001` nos scripts que o pedirem) ou SSMS. A situação de cada script está em [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md); confira-o antes de executar.
 
-| Script | Objetos |
-|---|---|
-| `20261016_analise_fundacao.sql` | Schema, carga_log, config, menus |
-| `20261017_analise_camada_dados.sql` | Tabelas materializadas, views, procedures |
-| `20261017_analise_mapas_geo.sql` | Views geolocalizadas, vínculo usuário-área |
-| `20261019_analise_permissao_abrir_superset.sql` | Funcionalidade 396 "Analises - Abrir no Superset" (direito do grupo 11) e direito do grupo 11 à tela de Análises (395) |
+| Ordem | Script | Objetos | Situação no DEV |
+|---|---|---|---|
+| 1 | `20261016_analise_fundacao.sql` | Schema `analise`, carga_log, config, menus | Executado |
+| 2 | `20261017_analise_camada_dados.sql` | Tabelas materializadas, views, procedures | Executado |
+| 3 | `20261017_analise_correcao_camada.sql` | Correção da camada: `v_local_vigente`, cargas `spu_carga_*` parametrizáveis, `v_equipamentos`, `v_disponibilidade_dia`, `v_preprocessamento`, áreas monitoradas e views geolocalizadas | Executado (2026-10-17) |
+| 4 | `20261017_analise_versao_equipamento.sql` | `v_local_versao`; cargas e views passam a usar a versão vigente do equipamento | Executado (2026-10-17) |
+| 5 | `20261017_fix_icone_superset.sql` | Ícone do card Análises (395), direitos dos grupos 41 e 42, chave `SUPERSET_BASE_URL` | Executado (2026-10-17) |
+| 6 | `20261019_analise_permissao_abrir_superset.sql` | Funcionalidade 396 "Analises - Abrir no Superset" (direito do grupo 11) e direito do grupo 11 à tela de Análises (395) | **Não executado** (aguarda autorização): até lá o botão fica oculto para todos |
+| — | `20261017_analise_mapas_geo.sql` | Views geolocalizadas e vínculo usuário-área (versão antiga) | **Obsoleto — não executar** (colunas e tabela inexistentes; substituído pela correção da camada, ordem 3) |
 
 ## 6. Papéis e permissões
 
@@ -102,10 +114,18 @@ Executar no banco `GTW_MURALHA_DEV` via SSMS ou sqlcmd:
 
 ### Mapeamento de grupos
 
-Configurado no `.env`:
+Configurado no `.env` (valor do `.env.exemplo`). A chave é o id do grupo em `dbo.sis_grupo`; o valor é o nome do papel no Superset:
 ```json
-GTW_GRUPOS_PAPEIS={"11":"Admin","41":"Alpha","42":"Gamma","50":"Operador","51":"Gestor"}
+GTW_GRUPOS_PAPEIS={"11":"Admin","41":"Alpha","42":"Gamma"}
 ```
+
+Neste exemplo, 11 = Administradores, 41 = Anel de Segurança e 42 = Anel de Segurança - Supervisores.
+
+Para usar os papéis customizados **Operador**, **Gestor** e **Auditor**, escolha o grupo do GTW que representa cada perfil, consulte o id dele em `dbo.sis_grupo` e acrescente a entrada ao JSON, por exemplo:
+```json
+GTW_GRUPOS_PAPEIS={"11":"Admin","41":"Alpha","42":"Gamma","<id_grupo>":"Operador"}
+```
+Use um `<id_grupo>` por entrada (o mesmo papel pode ter vários grupos). Não presuma ids: confira sempre no banco, pois grupos como 50 e 51 pertencem a outras funções (App Alerta Roubado e App Alerta Sequestro Relâmpago). Depois de alterar o `.env`, recrie o container: `docker compose up -d superset`.
 
 ### Botão "Abrir no Superset" na tela de Análises
 
@@ -221,3 +241,6 @@ Agenda sugerida (crontab):
 | Alertas não disparam | Verificar celery-worker e celery-beat nos logs |
 | Login redireciona em loop | Verificar auth_request do nginx e SsoAnaliseServlet |
 | Mapa em branco | Verificar coordenadas na tabela `dbo.local` e conexão internet |
+| Numa instalação nova, `superset`, `celery-worker` e `celery-beat` encerram com `sqlalchemy.exc.SQLAlchemyError` | Eles sobem junto com `superset-init`, antes de o banco de metadados ser migrado. Aguardar o `superset-init` terminar (`docker compose logs -f superset-init` até "Inicialização concluída") e rodar `docker compose up -d superset celery-worker celery-beat` |
+| nginx responde 502 depois de recriar o container `superset` | O nginx guardou o IP antigo. Executar `docker compose restart nginx` |
+| Relatórios agendados avisam "Dashboard ... não encontrado" | Os painéis não foram publicados. Rodar `paineis/operacionais.py`, `paineis/demonstracao.py` e depois `provisionar.py --alertas-only` (ordem do §3) |
