@@ -52,3 +52,6 @@ src/main/webapp/WEB-INF/confGTW.xml
 
 # Variaveis de ambiente locais
 .env
+
+# Despejos de memoria de ferramentas (Git Bash/MSYS)
+*.stackdump
