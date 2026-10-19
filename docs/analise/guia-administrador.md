@@ -99,7 +99,7 @@ Executar no banco `GTW_MURALHA_DEV` somente com autorização, via `sqlcmd` (`-b
 | 3 | `20261017_analise_correcao_camada.sql` | Correção da camada: `v_local_vigente`, cargas `spu_carga_*` parametrizáveis, `v_equipamentos`, `v_disponibilidade_dia`, `v_preprocessamento`, áreas monitoradas e views geolocalizadas | Executado (2026-10-17) |
 | 4 | `20261017_analise_versao_equipamento.sql` | `v_local_versao`; cargas e views passam a usar a versão vigente do equipamento | Executado (2026-10-17) |
 | 5 | `20261017_fix_icone_superset.sql` | Ícone do card Análises (395), direitos dos grupos 41 e 42, chave `SUPERSET_BASE_URL` | Executado (2026-10-17) |
-| 6 | `20261019_analise_permissao_abrir_superset.sql` | Funcionalidade 396 "Analises - Abrir no Superset" (direito do grupo 11) e direito do grupo 11 à tela de Análises (395) | **Não executado** (aguarda autorização): até lá o botão fica oculto para todos |
+| 6 | `20261019_analise_permissao_abrir_superset.sql` | Funcionalidade 396 "Analises - Abrir no Superset" (direito do grupo 11) e direito do grupo 11 à tela de Análises (395) | Executado (2026-10-19). Na mesma data, `20261019_registro_modulos_novos.sql` corrigiu a `acao` do 395 para `/MuralhaDigital/SsoAnalise` (a tela passou a exigir o direito) e registrou o guest token (438) |
 | — | `20261017_analise_mapas_geo.sql` | Views geolocalizadas e vínculo usuário-área (versão antiga) | **Obsoleto — não executar** (colunas e tabela inexistentes; substituído pela correção da camada, ordem 3) |
 
 ## 6. Papéis e permissões

@@ -118,6 +118,8 @@ flowchart LR
 
 ### 1.4 Direitos das telas deste guia (DEV, 2026-10-19)
 
+> Situação **antes** de `20261019_registro_modulos_novos.sql`. Depois da migração, todas estas telas têm também o grupo 11, o 372 ficou só com os grupos 11 e 42, o 395 tem `acao` `/MuralhaDigital/SsoAnalise` e o 396 existe com o grupo 11 (ver §7).
+
 | Menu | Tela | `sis_menu.acao` | Grupos com direito |
 |---|---|---|---|
 | 366–369, 373, 374, 384, 387 | Log de Auditoria, SLA de Latência, Assertividade, SLA Pré-proc., Time-lapse, Disponibilidade, Integridade, Logs Técnicos | caminho da JSP | 41 Anel de Segurança, 42 Anel de Segurança – Supervisores |
@@ -153,14 +155,14 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 
 | ID | Prioridade | Tela / área | Problema | Migração? |
 |---|---|---|---|---|
-| [SEG-01](#seg-01-verificação-de-acesso-fail-open-nos-servlets-novos) | Alta | Servlets novos | Fail-open: as URIs dos servlets não estão em `sis_menu` | Sim |
-| [SEG-02](#seg-02-acao-com-query-string-não-casa-com-a-uri) | Alta | Análises (395) e mais 14 menus | `acao` com `?…` nunca casa com a URI | Sim |
-| [SEG-03](#seg-03-gestão-de-lotes-e-kpis-sem-permissão-por-ação) | Alta | Gestão de Lotes, KPIs | Só sessão; sem permissão por ação | Sim |
+| [SEG-01](#seg-01-verificação-de-acesso-fail-open-nos-servlets-novos) | Alta | Servlets novos | Fail-open: as URIs dos servlets não estão em `sis_menu` | Sim. **Parcial (2026-10-19):** 33 servlets registrados com direitos; falta a verificação estrita no código |
+| [SEG-02](#seg-02-acao-com-query-string-não-casa-com-a-uri) | Alta | Análises (395) e mais 14 menus | `acao` com `?…` nunca casa com a URI | Sim. ✅ **395 corrigido (2026-10-19)**; os outros 14 são cards de módulo, legados ou externos |
+| [SEG-03](#seg-03-gestão-de-lotes-e-kpis-sem-permissão-por-ação) | Alta | Gestão de Lotes, KPIs | Só sessão; sem permissão por ação | Sim. **Parcial (2026-10-19):** servlets exigem os grupos 11, 41 e 42; falta separar leitura e escrita |
 | [SEG-04](#seg-04-sql-livre-na-configuração-de-kpis) | Alta | Configuração de KPIs | SQL livre executado; validação só por `startsWith("SELECT")` | Sim |
 | [SEG-05](#seg-05-xss-armazenado) | Alta | Log de Auditoria, Relatórios Gerenciais, KPIs | HTML montado sem escape | Não |
 | [SEG-06](#seg-06-rls-do-superset-quebrada) | Alta | Plataforma de Análises | RLS do Operador aponta para view e coluna inexistentes | Sim |
-| [SEG-07](#seg-07-direitos-dos-administradores-e-da-configuração-de-kpis) | Média | Direitos | Grupo 11 sem direito às telas; Config. de KPIs aberta ao grupo 41 | Sim |
-| [SEG-08](#seg-08-botão-abrir-no-superset) | Média | Análises | Migração do menu 396 pendente | Sim (já escrita) |
+| [SEG-07](#seg-07-direitos-dos-administradores-e-da-configuração-de-kpis) | Média | Direitos | Grupo 11 sem direito às telas; Config. de KPIs aberta ao grupo 41 | Sim. ✅ **Executado (2026-10-19)** |
+| [SEG-08](#seg-08-botão-abrir-no-superset) | Média | Análises | Migração do menu 396 pendente | Sim. ✅ **Executado (2026-10-19)** |
 | [SEG-09](#seg-09-hash-de-senha-em-log-e-na-resposta-do-login) | Média | Login | Hash da senha em log de debug e na resposta | Não |
 | [SEG-10](#seg-10-tipos-de-alerta-acaolistar-sem-permissão) | Baixa | Tipos de Alerta | `acao=listar` sem checar permissão | Não |
 | [FUN-01](#fun-01-relatoriogerencialjob-consulta-tabela-inexistente) | Alta | Relatórios Gerenciais | Job lê `muralha.sis_log_auditoria` (não existe) | Não |
@@ -176,7 +178,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 | [FUN-11](#fun-11-inconsistências-menores) | Baixa | Várias | Filtro de imagem teste, status inexistente, textos | Não |
 | [DES-01](#des-01-consultas-pesadas-sem-materialização) | Média | Pré-Processamento, KPIs, Superset | Varreduras de ≈8 mi linhas a cada 60 s | Sim |
 | [IMP-01](#imp-01-tela-de-gestão-de-grupos-e-direitos) | Média | Usuários | Não há tela de grupos e direitos por grupo | Não (usa tabelas existentes) |
-| [SEG-11](#seg-11-telas-e-servlets-novos-sem-registro) | Alta | Módulos novos (todos) | 22 telas e 32 servlets novos sem registro em `sis_menu` (ver §7) | Sim |
+| [SEG-11](#seg-11-telas-e-servlets-novos-sem-registro) | Alta | Módulos novos (todos) | 22 telas e 32 servlets novos sem registro em `sis_menu` (ver §7) | Sim. ✅ **Executado (2026-10-19)** |
 
 ---
 
@@ -255,7 +257,7 @@ Hoje, os direitos por grupo (que são 99% dos direitos) só mudam por script de 
 - **Aceite:** um usuário só do grupo 11 vê os cards e abre as telas; um usuário só do grupo 41 não abre a Configuração de KPIs.
 
 ### SEG-08 Botão "Abrir no Superset"
-- **Situação:** o script [`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql) está escrito e não foi executado. Até ser aplicado, o botão fica oculto para todos.
+- **Situação:** ✅ **executado em 2026-10-19.** O script [`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql) criou o 396 com direito do grupo 11. Para outros grupos verem o botão, basta incluir linhas em `sis_menu_direitos` para o 396.
 - **Proposta:** executar no DEV com autorização, junto com o SEG-07, porque o script também dá o menu 395 ao grupo 11.
 
 ### SEG-09 Hash de senha em log e na resposta do login
@@ -425,21 +427,37 @@ Todas estão por escrever, exceto a do SEG-08. Nenhuma foi executada.
 
 | Item | Script sugerido | Conteúdo |
 |---|---|---|
-| SEG-02 | `AAAAMMDD_acesso_acao_menus_query.sql` | `UPDATE sis_menu SET acao` do 395 e dos demais menus decididos |
+| SEG-02 | Incluído em `20261019_registro_modulos_novos.sql` | ✅ `acao` do 395 corrigida |
 | SEG-03 | `AAAAMMDD_lotes_direito_envio.sql` | Menu sem card "Gestão de Lotes – Enviar" e direitos |
-| SEG-07 | `AAAAMMDD_direitos_administradores_analise.sql` | Direitos do grupo 11 nos menus do §1.4; retirada do grupo 41 do 372 |
-| SEG-08 | [`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql) | Já escrito |
+| SEG-07 | Incluído em `20261019_registro_modulos_novos.sql` | ✅ Grupo 11 nos menus do §1.4; grupo 41 fora do 372 |
+| SEG-08 | [`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql) | ✅ Executado (2026-10-19) |
 | SEG-06 | `AAAAMMDD_analise_rls_area_monitorada.sql` | `analise.v_usuario_area_monitorada` e colunas de local nos datasets |
 | FUN-02 | `AAAAMMDD_vtr_status_analise_colunas.sql` | Só se a decisão for criar as colunas |
 | FUN-03 | `AAAAMMDD_lote_infracao_item_fk.sql` | FK ou índice de `id_infracao` |
 | FUN-06 | `AAAAMMDD_analise_v_preprocessamento.sql` | Nova definição da view |
 | DES-01 | `AAAAMMDD_analise_materializacoes_trafego.sql` | Tabelas `mat_*` e procedures de carga |
 | IMP-01 | `AAAAMMDD_menu_gestao_acessos.sql` | Menu e card "Gestão de Acessos" para o grupo 11 |
-| SEG-11 | `AAAAMMDD_registro_modulos_novos.sql` | Menus sem card das telas do §7.3 e §7.4 marcadas "Registrar", com os direitos do §7.5 |
+| SEG-02, SEG-07, SEG-11 | [`20261019_registro_modulos_novos.sql`](../banco-de-dados/migracoes/20261019_registro_modulos_novos.sql) | ✅ Executado (2026-10-19): menus 397–438, grupo 11 nas telas novas, 41 fora do 372, `acao` do 395 |
 
 ---
 
 ## 7. Registro e atribuição dos módulos novos
+
+> ✅ **Corrigido em 2026-10-19** por [`20261019_registro_modulos_novos.sql`](../banco-de-dados/migracoes/20261019_registro_modulos_novos.sql), executado no DEV depois de `20261019_analise_permissao_abrir_superset.sql`, com as decisões do §7.5:
+> - grupo 11 em todas as telas novas e Configuração de KPIs sem o grupo 41;
+> - Exportação e Consolidação para os grupos 11 e 42;
+> - Dupla Análise para os grupos 11, 41 e 42;
+> - versões anteriores do Builder e do Cadastro de Datasets só para o grupo 11.
+>
+> O script registrou 42 funcionalidades sem card (ids 397–438), incluiu 124 direitos e corrigiu a `acao` do 395.
+>
+> Teste com `fcn_VerificaAcesso`: o usuário sem grupo é barrado em tudo; o operador (só grupo 41) acessa as telas operacionais e é barrado na Configuração de KPIs, na Retenção, na Exportação e em Tipos de Alerta; o administrador (só grupo 11) acessa tudo.
+>
+> **Continua pendente:**
+> - permissão por **ação** dentro do mesmo servlet (por exemplo, gravar KPI só com o 372), que exige código (SEG-01 e SEG-03);
+> - `MapaConfig`, `MfaConfig`, `/api/dash/health` e os servlets dos Chamados ficaram de fora de propósito (§7.4).
+>
+> As tabelas abaixo mostram a situação **antes** da migração.
 
 > Verificação de 2026-10-19. Considerados "novos" os JSPs em `muralha-digital/pages/` e os servlets em `muralha.digital` criados depois do commit de importação `4985d5f` (2026-10-08): 42 JSPs e 41 servlets. Cada URL foi comparada com `sis_menu.acao` (sem a query), `sis_menu_infos` (card) e `sis_menu_direitos` (grupos). A tabela `sis_menu_url`, que o legado usa para associar URLs extras a um menu, está vazia.
 
@@ -451,7 +469,7 @@ Todas estão por escrever, exceto a do SEG-08. Nenhuma foi executada.
 | Registrada, sem card (aberta por botão) e com direitos | 5 | 5 (385, 386, 388, 390, 391) |
 | Registrada, mas a `acao` não casa com a URI | — | 1 (395, ver SEG-02) |
 | **Sem registro** | **22** (16 a registrar, 6 sem necessidade) | **32** (3 com controle próprio) |
-| Prevista e não executada | menu 396 "Análises – Abrir no Superset" (SEG-08) | — |
+| Prevista e não executada | menu 396 "Análises – Abrir no Superset" (SEG-08); executada em 2026-10-19 | — |
 
 ```mermaid
 flowchart LR

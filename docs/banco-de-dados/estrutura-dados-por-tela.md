@@ -1428,7 +1428,7 @@ flowchart LR
 
 #### Pontos de atenção
 
-- **Funcionalidade 396 não existe nesta base:** `dbo.sis_menu` não tem `id_menu = 396` em 2026-10-19 (a migração `20261019_analise_permissao_abrir_superset.sql` ainda não foi aplicada). Como o servlet nega quando a funcionalidade não está cadastrada, o botão "Abrir no Superset" não aparece para ninguém aqui.
+- **Funcionalidade 396 não existe nesta base:** `dbo.sis_menu` não tem `id_menu = 396` em 2026-10-19 (a migração `20261019_analise_permissao_abrir_superset.sql` ainda não foi aplicada). Como o servlet nega quando a funcionalidade não está cadastrada, o botão "Abrir no Superset" não aparece para ninguém aqui. **Atualização (2026-10-19):** migração aplicada; o 396 existe com direito do grupo 11, e a `acao` do 395 foi corrigida para `/MuralhaDigital/SsoAnalise` por `20261019_registro_modulos_novos.sql`.
 - **Verificação de acesso ao abrir:** `Acesso.verificaAcesso` usa `request.getRequestURI()` (`/MuralhaDigital/SsoAnalise`), enquanto `sis_menu.acao` 395 é `/MuralhaDigital/SsoAnalise?acao=abrir`. Não há correspondência em `sis_menu`, então `cnt = 0` e o acesso é liberado a qualquer usuário logado; os direitos do menu 395 (grupos 41 e 42) controlam apenas a exibição do card em `sis_menu_infos`. Observação derivada da leitura do código e das linhas consultadas.
 - `acao=validar` (e o caminho sem `acao`) só checa a existência de sessão; não consulta `fcn_VerificaAcesso`, portanto o Superset aceita qualquer usuário logado do GTW que alcance o nginx.
 - Em desenvolvimento, `nginx/default.dev.conf` desabilita o `auth_request` e injeta uma identidade fixa (conforme o Guia do Administrador).
