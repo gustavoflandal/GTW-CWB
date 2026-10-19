@@ -90,9 +90,9 @@ Relatórios são enviados automaticamente por e-mail:
 
 ## 7. Embedding no GTW
 
-Os dashboards também podem ser visualizados dentro do GTW sem sair do sistema. Acesse **Tela Inicial → Análise de Dados → Análises** e escolha o painel na lista **Painel** (grupos *Demonstração* e *Painéis operacionais*). O botão **Abrir no Superset** abre o painel em nova aba.
+Os dashboards também podem ser visualizados dentro do GTW sem sair do sistema. Acesse **Tela Inicial → Análise de Dados → Análises** e escolha o painel na lista **Painel** (grupos *Demonstração* e *Painéis operacionais*). O botão **Abrir no Superset** abre o painel em nova aba; ele só aparece para o administrador do sistema ou para quem recebeu o direito *Analises - Abrir no Superset*.
 
-Para abrir no Superset completo (com filtros avançados e SQL Lab para administradores), clique em **Abrir no Superset**.
+Para abrir no Superset completo (com filtros avançados e SQL Lab para administradores), clique em **Abrir no Superset**. Se o botão não aparece, peça ao administrador o direito *Analises - Abrir no Superset* (funcionalidade 396 em `sis_menu`, concedida por grupo ou por usuário).
 
 ## 8. Dúvidas frequentes
 

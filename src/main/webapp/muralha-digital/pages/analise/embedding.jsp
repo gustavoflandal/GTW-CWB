@@ -75,10 +75,13 @@
       <option value="mapa-equipamentos-infracoes">Mapa de Equipamentos</option>
       </optgroup>
     </select>
-    <a id="btnAbrirSuperset" href="#" target="_blank"
+    <%-- Somente com direito a "Analises - Abrir no Superset" (sis_menu 396), calculado pelo SsoAnaliseServlet --%>
+    <% if (Boolean.TRUE.equals(request.getAttribute("podeAbrirSuperset"))) { %>
+    <a id="btnAbrirSuperset" href="#" target="_blank" rel="noopener"
        class="btn btn-outline-primary btn-sm analise-btn-abrir" style="display:none;">
       <i class="bi bi-box-arrow-up-right"></i> Abrir no Superset
     </a>
+    <% } %>
   </div>
   <div class="analise-frame-wrapper">
     <div id="loadingAnalise" class="analise-loading" style="display:none;">

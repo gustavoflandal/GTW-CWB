@@ -16,7 +16,14 @@
   var frameAnalise = document.getElementById('frameAnalise');
   var loadingAnalise = document.getElementById('loadingAnalise');
   var placeholderAnalise = document.getElementById('placeholderAnalise');
+  // So existe para quem tem direito a "Analises - Abrir no Superset"
   var btnAbrir = document.getElementById('btnAbrirSuperset');
+
+  function mostrarBotaoAbrir(visivel, href) {
+    if (!btnAbrir) return;
+    if (href) btnAbrir.href = href;
+    btnAbrir.style.display = visivel ? '' : 'none';
+  }
 
   selectDashboard.addEventListener('change', function () {
     var slug = this.value;
@@ -24,7 +31,7 @@
       frameAnalise.src = 'about:blank';
       placeholderAnalise.style.display = '';
       loadingAnalise.style.display = 'none';
-      btnAbrir.style.display = 'none';
+      mostrarBotaoAbrir(false);
       return;
     }
     carregarDashboard(slug);
@@ -33,7 +40,7 @@
   function carregarDashboard(slug) {
     placeholderAnalise.style.display = 'none';
     loadingAnalise.style.display = '';
-    btnAbrir.style.display = 'none';
+    mostrarBotaoAbrir(false);
 
     // standalone=2 oculta menu e título do Superset, mas mantém a barra de filtros nativos
     var url = SUPERSET_BASE + '/superset/dashboard/' + slug + '/?standalone=2';
@@ -42,8 +49,7 @@
 
     frameAnalise.onload = function () {
       loadingAnalise.style.display = 'none';
-      btnAbrir.href = SUPERSET_BASE + '/superset/dashboard/' + slug + '/';
-      btnAbrir.style.display = '';
+      mostrarBotaoAbrir(true, SUPERSET_BASE + '/superset/dashboard/' + slug + '/');
     };
   }
 })();
