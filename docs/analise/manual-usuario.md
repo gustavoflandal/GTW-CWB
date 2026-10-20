@@ -104,7 +104,7 @@ R: Confira se o filtro de período ou um filtro cruzado não excluiu todos os re
 R: Seu perfil pode não ter acesso. Solicite ao administrador do sistema.
 
 **P: Os dados estão desatualizados.**
-R: Os resultados ficam em cache de 10 minutos a 1 hora (conforme o painel). As tabelas materializadas são recarregadas pelo `refresh-materialized.sh` (sugestão: a cada 30 minutos).
+R: Os resultados ficam em cache de 10 minutos a 1 hora (conforme o painel). As tabelas materializadas são recarregadas pelo próprio GTW a cada 30 minutos (job `CargaAnaliseJob`); o `refresh-materialized.sh` serve para a recarga manual (ver o [guia do administrador](guia-administrador.md)).
 
 **P: Como criar um novo gráfico?**
 R: Apenas perfis Gestor e Administrador podem criar gráficos. Acesse o Superset diretamente e use o menu **+ > Chart**.

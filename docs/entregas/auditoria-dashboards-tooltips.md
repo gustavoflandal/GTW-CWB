@@ -1,7 +1,7 @@
 # Auditoria — Módulo de Dashboards: tooltips e referências cruzadas
 
 > **Data:** 2026-10-17
-> **Status:** 🟡 Correções implementadas — aguardando migração da demonstração, build no Windows e teste no navegador. Itens de segurança listados em "Pendências" seguem **abertos**.
+> **Status:** 🟡 Correções implementadas — migração da demonstração executada (conferida em 2026-10-20); aguardando build no Windows e teste no navegador. Itens de segurança listados em "Pendências" seguem **abertos**.
 > **Escopo:** módulo novo de análises (`static/js/dashboards/`, `pages/analises/`, `muralha.digital.dashboards`), dashboard legado (`pages/dashboards/`, `pages/dashboard/`), tooltips de interface do Muralha Digital e integração Superset (`analise/superset/`).
 
 ## Origem
@@ -98,7 +98,7 @@ Terceira rodada (teste em navegador real, Chromium 141 via Playwright):
 
 ### Demonstração (painéis 101 e 102)
 
-Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql), **não executado**:
+Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql), **executado** (conferido em 2026-10-20 no `GTW_MURALHA_DEV`, ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md)):
 
 - Todos os widgets usam os mesmos "últimos 12 meses". Antes, os KPIs somavam todo o histórico e as linhas só 12 meses, então os totais não batiam. O filtro global "De/Até" também só alcançava as linhas e áreas.
 - "Vel. Média Infrações" dizia "km/h acima do limite", mas mostra a velocidade média considerada.
@@ -119,6 +119,8 @@ Script [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dado
 **Não verificado aqui:** o build Maven completo (dependências no repositório interno da Consilux) e o navegador. Rodar `..\.setup-gtw\build.ps1` e testar os painéis 101 e 102 após a migração.
 
 ## Pendências (não corrigidas)
+
+> **Atualização de 2026-10-20:** parte destas pendências foi tratada depois: as rotas `/api/dash/*` e o `GuestTokenServlet` foram registrados em `sis_menu` (`20261019_registro_modulos_novos.sql`) e passaram a exigir direito pela verificação estrita de `ControleAcesso`; o XSS de `kpis/index.jsp` foi corrigido; as procedures de recarga (`spu_carga_*`) e as views de mapa foram corrigidas no [gap da camada `analise`](gap-camada-analise-superset.md). Ver a [Entrega 35](35-correcoes-seguranca-funcionais.md). Os demais itens seguem abertos.
 
 | Sev. | Item | Recomendação |
 |---|---|---|

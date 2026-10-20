@@ -8,7 +8,7 @@ Exemplo de referência canônico: `guarnicao` (`pages/guarnicao/`, `GuarnicaoSer
 
 1. **Banco** (se precisar): tabela em `muralha.` (`id` identity, campos, `ativo`, `data_criacao`), via script em `docs/banco-de-dados/migracoes/` (§6).
 2. **Domínio** `muralha.digital.<modulo>`: `Entidade.java` (POJO + métodos estáticos JDBC) e `Entidades.java` (listagens). Seguir `06` §2.
-3. **Servlet** `@WebServlet("/MuralhaDigital/Entidade")` com `acao`s `listar`, `obterPorId`, `cadastrar`, `atualizar`, `deletar` (soft delete). Incluir verificação de sessão/acesso (`06` §1.1).
+3. **Servlet** `@WebServlet("/MuralhaDigital/Entidade")` com `acao`s `listar`, `obterPorId`, `cadastrar`, `atualizar`, `deletar` (soft delete). Incluir verificação de sessão/acesso com `ControleAcesso` (`06` §1.1). (O `GuarnicaoServlet` de referência ainda não verifica acesso — não copie essa parte.)
 4. **JSP** `pages/<modulo>/listagem-<entidades>.jsp`: incluir `cabecalho_bootstrap_simples.jsp`; `h2.text-center`; botão "Nova …" (`btn btn-sm btn-success`); tabela `table table-striped align-middle` com estado "Carregando…"; modais `modal-*.jsp` incluídos no fim.
 5. **JS** `assets/js/listagem-<entidades>.js`: `listar()` via `$.ajax GET acao=listar` → renderiza linhas com botões `btn-outline-* btn-sm` + `title` + `bi-*`; delegação de eventos; `Swal.fire` para confirmar/avisar.
 6. **CSS** `assets/css/…` apenas se necessário.
@@ -31,8 +31,8 @@ Referência: `consulta-veiculo/consulta.jsp`.
 4. Não alterar o formato de respostas existentes (o JS depende de nomes de campos). Se precisar mudar, **adicione** campos.
 
 ## 4. Registrar funcionalidade, menu e permissão
-1. `sis_menu` (funcionalidade protegida): `acao` = URL exata da JSP/servlet; `tipo='U'`; `nivel=1`; `id_pai_menu` = pai (ex.: 222 Anel de Segurança); `nome_sistema='Muralha-Digital'`; `Ativo=1`.
-2. `sis_menu_direitos`: uma linha por grupo (`id_grupo`) que pode usar.
+1. `sis_menu` (funcionalidade protegida): `acao` = URL exata da JSP/servlet, **sem query string** (o servlet compara com `getServletPath()`; o `?acao=…` do card fica só em `sis_menu_infos.href`); `tipo='U'`; `nivel=1`; `id_pai_menu` = pai (ex.: 222 Anel de Segurança); `nome_sistema='Muralha-Digital'`; `Ativo=1`. Cadastre também o servlet que a tela chama (funcionalidade sem card), pois o `ControleAcesso` nega o que não estiver cadastrado (`06` §1.1); recurso dentro da tela (ex.: um botão) pode ter `acao` própria (ex.: 396 `/MuralhaDigital/SsoAnalise/abrir-superset`). Exemplo completo: `docs/banco-de-dados/migracoes/20261019_registro_modulos_novos.sql`.
+2. `sis_menu_direitos`: uma linha por grupo (`id_grupo`) que pode usar — inclusive o 11 (Administradores), que não tem acesso implícito.
 3. Navbar: item em `sis_menu_infos` (Processamento; colunas: `id_infos`, `id_menu`, `src` (imagem do card), `descricao`, `href`, `descricao_detalhada`, `ordenacao`, `menu_pai` = id do submenu), `sis_menu_relatorio_infos` (Relatórios) ou `sis_menu_graficos_infos` (Gráficos).
 4. Escopo fino (por tipo de alerta/notificação): `muralha.config_grupo_permissao`.
 5. Scripts de carga em `docs/banco-de-dados/migracoes/`; executar em DEV após aprovação.
@@ -56,8 +56,8 @@ Os arquivos de `docs/referencia/` e `docs/banco-de-dados/` foram **gerados por s
 
 ## 8. Novo job agendado
 1. Classe `Job<Nome> implements org.quartz.Job` no módulo.
-2. Registrar em `com.consilux.servlet.ferramentas.Agendador` (constante de nome + agendamento condicionado à configuração), chave de configuração em `muralha-digital-config.xml`/`config_chave_valor`.
-3. Idempotência e lock (`muralha.controla_execucao_job`) quando houver risco de execução duplicada; logar início/fim/erros; **nunca** deixar o job sem `try/catch`.
+2. Registrar em `com.consilux.servlet.ferramentas.Agendador`: constantes de nome/grupo (`JOB_*`, `GRUPO_*`) e um método `reajustaJob<Nome>()` chamado na inicialização, que só agenda se `possuiJob(grupo, nome)` for falso. Como fazem os jobs atuais do Muralha (ex.: `reajustaJobTratamentoAutomatico`, 1 min; `reajustaJobCargaAnalise`, 30 min), o intervalo é **fixo no código** (`SimpleScheduleBuilder.repeatMinutelyForever(n)`) e o job é agendado **sem condição**; só os jobs de e-mail/SMS de notificação dependem de flag (`emailAtivo`/`smsAtivo`, de `muralha-digital-config.xml`). Parâmetros de comportamento (janela, dia de geração etc.) são lidos pelo próprio job a cada execução em `muralha.config_chave_valor` (`ConfigChaveValor.obterInt(conn, chave, padrao)`, ex.: `TRATAMENTO_AUTO_JANELA_MIN`, `RELATORIO_GERENCIAL_DIA`), com padrão no código. Lista atual em `02-arquitetura.md` §7.
+3. Idempotência e lock (`@DisallowConcurrentExecution` na classe, como em `JobTratamentoAutomatico`/`CargaAnaliseJob`; `muralha.controla_execucao_job`) quando houver risco de execução duplicada; logar início/fim/erros; **nunca** deixar o job sem `try/catch`.
 4. Lembrete: Quartz usa `RAMJobStore` — reinício do Tomcat recria agendamentos a partir da config.
 
 ## 9. Novo canal de tempo real
@@ -70,7 +70,7 @@ Seguir checklist de `07` §5; isolar em classe `Servico<Nome>` no pacote do mód
 
 ## 11. Definição de pronto (DoD)
 - [ ] Segue `05` e `06`; sem nova dependência
-- [ ] Verifica sessão e permissão; escopo de dados aplicado
+- [ ] Verifica sessão e permissão (`ControleAcesso`, funcionalidade cadastrada e atribuída em `sis_menu`/`sis_menu_direitos`); escopo de dados aplicado
 - [ ] Sem segredos; configuração em `.example` atualizada
 - [ ] SQL parametrizado; conexões fechadas; consultas com limites
 - [ ] Testado manualmente (caminho feliz, erro, sem permissão) e build `BUILD SUCCESS`

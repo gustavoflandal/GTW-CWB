@@ -11,7 +11,7 @@ Você está trabalhando no sistema **GTW-CWB** (Consilux Tecnologia): sistema le
 **Regras que nunca mudam (CLAUDE.md):**
 - Não alterar `.setup-gtw/`, `pom.xml`, nem adicionar dependências externas
 - Sem `ALTER TABLE` em tabelas existentes — usar tabelas complementares
-- Todo código novo: verificar sessão (`SessaoConstantes.SESSAO_USUARIO`) + acesso (`Acesso.verificaAcesso(false)`)
+- Todo código novo: verificar sessão + direito com `muralha.digital.acessos.ControleAcesso` (`exigir`, `exigirTela` ou `exigirSessao`; verificação **estrita**, que nega quando a URL não está cadastrada em `sis_menu`/`sis_menu_direitos` e responde 401/403 em JSON). `Acesso.verificaAcesso(false)` é *fail-open* e fica só para o legado ([Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)). Toda URL nova precisa de entrada em `sis_menu` com direitos (script em `docs/banco-de-dados/migracoes/`)
 - SQL sempre parametrizado (`PreparedStatement`)
 - DDL/DML somente como script em `docs/banco-de-dados/migracoes/`
 - Commits em português, imperativo
@@ -34,10 +34,10 @@ Você está trabalhando no sistema **GTW-CWB** (Consilux Tecnologia): sistema le
 | O que ler | Onde está |
 |---|---|
 | Estrutura canônica de servlet | `docs/planos-salvador/00c-errata-correcoes.md` §3 |
-| Padrão de sessão/acesso | `docs/planos-salvador/00c-errata-correcoes.md` §1–2 |
+| Padrão de sessão/acesso | `docs/planos-salvador/00c-errata-correcoes.md` §1–2; para módulos novos, `ControleAcesso` (`docs/planos-salvador/35-correcoes-seguranca-funcionais.md`, Task 1) |
 | Como registrar no menu | `docs/planos-salvador/00c-errata-correcoes.md` §8 |
 | Padrão visual (JSP/Bootstrap) | `docs/requisitos/05-padrao-visual.md` |
-| Exemplos existentes | `src/main/java/muralha/digital/guarnicao/` |
+| Exemplos existentes | `src/main/java/muralha/digital/guarnicao/` (legado); com `ControleAcesso`: `src/main/java/muralha/digital/lote/LoteServlet.java` |
 
 ### Quando escrever SQL
 
@@ -68,6 +68,7 @@ Você está trabalhando no sistema **GTW-CWB** (Consilux Tecnologia): sistema le
 | Telas existentes | `docs/referencia/telas-muralha-digital.md` |
 | Menus e permissões | `docs/referencia/menus-e-permissoes.md` |
 | Pacotes Java | `docs/referencia/inventario-pacotes-java.md` |
+| Correções pendentes de Análise de Dados, KPIs, Lotes e acessos | `docs/referencia/guia-correcoes-analise-kpis-lotes.md` |
 
 ---
 
@@ -114,6 +115,8 @@ Todos em `docs/planos-salvador/`. Leia `00-gaps-criticos.md` para entender a ord
 | `32-retry-notificacao.md` | Retry de notificações em falha de comunicação (§5.3.5.3) | — |
 | `33-timelapse-descarte.md` | Descarte automático de time-lapse (§5.7.7.5-6) | 17 |
 | `34-consolidacao-multifonte.md` | Consolidação de dados multifonte (§5.4.1.1) | 19 |
+| `23-analises-superset.md` | Plataforma de Análises com Apache Superset (sessões SUP-1 a SUP-14, schema `analise`, SSO via `SsoAnaliseServlet`, carga por `CargaAnaliseJob`); documentação em [`docs/analise/`](../analise/) | — |
+| `35-correcoes-seguranca-funcionais.md` | Correções de segurança e funcionais (fases 1 e 2 do [guia de correções](../referencia/guia-correcoes-analise-kpis-lotes.md)): `ControleAcesso` (verificação estrita), `ValidadorSqlKpi`, escape de XSS, Gestão de Lotes (adicionar infrações), ação `aparencia` dos Tipos de Alerta, relatórios gerencial e de pré-processamento, `CargaAnaliseJob` | 15, 23, 28, 29 |
 
 ---
 
@@ -130,10 +133,10 @@ public class NomeDaEntidadeServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-        Usuario usuario = (Usuario) req.getSession()
-            .getAttribute(SessaoConstantes.SESSAO_USUARIO);
-        if (usuario == null) { resp.sendError(401); return; }
-        if (!new Acesso(req, resp, true).verificaAcesso(false)) { return; }
+        // Sessão + direito ao próprio servlet (401/403 em JSON); use exigir(req, resp, acaoDaTela)
+        // para exigir o direito da tela, e exigirTela(req, resp) quando o servlet encaminha para JSP.
+        if (!ControleAcesso.exigir(req, resp)) return;
+        Usuario usuario = ControleAcesso.usuario(req);
 
         resp.setContentType("application/json; charset=UTF-8");
         resp.setCharacterEncoding("UTF-8");

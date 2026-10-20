@@ -1,5 +1,7 @@
 # Descarte Automático de Time-lapse — Plano de Implementação
 
+> **Status:** Executado (2026-10-16): ver [Entrega 33](../entregas/33-timelapse-descarte.md).
+
 > **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
 
 **Goal:** Implementar descarte parametrizado de dados de sessões de time-lapse, com retenção padrão de 72 horas e configuração via `config_chave_valor`, atendendo §5.7.7.5-6 do TR TRANSALVADOR.

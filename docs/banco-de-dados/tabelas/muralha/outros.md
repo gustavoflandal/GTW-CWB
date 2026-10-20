@@ -1,6 +1,6 @@
 # Tabelas — schema `muralha` — grupo `outros`
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas. Tabelas novas ou alteradas atualizadas em 2026-10-20.
 
 ## muralha.abordagem_origem
 
@@ -310,6 +310,39 @@ Linhas: ~0
 - IDX `ix_eq_disp_local` (NONCLUSTERED): id_local, dt_verificacao
 - PK `PK__equipame__3213E83F9D3E8B0B` (CLUSTERED): id
 
+## muralha.equipamento_integridade_config
+
+Linhas: ~1
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_local | int | N |  |  |  |
+| 2 | origem_hash | varchar(20) | N |  |  |  |
+| 3 | campo | varchar(100) | S |  |  |  |
+| 4 | ativo | bit | N |  | ((1)) |  |
+| 5 | id_usuario | int | S |  |  |  |
+| 6 | data_modificacao | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- PK `PK_equipamento_integridade_config` (CLUSTERED): id_local
+
+## muralha.equipamento_ocr_config
+
+Linhas: ~0
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_local | int | N |  |  |  |
+| 2 | origem_score | varchar(20) | S |  |  |  |
+| 3 | campo | varchar(100) | S |  |  |  |
+| 4 | limiar | decimal(5,2) | S |  |  |  |
+| 5 | ativo | bit | N |  | ((1)) |  |
+| 6 | id_usuario | int | S |  |  |  |
+| 7 | data_modificacao | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- PK `PK_equipamento_ocr_config` (CLUSTERED): id_local
+
 ## muralha.equipamentos_area_monitorada
 
 Linhas: ~54
@@ -504,7 +537,7 @@ Linhas: ~0
 
 ## muralha.kpi_config
 
-Linhas: ~4
+Linhas: ~12
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -522,6 +555,48 @@ Linhas: ~4
 
 **Índices/Chaves:**
 - PK `PK__kpi_conf__3213E83F7E71461E` (CLUSTERED): id
+
+**Referenciada por:**
+- muralha.kpi_config_meta.id_kpi
+- muralha.kpi_historico.id_kpi
+
+## muralha.kpi_config_meta
+
+Linhas: ~12
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_kpi | int | N |  |  |  |
+| 2 | meta | float | S |  |  |  |
+| 3 | meta_minima | float | S |  |  |  |
+| 4 | categoria | varchar(60) | N |  | ('geral') |  |
+| 5 | gerar_alerta | bit | N |  | ((1)) |  |
+| 6 | dt_atualizacao | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- PK `PK_kpi_config_meta` (CLUSTERED): id_kpi
+
+**FKs (saída):**
+- id_kpi → muralha.kpi_config.id
+
+## muralha.kpi_historico
+
+Linhas: ~573
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_kpi | int | N |  |  |  |
+| 3 | valor | float | N |  |  |  |
+| 4 | status | varchar(10) | N |  |  |  |
+| 5 | dt_coleta | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- IDX `IX_kpi_historico_kpi_dt` (NONCLUSTERED): id_kpi, dt_coleta
+- PK `PK_kpi_historico` (CLUSTERED): id
+
+**FKs (saída):**
+- id_kpi → muralha.kpi_config.id
 
 ## muralha.lote_infracao
 
@@ -575,45 +650,23 @@ Linhas: ~1
 |---|---|---|---|---|---|---|
 | 1 | id_grupo_exibicao | int | N |  |  |  |
 
-## muralha.motivo_descarte
+## muralha.notificacao_retry
 
-Linhas: ~2
+Linhas: ~0
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
-| 1 | id | uniqueidentifier | N |  | (newid()) |  |
-| 2 | descricao | varchar(40) | N |  |  |  |
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_notificacao | uniqueidentifier | N |  |  |  |
+| 3 | tipo_registro | varchar(20) | N |  |  |  |
+| 4 | tentativa | int | N |  |  |  |
+| 5 | dt_tentativa | datetime2 | N |  | (sysdatetime()) |  |
+| 6 | erro | varchar(500) | S |  |  |  |
+| 7 | sucesso | bit | N |  | ((0)) |  |
 
 **Índices/Chaves:**
-- PK `PK_muralha_motivo_descarte` (CLUSTERED): id
-
-**Referenciada por:**
-- muralha.alerta.id_motivo_descarte
-
-## muralha.motivo_invalido_correlacionamento_automatico_placa
-
-Linhas: ~4
-
-| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
-|---|---|---|---|---|---|---|
-| 1 | id | int | N | S |  |  |
-| 2 | descricao | varchar(max) | N |  |  |  |
-
-## muralha.motivo_solicitacao_relatorio
-
-Linhas: ~1749
-
-| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
-|---|---|---|---|---|---|---|
-| 1 | id | int | N | S |  |  |
-| 2 | id_usuario | int | N |  |  |  |
-| 3 | motivo | varchar(255) | N |  |  |  |
-| 4 | data_criacao | datetime | N |  |  |  |
-| 5 | placa | char(7) | S |  |  |  |
-| 6 | tipo_solicitacao | int | S |  |  |  |
-
-**Índices/Chaves:**
-- PK `PK__motivo_s__3213E83FB3354665` (CLUSTERED): id
+- IDX `IX_notificacao_retry_notif` (NONCLUSTERED): id_notificacao, tipo_registro
+- PK `PK_notificacao_retry` (CLUSTERED): id
 
 ## muralha.ocorrencia
 
@@ -697,6 +750,29 @@ Linhas: ~72
 - id_status_notificacao → muralha.status_notificacao.id
 - id_tipo_notificacao → muralha.tipo_notificacao.id
 - id_usuario → dbo.sis_usuario.id_usuario
+
+## muralha.parametro_historico
+
+Linhas: ~17
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | dt | datetime2 | N |  | (sysdatetime()) |  |
+| 3 | tipo_recurso | varchar(40) | N |  |  |  |
+| 4 | id_recurso | varchar(100) | N |  |  |  |
+| 5 | parametro | varchar(200) | N |  |  |  |
+| 6 | valor_anterior | nvarchar(1000) | S |  |  |  |
+| 7 | valor_novo | nvarchar(1000) | S |  |  |  |
+| 8 | id_usuario | int | S |  |  |  |
+| 9 | login | varchar(50) | S |  |  |  |
+| 10 | ip | varchar(45) | S |  |  |  |
+| 11 | origem | varchar(60) | S |  |  |  |
+
+**Índices/Chaves:**
+- IDX `IX_ph_dt` (NONCLUSTERED): dt
+- IDX `IX_ph_recurso` (NONCLUSTERED): tipo_recurso, id_recurso, dt
+- PK `PK_parametro_historico` (CLUSTERED): id
 
 ## muralha.ponto_interesse
 
@@ -802,6 +878,43 @@ Linhas: ~19
 
 **FKs (saída):**
 - id_veiculo_tempo_real → muralha.veiculo_tempo_real.id
+
+## muralha.relatorio_periodico
+
+Linhas: ~0
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | tipo | varchar(40) | N |  |  |  |
+| 3 | titulo | varchar(200) | N |  |  |  |
+| 4 | periodo_inicio | date | N |  |  |  |
+| 5 | periodo_fim | date | N |  |  |  |
+| 6 | dados_json | varchar(max) | N |  |  |  |
+| 7 | dt_geracao | datetime | N |  | (getdate()) |  |
+| 8 | gerado_por | varchar(60) | N |  | ('SISTEMA') |  |
+
+**Índices/Chaves:**
+- IDX `IX_relatorio_periodico_tipo_dt` (NONCLUSTERED): tipo, dt_geracao
+- PK `PK_relatorio_periodico` (CLUSTERED): id
+
+## muralha.timelapse_cache
+
+Linhas: ~1
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_local | int | N |  |  |  |
+| 3 | dt_inicio | datetime2 | N |  |  |  |
+| 4 | dt_fim | datetime2 | N |  |  |  |
+| 5 | total_frames | int | N |  |  |  |
+| 6 | dt_geracao | datetime2 | N |  | (sysdatetime()) |  |
+| 7 | id_usuario | int | S |  |  |  |
+
+**Índices/Chaves:**
+- IDX `IX_timelapse_cache_dt` (NONCLUSTERED): dt_geracao
+- PK `PK_timelapse_cache` (CLUSTERED): id
 
 ## muralha.token_acesso_mobilidade_urbana
 

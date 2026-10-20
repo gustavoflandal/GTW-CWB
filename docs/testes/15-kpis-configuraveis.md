@@ -15,7 +15,7 @@ Data: 2026-10-08
 **Procedimento:**
 1. Acessar `http://localhost:8080/muralha-digital/pages/dashboard/kpis/index.jsp`
 
-**Resultado esperado:** 4 cards de KPI com valores numéricos, cores (verde/amarelo/vermelho) e badges de status.
+**Resultado esperado:** um card por KPI ativo (12 no DEV desde o Plano 29) com valores numéricos, cores (verde/amarelo/vermelho) e badges de status.
 
 **Status:** ⏳ Aguarda teste manual
 
@@ -36,9 +36,9 @@ Data: 2026-10-08
 ## T03 — Tela de configuração lista KPIs
 
 **Procedimento:**
-1. Acessar `http://localhost:8080/muralha-digital/pages/admin/kpis/index.jsp`
+1. No painel de KPIs, clicar **Configurar** (ou acessar `http://localhost:8080/muralha-digital/pages/admin/kpis/index.jsp`; exige o direito do menu 372, grupos 11 e 42)
 
-**Resultado esperado:** Tabela com 4 KPIs padrão (ordem, nome, unidade, thresholds, ativo).
+**Resultado esperado:** Tabela com os KPIs cadastrados (ordem, nome, unidade, thresholds, ativo).
 
 **Status:** ⏳ Aguarda teste manual
 
@@ -77,7 +77,7 @@ Data: 2026-10-08
 2. Alterar SQL para `DELETE FROM muralha.kpi_config`
 3. Salvar
 
-**Resultado esperado:** SweetAlert de erro "query_sql deve iniciar com SELECT".
+**Resultado esperado:** SweetAlert de erro "A consulta deve começar com SELECT." (validação de `ValidadorSqlKpi`, Plano 35; comandos de escrita dentro de um SELECT também são recusados com "Comando não permitido na consulta: ...").
 
 **Status:** ⏳ Aguarda teste manual
 
@@ -100,6 +100,6 @@ Data: 2026-10-08
 1. Abrir aba anônima
 2. Acessar `http://localhost:8080/MuralhaDigital/Kpi`
 
-**Resultado esperado:** Redirecionamento para login ou resposta de acesso negado.
+**Resultado esperado:** HTTP 401 com `{"ok":false,"erro":"Sessão expirada. Faça login novamente."}` (verificação estrita de `ControleAcesso`, Plano 35).
 
 **Status:** ⏳ Aguarda teste manual

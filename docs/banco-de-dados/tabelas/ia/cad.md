@@ -1,6 +1,6 @@
 # Tabelas — schema `ia` — grupo `cad`
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas. Tabelas novas ou alteradas atualizadas em 2026-10-20.
 
 ## ia.cad_cor
 
@@ -40,6 +40,7 @@ Linhas: ~17
 |---|---|---|---|---|---|---|
 | 1 | id | int | N | S |  |  |
 | 2 | descricao | varchar(25) | N |  |  |  |
+| 3 | id_marca | int | S |  |  |  |
 
 **Índices/Chaves:**
 - PK `PK_modelo` (CLUSTERED): id

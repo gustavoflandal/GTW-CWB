@@ -1,5 +1,7 @@
 # Plano 23 — Plataforma de Analises com Apache Superset
 
+> **Status:** Executado (2026-10-17): sessões SUP-1 a SUP-14 — ver [Entrega 23 — Análises](../entregas/23-analises-superset.md). Testes no navegador e homologação pendentes.
+
 ## Objetivo
 
 Implantar o Apache Superset 6.0 como plataforma de criacao de dashboards e exploracao self-service do GTW-CWB / Muralha Digital, substituindo o Dashboard Builder proprio (Planos 20-21) por uma solucao madura, de codigo aberto e auto-hospedada.

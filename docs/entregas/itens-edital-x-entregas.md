@@ -74,7 +74,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 |---|---|---|
 | 5.2.1.1 | ✅ Já atendido pelo GTW | — |
 | 5.2.1.2 | ⚠️ Parcial | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) (corrige a [02](02-sha256-integridade.md)) — `JobSha256Imagem` compara o SHA-256 com o hash de origem configurado por equipamento e grava `INTEGRO`/`DIVERGENTE`/`SEM_CONFERENCIA`/`ERRO_LEITURA`, com alerta e auditoria na divergência. Parcial porque nenhum equipamento envia hash hoje (Fase 11) e a migração e o roteiro estão pendentes |
-| 5.2.1.3 | ⚠️ Parcial | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) — equipamento, captura, recepção e motivo por imagem em `muralha.vtr_imagem_integridade`; recebidos, íntegros e rejeitados por equipamento e dia em `muralha.v_integridade_recepcao` e na tela de integridade. Aguardando migração e teste |
+| 5.2.1.3 | ⚠️ Parcial | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) — equipamento, captura, recepção e motivo por imagem em `muralha.vtr_imagem_integridade`; recebidos, íntegros e rejeitados por equipamento e dia em `muralha.v_integridade_recepcao` e na tela de integridade. Migração executada; aguardando teste |
 | 5.2.1.4 | ✅ Já atendido pelo GTW | — |
 | 5.2.1.5 | ⚠️ Parcial | — |
 | 5.2.1.6 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md) |
@@ -82,7 +82,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.2.2.2 | ✅ Já atendido pelo GTW † | — |
 | 5.2.2.3 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Alerta visual quando assertividade < 80% (borda vermelha + banner) |
 | 5.2.2.4 | ✅ Já atendido pelo GTW | — |
-| 5.2.2.5 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Regra de divergência entre leitura embarcada e central encaminha para a fila de revisão; não existe OCR central para gerar a segunda leitura. Aguardando migração e teste no navegador |
+| 5.2.2.5 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Regra de divergência entre leitura embarcada e central encaminha para a fila de revisão; não existe OCR central para gerar a segunda leitura. Migração executada; aguardando teste no navegador |
 | 5.2.2.6 | ✅ Implementado | [08-painel-assertividade.md](08-painel-assertividade.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Auto-refresh 30s, volume processado, divergências, revisão manual, alerta < 80% |
 | 5.2.3.1 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
 | 5.2.3.2 | ✅ Implementado | [05-dupla-analise.md](05-dupla-analise.md) |
@@ -118,38 +118,38 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 |---|---|---|
 | 5.3.1.1 | ✅ Já atendido pelo GTW | — |
 | 5.3.1.2 | ✅ Já atendido pelo GTW | — |
-| 5.3.1.3 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — tratamentos parametrizáveis com execução automática; aguardando migração |
+| 5.3.1.3 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — tratamentos parametrizáveis com execução automática; migração executada |
 | 5.3.1.4 | ✅ Já atendido pelo GTW | — |
-| 5.3.2.1 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — 4 tipos operacionais inseridos pelo script; aguardando migração |
+| 5.3.2.1 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — 4 tipos operacionais inseridos pelo script; migração executada |
 | 5.3.2.2 | ✅ Já atendido pelo GTW | — |
 | 5.3.3.1 | ✅ Já atendido pelo GTW | — |
 | 5.3.3.2 | ✅ Já atendido pelo GTW | — |
-| 5.3.3.3 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — criticidade configurável via `tipo_alerta_config`; aguardando migração |
-| 5.3.3.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — cor e ícone configuráveis via banco, `notificacao.js` carrega via AJAX; aguardando migração |
+| 5.3.3.3 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — criticidade configurável via `tipo_alerta_config`; migração executada |
+| 5.3.3.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — cor e ícone configuráveis via banco, `notificacao.js` carrega via AJAX; migração executada |
 | 5.3.4.1 | ⚠️ Parcial † | — |
 | 5.3.4.2 | ⚠️ Parcial † | — |
 | 5.3.4.3 | ⚠️ Parcial † | — |
 | 5.3.5.1 | ⚠️ Parcial † | — |
 | 5.3.5.2 | ❌ Não implementado † ‡ | — |
-| 5.3.5.3 | ⚠️ Parcial | [32-retry-notificacao.md](32-retry-notificacao.md) — retry automático com até N tentativas configuráveis; aguardando migração e teste |
+| 5.3.5.3 | ⚠️ Parcial | [32-retry-notificacao.md](32-retry-notificacao.md) — retry automático com até N tentativas configuráveis; migração executada, aguardando teste |
 | 5.3.6.1 | ✅ Já atendido pelo GTW † | — |
-| 5.3.6.2 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — filtros de localidade, responsável e resultado adicionados; aguardando migração e teste |
+| 5.3.6.2 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — filtros de localidade, responsável e resultado adicionados; migração executada, aguardando teste |
 | 5.3.6.3 | ⚠️ Parcial † | [01-log-auditoria.md](01-log-auditoria.md) |
 | 5.3.6.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — exportação CSV adicionada; aguardando teste no navegador |
 | 5.3.7.1 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
 | 5.3.7.2 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
 | 5.3.7.3 | ✅ Implementado | [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — alíneas a–c pelo legado; d (retenção por regra sobre `veiculo_sumarizado`) e e (alertas parametrizáveis) implementados; aguardando migração |
+| 5.3.7.4 | ⚠️ Parcial | [28-alertas-operacionais.md](28-alertas-operacionais.md) — alíneas a–c pelo legado; d (retenção por regra sobre `veiculo_sumarizado`) e e (alertas parametrizáveis) implementados; migração executada |
 | 5.3.7.5 | ⚠️ Parcial | [03-politica-senhas.md](03-politica-senhas.md), [04-mfa-totp.md](04-mfa-totp.md), [09-cpf-matricula.md](09-cpf-matricula.md) — Navegador, autenticação individualizada e perfis atendidos; criptografia (HTTPS) depende da configuração do deploy |
-| 5.3.7.6 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — limiares de retenção e config de tipos via interface administrativa; aguardando migração |
+| 5.3.7.6 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — limiares de retenção e config de tipos via interface administrativa; migração executada |
 | 5.3.7.7 | ✅ Implementado | [16-exportacao-gis.md](16-exportacao-gis.md), [19-sensores-externos.md](19-sensores-externos.md) |
-| 5.3.7.8 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — prioridade + cor/ícone parametrizáveis via tela; aguardando migração |
+| 5.3.7.8 | ⚠️ Parcial † | [28-alertas-operacionais.md](28-alertas-operacionais.md) — prioridade + cor/ícone parametrizáveis via tela; migração executada |
 
 ## 5.4 — Funcionalidade de Inteligência de Dados e Apoio à Decisão Operacional
 
 | Item do edital | Situação | Entrega / evidência |
 |---|---|---|
-| 5.4.1.1 | ⚠️ Parcial | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) — view consolidada 4 fontes, servlet e tela; aguardando migração e teste |
+| 5.4.1.1 | ⚠️ Parcial | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) — view consolidada 4 fontes, servlet e tela; migração executada, aguardando teste |
 | 5.4.1.2 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.4.1.3 | ✅ Implementado | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.4.1.4 | ⚠️ Parcial † | — |
@@ -165,7 +165,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4.3.4 | ⚠️ Parcial † | — |
 | 5.4.3.5 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Alertas analíticos automáticos via KpiSnapshotJob quando KPI em WARN/CRIT; cooldown configurável |
 | 5.4.3.6 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Alíneas a-e cobertas pelos 8 KPIs obrigatórios: infrações, desempenho, disponibilidade, retenções, padrões |
-| 5.4.3.7 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório gerencial periódico com a-e: resumo, comparação, evolução, alertas, acompanhamento; aguardando migração |
+| 5.4.3.7 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório gerencial periódico com a-e: resumo, comparação, evolução, alertas, acompanhamento; migração executada |
 | 5.4.4.1 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.2 | ✅ Já atendido pelo GTW | — |
 | 5.4.4.3 | ✅ Já atendido pelo GTW | — |
@@ -173,14 +173,14 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.4.5.1 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatórios gerenciais cobrem a (tráfego), c (ocupação via KPI), e (equipamentos), f (aproveitamento), h (efetividade), i (funcionalidades integradas); b,d,g parciais |
 | 5.4.5.2 | ⚠️ Parcial | [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Filtros por período (a), exportação CSV/XLS (c), emissão periódica automática (d); segmentação completa (b) e PDF (c parcial) na Fase 9 |
 | 5.4.6.1 | ✅ Implementado | [15-kpis-configuraveis.md](15-kpis-configuraveis.md) |
-| 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — 12 KPIs (4 existentes + 8 obrigatórios a-h): infração/tráfego, variação temporal, disponibilidade, aproveitamento, efetividade, segurança viária, conformidade, SLA; aguardando migração |
-| 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Metas (a), limites atenção/crítico (b), alertas analíticos automáticos (c), histórico horário (d), gráfico Chart.js (e); aguardando migração |
-| 5.4.7.1 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Repositório central na tela Logs Técnicos: 12 fontes (`eventos_csx`, `status_conexao`, `status_energia`, `manutencao`, `log_alerta`, `log_processos`, disponibilidade, SLA, auditoria, históricos de parâmetros) lidas e normalizadas por `ServicoLogTecnico`, sem cópia; o recebimento continua nas tabelas do legado. Implementado, aguardando migração e teste no navegador |
-| 5.4.7.2 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Alíneas a-f cobertas pelas fontes existentes (equipamento, eventos, falhas/degradação, alterações de configuração, ações de usuário, ocorrências sistêmicas); nada novo é recebido além do que o legado já grava. Implementado, aguardando migração e teste no navegador |
-| 5.4.7.3 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Categorias energia, comunicação, sincronismo, hardware, software, sensor, parâmetro, intervenção técnica, processamento e usuário (alíneas a-i); "formação de lotes" (i) não tem fonte de log própria. Implementado, aguardando migração e teste no navegador |
+| 5.4.6.2 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — 12 KPIs (4 existentes + 8 obrigatórios a-h): infração/tráfego, variação temporal, disponibilidade, aproveitamento, efetividade, segurança viária, conformidade, SLA; migração executada |
+| 5.4.6.3 | ⚠️ Parcial | [15-kpis-configuraveis.md](15-kpis-configuraveis.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Metas (a), limites atenção/crítico (b), alertas analíticos automáticos (c), histórico horário (d), gráfico Chart.js (e); migração executada |
+| 5.4.7.1 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Repositório central na tela Logs Técnicos: 12 fontes (`eventos_csx`, `status_conexao`, `status_energia`, `manutencao`, `log_alerta`, `log_processos`, disponibilidade, SLA, auditoria, históricos de parâmetros) lidas e normalizadas por `ServicoLogTecnico`, sem cópia; o recebimento continua nas tabelas do legado. Implementado, migração executada, aguardando teste no navegador |
+| 5.4.7.2 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Alíneas a-f cobertas pelas fontes existentes (equipamento, eventos, falhas/degradação, alterações de configuração, ações de usuário, ocorrências sistêmicas); nada novo é recebido além do que o legado já grava. Implementado, migração executada, aguardando teste no navegador |
+| 5.4.7.3 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Categorias energia, comunicação, sincronismo, hardware, software, sensor, parâmetro, intervenção técnica, processamento e usuário (alíneas a-i); "formação de lotes" (i) não tem fonte de log própria. Implementado, migração executada, aguardando teste no navegador |
 | 5.4.7.4 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Registro normalizado com data/hora, equipamento, usuário quando houver, descrição e referência à linha de origem; a rastreabilidade integral (e) depende das tabelas legadas, sem trilha imutável |
-| 5.4.7.5 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Filtros por período, equipamento, localidade, categoria e severidade; linha do tempo e correlação temporal; CSV com SHA-256, XLS e PDF; relatório técnico por equipamento; exportação e relatório auditados. Implementado, aguardando migração e teste no navegador |
-| 5.4.7.6 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — `muralha.parametro_historico` (data, parâmetro, valor anterior, valor novo, usuário, IP) alimentada pelo ConfigEquip (web service e importação), KPIs, retenção e configuração de integridade; as telas antigas seguem só com o texto de `config_chave_valor_hist`. Implementado, aguardando migração e teste no navegador |
+| 5.4.7.5 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — Filtros por período, equipamento, localidade, categoria e severidade; linha do tempo e correlação temporal; CSV com SHA-256, XLS e PDF; relatório técnico por equipamento; exportação e relatório auditados. Implementado, migração executada, aguardando teste no navegador |
+| 5.4.7.6 | ⚠️ Parcial | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) — `muralha.parametro_historico` (data, parâmetro, valor anterior, valor novo, usuário, IP) alimentada pelo ConfigEquip (web service e importação), KPIs, retenção e configuração de integridade; as telas antigas seguem só com o texto de `config_chave_valor_hist`. Implementado, migração executada, aguardando teste no navegador |
 | 5.4.7.7 | ⚠️ Parcial | [01-log-auditoria.md](01-log-auditoria.md), [12-retencao-dados.md](12-retencao-dados.md) — Retenção configurável cobre `sis_log_auditoria`; logs técnicos legados sem política própria |
 
 ## 5.5 — Serviço de Pré-Processamento de Imagens
@@ -198,7 +198,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.5.2.5 | ❌ Não implementado † ‡ | — |
 | 5.5.3.1 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [21-dashboard-builder.md](21-dashboard-builder.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md), [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) — Painel operacional com a-e, g, j-l, n em tempo real; h, i, m dependem de colunas ausentes em vtr_status_analise |
 | 5.5.3.2 | ⚠️ Parcial | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Segmentação por período (a); filtros b-h na Fase 9 |
-| 5.5.3.3 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório mensal consolidado automático no 5o dia útil via RelatorioPreProcMensalJob; aguardando migração |
+| 5.5.3.3 | ⚠️ Parcial | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) — Relatório mensal consolidado automático no 5o dia útil via RelatorioPreProcMensalJob; migração executada |
 | 5.5.3.4 | ✅ Implementado † | [10-sla-preprocessamento.md](10-sla-preprocessamento.md), [11-exportacao-padronizada.md](11-exportacao-padronizada.md) |
 | 5.5.3.5 | ⚠️ Parcial † | [21-dashboard-builder.md](21-dashboard-builder.md) |
 | 5.5.4.1 | ❌ Não implementado † ‡ | — |
@@ -255,7 +255,7 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.7.1.1 | ✅ Já atendido pelo GTW | — |
 | 5.7.1.2 | ✅ Já atendido pelo GTW † | — |
 | 5.7.1.3 | ⚠️ Parcial † | — |
-| 5.7.1.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `muralha.vtr_placa_leitura` registra N placas por passagem (tração, frontal, reboques); as do equipamento são só tração e frontal, reboques entram pela revisão manual. Aguardando migração e teste no navegador |
+| 5.7.1.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `muralha.vtr_placa_leitura` registra N placas por passagem (tração, frontal, reboques); as do equipamento são só tração e frontal, reboques entram pela revisão manual. Migração executada; aguardando teste no navegador |
 | 5.7.2.1 | ⚠️ Parcial | — |
 | 5.7.2.2 | ❌ Não implementado † | — |
 | 5.7.2.3 | ❌ Não implementado † | — |
@@ -265,21 +265,21 @@ Cobertura = (✅ + 0,5 × ⚠️) ÷ itens da seção. O cálculo é refeito pel
 | 5.7.3.2 | ❌ Não implementado † ‡ | — |
 | 5.7.3.3 | ✅ Já atendido pelo GTW † | — |
 | 5.7.4.1 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Score por placa guardado conforme a origem configurada por equipamento; nenhum equipamento envia score hoje (`spu_veiculo_tempo_real` não recebe, `dado_bruto` vazio) |
-| 5.7.4.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Limiar `OCR_SCORE_LIMIAR` (padrão 85) e limiar por equipamento, com tela e histórico de alteração. Aguardando migração e teste no navegador |
-| 5.7.4.3 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `JobOcrRevisao` encaminha à fila as leituras abaixo do limiar; sem score enviado pelos equipamentos, nada é encaminhado. Aguardando migração e teste no navegador |
-| 5.7.4.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Score como metadado de cada leitura em `vtr_placa_leitura`. Aguardando migração e teste no navegador |
+| 5.7.4.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Limiar `OCR_SCORE_LIMIAR` (padrão 85) e limiar por equipamento, com tela e histórico de alteração. Migração executada; aguardando teste no navegador |
+| 5.7.4.3 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — `JobOcrRevisao` encaminha à fila as leituras abaixo do limiar; sem score enviado pelos equipamentos, nada é encaminhado. Migração executada; aguardando teste no navegador |
+| 5.7.4.4 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Score como metadado de cada leitura em `vtr_placa_leitura`. Migração executada; aguardando teste no navegador |
 | 5.7.5.1 | ✅ Já atendido pelo GTW | — |
-| 5.7.5.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Toda correção (fila, lote, consulta) exige motivo e grava `veiculo_tempo_real_correcao`, justificativa e `sis_log_auditoria`. Aguardando migração e teste no navegador |
+| 5.7.5.2 | ⚠️ Parcial | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Toda correção (fila, lote, consulta) exige motivo e grava `veiculo_tempo_real_correcao`, justificativa e `sis_log_auditoria`. Migração executada; aguardando teste no navegador |
 | 5.7.5.3 | ✅ Implementado | [12-retencao-dados.md](12-retencao-dados.md) |
-| 5.7.5.4 | ⚠️ Parcial † | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Fila com filtros de equipamento, período, faixa de score, tipo de intervenção e operador. Aguardando migração e teste no navegador |
+| 5.7.5.4 | ⚠️ Parcial † | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) — Fila com filtros de equipamento, período, faixa de score, tipo de intervenção e operador. Migração executada; aguardando teste no navegador |
 | 5.7.6.1 | ✅ Já atendido pelo GTW † | — |
 | 5.7.6.2 | ⚠️ Parcial † | — |
 | 5.7.7.1 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Player de imagens no navegador (`TimelapseServlet`); não gera arquivo de vídeo |
 | 5.7.7.2 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Sequência cronológica de imagens por equipamento, exibida no navegador; sem vídeo |
 | 5.7.7.3 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Finalidade atendida pelo player; sem vídeo gerado |
 | 5.7.7.4 | ⚠️ Parcial † | [17-timelapse.md](17-timelapse.md) — Reconstrução visual e validação temporal no player; sem vídeo nem vínculo com alertas |
-| 5.7.7.5 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — descarte automático parametrizado (72h padrão); aguardando migração e teste |
-| 5.7.7.6 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — TIMELAPSE_RETENCAO_HORAS configurável via config_chave_valor; aguardando migração e teste |
+| 5.7.7.5 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — descarte automático parametrizado (72h padrão); migração executada, aguardando teste |
+| 5.7.7.6 | ⚠️ Parcial † | [33-timelapse-descarte.md](33-timelapse-descarte.md) — TIMELAPSE_RETENCAO_HORAS configurável via config_chave_valor; migração executada, aguardando teste |
 | 5.7.8.1 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.7.8.2 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |
 | 5.7.8.3 | ✅ Implementado † | [13-anonimizacao-placas.md](13-anonimizacao-placas.md) |

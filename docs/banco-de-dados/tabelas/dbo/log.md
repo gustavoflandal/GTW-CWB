@@ -1,10 +1,10 @@
 # Tabelas — schema `dbo` — grupo `log`
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas. Tabelas novas ou alteradas atualizadas em 2026-10-20.
 
 ## dbo.log_alerta
 
-Linhas: ~53
+Linhas: ~176
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -18,6 +18,29 @@ Linhas: ~53
 
 **FKs (saída):**
 - id_tipo → dbo.log_tipo.id
+
+**Referenciada por:**
+- dbo.log_alerta_arquivo.id_log_alerta
+
+## dbo.log_alerta_arquivo
+
+Linhas: ~2
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_log_alerta | bigint | N |  |  |  |
+| 3 | caminho_arquivo | varchar(500) | N |  |  |  |
+| 4 | nome_arquivo_original | varchar(255) | S |  |  |  |
+| 5 | tipo_arquivo | varchar(100) | S |  |  |  |
+| 6 | data_criacao | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- IDX `IX_log_alerta_arquivo_id_log_alerta` (NONCLUSTERED): id_log_alerta
+- PK `PK_log_alerta_arquivo` (CLUSTERED): id
+
+**FKs (saída):**
+- id_log_alerta → dbo.log_alerta.id
 
 ## dbo.log_arquivo
 

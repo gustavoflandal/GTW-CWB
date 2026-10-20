@@ -1,5 +1,7 @@
 # Retry de Notificações em Falha de Comunicação — Plano de Implementação
 
+> **Status:** Executado (2026-10-16): ver [Entrega 32](../entregas/32-retry-notificacao.md).
+
 > **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
 
 **Goal:** Implementar reenvio automático de notificações (e-mail e SMS) que falharam, com rastreamento de tentativas e limites configuráveis, atendendo §5.3.5.3 do TR TRANSALVADOR.

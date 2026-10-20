@@ -31,7 +31,7 @@ Em 2026-10-17 houve um contorno temporário (tabela `muralha.tipo_alerta_ajuste_
   - Busca, pré-visualização do aviso com a cor e o ícone, chave Crítico, seleção entre as 8 cores suportadas e ícone com sugestões.
   - Modal de tratamentos: ativo, automático (só para os executáveis) e parâmetros em JSON.
 - **Servlet** `TipoAlertaConfigServlet`:
-  - `listar` exige só sessão; a tela, o catálogo e as gravações exigem a permissão do menu.
+  - `listar` exige só sessão; a tela, o catálogo e as gravações exigem a permissão do menu. *(Alterado em 2026-10-19, [Entrega 35](35-correcoes-seguranca-funcionais.md), SEG-10: o aviso usa a nova ação `aparencia`, que só exige sessão; `listar` passou a exigir a permissão da tela.)*
   - Valida cor (8 valores), ícone (`bi-*`), parâmetros (objeto JSON de até 2.000 caracteres) e se o tratamento pode ser automático.
   - O histórico de parâmetros registra valor anterior e novo de critico, cor, ícone e de cada tratamento. A auditoria continua.
 - **Execução dos tratamentos automáticos:** `JobTratamentoAutomatico`, agendado a cada minuto no `Agendador`, processa os alertas dos últimos `TRATAMENTO_AUTO_JANELA_MIN` minutos (padrão 60). Cada par alerta × tratamento é registrado uma única vez em `muralha.alerta_tratamento_execucao`.

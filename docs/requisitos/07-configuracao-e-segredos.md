@@ -61,6 +61,7 @@ Obs.: caminhos `E:\Consilux\MuralhaDigital\…` e `C:\Consilux\…` são do serv
 | `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` | `muralha.digital.google.LoginGoogle` | OAuth 2.0 "Login com Google" (`REDIRECT_URI` ainda fixo em `http://localhost:8080/callback` — ajustar por ambiente) |
 | `SENDGRID_API_KEY` | `ServicoEmailMuralha` | Envio via SendGrid (chave de conta de teste; trocar em produção) |
 | `TWILIO_TEST_ACCOUNT_SID` / `TWILIO_TEST_AUTH_TOKEN` | `ServicoSMS.EnviaSMS_RecuperacaoSenha_Twilio` | Credenciais de teste do SMS de recuperação de senha |
+| `SUPERSET_SECRET_KEY` (ou propriedade de sistema `superset.secret.key`) | `muralha.digital.analise.GuestTokenServlet` | Assina (HMAC) o token de convidado do Superset em `/MuralhaDigital/AnaliseGuestToken`; deve ser a mesma chave do Superset (ver [guia do administrador](../analise/guia-administrador.md)) |
 | `GTW_CHAMADO_CHAVE_SMTP` | `muralha.digital.chamado.CifraSegredo` | Chave que cifra a senha do SMTP do Sistema de Chamados gravada em `muralha.config_chave_valor` (ver §3.1) |
 
 Como definir (Windows, Tomcat standalone): `setenv.bat` em `apache-tomcat-9.0.91\bin` **não existe** na stack (e a stack não deve ser alterada) — defina as variáveis no ambiente do usuário/serviço antes de iniciar (`setx` ou propriedades do serviço). Para `tomcat7:run`: definir na sessão do PowerShell antes de `run.ps1` (`$env:SENDGRID_API_KEY='…'`).
@@ -92,7 +93,7 @@ $b = New-Object byte[] 32
 ### 4.2 Origem do hash de integridade das imagens
 
 - Chaves `INTEGRIDADE_ORIGEM_HASH` (`PAYLOAD_SOAP`, `DADO_BRUTO:<campo>` ou `AUSENTE`), `INTEGRIDADE_LOTE`, `INTEGRIDADE_JANELA_HORAS`, `INTEGRIDADE_ESPERA_HASH_MIN` e `INTEGRIDADE_ALERTA_HABILITADO` em `muralha.config_chave_valor`; exceções por equipamento em `muralha.equipamento_integridade_config`. Criadas por `docs/banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql`.
-- Lidas por `muralha.digital.integridade.ParametrosIntegridade` (valor inválido cai no padrão com aviso no log). A origem é editada na aba Configuração de `pages/monitoramento/integridade/` (`/MuralhaDigital/IntegridadeConfig`, grupo 42), com registro em `sis_log_auditoria`. Ver [Entrega 25](../entregas/25-integridade-sha256-recepcao.md).
+- Lidas por `muralha.digital.integridade.ParametrosIntegridade` (valor inválido cai no padrão com aviso no log). A origem é editada na aba Configuração de `pages/monitoramento/integridade/` (`/MuralhaDigital/IntegridadeConfig`, `sis_menu` 386: grupos 11 e 42), com registro em `sis_log_auditoria`. Ver [Entrega 25](../entregas/25-integridade-sha256-recepcao.md).
 
 ### 4.3 Logs técnicos e histórico de parâmetros
 
@@ -102,7 +103,11 @@ $b = New-Object byte[] 32
 ### 4.4 Score de OCR e revisão de placas
 
 - Chaves `OCR_SCORE_ORIGEM`, `OCR_SCORE_LIMIAR`, `OCR_SCORE_ESCALA`, `OCR_REVISAR_SEM_SCORE`, `OCR_REVISAR_SEM_LEITURA`, `OCR_JANELA_HORAS`, `OCR_LOTE` e `OCR_ESPERA_SCORE_MIN` em `muralha.config_chave_valor`; origem e limiar por equipamento em `muralha.equipamento_ocr_config`; motivos de correção em `muralha.motivo_correcao_placa`. Criados por `docs/banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql`; lidos por `muralha.digital.ocr.ParametrosOcr`.
-- Origem e limiar são editados na aba "Score e limiar" da Revisão de Placas (grupo 42), com registro em `parametro_historico`. Ver [Entrega 27](../entregas/27-score-ocr-revisao-placas.md).
+- Origem e limiar são editados na aba "Score e limiar" da Revisão de Placas (`/MuralhaDigital/OcrConfig`, `sis_menu` 391: grupos 11 e 42), com registro em `parametro_historico`. Ver [Entrega 27](../entregas/27-score-ocr-revisao-placas.md).
+
+### 4.5 Tratamentos automáticos de alerta
+
+- Chave `TRATAMENTO_AUTO_JANELA_MIN` (padrão 60) em `muralha.config_chave_valor`, criada por `docs/banco-de-dados/migracoes/20261018_tipo_alerta_config_definitivo.sql`: minutos de alertas recentes que `muralha.digital.alerta.operacional.JobTratamentoAutomatico` (Quartz, a cada 1 min, registrado no `Agendador`) considera ao aplicar os tratamentos marcados como automáticos na tela Tipos de Alerta (`/MuralhaDigital/TipoAlertaConfig`). Cada par alerta × tratamento roda uma única vez (`muralha.alerta_tratamento_execucao`).
 
 ## 5. Checklist ao criar uma nova integração
 1. Definir a credencial como variável de ambiente ou tag em `muralha-digital-config.xml` (+ campo em `Inicializacao`).

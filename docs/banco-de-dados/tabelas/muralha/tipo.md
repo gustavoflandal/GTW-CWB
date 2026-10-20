@@ -1,10 +1,29 @@
 # Tabelas — schema `muralha` — grupo `tipo`
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas. Tabelas novas ou alteradas atualizadas em 2026-10-20.
+
+## muralha.tipo_alerta_config
+
+Linhas: ~15
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_tipo_alerta_ocorrencia | uniqueidentifier | N |  |  |  |
+| 2 | critico | bit | N |  | ((0)) |  |
+| 3 | cor | varchar(30) | S |  |  |  |
+| 4 | icone | varchar(50) | S |  |  |  |
+| 5 | dt_atualizacao | datetime | N |  | (getdate()) |  |
+| 6 | id_usuario | int | S |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK_tipo_alerta_config` (CLUSTERED): id_tipo_alerta_ocorrencia
+
+**FKs (saída):**
+- id_tipo_alerta_ocorrencia → muralha.tipo_alerta_ocorrencia.id
 
 ## muralha.tipo_alerta_ocorrencia
 
-Linhas: ~10
+Linhas: ~15
 
 | # | Coluna | Tipo | Null | Ident. | Default | Descrição |
 |---|---|---|---|---|---|---|
@@ -18,8 +37,10 @@ Linhas: ~10
 | 8 | id_usuario | int | S |  |  |  |
 | 9 | nomeinterno | nchar(20) | S |  |  |  |
 | 10 | prioridade | int | S |  |  |  |
+| 11 | cor | varchar(7) | S |  |  |  |
 
 **Índices/Chaves:**
+- UNIQUE `IX_tipo_alerta_ocorrencia_cor` (NONCLUSTERED): cor
 - PK `PK_muralha_tipo_alerta_ocorrencia` (CLUSTERED): id
 
 **Referenciada por:**
@@ -29,7 +50,30 @@ Linhas: ~10
 - muralha.config_alerta.id_tipo_alerta_ocorrencia
 - muralha.config_grupo_permissao.id_tipo_alerta_ocorrencia
 - muralha.ocorrencia.id_tipo_alerta_ocorrencia
+- muralha.tipo_alerta_config.id_tipo_alerta_ocorrencia
+- muralha.tipo_alerta_tratamento.id_tipo_alerta_ocorrencia
 - muralha.tipo_ocorrencia_status.id_tipo_ocorrencia
+
+## muralha.tipo_alerta_tratamento
+
+Linhas: ~6
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id | bigint | N | S |  |  |
+| 2 | id_tipo_alerta_ocorrencia | uniqueidentifier | N |  |  |  |
+| 3 | tratamento | varchar(40) | N |  |  |  |
+| 4 | automatico | bit | N |  | ((0)) |  |
+| 5 | parametros_json | varchar(max) | S |  |  |  |
+| 6 | ativo | bit | N |  | ((1)) |  |
+| 7 | dt_cadastro | datetime | N |  | (getdate()) |  |
+
+**Índices/Chaves:**
+- PK `PK_tipo_alerta_tratamento` (CLUSTERED): id
+- UNIQUE `UQ_tat_tipo_trat` (NONCLUSTERED): id_tipo_alerta_ocorrencia, tratamento
+
+**FKs (saída):**
+- id_tipo_alerta_ocorrencia → muralha.tipo_alerta_ocorrencia.id
 
 ## muralha.tipo_notificacao
 

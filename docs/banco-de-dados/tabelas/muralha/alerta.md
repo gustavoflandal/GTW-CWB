@@ -1,6 +1,6 @@
 # Tabelas — schema `muralha` — grupo `alerta`
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas.
+Gerado de GTW_MURALHA_DEV em 2026-10-15. Linhas aproximadas. Tabelas novas ou alteradas atualizadas em 2026-10-20.
 
 ## muralha.alerta
 
@@ -33,6 +33,9 @@ Linhas: ~11555
 | 24 | com_semelhanca_desc | varchar(120) | S |  |  |  |
 | 25 | enviado_blitz_mobile | bit | S |  |  |  |
 | 26 | data_blitz_mobile_processado | datetime | S |  |  |  |
+| 27 | enviado_cliente_GTW | bit | S |  | ((0)) |  |
+| 28 | data_enviado_GTW | datetime | S |  | (getdate()) |  |
+| 29 | lembrete_visualizado_GTW | int | S |  | ((0)) |  |
 
 **Índices/Chaves:**
 - IDX `IX_alerta_data_cad_veiculo` (NONCLUSTERED): id_cad_veiculo_monitorado, data
@@ -54,6 +57,8 @@ Linhas: ~11555
 **Referenciada por:**
 - muralha.alerta.id_alerta_vinculado
 - muralha.alerta_notificacao.id_alerta
+- muralha.alerta_retencao.id_alerta
+- muralha.alerta_tratamento_execucao.id_alerta
 - muralha.alerta_veiculo.id_alerta
 - muralha.anotacao_contributiva.id_alerta
 - muralha.blitz_abordagem.id_alerta
@@ -122,6 +127,25 @@ Linhas: ~34
 **FKs (saída):**
 - id_questionario_alerta → muralha.alerta_questionario.id
 
+## muralha.alerta_retencao
+
+Linhas: ~0
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_alerta | uniqueidentifier | N |  |  |  |
+| 2 | id_local | int | N |  |  |  |
+| 3 | horas_consecutivas | int | N |  |  |  |
+| 4 | velocidade_media | decimal(6,1) | N |  |  |  |
+| 5 | ocupacao_media | int | N |  |  |  |
+| 6 | severidade | varchar(10) | N |  |  |  |
+
+**Índices/Chaves:**
+- PK `PK_alerta_retencao` (CLUSTERED): id_alerta
+
+**FKs (saída):**
+- id_alerta → muralha.alerta.id
+
 ## muralha.alerta_sla
 
 Linhas: ~710
@@ -156,6 +180,24 @@ Linhas: ~89
 
 **Índices/Chaves:**
 - PK `PK__alerta_s__3213E83F72497446` (CLUSTERED): id
+
+## muralha.alerta_tratamento_execucao
+
+Linhas: ~0
+
+| # | Coluna | Tipo | Null | Ident. | Default | Descrição |
+|---|---|---|---|---|---|---|
+| 1 | id_alerta | uniqueidentifier | N |  |  |  |
+| 2 | tratamento | varchar(40) | N |  |  |  |
+| 3 | dt_execucao | datetime | N |  | (getdate()) |  |
+| 4 | resultado | varchar(200) | S |  |  |  |
+
+**Índices/Chaves:**
+- IDX `IX_ate_dt_execucao` (NONCLUSTERED): dt_execucao
+- PK `PK_alerta_tratamento_execucao` (CLUSTERED): id_alerta, tratamento
+
+**FKs (saída):**
+- id_alerta → muralha.alerta.id
 
 ## muralha.alerta_usuario_visualiza
 

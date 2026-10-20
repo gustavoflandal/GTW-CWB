@@ -1,5 +1,7 @@
 # Consolidação de Dados Multifonte — Plano de Implementação
 
+> **Status:** Executado (2026-10-16): ver [Entrega 34](../entregas/34-consolidacao-multifonte.md).
+
 > **Errata:** ver correções em [`00c-errata-correcoes.md`](00c-errata-correcoes.md) antes de usar o código deste plano.
 
 **Goal:** Implementar pipeline de consolidação de dados provenientes de múltiplas fontes (equipamentos de campo, alertas, incidentes Waze, volumetria sumarizada) em view unificada, com servlet de consulta e tela administrativa, atendendo §5.4.1.1 do TR TRANSALVADOR.

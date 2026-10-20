@@ -1,6 +1,6 @@
 # Referência — Servlets e endpoints HTTP
 
-Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 servlets em web.xml + 145 anotados.
+Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 servlets em web.xml + 159 anotados (conferido com o código em 2026-10-20). A verificação de direito dos servlets dos módulos novos está na §3.
 
 ## 1. Servlets declarados em web.xml (`src/main/webapp/WEB-INF/web.xml`)
 
@@ -349,3 +349,55 @@ Gerado por varredura de `web.xml` e das anotações `@WebServlet`. Total: 194 se
 | `/MuralhaDigital/SlaPreprocessamento` | `muralha.digital.sla.SlaPreprocessamentoServlet` |
 | `/MuralhaDigital/Timelapse` | `muralha.digital.timelapse.TimelapseServlet` |
 | `/MuralhaDigital/UsuarioCpfMatricula` | `muralha.digital.usuario.UsuarioCpfMatriculaServlet` |
+| `/MuralhaDigital/TipoAlertaConfig` | `muralha.digital.alerta.operacional.TipoAlertaConfigServlet` |
+| `/MuralhaDigital/AnaliseGuestToken` | `muralha.digital.analise.GuestTokenServlet` |
+| `/MuralhaDigital/SsoAnalise` | `muralha.digital.analise.SsoAnaliseServlet` |
+| `/MuralhaDigital/Chamado` | `muralha.digital.chamado.ChamadoServlet` |
+| `/MuralhaDigital/ChamadoConfig` | `muralha.digital.chamado.ChamadoConfigServlet` |
+| `/MuralhaDigital/ChamadoRelatorio` | `muralha.digital.chamado.ChamadoRelatorioServlet` |
+| `/MuralhaDigital/Consolidacao` | `muralha.digital.consolidacao.ConsolidacaoServlet` |
+| `/MuralhaDigital/IntegridadeConfig` | `muralha.digital.integridade.IntegridadeConfigServlet` |
+| `/MuralhaDigital/IntegridadeRecepcao` | `muralha.digital.integridade.IntegridadeRecepcaoServlet` |
+| `/MuralhaDigital/LogTecnico` | `muralha.digital.logtecnico.LogTecnicoServlet` |
+| `/MuralhaDigital/MapaConfig` | `muralha.digital.mapas.MapaConfigServlet` |
+| `/MuralhaDigital/OcrConfig` | `muralha.digital.ocr.OcrConfigServlet` |
+| `/MuralhaDigital/RevisaoPlaca` | `muralha.digital.ocr.RevisaoPlacaServlet` |
+| `/MuralhaDigital/PreProcessamento` | `muralha.digital.preprocessamento.PreProcessamentoServlet` |
+| `/MuralhaDigital/RelatorioGerencial` | `muralha.digital.relatorio.RelatorioGerencialServlet` |
+
+## 3. Verificação de direito nos módulos novos (`ControleAcesso`)
+
+Os servlets abaixo usam `muralha.digital.acessos.ControleAcesso`, que consulta `dbo.fcn_VerificaAcesso` de forma **estrita**: a funcionalidade precisa estar em `dbo.sis_menu` (pela `acao`) e atribuída ao grupo ou usuário em `dbo.sis_menu_direitos`; sem cadastro, o acesso é negado. O legado (`Acesso.verificaAcesso`) continua liberando URL não cadastrada. Respostas de `exigir`/`exigirSessao`: **401** (sem sessão) ou **403** (sem direito) em JSON `{"ok":false,"erro":"…"}`; `exigirTela` redireciona para `/login/login.jsp` (sem sessão) ou `/login/gtw_principal.jsp` (sem direito). A negação é registrada na auditoria. Registro e grupos: `docs/banco-de-dados/migracoes/20261019_registro_modulos_novos.sql` e [guia de correções](guia-correcoes-analise-kpis-lotes.md).
+
+Salvo indicação, o direito exigido é o do próprio servlet (`acao` em `sis_menu` = URL do servlet).
+
+| URL | Direito exigido (`sis_menu.id_menu`) | Observações |
+|---|---|---|
+| `/MuralhaDigital/Lote` | `/muralha-digital/pages/processamento/lotes/index.jsp` (370 — Gestão de Lotes) | Usa o direito da **tela**, não o 428 (`/MuralhaDigital/Lote`). GET: sem `acao` (lista os lotes), `itens`, `disponiveis` (infrações `PRE_APROVADA` fora de lote); POST: `criar`, `adicionarInfracoes` (só lote `RASCUNHO`, até 500 infrações por vez — `LoteRegras`), `enviar`, `cancelar` |
+| `/MuralhaDigital/Kpi` | 429; e também 372 (`/muralha-digital/pages/admin/kpis/index.jsp` — Configuração de KPIs) em `listarConfig` e em todo POST | GET: `historico`, `listarConfig`, sem `acao` (valores atuais); POST: `salvar`. O SQL do KPI passa por `ValidadorSqlKpi` ao gravar e antes de executar (tela e `KpiSnapshotJob`): uma única consulta `SELECT`, até 4.000 caracteres, sem comentários, sem `;` e sem comandos que alterem dados ou iniciem outro comando (`INSERT`, `EXEC`, `DECLARE`, `SET`, `xp_`/`sp_`…), com conteúdo de literais `'…'` e identificadores `[…]`/`"…"` neutralizado antes da checagem; timeout de 30 s. KPI com SQL inválido aparece com status `ERRO` (ou é ignorado pelo job) |
+| `/MuralhaDigital/TipoAlertaConfig` | 392 | Sem `acao`: `exigirTela` e encaminha para `pages/tipos-alerta/index.jsp`. `aparencia` exige **só a sessão** (`exigirSessao`), pois o popup de notificação de qualquer operador lê cor e ícone. Demais — GET: `listar`, `tratamentos`, `catalogo`; POST: `salvarConfig`, `salvarTratamento`, `novoTipo` — exigem o 392 |
+| `/MuralhaDigital/PreProcessamento` | 394 | Sem `acao`: `exigirTela` e encaminha para `pages/monitoramento/pre-processamento/index.jsp`; `metricas` |
+| `/MuralhaDigital/RelatorioGerencial` | 393 | Sem `acao`: `exigirTela` e encaminha para `pages/relatorios/gerencial/index.jsp`; `listar`, `detalhe`, `exportarCsv`, `exportarXlsx` |
+| `/MuralhaDigital/AnaliseGuestToken` | 438 | Token de convidado do Superset |
+| `/MuralhaDigital/IntegridadeRecepcao` / `IntegridadeConfig` | 385 / 386 | |
+| `/MuralhaDigital/LogTecnico` | 388 | |
+| `/MuralhaDigital/RevisaoPlaca` / `OcrConfig` | 390 / 391 | |
+| `/MuralhaDigital/Retencao` | 401 | |
+| `/MuralhaDigital/UsuarioCpfMatricula` | 403 | |
+| `/MuralhaDigital/DashboardBuilder` / `Dataset` | 406 / 407 | Versão anterior do Builder |
+| `/MuralhaDigital/Exportacao` | 409 | |
+| `/MuralhaDigital/Consolidacao` | 411 | |
+| `/MuralhaDigital/ConsultaAnonimizada` | 413 | |
+| `/MuralhaDigital/InfracaoAnalise` | 416 | |
+| `/MuralhaDigital/Obliteracao` | 417 | |
+| `/api/dash/catalogo`, `/consultas`, `/paineis`, `/datasets`, `/widgets`, `/exportar` | 422, 423, 424, 425, 426, 427 | Painéis de Análise |
+| `/MuralhaDigital/Assertividade` | 430 | |
+| `/MuralhaDigital/Auditoria` | 431 | |
+| `/MuralhaDigital/Disponibilidade` | 432 | |
+| `/MuralhaDigital/SlaLatencia` / `SlaPreprocessamento` | 433 / 434 | |
+| `/MuralhaDigital/Timelapse` | 435 | |
+| `/MuralhaDigital/Gis` / `Incidente` | 436 / 437 | Mapa de Incidentes |
+
+Casos à parte:
+- `/MuralhaDigital/SsoAnalise`: `validar` (padrão) exige só a sessão e responde 204 com os cabeçalhos `X-GTW-Usuario`, `X-GTW-UserId` e `X-GTW-Grupos` (401 sem corpo se não houver sessão); `abrir` usa o `Acesso.verificaAcesso` legado sobre o 395 e só mostra o botão "Abrir no Superset" a quem tem o 396 (`/MuralhaDigital/SsoAnalise/abrir-superset`, via `ControleAcesso.possuiDireito`).
+- Fora do `ControleAcesso` (verificação legada `Acesso.verificaAcesso`): `/MuralhaDigital/MapaConfig`, `/MuralhaDigital/MfaConfig` e `/api/dash/health`; os servlets do Sistema de Chamados (`Chamado`, `ChamadoConfig`, `ChamadoRelatorio`) somam a isso os perfis próprios do módulo (403 em JSON para quem não tem perfil).

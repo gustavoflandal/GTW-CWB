@@ -3,6 +3,8 @@
 > **Data:** 2026-10-16
 > **Status:** 🟡 Implementado — migração executada, aguardando teste no navegador.
 > **Fase:** 7 de 11 da correção da auditoria de 2026-10-16.
+>
+> **Atualização de 2026-10-19** ([Entrega 35](35-correcoes-seguranca-funcionais.md), FUN-01, FUN-02 e FUN-04): o `RelatorioGerencialJob` passou a ler `dbo.sis_log_auditoria` e a usar `desativado = 0` na disponibilidade; o `RelatorioPreProcMensalJob` foi reescrito sobre `infracao_analise` e `vtr_status_analise`; o SQL dos KPIs 5, 7, 8, 9 e 11 foi corrigido por migração.
 
 ## Escopo
 
@@ -65,17 +67,17 @@ Histórico periódico de KPIs com snapshots horários, metas parametrizáveis po
 
 | Item | Antes | Depois | Por quê |
 |---|---|---|---|
-| 5.4.3.5 | ⚠️ Parcial | ⚠️ | Alertas analíticos automáticos via KpiSnapshotJob; aguardando migração |
-| 5.4.3.6 | ⚠️ Parcial | ⚠️ | 5 tipos de alerta analítico implementados (a-e); aguardando migração |
-| 5.4.3.7 | ❌ Não implementado | ⚠️ | Relatório gerencial periódico com a-e; aguardando migração |
-| 5.4.5.1 | ⚠️ Parcial | ⚠️ | Relatórios gerenciais cobrem a,c,e,f,h,i; aguardando migração |
-| 5.4.5.2 | ⚠️ Parcial | ⚠️ | Emissão automática periódica + exportação CSV/XLS; aguardando migração |
+| 5.4.3.5 | ⚠️ Parcial | ⚠️ | Alertas analíticos automáticos via KpiSnapshotJob; migração executada |
+| 5.4.3.6 | ⚠️ Parcial | ⚠️ | 5 tipos de alerta analítico implementados (a-e); migração executada |
+| 5.4.3.7 | ❌ Não implementado | ⚠️ | Relatório gerencial periódico com a-e; migração executada |
+| 5.4.5.1 | ⚠️ Parcial | ⚠️ | Relatórios gerenciais cobrem a,c,e,f,h,i; migração executada |
+| 5.4.5.2 | ⚠️ Parcial | ⚠️ | Emissão automática periódica + exportação CSV/XLS; migração executada |
 | 5.4.6.1 | ✅ | ✅ | Mantido |
-| 5.4.6.2 | ⚠️ Parcial | ⚠️ | 8 KPIs obrigatórios (a-h) implementados; aguardando migração |
-| 5.4.6.3 | ⚠️ Parcial | ⚠️ | Metas (a), limites (b), alertas (c), histórico (d), gráfico (e); aguardando migração |
-| 5.5.3.1 | ⚠️ Parcial | ⚠️ | 14 métricas (a-n) coletadas pelo job; aguardando migração |
+| 5.4.6.2 | ⚠️ Parcial | ⚠️ | 8 KPIs obrigatórios (a-h) implementados; migração executada |
+| 5.4.6.3 | ⚠️ Parcial | ⚠️ | Metas (a), limites (b), alertas (c), histórico (d), gráfico (e); migração executada |
+| 5.5.3.1 | ⚠️ Parcial | ⚠️ | 14 métricas (a-n) coletadas pelo job; migração executada |
 | 5.5.3.2 | ⚠️ Parcial | ⚠️ | Segmentação por período; filtros adicionais na Fase 9 |
-| 5.5.3.3 | ❌ Não implementado | ⚠️ | Relatório mensal automático no 5o dia útil; aguardando migração |
+| 5.5.3.3 | ❌ Não implementado | ⚠️ | Relatório mensal automático no 5o dia útil; migração executada |
 
 ## Limitações conhecidas
 

@@ -1,7 +1,7 @@
 # Entrega — Plano 27: Score de OCR, Revisão Automática e Múltiplas Placas
 
 > **Data:** 2026-10-16
-> **Status:** 🟡 Implementado — aguardando migração e teste no navegador (build e testes automatizados aprovados; migração com sintaxe conferida, não executada).
+> **Status:** 🟡 Implementado — aguardando teste no navegador (build e testes automatizados aprovados; migração executada no DEV em 2026-10-16, conferida em 2026-10-20).
 > **Fase:** 5 de 11 da correção da auditoria de 2026-10-16.
 
 ## Escopo
@@ -61,7 +61,7 @@ Em lugar nenhum: a procedure que grava as passagens (`dbo.spu_veiculo_tempo_real
 
 - [x] 1. `..\.setup-gtw\build.ps1` compila sem erro (Windows, 2026-10-16).
 - [x] 2. Testes TestNG (Windows, 2026-10-16): `RegraRevisaoTest` 9, `ProcessadorOcrTest` 6, `CorrecaoEFiltroRevisaoTest` 17. Total 32/32; com as fases anteriores, 160/160. Cobrem limiar global e por equipamento, encaminhamento por score, sem leitura (só se configurado) e divergência, espera do score, leituras da recepção, justificativa obrigatória, formato de placa, placas adicionais e filtros da fila.
-- [ ] 3. Migração executada (com autorização) e roteiro [`docs/testes/27-score-ocr-revisao-placas.md`](../testes/27-score-ocr-revisao-placas.md) no navegador.
+- [ ] 3. Migração executada (com autorização) e roteiro [`docs/testes/27-score-ocr-revisao-placas.md`](../testes/27-score-ocr-revisao-placas.md) no navegador. *Migração executada no DEV em 2026-10-16 (6 tabelas, ~847 mil leituras em `vtr_placa_leitura`, menus 389–391; ver [`migracoes/README.md`](../banco-de-dados/migracoes/README.md)); falta o roteiro no navegador.*
 - [x] 4. `python -I docs/referencia/scripts/validar_aderencia.py` sem erro.
 
 ## Situação dos itens do TR
@@ -70,12 +70,12 @@ Em lugar nenhum: a procedure que grava as passagens (`dbo.spu_veiculo_tempo_real
 |---|---|---|---|
 | 5.7.1.4 | ❌ | ⚠️ | N placas por passagem (manual na revisão; tração e frontal do equipamento); o equipamento ainda não envia reboques |
 | 5.7.4.1 | ⚠️ | ⚠️ | Score guardado quando houver origem; nenhum equipamento envia hoje |
-| 5.7.4.2 | ❌ | ⚠️ | Limiar global e por equipamento, com tela; aguardando migração e teste |
+| 5.7.4.2 | ❌ | ⚠️ | Limiar global e por equipamento, com tela; aguardando teste |
 | 5.7.4.3 | ⚠️ | ⚠️ | Encaminhamento automático pronto; sem score, a fila não recebe nada |
-| 5.7.4.4 | ❌ | ⚠️ | Score como metadado em `vtr_placa_leitura`; aguardando migração |
+| 5.7.4.4 | ❌ | ⚠️ | Score como metadado em `vtr_placa_leitura`; migração executada, aguardando teste |
 | 5.2.2.5 | ⚠️ | ⚠️ | Regra de divergência embarcada × central pronta; não há OCR central |
-| 5.7.5.2 | ⚠️ | ⚠️ | Justificativa obrigatória nos três caminhos; aguardando migração e teste |
-| 5.7.5.4 | ⚠️ | ⚠️ | Fila com os cinco filtros; aguardando migração e teste |
+| 5.7.5.2 | ⚠️ | ⚠️ | Justificativa obrigatória nos três caminhos; aguardando teste |
+| 5.7.5.4 | ⚠️ | ⚠️ | Fila com os cinco filtros; aguardando teste |
 
 ## Limitações conhecidas
 

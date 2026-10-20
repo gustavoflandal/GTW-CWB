@@ -31,7 +31,7 @@ public class EntidadeServlet extends HttpServlet {
 Regras:
 - **GET = leitura; POST = escrita.** Ações em `camelCase` verbo+objeto (`listarGuarnicoes`, `cadastrarInfoDiaria`, `deletarGuarnicao`). Comparar com literal primeiro (`"x".equals(acao)`) para evitar NPE.
 - **Resposta JSON**: `resp.setContentType("application/json; charset=UTF-8"); resp.setCharacterEncoding("UTF-8"); resp.getWriter().write(gson.toJson(obj));`. Nomes de campos em `snake_case` quando vierem de colunas (padrão do front existente); datas já formatadas em campo `*_formatado` (`data_criacao_formatado`) quando a tela as exibe.
-- **Erros**: `sendError(400)` para parâmetro inválido (mensagem em português), `404` para não encontrado, `500` genérico — **nunca devolver stack trace ou mensagem de SQL ao cliente**. Para resultado de comando use `{"sucesso":true|false,"mensagem":"…"}` (`muralha.digital.util.Resultado`).
+- **Erros**: 401/403 vêm do `ControleAcesso` (§1.1); `sendError(400)` para parâmetro inválido (mensagem em português), `404` para não encontrado, `500` genérico — **nunca devolver stack trace ou mensagem de SQL ao cliente**. Para resultado de comando use `{"sucesso":true|false,"mensagem":"…"}` (`muralha.digital.util.Resultado`).
 - Validar **todo** parâmetro (`null/empty`, `Integer.parseInt` em `try/catch NumberFormatException` → 400). Limitar tamanhos de texto e listas.
 - Upload: `commons-fileupload`; validar extensão/tamanho/tipo (`jpg, jpeg, png, pdf` nos módulos existentes) e nunca usar o nome do arquivo do cliente como caminho.
 - Download de arquivo: `Content-Disposition` com nome sanitizado; autorizar por registro (não só por login).
@@ -40,12 +40,16 @@ Regras:
 O filtro `ValidaSessao` **não bloqueia requisição sem sessão**, e ~11 servlets Muralha existentes não verificam acesso (`GuarnicaoServlet`, `NotificacaoServlet`, `RelatorioAuditoriaServlet`…). **Todo servlet novo deve** abrir assim:
 
 ```java
-Usuario usuario = (Usuario) req.getSession().getAttribute(SessaoConstantes.SESSAO_USUARIO);   // "[usuario]"
-if (usuario == null) { resp.sendError(HttpServletResponse.SC_UNAUTHORIZED); return; }
-// permissão por funcionalidade (cadastrada em sis_menu.acao + sis_menu_direitos):
-if (!new Acesso(req, resp, true).verificaAcesso(false)) { return; }   // padrão de AlertaServlet
+// sessão + direito à funcionalidade (sis_menu.acao = URL do servlet + sis_menu_direitos); 401/403 já respondidos em JSON
+if (!ControleAcesso.exigir(req, resp)) return;                       // muralha.digital.acessos.ControleAcesso
+Usuario usuario = ControleAcesso.usuario(req);                       // só depois do exigir
 ```
-Use `req.getSession(false)` quando não quiser criar sessão. Registre a nova ação em `sis_menu` (ver `10-guia-de-implementacao.md` §4).
+- `ControleAcesso` é **estrito** (*fail-closed*): nega quando a funcionalidade não está cadastrada em `sis_menu`/`sis_menu_direitos`. O `Acesso.verificaAcesso` legado (ainda em `AlertaServlet` e no GTW clássico) libera URL não cadastrada — não use em código novo.
+- Respostas: sem sessão → **401**, sem direito → **403**, ambos em JSON `{"ok":false,"erro":"…"}` (a tela mostra `erro`). Grava o log de acesso como o legado e registra a negação na auditoria.
+- Variantes: `exigir(req, resp, "<acao>")` para exigir o direito de outra funcionalidade (ex.: `KpiServlet` exige o da tela `/muralha-digital/pages/admin/kpis/index.jsp` para gravar; `LoteServlet` usa o da tela de Lotes); `exigirTela(req, resp)` quando o servlet encaminha para JSP (redireciona para o login ou para `gtw_principal.jsp`, como o legado); `exigirSessao(req, resp)` só para ação que qualquer usuário logado pode chamar (ex.: `TipoAlertaConfig?acao=aparencia`); `possuiDireito(acao, idUsuario)` para liberar um recurso dentro da tela (ex.: botão "Abrir no Superset" em `SsoAnaliseServlet`).
+- **Não** faça checagem própria de sessão com `getSession()` + `sendError(401)` antes do `exigir`: devolve a página HTML do Tomcat em vez de JSON (removida dos servlets dos módulos novos em 2026-10-19).
+
+Registre a nova ação em `sis_menu` e atribua os grupos em `sis_menu_direitos` (ver `10-guia-de-implementacao.md` §4) — sem isso o próprio administrador recebe 403.
 
 ## 2. Java — Classe de domínio / acesso a dados
 
@@ -69,6 +73,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 ```
 - **Sempre** `Conexao.getConexao()` e fechar no `finally` (pool máx. 400, `maxWait 2 s`: vazamento derruba o sistema). Preferir **try-with-resources** (Java 13) em código novo.
 - **Sempre `PreparedStatement` com `?`**. Nunca concatenar parâmetros do usuário em SQL (há concatenação de colunas fixas em código antigo — não copiar). Para `IN (…)` gere os `?` dinamicamente.
+- SQL **escrito pelo usuário** (só em funcionalidade administrativa, como o SQL dos KPIs): validar ao gravar **e** antes de executar, com `setQueryTimeout`. Referência: `muralha.digital.kpi.ValidadorSqlKpi` — uma única consulta `SELECT`, até 4.000 caracteres, sem comentários nem `;`, recusa comandos de escrita/controle (`INSERT`, `EXEC`, `DECLARE`, `SET`, `xp_`/`sp_`…) mesmo colados a `@`, `#`, `(` ou `[`, depois de neutralizar literais e identificadores delimitados; timeout de 30 s.
 - Procedures: `EXEC muralha.spu_Nome ?, ?` via `prepareStatement` (resultset) ou `prepareCall("{call …}")`. Reutilize `spu_*`/`fcn_*`/`v_*` existentes antes de escrever SQL novo (catálogo em `../banco-de-dados/objetos-programaveis.md`).
 - Qualificar o schema: `muralha.` ou `dbo.`. Tabelas grandes (`veiculo_tempo_real`, `veiculo_tempo_real_imagem`) **sempre** com filtro de período/equipamento e `TOP`/paginação; usar `WITH (NOLOCK)` apenas em leituras de tela já assim (como `fcn_VerificaAcesso`).
 - Transação: `conn.setAutoCommit(false)` → `commit/rollback` → restaurar. Auto-commit é o padrão do pool.
@@ -102,6 +107,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 - Delegação de eventos em tabelas dinâmicas: `$('#tabela tbody').on('click', '.btn[title="Editar"]', …)`.
 - Montagem de HTML por template string: **escapar** valores (use `.text()`/`$('<td>').text(v)` ou uma função `esc()`); IDs em `data-id`.
 - Feedback com `Swal.fire` (§7.6 de `05-padrao-visual.md`); proibido `alert()/confirm()` em código novo; remover `console.log` de depuração antes do commit.
+- Mensagem vinda do servidor (campo `erro`, inclusive de 401/403) vai em `text:` do SweetAlert2 (`Swal.fire({title: 'Erro', text: d.erro, icon: 'error'})`), nunca em `html:` nem no segundo argumento posicional, que interpretam HTML.
 - Datas: moment/Tempus Dominus; números/placas: máscaras existentes. Sem frameworks adicionais, sem `npm`/bundlers, sem ES modules (browser alvo: Chrome/Edge atuais, mas manter ES2015+ simples).
 - Tempo real: `new WebSocket("ws(s)://<host>/ClientesWebSocket")` e enviar `...<TIPO>-<SUBTIPO>-...` conforme `02-arquitetura.md` §6; tratar reconexão.
 
@@ -115,7 +121,7 @@ public static List<Guarnicao> listarTodas() throws SQLException, ConexaoExceptio
 Servidor: log com stack no `error.log`, resposta genérica ao cliente. Cliente: mensagem amigável + `console.error`. Erros previsíveis (validação) → 400 com texto; falha inesperada → 500.
 
 ## 8. Testes
-Há quase nenhum teste automatizado (TestNG + Mockito + HtmlUnit). Para código novo: teste unitário das regras puras (sem banco); roteiro de teste manual no PR (login → fluxo → conferir banco/log). Não rodar testes contra o banco de produção. Build/teste: `..\.setup-gtw\build.ps1` (`-DskipTests` por padrão; rode testes com `mvn -s … test` quando existirem).
+Há quase nenhum teste automatizado (TestNG + Mockito + HtmlUnit). Para código novo: teste unitário das regras puras (sem banco) — ex.: `ValidadorSqlKpiTest`, `LoteRegrasTest`; para a verificação de acesso, `ControleAcesso.definirParaTestes(...)`/`restaurarPadrao()` troca a consulta ao banco (ver `ControleAcessoTest`, `ExportacaoServletAcessoTest`); roteiro de teste manual no PR (login → fluxo → conferir banco/log). Não rodar testes contra o banco de produção. Build/teste: `..\.setup-gtw\build.ps1` (`-DskipTests` por padrão; rode testes com `mvn -s … test` quando existirem).
 
 ## 9. Git
 - Branch `main`; commits em português, imperativo curto (`Adiciona filtro de equipamento na consulta`). Segredos **nunca** (`confGTW.xml` e `muralha-digital-config.xml` estão ignorados).
@@ -126,6 +132,8 @@ Há quase nenhum teste automatizado (TestNG + Mockito + HtmlUnit). Para código 
 |---|---|---|
 | Credenciais/chaves no código | já removidos de `LoginGoogle`, `ServicoEmailMuralha`, `ServicoSMS` | Config local/ambiente |
 | Servlet sem verificar sessão | `GuarnicaoServlet`, `NotificacaoServlet`, relatórios de auditoria | §1.1 |
+| `Acesso.verificaAcesso` (libera URL não cadastrada) em módulo novo | legado; ainda em `MapaConfigServlet`, `MfaConfigServlet`, `HealthCheckServlet`, Sistema de Chamados | `ControleAcesso.exigir` (§1.1) |
+| `getSession()` + `sendError(401)` em servlet chamado por AJAX (devolve HTML do Tomcat) | Sistema de Chamados (`ContextoRequisicao`), `MapaConfigServlet` | `ControleAcesso.exigir`/`exigirSessao` (401 em JSON) |
 | SQL por concatenação de strings | partes de `UsuarioServlet`, `Alertas` (`sbSQL.append`) | `PreparedStatement` e `?` |
 | `Connection` fechada antes de `ResultSet`/`PreparedStatement` e sem try-with-resources | vários `finally` | fechar em ordem inversa / try-with-resources |
 | `alert()/confirm()` + `location.reload()` com `setTimeout` | `listagem-guarnicoes.js` | Swal + recarregar a lista via AJAX |

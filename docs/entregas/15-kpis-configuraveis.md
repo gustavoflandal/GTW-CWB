@@ -5,6 +5,8 @@
 
 > **Atualização de 2026-10-18** ([`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql)): A Configuração de KPIs não tem mais card em Cadastro e Configuração; é aberta pelo botão **Configurar** do painel KPIs (mesmas permissões, grupos 41 e 42).
 
+> **Atualização de 2026-10-19** ([Entrega 35](35-correcoes-seguranca-funcionais.md), SEG-03, SEG-04, SEG-05 e FUN-04): o SQL dos KPIs é validado por `ValidadorSqlKpi` ao salvar, no painel e no `KpiSnapshotJob` (timeout de 30 s); `listarConfig` e `salvar` exigem o direito do menu 372; os valores do servidor são escapados nas telas; a migração `20261019_kpis_corrige_consultas.sql` corrigiu o SQL dos KPIs 5, 7, 8, 9 e 11. Desde `20261019_registro_modulos_novos.sql`, a Configuração de KPIs (menu 372) é dos grupos 11 e 42 (o grupo 41 foi retirado); o painel e o servlet `/MuralhaDigital/Kpi` (menu 429) seguem com 11, 41 e 42.
+
 ## Escopo
 
 Dashboard de KPIs configuráveis com thresholds de alerta personalizáveis, CRUD de configuração e atualização automática.

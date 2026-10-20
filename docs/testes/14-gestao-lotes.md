@@ -48,7 +48,7 @@ Data: 2026-10-08
 ## T04 — Marcar lote como enviado
 
 **Procedimento:**
-1. Clicar no olho de um lote RASCUNHO
+1. Clicar no olho de um lote RASCUNHO com itens (ver T08)
 2. Clicar "Marcar como enviado"
 3. Confirmar
 
@@ -88,6 +88,29 @@ Data: 2026-10-08
 1. Abrir aba anônima
 2. Acessar `http://localhost:8080/MuralhaDigital/Lote?acao=listar`
 
-**Resultado esperado:** Redirecionamento para login ou resposta de acesso negado.
+**Resultado esperado:** HTTP 401 com `{"ok":false,"erro":"Sessão expirada. Faça login novamente."}`. Usuário logado sem o direito da tela (menu 370) recebe 403 (verificação estrita de `ControleAcesso`, Plano 35).
+
+**Status:** ⏳ Aguarda teste manual
+
+---
+
+## T08 — Adicionar infrações a um lote (Plano 35, FUN-03)
+
+**Procedimento:**
+1. Abrir um lote RASCUNHO
+2. Clicar "Adicionar infrações", filtrar, selecionar e confirmar
+
+**Resultado esperado:** Mensagem com adicionados e ignorados; itens aparecem no modal. Em lote que não está em RASCUNHO a inclusão é recusada.
+
+**Status:** ⏳ Aguarda teste manual
+
+---
+
+## T09 — Lote vazio não pode ser marcado como enviado (Plano 35, FUN-03)
+
+**Procedimento:**
+1. Criar um lote e, sem adicionar infrações, clicar "Marcar como enviado"
+
+**Resultado esperado:** Ação recusada com mensagem de erro; o lote continua RASCUNHO.
 
 **Status:** ⏳ Aguarda teste manual

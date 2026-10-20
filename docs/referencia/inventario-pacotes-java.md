@@ -1,6 +1,6 @@
 # Referência — Inventário de pacotes Java
 
-Gerado por varredura de `src/main/java`. Total: ~1017 arquivos `.java`.
+Gerado por varredura de `src/main/java`. Total: ~1124 arquivos `.java`.
 
 ### com.abertura.sistemas (3)
 SistemaConsiluxItem, SistemasConsilux, SistemasServlet
@@ -137,8 +137,8 @@ ConfiguracaoEquipamento, ConfiguracaoEquipamentos, ConfiguracaoEquipamentoServle
 ### muralha.digital._ini (1)
 Inicializacao
 
-### muralha.digital.acessos (18)
-ConfiguracaoInatividade, ConfiguracaoInatividadeResult, ConfiguracaoInatividadeServlet, ConfiguracaoRadares, ConfiguracaoRadaresResult, ConfiguracaoRadaresServlet, ConfiguracaoTempoOcrBlitz, ConfiguracaoTempoOcrBlitzResult, ConfiguracaoTempoOcrBlitzServlet, Grupo, GruposRetorno, Menu, PermissaoFuncionalidade, PermissoesFuncionalidade, PermissoesFuncionalidadeServlet, RespostaPermissao, Usuario, UsuarioServlet
+### muralha.digital.acessos (20)
+ConfiguracaoInatividade, ConfiguracaoInatividadeResult, ConfiguracaoInatividadeServlet, ConfiguracaoRadares, ConfiguracaoRadaresResult, ConfiguracaoRadaresServlet, ConfiguracaoTempoOcrBlitz, ConfiguracaoTempoOcrBlitzResult, ConfiguracaoTempoOcrBlitzServlet, ControleAcesso, Grupo, GruposRetorno, Menu, PermissaoFuncionalidade, PermissoesFuncionalidade, PermissoesFuncionalidadeServlet, ReferenciaEdital, RespostaPermissao, Usuario, UsuarioServlet
 
 ### muralha.digital.alerta (11)
 Alerta, Alertas, AlertaServlet, AlertasVinculadosAtualizar, AlertaVinculadoAtualizar, AnotacaoContributiva, AnotacaoContributivaServlet, AnotacoesContributivas, MotivoDescarte, MotivoDescarteServlet, MotivosDescarte
@@ -206,8 +206,8 @@ Camera, CameraMonitoramentoAoVivo, CamerasMonitoramentoAoVivo, EquipamentoCamera
 ### muralha.digital.motivosolicitacaorelatorio (3)
 MotivoSolicitacaoRelatorio, MotivoSolicitacaoRelatorioServlet, MotivosSolicitacoesRelatorios
 
-### muralha.digital.notificacao (23)
-ConfiguracaoSom, ConfiguracaoSons, ConfiguracaoSonsServlet, GrupoNotificacao, GrupoNotificacaoEmail, GrupoNotificacaoServlet, GruposNotificacao, JobEnviaEmailAlerta, JobEnviaEmailOcorrencia, JobEnviaSmsAlerta, JobEnviaSmsOcorrencia, Notificacao, NotificacaoServlet, Notificacoes, RecuperacaoSenha, ServicoEmailMuralha, ServicoSMS, StatusNotificacao, TipoNotificacao, TipoNotificacaoServlet, TiposNotificacao, ViewGrupoAlertas, ViewGruposAlertas
+### muralha.digital.notificacao (24)
+ConfiguracaoSom, ConfiguracaoSons, ConfiguracaoSonsServlet, GrupoNotificacao, GrupoNotificacaoEmail, GrupoNotificacaoServlet, GruposNotificacao, JobEnviaEmailAlerta, JobEnviaEmailOcorrencia, JobEnviaSmsAlerta, JobEnviaSmsOcorrencia, JobRetryNotificacao, Notificacao, NotificacaoServlet, Notificacoes, RecuperacaoSenha, ServicoEmailMuralha, ServicoSMS, StatusNotificacao, TipoNotificacao, TipoNotificacaoServlet, TiposNotificacao, ViewGrupoAlertas, ViewGruposAlertas
 
 ### muralha.digital.ocorrencia (5)
 Ocorrencias, OcorrenciaServlet, StatusOcorrencia, StatusOcorrencias, StatusOcorrenciaServlet
@@ -254,8 +254,8 @@ RelatorioPlacasVeiculares, RelatorioPlacasVeicularesServlet
 ### muralha.digital.temporeal (2)
 BlitzEletronica, VeiculoTempoReal
 
-### muralha.digital.util (6)
-Constantes, EncurtadorURL, Paginacao, RespostaRequisicaoXML, Resultado, Utils
+### muralha.digital.util (8)
+ConfigChaveValor, Constantes, EncurtadorURL, HashUtil, Paginacao, RespostaRequisicaoXML, Resultado, Utils
 
 ### muralha.digital.veiculo (19)
 ClassesVeiculo, ClasseVeiculo, ClasseVeiculoServlet, PassagemRelacionada, PassagensRelacionadasDTO, Veiculo, VeiculoAlerta, VeiculoBlitz, VeiculoDeCarga, VeiculoDeCargaDetalhes, VeiculoDeCargaRelatorio, VeiculoDeCargaServlet, VeiculoDeCargaValidacao, Veiculos, VeiculosAlerta, VeiculosBlitz, VeiculosDeCarga, VeiculoServlet, VeiculoValidacao
@@ -275,6 +275,12 @@ IExpValida
 ### muralha.digital.acesso (3)
 MfaConfigServlet, SenhaService, TotpService
 
+### muralha.digital.alerta.operacional (12)
+ConfigTipoAlerta, ExecutorTratamento, FiltroHistorico, JdbcRepositorioRetencao, JobAlertaRetencao, JobTratamentoAutomatico, ParametrosRetencao, ProcessadorRetencao, RegraRetencao, RepositorioRetencao, TipoAlertaConfigServlet, TratamentoAlerta
+
+### muralha.digital.analise (3)
+CargaAnaliseJob, GuestTokenServlet, SsoAnaliseServlet
+
 ### muralha.digital.anonimizacao (1)
 ConsultaAnonimizadaServlet
 
@@ -284,11 +290,17 @@ AssertividadeServlet
 ### muralha.digital.auditoria (2)
 AuditoriaService, AuditoriaServlet
 
+### muralha.digital.chamado (28)
+AcaoChamado, AnexoGravado, ArmazenamentoAnexo, ArquivoEnviado, CalculadoraSla, Categoria, Chamado, ChamadoConfigDao, ChamadoConfigServlet, ChamadoDao, ChamadoEmailJob, ChamadoNaoEncontradoException, ChamadoRelatorioServlet, ChamadoService, ChamadoServlet, ChamadoSlaJob, CifraSegredo, ConfiguracaoSmtpChamado, ContextoRequisicao, EmailChamado, ExportacaoChamados, FiltroChamados, GeradorProtocolo, MaquinaEstados, PerfilChamado, Prioridade, RegraChamadoException, StatusChamado
+
+### muralha.digital.consolidacao (1)
+ConsolidacaoServlet
+
 ### muralha.digital.dashboard (2)
 DashboardBuilderServlet, DatasetServlet
 
-### muralha.digital.dashboards (16)
-DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
+### muralha.digital.dashboards (18)
+CodificacaoUtf8Filter, SemCacheScriptsDashboardFilter, DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
 
 ### muralha.digital.dashboards.consulta (8)
 ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta
@@ -305,14 +317,32 @@ GisServlet
 ### muralha.digital.imagem (2)
 ObliteracaoService, ObliteracaoServlet
 
-### muralha.digital.kpi (1)
-KpiServlet
+### muralha.digital.integridade (13)
+ConferenciaIntegridade, FiltroIntegridade, ImagemPendente, IntegridadeConfigServlet, IntegridadeRecepcaoServlet, JdbcRepositorioIntegridade, JobSha256Imagem, OrigemHash, ParametrosIntegridade, ProcessadorIntegridade, RepositorioIntegridade, ResultadoConferencia, StatusIntegridade
 
-### muralha.digital.lote (1)
-LoteServlet
+### muralha.digital.kpi (3)
+KpiServlet, KpiSnapshotJob, ValidadorSqlKpi
+
+### muralha.digital.lote (2)
+LoteRegras, LoteServlet
+
+### muralha.digital.logtecnico (17)
+AlteracaoParametro, CategoriaLog, ClassificacaoCsx, ClassificacaoLogTipo, ContextoAlteracao, CorrelacionadorIntervalos, FiltroLogTecnico, FonteLog, FontesLogTecnico, HistoricoConfigEquip, HistoricoParametros, LogTecnicoServlet, ParametrosLogTecnico, RegistroLogTecnico, RelatorioTecnico, ServicoLogTecnico, SeveridadeLog
+
+### muralha.digital.mapas (1)
+MapaConfigServlet
+
+### muralha.digital.ocr (14)
+CorrecaoPlacaService, FiltroRevisao, JdbcRepositorioOcr, JobOcrRevisao, LeituraPlaca, OcrConfigServlet, OrigemScore, ParametrosOcr, PassagemPendente, ProcessadorOcr, RegraRevisao, RepositorioOcr, RevisaoPlacaServlet, ValidacaoCorrecao
+
+### muralha.digital.preprocessamento (1)
+PreProcessamentoServlet
 
 ### muralha.digital.processamento (2)
 InfracaoAnaliseDAO, InfracaoAnaliseServlet
+
+### muralha.digital.relatorio (3)
+RelatorioGerencialJob, RelatorioGerencialServlet, RelatorioPreProcMensalJob
 
 ### muralha.digital.retencao (2)
 RetencaoJob, RetencaoServlet
@@ -323,8 +353,8 @@ IncidenteImportJob, IncidenteServlet
 ### muralha.digital.sla (4)
 SlaLatenciaJob, SlaLatenciaServlet, SlaPreprocessamentoJob, SlaPreprocessamentoServlet
 
-### muralha.digital.timelapse (1)
-TimelapseServlet
+### muralha.digital.timelapse (2)
+JobTimelapseDescarte, TimelapseServlet
 
 ### muralha.digital.usuario (2)
 UsuarioCpfMatriculaServlet, UsuarioCpfUtil

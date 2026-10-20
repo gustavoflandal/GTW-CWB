@@ -5,6 +5,8 @@
 > **Fase:** 6 de 11 da correção da auditoria de 2026-10-16.
 
 > **Atualização de 2026-10-18:** criada a tela de configuração (`pages/tipos-alerta/`). Os tratamentos automáticos passaram a ser executados (`JobTratamentoAutomatico`, a cada minuto). A listagem ficou disponível para o aviso de todos os operadores, e o ícone passou a aparecer no aviso. O contorno temporário foi removido. Ver [gap-tipos-alerta-ajuste-demo.md](gap-tipos-alerta-ajuste-demo.md).
+>
+> **Atualização de 2026-10-19** ([Entrega 35](35-correcoes-seguranca-funcionais.md), SEG-10): o aviso dos operadores passou a usar a ação `aparencia` do `TipoAlertaConfigServlet`, que só exige sessão e devolve apenas os campos do popup; `listar` e as demais ações voltaram a exigir o direito da tela de Tipos de Alerta.
 
 ## Escopo
 
@@ -66,15 +68,15 @@ Tipos de alerta operacionais (estacionamento irregular, congestionamento/retenç
 
 | Item | Antes | Depois | Por quê |
 |---|---|---|---|
-| 5.3.1.3 | ⚠️ | ⚠️ | Tratamentos parametrizáveis com execução automática; tela de configuração pronta; aguardando migração e teste |
-| 5.3.2.1 | ⚠️ | ⚠️ | 4 novos tipos operacionais inseridos pelo script; aguardando migração |
-| 5.3.3.3 | ⚠️ | ⚠️ | Criticidade por tipo via `tipo_alerta_config`; aguardando migração e teste |
-| 5.3.3.4 | ⚠️ | ⚠️ | Cor e ícone configuráveis pelo banco, `notificacao.js` carrega via AJAX; aguardando migração |
-| 5.3.6.2 | ⚠️ | ⚠️ | Filtros de localidade, responsável e resultado adicionados; aguardando migração e teste |
+| 5.3.1.3 | ⚠️ | ⚠️ | Tratamentos parametrizáveis com execução automática; tela de configuração pronta; migração executada, aguardando teste |
+| 5.3.2.1 | ⚠️ | ⚠️ | 4 novos tipos operacionais inseridos pelo script; migração executada |
+| 5.3.3.3 | ⚠️ | ⚠️ | Criticidade por tipo via `tipo_alerta_config`; migração executada, aguardando teste |
+| 5.3.3.4 | ⚠️ | ⚠️ | Cor e ícone configuráveis pelo banco, `notificacao.js` carrega via AJAX; migração executada |
+| 5.3.6.2 | ⚠️ | ⚠️ | Filtros de localidade, responsável e resultado adicionados; migração executada, aguardando teste |
 | 5.3.6.4 | ⚠️ | ⚠️ | CSV adicionado; aguardando teste no navegador |
-| 5.3.7.4 | ⚠️ | ⚠️ | Retenção detectada por regra sobre `veiculo_sumarizado`; aguardando migração e teste |
-| 5.3.7.6 | ⚠️ | ⚠️ | Limiares de retenção e configuração de tipos via interface; aguardando migração |
-| 5.3.7.8 | ⚠️ | ⚠️ | Prioridade + cor/ícone parametrizáveis; aguardando migração e teste |
+| 5.3.7.4 | ⚠️ | ⚠️ | Retenção detectada por regra sobre `veiculo_sumarizado`; migração executada, aguardando teste |
+| 5.3.7.6 | ⚠️ | ⚠️ | Limiares de retenção e configuração de tipos via interface; migração executada |
+| 5.3.7.8 | ⚠️ | ⚠️ | Prioridade + cor/ícone parametrizáveis; migração executada, aguardando teste |
 
 ## Limitações conhecidas
 
