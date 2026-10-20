@@ -9,8 +9,10 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 
 ## acessos
 
-- Arquivos Java: 18 (pacote `muralha.digital.acessos`)
-- Classes: ConfiguracaoInatividade, ConfiguracaoInatividadeResult, ConfiguracaoInatividadeServlet, ConfiguracaoRadares, ConfiguracaoRadaresResult, ConfiguracaoRadaresServlet, ConfiguracaoTempoOcrBlitz, ConfiguracaoTempoOcrBlitzResult, ConfiguracaoTempoOcrBlitzServlet, Grupo, GruposRetorno, Menu, PermissaoFuncionalidade, PermissoesFuncionalidade, PermissoesFuncionalidadeServlet, RespostaPermissao, Usuario, UsuarioServlet
+- Arquivos Java: 20 (pacote `muralha.digital.acessos`)
+- Classes: ConfiguracaoInatividade, ConfiguracaoInatividadeResult, ConfiguracaoInatividadeServlet, ConfiguracaoRadares, ConfiguracaoRadaresResult, ConfiguracaoRadaresServlet, ConfiguracaoTempoOcrBlitz, ConfiguracaoTempoOcrBlitzResult, ConfiguracaoTempoOcrBlitzServlet, ControleAcesso, Grupo, GruposRetorno, Menu, PermissaoFuncionalidade, PermissoesFuncionalidade, PermissoesFuncionalidadeServlet, ReferenciaEdital, RespostaPermissao, Usuario, UsuarioServlet
+- `ControleAcesso`: verificação **estrita** de direito usada pelos servlets dos módulos novos — ao contrário de `Acesso.verificaAcesso()` (que libera URL não cadastrada), nega quando a funcionalidade não está cadastrada em `sis_menu`/`sis_menu_direitos`.
+- `ReferenciaEdital`: item do TR TRANSALVADOR exigido por cada funcionalidade com card no menu (só o item específico).
 - Servlet URL(s): `/MuralhaDigital/ConfiguracaoInatividade`, `/MuralhaDigital/ConfiguracaoRadares`, `/MuralhaDigital/ConfiguracaoTempoOcrBlitz`, `/MuralhaDigital/PermissoesFuncionalidade`, `/MuralhaDigital/Usuarios`
 - Ações (`acao`): buscarTempoInatividade, buscarConfigsInatividade, atualizarTempoInatividade, obterRaioRadaresMapa, configurarRaioRadaresMapa, obterTempoOCRBlitz, configurarTempoOCRBlitz, obterListaUsuariosAtivos, login, openview, out, login_google_token, acessoViaToken
 - Tabelas/objetos em SQL: config_chave_valor, config_chave_valor_hist, config_grupo_permissao, fcn_verificaacesso, sis_grupo, sis_menu, sis_menu_direitos, sis_menu_graficos_infos, sis_menu_infos, sis_menu_relatorio_infos, sis_usuario, sis_usuario_grupo, tipo_alerta_ocorrencia, tipo_registro, token_acesso_mobilidade_urbana, v_grupo_supervisionado, v_sis_usuario
@@ -190,12 +192,13 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 
 ## notificacao
 
-- Arquivos Java: 23 (pacote `muralha.digital.notificacao`)
-- Classes: ConfiguracaoSom, ConfiguracaoSons, ConfiguracaoSonsServlet, GrupoNotificacao, GrupoNotificacaoEmail, GrupoNotificacaoServlet, GruposNotificacao, JobEnviaEmailAlerta, JobEnviaEmailOcorrencia, JobEnviaSmsAlerta, JobEnviaSmsOcorrencia, Notificacao, NotificacaoServlet, Notificacoes, RecuperacaoSenha, ServicoEmailMuralha, ServicoSMS, StatusNotificacao, TipoNotificacao, TipoNotificacaoServlet, TiposNotificacao, ViewGrupoAlertas, ViewGruposAlertas
+- Arquivos Java: 24 (pacote `muralha.digital.notificacao`)
+- Classes: ConfiguracaoSom, ConfiguracaoSons, ConfiguracaoSonsServlet, GrupoNotificacao, GrupoNotificacaoEmail, GrupoNotificacaoServlet, GruposNotificacao, JobEnviaEmailAlerta, JobEnviaEmailOcorrencia, JobEnviaSmsAlerta, JobEnviaSmsOcorrencia, JobRetryNotificacao, Notificacao, NotificacaoServlet, Notificacoes, RecuperacaoSenha, ServicoEmailMuralha, ServicoSMS, StatusNotificacao, TipoNotificacao, TipoNotificacaoServlet, TiposNotificacao, ViewGrupoAlertas, ViewGruposAlertas
 - Servlet URL(s): `/MuralhaDigital/ConfiguracaoTempo`, `/MuralhaDigital/GrupoNotificacao`, `/MuralhaDigital/Notificacao`, `/MuralhaDigital/TipoNotificacao`
 - Ações (`acao`): obterConfigTempos, obterSonsAtivo, obterAlertaContinuo, obterTempoMaximoEmissao, obterTiposAlertas, obterPrioridade, configurarAlertaSonoro, configurarTempoMaximoEmissao, cadastrarPrioridade, obterGruposEmail, obterGruposSMS, obterGruposPopup, obterGruposEmailPorIdOcorrencia, obterGruposSmsPorIdOcorrencia, obterGruposPopupPorIdOcorrencia, obterGruposPorIdGrupoETipoNotificacao, buscarGruposView, buscarGruposSelecionados, obterStatusAgenteGuarnicao, configAgenteGuarnicao, listar, enviarsms, enviarEmail, buscarusuario, validartoken, atualizarsenha
 - Tabelas/objetos em SQL: alerta_notificacao, codigo_verificacao, config_chave_valor, config_chave_valor_hist, config_grupo_permissao, ocorrencia_notificacao, sis_grupo, sis_usuario, sis_usuario_grupo, sis_usuario_recupera_senha, tipo_alerta_ocorrencia, tipo_notificacao, tipo_registro, v_grupo_alertas
 - Procedures/Funções/Views: spu_obternotificacoespendentes
+- Jobs Quartz (`Agendador`): `JobEnviaEmailAlerta` e `JobEnviaEmailOcorrencia` (a cada `IntervaloExecucaoEmailMinutos`, padrão 1 min, se `emailAtivo`), `JobEnviaSmsAlerta` e `JobEnviaSmsOcorrencia` (a cada `IntervaloExecucaoSmsMinutos`, padrão 5 min, se `smsAtivo`), `JobRetryNotificacao` (5 min, se e-mail ou SMS ativo)
 
 ## ocorrencia
 
@@ -282,8 +285,8 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 
 ## util
 
-- Arquivos Java: 6 (pacote `muralha.digital.util`)
-- Classes: Constantes, EncurtadorURL, Paginacao, RespostaRequisicaoXML, Resultado, Utils
+- Arquivos Java: 8 (pacote `muralha.digital.util`)
+- Classes: ConfigChaveValor, Constantes, EncurtadorURL, HashUtil, Paginacao, RespostaRequisicaoXML, Resultado, Utils
 
 ## veiculo
 
@@ -310,13 +313,31 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 
 ---
 
-### Módulos adicionados nos Planos 01-20
+### Módulos adicionados pelos planos da PoC TRANSALVADOR
+
+Os intervalos dos jobs citados abaixo são os registrados em `com.consilux.servlet.ferramentas.Agendador` (Quartz, `RAMJobStore`).
 
 ## acesso
 
 - Arquivos Java: 3 (pacote `muralha.digital.acesso`)
 - Classes: MfaConfigServlet, SenhaService, TotpService
 - Servlet URL(s): `/MuralhaDigital/MfaConfig`
+
+## alerta.operacional
+
+- Arquivos Java: 12 (pacote `muralha.digital.alerta.operacional`)
+- Classes: ConfigTipoAlerta, ExecutorTratamento, FiltroHistorico, JdbcRepositorioRetencao, JobAlertaRetencao, JobTratamentoAutomatico, ParametrosRetencao, ProcessadorRetencao, RegraRetencao, RepositorioRetencao, TipoAlertaConfigServlet, TratamentoAlerta
+- Servlet URL(s): `/MuralhaDigital/TipoAlertaConfig`
+- `ConfigTipoAlerta`: configuração complementar do tipo de alerta (criticidade, cor, ícone); `TratamentoAlerta`: enum dos tratamentos (os que o sistema executa sozinho são `REGISTRO_ESTATISTICO`, `GERAR_OCORRENCIA` e `PRIORIZAR_AUDITORIA`); `ExecutorTratamento`: executa um tratamento automático para um alerta.
+- Jobs Quartz: `JobAlertaRetencao` (10 min); `JobTratamentoAutomatico` (1 min, `@DisallowConcurrentExecution`) — aplica os tratamentos marcados como automáticos aos alertas dos últimos `TRATAMENTO_AUTO_JANELA_MIN` minutos (padrão 60), uma única vez por par alerta × tratamento.
+- Tabelas: `muralha.alerta`, `muralha.alerta_tratamento_execucao`
+
+## analise
+
+- Arquivos Java: 3 (pacote `muralha.digital.analise`)
+- Classes: CargaAnaliseJob, GuestTokenServlet, SsoAnaliseServlet
+- Servlet URL(s): `/MuralhaDigital/AnaliseGuestToken`, `/MuralhaDigital/SsoAnalise`
+- Jobs Quartz: `CargaAnaliseJob` (30 min, grupo `Analise`, `@DisallowConcurrentExecution`) — executa `analise.spu_carga_passagens_hora`, `analise.spu_carga_infracoes_dia` e `analise.spu_carga_areas_monitoradas` (cada uma registra em `analise.carga_log`).
 
 ## anonimizacao
 
@@ -336,6 +357,19 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 - Classes: AuditoriaService, AuditoriaServlet
 - Servlet URL(s): `/MuralhaDigital/Auditoria`
 
+## chamado
+
+- Arquivos Java: 28 (pacote `muralha.digital.chamado`)
+- Classes: AcaoChamado, AnexoGravado, ArmazenamentoAnexo, ArquivoEnviado, CalculadoraSla, Categoria, Chamado, ChamadoConfigDao, ChamadoConfigServlet, ChamadoDao, ChamadoEmailJob, ChamadoNaoEncontradoException, ChamadoRelatorioServlet, ChamadoService, ChamadoServlet, ChamadoSlaJob, CifraSegredo, ConfiguracaoSmtpChamado, ContextoRequisicao, EmailChamado, ExportacaoChamados, FiltroChamados, GeradorProtocolo, MaquinaEstados, PerfilChamado, Prioridade, RegraChamadoException, StatusChamado
+- Servlet URL(s): `/MuralhaDigital/Chamado`, `/MuralhaDigital/ChamadoConfig`, `/MuralhaDigital/ChamadoRelatorio`
+- Jobs Quartz: `ChamadoSlaJob` (5 min), `ChamadoEmailJob` (1 min). Arquitetura em [`../chamados/sistema-chamados-arquitetura.md`](../chamados/sistema-chamados-arquitetura.md).
+
+## consolidacao
+
+- Arquivos Java: 1 (pacote `muralha.digital.consolidacao`)
+- Classes: ConsolidacaoServlet
+- Servlet URL(s): `/MuralhaDigital/Consolidacao`
+
 ## dashboard
 
 - Arquivos Java: 2 (pacote `muralha.digital.dashboard`)
@@ -344,8 +378,8 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 
 ## dashboards (API REST)
 
-- Arquivos Java: 19 (pacote `muralha.digital.dashboards`)
-- Classes: DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
+- Arquivos Java: 18 no pacote `muralha.digital.dashboards` + 8 no subpacote `consulta`
+- Classes: CodificacaoUtf8Filter (`@WebFilter /api/dash/*`), SemCacheScriptsDashboardFilter (`@WebFilter /static/js/dashboards/*`), DashCatalogoServlet, DashConsultaServlet, DashPainelServlet, DatasetServlet, DatasetService, WidgetServlet, WidgetService, ExportacaoDashboardServlet, ExportacaoService, HealthCheckServlet, GramaticaCampoCalculado, CompartilhamentoService, HistoricoVersaoService, PainelService, PivotService, ConsultaLogService
 - Subpacote `consulta`: ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta
 - Servlet URL(s): `/api/dash/catalogo`, `/api/dash/consultas`, `/api/dash/datasets`, `/api/dash/exportar`, `/api/dash/health`, `/api/dash/paineis`, `/api/dash/widgets`
 - Ações `DashCatalogoServlet` (GET): listarTabelas, listarColunas, listarRelacoes, importarSugestoes, amostraTabela; (POST): salvarTabela, salvarRelacao, salvarColuna, excluirRelacao, promoverRelacao
@@ -357,6 +391,7 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 - Arquivos Java: 2 (pacote `muralha.digital.disponibilidade`)
 - Classes: DisponibilidadeJob, DisponibilidadeServlet
 - Servlet URL(s): `/MuralhaDigital/Disponibilidade`
+- Jobs Quartz: `DisponibilidadeJob` (10 min)
 
 ## exportacao
 
@@ -376,17 +411,52 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 - Classes: ObliteracaoService, ObliteracaoServlet
 - Servlet URL(s): `/MuralhaDigital/Obliteracao`
 
+## integridade
+
+- Arquivos Java: 13 (pacote `muralha.digital.integridade`)
+- Classes: ConferenciaIntegridade, FiltroIntegridade, ImagemPendente, IntegridadeConfigServlet, IntegridadeRecepcaoServlet, JdbcRepositorioIntegridade, JobSha256Imagem, OrigemHash, ParametrosIntegridade, ProcessadorIntegridade, RepositorioIntegridade, ResultadoConferencia, StatusIntegridade
+- Servlet URL(s): `/MuralhaDigital/IntegridadeConfig`, `/MuralhaDigital/IntegridadeRecepcao`
+- Jobs Quartz: `JobSha256Imagem` (5 min)
+
 ## kpi
 
-- Arquivos Java: 1 (pacote `muralha.digital.kpi`)
-- Classes: KpiServlet
+- Arquivos Java: 3 (pacote `muralha.digital.kpi`)
+- Classes: KpiServlet, KpiSnapshotJob, ValidadorSqlKpi
 - Servlet URL(s): `/MuralhaDigital/Kpi`
+- `ValidadorSqlKpi`: valida o `query_sql` do KPI antes de gravar e de executar (uma única consulta `SELECT`, sem comandos que alterem dados; timeout `TIMEOUT_SEGUNDOS`); usado pelo `KpiServlet` e pelo `KpiSnapshotJob`.
+- Jobs Quartz: `KpiSnapshotJob` (60 min) — grava `muralha.kpi_historico`, gera alerta analítico conforme meta e cooldown (`KPI_ALERTA_COOLDOWN_MIN`) e expurga o histórico após `KPI_SNAPSHOT_RETENCAO_DIAS` (padrão 90); KPI com SQL reprovado pelo validador é ignorado.
+
+## logtecnico
+
+- Arquivos Java: 17 (pacote `muralha.digital.logtecnico`)
+- Classes: AlteracaoParametro, CategoriaLog, ClassificacaoCsx, ClassificacaoLogTipo, ContextoAlteracao, CorrelacionadorIntervalos, FiltroLogTecnico, FonteLog, FontesLogTecnico, HistoricoConfigEquip, HistoricoParametros, LogTecnicoServlet, ParametrosLogTecnico, RegistroLogTecnico, RelatorioTecnico, ServicoLogTecnico, SeveridadeLog
+- Servlet URL(s): `/MuralhaDigital/LogTecnico`
 
 ## lote
 
-- Arquivos Java: 1 (pacote `muralha.digital.lote`)
-- Classes: LoteServlet
+- Arquivos Java: 2 (pacote `muralha.digital.lote`)
+- Classes: LoteRegras, LoteServlet
 - Servlet URL(s): `/MuralhaDigital/Lote`
+- `LoteRegras`: regras da Gestão de Lotes que não dependem do banco.
+
+## mapas
+
+- Arquivos Java: 1 (pacote `muralha.digital.mapas`)
+- Classes: MapaConfigServlet
+- Servlet URL(s): `/MuralhaDigital/MapaConfig`
+
+## ocr
+
+- Arquivos Java: 14 (pacote `muralha.digital.ocr`)
+- Classes: CorrecaoPlacaService, FiltroRevisao, JdbcRepositorioOcr, JobOcrRevisao, LeituraPlaca, OcrConfigServlet, OrigemScore, ParametrosOcr, PassagemPendente, ProcessadorOcr, RegraRevisao, RepositorioOcr, RevisaoPlacaServlet, ValidacaoCorrecao
+- Servlet URL(s): `/MuralhaDigital/OcrConfig`, `/MuralhaDigital/RevisaoPlaca`
+- Jobs Quartz: `JobOcrRevisao` (5 min)
+
+## preprocessamento
+
+- Arquivos Java: 1 (pacote `muralha.digital.preprocessamento`)
+- Classes: PreProcessamentoServlet
+- Servlet URL(s): `/MuralhaDigital/PreProcessamento`
 
 ## processamento
 
@@ -394,29 +464,42 @@ Gerado automaticamente por varredura do código. Para cada pacote: classes, serv
 - Classes: InfracaoAnaliseDAO, InfracaoAnaliseServlet
 - Servlet URL(s): `/MuralhaDigital/InfracaoAnalise`
 
+## relatorio
+
+- Arquivos Java: 3 (pacote `muralha.digital.relatorio`)
+- Classes: RelatorioGerencialJob, RelatorioGerencialServlet, RelatorioPreProcMensalJob
+- Servlet URL(s): `/MuralhaDigital/RelatorioGerencial`
+- Jobs Quartz (ambos verificados a cada 24 h; geram uma vez por mês, gravam em `muralha.relatorio_periodico` e não duplicam o período):
+  - `RelatorioGerencialJob` — gera o relatório `GERENCIAL` do mês anterior no dia `RELATORIO_GERENCIAL_DIA` (padrão 1): resumo e comparação de KPIs (`kpi_historico`), alertas analíticos (`dbo.sis_log_auditoria`), volume de tráfego e disponibilidade (`dbo.veiculo_sumarizado`, `dbo.local_vigente` com `desativado = 0`).
+  - `RelatorioPreProcMensalJob` — gera o relatório `PRE_PROCESSAMENTO` do mês anterior no N-ésimo dia útil (`RELATORIO_PREPROC_DIA_UTIL`, padrão 5), a partir de `veiculo_tempo_real`, `vtr_status_analise`, `infracao_analise`, `alerta_sla` e `alerta_sla_preproc` (volumes, aproveitamento, tempo médio, produtividade, divergência, retrabalho, backlog de 72 h, SLA, motivos de descarte).
+
 ## retencao
 
 - Arquivos Java: 2 (pacote `muralha.digital.retencao`)
 - Classes: RetencaoJob, RetencaoServlet
 - Servlet URL(s): `/MuralhaDigital/Retencao`
+- Jobs Quartz: `RetencaoJob` (24 h)
 
 ## sensores
 
 - Arquivos Java: 2 (pacote `muralha.digital.sensores`)
 - Classes: IncidenteImportJob, IncidenteServlet
 - Servlet URL(s): `/MuralhaDigital/Incidente`
+- Jobs Quartz: `IncidenteImportJob` (30 min, importação Waze)
 
 ## sla
 
 - Arquivos Java: 4 (pacote `muralha.digital.sla`)
 - Classes: SlaLatenciaJob, SlaLatenciaServlet, SlaPreprocessamentoJob, SlaPreprocessamentoServlet
 - Servlet URL(s): `/MuralhaDigital/SlaLatencia`, `/MuralhaDigital/SlaPreprocessamento`
+- Jobs Quartz: `SlaLatenciaJob` (5 min), `SlaPreprocessamentoJob` (60 min)
 
 ## timelapse
 
-- Arquivos Java: 1 (pacote `muralha.digital.timelapse`)
-- Classes: TimelapseServlet
+- Arquivos Java: 2 (pacote `muralha.digital.timelapse`)
+- Classes: JobTimelapseDescarte, TimelapseServlet
 - Servlet URL(s): `/MuralhaDigital/Timelapse`
+- Jobs Quartz: `JobTimelapseDescarte` (60 min)
 
 ## usuario
 

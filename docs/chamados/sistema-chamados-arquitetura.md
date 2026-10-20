@@ -342,7 +342,7 @@ Pedido do responsável após a primeira entrega, com a migração já executada 
 - **Hierarquia dos grupos:** os grupos 107–109 passam a ter `id_grupo_pai = 11`, para aparecerem na tela legada de usuários (GWT), que lista os grupos abaixo do grupo de quem edita.
 - **Aba "Perfis de acesso"** na Configuração: o administrador inclui ou remove usuários dos três grupos de perfil, na mesma tabela `dbo.sis_usuario_grupo` da tela legada; o grupo do `ADMIN` não é gerenciado por ali.
 - **Aba "Parâmetros de SLA":** `chamado_sla_risco_percentual` (1–99) e `chamado_fechamento_auto_dias` (1–60), validados no servidor e registrados em `muralha.config_chave_valor_hist`.
-- **Categoria "Sistema de Chamados"** na tela inicial (`sis_menu` 383, `sis_menu_infos` 49, `menu_pai NULL`, `ordenacao 10`); os cards 46, 47 e 48 passam para `menu_pai = 49`, com ícones SVG novos em `assets/images/menu-icons/`. O direito do menu 382 (Configuração) fica só com o grupo administrador.
+- **Categoria "Sistema de Chamados"** na tela inicial (`sis_menu` 383, `sis_menu_infos` 49, `menu_pai NULL`, `ordenacao 10`); os cards 46, 47 e 48 passam para `menu_pai = 49`, com ícones SVG novos em `assets/images/menu-icons/`. O direito do menu 382 (Configuração) fica só com o grupo administrador. *(Desde 2026-10-18, `20261018_remove_cards_duplicados.sql` removeu os cards 47 e 48 (Relatórios e Configuração); as telas são abertas pelos botões da tela Chamados e só o card 46 fica na categoria.)*
 - **Motor de logs:** parâmetros (`SALVAR_PARAMETROS_SLA`) e perfis (`ADICIONAR_PERFIL`, `REMOVER_PERFIL`) se somam às operações já auditadas, via `AuditoriaService` (funcionalidade "Chamado").
 - Script: `docs/banco-de-dados/migracoes/20261015_sistema_chamados_admin.sql` (idempotente, rollback no cabeçalho).
 

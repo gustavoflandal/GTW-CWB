@@ -11,7 +11,7 @@
  Tomcat (WAR "ROOT", contexto "/")
    ├─ Filtros:      ValidaSessao (@WebFilter "/*"), CacheFilter (*.png *.css *.gif *.html)
    ├─ Listeners:    SessoesAtivas, muralha.digital._ini.Inicializacao
-   ├─ Servlets:     194 em web.xml + 118 @WebServlet  (padrão "servlet com ?acao=")
+   ├─ Servlets:     194 em web.xml + 159 @WebServlet  (padrão "servlet com ?acao=")
    ├─ JSP:          paginas e fragmentos (include de cabeçalho/menus/modais)
    ├─ JAX-RS:       Jersey em /rest/*  (pacote com.consilux.rest.resources)
    ├─ SOAP (Axis):  /services/*  (InfoEquipamento, StatusEquipamento, ConfigEquip(WS), CSXEventsWS, VeiculoMonitoradoWS, Version)
@@ -33,7 +33,7 @@ Não existe framework MVC, ORM, injeção de dependência, nem camada de serviç
 1. O navegador abre uma página `/muralha-digital/pages/<modulo>/<tela>.jsp`.
 2. A JSP inclui `utils/credenciais/cabecalho_bootstrap_simples.jsp`, que: carrega Bootstrap/FA/jQuery/Tempus Dominus; instancia `new Acesso(request, response, true)` e chama `verificaAcesso()` (redireciona ao login se não autenticado/sem direito); monta os menus do usuário (`UsuarioServlet.ObterListaMenusAcesso/Relatorio/Graficos`); desenha a navbar.
 3. O JS da tela (`assets/js/<tela>.js`) chama o back-end por `$.ajax` em `/MuralhaDigital/<Entidade>` com `acao=<nome>` (GET para leituras, POST para escritas) e recebe **JSON (Gson)** — alguns pontos usam XML (WebSocket e alguns endpoints antigos).
-4. O servlet (`muralha.digital.<modulo>.<Entidade>Servlet`) despacha por `if/else` sobre `acao`, valida parâmetros, chama a classe de domínio (`Entidade`/`Entidades`) que abre `Conexao.getConexao()`, executa SQL/procedure, fecha tudo em `finally` e devolve JSON ou `sendError`.
+4. O servlet (`muralha.digital.<modulo>.<Entidade>Servlet`) verifica sessão e direito — nos módulos novos com `muralha.digital.acessos.ControleAcesso.exigir`, que responde 401/403 em JSON (§4) —, despacha por `if/else` sobre `acao`, valida parâmetros, chama a classe de domínio (`Entidade`/`Entidades`) que abre `Conexao.getConexao()`, executa SQL/procedure, fecha tudo em `finally` e devolve JSON ou `sendError`.
 5. Na tela, `Swal.fire`/`bs_alert`/`toastr` reportam sucesso ou erro.
 
 Fluxo GTW clássico: JSP → `include cabecalho.jsp` → GWT widgets (`GtwMenu.nocache.js`, `GtwWidgets/*`) → serviços GWT-RPC (`com.consilux.ui.server.*ServiceImpl`) ou servlets `/ajax/*`, `/processo/*`, `/relatorio/*`, `/remessa/*`.
@@ -44,11 +44,13 @@ Fluxo GTW clássico: JSP → `include cabecalho.jsp` → GWT widgets (`GtwMenu.n
 - Inatividade: valores vêm de `ConfiguracaoInatividadeServlet` (config `LoginTempoInatividade` / `LoginNuncaBloqueia`) — com "nunca bloqueia" a sessão fica sem timeout (`manterConectado=true`). `web.xml` define 240 min como padrão do container.
 - Outras vias de entrada: login Google OAuth (`muralha.digital.google.LoginGoogle`, servlet `/callback`, `login_google_token`), acesso por token (`acessoViaToken`, procs `spu_ppv_sis_usuario_token_*`), apps móveis (`login_action_app.jsp`, cookie `isMobileApp`).
 - **Redirecionamento pós-login**: `retUrl` → troca de senha obrigatória (`/login/login_change.jsp`) → tela de alertas (`/muralha-digital/pages/consulta-alerta-ocorrencia/consulta.jsp`, se `ConfiguracaoSons.buscarLoginRedirecionaTelaAlerta()` for verdadeiro e `Alertas.buscarAlertasPendentes()` encontrar pendências) → `/login/abertura-sistemas.jsp`.
-- **Filtro `ValidaSessao`** (`/*`): libera `/login/`, `/Abertura/`, `/ClientesWebSocket`, `erro*.jsp`, `resources/`, `assets/`, `favicon`; se há sessão, revalida a cada 5 min se o usuário continua ativo (`UsuarioServlet.obterStatusUsuario`). **Atenção: se não há sessão (`getSession(false)==null`) o filtro deixa a requisição passar** — a proteção real depende de cada JSP/servlet chamar `Acesso.verificaAcesso()`. Ver `12-riscos-e-debitos-tecnicos.md`.
+- **Filtro `ValidaSessao`** (`/*`): libera `/login/`, `/Abertura/`, `/ClientesWebSocket`, `erro*.jsp`, `resources/`, `assets/`, `favicon`; se há sessão, revalida a cada 5 min se o usuário continua ativo (`UsuarioServlet.obterStatusUsuario`). **Atenção: se não há sessão (`getSession(false)==null`) o filtro deixa a requisição passar** — a proteção real depende de cada JSP/servlet chamar `Acesso.verificaAcesso()` (legado) ou `ControleAcesso` (módulos novos). Ver `12-riscos-e-debitos-tecnicos.md`.
 
 ## 4. Autorização (resumo)
 
-`Acesso.verificaAcesso()` consulta `dbo.fcn_VerificaAcesso(url/ação, id_usuario)`: URLs não cadastradas em `sis_menu.acao` são **liberadas**; cadastradas exigem direito via `sis_menu_direitos` (por grupo ou diretamente por usuário). Menus dinâmicos vêm de `sis_menu_infos`, `sis_menu_relatorio_infos`, `sis_menu_graficos_infos`. Detalhe completo em `09-seguranca-e-permissoes.md` e dados reais em `../referencia/menus-e-permissoes.md`.
+`Acesso.verificaAcesso()` (`com.consilux.model.Acesso`, usado pelo GTW clássico, pelos servlets Muralha antigos e pelo cabeçalho das JSPs) consulta `dbo.fcn_VerificaAcesso(url/ação, id_usuario)`: URLs não cadastradas em `sis_menu.acao` são **liberadas**; cadastradas exigem direito via `sis_menu_direitos` (por grupo ou diretamente por usuário).
+
+Os servlets dos módulos novos usam `muralha.digital.acessos.ControleAcesso`, que consulta a mesma função de forma **estrita**: URL não cadastrada (ou erro na consulta) é **negada**. Sem sessão responde 401 e sem direito 403, ambos em JSON `{"ok":false,"erro":"…"}`; `exigirTela` (servlets que encaminham para JSP) redireciona como o legado. Por isso cada servlet chamado pelas telas novas está cadastrado em `sis_menu` como funcionalidade **sem card** (sem linha em `sis_menu_infos`). Um recurso dentro da tela pode ter `acao` própria, como o 396 (`/MuralhaDigital/SsoAnalise/abrir-superset`, botão "Abrir no Superset"). Tabela por servlet em `../referencia/servlets-e-endpoints.md` §3. Menus dinâmicos vêm de `sis_menu_infos`, `sis_menu_relatorio_infos`, `sis_menu_graficos_infos`. Detalhe completo em `09-seguranca-e-permissoes.md` e dados reais em `../referencia/menus-e-permissoes.md`.
 
 ## 5. Acesso a dados
 
@@ -67,7 +69,32 @@ Fluxo GTW clássico: JSP → `include cabecalho.jsp` → GWT widgets (`GtwMenu.n
 
 ## 7. Jobs agendados (Quartz)
 
-`com.consilux.servlet.ferramentas.Agendador` (servlet `load-on-startup 4`) registra, conforme `confGTW.xml`/banco: Envio de e-mails, Veículo monitorado importado, Tráfego tempo real, Exportação de imagens, Importação de ConfigEquip pendentes, Processamento automático de infrações, Processamento agendado, Envio de movimentos validados, Busca de remessas pendentes, Exportação de descarga e os jobs do Muralha: e-mail/SMS de **Alertas** e **Ocorrências** (`muralha.digital.notificacao.JobEnvia*`). `RAMJobStore` — agendamentos não persistem entre reinicializações (as tabelas `qrtz_*` existem no banco, porém o JDBC store está comentado).
+`com.consilux.servlet.ferramentas.Agendador` (servlet `load-on-startup 4`) registra na inicialização (cada `reajustaJob*` só agenda se o job ainda não existir — `possuiJob`):
+
+- **GTW clássico**: Processamento automático de infrações (`JobProcessaAutomatico`, 10 min) e Processamento agendado (`JobProcessaInfracaoAgendamento`, 10 min); com `habilitar_funcionalidade_cav = 1`, também Envio de movimentos validados (`JobEnviaMovimentoValidado`, cron `0 0/20 19-23 * * ? *`) e Busca de remessas pendentes (`JobBuscaRemessasPendentes`, 1 min). Envio de e-mails, Veículo monitorado importado, Tráfego tempo real, Importação de ConfigEquip XML, Exportação de descarga e Exportação de imagens continuam no código, mas a chamada está comentada (desabilitados em 16/03/2015).
+- **Muralha Digital** (intervalos fixos no código):
+
+| Job | Intervalo | Condição |
+|---|---|---|
+| `notificacao.JobEnviaEmailAlerta`, `JobEnviaEmailOcorrencia` | `IntervaloExecucaoEmailMinutos` (padrão 1 min) | `emailAtivo` |
+| `notificacao.JobEnviaSmsAlerta`, `JobEnviaSmsOcorrencia` | `IntervaloExecucaoSmsMinutos` (padrão 5 min) | `smsAtivo` |
+| `notificacao.JobRetryNotificacao` | 5 min | e-mail ou SMS ativo |
+| `integridade.JobSha256Imagem`, `ocr.JobOcrRevisao` | 5 min | — |
+| `sla.SlaLatenciaJob` | 5 min | — |
+| `sla.SlaPreprocessamentoJob` | 60 min | — |
+| `retencao.RetencaoJob` | 24 h | — |
+| `alerta.operacional.JobAlertaRetencao` | 10 min | — |
+| `alerta.operacional.JobTratamentoAutomatico` | 1 min | — (aplica os tratamentos automáticos dos tipos de alerta) |
+| `disponibilidade.DisponibilidadeJob` | 10 min | — |
+| `sensores.IncidenteImportJob` | 30 min | — |
+| `chamado.ChamadoSlaJob` / `chamado.ChamadoEmailJob` | 5 min / 1 min | — |
+| `kpi.KpiSnapshotJob` | 60 min | — |
+| `analise.CargaAnaliseJob` | 30 min | — (recarga das tabelas `analise.mat_*`) |
+| `relatorio.RelatorioGerencialJob` | 24 h | gera no dia `RELATORIO_GERENCIAL_DIA` (padrão 1) |
+| `relatorio.RelatorioPreProcMensalJob` | 24 h | gera no N-ésimo dia útil `RELATORIO_PREPROC_DIA_UTIL` (padrão 5) |
+| `timelapse.JobTimelapseDescarte` | 60 min | — |
+
+`RAMJobStore` — agendamentos não persistem entre reinicializações (as tabelas `qrtz_*` existem no banco, porém o JDBC store está comentado).
 
 ## 8. Web Services
 

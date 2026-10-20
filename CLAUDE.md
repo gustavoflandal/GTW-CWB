@@ -8,7 +8,7 @@ Sistema legado Java/JSP (Tomcat, SQL Server) da Consilux: **GTW clássico** + **
 - **Padrão visual obrigatório**: `docs/requisitos/05-padrao-visual.md` (Bootstrap 5.3, navbar `#0d75bf`, Bootstrap Icons, SweetAlert2…).
 - **Sem segredos no git.** `confGTW.xml` e `muralha-digital-config.xml` (WEB-INF) são locais e ignorados; use os `.example`. Chaves via variáveis de ambiente (`docs/requisitos/07-configuracao-e-segredos.md`).
 - **Banco** `GTW_MURALHA_DEV` (10.0.0.200): somente leitura sem autorização; DDL/DML só como script em `docs/banco-de-dados/migracoes/`.
-- Código novo: sessão + permissão (`docs/requisitos/06-padroes-de-codigo.md` §1.1), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
+- Código novo: sessão + permissão (`docs/requisitos/06-padroes-de-codigo.md` §1.1; nos módulos novos via `muralha.digital.acessos.ControleAcesso`, verificação estrita — URL nova exige registro em `sis_menu`, ver Plano 35), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
 
 ## Comandos (a partir de `D:\GTW-CWB`)
 ```powershell

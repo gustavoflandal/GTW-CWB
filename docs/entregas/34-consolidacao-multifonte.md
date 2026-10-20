@@ -26,7 +26,7 @@ Implementação de pipeline de consolidação de dados provenientes de múltipla
 
 | Migração | Status |
 |---|---|
-| `20261016_consolidacao_multifonte.sql` | ⏳ Pendente |
+| `20261016_consolidacao_multifonte.sql` | ✅ Executada no DEV (objetos e chaves presentes; conferido em 2026-10-20) |
 
 - View `muralha.v_dados_consolidados` — UNION ALL de 4 fontes com schema normalizado:
   - **PASSAGEM**: `muralha.veiculo_tempo_real` + `dbo.local` (8,2M registros)
@@ -53,7 +53,7 @@ Implementação de pipeline de consolidação de dados provenientes de múltipla
 ## Critérios de aceite
 
 - [x] Build compila sem erros
-- [ ] Migração executada no banco DEV
+- [x] Migração executada no banco DEV (conferido em 2026-10-20)
 - [ ] Ação `resumo` retorna totais por fonte
 - [ ] Ação `consultar` filtra por fonte, período e limite
 - [ ] Tela exibe cards por fonte e tabela com badges coloridos

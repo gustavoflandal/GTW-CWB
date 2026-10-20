@@ -91,11 +91,13 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 
 ## consulta
 
-- Caminho: `muralha-digital/pages/consulta` · 4 arquivos
-- JSPs: log/consulta_log.jsp
+- Caminho: `muralha-digital/pages/consulta` · 5 arquivos
+- JSPs: log/consulta_log.jsp, passagens-anonimizadas/index.jsp
+- Títulos (`<h4>`): passagens-anonimizadas/index: Consulta de Passagens (LGPD)
 - JS próprios: log/js/consulta_log.js, log/js/moment.js
 - CSS próprios: log/css/style.css
-- Endpoints chamados: `/MuralhaDigital/Ftp`
+- Endpoints chamados: `/MuralhaDigital/Ftp`, `/MuralhaDigital/ConsultaAnonimizada`
+- Menu: passagens-anonimizadas = 412 (tela) e 413 (serviço), sem card
 
 ## consulta-alerta-ocorrencia
 
@@ -395,12 +397,15 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - Caminho: `muralha-digital/pages/admin/kpis`
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Configuração de KPIs
+- Endpoints chamados: `/MuralhaDigital/Kpi` (ações: listarConfig, salvar); dados do servidor escapados antes de entrar no HTML
+- Menu: 372, sem card desde 2026-10-18; aberto pelo botão da tela de KPIs (`dashboard/kpis/index.jsp`). Grupos 11 e 42 (o 41 saiu em 2026-10-19)
 
 ## admin/retencao
 
 - Caminho: `muralha-digital/pages/admin/retencao`
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Política de Retenção
+- Menu: 400 (tela) e 401 (serviço `/MuralhaDigital/Retencao`), sem card, só grupo 11. Idem `admin/cpf-matricula` (402/403), `admin/datasets` (404/407) e `dashboard/builder` (405/406)
 
 ## ajuda
 
@@ -408,6 +413,16 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Ajuda contextual
 - Ajuda contextual: o botão de ajuda da barra superior (`cabecalho_bootstrap_simples.jsp` e `muralha_abertura_bootstrap.jsp`) recebe de `muralha-digital/assets/js/ajuda-contexto.js` o endereço `index.jsp#<seção>` da tela atual. O mapa liga trechos do endereço da tela a ids do manual, e o trecho mais longo vence. A tela inicial e as categorias (`muralha_principal.jsp?menu_info_pai=N`) apontam para a seção da categoria, e cada relatório ou gráfico para a sua linha nas seções 15.1 e 15.2. Ao abrir, a Central de Ajuda rola até a seção e a destaca por 4 segundos. Uma tela nova precisa de uma entrada no mapa e de um id correspondente em `pages/ajuda/index.jsp`.
+
+## analise
+
+- Caminho: `muralha-digital/pages/analise` · 3 arquivos
+- JSPs: embedding.jsp, manual.jsp
+- Títulos (`<h1>`): manual: Manual da Plataforma de Análises
+- JS próprios: assets/js/embedding.js
+- Endpoints: a tela é aberta por `/MuralhaDigital/SsoAnalise?acao=abrir` (card 395), que encaminha para embedding.jsp; o iframe carrega o Superset (`/superset/dashboard/<slug>/`) autenticado por SSO. `embedding.js` declara `/MuralhaDigital/AnaliseGuestToken`, mas não o chama
+- Botões: **Manual** (abre `analise/manual.jsp`) e **Abrir no Superset**, exibido só com direito à funcionalidade 396 (atributo `podeAbrirSuperset` calculado pelo `SsoAnaliseServlet`)
+- Menu: 395 (card **Analises** em Análise de Dados, menu_pai=15); 396 Abrir no Superset e 438 guest token, sem card
 
 ## analises/datasets
 
@@ -423,6 +438,8 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - Caminho: `muralha-digital/pages/analises/paineis`
 - JSPs: index.jsp, lista.jsp
 - Títulos (`<title>`): index: Painéis de Análise · lista: Painéis de Análise
+- Manual: botão **Manual** da lista abre `analises/manual.jsp` (Manual do Dashboard Builder)
+- Menu: 376 (card, raiz) para lista.jsp; 418 painel (index.jsp), 419 editor de widget, 420/421 editor e modelador de datasets e 422–427 APIs `/api/dash/*`, sem card
 
 ## analises/widgets
 
@@ -443,6 +460,19 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - Caminho: `muralha-digital/pages/auditoria`
 - JSPs: consulta-log.jsp
 - Títulos (`<title>`): consulta-log: Log de Auditoria
+- JS: `muralha-digital/assets/js/auditoria/consulta-log.js` (dados do servidor escapados antes de entrar no HTML)
+- Endpoints chamados: `/MuralhaDigital/Auditoria` (ações: consultar, listarFiltros)
+- Menu: 366 (card em Análise de Dados, menu_pai=15); serviço 431
+
+## chamados
+
+- Caminho: `muralha-digital/pages/chamados`
+- JSPs: index.jsp, detalhe.jsp, relatorios.jsp, configuracao.jsp, manual.jsp
+- Títulos (`<h4>`/`<h1>`): index: Chamados · relatorios: Relatórios de Atendimento · configuracao: Configuração de Chamados · manual: Manual do Sistema de Chamados
+- JS: `muralha-digital/assets/js/chamados/` (chamados-comum.js, chamados-lista.js, chamados-detalhe.js, chamados-relatorios.js, chamados-configuracao.js)
+- Endpoints chamados: `/MuralhaDigital/Chamado`, `/MuralhaDigital/ChamadoConfig`
+- Menu: 383 (categoria **Sistema de Chamados**, menu_info_pai=49) → 379 (card Chamados); 380 detalhe, 381 relatórios e 382 configuração sem card (relatórios e configuração abertos pelos botões da lista). Grupos 107–109 (perfis de chamados) e 11; os servlets não estão em `sis_menu` (controle próprio por perfil)
+- Configuração: a aba Perfis de acesso não lista mais os administradores (2026-10-15)
 
 ## dashboard/builder
 
@@ -454,7 +484,17 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 
 - Caminho: `muralha-digital/pages/dashboard/kpis`
 - JSPs: index.jsp
-- Títulos (`<title>`): index: KPIs (legado)
+- Títulos (`<title>`): index: Dashboard de KPIs
+- Endpoints chamados: `/MuralhaDigital/Kpi` (ação: historico); nomes, unidades e valores escapados antes de entrar no HTML. Botão para a Configuração de KPIs (`admin/kpis/index.jsp`)
+- Menu: 371 (card **KPIs** em Dashboards, menu_pai=1); serviço 429
+
+## inteligencia/consolidacao
+
+- Caminho: `muralha-digital/pages/inteligencia/consolidacao`
+- JSPs: index.jsp
+- Títulos (`<h4>`): index: Consolidação de Dados Multifonte
+- Endpoints chamados: `/MuralhaDigital/Consolidacao` (ações: consultar, resumo)
+- Menu: 410 (tela) e 411 (serviço), sem card; grupos 11 e 42
 
 ## meu-perfil
 
@@ -474,11 +514,39 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Disponibilidade Equipamentos
 
+## monitoramento/integridade
+
+- Caminho: `muralha-digital/pages/monitoramento/integridade` · 3 arquivos
+- JSPs: index.jsp
+- Títulos (`<h2>`): index: Integridade das Imagens Recebidas
+- JS próprios: assets/js/integridade.js
+- CSS próprios: assets/css/integridade.css
+- Endpoints chamados: `/MuralhaDigital/IntegridadeRecepcao` (ações: listar, resumo, exportarCsv), `/MuralhaDigital/IntegridadeConfig` (ações: salvarPadrao, salvarEquipamento)
+- Menu: 384 (card em Análise de Dados, menu_pai=15); 385 consulta e 386 configuração, sem card
+
+## monitoramento/logs-tecnicos
+
+- Caminho: `muralha-digital/pages/monitoramento/logs-tecnicos` · 3 arquivos
+- JSPs: index.jsp
+- Títulos (`<h2>`): index: Logs Técnicos
+- JS próprios: assets/js/logs-tecnicos.js
+- CSS próprios: assets/css/logs-tecnicos.css
+- Endpoints chamados: `/MuralhaDigital/LogTecnico` (ações: listar, opcoes, linhaTempo, correlacionar, historicoParametros, relatorioEquipamento, exportarCsv)
+- Menu: 387 (card em Análise de Dados, menu_pai=15); 388 consulta, sem card
+
 ## monitoramento/mapa
 
 - Caminho: `muralha-digital/pages/monitoramento/mapa`
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Mapa GIS
+
+## monitoramento/pre-processamento
+
+- Caminho: `muralha-digital/pages/monitoramento/pre-processamento`
+- JSPs: index.jsp
+- Títulos (`<h4>`): index: Painel de Pré-Processamento
+- Endpoints chamados: `/MuralhaDigital/PreProcessamento` (ação: metricas); sem `acao`, o servlet encaminha para esta JSP
+- Menu: 394 (card **Pre-Processamento** em Análise de Dados, href `/MuralhaDigital/PreProcessamento`); 399 = JSP, sem card; grupos 11 e 42
 
 ## monitoramento/sla-latencia
 
@@ -509,4 +577,43 @@ Gerado por varredura. Para cada diretório de página: JSPs, JS/CSS próprios e 
 - Caminho: `muralha-digital/pages/processamento/lotes`
 - JSPs: index.jsp
 - Títulos (`<title>`): index: Gestão de Lotes
+- Endpoints chamados: `/MuralhaDigital/Lote` (ações: listar, criar, itens, disponiveis, adicionarInfracoes, enviar, cancelar)
+- Modais: detalhe do lote (botões Adicionar infrações, Cancelar e Enviar, exibidos conforme a situação) e **Adicionar infrações ao lote** (lista as disponíveis e inclui as marcadas)
+- Menu: 370 (card em Cadastro e Configuração, menu_pai=16); serviço 428
+
+## processamento/revisao-placas
+
+- Caminho: `muralha-digital/pages/processamento/revisao-placas` · 3 arquivos
+- JSPs: index.jsp
+- Títulos (`<h2>`): index: Revisão de Placas
+- JS próprios: assets/js/revisao-placas.js
+- CSS próprios: assets/css/revisao-placas.css
+- Endpoints chamados: `/MuralhaDigital/RevisaoPlaca` (ações: listar, passagem, corrigir, motivos, operadores), `/MuralhaDigital/OcrConfig` (ações: salvarPadrao, salvarEquipamento), `/MuralhaDigital/Veiculo/Imagem`
+- Menu: 389 (card em Consulta de Veículos, menu_pai=6); 390 fila e 391 configuração do score de OCR, sem card
+
+## relatorios/exportacao-passagens
+
+- Caminho: `muralha-digital/pages/relatorios/exportacao-passagens`
+- JSPs: index.jsp
+- Títulos (`<h4>`): index: Exportação de Passagens
+- Endpoints chamados: `/MuralhaDigital/Exportacao` (prévia em JSON e download em CSV)
+- Menu: 408 (tela) e 409 (serviço), sem card; grupos 11 e 42
+
+## relatorios/gerencial
+
+- Caminho: `muralha-digital/pages/relatorios/gerencial`
+- JSPs: index.jsp
+- Títulos (`pageTitle` do servlet): index: Relatórios Gerenciais
+- Endpoints chamados: `/MuralhaDigital/RelatorioGerencial` (ações: listar, detalhe, exportarCsv, exportarXlsx); sem `acao`, o servlet encaminha para esta JSP. Dados do servidor escapados antes de entrar no HTML
+- Menu: 393 (card **Relatorios Gerenciais** em Análise de Dados, href `/MuralhaDigital/RelatorioGerencial`); 398 = JSP, sem card; grupos 11 e 42
+
+## tipos-alerta
+
+- Caminho: `muralha-digital/pages/tipos-alerta` · 3 arquivos
+- JSPs: index.jsp
+- Títulos (`<h2>`): index: Tipos de Alerta — Criticidade, Cores e Tratamentos
+- JS próprios: assets/js/tipos-alerta.js
+- CSS próprios: assets/css/tipos-alerta.css
+- Endpoints chamados: `/MuralhaDigital/TipoAlertaConfig` (ações: listar, catalogo, salvarConfig, tratamentos, salvarTratamento); sem `acao`, o servlet encaminha para esta JSP. A ação `aparencia` (cor/ícone/criticidade) é lida por `utils/notificacao/js/notificacao.js`
+- Menu: 392 (card **Tipos de Alerta** em Análise de Dados, href `/MuralhaDigital/TipoAlertaConfig`); 397 = JSP, sem card; grupos 11 e 42
 

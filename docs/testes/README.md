@@ -36,15 +36,16 @@ A numeração segue a do plano: o Teste 20 corresponde ao Plano 20, cuja entrega
 | 22 — Sistema de Chamados | [22-sistema-chamados.md](22-sistema-chamados.md) | ⏳ Parcial: teste integrado de 2026-10-15 com 10 de 10 casos aprovados; navegador e perfil Gestor pendentes |
 | 23 — Correção da documentação de aderência | [23-correcao-documentacao-aderencia.md](23-correcao-documentacao-aderencia.md) | ⏳ Pendente (script de validação executado na nuvem; roteiro a repetir no Windows) |
 | 24 — Correções pontuais da auditoria | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) | ⏳ Parcial: 15 testes TestNG aprovados na nuvem e no Windows; roteiro manual pendente |
-| 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
-| 26 — Logs técnicos e histórico de parâmetros | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) | ⏳ Parcial: 42 testes TestNG e consulta real somente leitura aprovados no Windows; migração e roteiro no navegador pendentes |
-| 27 — Score de OCR e revisão de placas | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) | ⏳ Parcial: 32 testes TestNG aprovados no Windows; migração e roteiro no navegador pendentes |
+| 25 — Integridade SHA-256 na recepção | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) | ⏳ Parcial: 31 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
+| 26 — Logs técnicos e histórico de parâmetros | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) | ⏳ Parcial: 42 testes TestNG e consulta real somente leitura aprovados no Windows; migração executada, roteiro no navegador pendente |
+| 27 — Score de OCR e revisão de placas | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) | ⏳ Parcial: 32 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 28 — Alertas Operacionais | [28-alertas-operacionais.md](28-alertas-operacionais.md) | ⏳ Parcial: 20 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 29 — KPIs, Histórico e Relatório Mensal | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) | ⏳ Parcial: 16 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 30 — Painéis de Assertividade e Pré-Processamento | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) | ⏳ Parcial: 8 testes TestNG aprovados no Windows; migração executada, roteiro no navegador pendente |
 | 31 — Acabamentos de Baixo Custo | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) | ⏳ Parcial: 6 testes TestNG aprovados no Windows; roteiro no navegador pendente |
-| 32 — Retry de notificações | [32-retry-notificacao.md](32-retry-notificacao.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
-| 33 — Descarte automático de time-lapse | [33-timelapse-descarte.md](33-timelapse-descarte.md) | ⏳ Parcial: 6 testes TestNG; migração e roteiro no navegador pendentes |
-| 34 — Consolidação de dados multifonte | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) | ⏳ Parcial: 8 testes TestNG; migração e roteiro no navegador pendentes |
+| 32 — Retry de notificações | [32-retry-notificacao.md](32-retry-notificacao.md) | ⏳ Parcial: 8 testes TestNG; migração executada, roteiro no navegador pendente |
+| 33 — Descarte automático de time-lapse | [33-timelapse-descarte.md](33-timelapse-descarte.md) | ⏳ Parcial: 6 testes TestNG; migração executada, roteiro no navegador pendente |
+| 34 — Consolidação de dados multifonte | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) | ⏳ Parcial: 8 testes TestNG; migração executada, roteiro no navegador pendente |
+| 35 — Correções de segurança e funcionais (fases 1 e 2) | Sem roteiro próprio: casos na seção "Pendente de execução manual" da [Entrega 35](../entregas/35-correcoes-seguranca-funcionais.md) e na Fase 7 do [roteiro consolidado](../entregas/roteiro-testes-manuais.md) | ⏳ Parcial: testes TestNG das classes alteradas aprovados; 5 casos no navegador pendentes |
 
-Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).
+Situação das migrações conferida em 2026-10-20 ([`migracoes/README.md`](../banco-de-dados/migracoes/README.md)). Revisado em 2026-10-16 a partir dos próprios roteiros ([Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)).

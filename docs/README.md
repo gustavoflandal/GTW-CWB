@@ -1,6 +1,6 @@
 # Documentação do GTW-CWB
 
-Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha Digital), Consilux Tecnologia. Esta pasta é a **base de conhecimento oficial** para qualquer implementação e para orientar subagents. Gerada em 2026-10-08 a partir do código e do banco `GTW_MURALHA_DEV`; índice atualizado em 2026-10-16.
+Sistema legado de gestão de trânsito e monitoramento (GTW clássico + Muralha Digital), Consilux Tecnologia. Esta pasta é a **base de conhecimento oficial** para qualquer implementação e para orientar subagents. Gerada em 2026-10-08 a partir do código e do banco `GTW_MURALHA_DEV`; índice atualizado em 2026-10-20.
 
 > **Regras de ouro:** (1) a stack em `.setup-gtw` é imutável; (2) siga o padrão visual (`05`); (3) sem segredos no repositório; (4) banco somente leitura sem autorização; (5) todo código novo verifica sessão e permissão.
 
@@ -35,13 +35,16 @@ Visão completa do sistema em diagramas Mermaid (renderizados automaticamente pe
 | [10-guia-de-implementacao.md](requisitos/10-guia-de-implementacao.md) | Receitas passo a passo e Definição de Pronto |
 | [11-glossario.md](requisitos/11-glossario.md) | Termos e siglas |
 | [12-riscos-e-debitos-tecnicos.md](requisitos/12-riscos-e-debitos-tecnicos.md) | Riscos de segurança, desempenho e manutenção |
-| [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 788 tabelas, 826 objetos programáveis, código SQL, domínios |
+| [banco-de-dados/](banco-de-dados/README.md) | Catálogo do banco: 812 tabelas, 851 objetos programáveis, código SQL, domínios |
 | [referencia/](referencia/) | Inventários gerados: servlets, módulos, telas, pacotes, menus/permissões; [guia de correções](referencia/guia-correcoes-analise-kpis-lotes.md) de Análise de Dados, KPIs, Gestão de Lotes e acessos |
 | [dashboards/](dashboards/) | Construtor de Dashboards (Plano 20): arquitetura, sessões DASH-1 a DASH-6, relatórios |
+| [analise/](analise/README.md) | Plataforma de Análises com Apache Superset (Plano 23): sessões SUP-1 a SUP-14, relatórios, manual do usuário, guia do administrador e [camada de dados](analise/camada-dados-views-datasets.md) (views, datasets e tabelas de origem) |
 | [chamados/](chamados/) | Sistema de Chamados (Plano 22): arquitetura, manual do usuário, sessões CH-1 a CH-3, relatórios |
-| [planos-salvador/](planos-salvador/) | 34 planos PoC Salvador (01–34) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
-| [entregas/](entregas/README.md) | Relatórios de entrega 01–34 e a matriz canônica de aderência ao TR ([`itens-edital-x-entregas.md`](entregas/itens-edital-x-entregas.md)) |
+| [planos-salvador/](planos-salvador/) | 35 planos PoC Salvador (01–35; o número 23 tem dois documentos: correção da documentação de aderência e Análises com Superset) mais `00`, `00b` (tabelas complementares) e `00c` (errata) |
+| [entregas/](entregas/README.md) | Relatórios de entrega 01–35 e a matriz canônica de aderência ao TR ([`itens-edital-x-entregas.md`](entregas/itens-edital-x-entregas.md)) |
 | [testes/](testes/README.md) | Roteiros de teste manual por plano |
+| [Auditoria/](Auditoria/) | Auditoria de código de 2026-10-19: [relatório](Auditoria/2026-10-19-relatorio-auditoria.md), [sugestões de melhoria](Auditoria/2026-10-19-sugestoes-melhoria.md) e [prompt de code review e correção](Auditoria/2026-10-19-prompt-code-review-correcoes.md) (registros datados; as correções das fases 1 e 2 estão no Plano 35) |
+| [edital-curitiba/](edital-curitiba/) | [Análise comparativa Curitiba × Salvador](edital-curitiba/analise-comparativa-curitiba-salvador.md); o Anexo II de Curitiba em md está em [`docs-editais/edital-curitiba/`](../docs-editais/edital-curitiba/Anexo_II_Especificacoes_Tecnicas_Sistema.md) |
 | [agentes/AGENTS.md](agentes/AGENTS.md) | **Guia para subagentes**: mapa de docs por tarefa, padrões de código, índice dos planos Salvador |
 
 ## Manutenção

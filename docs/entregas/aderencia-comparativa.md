@@ -53,7 +53,7 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 |---|---|---|---|---|
 | 5.2.1.1 | Recepção automática | ✅ | ✅ | Já existente |
 | 5.2.1.2 | SHA-256 integridade | ❌ | ⚠️ | Planos 02 e 25 (conferência com hash de origem por equipamento; nenhum equipamento envia hash ainda) |
-| 5.2.1.3 | Registro de recepção | ⚠️ | ⚠️ | Plano 25 (a-f por imagem e por equipamento/dia; aguardando migração e teste) |
+| 5.2.1.3 | Registro de recepção | ⚠️ | ⚠️ | Plano 25 (a-f por imagem e por equipamento/dia; migração executada, aguardando teste) |
 | 5.2.1.4 | Indexação por tipo/equip/local | ✅ | ✅ | Já existente |
 | 5.2.1.5 | Recepção simultânea + margem | ⚠️ | ⚠️ | Sem métricas |
 | 5.2.1.6 | Registros fora do prazo | ❌ | ⚠️ | Plano 10 (parcial) |
@@ -117,8 +117,8 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.4.4.4 | Exportação GIS | ❌ | ✅ | Planos 16, 31 (3 camadas: equipamentos, alertas, infrações) |
 | 5.4.5 | Relatórios analíticos | ⚠️ | ⚠️ | Plano 20 (widgets TABLE) |
 | 5.4.6.1-3 | KPIs com metas/alertas | ❌ | ⚠️ | Plano 15 (sem meta, histórico e alerta) |
-| 5.4.7.1-7 | Repositório de logs | ⚠️ | ⚠️ | Plano 26 (logs técnicos unificados; sem trilha imutável; aguardando migração e teste) |
-| 5.4.7.6 | Histórico de configurações | ❌ | ⚠️ | Plano 26 (`parametro_historico`; aguardando migração e teste) |
+| 5.4.7.1-7 | Repositório de logs | ⚠️ | ⚠️ | Plano 26 (logs técnicos unificados; sem trilha imutável; migração executada, aguardando teste) |
+| 5.4.7.6 | Histórico de configurações | ❌ | ⚠️ | Plano 26 (`parametro_historico`; migração executada, aguardando teste) |
 
 ### §5.5 — Pré-processamento
 
@@ -156,9 +156,9 @@ A queda em §5.6 não é regressão: a matriz passou a contar os 28 subitens de 
 | 5.7.2.1 | Índice mínimo | ⚠️ | ⚠️ | Não aferido |
 | 5.7.4.1-2 | Score parametrizável | ⚠️ | ⚠️ | Plano 27 (score e limiar configuráveis; equipamentos não enviam score) |
 | 5.7.4.3 | Encaminhamento por score | ⚠️ | ⚠️ | Plano 27 (job e fila; sem score, nada é encaminhado) |
-| 5.7.4.4 | Score permanente | ❌ | ⚠️ | Plano 27 (`vtr_placa_leitura`; migração pendente) |
+| 5.7.4.4 | Score permanente | ❌ | ⚠️ | Plano 27 (`vtr_placa_leitura`; migração executada) |
 | 5.7.5.1 | Rastreabilidade | ✅ | ✅ | Já existente |
-| 5.7.5.2 | Log de correção | ⚠️ | ⚠️ | Plano 27 (justificativa obrigatória; migração pendente) |
+| 5.7.5.2 | Log de correção | ⚠️ | ⚠️ | Plano 27 (justificativa obrigatória; migração executada) |
 | 5.7.5.3 | Retenção 5 anos | ❌ | ✅ | Plano 12 |
 | 5.7.8 | Anonimização | ❌ | ✅ | Plano 13 |
 | 5.7.9.1 | Latência ≤4s | ⚠️ | ⚠️ | Plano 07 (monitoramento) |

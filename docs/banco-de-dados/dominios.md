@@ -1,6 +1,6 @@
 # Tabelas de domínio (valores atuais)
 
-Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status, situação, categoria, motivo, perfil, prioridade, classe). Valores em 2026-10-15 no ambiente DEV; podem diferir em produção.
+Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status, situação, categoria, motivo, perfil, prioridade, classe). Valores em 2026-10-20 no ambiente DEV; podem diferir em produção.
 
 ## dbo.cad_categoria (14)
 
@@ -104,7 +104,7 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 1 | NORMAL |
 | 2 | ALTA |
 
-## dbo.log_tipo (32)
+## dbo.log_tipo (27)
 
 | id | tipo | subtipo | descricao |
 |---|---|---|---|
@@ -125,11 +125,6 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 26 | 2 | 6 | Falha na comunicação com a câmera |
 | 27 | 2 | 7 | Falha na sequência semafórica |
 | 28 | 2 | 8 | Sequência semafórica correta |
-| 29 | 3 | 15 | Circulação ou estacionamento irregular |
-| 30 | 3 | 16 | Circulação em desacordo com uso da via |
-| 31 | 3 | 17 | Congestionamento ou retenção anormal |
-| 32 | 3 | 18 | Bloqueio ou interferência na via |
-| 33 | 3 | 19 | Evento operacional de mobilidade urbana |
 | 110 | 1 | 10 | Ajuste de relógio |
 | 111 | 1 | 11 | Mudança de horário de verão |
 | 112 | 1 | 12 | Conectado ao servidor |
@@ -153,7 +148,7 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 
 | serie_equipamento | versao | tempo_executando | status_copia | ultima_deteccao | data_atualizacao |
 |---|---|---|---|---|---|
-| 1000001 | 20260812.01DAT11     | 123962859 | Sincronização incompleta [Error in socket I/O]                                                                                                                                                                                                             | 10/15/2026 16:43:53 | 10/15/2026 16:44:05 |
+| 1000001 | 20260812.01DAT11     | 20220375 | Sincronização incompleta [Error in socket I/O]                                                                                                                                                                                                             | 10/20/2026 08:20:14 | 10/20/2026 08:20:53 |
 | 1000100 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 01/06/2026 14:12:23 |
 | 1000101 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 08/14/2025 02:02:38 |
 | 1000102 |                      | 0 |                                                                                                                                                                                                                                                            | 12/30/1899 00:00:00 | 11/19/2025 02:03:08 |
@@ -420,6 +415,18 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 1 | Ativo |
 | 2 | Encerrado |
 
+## muralha.motivo_correcao_placa (7)
+
+| id | descricao | exige_texto | confirmacao | ativo | ordem |
+|---|---|---|---|---|---|
+| 1 | Erro de leitura do OCR (caractere trocado) | False | False | True | 1 |
+| 2 | Placa parcialmente ilegível na imagem | False | False | True | 2 |
+| 3 | Placa não lida pelo equipamento | False | False | True | 3 |
+| 4 | Placa frontal diferente da traseira | True | False | True | 4 |
+| 5 | Inclusão de placa de reboque ou semirreboque | False | False | True | 5 |
+| 6 | Conferida: leitura correta | False | True | True | 6 |
+| 7 | Outro (descrever) | True | False | True | 99 |
+
 ## muralha.motivo_descarte (2)
 
 | id | descricao |
@@ -537,20 +544,56 @@ Tabelas de apoio pequenas (<= 40 linhas) cujo nome sugere domínio (tipo, status
 | 81038ad9-2206-4956-a34e-8c844c673a62 | FINALIZADO - APREENDIDO |
 | 6077fc54-fd5b-42c0-9ee1-8fb3612e48bd | NOTIFICAÇÃO ENVIADA |
 
-## muralha.tipo_alerta_ocorrencia (10)
+## muralha.tipo_alerta_config (15)
 
-| id | tipo | descricao | descricao_sms | permite_monitorado_sem_placa | tarefa_ativa | data_alteracao | id_usuario | nomeinterno | prioridade |
-|---|---|---|---|---|---|---|---|---|---|
-| cb8d5c4b-1822-4868-a2f9-0153b50212da | Veículo Suspeito de Sequestro Relâmpago |  | Veíc. Seq.Relâmpago | True | True | 01/12/2022 17:54:35 | 2 | SEQUESTRO            | 14 |
-| 95631582-96b2-4220-9612-12131be4923c | Veículo Roubado |  | Veículo Roubado | False | True | 01/12/2022 17:54:35 | 2 | ROUBADO              | 12 |
-| 9d31a265-a663-4836-bf00-2309fc0d5e33 | Veiculo Monitorado |  | Veículo Monitorado | False | True | 04/04/2022 09:00:20 | 2 | MONITORADO           | 1 |
-| 0ab34bea-2f45-4d83-b7cb-53a3440da8a6 | Outros |  | Outros | False | True | 10/01/2026 11:11:42 | 2 | OUTROS               | 9 |
-| 19b86a23-2cd6-43ed-a596-62935ea3980a | Comboio de Veículos |  | Comboio de Veículos | True | True | 01/14/2022 11:57:05 | 2 | COMBOIO              | 99 |
-| ae93f81a-df6d-41b5-afc6-99b3438c291d | Transporte Clandestino |  | Transp. Clandestino | True | True | 01/12/2022 17:54:35 | 2 | CLANDESTINO          | 3 |
-| feef9500-83c0-4942-a8aa-aed77e20ba5b | Veículo Suspeito de Roubo à Banco |  | Veíc. Roubo Banco | True | True | 01/12/2022 17:54:35 | 2 | SRBANCO              | 5 |
-| 6631dc43-779f-4bff-a329-b9653d056708 | Veículo com Atraso de Licenciamento |  | Atraso Licenciamento | False | True | 08/22/2023 19:42:15 | 2 | LICENCIAMENTO        | 6 |
-| 0349f722-dfde-4080-9e3b-d65f1c058edc | Veículo Furtado |  | Veículo Furtado | False | True | 01/12/2022 17:54:35 | 2 | FURTADO              | 7 |
-| cf6ebc36-56ca-430b-9d3d-f7d9ff1e82f3 | Veículo Clonado |  | Veículo Clonado | True | True | 01/12/2022 17:54:35 | 2 | CLONADO              | 8 |
+| id_tipo_alerta_ocorrencia | critico | cor | icone | dt_atualizacao | id_usuario |
+|---|---|---|---|---|---|
+| e2a31f01-0001-4a00-b001-000000000001 | False | purple | bi-sign-no-parking | 10/16/2026 18:20:04 |  |
+| e2a31f01-0001-4a00-b001-000000000003 | True | error | bi-cone-striped | 10/16/2026 18:20:04 |  |
+| e2a31f01-0001-4a00-b001-000000000004 | False | pink | bi-tools | 10/16/2026 18:20:04 |  |
+| cb8d5c4b-1822-4868-a2f9-0153b50212da | True | error | bi-person-dash | 10/18/2026 10:09:59 |  |
+| 95631582-96b2-4220-9612-12131be4923c | True | orange | bi-exclamation-triangle-fill | 10/16/2026 18:20:04 |  |
+| 9d31a265-a663-4836-bf00-2309fc0d5e33 | False | success | bi-eye | 10/16/2026 18:20:04 |  |
+| 0ab34bea-2f45-4d83-b7cb-53a3440da8a6 | False | info | bi-question-circle | 10/18/2026 10:09:59 |  |
+| 19b86a23-2cd6-43ed-a596-62935ea3980a | False | info | bi-people | 10/16/2026 18:20:04 |  |
+| 634c485a-42a6-480d-8beb-8f63bf9cbfd7 | False | warning | bi-shield-exclamation | 10/18/2026 10:09:59 |  |
+| ae93f81a-df6d-41b5-afc6-99b3438c291d | False | info | bi-truck | 10/16/2026 18:20:04 |  |
+| e2a31f01-0001-4a00-b001-ae7e4ca00001 | False | brown | bi-stoplights | 10/16/2026 18:20:04 |  |
+| feef9500-83c0-4942-a8aa-aed77e20ba5b | True | error | bi-bank | 10/18/2026 10:09:59 |  |
+| 6631dc43-779f-4bff-a329-b9653d056708 | False | info | bi-calendar-x | 10/16/2026 18:20:04 |  |
+| 0349f722-dfde-4080-9e3b-d65f1c058edc | True | orange | bi-exclamation-triangle | 10/16/2026 18:20:04 |  |
+| cf6ebc36-56ca-430b-9d3d-f7d9ff1e82f3 | False | warning | bi-files | 10/18/2026 10:14:47 | 1 |
+
+## muralha.tipo_alerta_ocorrencia (15)
+
+| id | tipo | descricao | descricao_sms | permite_monitorado_sem_placa | tarefa_ativa | data_alteracao | id_usuario | nomeinterno | prioridade | cor |
+|---|---|---|---|---|---|---|---|---|---|---|
+| e2a31f01-0001-4a00-b001-000000000001 | Estacionamento Irregular | Irregularidade de estacionamento ou parada | ESTAC IRREG | True | True |  |  | ESTAC_IRREGULAR      | 20 |  |
+| e2a31f01-0001-4a00-b001-000000000003 | Bloqueio de Via | Bloqueio ou interferência na circulação viária | BLOQUEIO | True | True |  |  | BLOQUEIO_VIA         | 10 |  |
+| e2a31f01-0001-4a00-b001-000000000004 | Falha de Equipamento | Falha operacional relevante de equipamento | FALHA EQUIP | True | True |  |  | FALHA_EQUIP          | 5 |  |
+| cb8d5c4b-1822-4868-a2f9-0153b50212da | Veículo Suspeito de Sequestro Relâmpago |  | Veíc. Seq.Relâmpago | True | True | 01/12/2022 17:54:35 | 2 | SEQUESTRO            | 14 | #28A745 |
+| 95631582-96b2-4220-9612-12131be4923c | Veículo Roubado |  | Veículo Roubado | False | True | 01/12/2022 17:54:35 | 2 | ROUBADO              | 12 | #FFA500 |
+| 9d31a265-a663-4836-bf00-2309fc0d5e33 | Veiculo Monitorado |  | Veículo Monitorado | False | True | 04/04/2022 09:00:20 | 2 | MONITORADO           | 1 | #198754 |
+| 0ab34bea-2f45-4d83-b7cb-53a3440da8a6 | Outros |  | Outros | False | True | 10/01/2026 11:11:42 | 2 | OUTROS               | 9 |  |
+| 19b86a23-2cd6-43ed-a596-62935ea3980a | Comboio de Veículos |  | Comboio de Veículos | True | True | 01/14/2022 11:57:05 | 2 | COMBOIO              | 99 |  |
+| 634c485a-42a6-480d-8beb-8f63bf9cbfd7 | Integridade de imagem divergente | SHA-256 da imagem recebida difere do hash enviado pelo equipamento (TR 5.2.1.2) | Integridade imagem | True | True | 10/16/2026 16:47:34 |  | INTEGRIDADE          | 2 | #DC3545 |
+| ae93f81a-df6d-41b5-afc6-99b3438c291d | Transporte Clandestino |  | Transp. Clandestino | True | True | 01/12/2022 17:54:35 | 2 | CLANDESTINO          | 3 | #17A2B8 |
+| e2a31f01-0001-4a00-b001-ae7e4ca00001 | Congestionamento/Retenção | Retenção ou congestionamento detectado por regra de tráfego | RETENCAO | True | True |  |  | CONGESTIONAMENTO     | 15 |  |
+| feef9500-83c0-4942-a8aa-aed77e20ba5b | Veículo Suspeito de Roubo à Banco |  | Veíc. Roubo Banco | True | True | 01/12/2022 17:54:35 | 2 | SRBANCO              | 5 | #20C997 |
+| 6631dc43-779f-4bff-a329-b9653d056708 | Veículo com Atraso de Licenciamento |  | Atraso Licenciamento | False | True | 08/22/2023 19:42:15 | 2 | LICENCIAMENTO        | 6 | #0D6EFD |
+| 0349f722-dfde-4080-9e3b-d65f1c058edc | Veículo Furtado |  | Veículo Furtado | False | True | 01/12/2022 17:54:35 | 2 | FURTADO              | 7 | #E67E22 |
+| cf6ebc36-56ca-430b-9d3d-f7d9ff1e82f3 | Veículo Clonado |  | Veículo Clonado | True | True | 01/12/2022 17:54:35 | 2 | CLONADO              | 8 | #FFC107 |
+
+## muralha.tipo_alerta_tratamento (6)
+
+| id | id_tipo_alerta_ocorrencia | tratamento | automatico | parametros_json | ativo | dt_cadastro |
+|---|---|---|---|---|---|---|
+| 1 | e2a31f01-0001-4a00-b001-ae7e4ca00001 | REGISTRO_ESTATISTICO | True |  | True | 10/16/2026 18:20:04 |
+| 2 | e2a31f01-0001-4a00-b001-ae7e4ca00001 | ANALISE_OPERACIONAL | False |  | True | 10/16/2026 18:20:04 |
+| 3 | e2a31f01-0001-4a00-b001-000000000003 | CAMPO | False |  | True | 10/16/2026 18:20:04 |
+| 4 | e2a31f01-0001-4a00-b001-000000000003 | GERAR_OCORRENCIA | True |  | True | 10/16/2026 18:20:04 |
+| 5 | e2a31f01-0001-4a00-b001-000000000004 | CAMPO | False |  | True | 10/16/2026 18:20:04 |
+| 6 | e2a31f01-0001-4a00-b001-000000000004 | REGISTRO_ESTATISTICO | True |  | True | 10/16/2026 18:20:04 |
 
 ## muralha.tipo_notificacao (3)
 

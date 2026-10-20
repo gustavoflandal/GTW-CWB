@@ -31,7 +31,7 @@ graph TB
         subgraph Muralha["muralha.digital (Moderno)"]
             SERVLETS["@WebServlet<br/>/MuralhaDigital/*"]
             SERVICES["Services<br/>(Auditoria, Senha, TOTP,<br/>Obliteração, Assinatura)"]
-            JOBS["Quartz Jobs<br/>(12 jobs ativos)"]
+            JOBS["Quartz Jobs<br/>(21 jobs)"]
             CHAMADOS["Sistema de Chamados<br/>/MuralhaDigital/Chamado<br/>ChamadoRelatorio, ChamadoConfig<br/>ChamadoSlaJob, ChamadoEmailJob"]
             DASHB["Construtor de Dashboards<br/>(datasets, painéis, widgets)"]
         end
@@ -87,7 +87,7 @@ graph TB
     JOBS --> SMS
 ```
 
-O banco `GTW_MURALHA_DEV` (SQL Server 2016, ≈ 722 GB) tem **5 schemas e 788 tabelas** em 2026-10-15: `dbo` (436), `muralha` (148), `mobilidade` (183, não usado pelo Java deste projeto), `ia` (6) e `dash` (15, criado em 2026-10-13), além de 126 views, 390 procedures, 302 funções, 8 triggers e 666 chaves estrangeiras. O detalhe está em [`../banco-de-dados/README.md`](../banco-de-dados/README.md).
+O banco `GTW_MURALHA_DEV` (SQL Server 2016, ≈ 722 GB) tem **6 schemas e 812 tabelas** em 2026-10-20: `dbo` (437), `muralha` (167), `mobilidade` (183, não usado pelo Java deste projeto), `ia` (6), `dash` (15, criado em 2026-10-13) e `analise` (4, camada do Superset, criado em 2026-10-16), além de 140 views, 401 procedures, 302 funções, 8 triggers e 673 chaves estrangeiras. O detalhe está em [`../banco-de-dados/README.md`](../banco-de-dados/README.md).
 
 ---
 
@@ -147,17 +147,26 @@ gantt
 
     section PoC
     SHA-256 Integridade (5 min)       :a1, 0, 5
+    Revisão OCR (5 min)               :a7, 0, 5
     SLA Latência (5 min)              :a2, 0, 5
+    Tratamento autom. alertas (1 min) :a8, 0, 1
+    Alerta retenção tráfego (10 min)  :a9, 0, 10
     Disponibilidade Equip (10 min)    :a3, 0, 10
     Incidentes Waze (30 min)          :a4, 0, 30
+    Carga Análises (30 min)           :a10, 0, 30
     SLA Pré-proc 72h (60 min)        :a5, 0, 60
+    KPI Snapshot (60 min)             :a11, 0, 60
+    Descarte Timelapse (60 min)       :a12, 0, 60
     Retenção Dados (1440 min)         :a6, 0, 60
+    Relatório Gerencial (1440 min)    :a13, 0, 60
+    Relatório Pré-proc (1440 min)     :a14, 0, 60
 
     section Notificações
     E-mail Alertas (1 min)            :b1, 0, 1
     E-mail Ocorrências (1 min)        :b2, 0, 1
     SMS Alertas (5 min)               :b3, 0, 5
     SMS Ocorrências (5 min)           :b4, 0, 5
+    Retry Notificações (5 min)        :b5, 0, 5
 
     section Chamados
     SLA dos Chamados (5 min)          :d1, 0, 5
@@ -389,8 +398,8 @@ mindmap
       rest
         Jersey JAX-RS
     muralha.digital
-      57 módulos
-      108 servlets
-      12 Quartz jobs
+      66 módulos
+      151 servlets
+      21 Quartz jobs
       6 services
       WebSocket

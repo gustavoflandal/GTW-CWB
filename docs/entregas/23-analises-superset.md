@@ -6,7 +6,9 @@
 
 ## Status
 
-**Concluida** — SUP-1 a SUP-14 implementadas.
+🟡 **Implementada** — SUP-1 a SUP-14 implementadas; camada `analise` corrigida e 14 painéis (122 gráficos) validados em 2026-10-17. Testes no navegador (SSO, RLS, alertas, embedding) e homologação pendentes (ver Pendencias).
+
+> **Atualização de 2026-10-19:** o botão **Abrir no Superset** só aparece para quem tem o direito do menu 396 ([`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql)); o `SsoAnaliseServlet` usa a verificação estrita de `ControleAcesso`. A recarga das tabelas materializadas passou a ser feita pelo `CargaAnaliseJob` do GTW, a cada 30 minutos ([Entrega 35](35-correcoes-seguranca-funcionais.md), FUN-05).
 
 ## Sessoes concluidas
 
@@ -34,6 +36,7 @@
 | Arquivo | Descricao |
 |---|---|
 | `muralha.digital.analise.SsoAnaliseServlet` | Servlet SSO para validacao de sessao (`acao=validar`) e redirecionamento (`acao=abrir`) |
+| `muralha.digital.analise.CargaAnaliseJob` | Job Quartz (a cada 30 min, agendado em `Agendador`) que chama as procedures `analise.spu_carga_*` (2026-10-19, Plano 35) |
 
 ### Infraestrutura (analise/)
 
@@ -68,7 +71,10 @@
 |---|---|
 | `20261016_analise_fundacao.sql` | Schema `analise`, tabela `analise.carga_log`, chave `SUPERSET_URL`, menus 395/56 |
 | `20261017_analise_camada_dados.sql` | `mat_passagens_hora`, `mat_infracoes_dia`, 8 views analiticas, 2 procedures de carga |
-| `20261017_analise_mapas_geo.sql` | `v_infracoes_geolocalizado`, `v_passagens_geolocalizado`, `v_usuario_area_monitorada` |
+| `20261017_analise_mapas_geo.sql` | `v_infracoes_geolocalizado`, `v_passagens_geolocalizado`, `v_usuario_area_monitorada` (obsoleta; ver as duas linhas abaixo) |
+| `20261017_analise_correcao_camada.sql` | Correcao das cargas e views da camada `analise` ([gap-camada-analise-superset.md](gap-camada-analise-superset.md)) |
+| `20261017_analise_versao_equipamento.sql` | Nome e coordenadas do equipamento pela versao vigente na data da passagem |
+| `20261019_analise_permissao_abrir_superset.sql` | Menu 396 (Abrir no Superset) e direito do grupo 11 ao menu 395 |
 
 ### Testes
 

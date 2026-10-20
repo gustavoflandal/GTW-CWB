@@ -1,6 +1,8 @@
 # Estrutura de dados por tela — Análise de Dados, Dashboards (KPIs) e Gestão de Lotes
 
 > Levantamento de 2026-10-19 no código do repositório e no banco `GTW_MURALHA_DEV` (somente consultas `SELECT` em `sys.columns`, `sys.partitions`, `sys.sql_expression_dependencies` e nos dados). As quantidades de linhas são aproximadas e valem para a base de desenvolvimento nessa data.
+>
+> **Atualização de 2026-10-20:** revisado depois das correções das fases 1 e 2 ([Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md), [entrega 35](../entregas/35-correcoes-seguranca-funcionais.md)) — permissões, escape de HTML, Tipos de Alerta, Relatórios Gerenciais, Análises, KPIs e Gestão de Lotes. Os trechos alterados estão marcados com **Atualização (2026-10-19)** ou citam a data; as demais quantidades continuam as de 2026-10-19.
 
 ## Escopo
 
@@ -42,6 +44,8 @@ Cada tela traz: menu e arquivos, fluxo de dados (elemento da tela → endpoint �
 ## Visão geral
 
 Todas as telas seguem o padrão do Muralha Digital: JSP + JavaScript (`fetch`) → servlet `/MuralhaDigital/<Entidade>?acao=…` (JSON/Gson, JDBC via `Conexao.getConexao()`) → tabelas dos schemas `muralha` e `dbo`. Boa parte dos dados é produzida por jobs Quartz agendados em `Agendador` a partir da tabela de passagens `muralha.veiculo_tempo_real`.
+
+Acesso (desde 2026-10-19): os servlets destas telas usam `ControleAcesso` (`muralha.digital.acessos`), que exige sessão e direito **estrito** em `dbo.fcn_VerificaAcesso` para o caminho do servlet (ou para a ação de menu indicada) e responde 401/403 em JSON; uma ação não cadastrada em `sis_menu` é negada, ao contrário do `Acesso.verificaAcesso` legado (*fail-open*). Os servlets que encaminham para JSP usam `exigirTela` (redireciona ao login ou à tela principal). Os servlets e JSPs que não tinham registro ganharam entradas sem card em `sis_menu` (ids 397–438, [`20261019_registro_modulos_novos.sql`](migracoes/20261019_registro_modulos_novos.sql)); os grupos de cada id estão em [menus e permissões](../referencia/menus-e-permissoes.md). Exceção: `SsoAnaliseServlet` ainda abre a tela com `Acesso.verificaAcesso` (ver seção 12).
 
 ```mermaid
 flowchart LR
@@ -613,7 +617,8 @@ flowchart LR
 - O filtro "Equipamento" não relaciona o log a um equipamento: faz `LIKE` do nome do equipamento no texto de `descricao` (e junta `sis_usuario` sem usar suas colunas).
 - Não há FK entre `sis_log_auditoria.id_usuario` e `sis_usuario`.
 - Os exports CSV/XLS/PDF cobrem apenas as 50 linhas da página atual.
-- Os valores são inseridos no HTML sem escape no JS (`r.descricao`, `r.login`), ponto de XSS armazenado potencial.
+- **Atualização (2026-10-19):** os valores do servidor (`r.descricao`, `r.login` etc.) passaram por `escaparHtml()` em `consulta-log.js` antes de entrar no HTML (SEG-05 do [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)); o ponto de XSS armazenado foi fechado.
+- Permissão: `AuditoriaServlet` exige o direito de `/MuralhaDigital/Auditoria` (sis_menu 431; grupos 11, 41 e 42) via `ControleAcesso`, com 401/403 em JSON.
 
 ---
 
@@ -635,7 +640,7 @@ flowchart LR
 | Salvar origem padrão / por equipamento | `IntegridadeConfig` POST `acao=salvarPadrao` / `salvarEquipamento` | `muralha.config_chave_valor` (UPSERT via `ConfigChaveValor.gravar`); `MERGE muralha.equipamento_integridade_config`; histórico em `muralha.parametro_historico` | Também grava `dbo.sis_log_auditoria` |
 | Filtro de equipamentos | `obterEquipamentosGenerico` (função global) | não verificado neste levantamento | Biblioteca comum do módulo |
 
-Permissão: ambos os servlets exigem sessão (401) e `Acesso.verificaAcesso(false)`, que consulta `dbo.fcn_VerificaAcesso` com a URI da requisição (`/MuralhaDigital/IntegridadeRecepcao` e `/MuralhaDigital/IntegridadeConfig` são registros próprios em `dbo.sis_menu`, criados pela migração). Direitos do menu 384: grupos 41 e 42.
+Permissão: ambos os servlets usam `ControleAcesso.exigir` (desde 2026-10-19): sessão (401) e direito estrito via `dbo.fcn_VerificaAcesso` com o caminho do servlet (`/MuralhaDigital/IntegridadeRecepcao` = sis_menu 385 e `/MuralhaDigital/IntegridadeConfig` = 386, registros próprios criados pela migração); sem direito, 403 — a ação não cadastrada não é mais liberada. Direitos: 384 e 385 = grupos 11, 41 e 42; 386 = grupos 11 e 42.
 
 #### Estrutura de dados
 
@@ -793,7 +798,7 @@ flowchart LR
 | Aba Histórico de parâmetros | `historicoParametros` (`tipoRecurso`, `idRecurso`, `parametro`, paginado) | `muralha.parametro_historico` | Se a tabela não existir devolve `aviso` |
 | Nomes de equipamento | (interno) | `local_vigente` | `serie_equipamento` ↔ `id_local` |
 
-Permissão: sessão + `Acesso.verificaAcesso(false)` com a URI `/MuralhaDigital/LogTecnico`. Direitos do menu 387: grupos 41 e 42.
+Permissão: `ControleAcesso.exigir` (desde 2026-10-19) — sessão (401) e direito estrito de `/MuralhaDigital/LogTecnico` (sis_menu 388; sem direito, 403). Direitos dos menus 387 e 388: grupos 11, 41 e 42.
 
 #### Estrutura de dados
 
@@ -965,14 +970,15 @@ flowchart LR
 
 | Elemento da tela | Endpoint (`acao`, em `/MuralhaDigital/TipoAlertaConfig`) | Fonte no banco | Observação |
 |---|---|---|---|
-| Lista de tipos (cor, ícone, crítico, nº de tratamentos e automáticos) | `listar` (GET) | `muralha.tipo_alerta_ocorrencia` LEFT JOIN `muralha.tipo_alerta_config`; subconsultas em `muralha.tipo_alerta_tratamento` | Também lida pelo popup de notificação de todos os operadores (`utils/notificacao/js/notificacao.js`); por isso `listar` exige só sessão, sem permissão da tela |
+| Lista de tipos (cor, ícone, crítico, nº de tratamentos e automáticos) | `listar` (GET) | `muralha.tipo_alerta_ocorrencia` LEFT JOIN `muralha.tipo_alerta_config`; subconsultas em `muralha.tipo_alerta_tratamento` | Exige o direito da tela (desde 2026-10-19) |
+| (sem elemento na tela) popup de notificação de todos os operadores | `aparencia` (GET) | mesma consulta de `listar`, reduzida a tipo, cor e ícone | Chamada por `utils/notificacao/js/notificacao.js`; exige só sessão |
 | Painel de tratamentos do tipo selecionado | `tratamentos` (`idTipo`) | `muralha.tipo_alerta_tratamento` | |
 | Combos de tratamento e de cores | `catalogo` | enums Java (`TratamentoAlerta`, `ConfigTipoAlerta.CORES`) | Sem acesso ao banco |
 | Salvar criticidade/cor/ícone | `salvarConfig` (POST) | `MERGE muralha.tipo_alerta_config`; histórico em `muralha.parametro_historico` (recurso `TIPO_ALERTA`); auditoria | Valida cor e ícone; 404 se o tipo não existe |
 | Salvar tratamento | `salvarTratamento` (POST) | `MERGE muralha.tipo_alerta_tratamento` (chave tipo + tratamento); histórico (`TIPO_ALERTA_TRATAMENTO`); auditoria | Tratamento "automático" só para os executáveis; `parametrosJson` deve ser objeto JSON de até 2000 caracteres |
-| Novo tipo | `novoTipo` (POST) | `INSERT muralha.tipo_alerta_ocorrencia` (UUID gerado, `prioridade` = MAX + 1) | Auditoria |
+| (sem botão na tela atual) novo tipo | `novoTipo` (POST) | `INSERT muralha.tipo_alerta_ocorrencia` (UUID gerado, `prioridade` = MAX + 1) | Auditoria; disponível só no servlet, `tipos-alerta.js` não chama |
 
-Permissão: todas as ações, exceto `listar`, passam por `Acesso.verificaAcesso(false)` com a URI `/MuralhaDigital/TipoAlertaConfig` (sis_menu 392; direito só do grupo 42).
+Permissão (desde 2026-10-19, `ControleAcesso`): sem `acao`, `exigirTela` (sem sessão redireciona ao login; sem direito, à tela principal); `aparencia` só exige sessão (401 em JSON); todas as demais, inclusive `listar`, exigem o direito de `/MuralhaDigital/TipoAlertaConfig` (sis_menu 392; grupos 11 e 42), com 401/403 em JSON. A JSP encaminhada tem registro próprio (sis_menu 397; grupos 11 e 42).
 
 #### Estrutura de dados
 
@@ -1076,7 +1082,7 @@ flowchart LR
 
 #### Pontos de atenção
 
-- `listar` não verifica a permissão da tela (por desenho, para o popup de notificação); qualquer usuário logado lê tipos, cores e contagens.
+- **Atualização (2026-10-19):** `listar` deixou de ser lido sem permissão — corrigido (SEG-10 do [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)): o popup usa `acao=aparencia`, que devolve só tipo, cor e ícone; `listar` exige o direito da tela.
 - `novoTipo` insere em `tipo_alerta_ocorrencia` apenas `id`, `tipo`, `descricao`, `tarefa_ativa`, `prioridade`; os demais campos ficam nulos.
 
 ---
@@ -1095,7 +1101,7 @@ flowchart LR
 | Modal de detalhe | `detalhe` (`id`) | `muralha.relatorio_periodico` (inclui `dados_json`) | O JSON é interpretado no cliente por tipo (`GERENCIAL` ou `PRE_PROCESSAMENTO`) |
 | Exportar CSV / XLSX | `exportarCsv` / `exportarXlsx` (`id`) | `muralha.relatorio_periodico` | Achata `dados_json` em linhas Métrica/Valor/Unidade; usa `ExportacaoService` |
 
-Permissão: `Acesso.verificaAcesso(false)` com a URI `/MuralhaDigital/RelatorioGerencial` (sis_menu 393; direito do grupo 42). Não há verificação explícita de sessão antes disso; sem usuário, `verificaAcesso(false)` apenas nega, sem redirecionar.
+Permissão (desde 2026-10-19, `ControleAcesso`): sem `acao`, `exigirTela` (sem sessão redireciona ao login; sem direito, à tela principal); com `acao`, `exigir` (401/403 em JSON). Direito de `/MuralhaDigital/RelatorioGerencial` (sis_menu 393; grupos 11 e 42); a JSP encaminhada tem registro próprio (sis_menu 398; grupos 11 e 42).
 
 #### Estrutura de dados
 
@@ -1114,7 +1120,7 @@ Permissão: `Acesso.verificaAcesso(false)` com a URI `/MuralhaDigital/RelatorioG
 Conteúdo de `dados_json` (gerado pelos jobs):
 
 - `GERENCIAL`: `resumoKpis` e `comparacaoPeriodo` (de `muralha.kpi_config` + `muralha.kpi_historico`: nome, unidade, média/mín./máx., contagens OK/WARN/CRIT), `alertasAnaliticos` (de auditoria), `volumeTrafego` e `disponibilidade` (de `dbo.veiculo_sumarizado` — colunas `data`, `id_local`, `trafego` — e `dbo.local_vigente`).
-- `PRE_PROCESSAMENTO`: volumes e índice de aproveitamento (`muralha.veiculo_tempo_real` + `muralha.vtr_status_analise`), tempo médio, produtividade por operador (`dbo.sis_usuario`), divergência, retrabalho, pendentes e backlog > 72 h, SLA (`muralha.alerta_sla`, `muralha.alerta_sla_preproc`), motivos de descarte e histórico de classificação.
+- `PRE_PROCESSAMENTO` (job reescrito em 2026-10-19 sobre os dados existentes, sem colunas novas): volumes e índice de aproveitamento (`muralha.veiculo_tempo_real` + `muralha.vtr_status_analise`, ancorados na data da passagem), tempo médio, produtividade (total analisado, operadores distintos e média por operador), divergência entre a 1ª e a 2ª análise e retrabalho (`muralha.infracao_analise`), pendentes e backlog > 72 h, SLA (`muralha.alerta_sla`, `muralha.alerta_sla_preproc`), motivos de descarte (justificativa da última análise em `infracao_analise`) e histórico de classificação.
 
 Tabelas de apoio (principais colunas):
 
@@ -1125,6 +1131,7 @@ Tabelas de apoio (principais colunas):
 | `dbo.veiculo_sumarizado` | 4.151.335 | data (date), hora, id_local, trafego (int) |
 | `muralha.veiculo_tempo_real` | 8.188.803 | id (uniqueidentifier, PK), data |
 | `muralha.vtr_status_analise` | 30 | id_veiculo_tempo_real, status_analise (nesta base só estas 2 colunas) |
+| `muralha.infracao_analise` | 60 | id_infracao, id_usuario, sequencia, classificacao, justificativa, dt_analise (ver seção 2) |
 | `muralha.alerta_sla` / `muralha.alerta_sla_preproc` | 2.176 / 227 | ver seção 8 |
 
 #### Origem / alimentação dos dados
@@ -1197,16 +1204,16 @@ flowchart LR
     J1 --> A["auditoria de alertas analiticos"]
     J2 --> VT["muralha.veiculo_tempo_real e vtr_status_analise"]
     J2 --> SL["muralha.alerta_sla e alerta_sla_preproc"]
-    J2 --> U["dbo.sis_usuario"]
+    J2 --> U["muralha.infracao_analise"]
     KJ["KpiSnapshotJob"] --> K
 ```
 
 #### Pontos de atenção
 
 - `muralha.relatorio_periodico` está vazia: nenhum relatório foi gerado nesta base e a tela mostra "Nenhum relatório encontrado".
-- `RelatorioGerencialJob.alertasAnaliticos` consulta `muralha.sis_log_auditoria` com a coluna `data`; nesta base a tabela é `dbo.sis_log_auditoria` e a coluna de data é `dt_operacao` (`muralha.sis_log_auditoria` não existe). A geração do relatório gerencial tende a falhar nessa etapa (o job apenas registra o erro em log).
-- `RelatorioPreProcMensalJob` referencia colunas de `muralha.vtr_status_analise` (`data_analise`, `resultado_ia`, `revisado`, `motivo_descarte`, `id_usuario`) que não existem nesta base (a tabela tem só `id_veiculo_tempo_real` e `status_analise`); o relatório de pré-processamento também falharia aqui. Não foi executado nenhum dos jobs; é leitura do código e do catálogo.
-- `listar`/`detalhe` devolvem `e.getMessage()` ao cliente em caso de erro e o JS monta o HTML da tabela com `innerHTML` a partir de `titulo`/`geradoPor` sem escape.
+- **Atualização (2026-10-19):** `RelatorioGerencialJob.alertasAnaliticos` passou a consultar `dbo.sis_log_auditoria` pela coluna `dt_operacao` (antes, `muralha.sis_log_auditoria`/`data`, inexistentes), e a disponibilidade passou a filtrar `desativado = 0` (FUN-01 do [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)). As consultas foram executadas no DEV sem erro; em 2026-10-20 `relatorio_periodico` continua vazia porque o job ainda não rodou.
+- **Atualização (2026-10-19):** `RelatorioPreProcMensalJob` não usa mais as colunas inexistentes de `muralha.vtr_status_analise` (`data_analise`, `resultado_ia`, `revisado`, `motivo_descarte`, `id_usuario`); foi reescrito sobre `infracao_analise` e `vtr_status_analise` (FUN-02 do Plano 35).
+- `listar`/`detalhe` devolvem `e.getMessage()` ao cliente em caso de erro. **Atualização (2026-10-19):** o JS passou a escapar (`escaparHtml()`) `titulo`, `geradoPor` e os demais valores do servidor antes de montar o HTML (SEG-05).
 
 ---
 
@@ -1228,7 +1235,7 @@ flowchart LR
 | Gráfico de rosca Classificação | `metricas` → `classificacao` | `vtr_status_analise` JOIN `veiculo_tempo_real`, agrupado por `status_analise` | Cores fixas por status |
 | Seletor de período | parâmetros `dtInicio`, `dtFim` | — | Padrão dos últimos 30 dias quando nulos (`COALESCE`) |
 
-Todas as consultas usam `PreparedStatement`. Permissão: `Acesso.verificaAcesso(false)` com a URI `/MuralhaDigital/PreProcessamento` (sis_menu 394; direito do grupo 42).
+Todas as consultas usam `PreparedStatement`. Permissão (desde 2026-10-19, `ControleAcesso`): sem `acao`, `exigirTela`; com `acao`, `exigir` (401/403 em JSON). Direito de `/MuralhaDigital/PreProcessamento` (sis_menu 394; grupos 11 e 42); a JSP encaminhada tem registro próprio (sis_menu 399; grupos 11 e 42).
 
 #### Estrutura de dados
 
@@ -1313,14 +1320,14 @@ flowchart LR
 
 Fluxo GTW → SSO → Superset:
 
-1. O usuário abre `/MuralhaDigital/SsoAnalise?acao=abrir`. O servlet chama `Acesso.verificaAcesso(false)` (sessão + `fcn_VerificaAcesso`), lê `SUPERSET_BASE_URL` de `muralha.config_chave_valor` (padrão `http://localhost:8088`; valor atual `http://localhost:8088`) e calcula `podeAbrirSuperset` (direito do menu 396). Faz `forward` para `embedding.jsp` com `supersetBaseUrl` e `podeAbrirSuperset`.
+1. O usuário abre `/MuralhaDigital/SsoAnalise?acao=abrir`. O servlet chama `Acesso.verificaAcesso(false)` (sessão + `fcn_VerificaAcesso` com a URI `/MuralhaDigital/SsoAnalise`, que desde 2026-10-19 é a `acao` do sis_menu 395), lê `SUPERSET_BASE_URL` de `muralha.config_chave_valor` (padrão `http://localhost:8088`; valor atual `http://localhost:8088`) e calcula `podeAbrirSuperset` (direito estrito do menu 396 via `ControleAcesso.possuiDireito`). Faz `forward` para `embedding.jsp` com `supersetBaseUrl` e `podeAbrirSuperset`.
 2. `embedding.js` monta o iframe com `SUPERSET_BASE/superset/dashboard/<slug>/?standalone=2` a partir do painel escolhido no `<select>` (lista fixa no JSP: 5 painéis de demonstração e 9 operacionais).
 3. A requisição ao Superset passa pelo nginx (porta 8088), que faz `auth_request` a `/MuralhaDigital/SsoAnalise?acao=validar` repassando o cookie de sessão do GTW. O servlet responde 401 sem sessão ou 204 com os cabeçalhos `X-GTW-Usuario`, `X-GTW-UserId` e `X-GTW-Grupos` (atributo de sessão `gruposUsuario`). O nginx sobrescreve esses cabeçalhos antes do `proxy_pass`.
 4. No Superset, `GtwSecurityManager` (`AUTH_REMOTE_USER`) lê os cabeçalhos, cria/atualiza o usuário e sincroniza papéis conforme `GTW_GRUPOS_PAPEIS` (grupo GTW → papel Superset). O Superset lê o SQL Server somente leitura, principalmente do schema `analise`.
 
 | Elemento da tela | Endpoint | Fonte no banco GTW | Observação |
 |---|---|---|---|
-| Abertura da tela | `SsoAnalise?acao=abrir` | `dbo.fcn_VerificaAcesso` (sis_menu, sis_menu_direitos, sis_usuario_grupo); `muralha.config_chave_valor` (`SUPERSET_BASE_URL`) | A URI usada na verificação é `/MuralhaDigital/SsoAnalise` (sem query), diferente do `acao` cadastrado em sis_menu 395 (`...SsoAnalise?acao=abrir`); ver pontos de atenção |
+| Abertura da tela | `SsoAnalise?acao=abrir` | `dbo.fcn_VerificaAcesso` (sis_menu, sis_menu_direitos, sis_usuario_grupo); `muralha.config_chave_valor` (`SUPERSET_BASE_URL`) | A URI usada na verificação é `/MuralhaDigital/SsoAnalise` (sem query), igual à `acao` do sis_menu 395 desde 2026-10-19; exige direito (grupos 11, 41 e 42) |
 | Botão "Abrir no Superset" | gerado em `embedding.jsp` | `dbo.fcn_VerificaAcesso('/MuralhaDigital/SsoAnalise/abrir-superset', id_usuario)` | Nega se a funcionalidade 396 não existe ou em erro (diferente do padrão das telas) |
 | Validação SSO (nginx) | `SsoAnalise?acao=validar` (também o padrão sem `acao`) | só sessão HTTP; sem consulta ao banco | Devolve usuário, id e grupos nos cabeçalhos |
 | Painéis do iframe | Superset (`/superset/dashboard/<slug>/`) | Schema `analise` e tabelas `dbo`/`mobilidade` (ver resumo abaixo) | Fora do GTW |
@@ -1335,8 +1342,8 @@ Fluxo GTW → SSO → Superset:
 | `dbo.sis_usuario` | 42 | id_usuario (int, PK), usuario (char 25), nome, email, ativo (bit) | Usuário logado (objeto `Usuario` na sessão, atributo `[usuario]`) |
 | `dbo.sis_grupo` | 35 | id_grupo (int, PK), descricao, id_grupo_pai | Grupos do GTW (mapeados a papéis do Superset) |
 | `dbo.sis_usuario_grupo` | 203 | id_usuario (FK), id_grupo (FK) | Pertinência a grupos |
-| `dbo.sis_menu` | 202 | id_menu (int, PK), descricao, acao (char 250), id_pai_menu, Ativo, nome_sistema | Catálogo de telas/funcionalidades; 395 = Analises (`/MuralhaDigital/SsoAnalise?acao=abrir`, pai 222) |
-| `dbo.sis_menu_direitos` | 392 | id_menu_direito (PK), id_grupo (FK, nulo), id_usuario (FK, nulo), id_menu (FK) | Direito por grupo ou por usuário; 395: grupos 41 e 42 |
+| `dbo.sis_menu` | 245 | id_menu (int, PK), descricao, acao (char 250), id_pai_menu, Ativo, nome_sistema | Catálogo de telas/funcionalidades; 395 = Analises (`/MuralhaDigital/SsoAnalise`, pai 222); 396 = Abrir no Superset; 438 = guest token |
+| `dbo.sis_menu_direitos` | 517 | id_menu_direito (PK), id_grupo (FK, nulo), id_usuario (FK, nulo), id_menu (FK) | Direito por grupo ou por usuário; 395: grupos 11, 41 e 42; 396: grupo 11 |
 | `dbo.sis_menu_infos` | 51 | id_infos (PK), id_menu, descricao, href, descricao_detalhada, ordenacao, menu_pai | Card do módulo "Análise de Dados" (`menu_pai` 15; card de Análises: ordenacao 13, href `/MuralhaDigital/SsoAnalise?acao=abrir`) |
 | `dbo.sis_log_auditoria` | 88 | id (bigint, PK), id_usuario, login, dt_operacao (datetime2), ip_terminal, funcionalidade, operacao, id_registro, descricao | Auditoria central (`AuditoriaService.registrar` faz `INSERT`); SSO em si só usa `java.util.logging`, não grava aqui |
 | `muralha.config_chave_valor` | 74 | chave (PK), valor | `SUPERSET_BASE_URL` e `SUPERSET_URL` (ambos `http://localhost:8088`) |
@@ -1348,7 +1355,7 @@ Fluxo GTW → SSO → Superset:
 #### Origem / alimentação dos dados
 
 - Usuários, grupos, menus e direitos: administrados pelo cadastro do GTW clássico; a funcionalidade 396 é criada pela migração `20261019_analise_permissao_abrir_superset.sql`.
-- `analise.mat_*`: carregadas pelas procedures `analise.spu_carga_*` (detalhes e agendamento no documento da camada de dados).
+- `analise.mat_*`: carregadas pelas procedures `analise.spu_carga_*`, chamadas desde 2026-10-19 pelo `CargaAnaliseJob` (Quartz, agendado em `Agendador` a cada 30 minutos; log em `analise.carga_log`, cuja última execução no DEV em 2026-10-20 ainda é de 2026-10-17). Detalhes no documento da camada de dados e no [Guia do Administrador](../analise/guia-administrador.md).
 - Superset: container Docker em `analise/` (nginx, Superset, Redis, PostgreSQL de metadados), conforme o Guia do Administrador; o SQL Server é acessado somente para leitura.
 
 #### Diagrama
@@ -1429,7 +1436,7 @@ flowchart LR
 #### Pontos de atenção
 
 - **Funcionalidade 396 não existe nesta base:** `dbo.sis_menu` não tem `id_menu = 396` em 2026-10-19 (a migração `20261019_analise_permissao_abrir_superset.sql` ainda não foi aplicada). Como o servlet nega quando a funcionalidade não está cadastrada, o botão "Abrir no Superset" não aparece para ninguém aqui. **Atualização (2026-10-19):** migração aplicada; o 396 existe com direito do grupo 11, e a `acao` do 395 foi corrigida para `/MuralhaDigital/SsoAnalise` por `20261019_registro_modulos_novos.sql`.
-- **Verificação de acesso ao abrir:** `Acesso.verificaAcesso` usa `request.getRequestURI()` (`/MuralhaDigital/SsoAnalise`), enquanto `sis_menu.acao` 395 é `/MuralhaDigital/SsoAnalise?acao=abrir`. Não há correspondência em `sis_menu`, então `cnt = 0` e o acesso é liberado a qualquer usuário logado; os direitos do menu 395 (grupos 41 e 42) controlam apenas a exibição do card em `sis_menu_infos`. Observação derivada da leitura do código e das linhas consultadas.
+- **Verificação de acesso ao abrir:** `Acesso.verificaAcesso` usa `request.getRequestURI()` (`/MuralhaDigital/SsoAnalise`). Até 2026-10-19 `sis_menu.acao` 395 era `/MuralhaDigital/SsoAnalise?acao=abrir`, sem correspondência (`cnt = 0`, acesso liberado a qualquer usuário logado). **Atualização (2026-10-19):** a `acao` do 395 passou a ser `/MuralhaDigital/SsoAnalise`, então a abertura exige direito (grupos 11, 41 e 42); o card mantém `?acao=abrir`.
 - `acao=validar` (e o caminho sem `acao`) só checa a existência de sessão; não consulta `fcn_VerificaAcesso`, portanto o Superset aceita qualquer usuário logado do GTW que alcance o nginx.
 - Em desenvolvimento, `nginx/default.dev.conf` desabilita o `auth_request` e injeta uma identidade fixa (conforme o Guia do Administrador).
 - O comentário de `embedding.js` cita guest token, mas o código atual não chama `AnaliseGuestToken`; o iframe depende do SSO por cabeçalhos.
@@ -1446,13 +1453,13 @@ flowchart LR
 #### Fluxo de dados
 | Elemento da tela | Endpoint (`acao`) | Fonte no banco | Observação |
 |---|---|---|---|
-| Cards (tipos `card`, `compacto`, `medidor`, `progresso`) e rótulo "Atualizado" | `GET /MuralhaDigital/Kpi` (sem `acao`; recarrega a cada 60 s e no botão de atualizar) | `muralha.kpi_config` (`ativo = 1`, `ORDER BY ordem`); para cada linha o servlet executa o `query_sql` da própria linha e lê a coluna `valor` | Status calculado em Java: se `threshold_ok > threshold_warn` (quanto maior melhor) `valor>=ok` OK, `>=warn` WARN, senão CRIT; caso contrário o inverso. `query_sql` que não começa com SELECT ou que falha gera `ERRO`. Máximo do medidor/progresso = `max(thOk, thWarn, valor) * 1.2`. |
+| Cards (tipos `card`, `compacto`, `medidor`, `progresso`) e rótulo "Atualizado" | `GET /MuralhaDigital/Kpi` (sem `acao`; recarrega a cada 60 s e no botão de atualizar) | `muralha.kpi_config` (`ativo = 1`, `ORDER BY ordem`); para cada linha o servlet executa o `query_sql` da própria linha e lê a coluna `valor` | Status calculado em Java: se `threshold_ok > threshold_warn` (quanto maior melhor) `valor>=ok` OK, `>=warn` WARN, senão CRIT; caso contrário o inverso. `query_sql` recusado pelo `ValidadorSqlKpi` (desde 2026-10-19) ou que falha gera `ERRO`; a execução tem timeout de 30 s. Máximo do medidor/progresso = `max(thOk, thWarn, valor) * 1.2`. |
 | Cor do card | idem | `kpi_config.cor_personalizada` | Se nula, usa a cor do status (OK verde, WARN amarelo, CRIT vermelho, ERRO cinza). |
 | Modal Histórico: gráfico de linha (7/30/90 dias) | `GET /MuralhaDigital/Kpi?acao=historico&idKpi=&dias=` | `muralha.kpi_historico` (`id_kpi`, `dt_coleta >= DATEADD(DAY,-dias,GETDATE())`) | Cor de cada ponto = `status` do snapshot. |
 | Modal Histórico: linha "Meta" e rótulo de meta | idem | `muralha.kpi_config_meta` (`meta`, `meta_minima`, `categoria`) por `id_kpi` | Só `meta` é usada pelo JS; `metaMinima` e `categoria` são devolvidos mas não exibidos. |
 | Botão "Configurar" | link para `/muralha-digital/pages/admin/kpis/index.jsp` | — | Ver seção 14. |
 
-Todos os endpoints exigem sessão (`new Acesso(req, resp, true).verificaAcesso(false)`); não há checagem de permissão por ação.
+Permissão (desde 2026-10-19, `ControleAcesso`): todos os endpoints exigem o direito estrito de `/MuralhaDigital/Kpi` (sis_menu 429; grupos 11, 41 e 42), com 401/403 em JSON; `listarConfig` e `salvar` exigem também o direito do menu 372 (Configuração de KPIs; grupos 11 e 42). A tela tem o sis_menu 371 (grupos 11, 41 e 42).
 
 #### Estrutura de dados
 **`muralha.kpi_config`** (tabela, 12 linhas): definição dos KPIs, inclusive a consulta SQL de cada um. PK `id` (identity).
@@ -1491,11 +1498,11 @@ Todos os endpoints exigem sessão (`new Acesso(req, resp, true).verificaAcesso(f
 | gerar_alerta | bit | Se o job gera alerta analítico | |
 | dt_atualizacao | datetime | Última atualização | |
 
-**Tabelas lidas indiretamente pelos `query_sql` dos 12 KPIs cadastrados** (a tela não as acessa diretamente; o servlet executa o texto): `muralha.veiculo_tempo_real` (KPIs 1, 2, 4, 6, 8; ≈8,19 milhões de linhas, consultada com `NOLOCK`), `muralha.vtr_status_analise` (2, 3), `muralha.infracao_analise` (3), `dbo.veiculo_sumarizado` (5, 7, 11), `dbo.local_vigente` (7, 11), `muralha.alerta` (9, 10), `muralha.tipo_alerta_ocorrencia` (10), `muralha.alerta_sla` (12, `TOP 1 percentil95_ms ORDER BY janela_fim DESC`). As consultas dos KPIs 3, 5, 7, 8, 9 e 11 só foram lidas parcialmente (saída truncada), então a lista de tabelas desses KPIs pode estar incompleta; o texto completo está em `kpi_config.query_sql`.
+**Tabelas lidas indiretamente pelos `query_sql` dos 12 KPIs cadastrados** (a tela não as acessa diretamente; o servlet executa o texto; conferido em 2026-10-20, depois de [`20261019_kpis_corrige_consultas.sql`](migracoes/20261019_kpis_corrige_consultas.sql) corrigir os KPIs 5, 7, 8, 9 e 11): `muralha.veiculo_tempo_real` (KPIs 1, 2, 4, 6; ≈8,19 milhões de linhas, consultada com `NOLOCK`), `muralha.vtr_status_analise` (2, 3), `muralha.infracao_analise` (3), `dbo.infracao` (5, 8), `dbo.veiculo_sumarizado` (5, 7, 11), `dbo.local_vigente` (7, 11), `muralha.alerta` (9, 10), `muralha.status_alerta` (9), `muralha.tipo_alerta_ocorrencia` (10), `muralha.alerta_sla` (12, `TOP 1 percentil95_ms ORDER BY janela_fim DESC`). O texto completo está em `kpi_config.query_sql`.
 
 #### Origem / alimentação dos dados
 - `kpi_config` e `kpi_config_meta`: criadas/semeadas por migrações em `docs/banco-de-dados/migracoes/` (`20261008_lotes_kpis.sql`, `20261012_kpi_tipo_visual.sql`, `20261012_kpi_cor_personalizada.sql`, `20261012_fix_encoding_kpi.sql`, `20261016_kpis_relatorio_mensal.sql`); alteradas pela tela de Configuração (seção 14).
-- `kpi_historico`: gravada por `KpiSnapshotJob` (Quartz, agendado em `Agendador.reajustaJobKpiSnapshot`, repete a cada 60 minutos): para cada KPI ativo executa o `query_sql`, calcula o status e insere o snapshot; remove snapshots mais antigos que `KPI_SNAPSHOT_RETENCAO_DIAS` (padrão 90, lido por `ConfigChaveValor`). Se `status <> OK` e `gerar_alerta` (padrão verdadeiro quando não há meta), registra "ALERTA_ANALITICO" via `AuditoriaService.registrarSistema`, respeitando `KPI_ALERTA_COOLDOWN_MIN` (padrão 360).
+- `kpi_historico`: gravada por `KpiSnapshotJob` (Quartz, agendado em `Agendador.reajustaJobKpiSnapshot`, repete a cada 60 minutos): para cada KPI ativo valida (`ValidadorSqlKpi`) e executa o `query_sql` (timeout de 30 s), calcula o status e insere o snapshot; remove snapshots mais antigos que `KPI_SNAPSHOT_RETENCAO_DIAS` (padrão 90, lido por `ConfigChaveValor`). Se `status <> OK` e `gerar_alerta` (padrão verdadeiro quando não há meta), registra "ALERTA_ANALITICO" via `AuditoriaService.registrarSistema`, respeitando `KPI_ALERTA_COOLDOWN_MIN` (padrão 360).
 - Dados medidos pelos KPIs: carga de passagens em `veiculo_tempo_real` e demais tabelas operacionais (origem fora do escopo desta tela: não identificado aqui).
 
 #### Diagrama
@@ -1536,7 +1543,7 @@ flowchart LR
     T["kpis/index.jsp (JS inline, Chart.js)"] -->|"GET /Kpi (60 s)"| S["KpiServlet.doGet"]
     T -->|"GET /Kpi?acao=historico"| S
     S -->|"lista ativos e executa query_sql"| C[("muralha.kpi_config")]
-    C -.->|"SELECT dinamico"| O[("veiculo_tempo_real, vtr_status_analise, infracao_analise, veiculo_sumarizado, local_vigente, alerta, alerta_sla")]
+    C -.->|"SELECT dinamico"| O[("veiculo_tempo_real, vtr_status_analise, infracao_analise, infracao, veiculo_sumarizado, local_vigente, alerta, status_alerta, alerta_sla")]
     S -->|"historico"| H[("muralha.kpi_historico")]
     S -->|"meta"| M[("muralha.kpi_config_meta")]
     J["KpiSnapshotJob (Quartz, 60 min)"] -->|"INSERT snapshot / DELETE retencao"| H
@@ -1547,9 +1554,9 @@ flowchart LR
 
 #### Pontos de atenção
 - O painel executa as 12 consultas em série a cada carga/60 s, inclusive sobre `veiculo_tempo_real` (≈8,19 milhões de linhas).
-- `kpi_historico` só contém os KPIs 1, 2, 3, 4, 6, 10 e 12; os KPIs 5, 7, 8, 9 e 11 não têm nenhum snapshot (o job apenas registra aviso em log quando a consulta falha; causa não verificada).
-- `nome`, `descricao` e `unidade` são inseridos no HTML por concatenação de strings (sem escape) no JS.
-- O texto do servlet aceita qualquer `SELECT` salvo na configuração (executado com a conexão da aplicação).
+- **Atualização (2026-10-19):** os KPIs 5, 7, 8, 9 e 11 não tinham snapshot porque o `query_sql` usava colunas inexistentes; a migração `20261019_kpis_corrige_consultas.sql` (FUN-04 do [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)) corrigiu as consultas e, em 2026-10-20, os 12 KPIs têm snapshots em `kpi_historico`.
+- **Atualização (2026-10-19):** `nome`, `descricao`, `unidade` e os demais valores do servidor passam por `escaparHtml()` (ou `Number()`) antes de entrar no HTML; a cor personalizada só vale se for hexadecimal válido e o histórico não usa mais `onclick` com o nome (SEG-05).
+- O servlet executa o `SELECT` salvo na configuração com a conexão da aplicação. Desde 2026-10-19 o `ValidadorSqlKpi` (lista de palavras proibidas, não um analisador de SQL) recusa `;`, comentários, comandos de escrita/DDL, `EXEC` e afins — e também `WITH` (CTE) e `OFFSET ... FETCH`; o login de banco somente leitura para os KPIs continua pendente (SEG-04).
 
 ### 14. Configuração de KPIs
 - **Menu:** Dashboards (módulo "Anel de Segurança", `id_pai_menu` 222) › Configuração de KPIs (sis_menu 372, sem card; aberta pelo botão "Configurar" da tela de KPIs) · **URL:** `/muralha-digital/pages/admin/kpis/index.jsp` (confirmado em `dbo.sis_menu.acao`)
@@ -1561,7 +1568,7 @@ flowchart LR
 |---|---|---|---|
 | Tabela de KPIs (Ordem, Nome, Unidade, Limite Ideal, Limite Alerta, Exibição, Cor, Ativo) | `GET /MuralhaDigital/Kpi?acao=listarConfig` | `muralha.kpi_config` (todos, `ORDER BY ordem`) | Inclui inativos. |
 | Offcanvas Novo/Editar KPI (campos nome, descrição, consulta, unidade, ordem, limites, exibição, cor, ativo) | preenchido a partir da linha já carregada (sem nova chamada) | — | |
-| Botão Salvar | `POST /MuralhaDigital/Kpi` `acao=salvar` (`id` vazio = INSERT; preenchido = UPDATE) | `muralha.kpi_config` (INSERT/UPDATE) e `muralha.parametro_historico` (INSERT via `HistoricoParametros.registrarSemFalhar`, recurso `KPI`, origem "Configuracao de KPIs") | Rejeita `querySql` que não inicia com SELECT. No INSERT o `ativo` não é enviado (assume o default da coluna) e nenhum registro é criado em `kpi_config_meta`. |
+| Botão Salvar | `POST /MuralhaDigital/Kpi` `acao=salvar` (`id` vazio = INSERT; preenchido = UPDATE) | `muralha.kpi_config` (INSERT/UPDATE) e `muralha.parametro_historico` (INSERT via `HistoricoParametros.registrarSemFalhar`, recurso `KPI`, origem "Configuracao de KPIs") | Rejeita `querySql` recusado pelo `ValidadorSqlKpi` (início `SELECT`, até 4000 caracteres, sem `;`, comentários nem palavras proibidas). No INSERT o `ativo` não é enviado (assume o default da coluna) e nenhum registro é criado em `kpi_config_meta`. |
 
 #### Estrutura de dados
 - `muralha.kpi_config` (tabela, 12 linhas): colunas e tipos conforme seção 13; aqui são lidas e gravadas todas as colunas.
@@ -1610,7 +1617,8 @@ flowchart LR
 ```
 
 #### Pontos de atenção
-- A consulta digitada pelo administrador é executada depois como está (apenas valida o prefixo SELECT).
+- A consulta digitada pelo administrador é executada depois como está; desde 2026-10-19 passa antes pelo `ValidadorSqlKpi` ao salvar, no painel e no job (ver seção 13).
+- Permissão: `listarConfig` e `salvar` exigem o direito de `/MuralhaDigital/Kpi` (429) e o do menu 372 (grupos 11 e 42; o grupo 41 foi retirado em 2026-10-19).
 - Sem exclusão de KPI nem edição de metas.
 - A lista exibe `thOk`/`thWarn` mesmo quando nulos como `0` (o servlet usa `getDouble`).
 
@@ -1618,7 +1626,7 @@ flowchart LR
 
 ### 15. Gestão de Lotes de Processamento
 - **Menu:** Cadastro e Configuração (sis_menu 370 "Gestao de Lotes", `id_pai_menu` 222) · **URL:** `/muralha-digital/pages/processamento/lotes/index.jsp`
-- **Arquivos:** [index.jsp](../../src/main/webapp/muralha-digital/pages/processamento/lotes/index.jsp) (JS inline; modal "Lote" na própria página, sem telas filhas), [LoteServlet.java](../../src/main/java/muralha/digital/lote/LoteServlet.java), `AuditoriaService`. Documentação: [entrega 14](../entregas/14-gestao-lotes.md), [plano 14](../planos-salvador/14-gestao-lotes.md).
+- **Arquivos:** [index.jsp](../../src/main/webapp/muralha-digital/pages/processamento/lotes/index.jsp) (JS inline; modais "Lote" e "Adicionar infrações ao lote" na própria página, sem telas filhas), [LoteServlet.java](../../src/main/java/muralha/digital/lote/LoteServlet.java), [LoteRegras.java](../../src/main/java/muralha/digital/lote/LoteRegras.java), `AuditoriaService`. Documentação: [entrega 14](../entregas/14-gestao-lotes.md), [plano 14](../planos-salvador/14-gestao-lotes.md).
 - **Finalidade:** agrupar infrações em lotes para encaminhamento ao DETRAN, com ciclo RASCUNHO → ENVIADO (CONFIRMADO está previsto na tabela e no badge, mas nenhum código o grava) ou CANCELADO.
 
 #### Fluxo de dados
@@ -1668,7 +1676,7 @@ flowchart LR
 | id_pista | tinyint | Pista | |
 
 #### Origem / alimentação dos dados
-- Lotes: criados e transicionados por esta tela. Itens: apenas pelo endpoint `adicionarInfracoes`, que não tem chamador no front-end do repositório (a tabela está vazia); portanto a origem dos itens é não identificada. `veiculo_tempo_real` é alimentada pela ingestão de passagens (fora do escopo desta tela).
+- Lotes: criados e transicionados por esta tela. Itens: incluídos pelo modal "Adicionar infrações ao lote" (`adicionarInfracoes`, desde 2026-10-19); em 2026-10-20 a tabela continua vazia no DEV. `veiculo_tempo_real` é alimentada pela ingestão de passagens (fora do escopo desta tela).
 - Criação das tabelas: migração `docs/banco-de-dados/migracoes/20261008_lotes_kpis.sql`.
 
 #### Diagrama
@@ -1705,18 +1713,19 @@ erDiagram
 flowchart LR
     T["lotes/index.jsp (JS inline + modal)"] -->|"GET listar"| S["LoteServlet.doGet"]
     T -->|"GET itens"| S
-    T -->|"POST criar / enviar / cancelar"| P["LoteServlet.doPost"]
+    T -->|"GET disponiveis"| S
+    T -->|"POST criar / enviar / cancelar / adicionarInfracoes"| P["LoteServlet.doPost"]
     S --> L[("muralha.lote_infracao")]
     S --> I[("muralha.lote_infracao_item")]
     S -->|"JOIN id = id_infracao"| V[("muralha.veiculo_tempo_real")]
     P --> L
-    P -->|"adicionarInfracoes (sem chamador na UI)"| I
+    P -->|"adicionarInfracoes"| I
     P -->|"registrar"| A["AuditoriaService"]
     R["Ingestao de passagens"] -.->|"alimenta"| V
 ```
 
 #### Pontos de atenção
-- `lote_infracao_item` está vazia e nenhuma tela chama `adicionarInfracoes`: hoje é possível criar lotes, mas não incluir infrações por esta interface (lote atual com 0 itens pode ser "enviado").
-- O botão Enviar apenas muda o status para ENVIADO; não há integração/remessa ao DETRAN nem transição para CONFIRMADO no código.
-- `acao=cancelar` não registra auditoria; `enviar` registra auditoria mesmo quando nenhuma linha foi atualizada.
+- **Atualização (2026-10-19, FUN-03 do [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md)):** a tela passou a incluir infrações (modal "Adicionar infrações ao lote"), `enviar` recusa lote sem itens e `cancelar`/`enviar` só auditam quando alteram a linha. `lote_infracao_item` continua vazia no DEV (nenhuma inclusão feita até 2026-10-20).
+- O botão "Marcar como enviado" apenas muda o status para ENVIADO; não há integração/remessa ao DETRAN nem transição para CONFIRMADO no código.
+- Permissão: todas as ações exigem o direito da tela (sis_menu 370, `/muralha-digital/pages/processamento/lotes/index.jsp`; grupos 11, 41 e 42) via `ControleAcesso`, com 401/403 em JSON — não o da entrada do servlet (428). Não há separação entre leitura e escrita.
 - `id_infracao` não tem FK para `veiculo_tempo_real`; itens órfãos retornariam vazios no JOIN.

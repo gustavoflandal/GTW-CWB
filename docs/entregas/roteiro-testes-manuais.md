@@ -1,6 +1,6 @@
 # Roteiro de Testes Manuais — PoC TRANSALVADOR
 
-Documento consolidado com todos os testes manuais dos Planos 01–19, organizados em trilha sequencial para o programador.
+Documento consolidado com todos os testes manuais dos Planos 01–19, 23 (Superset) e 35, organizados em trilha sequencial para o programador.
 
 > **Pré-requisitos globais:**
 > 1. ~~Migrações executadas~~ ✅ Executadas em 2026-10-09 (ver [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md))
@@ -170,7 +170,7 @@ Documento consolidado com todos os testes manuais dos Planos 01–19, organizado
 | 14-T02 | Tela carrega | Acessar `/muralha-digital/pages/processamento/lotes/index.jsp` | Tabela de lotes + botão "Novo Lote" | [ ] |
 | 14-T03 | Criar lote | "Novo Lote" → descrição → Confirmar | Código gerado; status RASCUNHO | [ ] |
 | 14-T04 | Ver itens | Clicar olho de um lote | Modal com tabela de itens | [ ] |
-| 14-T05 | Enviar lote | Olho → "Marcar como enviado" → Confirmar | Status ENVIADO; data preenchida | [ ] |
+| 14-T05 | Enviar lote | Olho de lote RASCUNHO com itens → "Marcar como enviado" → Confirmar | Status ENVIADO; data preenchida (lote vazio é recusado, ver 35-T03) | [ ] |
 | 14-T06 | Cancelar lote | Olho de lote RASCUNHO → "Cancelar Lote" | Status CANCELADO | [ ] |
 | 14-T07 | Lote enviado imutável | Olho de lote ENVIADO | Botões Enviar/Cancelar ausentes | [ ] |
 | 14-T08 | Sem sessão | Aba anônima → `GET /MuralhaDigital/Lote?acao=listar` | Acesso negado | [ ] |
@@ -179,13 +179,13 @@ Documento consolidado com todos os testes manuais dos Planos 01–19, organizado
 
 | ID | Teste | Procedimento | Resultado esperado | Aceite |
 |---|---|---|---|---|
-| 15-T01 | KPIs padrão | `SELECT id, nome, unidade, ativo FROM muralha.kpi_config ORDER BY ordem` | 4 KPIs ativos | [x] ✅ |
-| 15-T02 | Dashboard carrega | Acessar `/muralha-digital/pages/dashboard/kpis/index.jsp` | 4 cards coloridos com badges | [ ] |
+| 15-T01 | KPIs padrão | `SELECT id, nome, unidade, ativo FROM muralha.kpi_config ORDER BY ordem` | 4 KPIs ativos (12 desde o Plano 29) | [x] ✅ |
+| 15-T02 | Dashboard carrega | Acessar `/muralha-digital/pages/dashboard/kpis/index.jsp` | Um card colorido com badge por KPI ativo (12 no DEV) | [ ] |
 | 15-T03 | Auto-refresh | Aguardar 60s | Horário de atualização muda | [ ] |
-| 15-T04 | Config lista KPIs | Acessar `/muralha-digital/pages/admin/kpis/index.jsp` | Tabela com 4 KPIs padrão | [ ] |
+| 15-T04 | Config lista KPIs | KPIs → botão **Configurar** (`/muralha-digital/pages/admin/kpis/index.jsp`) | Tabela com os KPIs cadastrados | [ ] |
 | 15-T05 | Editar KPI | Editar → alterar threshold → Salvar | Tabela atualiza; dashboard reflete cor | [ ] |
 | 15-T06 | Criar KPI | "Novo KPI" → `SELECT CAST(1 AS NUMERIC) AS valor` → Salvar | KPI aparece no dashboard | [ ] |
-| 15-T07 | Query não-SELECT | Alterar SQL para `DELETE FROM...` → Salvar | "query_sql deve iniciar com SELECT" | [ ] |
+| 15-T07 | Query não-SELECT | Alterar SQL para `DELETE FROM...` → Salvar | "A consulta deve começar com SELECT." | [ ] |
 | 15-T08 | Desativar KPI | Editar → desmarcar "Ativo" → Salvar | Não aparece no dashboard | [ ] |
 | 15-T09 | Sem sessão | Aba anônima → `GET /MuralhaDigital/Kpi` | Acesso negado | [ ] |
 
@@ -268,7 +268,7 @@ VALUES
 > 1. Docker e Docker Compose instalados
 > 2. Stack Superset rodando: `cd analise && docker compose up -d`
 > 3. `.env` preenchido (copiar de `.env.exemplo`)
-> 4. Migracoes SQL executadas (fundacao, camada dados, mapas geo)
+> 4. Migracoes SQL executadas (fundacao, camada dados, correcao da camada, versao do equipamento; a de mapas geo e obsoleta)
 > 5. Provisionamento executado: `docker compose exec superset python /app/provisionar.py`
 
 ### 6.1 — Infraestrutura Docker (SUP-1)
@@ -300,7 +300,7 @@ VALUES
 
 | ID | Teste | Procedimento | Resultado esperado | Aceite |
 |---|---|---|---|---|
-| 23-T11 | 9 dashboards | Superset > Dashboards | 9 paineis operacionais visiveis | [ ] |
+| 23-T11 | 14 dashboards | Superset > Dashboards | 9 paineis operacionais e 5 de demonstracao visiveis | [ ] |
 | 23-T12 | Filtros nativos | Abrir dashboard > usar filtro de periodo | Graficos atualizam conforme filtro | [ ] |
 | 23-T13 | Cross-filter | Clicar em barra de grafico | Demais graficos filtram pelo valor clicado | [ ] |
 | 23-T14 | Exportacao CSV | Grafico > menu (...) > Export to CSV | Arquivo CSV baixado com dados corretos | [ ] |
@@ -351,6 +351,20 @@ VALUES
 
 ---
 
+## Fase 7 — Correções de segurança e funcionais (Plano 35)
+
+> Casos da seção "Pendente de execução manual" da [Entrega 35](35-correcoes-seguranca-funcionais.md). Requisições sem sessão ou sem direito devem receber 401 ou 403 em JSON (`{"ok":false,"erro":...}`).
+
+| ID | Teste | Procedimento | Resultado esperado | Aceite |
+|---|---|---|---|---|
+| 35-T01 | XSS armazenado (SEG-05) | Configuração de KPIs → KPI de teste com nome `<img src=x onerror=alert(1)>` → abrir painel, configuração e histórico → desativar o KPI | Nome exibido como texto, sem alerta | [ ] |
+| 35-T02 | Tipos de Alerta (SEG-10) | Usuário **sem** o direito da tela: `GET /MuralhaDigital/TipoAlertaConfig?acao=listar` e `?acao=aparencia` | `listar` → 403; `aparencia` → 200 e o popup de notificação continua funcionando | [ ] |
+| 35-T03 | Gestão de Lotes (FUN-03) | Criar lote → "Adicionar infrações" (filtrar, selecionar, confirmar) → "Marcar como enviado" em lote vazio e em lote com itens → cancelar um RASCUNHO | Itens incluídos; lote vazio recusado; lote com itens ENVIADO; RASCUNHO CANCELADO | [ ] |
+| 35-T04 | Acesso por usuário (SEG-01/SEG-03) | Usuário sem o grupo da tela: `GET /MuralhaDigital/Lote?acao=listar` e `POST` de configuração de KPI; repetir com usuário do grupo 42 | 403 para o primeiro; acesso normal para o grupo 42 | [ ] |
+| 35-T05 | Relatórios e KPIs com dados (FUN-01/FUN-04) | Executar o `RelatorioGerencialJob` no DEV; aguardar o `KpiSnapshotJob` | Linha em `muralha.relatorio_periodico` exibida na tela; snapshot dos KPIs 5, 7, 8, 9 e 11 em `muralha.kpi_historico` | [ ] |
+
+---
+
 ## Resumo de Aceite
 
 | Fase | Planos | Total testes | Aceitos |
@@ -361,10 +375,11 @@ VALUES
 | 4 — Gestão e Analytics | 14–16 | 24 | 2/24 |
 | 5 — Monitoramento e Integração | 17–19 | 24 | 2/24 |
 | 6 — Analises com Superset | 23 | 28 | 0/28 |
-| **Total** | **01–19, 23** | **149** | **13/149** |
+| 7 — Correções de segurança e funcionais | 35 | 5 | 0/5 |
+| **Total** | **01–19, 23, 35** | **154** | **13/154** |
 
 > **13 testes de banco de dados** verificados via `sqlcmd` em 2026-10-09.  
-> **136 testes restantes** requerem servidor rodando + browser (108 GTW + 28 Superset).
+> **141 testes restantes** requerem servidor rodando + browser (108 GTW + 28 Superset + 5 do Plano 35).
 
 ---
 

@@ -1,5 +1,7 @@
 # Correções de segurança e funcionais (fases 1 e 2) — Plano de Implementação
 
+> **Status:** Executado (2026-10-19, PR #54): ver [Entrega 35](../entregas/35-correcoes-seguranca-funcionais.md). Testes no navegador pendentes.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Corrigir os itens das fases 1 e 2 do guia de correções: SEG-01, SEG-03, SEG-04, SEG-05, SEG-09, SEG-10 e FUN-01 a FUN-05.

@@ -3,6 +3,8 @@
 **Data:** 2026-10-08  
 **Status:** 🟡 Implementado — aguardando teste (critérios de aceite ainda não executados; revisão de 2026-10-16)
 
+> **Atualização de 2026-10-19** ([Entrega 35](35-correcoes-seguranca-funcionais.md), FUN-03 e SEG-03): novo modal **Adicionar infrações** (`acao=disponiveis` e `adicionarInfracoes`, só em RASCUNHO); `enviar` recusa lote sem itens; o botão "Enviar para DETRAN" passou a se chamar **"Marcar como enviado"** (não há integração com o DETRAN); todas as ações exigem o direito da tela (menu 370) pela verificação estrita de `ControleAcesso`.
+
 ## Escopo
 
 Agrupamento de infrações pré-aprovadas em lotes para encaminhamento ao DETRAN/DENATRAN, com ciclo de vida RASCUNHO → ENVIADO → CONFIRMADO/CANCELADO.
@@ -42,5 +44,5 @@ Agrupamento de infrações pré-aprovadas em lotes para encaminhamento ao DETRAN
 
 ## Pendências
 
-- Registrar menu no banco via INSERT em `dbo.sis_menu_infos`
+- ~~Registrar menu no banco via INSERT em `dbo.sis_menu_infos`~~ — feito na [Entrega 20](20-menu-modulos.md) (menu 370)
 - Teste manual completo (ver `docs/testes/14-gestao-lotes.md`)

@@ -22,7 +22,7 @@ Implementação de descarte automático parametrizado de dados de sessões de ti
 
 | Migração | Status |
 |---|---|
-| `20261016_timelapse_descarte.sql` | ⏳ Pendente |
+| `20261016_timelapse_descarte.sql` | ✅ Executada no DEV (objetos e chaves presentes; conferido em 2026-10-20) |
 
 - Tabela `muralha.timelapse_cache` — registra sessões de timelapse (id_local, dt_inicio, dt_fim, total_frames, dt_geracao, id_usuario)
 - Índice `IX_timelapse_cache_dt` para limpeza eficiente por data
@@ -39,7 +39,7 @@ Implementação de descarte automático parametrizado de dados de sessões de ti
 ## Critérios de aceite
 
 - [x] Build compila sem erros
-- [ ] Migração executada no banco DEV
+- [x] Migração executada no banco DEV (conferido em 2026-10-20)
 - [ ] Sessões de timelapse são registradas no cache ao carregar frames
 - [ ] Job de descarte remove sessões expiradas
 - [ ] Período de retenção configurável via `config_chave_valor`

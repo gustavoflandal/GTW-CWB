@@ -2,7 +2,7 @@
 
 Registro formal de cada fase entregue: escopo, arquivos produzidos, critérios de aceite e pendências.
 
-Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados e marcados; enquanto houver critério sem execução, o status é 🟡 (revisão de 2026-10-16, [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)). A numeração de plano e entrega coincide até a 19; depois, a Entrega 20 (menus) não tem plano, o Plano 20 gerou a Entrega 21 e o Plano 21 está embutido na Entrega 21 (ver [`rastreabilidade-tr.md`](rastreabilidade-tr.md#cobertura-por-plano)).
+Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados e marcados; enquanto houver critério sem execução, o status é 🟡 (revisão de 2026-10-16, [Plano 23](../planos-salvador/23-correcao-documentacao-aderencia.md)). A numeração de plano e entrega coincide até a 19; depois, a Entrega 20 (menus) não tem plano, o Plano 20 gerou a Entrega 21 e o Plano 21 está embutido na Entrega 21; o número 23 tem dois planos e duas entregas (correção da documentação de aderência e Análises com Superset) (ver [`rastreabilidade-tr.md`](rastreabilidade-tr.md#cobertura-por-plano)).
 
 ## Entregas
 
@@ -31,30 +31,34 @@ Uma entrega só recebe ✅ quando todos os critérios de aceite foram executados
 | 21 | Dashboard Builder Self-Service (Planos 20 e 21) | 2026-10-13 | 🟡 Implementado — aguardando teste no navegador | [21-dashboard-builder.md](21-dashboard-builder.md) |
 | 22 | Sistema de Gerenciamento de Chamados | 2026-10-15 | 🟡 Implementado — migrações executadas e teste integrado aprovado (10/10); faltam navegador e perfil Gestor | [22-sistema-chamados.md](22-sistema-chamados.md) |
 | 23 | Correção da documentação de aderência (Plano 23) | 2026-10-16 | 🟡 Implementado — aguardando validação no Windows | [23-correcao-documentacao-aderencia.md](23-correcao-documentacao-aderencia.md) |
+| 23 | Plataforma de Análises com Apache Superset (Plano 23 — Análises) | 2026-10-17 | 🟡 Implementado (SUP-1 a SUP-14) — camada `analise` corrigida e 122 gráficos validados; SSO, RLS, alertas, embedding e homologação pendentes | [23-analises-superset.md](23-analises-superset.md) |
 | 24 | Correções pontuais da auditoria (Plano 24) | 2026-10-16 | 🟡 Implementado — build, testes e migrações concluídos; aguardando teste manual | [24-correcoes-pontuais-auditoria.md](24-correcoes-pontuais-auditoria.md) |
 | 25 | Integridade SHA-256 na recepção (Plano 25) | 2026-10-16 | 🟡 Implementado — migração executada; aguardando teste no navegador | [25-integridade-sha256-recepcao.md](25-integridade-sha256-recepcao.md) |
 | 26 | Logs técnicos e histórico de parâmetros (Plano 26) | 2026-10-16 | 🟡 Implementado — migrações executadas; aguardando teste no navegador | [26-logs-tecnicos-historico-parametros.md](26-logs-tecnicos-historico-parametros.md) |
-| 27 | Score de OCR, revisão automática e múltiplas placas (Plano 27) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) |
+| 27 | Score de OCR, revisão automática e múltiplas placas (Plano 27) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [27-score-ocr-revisao-placas.md](27-score-ocr-revisao-placas.md) |
 | 28 | Alertas Operacionais (Plano 28) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [28-alertas-operacionais.md](28-alertas-operacionais.md) |
 | 29 | KPIs com Histórico, Alertas Analíticos e Relatório Mensal (Plano 29) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [29-kpis-relatorio-mensal.md](29-kpis-relatorio-mensal.md) |
 | 30 | Painéis de Assertividade e Pré-Processamento (Plano 30) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [30-paineis-assertividade-preproc.md](30-paineis-assertividade-preproc.md) |
 | 31 | Acabamentos de Baixo Custo (Plano 31) | 2026-10-16 | 🟡 Build OK — aguardando teste no navegador | [31-acabamentos-baixo-custo.md](31-acabamentos-baixo-custo.md) |
-| 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
-| 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
-| 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — aguardando migração e teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |
+| 32 | Retry de notificações em falha de comunicação (Plano 32) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [32-retry-notificacao.md](32-retry-notificacao.md) |
+| 33 | Descarte automático de time-lapse (Plano 33) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [33-timelapse-descarte.md](33-timelapse-descarte.md) |
+| 34 | Consolidação de dados multifonte (Plano 34) | 2026-10-16 | 🟡 Implementado — migração executada, aguardando teste no navegador | [34-consolidacao-multifonte.md](34-consolidacao-multifonte.md) |
 | 35 | Correções de segurança e funcionais, fases 1 e 2 (Plano 35) | 2026-10-19 | 🟡 Implementado — aguardando teste no navegador | [35-correcoes-seguranca-funcionais.md](35-correcoes-seguranca-funcionais.md) |
 
-> Migrações: a lista oficial, com a situação de cada um dos 33 scripts no `GTW_MURALHA_DEV` (conferida em 2026-10-15), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
+> Migrações: a lista oficial, com a situação de cada script no `GTW_MURALHA_DEV` (60 scripts na pasta em 2026-10-20), está em [`migracoes/README.md`](../banco-de-dados/migracoes/README.md); o resumo por entrega está em [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md). As entregas 01–07 têm os critérios de aceite marcados como build e revisão de código; os roteiros de teste manual seguem pendentes (ver [`docs/testes/`](../testes/README.md)).
 
 ## Documentos de apoio
 
+- **Gap da camada `analise` do Superset (2026-10-17, ✅ resolvido):** [`gap-camada-analise-superset.md`](gap-camada-analise-superset.md) — correção das cargas e das views da camada `analise` e republicação dos 14 painéis (Entrega 23 — Análises)
+- **Gap da configuração dos tipos de alerta (2026-10-17, ✅ resolvido em 2026-10-18):** [`gap-tipos-alerta-ajuste-demo.md`](gap-tipos-alerta-ajuste-demo.md) — tela de Tipos de Alerta, cores e ícones definitivos e execução dos tratamentos automáticos (Entrega 28)
+- **Gaps pendentes de definição:** [`gaps-amarelos-pendentes.md`](gaps-amarelos-pendentes.md) (🟡 parcialmente atendidos) e [`gaps-vermelhos-pendentes.md`](gaps-vermelhos-pendentes.md) (🔴 não atendidos)
 - **Auditoria de dashboards e tooltips (2026-10-17):** [`auditoria-dashboards-tooltips.md`](auditoria-dashboards-tooltips.md) — correções no módulo de análises, no backend de consulta e exportação, no SSO do Superset e nos tooltips de interface; pendências de segurança em aberto
 - **Diagrama de arquitetura:** [`arquitetura-sistema.md`](../diagrama-arquitetura/arquitetura-sistema.md) — camadas, módulos PoC, jobs Quartz, schema ER e módulos legados (Mermaid)
 - **Matriz canônica de aderência (fonte primária):** [`itens-edital-x-entregas.md`](itens-edital-x-entregas.md) — os 232 itens do Capítulo 5 do TR em ordem crescente, com situação (✅/⚠️/❌), entrega e evidência; cobertura por seção
 - **Análise de aderência:** [`analise-aderencia.md`](../../docs-editais/edital-salvador/analise-aderencia.md) — os mesmos status, agrupados por requisito, com links para os artefatos
 - **Aderência comparativa antes/depois:** [`aderencia-comparativa.md`](aderencia-comparativa.md) — visão tabular da evolução (estimativa de 39% antes da PoC; 57% hoje pela matriz canônica)
 - **Pendências de banco de dados:** [`pendencias-banco-de-dados.md`](pendencias-banco-de-dados.md) — migrações, menus, configs e verificação
-- **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 121 testes consolidados em trilha sequencial (13/121 aceitos)
+- **Roteiro de testes manuais:** [`roteiro-testes-manuais.md`](roteiro-testes-manuais.md) — 154 testes consolidados em trilha sequencial (13/154 aceitos), incluindo os 28 do Superset e os 5 do Plano 35
 - **Matriz de rastreabilidade:** [`rastreabilidade-tr.md`](rastreabilidade-tr.md) — TR → Plano → Entrega → Teste
 - **Validação automática:** [`validar_aderencia.py`](../referencia/scripts/validar_aderencia.py) — links relativos, divergência de status entre as fontes e termos proibidos
 

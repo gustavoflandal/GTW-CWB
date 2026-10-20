@@ -125,11 +125,16 @@ Itens do TR tratados por cada plano; "(parcial)" quando o item está ⚠️ na m
 | 22 | Sistema de Chamados | 22 | 22 | 7.2.3 (a–f), 7.2.4 |
 | 23 | Correção da documentação de aderência | 23 | 23 | Sem itens próprios: alinha a documentação ao código |
 | 24 | Correções pontuais da auditoria | 24 | 24 | Sem itens próprios: corrige defeitos (completa a Waze da Entrega 19) |
-| 25 | Integridade SHA-256 na recepção | 25 | 25 | 5.2.1.2 (parcial: conferência pronta, sem hash de origem enviado), 5.2.1.3 (parcial: aguardando migração e teste) |
-| 26 | Logs técnicos e histórico de parâmetros | 26 | 26 | 5.4.7.1–7 (parcial), 5.4.7.6 (parcial: aguardando migração e teste), 5.2.7.2 (períodos início/fim) |
-| 27 | Score de OCR, revisão automática e múltiplas placas | 27 | 27 | 5.7.1.4, 5.7.4.1–4, 5.2.2.5, 5.7.5.2, 5.7.5.4 (parciais: aguardando migração e teste; equipamentos não enviam score) |
+| 25 | Integridade SHA-256 na recepção | 25 | 25 | 5.2.1.2 (parcial: conferência pronta, sem hash de origem enviado), 5.2.1.3 (parcial: migração executada, aguardando teste) |
+| 26 | Logs técnicos e histórico de parâmetros | 26 | 26 | 5.4.7.1–7 (parcial), 5.4.7.6 (parcial: migração executada, aguardando teste), 5.2.7.2 (períodos início/fim) |
+| 27 | Score de OCR, revisão automática e múltiplas placas | 27 | 27 | 5.7.1.4, 5.7.4.1–4, 5.2.2.5, 5.7.5.2, 5.7.5.4 (parciais: migração executada, aguardando teste; equipamentos não enviam score) |
 | 28 | Alertas operacionais e SLA | 28 | 28 | 5.2.7.1–3, 5.5.2.1, 5.5.3.1–3 (parciais) |
 | 29 | KPIs obrigatórios, histórico e relatório mensal | 29 | 29 | 5.4.3.5–7, 5.4.5.1–2, 5.4.6.2–3, 5.5.3.1–3 |
 | 30 | Painéis de assertividade e pré-processamento | 30 | 30 | 5.2.2.6 |
 | 31 | Acabamentos de baixo custo | 31 | 31 | 5.1.10, 5.4.4.4, 5.5.4.3 |
+| 32 | Retry de notificações | 32 | 32 | 5.3.5.3 (parcial) |
+| 33 | Descarte automático de time-lapse | 33 | 33 | 5.7.7.5–6 (parcial) |
+| 34 | Consolidação de dados multifonte | 34 | 34 | 5.4.1.1 (parcial) |
+| 23 | Análises com Apache Superset | 23 (Análises) | Fase 6 do [roteiro](roteiro-testes-manuais.md) | Sem itens próprios na matriz canônica: plataforma de análises que coexiste com o Dashboard Builder |
+| 35 | Correções de segurança e funcionais (fases 1 e 2) | 35 | Fase 7 do [roteiro](roteiro-testes-manuais.md) | Sem itens próprios: corrige defeitos de segurança e funcionais dos módulos novos (KPIs, Lotes, Tipos de Alerta, relatórios) |
 | — | Registro dos módulos no menu (pendência da Entrega 17) | 20 | — | Sem itens próprios |

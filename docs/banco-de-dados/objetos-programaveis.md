@@ -1,8 +1,68 @@
 # Catálogo de objetos programáveis
 
-Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Para cada objeto: parâmetros e objetos referenciados (tabelas/views/outros) extraídos de `sys.sql_expression_dependencies`. Tipos entre colchetes: U=tabela, V=view, P=procedure, FN/IF/TF=função, TR=trigger.
+Gerado de GTW_MURALHA_DEV em 2026-10-20. O código-fonte completo de cada objeto está em [codigo-sql/](codigo-sql/). Para cada objeto: parâmetros e objetos referenciados (tabelas/views/outros) extraídos de `sys.sql_expression_dependencies`. Tipos entre colchetes: U=tabela, V=view, P=procedure, FN/IF/TF=função, TR=trigger.
 
-## Views — 126
+## Views — 140
+
+### analise.v_alertas
+- Arquivo: `codigo-sql/views/analise.v_alertas.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: dbo.sis_usuario [U], muralha.alerta [U], muralha.motivo_descarte [U], muralha.status_alerta [U], muralha.tipo_alerta_config [U], muralha.tipo_alerta_ocorrencia [U]
+
+### analise.v_areas_monitoradas_geojson
+- Arquivo: `codigo-sql/views/analise.v_areas_monitoradas_geojson.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.mat_areas_monitoradas [U], muralha.area_monitorada [U]
+
+### analise.v_assertividade_dia
+- Arquivo: `codigo-sql/views/analise.v_assertividade_dia.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: muralha.infracao_analise [U], muralha.vtr_status_analise [U]
+
+### analise.v_disponibilidade_dia
+- Arquivo: `codigo-sql/views/analise.v_disponibilidade_dia.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.v_local_versao [V], dbo.veiculo_sumarizado [U]
+
+### analise.v_equipamentos
+- Arquivo: `codigo-sql/views/analise.v_equipamentos.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.v_local_vigente [V], muralha.area_monitorada [U], muralha.equipamentos_area_monitorada [U], muralha.veiculo_tempo_real [U]
+
+### analise.v_infracoes_geolocalizado
+- Arquivo: `codigo-sql/views/analise.v_infracoes_geolocalizado.sql` · criado 2026-10-17 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.mat_infracoes_dia [U]
+
+### analise.v_local_versao
+- Arquivo: `codigo-sql/views/analise.v_local_versao.sql` · criado 2026-10-17 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: dbo.local [U]
+
+### analise.v_local_vigente
+- Arquivo: `codigo-sql/views/analise.v_local_vigente.sql` · criado 2026-10-17 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: dbo.local [U]
+
+### analise.v_passagens_geolocalizado
+- Arquivo: `codigo-sql/views/analise.v_passagens_geolocalizado.sql` · criado 2026-10-17 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.mat_passagens_hora [U]
+
+### analise.v_preprocessamento
+- Arquivo: `codigo-sql/views/analise.v_preprocessamento.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.v_local_versao [V], dbo.infracao [U], dbo.sis_usuario [U]
+
+### analise.v_sla_latencia_dia
+- Arquivo: `codigo-sql/views/analise.v_sla_latencia_dia.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: muralha.alerta_sla [U]
+
+### analise.v_sla_preproc_dia
+- Arquivo: `codigo-sql/views/analise.v_sla_preproc_dia.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: muralha.alerta_sla_preproc [U]
 
 ### dbo.agenda_camera_vigente
 - Arquivo: `codigo-sql/views/dbo.agenda_camera_vigente.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -564,6 +624,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Parâmetros/retorno: —
 - Referencia: dbo.sis_usuario [U], muralha.config_monitoramento_ao_vivo [U], muralha.monitoramento_ao_vivo_grupo_exibicao [U]
 
+### muralha.v_dados_consolidados
+- Arquivo: `codigo-sql/views/muralha.v_dados_consolidados.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: dbo.local [U], dbo.veiculo_sumarizado [U], muralha.alerta [U], muralha.incidente_externo [U], muralha.tipo_alerta_ocorrencia [U], muralha.veiculo_tempo_real [U]
+
 ### muralha.v_dashboard_alertas_resumo
 - Arquivo: `codigo-sql/views/muralha.v_dashboard_alertas_resumo.sql` · criado 2026-10-09 · alterado 2026-10-09
 - Parâmetros/retorno: —
@@ -588,6 +653,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Arquivo: `codigo-sql/views/muralha.v_grupo_supervisionado.sql` · criado 2025-06-23 · alterado 2025-11-25
 - Parâmetros/retorno: —
 - Referencia: dbo.sis_grupo [U]
+
+### muralha.v_integridade_recepcao
+- Arquivo: `codigo-sql/views/muralha.v_integridade_recepcao.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: —
+- Referencia: muralha.vtr_imagem_integridade [U]
 
 ### muralha.v_porte_veiculo_ref
 - Arquivo: `codigo-sql/views/muralha.v_porte_veiculo_ref.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -634,7 +704,22 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Parâmetros/retorno: —
 - Referencia: muralha.analise_correlacionamento_placas_registro_fato, muralha.correlacionamento_placas
 
-## Stored Procedures — 390
+## Stored Procedures — 401
+
+### analise.spu_carga_areas_monitoradas
+- Arquivo: `codigo-sql/procedures/analise.spu_carga_areas_monitoradas.sql` · criado 2026-10-17 · alterado 2026-10-17
+- Parâmetros/retorno: —
+- Referencia: analise.carga_log [U], analise.mat_areas_monitoradas [U], muralha.area_monitorada [U], n.value
+
+### analise.spu_carga_infracoes_dia
+- Arquivo: `codigo-sql/procedures/analise.spu_carga_infracoes_dia.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: @dias int, @dt_inicio date, @dt_fim date
+- Referencia: analise.carga_log [U], analise.mat_infracoes_dia [U], analise.v_local_versao [V], dbo.enquadramento [U], dbo.infracao [U]
+
+### analise.spu_carga_passagens_hora
+- Arquivo: `codigo-sql/procedures/analise.spu_carga_passagens_hora.sql` · criado 2026-10-16 · alterado 2026-10-17
+- Parâmetros/retorno: @horas int, @dt_inicio datetime2, @dt_fim datetime2
+- Referencia: analise.carga_log [U], analise.mat_passagens_hora [U], analise.v_local_versao [V], muralha.veiculo_tempo_real [U]
 
 ### dbo.grava_indicadores_tempo_real
 - Arquivo: `codigo-sql/procedures/dbo.grava_indicadores_tempo_real.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -817,7 +902,7 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Referencia: dbo.cad_isento [U], dbo.cad_isento_ant [U], dbo.infracao [U]
 
 ### dbo.spu_atualizar_classe_veiculo
-- Arquivo: `codigo-sql/procedures/dbo.spu_atualizar_classe_veiculo.sql` · criado 2026-10-15 · alterado 2026-10-15
+- Arquivo: `codigo-sql/procedures/dbo.spu_atualizar_classe_veiculo.sql` · criado 2026-10-15 · alterado 2026-10-17
 - Parâmetros/retorno: @idCaptura varchar, @idClasse varchar
 - Referencia: dbo.veiculo [U], dbo.veiculo_estatistica [U], ia.veiculo_caracteristica [U], muralha.veiculo_tempo_real [U]
 
@@ -2191,6 +2276,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Parâmetros/retorno: @idOcorrencia uniqueidentifier, @idAlerta uniqueidentifier, @idTipoAlerta uniqueidentifier, @idStatusAlertaOcorrenciaGerada uniqueidentifier, @idStatusOcorrenciaPendente uniqueidentifier, @data datetime, @idUsuario int, @alertaVinculado bit, @idAlertaVinculado uniqueidentifier
 - Referencia: dbo.spu_replica_erro, muralha.alerta [U], muralha.ocorrencia [U]
 
+### muralha.spu_getAproveitamentoRegistros
+- Arquivo: `codigo-sql/procedures/muralha.spu_getAproveitamentoRegistros.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.local_vigente [V], muralha.veiculo_tempo_real [U]
+
 ### muralha.spu_getCalendarioIntensidade
 - Arquivo: `codigo-sql/procedures/muralha.spu_getCalendarioIntensidade.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Tipo_Info tinyint, @Id_Municipio int, @Id_Regiao tinyint
@@ -2200,11 +2290,6 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoFluxoInfracao.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
 - Referencia: dbo.fcn_ObterDatasPeriodo [IF]
-
-### muralha.spu_getComparativoFluxoInfracaoSalvador
-- Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoFluxoInfracaoSalvador.sql` · criado 2026-10-15 · alterado 2026-10-15
-- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint, @Hora_Ini int, @Hora_Fim int, @Id_Classe char
-- Referencia: dbo.infracao [U], dbo.local_vigente [V], dbo.veiculo [U], dbo.veiculo_sumarizado [U]
 
 ### muralha.spu_getComparativoPeriodoAnoAnterior
 - Arquivo: `codigo-sql/procedures/muralha.spu_getComparativoPeriodoAnoAnterior.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -2216,6 +2301,31 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Tipo_Info tinyint, @Id_Municipio int, @Id_Regiao tinyint
 - Referencia: dbo.fcn_ObterDatasPeriodo [IF]
 
+### muralha.spu_getComportamentoFluxoViario
+- Arquivo: `codigo-sql/procedures/muralha.spu_getComportamentoFluxoViario.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.local_pista_vigente [V], dbo.veiculo_sumarizado [U]
+
+### muralha.spu_getConformidadeFuncionalidadesIntegradas
+- Arquivo: `codigo-sql/procedures/muralha.spu_getConformidadeFuncionalidadesIntegradas.sql` · criado 2026-10-19 · alterado 2026-10-19
+- Parâmetros/retorno: @dataInicio datetime, @dataFim datetime, @idLocal int
+- Referencia: muralha.alerta [U], muralha.veiculo_tempo_real [U], muralha.vtr_imagem_integridade [U]
+
+### muralha.spu_getDesempenhoOperacionalEquipamentos
+- Arquivo: `codigo-sql/procedures/muralha.spu_getDesempenhoOperacionalEquipamentos.sql` · criado 2026-10-19 · alterado 2026-10-19
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.local_pista_vigente [V], dbo.local_vigente [V], dbo.log_alerta [U]
+
+### muralha.spu_getDisponibilidadeEquipamentos
+- Arquivo: `codigo-sql/procedures/muralha.spu_getDisponibilidadeEquipamentos.sql` · criado 2026-10-19 · alterado 2026-10-19
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.local_pista_vigente [V], dbo.local_status_conexao [V], dbo.local_vigente [V], dbo.log_alerta [U], dbo.log_tipo [U]
+
+### muralha.spu_getDistribuicaoInfracoesPorEnquadramento
+- Arquivo: `codigo-sql/procedures/muralha.spu_getDistribuicaoInfracoesPorEnquadramento.sql` · criado 2026-10-15 · alterado 2026-10-16
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint, @Hora_Ini int, @Hora_Fim int, @Id_Classe char, @Id_Enquadramento int
+- Referencia: dbo.enquadramento [U], dbo.infracao [U], dbo.local_vigente [V], dbo.veiculo [U]
+
 ### muralha.spu_getDistribuicaoPorFaixaRolagem
 - Arquivo: `codigo-sql/procedures/muralha.spu_getDistribuicaoPorFaixaRolagem.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Tipo_Info tinyint, @Id_Municipio int, @Id_Regiao tinyint
@@ -2225,6 +2335,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Arquivo: `codigo-sql/procedures/muralha.spu_getEvolucaoPorClassificacao.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Tipo_Info tinyint, @Id_Municipio int, @Id_Regiao tinyint
 - Referencia: dbo.fcn_ObterDatasPeriodo [IF]
+
+### muralha.spu_getEvolucaoTemporalInfracoesAlertas
+- Arquivo: `codigo-sql/procedures/muralha.spu_getEvolucaoTemporalInfracoesAlertas.sql` · criado 2026-10-16 · alterado 2026-10-16
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.fcn_ObterDatasPeriodo [IF], dbo.infracao [U], dbo.local_vigente [V], dbo.veiculo [U], muralha.alerta [U], muralha.alerta_veiculo [U], muralha.veiculo_tempo_real [U]
 
 ### muralha.spu_getFluxoDiaHorarioGrafico
 - Arquivo: `codigo-sql/procedures/muralha.spu_getFluxoDiaHorarioGrafico.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -2245,6 +2360,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 - Arquivo: `codigo-sql/procedures/muralha.spu_getGraficoPrevisaoFutura.sql` · criado 2025-06-02 · alterado 2025-06-02
 - Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Tipo_Info tinyint, @Id_Municipio int, @Id_Regiao tinyint
 - Referencia: dbo.fcn_ObterDatasPeriodo [IF]
+
+### muralha.spu_getIndicesClassificacaoVeicular
+- Arquivo: `codigo-sql/procedures/muralha.spu_getIndicesClassificacaoVeicular.sql` · criado 2026-10-19 · alterado 2026-10-19
+- Parâmetros/retorno: @Data_Ini datetime, @Data_Fim datetime, @Id_Local int, @Id_Municipio int, @Id_Regiao tinyint
+- Referencia: dbo.local_vigente [V], ia.veiculo_caracteristica [U], muralha.veiculo_tempo_real [U]
 
 ### muralha.spu_getInfracoesDiaGrafico
 - Arquivo: `codigo-sql/procedures/muralha.spu_getInfracoesDiaGrafico.sql` · criado 2025-06-02 · alterado 2025-06-02
@@ -2353,6 +2473,11 @@ Gerado de GTW_MURALHA_DEV em 2026-10-15. O código-fonte completo de cada objeto
 
 ### muralha.spu_ObterNovosAlertas
 - Arquivo: `codigo-sql/procedures/muralha.spu_ObterNovosAlertas.sql` · criado 2025-10-06 · alterado 2025-10-06
+- Parâmetros/retorno: @lembrete_visualizado bit
+- Referencia: dbo.local_vigente [V], muralha.alerta [U], muralha.alerta_veiculo [U], muralha.cad_veiculo_monitorado [U], muralha.fn_ObterSom [TF], muralha.fn_RegistroFatoRequerEPossuiBO [TF], muralha.status_alerta [U], muralha.tipo_alerta_ocorrencia [U], muralha.veiculo_tempo_real [U]
+
+### muralha.spu_ObterNovosAlertasGTW
+- Arquivo: `codigo-sql/procedures/muralha.spu_ObterNovosAlertasGTW.sql` · criado 2026-10-15 · alterado 2026-10-15
 - Parâmetros/retorno: @lembrete_visualizado bit
 - Referencia: dbo.local_vigente [V], muralha.alerta [U], muralha.alerta_veiculo [U], muralha.cad_veiculo_monitorado [U], muralha.fn_ObterSom [TF], muralha.fn_RegistroFatoRequerEPossuiBO [TF], muralha.status_alerta [U], muralha.tipo_alerta_ocorrencia [U], muralha.veiculo_tempo_real [U]
 

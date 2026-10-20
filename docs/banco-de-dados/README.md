@@ -1,6 +1,6 @@
 # Banco de Dados — GTW_MURALHA_DEV
 
-> Catálogo gerado em **2026-10-15** a partir do ambiente DEV, em modo somente leitura. **A senha não está documentada**: ela vem de `confGTW.xml` local (ou variável `GTW_DB_PASSWORD` para o script de extração).
+> Catálogo gerado em **2026-10-15** e atualizado em **2026-10-20** (objetos novos ou alterados até as migrações de 2026-10-19) a partir do ambiente DEV, em modo somente leitura. **A senha não está documentada**: ela vem de `confGTW.xml` local (ou variável `GTW_DB_PASSWORD` para o script de extração).
 
 ## 1. Identificação
 
@@ -19,16 +19,17 @@
 
 | Schema | Tabelas | Linhas (≈) | Variação desde 2026-10-08 | Papel |
 |---|---|---|---|---|
-| `dbo` | 436 | 24,2 M | +3 tabelas | GTW clássico (infração, processo, remessa, cadastros, configuração de equipamentos) + tabelas de sistema (`sis_*`, incluindo `sis_log_auditoria`, `sis_senha_config`, `sis_usuario_complemento`) + Quartz (`qrtz_*`) + logs |
-| `muralha` | 148 | 19,3 M | +24 tabelas | Muralha Digital (alertas, ocorrências, atendimento, blitz, registro de fato, boletim, veículo em tempo real, configurações) + tabelas complementares da PoC (`vtr_*`, `lote_*`, `alerta_sla*`, `kpi_config`…) + Sistema de Chamados (`chamado*`) |
-| `mobilidade` | 183 | 4,1 M | sem mudança | Mobilidade urbana/Waze (congestionamentos, incidentes, radares, eventos). **Não usado pelo Java deste projeto** |
+| `dbo` | 437 | 24,3 M | +4 tabelas | GTW clássico (infração, processo, remessa, cadastros, configuração de equipamentos) + tabelas de sistema (`sis_*`, incluindo `sis_log_auditoria`, `sis_senha_config`, `sis_usuario_complemento`) + Quartz (`qrtz_*`) + logs (incluindo `log_alerta_arquivo`, ver §5C) |
+| `muralha` | 167 | 20,6 M | +43 tabelas | Muralha Digital (alertas, ocorrências, atendimento, blitz, registro de fato, boletim, veículo em tempo real, configurações) + tabelas complementares da PoC (`vtr_*`, `lote_*`, `alerta_sla*`, `kpi_*`, `tipo_alerta_config`/`_tratamento`, `parametro_historico`…) + Sistema de Chamados (`chamado*`) |
+| `mobilidade` | 183 | 4,2 M | sem mudança | Mobilidade urbana/Waze (congestionamentos, incidentes, radares, eventos). **Não usado pelo Java deste projeto** |
 | `ia` | 6 | 8,2 M | sem mudança | Características do veículo por IA (`veiculo_caracteristica`, `cad_cor`, `cad_marca`, `cad_modelo`) |
-| `dash` | 15 | 372 | novo (2026-10-13) | Construtor de Dashboards: catálogo de dados, datasets, dashboards, widgets, compartilhamento e observabilidade (ver §5A) |
-| **Total** | **788** | | +42 (eram 746) | + 126 views · 390 procedures · 302 funções · 8 triggers · 666 chaves estrangeiras |
+| `dash` | 15 | 663 | novo (2026-10-13) | Construtor de Dashboards: catálogo de dados, datasets, dashboards, widgets, compartilhamento e observabilidade (ver §5A) |
+| `analise` | 4 | ≈ 63 mil | novo (2026-10-16) | Camada analítica para o Apache Superset (Plano 23): materializações, log de carga, views e procedures de carga (ver §5B) |
+| **Total** | **812** | | +66 (eram 746) | + 140 views · 401 procedures · 302 funções · 8 triggers · 673 chaves estrangeiras |
 
-Variação de objetos programáveis desde 2026-10-08: views 123 → 126, procedures 388 → 390, chaves estrangeiras 636 → 666, funções e triggers sem mudança.
+Variação de objetos programáveis desde 2026-10-08: views 123 → 140, procedures 388 → 401, chaves estrangeiras 636 → 673, funções e triggers sem mudança. A procedure `muralha.spu_getComparativoFluxoInfracaoSalvador`, catalogada em 2026-10-15, não existe mais no DEV.
 
-Objetos programáveis: `dbo` = 110 views, 283 procedures, 193 funções inline + 55 escalares + 8 tabela, 5 triggers; `muralha` = 16 views, 107 procedures, 33 inline + 5 escalares + 8 tabela, 3 triggers. O schema `dash` não tem views, procedures nem funções (a lógica está no Java).
+Objetos programáveis: `dbo` = 110 views, 283 procedures, 193 funções inline + 55 escalares + 8 tabela, 5 triggers; `muralha` = 18 views, 115 procedures, 33 inline + 5 escalares + 8 tabela, 3 triggers; `analise` = 12 views, 3 procedures. O schema `dash` não tem views, procedures nem funções (a lógica está no Java).
 
 Observações de higiene: ~156 tabelas com sufixo `_test*`, `bkp`, `backup`, `_ant` (principalmente em `mobilidade` e backups em `dbo`); `veiculo_tempo_real_imagem_copiar_dev` (4,4 M) é cópia para DEV.
 
@@ -51,11 +52,11 @@ Observações de higiene: ~156 tabelas com sufixo `_test*`, `bkp`, `backup`, `_a
 
 | Arquivo / pasta | Conteúdo |
 |---|---|
-| [`tabelas/<schema>/<grupo>.md`](tabelas/) | 65 arquivos agrupados pelo prefixo do nome: colunas (tipo, null, identity, default), PK/índices, FKs de saída e "referenciada por", contagem de linhas. Prefixos com < 4 tabelas vão em `outros.md` |
+| [`tabelas/<schema>/<grupo>.md`](tabelas/) | 67 arquivos agrupados pelo prefixo do nome: colunas (tipo, null, identity, default), PK/índices, FKs de saída e "referenciada por", contagem de linhas. Prefixos com < 4 tabelas vão em `outros.md` |
 | [`objetos-programaveis.md`](objetos-programaveis.md) | Catálogo das views/procedures/funções/triggers: parâmetros, **objetos referenciados**, datas de criação/alteração |
-| [`codigo-sql/`](codigo-sql/) | **Código-fonte** de cada objeto (826 arquivos em `views/ procedures/ funcoes/ triggers/` — `<schema>.<nome>.sql`) |
+| [`codigo-sql/`](codigo-sql/) | **Código-fonte** de cada objeto (851 arquivos em `views/ procedures/ funcoes/ triggers/` — `<schema>.<nome>.sql`) |
 | [`estrutura-dados-por-tela.md`](estrutura-dados-por-tela.md) | Estrutura de dados que abastece cada tela dos módulos Análise de Dados, Dashboards (KPIs) e Gestão de Lotes: endpoints, tabelas/colunas, jobs de carga e diagramas Mermaid |
-| [`dominios.md`](dominios.md) | Valores de 46 tabelas de domínio pequenas (tipos, status, situações, categorias, prioridades…) |
+| [`dominios.md`](dominios.md) | Valores de 49 tabelas de domínio pequenas (tipos, status, situações, categorias, prioridades…) |
 | [`scripts/extrair-catalogo.ps1`](scripts/extrair-catalogo.ps1) | Regenera `tabelas/`, `codigo-sql/`, `objetos-programaveis.md` e `dominios.md` (somente SELECT) |
 | [`../referencia/menus-e-permissoes.md`](../referencia/menus-e-permissoes.md) | Conteúdo de `sis_grupo`, `sis_menu*` (menus e direitos) |
 | [`migracoes/`](migracoes/) | Scripts DDL/DML versionados (`AAAAMMDD_descricao.sql`, idempotentes, com rollback comentado) das Planos Salvador, do Construtor de Dashboards e do Sistema de Chamados; o [README da pasta](migracoes/README.md) lista cada script, sua situação no DEV e a ordem de execução. Regras gerais em [`../requisitos/10-guia-de-implementacao.md`](../requisitos/10-guia-de-implementacao.md) §6 |
@@ -83,9 +84,15 @@ Grupos criados a partir de 2026-10-08 (Planos Salvador, Construtor de Dashboards
 |---|---|---|
 | `chamado*` (7: `chamado`, `chamado_anexo`, `chamado_categoria`, `chamado_historico`, `chamado_notificacao`, `chamado_prioridade`, `chamado_protocolo`) | `chamado.md` | Sistema de Gerenciamento de Chamados (Plano 22), com SLA, histórico, anexos e fila de e-mails — diagrama na §6A |
 | `vtr_*` (4: `vtr_complemento`, `vtr_imagem_complemento`, `vtr_imagem_obliterada`, `vtr_status_analise`) | `vtr.md` | Complementos de `veiculo_tempo_real` e de suas imagens (status de análise, SHA-256, obliteração), em tabelas separadas para não alterar a tabela legada — diagrama na §6C |
+| `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade` + view `v_integridade_recepcao` | `outros.md` / `vtr.md` | Conferência de integridade SHA-256 na recepção de imagens (Plano 25, `20261016_integridade_sha256_recepcao.sql`): origem do hash por equipamento, hash enviado pela origem e resultado da conferência (`INTEGRO`, `DIVERGENTE`, `SEM_CONFERENCIA`, `ERRO_LEITURA`) |
+| `parametro_historico` | `outros.md` | Valor anterior e novo de cada parâmetro alterado (Plano 26, `20261016_logs_tecnicos_parametro_historico.sql`); também usada pela configuração dos tipos de alerta |
+| `vtr_placa_leitura`, `vtr_ocr_avaliacao`, `vtr_revisao_placa`, `vtr_correcao_justificativa`, `equipamento_ocr_config`, `motivo_correcao_placa` | `vtr.md` / `outros.md` / `motivo.md` | Score de OCR, N placas por passagem, fila de revisão de placas e justificativa das correções (Plano 27, `20261016_ocr_score_revisao_placas.sql`) |
+| `tipo_alerta_config`, `tipo_alerta_tratamento`, `alerta_retencao`, `alerta_tratamento_execucao` | `tipo.md` / `alerta.md` | Alertas operacionais (Plano 28): criticidade, cor e ícone por tipo, tratamentos parametrizáveis e detalhe da detecção de retenção/congestionamento (`20261016_alertas_operacionais.sql`); registro de cada tratamento automático já executado por alerta, usado pelo `JobTratamentoAutomatico` com a chave `TRATAMENTO_AUTO_JANELA_MIN` (`20261018_tipo_alerta_config_definitivo.sql`) |
 | `lote_infracao`, `lote_infracao_item` | `outros.md` | Lotes de infrações (Plano 14) |
 | `alerta_sla`, `alerta_sla_preproc` | `alerta.md` | Medições de SLA de latência (Plano 07) e de pré-processamento 72 h (Plano 10) |
 | `kpi_config` | `outros.md` | KPIs configuráveis (Plano 15) |
+| `kpi_config_meta`, `kpi_historico`, `relatorio_periodico` | `outros.md` | Metas por KPI, snapshots periódicos de valor e relatórios gerenciais automáticos (Plano 29, `20261016_kpis_relatorio_mensal.sql`) |
+| `notificacao_retry`, `timelapse_cache` + view `v_dados_consolidados` | `outros.md` | Reenvio de notificações em falha (Plano 32), cache de time-lapse com descarte automático (Plano 33) e consolidação multifonte de passagens, sumarizados, alertas e incidentes Waze (Plano 34) |
 | `equipamento_disponibilidade`, `incidente_externo` | `outros.md` | Disponibilidade de equipamentos (Plano 18) e incidentes externos/Waze (Plano 19) |
 | `expurgo_log` | `outros.md` | Registro da política de retenção/expurgo (Plano 12) |
 | `infracao_analise`, `infracao_imagem_obliteracao` | `outros.md` | Dupla análise de infrações (Plano 05) e obliteração de imagens (Plano 06) |
@@ -93,9 +100,11 @@ Grupos criados a partir de 2026-10-08 (Planos Salvador, Construtor de Dashboards
 
 No schema `dbo`, os Planos Salvador acrescentaram `sis_log_auditoria` (Plano 01), `sis_senha_config` (Plano 03) e `sis_usuario_complemento` (Planos 03/04/09), em `tabelas/dbo/sis.md`. A visão por plano está em [`../planos-salvador/00b-tabelas-complementares.md`](../planos-salvador/00b-tabelas-complementares.md).
 
+Com `motivo_correcao_placa`, o prefixo `motivo_*` passou a ter 4 tabelas e saiu de `outros.md` para `tabelas/muralha/motivo.md` (junto com `motivo_descarte`, `motivo_invalido_correlacionamento_automatico_placa` e `motivo_solicitacao_relatorio`).
+
 ## 5A. Schema `dash` (Construtor de Dashboards)
 
-Criado em 2026-10-13 pelos Planos 20/21 (migrações `20261013_*` e dados de demonstração `20261014_*`). São 15 tabelas, ≈ 372 linhas, documentadas em `tabelas/dash/dataset.md` (família `dataset*`) e `tabelas/dash/outros.md` (demais).
+Criado em 2026-10-13 pelos Planos 20/21 (migrações `20261013_*` e dados de demonstração `20261014_*`). São 15 tabelas, ≈ 663 linhas, documentadas em `tabelas/dash/dataset.md` (família `dataset*`) e `tabelas/dash/outros.md` (demais).
 
 | Grupo | Tabelas | Função |
 |---|---|---|
@@ -105,6 +114,31 @@ Criado em 2026-10-13 pelos Planos 20/21 (migrações `20261013_*` e dados de dem
 | Governança e observabilidade | `compartilhamento`, `historico_versao`, `consulta_log`, `dataset_estatistica` | Permissões de acesso, versões, log de consultas e estatísticas de desempenho |
 
 FKs declaradas para fora do schema: `dataset.id_usuario` e `dashboard.id_usuario` → `dbo.sis_usuario.id_usuario`. As tabelas de governança (`compartilhamento`, `historico_versao`, `consulta_log`) referenciam recursos por id, sem FK. Diagrama na §6B.
+
+## 5B. Schema `analise` (camada analítica do Superset)
+
+Criado em 2026-10-16 pelo Plano 23 ([`../planos-salvador/23-analises-superset.md`](../planos-salvador/23-analises-superset.md)) com `20261016_analise_fundacao.sql` e `20261017_analise_camada_dados.sql`, e reescrito por `20261017_analise_correcao_camada.sql` e `20261017_analise_versao_equipamento.sql` (situação de cada script no [README de migrações](migracoes/README.md)). Só contém objetos próprios: nenhuma tabela de `dbo`/`muralha` foi alterada. Tabelas em `tabelas/analise/outros.md`; código das views e procedures em `codigo-sql/` (`analise.*.sql`).
+
+| Tipo | Objetos | Função |
+|---|---|---|
+| Tabelas (4) | `carga_log` (≈ 58), `mat_passagens_hora` (≈ 62 mil), `mat_infracoes_dia` (≈ 1 mil), `mat_areas_monitoradas` (4) | Log de execução das cargas e materializações (passagens por hora, local, faixa, classificação e placa Mercosul; infrações por dia e enquadramento; polígonos das áreas monitoradas), com `lat`/`lon` do local |
+| Procedures (3) | `spu_carga_passagens_hora` (`@horas`, `@dt_inicio`, `@dt_fim`), `spu_carga_infracoes_dia` (`@dias`, `@dt_inicio`, `@dt_fim`), `spu_carga_areas_monitoradas` | Recarga das tabelas `mat_*` numa janela parametrizável, com registro em `carga_log` |
+| Views de apoio (2) | `v_local_vigente`, `v_local_versao` | Equipamento vigente e vigência de cada versão da configuração do equipamento, usadas pelas cargas e pelas views diárias |
+| Views para o Superset (10) | `v_alertas`, `v_areas_monitoradas_geojson`, `v_assertividade_dia`, `v_disponibilidade_dia`, `v_equipamentos`, `v_infracoes_geolocalizado`, `v_passagens_geolocalizado`, `v_preprocessamento`, `v_sla_latencia_dia`, `v_sla_preproc_dia` | Datasets de alertas, disponibilidade, assertividade, pré-processamento, SLA e mapas |
+
+## 5C. Alterações no DEV sem migração no repositório
+
+A comparação com o DEV em 2026-10-20 encontrou mudanças que não aparecem em nenhum script de [`migracoes/`](migracoes/) (origem a confirmar com quem administra o banco):
+
+| Objeto | Mudança no DEV | Data (`modify_date`) |
+|---|---|---|
+| `muralha.alerta` | Colunas `enviado_cliente_GTW` (bit, default 0), `data_enviado_GTW` (datetime, default `getdate()`) e `lembrete_visualizado_GTW` (int, default 0); a procedure nova `muralha.spu_ObterNovosAlertasGTW` (`@lembrete_visualizado`) lê essa tabela | 2026-10-18 |
+| `muralha.tipo_alerta_ocorrencia` | Coluna `cor` (varchar(7)) com índice único `IX_tipo_alerta_ocorrencia_cor` | 2026-10-16 |
+| `ia.cad_modelo` | Coluna `id_marca` (int) | 2026-10-19 |
+| `dbo.log_alerta_arquivo` | Tabela nova, com FK `id_log_alerta` → `dbo.log_alerta.id` | 2026-10-19 |
+| `dbo.spu_atualizar_classe_veiculo` | Reescrita com parâmetros tipados (`varchar(36)`/`varchar(1)`), transação e `TRY/CATCH` | 2026-10-17 |
+| `muralha.spu_getAproveitamentoRegistros`, `spu_getComportamentoFluxoViario`, `spu_getConformidadeFuncionalidadesIntegradas`, `spu_getDesempenhoOperacionalEquipamentos`, `spu_getDisponibilidadeEquipamentos`, `spu_getDistribuicaoInfracoesPorEnquadramento`, `spu_getEvolucaoTemporalInfracoesAlertas`, `spu_getIndicesClassificacaoVeicular`, `spu_ObterNovosAlertasGTW` | Procedures novas (indicadores/gráficos por período, local, município e região; polling de alertas para o GTW); nenhuma é chamada pelo código Java deste repositório | 2026-10-15 a 2026-10-19 |
+| `muralha.spu_getComparativoFluxoInfracaoSalvador` | Removida do DEV | — |
 
 ## 6. Relacionamentos centrais (resumo)
 ```
@@ -125,8 +159,12 @@ dash.catalogo_tabela ─< catalogo_coluna ; dash.dataset ─< dataset_tabela | d
 dash.dashboard ─< widget >─ dataset ; dash.dataset >─ dbo.sis_usuario (autor)
 muralha.veiculo_tempo_real ··· vtr_complemento | vtr_imagem_complemento | vtr_imagem_obliterada | vtr_status_analise   (mesmo id, sem FK)
 muralha.lote_infracao ─< lote_infracao_item ; muralha.dashboard_painel ─< dashboard_widget >─ dashboard_dataset
+muralha.tipo_alerta_ocorrencia ─< tipo_alerta_config | tipo_alerta_tratamento ; muralha.alerta ─< alerta_retencao | alerta_tratamento_execucao
+muralha.kpi_config ─< kpi_config_meta | kpi_historico ; dbo.log_alerta ─< log_alerta_arquivo
+muralha.veiculo_tempo_real ··· vtr_placa_leitura | vtr_ocr_avaliacao | vtr_revisao_placa ; veiculo_tempo_real_imagem ··· vtr_imagem_hash_origem | vtr_imagem_integridade
+muralha.veiculo_tempo_real_correcao ··· vtr_correcao_justificativa (id_correcao)
 ```
-Use `tabelas/<schema>/<grupo>.md` para as FKs reais (666 chaves estrangeiras no banco; muitas relações de `muralha.*` são lógicas, sem FK declarada — validar no código).
+Use `tabelas/<schema>/<grupo>.md` para as FKs reais (673 chaves estrangeiras no banco; muitas relações de `muralha.*` são lógicas, sem FK declarada — validar no código).
 
 ### 6A. Diagrama — Sistema de Chamados (Plano 22)
 
@@ -463,7 +501,8 @@ Tabelas complementares sem relação com outras (consultadas por agregação): `
 | `muralha.spu_Relatorio*`, `spu_Get*` (≈ 40) | Relatórios/gráficos/dashboards |
 | `dbo.fcn_VerificaAcesso(acao, id_usuario)` | Autorização por URL |
 | `dbo.spu_ppv_sis_usuario_token_*` | Token de acesso de usuário |
-| `muralha.spu_ImportarBase` | Importação CSV de base (JuncaoBase) |
+| `muralha.spu_ImportarBase` | Importação CSV de base (JuncaoBase); chamada pelo `JuncaoBaseServlet`, mas **não existe no DEV** (ausente de `sys.procedures` em 2026-10-20) |
+| `analise.spu_carga_passagens_hora`, `spu_carga_infracoes_dia`, `spu_carga_areas_monitoradas` | Cargas das materializações do schema `analise` (§5B) |
 
 ## 8. Regras para agentes e desenvolvedores
 1. **Somente leitura por padrão.** Não executar INSERT/UPDATE/DELETE/DDL/EXEC de procedures com efeito colateral sem autorização explícita, nem em DEV.

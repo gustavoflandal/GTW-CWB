@@ -21,7 +21,7 @@ Implementação de mecanismo de reenvio automático para notificações (e-mail 
 
 | Migração | Status |
 |---|---|
-| `20261016_retry_notificacao.sql` | ⏳ Pendente |
+| `20261016_retry_notificacao.sql` | ✅ Executada no DEV (objetos e chaves presentes; conferido em 2026-10-20) |
 
 - Tabela `muralha.notificacao_retry` — rastreia cada tentativa com (id_notificacao, tipo_registro, tentativa, dt_tentativa, erro, sucesso)
 - Índice `IX_notificacao_retry_notif` para busca rápida por notificação
@@ -39,7 +39,7 @@ Implementação de mecanismo de reenvio automático para notificações (e-mail 
 ## Critérios de aceite
 
 - [x] Build compila sem erros
-- [ ] Migração executada no banco DEV
+- [x] Migração executada no banco DEV (conferido em 2026-10-20)
 - [ ] Job registrado no Agendador e executa a cada 5 min
 - [ ] Notificações com `NAO_ENVIADO` são reagendadas para `PENDENTE`
 - [ ] Após N tentativas (configurável), para de tentar

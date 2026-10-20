@@ -1,5 +1,7 @@
 # Plano 31 — Acabamentos de baixo custo
 
+> **Status:** Executado (2026-10-16): ver [Entrega 31](../entregas/31-acabamentos-baixo-custo.md).
+
 **Fase da auditoria:** 9 — Acabamentos de baixo custo
 **Itens do edital:** 5.1.10, 5.4.4.4, 5.5.4.3
 **Branch:** `fix/auditoria-fase-09-acabamentos`

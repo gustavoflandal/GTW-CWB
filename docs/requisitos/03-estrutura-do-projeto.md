@@ -5,7 +5,7 @@
 | Caminho | Conteúdo | Observação |
 |---|---|---|
 | `pom.xml` | Build Maven (`war`, `com.consilux.gtw:gtw:3.0`) | Não alterar sem aprovação |
-| `src/main/java` | Código Java (~1017 arquivos) | ver §2 |
+| `src/main/java` | Código Java (~1124 arquivos) | ver §2 |
 | `src/main/resources` | `log4j.xml`, `quartz.properties`, `imagens/logo_*.png` (logos de clientes) | |
 | `src/main/webapp` | Raiz web (JSP, JS, CSS, imagens, WEB-INF) | ver §3 |
 | `src/test` | Testes (TestNG; 6 `.java`) | cobertura mínima |
@@ -20,7 +20,7 @@
 
 | Pacote raiz | Arquivos | Papel |
 |---|---|---|
-| `com.consilux.model` | 253 | Núcleo de negócio do GTW clássico: `Usuario`, `Acesso`, `Infracao*`, `Remessa*`, `Enquadramento`, `Cadastro*`, `Job*` (Quartz), `Acesso{FTP,SFTP,Compartilhamento}`, `ExportaRemessa*`… |
+| `com.consilux.model` | 252 | Núcleo de negócio do GTW clássico: `Usuario`, `Acesso`, `Infracao*`, `Remessa*`, `Enquadramento`, `Cadastro*`, `Job*` (Quartz), `Acesso{FTP,SFTP,Compartilhamento}`, `ExportaRemessa*`… |
 | `com.consilux.servlet` | 159 | Servlets do GTW clássico por área: `ajax`, `processamento`, `remessa`, `relatorio`, `ferramentas`, `medicao`, `ait`, `notificacao`, `log`… |
 | `com.consilux.infra` | 36 | Infra: `SessaoConstantes`, `SessoesAtivas`, `SessaoFinaliza*`, `ValidaSessao` (filtro), `CacheFilter`, `Funcoes` (utilitários 47 KB), `ServicoEmail`, criptografia AES, gráficos |
 | `com.consilux.ws` | 26 | Web services Axis: `server/` (serviços expostos) e `client/` (stubs) |
@@ -28,10 +28,10 @@
 | `com.consilux.lib` | 14 | `Conexao` (pool), `ConnectionAdapter`, `GenericCache`, `RelatorioVisual`, `Grafico` |
 | `com.consilux.ui` | 14 | Implementações servidoras de GWT-RPC (`ui.server.*ServiceImpl`) |
 | `com.consilux.menu`, `.log`, `.exportalista`, `.rest`, `.Utils` | 1–3 cada | Menu GWT, log de tempo, exportação, recurso REST |
-| `com.abertura.sistemas` | 1 | `SistemasServlet` (`/Abertura/SistemasConsilux`) |
-| `muralha.digital.*` | ~487 | **Muralha Digital** — um subpacote por módulo (ver `04-modulos-funcionais.md`) |
-| `muralha.digital.dashboards` | 19 | **Construtor de Dashboards** — catálogo, datasets, painéis, widgets, exportação, observabilidade |
-| `muralha.configuracaoequipamento` | — | Servlets de configuração de equipamento |
+| `com.abertura.sistemas` | 3 | `SistemasServlet` (`/Abertura/SistemasConsilux`) |
+| `muralha.digital.*` | ~587 | **Muralha Digital** — um subpacote por módulo (ver `04-modulos-funcionais.md`) |
+| `muralha.digital.dashboards` | 26 (18 + 8 em `consulta`) | **Construtor de Dashboards** — catálogo, datasets, painéis, widgets, exportação, observabilidade |
+| `muralha.configuracaoequipamento` | 7 | Servlets de configuração de equipamento |
 
 Estrutura típica de um módulo Muralha (`muralha.digital.<modulo>`):
 

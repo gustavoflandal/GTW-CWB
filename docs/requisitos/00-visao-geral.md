@@ -21,7 +21,7 @@ O WAR reúne **três gerações de software** que convivem no mesmo contexto web
 - ~1017 arquivos `.java`: `com.consilux.*` (≈529, legado/núcleo) + `muralha.*` (≈487, Muralha Digital) + `com.abertura` (1).
 - 195 servlets declarados em `web.xml` + 145 anotados com `@WebServlet` (+ 1 endpoint WebSocket + 8 serviços Axis SOAP + recurso Jersey REST).
 - ~1.100 arquivos de front-end em `webapp/muralha-digital` (≈ 52 diretórios de telas em `pages/`), ~480 arquivos GXT em `webapp/gxt`.
-- Banco `GTW_MURALHA_DEV` (SQL Server 2016): **788 tabelas, 126 views, 390 procedures, 302 funções, 8 triggers, 666 FKs** (catálogo de 2026-10-15), schemas `dbo`, `muralha`, `mobilidade`, `ia` e `dash`.
+- Banco `GTW_MURALHA_DEV` (SQL Server 2016): **812 tabelas, 140 views, 401 procedures, 302 funções, 8 triggers, 673 FKs** (catálogo atualizado em 2026-10-20), schemas `dbo`, `muralha`, `mobilidade`, `ia`, `dash` e `analise`.
 
 ## 3. Domínio em uma página
 

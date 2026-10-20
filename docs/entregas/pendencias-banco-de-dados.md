@@ -1,6 +1,6 @@
 # Pendências de Banco de Dados — PoC TRANSALVADOR
 
-Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–34. As migrações dos Planos 24 a 26 e 28 a 30 foram executadas no DEV em 2026-10-16, com autorização; a do Plano 27 está pendente (seção 1, "Correção da auditoria"). O Plano 31 não requer migração.
+Relação completa de todas as ações manuais necessárias no banco `GTW_MURALHA_DEV` (10.0.0.200) para ativar as funcionalidades implementadas nos Planos 01–35. As migrações dos Planos 24 a 30 e 32 a 34 estão executadas no DEV (conferência de 2026-10-20), assim como as de 2026-10-17 a 2026-10-19 (Superset, tipos de alerta, cards, registro dos módulos novos e KPIs do Plano 35). O Plano 31 não requer migração.
 
 > **Lista oficial e atualizada dos scripts:** [`docs/banco-de-dados/migracoes/README.md`](../banco-de-dados/migracoes/README.md), que registra a situação de cada script no DEV conferida por consultas somente leitura. Este documento resume as ações por entrega; em caso de divergência, vale o README das migrações.
 
@@ -62,7 +62,7 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 | [`20261016_logs_tecnicos_parametro_historico.sql`](../banco-de-dados/migracoes/20261016_logs_tecnicos_parametro_historico.sql) | 26 | Tabela `muralha.parametro_historico`, chaves `LOG_TECNICO_*`, menus da tela Logs Técnicos. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16): tabela, 6 chaves e menus 387-388 |
 | [`20261016_desativa_menu_201.sql`](../banco-de-dados/migracoes/20261016_desativa_menu_201.sql) | 24 | Desativa o menu 201 "Relatório Alt. ConfigEquip" (`Ativo = 0`) | ✅ Executado (2026-10-16): menu 201 com `Ativo = 0` |
 | [`20261016_integridade_sha256_recepcao.sql`](../banco-de-dados/migracoes/20261016_integridade_sha256_recepcao.sql) | 25 | Tabelas `equipamento_integridade_config`, `vtr_imagem_hash_origem`, `vtr_imagem_integridade`; view `v_integridade_recepcao`; chaves `INTEGRIDADE_*`; tipo de alerta `INTEGRIDADE`; legado `'OK'` → `SEM_CONFERENCIA`; menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16), na segunda tentativa: a primeira parou no tipo de alerta porque o `sqlcmd` usa `QUOTED_IDENTIFIER OFF`; o script ganhou `SET QUOTED_IDENTIFIER ON` e foi reexecutado. 200 000 imagens `OK` → `SEM_CONFERENCIA`; menus 384-386 |
-| [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ⏳ **Pendente — necessário** para a fila de revisão e a justificativa em tabela |
+| [`20261016_ocr_score_revisao_placas.sql`](../banco-de-dados/migracoes/20261016_ocr_score_revisao_placas.sql) | 27 | Leituras de placa com score, fila de revisão, motivos e justificativas de correção, chaves `OCR_*`, menus. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16; conferido em 2026-10-20): 6 tabelas, ~847 mil leituras em `vtr_placa_leitura`, menus 389–391 |
 | [`20261016_alertas_operacionais.sql`](../banco-de-dados/migracoes/20261016_alertas_operacionais.sql) | 28 | 3 tabelas (`tipo_alerta_config`, `tipo_alerta_tratamento`, `alerta_retencao`), 4 tipos operacionais, configs de cor/ícone, tratamentos seed, 6 parâmetros `RETENCAO_*`, menu 392. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
 | [`20261016_kpis_relatorio_mensal.sql`](../banco-de-dados/migracoes/20261016_kpis_relatorio_mensal.sql) | 29 | 3 tabelas (`kpi_config_meta`, `kpi_historico`, `relatorio_periodico`), 8 KPIs obrigatórios, 12 metas, 5 parâmetros, menu 393. Rodar com `sqlcmd -b -f 65001` | ✅ Executado (2026-10-16) |
 | [`20261016_paineis_assertividade_preproc.sql`](../banco-de-dados/migracoes/20261016_paineis_assertividade_preproc.sql) | 30 | Menu do painel de pré-processamento (394/55). Sem criação de tabelas | ✅ Executado (2026-10-16) |
@@ -71,9 +71,9 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 
 | Script | Plano | Descrição | Status |
 |---|---|---|---|
-| [`20261016_retry_notificacao.sql`](../banco-de-dados/migracoes/20261016_retry_notificacao.sql) | 32 | Retry de notificações em falha de comunicação: tabela de controle de tentativas, chaves `RETRY_NOTIFICACAO_*` | ⏳ Pendente |
-| [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ⏳ Pendente |
-| [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ⏳ Pendente |
+| [`20261016_retry_notificacao.sql`](../banco-de-dados/migracoes/20261016_retry_notificacao.sql) | 32 | Retry de notificações em falha de comunicação: tabela de controle de tentativas, chaves `RETRY_NOTIFICACAO_*` | ✅ Executado (conferido em 2026-10-20) |
+| [`20261016_timelapse_descarte.sql`](../banco-de-dados/migracoes/20261016_timelapse_descarte.sql) | 33 | Descarte automático de time-lapse: controle de retenção, chaves `TIMELAPSE_*` | ✅ Executado (conferido em 2026-10-20) |
+| [`20261016_consolidacao_multifonte.sql`](../banco-de-dados/migracoes/20261016_consolidacao_multifonte.sql) | 34 | Consolidação de dados multifonte: view consolidada 4 fontes, chave `CONSOLIDACAO_FONTES_HABILITADO` | ✅ Executado (conferido em 2026-10-20) |
 
 ### Plano 23 — Análises Superset (2026-10-17)
 
@@ -81,12 +81,29 @@ Os scripts 18–21 do Sistema de Chamados devem rodar nessa ordem, com `sqlcmd -
 |---|---|---|---|
 | [`20261016_analise_fundacao.sql`](../banco-de-dados/migracoes/20261016_analise_fundacao.sql) | 23 (SUP-1) | Schema `analise`, tabela `carga_log`, config `SUPERSET_URL`, menu 395 | ✅ Executado (2026-10-16) |
 | [`20261017_analise_camada_dados.sql`](../banco-de-dados/migracoes/20261017_analise_camada_dados.sql) | 23 (SUP-2) | 2 tabelas materializadas, 8 views, 2 stored procedures no schema `analise` | ✅ Executado (2026-10-17) |
+| [`20261017_fix_icone_superset.sql`](../banco-de-dados/migracoes/20261017_fix_icone_superset.sql) | 23 | Ícone do card Análises (395), direitos dos grupos 41 e 42, chave `SUPERSET_BASE_URL` | ✅ Executado (2026-10-17) |
+| [`20261017_analise_mapas_geo.sql`](../banco-de-dados/migracoes/20261017_analise_mapas_geo.sql) | 23 (SUP-8) | **Obsoleta — não executar**; substituída pelas duas linhas abaixo | Nunca executada |
+| [`20261017_analise_correcao_camada.sql`](../banco-de-dados/migracoes/20261017_analise_correcao_camada.sql) | 23 (SUP-2/SUP-8) | Correção das cargas e views da camada `analise` (ver [gap](gap-camada-analise-superset.md)) | ✅ Executado (2026-10-17) |
+| [`20261017_analise_versao_equipamento.sql`](../banco-de-dados/migracoes/20261017_analise_versao_equipamento.sql) | 23 (SUP-2) | `v_local_versao`: nome e coordenadas pela versão do equipamento vigente na data do registro | ✅ Executado (2026-10-17) |
+| [`20261019_analise_permissao_abrir_superset.sql`](../banco-de-dados/migracoes/20261019_analise_permissao_abrir_superset.sql) | 23 (SUP-9) | Funcionalidade 396 "Abrir no Superset" (grupo 11) e grupo 11 na tela de Análises (395) | ✅ Executado (2026-10-19) |
 
 ### Auditoria de dashboards e tooltips (2026-10-17)
 
 | Script | Plano | Descrição | Status |
 |---|---|---|---|
-| [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql) | 20/21 | Demonstração do Dashboard Builder: período único de 12 meses, títulos coerentes com a métrica, rótulos acentuados. Ver [auditoria](auditoria-dashboards-tooltips.md) | ⏳ Pendente |
+| [`20261017_corrige_rotulos_demonstracao_dashboards.sql`](../banco-de-dados/migracoes/20261017_corrige_rotulos_demonstracao_dashboards.sql) | 20/21 | Demonstração do Dashboard Builder: período único de 12 meses, títulos coerentes com a métrica, rótulos acentuados. Ver [auditoria](auditoria-dashboards-tooltips.md) | ✅ Executado (conferido em 2026-10-20) |
+
+### Tipos de alerta, cards e registro dos módulos novos (2026-10-17 a 2026-10-19)
+
+| Script | Plano | Descrição | Status |
+|---|---|---|---|
+| [`20261017_icones_integridade_logs_revisao.sql`](../banco-de-dados/migracoes/20261017_icones_integridade_logs_revisao.sql) | 25, 26, 27 | Ícones próprios dos cards Integridade, Logs Técnicos e Revisão de Placas | ✅ Executado (2026-10-17) |
+| [`20261017_tipo_alerta_ajuste_demo.sql`](../banco-de-dados/migracoes/20261017_tipo_alerta_ajuste_demo.sql) | 28 | Contorno temporário dos tipos de alerta | Substituído em 2026-10-18 pela linha abaixo (tabela removida) |
+| [`20261018_tipo_alerta_config_definitivo.sql`](../banco-de-dados/migracoes/20261018_tipo_alerta_config_definitivo.sql) | 28 | Cores e ícones definitivos em `tipo_alerta_config`, tabela `alerta_tratamento_execucao`, parâmetro `TRATAMENTO_AUTO_JANELA_MIN` (ver [gap](gap-tipos-alerta-ajuste-demo.md)) | ✅ Executado (2026-10-18) |
+| [`20261018_remove_cards_duplicados.sql`](../banco-de-dados/migracoes/20261018_remove_cards_duplicados.sql) | 15, 20, 22 | Remove os cards que duplicavam botões de outras telas (372, 378, 306, 381, 382) | ✅ Executado (2026-10-18) |
+| [`20261018_renomeia_card_configuracao_monitoramento.sql`](../banco-de-dados/migracoes/20261018_renomeia_card_configuracao_monitoramento.sql) | 20 | Card "Configuração" renomeado para "Configuração de Monitoramento" | ✅ Executado (2026-10-18) |
+| [`20261019_registro_modulos_novos.sql`](../banco-de-dados/migracoes/20261019_registro_modulos_novos.sql) | 35 (pré-requisito) | Registra sem card (ids 397–438) as telas e os servlets novos, com direitos por grupo; grupo 11 nas telas novas; grupo 41 fora da Configuração de KPIs | ✅ Executado (2026-10-19) |
+| [`20261019_kpis_corrige_consultas.sql`](../banco-de-dados/migracoes/20261019_kpis_corrige_consultas.sql) | 35 (FUN-04) | Corrige o `query_sql` dos KPIs 5, 7, 8, 9 e 11 (SQL anterior em `parametro_historico`) | ✅ Executado (2026-10-19) |
 
 ### Comando de execução
 

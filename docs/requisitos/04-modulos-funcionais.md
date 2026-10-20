@@ -9,12 +9,13 @@
 | 1 | Registro de Fato | `pages/registro_fato/comBoletim/consulta.jsp` |
 | 2 | Monitoramento → Veículos Monitorados, Alerta e Ocorrência, Veículos em Tempo Real, Veículo de Carga em Tempo Real, Vídeo Monitoramento, Vídeo ao Vivo | submenu (`menu_pai=17`) |
 | 3 | Central de Atendimento | `pages/atendimento-ocorrencias/atendimento-ocorrencias.jsp` |
-| 5 | Consulta de Veículos → Consulta de Veículos, Consulta de Veículos de Carga | submenu (`menu_pai=6`) |
-| 6 | Mapas → Cadastro Área Monitorada (mancha), Mapa Interativo, Mapa de Calor, Mapa de Equipamentos, Quantitativos em camadas | submenu (`menu_pai=7`) |
-| 7 | Análise de Dados → Perfil Comportamental, Análise de Correlacionamentos | submenu (`menu_pai=15`) |
-| 8 | Dashboards → Painel Informativo, Dashboards | submenu (`menu_pai=1`) |
-| — | Painéis de Análise → Painéis, Catálogo de Datasets | submenu (itens 376/377, infos 43/44 — Plano 20) |
+| 5 | Consulta de Veículos → Consulta de Veículos, Consulta de Veículos de Carga, Revisão de Placas | submenu (`menu_pai=6`) |
+| 6 | Mapas → Cadastro Área Monitorada (mancha), Mapa Interativo, Mapa de Calor, Mapa de Equipamentos, Mapa de Incidentes, Quantitativos em camadas | submenu (`menu_pai=7`) |
+| 7 | Análise de Dados → SLA de Latência, Assertividade, SLA Pré-processamento, Time-lapse, Disponibilidade, Log de Auditoria, Integridade das Imagens, Logs Técnicos, Tipos de Alerta, Relatórios Gerenciais, Pré-Processamento, Análises (Superset), Perfil Comportamental, Análise de Correlacionamentos | submenu (`menu_pai=15`) |
+| 8 | Dashboards → Painel Informativo, Dashboards, KPIs | submenu (`menu_pai=1`) |
+| 8 | Painéis de Análise (menu 376, info 43 — Plano 20) | `analises/paineis/lista.jsp`; o Catálogo de Datasets (377, info 44) fica em Cadastro e Configuração |
 | 9 | Blitz Digital → Cadastro, Blitz Ostensiva, Abordagem | submenu (`menu_pai=29`) |
+| 10 | Sistema de Chamados → Chamados | submenu (`menu_pai=49`, Plano 22; ver §8) |
 | — | Catálogo de Dados (menu 378, sem card desde 2026-10-18) | `analises/catalogo/index.jsp`, aberto pelo botão **Catálogo de Dados** do Catálogo de Datasets |
 | 99 | Cadastro e Configuração → Gestão de Lotes, Catálogo de Datasets, Ponto de Interesse, Configuração de Monitoramento | submenu (`menu_pai=16`). Sem card desde 2026-10-18 (abertas por botão da tela do módulo): Guarnição (Central de Atendimento → Gerenciar Guarnições → Gerenciar), Configuração de KPIs (KPIs → Configurar) e Catálogo de Dados |
 | — | **Relatórios** (menu separado, `sis_menu_relatorio_infos`, ~35 itens) e **Gráficos** (`sis_menu_graficos_infos`, 5 itens) | `pages/relatorios/*` |
@@ -101,10 +102,10 @@ Home: `login/abertura-sistemas.jsp` → `login/muralha_principal.jsp?menu_info_p
 
 ## 5. Módulos PoC TRANSALVADOR (Planos 01-16)
 
-Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `muralha.digital.*`. Todos seguem o padrão servlet + sessão/permissão + JDBC parametrizado (§2 de `06`). Migrações SQL em `docs/banco-de-dados/migracoes/`.
+Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `muralha.digital.*`. Todos seguem o padrão servlet + sessão/permissão + JDBC parametrizado (§2 de `06`). Desde o [Plano 35](../planos-salvador/35-correcoes-seguranca-funcionais.md), os servlets dos módulos novos (34) verificam o direito com `muralha.digital.acessos.ControleAcesso` (estrito: nega URL sem registro em `sis_menu`, responde 401/403 em JSON); `Acesso.verificaAcesso` (*fail-open*) fica para o legado. Migrações SQL em `docs/banco-de-dados/migracoes/`.
 
 ### 5.1 Auditoria e rastreabilidade (Plano 01)
-- **Pacote:** `auditoria` (2 classes). **API:** `/MuralhaDigital/Auditoria` (`listar`, `exportar`).
+- **Pacote:** `auditoria` (2 classes). **API:** `/MuralhaDigital/Auditoria` (`consultar`, `listarFiltros`).
 - **Telas:** `pages/auditoria/consulta-log.jsp`, `pages/relatorios/auditoria/auditoria.jsp`.
 - Registra ações do usuário com IP, sessão e timestamp; consulta com filtros por período, usuário e ação.
 
@@ -114,66 +115,66 @@ Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `m
 
 ### 5.3 Política de senhas e MFA/TOTP (Planos 03-04)
 - **Pacote:** `acesso` (3 classes: `SenhaService`, `TotpService`, `MfaConfigServlet`).
-- **API:** `/MuralhaDigital/MfaConfig` (`gerarSegredo`, `ativar`, `desativar`, `verificar`).
+- **API:** `/MuralhaDigital/MfaConfig` (POST `ativar`, `desativar`).
 - **Tela:** `pages/meu-perfil/configurar-mfa.jsp` (QR Code TOTP, ativação em dois passos).
 - Política de senhas: complexidade mínima, expiração, histórico e bloqueio por tentativas (integrado ao login existente via `SenhaService`). MFA opcional por usuário via TOTP (Google Authenticator, Authy).
 
 ### 5.4 Dupla análise de infrações (Plano 05)
-- **Pacote:** `processamento` (2 classes). **API:** `/MuralhaDigital/InfracaoAnalise` (`listarFila`, `obter`, `analisar`, `estatisticas`).
+- **Pacote:** `processamento` (2 classes). **API:** `/MuralhaDigital/InfracaoAnalise` (GET `proximaFila`, `indicadores`; POST registra a análise com `idInfracao`, `classificacao` e `justificativa`).
 - **Telas:** `pages/processamento/dupla-analise/fila.jsp`, `analisar.jsp`.
 - Fluxo de revisão em duas etapas para infrações: primeiro analista confirma/rejeita, segundo valida. Rastreabilidade completa com registro de decisões.
 
 ### 5.5 Obliteração de imagens (Plano 06)
-- **Pacote:** `imagem` (1 classe). **API:** `/MuralhaDigital/Obliteracao` (`obliterar`, `status`).
+- **Pacote:** `imagem` (1 classe). **API:** `/MuralhaDigital/Obliteracao` (POST `aplicar`, `reverter`).
 - Sem tela — API para obliteração (borrar/mascarar) de imagens de passagem, atendendo requisitos de privacidade (LGPD).
 
 ### 5.6 SLA de latência (Plano 07)
-- **Pacote:** `sla` (compartilhado com Plano 10). **API:** `/MuralhaDigital/SlaLatencia` (`resumo`, `detalhe`, `historico`).
+- **Pacote:** `sla` (compartilhado com Plano 10). **API:** `/MuralhaDigital/SlaLatencia` (`atual`, `historico`).
 - **Tela:** `pages/monitoramento/sla-latencia/index.jsp`.
 - Painel de monitoramento de latência ponta-a-ponta (captura → processamento), com indicadores de conformidade ao SLA contratual.
 
 ### 5.7 Painel de assertividade (Plano 08)
-- **Pacote:** `assertividade`. **API:** `/MuralhaDigital/Assertividade` (`resumo`, `porEquipamento`, `porPeriodo`, `exportar`).
+- **Pacote:** `assertividade`. **API:** `/MuralhaDigital/Assertividade` (GET, sem `acao`).
 - **Tela:** `pages/monitoramento/assertividade/index.jsp`.
 - Métricas de acurácia do OCR e da detecção de infrações por equipamento e período; identifica equipamentos com desempenho abaixo do limiar.
 
 ### 5.8 CPF e matrícula de operadores (Plano 09)
-- **Pacote:** `usuario`. **API:** `/MuralhaDigital/UsuarioCpfMatricula` (`listar`, `atualizar`, `validar`).
+- **Pacote:** `usuario`. **API:** `/MuralhaDigital/UsuarioCpfMatricula` (GET lista; POST grava).
 - **Tela:** `pages/admin/cpf-matricula/index.jsp`.
 - Vinculação de CPF e matrícula funcional aos usuários do sistema; validação de formato e unicidade.
 
 ### 5.9 SLA de pré-processamento (Plano 10)
-- **Pacote:** `sla` (compartilhado com Plano 07). **API:** `/MuralhaDigital/SlaPreprocessamento` (`resumo`, `detalhe`, `historico`).
+- **Pacote:** `sla` (compartilhado com Plano 07). **API:** `/MuralhaDigital/SlaPreprocessamento` (GET situação atual; `historico`).
 - **Tela:** `pages/monitoramento/sla-preproc/index.jsp`.
 - Indicadores de tempo entre captura e disponibilização da imagem processada; complementa o SLA de latência (Plano 07).
 
 ### 5.10 Exportação padronizada (Plano 11)
-- **Pacote:** `exportacao`. **API:** `/MuralhaDigital/Exportacao` (`exportar`, `listarFormatos`, `status`).
+- **Pacote:** `exportacao`. **API:** `/MuralhaDigital/Exportacao` (GET com `formato=csv` ou JSON; filtros `dtInicio`, `dtFim`, `idLocal`, `status`).
 - **Tela:** `pages/relatorios/exportacao-passagens/index.jsp`.
 - Exportação de passagens e infrações em formatos padronizados (CSV, XLSX) com filtros por período, equipamento e tipo. Usa POI 4.1.1 (já presente no pom.xml).
 
 ### 5.11 Retenção de dados (Plano 12)
-- **Pacote:** `retencao`. **API:** `/MuralhaDigital/Retencao` (`listarPoliticas`, `configurar`, `executar`, `historico`).
+- **Pacote:** `retencao`. **API:** `/MuralhaDigital/Retencao` (GET consulta; POST grava o período `anos`, de 1 a 20).
 - **Tela:** `pages/admin/retencao/index.jsp`.
 - Configuração de políticas de retenção e expurgo automático de dados antigos, com log de execução e prévia de volume afetado.
 
 ### 5.12 Anonimização de placas (Plano 13)
-- **Pacote:** `anonimizacao`. **API:** `/MuralhaDigital/ConsultaAnonimizada` (`consultar`, `exportar`).
+- **Pacote:** `anonimizacao`. **API:** `/MuralhaDigital/ConsultaAnonimizada` (GET).
 - **Tela:** `pages/consulta/passagens-anonimizadas/index.jsp`.
 - Consulta de passagens com placas parcialmente mascaradas para perfis sem permissão de visualização completa (LGPD).
 
 ### 5.13 Gestão de lotes (Plano 14)
-- **Pacote:** `lote`. **API:** `/MuralhaDigital/Lote` (`listar`, `obter`, `criar`, `fechar`, `reabrir`, `estatisticas`).
+- **Pacote:** `lote` (`LoteServlet`, `LoteRegras`). **API:** `/MuralhaDigital/Lote` (GET lista, `itens`, `disponiveis`; POST `criar`, `adicionarInfracoes`, `enviar`, `cancelar`); todas as ações exigem o direito da tela (menu 370).
 - **Tela:** `pages/processamento/lotes/index.jsp`.
-- Agrupamento de infrações em lotes para processamento, conferência e envio; controle de status e rastreabilidade.
+- Agrupamento de infrações em lotes para processamento, conferência e envio; controle de status (RASCUNHO, ENVIADO, CANCELADO) e rastreabilidade. Inclusão de infrações pelo modal "Adicionar infrações" (só em RASCUNHO); "Marcar como enviado" recusa lote vazio e não envia ao DETRAN (integração não disponível).
 
 ### 5.14 KPIs configuráveis (Plano 15)
-- **Pacote:** `kpi`. **API:** `/MuralhaDigital/Kpi` (`listar`, `obter`, `cadastrar`, `atualizar`, `calcular`, `dashboard`).
-- **Telas:** `pages/admin/kpis/index.jsp` (cadastro), `pages/dashboard/kpis/index.jsp` (visualização).
+- **Pacote:** `kpi` (`KpiServlet`, `KpiSnapshotJob`, `ValidadorSqlKpi`). **API:** `/MuralhaDigital/Kpi` (GET painel, `historico`, `listarConfig`; POST `salvar`). `listarConfig` e `salvar` exigem também o direito do menu 372; o SQL é validado por `ValidadorSqlKpi` (um único SELECT, sem comandos de escrita) e executado com timeout de 30 s.
+- **Telas:** `pages/admin/kpis/index.jsp` (cadastro, aberta pelo botão **Configurar** do painel), `pages/dashboard/kpis/index.jsp` (visualização).
 - Cadastro de indicadores de desempenho com fórmulas, metas e periodicidade configuráveis; painel de acompanhamento com gráficos ECharts.
 
 ### 5.15 Exportação GIS (Plano 16)
-- **Pacote:** `gis`. **API:** `/MuralhaDigital/Gis` (`exportar`).
+- **Pacote:** `gis`. **API:** `/MuralhaDigital/Gis` (`formato=geojson` ou `kml`; `camada`, padrão `equipamentos`).
 - Sem tela — endpoint de download de dados georreferenciados (equipamentos, passagens) em formato compatível com ferramentas GIS.
 
 ### Resumo dos Planos 01-16
@@ -199,13 +200,13 @@ Módulos desenvolvidos para a PoC de Salvador, cada um em pacote próprio sob `m
 
 ## 6. Planos 17-19 — Timelapse, disponibilidade e sensores
 
-- **`muralha.digital.timelapse`** (1 arquivo) — Timelapse de imagens de passagens. **API:** `/MuralhaDigital/Timelapse`. **Tela:** `pages/timelapse/index.jsp`.
+- **`muralha.digital.timelapse`** (2 arquivos: `TimelapseServlet` e `JobTimelapseDescarte`, do Plano 33) — Timelapse de imagens de passagens. **API:** `/MuralhaDigital/Timelapse` (`equipamentos`, `frames`). **Tela:** `pages/monitoramento/timelapse/index.jsp`.
 - **`muralha.digital.disponibilidade`** (2 arquivos) — Monitoramento de disponibilidade de equipamentos. **API:** `/MuralhaDigital/Disponibilidade`. **Tela:** `pages/monitoramento/disponibilidade/index.jsp`.
-- **`muralha.digital.sensores`** (2 arquivos) — Integração com sensores externos e incidentes. **API:** `/MuralhaDigital/SensorExterno`. **Tela:** `pages/monitoramento/sensores/index.jsp`.
+- **`muralha.digital.sensores`** (2 arquivos) — Integração com sensores externos e incidentes. **API:** `/MuralhaDigital/Incidente` (`listar`, `geojson`). **Tela:** camada de incidentes do mapa GIS (`pages/monitoramento/mapa/index.jsp`).
 
 ## 7. Construtor de Dashboards (Plano 20)
 
-Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (16 arquivos Java) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](../planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
+Módulo self-service de painéis analíticos interativos. Pacote principal: `muralha.digital.dashboards` (18 arquivos Java, incluindo dois filtros: `CodificacaoUtf8Filter` e `SemCacheScriptsDashboardFilter`) e subpacote `consulta` (8 arquivos), que monta e executa o SQL das consultas direto no SQL Server ([Plano 21](../planos-salvador/21-dashboards-consulta-sql-sem-cube.md)).
 
 **Servlets REST (prefixo `/api/dash/`):**
 - `DashCatalogoServlet` — CRUD do catálogo de tabelas/colunas/relações
@@ -220,9 +221,9 @@ Módulo self-service de painéis analíticos interativos. Pacote principal: `mur
 
 **Subpacote `consulta`:** ConsultaDashboard, ResolvedorDataset, DatasetResolvido, MontadorSql, SqlMontado, ExecutorConsulta, PeriodoRelativo, ErroConsulta.
 
-**Frontend:** Telas em `analises/` (paineis/lista.jsp, paineis/index.jsp, datasets/index.jsp, datasets/editor.jsp, datasets/modelador.jsp, widgets/editor.jsp, catalogo/index.jsp). JavaScript em `static/js/dashboards/` (27 módulos ES, incluindo 4 do modelador visual em `modelador/`). Bibliotecas vendor: AntV X6 2.18.1 (canvas de grafos) e dagre 0.8.5 (auto-layout). CSS em `static/css/dashboards/print.css`.
+**Frontend:** Telas em `analises/` (paineis/lista.jsp, paineis/index.jsp, datasets/index.jsp, datasets/editor.jsp, datasets/modelador.jsp, widgets/editor.jsp, catalogo/index.jsp). JavaScript em `static/js/dashboards/` (28 módulos ES, incluindo 4 do modelador visual em `modelador/`). Bibliotecas vendor: AntV X6 2.18.1 (canvas de grafos) e dagre 0.8.5 (auto-layout). CSS em `static/css/dashboards/print.css`.
 
-**Catálogo de Dados** (`analises/catalogo/index.jsp`, menu 378 sob Cadastro e Configuração): tela de gerenciamento do catálogo de metadados usado pelo construtor de dashboards. Três abas: Tabelas (listar/editar schema, nome físico, rótulo), Colunas (listar/editar tipo, papel sugerido — dimensão/medida/tempo/geo, flag sensível) e Relações (origem→destino, colunas de junção, cardinalidade, soft delete). API via `DashCatalogoServlet` (`/api/dash/catalogo`): GET `listarTabelas`, `listarColunas`, `listarRelacoes`, `importarSugestoes`; POST `salvarTabela`, `salvarColuna`, `salvarRelacao`, `excluirRelacao`.
+**Catálogo de Dados** (`analises/catalogo/index.jsp`, menu 378, aberto pelo botão **Catálogo de Dados** do Catálogo de Datasets; sem card desde 2026-10-18): tela de gerenciamento do catálogo de metadados usado pelo construtor de dashboards. Três abas: Tabelas (listar/editar schema, nome físico, rótulo), Colunas (listar/editar tipo, papel sugerido — dimensão/medida/tempo/geo, flag sensível) e Relações (origem→destino, colunas de junção, cardinalidade, soft delete). API via `DashCatalogoServlet` (`/api/dash/catalogo`): GET `listarTabelas`, `listarColunas`, `listarRelacoes`, `importarSugestoes`; POST `salvarTabela`, `salvarColuna`, `salvarRelacao`, `excluirRelacao`.
 
 **Modelador Visual** (`datasets/modelador.jsp`): interface alternativa ao wizard para edição de datasets com canvas interativo (AntV X6). Arrastar tabelas do painel lateral para o canvas, criar relações por drag entre portas de colunas, sugestões automáticas (FKs, catálogo, nomes id_X), auto-layout dagre, undo/redo, seleção de campos com prévia de dados. API: GET `sugestoesRelacao`; POST `validarRelacao`, `verificarCardinalidade`, `salvarModelador`, `promoverRelacao`.
 
@@ -230,7 +231,7 @@ Módulo self-service de painéis analíticos interativos. Pacote principal: `mur
 
 ## 8. Sistema de Chamados (Plano 22)
 
-Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [arquitetura](../chamados/sistema-chamados-arquitetura.md), [documentação em `docs/chamados/`](../chamados/), [manual](../chamados/manual-sistema-chamados.md)). Pacote `muralha.digital.chamado` (26 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo` (107–109, abaixo do grupo 11), e perfil `ADMIN` mapeado do grupo 11 (Administradores, chave `chamado_grupo_admin`), único que acessa a Configuração.
+Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2.3 (a–f) e 7.2.4 do edital ([entrega 22](../entregas/22-sistema-chamados.md), [arquitetura](../chamados/sistema-chamados-arquitetura.md), [documentação em `docs/chamados/`](../chamados/), [manual](../chamados/manual-sistema-chamados.md)). Pacote `muralha.digital.chamado` (28 arquivos Java). Perfis `SOLICITANTE`, `GESTOR` e `EQUIPE` definidos por grupos de `dbo.sis_grupo` (107–109, abaixo do grupo 11), e perfil `ADMIN` mapeado do grupo 11 (Administradores, chave `chamado_grupo_admin`), único que acessa a Configuração.
 
 | Item | Detalhe |
 |---|---|
@@ -242,3 +243,23 @@ Central de suporte técnico integrada ao Muralha Digital, atendendo os itens 7.2
 | Parâmetros | chaves `chamado_*` em `muralha.config_chave_valor` (risco de SLA, fechamento automático, diretório e tamanho de anexos, e-mail ativo, IDs dos grupos) |
 
 **Status:** implementado; migração, seed e complemento (`20261015_sistema_chamados.sql`, `_seed.sql` e `_admin.sql`) executados no `GTW_MURALHA_DEV` e teste integrado executado em 2026-10-15 ([roteiro](../testes/22-sistema-chamados.md)).
+
+## 9. Planos 23–35 — Análises, correção da auditoria e correções de segurança
+
+Resumo por plano; o detalhe está nas [entregas](../entregas/README.md) e nos inventários de `../referencia/`. Jobs Quartz registrados em `com.consilux.servlet.ferramentas.Agendador`.
+
+| Plano | Pacote / classes principais | API (`/MuralhaDigital/…`) | Tela (`pages/…`) |
+|---|---|---|---|
+| 23 — Análises (Superset) | `analise`: `SsoAnaliseServlet`, `GuestTokenServlet`, `CargaAnaliseJob` (30 min, procedures `analise.spu_carga_*`); infraestrutura Docker em `analise/` | `SsoAnalise`, `AnaliseGuestToken` | `analise/embedding.jsp`, `analise/manual.jsp` ([documentação](../analise/README.md)) |
+| 25 — Integridade SHA-256 na recepção | `integridade`: `IntegridadeRecepcaoServlet`, `IntegridadeConfigServlet`, `ProcessadorIntegridade` | `IntegridadeRecepcao`, `IntegridadeConfig` | `monitoramento/integridade/` |
+| 26 — Logs técnicos e histórico de parâmetros | `logtecnico`: `LogTecnicoServlet`, `ServicoLogTecnico`, `HistoricoParametros` | `LogTecnico` | `monitoramento/logs-tecnicos/` |
+| 27 — Score de OCR e revisão de placas | `ocr`: `RevisaoPlacaServlet`, `OcrConfigServlet`, `JobOcrRevisao`, `CorrecaoPlacaService` | `RevisaoPlaca`, `OcrConfig` | `processamento/revisao-placas/` |
+| 28 — Alertas operacionais e Tipos de Alerta | `alerta.operacional`: `TipoAlertaConfigServlet` (ação `aparencia` só com sessão, para o aviso dos operadores), `JobTratamentoAutomatico` (1 min), `JobAlertaRetencao`, `ExecutorTratamento` | `TipoAlertaConfig` | `tipos-alerta/` |
+| 29 — KPIs com histórico e relatórios | `kpi.KpiSnapshotJob`; `relatorio`: `RelatorioGerencialServlet`, `RelatorioGerencialJob`, `RelatorioPreProcMensalJob` (reescrito no Plano 35 sobre `infracao_analise` e `vtr_status_analise`) | `RelatorioGerencial` | `relatorios/gerencial/` |
+| 30 — Painel de pré-processamento | `preprocessamento.PreProcessamentoServlet` | `PreProcessamento` | `monitoramento/pre-processamento/` |
+| 32 — Retry de notificações | `notificacao.JobRetryNotificacao` | — | — |
+| 33 — Descarte de time-lapse | `timelapse.JobTimelapseDescarte` | — | — |
+| 34 — Consolidação multifonte | `consolidacao.ConsolidacaoServlet` (view `muralha.v_dados_consolidados`) | `Consolidacao` | `inteligencia/consolidacao/` |
+| 35 — Correções de segurança e funcionais | `acessos.ControleAcesso`, `kpi.ValidadorSqlKpi`, `lote.LoteRegras`; ajustes em Lotes, KPIs, Tipos de Alerta, relatórios e `UsuarioServlet` | — | — |
+
+Os Planos 24 (correções pontuais) e 31 (acabamentos) alteraram módulos existentes, sem pacote próprio. O Plano 23 de correção da documentação de aderência não tem código.
