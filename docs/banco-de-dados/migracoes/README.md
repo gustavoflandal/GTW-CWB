@@ -107,6 +107,13 @@ Ordem sugerida (a mesma da criação): fundação → editor de dataset → obse
 | `20261019_kpis_corrige_consultas.sql` | [Plano 35](../../planos-salvador/35-correcoes-seguranca-funcionais.md) Task 4 (FUN-04) | Corrige o `query_sql` dos KPIs 5, 7, 8, 9 e 11, que usavam colunas inexistentes (`veiculo_tempo_real.resultado_ia`, `local_vigente.ativo`, `status_alerta.status`) e por isso eram pulados pelo `KpiSnapshotJob`. Só altera o KPI cujo SQL ainda tem a coluna inexistente; o valor anterior fica em `muralha.parametro_historico` (rollback no cabeçalho). Rodar com `sqlcmd -b -I -f 65001` | Executado (2026-10-19): 5 KPIs corrigidos |
 | `20261017_tipo_alerta_ajuste_demo.sql` | 28 | **Substituído em 2026-10-18** pelo script acima (a tabela foi removida). Era um **contorno temporário:** tabela nova `muralha.tipo_alerta_ajuste_demo` com 5 ajustes de cor, ícone, prioridade e descrição dos tipos de alerta; nenhuma tabela existente é alterada. Ver [gap](../../entregas/gap-tipos-alerta-ajuste-demo.md). Rodar com `sqlcmd -b -f 65001` | Executado (2026-10-17): tabela criada, 5 ajustes ativos |
 
+## Remoção das tabelas e views das migrações (2026-10-22)
+
+| Script | Descrição | Situação no DEV |
+|---|---|---|
+| `20261022_remove_tabelas_migracoes.sql` | Remove as 17 views e as 65 tabelas criadas pelos scripts acima (schemas `dbo`, `muralha`, `dash`, `analise`). **Não** altera dados inseridos em tabelas legadas (menus, direitos, grupos, `config_chave_valor`, `tipo_alerta_ocorrencia`), as colunas acrescentadas em `dbo.sis_usuario`, as procedures `analise.spu_carga_*` nem os schemas `dash`/`analise`. Objetos do período sem script nesta pasta (`imagem_pan_selecionada`, `log_alerta_arquivo`, `bkp_20261020_*`, `spu_get*`) foram mantidos. Backup prévio fora do repositório: `D:\GTW-CWB-backup\rollback-migracoes-20261022` (bcp nativo + `.fmt` por tabela; `views\` com a definição vigente). Rodar com `sqlcmd -b -I -f 65001` | Executado (2026-10-22): 17 views e 65 tabelas removidas. Com isso, as situações "Executado" das seções acima deixam de valer para tabelas e views |
+| `20261022_remove_schemas_dash_analise.sql` | Remove os schemas `dash` (`20261013_dash_fundacao.sql`) e `analise` (`20261016_analise_fundacao.sql`) e, antes, as procedures `analise.spu_carga_passagens_hora`, `spu_carga_infracoes_dia` e `spu_carga_areas_monitoradas`. Para sem alterar nada se houver outro objeto nos schemas. Definição das procedures salva em `D:\GTW-CWB-backup\rollback-migracoes-20261022\procedures\`. Rodar depois do script acima, com `sqlcmd -b -I -f 65001` | Executado (2026-10-22): 3 procedures e 2 schemas removidos |
+
 ## Como acrescentar uma migração
 
 1. Nomear `AAAAMMDD_descricao.sql`, com cabeçalho (plano, data, ordem de execução e rollback comentado).
