@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #fdfae7;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-bnl1"
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="20.047"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-8xud"
+        id="el-01-asterisco-edital"
+        class="scene"
+        data-composition-id="01-asterisco-edital"
+        data-composition-src="compositions/frames/01-asterisco-edital.html"
+        data-start="0"
+        data-duration="5.129"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-po06"
+        id="el-01-asterisco-edital-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="4.629"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-qfd9"
+        id="el-02-qualidade-prazos"
+        class="scene"
+        data-composition-id="02-qualidade-prazos"
+        data-composition-src="compositions/frames/02-qualidade-prazos.html"
+        data-start="4.629"
+        data-duration="4.599"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-btxb"
+        id="el-02-qualidade-prazos-voice"
+        src="assets/voice/02.wav"
+        data-start="4.629"
+        data-duration="4.099"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-s9p5"
+        id="el-03-equipamentos-imagens"
+        class="scene"
+        data-composition-id="03-equipamentos-imagens"
+        data-composition-src="compositions/frames/03-equipamentos-imagens.html"
+        data-start="8.728"
+        data-duration="4.296"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-3vmw"
+        id="el-03-equipamentos-imagens-voice"
+        src="assets/voice/03.wav"
+        data-start="8.728"
+        data-duration="3.796"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-2ywx"
+        id="el-04-gestao-rastreabilidade"
+        class="scene"
+        data-composition-id="04-gestao-rastreabilidade"
+        data-composition-src="compositions/frames/04-gestao-rastreabilidade.html"
+        data-start="12.524"
+        data-duration="5.524"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-ud3x"
+        id="el-04-gestao-rastreabilidade-voice"
+        src="assets/voice/04.wav"
+        data-start="12.524"
+        data-duration="5.024"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-fpum"
+        id="el-05-passe-o-mouse"
+        class="scene"
+        data-composition-id="05-passe-o-mouse"
+        data-composition-src="compositions/frames/05-passe-o-mouse.html"
+        data-start="17.548"
+        data-duration="2.499"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-xabd"
+        id="el-05-passe-o-mouse-voice"
+        src="assets/voice/05.wav"
+        data-start="17.548"
+        data-duration="2.499"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <!-- BGM -->
+      <audio data-hf-id="hf-or3b"
+        id="el-bgm"
+        src="assets/bgm/track.mp3"
+        data-start="0"
+        data-duration="20.047"
+        data-track-index="11"
+        data-volume="0.18"
+      ></audio>
+
+      <!-- captions -->
+      <div data-hf-id="hf-thgq"
+        id="el-captions"
+        class="scene"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="20.047"
+        data-track-index="2"
+      ></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-asterisco-edital", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 4.629);
+        tl.fromTo("#el-02-qualidade-prazos", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 4.629);
+        tl.addLabel("hf:transition:01-asterisco-edital:02-qualidade-prazos:crossfade", 4.629);
+        tl.to("#el-02-qualidade-prazos", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 8.728);
+        tl.fromTo("#el-03-equipamentos-imagens", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 8.728);
+        tl.addLabel("hf:transition:02-qualidade-prazos:03-equipamentos-imagens:crossfade", 8.728);
+        tl.to("#el-03-equipamentos-imagens", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 12.524);
+        tl.fromTo("#el-04-gestao-rastreabilidade", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 12.524);
+        tl.addLabel("hf:transition:03-equipamentos-imagens:04-gestao-rastreabilidade:crossfade", 12.524);
+        tl.to("#el-04-gestao-rastreabilidade", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 17.548);
+        tl.fromTo("#el-05-passe-o-mouse", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 17.548);
+        tl.addLabel("hf:transition:04-gestao-rastreabilidade:05-passe-o-mouse:crossfade", 17.548);
+        tl.to({}, { duration: 20.047 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

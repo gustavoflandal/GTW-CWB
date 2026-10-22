@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-buij" id="root" data-composition-id="02-demo-fluxo-veicular" data-start="0" data-duration="9.248" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p02-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p02-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p02-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p02-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p02-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p02-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p02-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p02-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p02-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p02-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p02-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p02-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p02-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1937px; transform-origin: 0 0; }
+      .p02-shot img { display: block; width: 1920px; height: 1937px; }
+    </style>
+
+    <div data-hf-id="hf-ntkz" class="p02-bg clip" id="p02-bgclip" data-start="0" data-duration="9.248" data-track-index="0"></div>
+    <div data-hf-id="hf-cse0" class="clip" id="p02-main" data-start="0" data-duration="9.248" data-track-index="1">
+      <div data-hf-id="hf-i1t3" class="p02-col">
+        <div data-hf-id="hf-o5fy" class="p02-accent" id="p02-accent"></div>
+        <div data-hf-id="hf-liu6" class="p02-eyebrow" id="p02-eyebrow">DEMONSTRAÇÃO · DADOS REAIS · 1/5</div>
+        <div data-hf-id="hf-m46j" class="p02-title" id="p02-title">Fluxo Veicular</div>
+        <div data-hf-id="hf-94yp" class="p02-desc" id="p02-desc">Passagens capturadas pelos equipamentos, agregadas por hora.</div>
+        <div data-hf-id="hf-ch42" class="p02-chip" id="p02-chip">11 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-b8dw" class="p02-win" id="p02-win">
+        <div data-hf-id="hf-eu1u" class="p02-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-j6m9">Análises · Fluxo Veicular</span></div>
+        <div data-hf-id="hf-5wid" class="p02-vp">
+          <div data-hf-id="hf-ukaq" class="p02-shot" id="p02-shot"><img data-hf-id="hf-m3mz" src="assets/demo-fluxo-veicular.png" alt="Painel Fluxo Veicular"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 8.748;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p02-shot", { scale: 0.3758, x: 221.2, y: 0.0 }, { scale: 0.3758, x: 221.2, y: 0.0, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p02-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p02-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p02-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p02-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p02-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p02-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p02-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p02-shot", { y: -446.3, duration: 3.95, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p02-shot", { scale: 0.3758, x: 221.2, y: 0.0, duration: 0.90, ease: "power3.inOut" }, 7.15);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["02-demo-fluxo-veicular"] = tl;
+      })();
+    </script>
+  </div>
+</template>

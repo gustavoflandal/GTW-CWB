@@ -1,0 +1,1619 @@
+{
+  "bgm": null,
+  "bgm_pending": false,
+  "voices": [
+    {
+      "frame": 1,
+      "path": "assets/voice/01.wav",
+      "duration_s": 8.788,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Na",
+          "start": 0,
+          "end": 0.122
+        },
+        {
+          "id": "w1",
+          "text": "tela",
+          "start": 0.142,
+          "end": 0.48
+        },
+        {
+          "id": "w2",
+          "text": "de",
+          "start": 0.5,
+          "end": 0.615
+        },
+        {
+          "id": "w3",
+          "text": "Análise",
+          "start": 0.635,
+          "end": 1.147
+        },
+        {
+          "id": "w4",
+          "text": "de",
+          "start": 1.167,
+          "end": 1.28
+        },
+        {
+          "id": "w5",
+          "text": "Dados,",
+          "start": 1.3,
+          "end": 1.984
+        },
+        {
+          "id": "w6",
+          "text": "a",
+          "start": 2.004,
+          "end": 2.062
+        },
+        {
+          "id": "w7",
+          "text": "Plataforma",
+          "start": 2.082,
+          "end": 2.856
+        },
+        {
+          "id": "w8",
+          "text": "de",
+          "start": 2.876,
+          "end": 2.99
+        },
+        {
+          "id": "w9",
+          "text": "Análises",
+          "start": 3.01,
+          "end": 3.605
+        },
+        {
+          "id": "w10",
+          "text": "reúne",
+          "start": 3.625,
+          "end": 3.959
+        },
+        {
+          "id": "w11",
+          "text": "14",
+          "start": 3.979,
+          "end": 4.633
+        },
+        {
+          "id": "w12",
+          "text": "dashboards",
+          "start": 4.653,
+          "end": 5.219
+        },
+        {
+          "id": "w13",
+          "text": "interativos:",
+          "start": 5.239,
+          "end": 6.359
+        },
+        {
+          "id": "w14",
+          "text": "5",
+          "start": 6.379,
+          "end": 6.63
+        },
+        {
+          "id": "w15",
+          "text": "de",
+          "start": 6.65,
+          "end": 6.902
+        },
+        {
+          "id": "w16",
+          "text": "demonstração",
+          "start": 6.922,
+          "end": 7.757
+        },
+        {
+          "id": "w17",
+          "text": "e",
+          "start": 7.777,
+          "end": 7.83
+        },
+        {
+          "id": "w18",
+          "text": "9",
+          "start": 7.85,
+          "end": 7.952
+        },
+        {
+          "id": "w19",
+          "text": "operacionais.",
+          "start": 7.972,
+          "end": 8.707
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "path": "assets/voice/02.wav",
+      "duration_s": 8.748,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Fluxo",
+          "start": 0.038,
+          "end": 0.544
+        },
+        {
+          "id": "w1",
+          "text": "Veicular:",
+          "start": 0.564,
+          "end": 1.333
+        },
+        {
+          "id": "w2",
+          "text": "passagens",
+          "start": 1.353,
+          "end": 2.019
+        },
+        {
+          "id": "w3",
+          "text": "capturadas",
+          "start": 2.039,
+          "end": 2.639
+        },
+        {
+          "id": "w4",
+          "text": "pelos",
+          "start": 2.659,
+          "end": 2.953
+        },
+        {
+          "id": "w5",
+          "text": "equipamentos,",
+          "start": 2.973,
+          "end": 3.974
+        },
+        {
+          "id": "w6",
+          "text": "por",
+          "start": 3.994,
+          "end": 4.159
+        },
+        {
+          "id": "w7",
+          "text": "hora,",
+          "start": 4.179,
+          "end": 4.644
+        },
+        {
+          "id": "w8",
+          "text": "com",
+          "start": 4.664,
+          "end": 4.85
+        },
+        {
+          "id": "w9",
+          "text": "velocidade",
+          "start": 4.87,
+          "end": 5.552
+        },
+        {
+          "id": "w10",
+          "text": "média,",
+          "start": 5.572,
+          "end": 6.169
+        },
+        {
+          "id": "w11",
+          "text": "placas",
+          "start": 6.189,
+          "end": 6.665
+        },
+        {
+          "id": "w12",
+          "text": "Mercosul",
+          "start": 6.685,
+          "end": 7.231
+        },
+        {
+          "id": "w13",
+          "text": "e",
+          "start": 7.251,
+          "end": 7.308
+        },
+        {
+          "id": "w14",
+          "text": "mapa",
+          "start": 7.328,
+          "end": 7.673
+        },
+        {
+          "id": "w15",
+          "text": "de",
+          "start": 7.693,
+          "end": 7.798
+        },
+        {
+          "id": "w16",
+          "text": "calor",
+          "start": 7.818,
+          "end": 8.134
+        },
+        {
+          "id": "w17",
+          "text": "semanal.",
+          "start": 8.154,
+          "end": 8.654
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "path": "assets/voice/03.wav",
+      "duration_s": 8.763,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Fiscalização",
+          "start": 0.038,
+          "end": 0.902
+        },
+        {
+          "id": "w1",
+          "text": "e",
+          "start": 0.922,
+          "end": 1.003
+        },
+        {
+          "id": "w2",
+          "text": "Infrações:",
+          "start": 1.023,
+          "end": 1.965
+        },
+        {
+          "id": "w3",
+          "text": "infrações",
+          "start": 1.985,
+          "end": 2.621
+        },
+        {
+          "id": "w4",
+          "text": "da",
+          "start": 2.641,
+          "end": 2.732
+        },
+        {
+          "id": "w5",
+          "text": "fiscalização",
+          "start": 2.752,
+          "end": 3.583
+        },
+        {
+          "id": "w6",
+          "text": "eletrônica",
+          "start": 3.603,
+          "end": 4.254
+        },
+        {
+          "id": "w7",
+          "text": "por",
+          "start": 4.274,
+          "end": 4.429
+        },
+        {
+          "id": "w8",
+          "text": "categoria,",
+          "start": 4.449,
+          "end": 5.308
+        },
+        {
+          "id": "w9",
+          "text": "tipo,",
+          "start": 5.328,
+          "end": 5.939
+        },
+        {
+          "id": "w10",
+          "text": "equipamento",
+          "start": 5.959,
+          "end": 6.669
+        },
+        {
+          "id": "w11",
+          "text": "e",
+          "start": 6.689,
+          "end": 6.751
+        },
+        {
+          "id": "w12",
+          "text": "faixa",
+          "start": 6.771,
+          "end": 7.197
+        },
+        {
+          "id": "w13",
+          "text": "de",
+          "start": 7.217,
+          "end": 7.325
+        },
+        {
+          "id": "w14",
+          "text": "excesso",
+          "start": 7.345,
+          "end": 7.819
+        },
+        {
+          "id": "w15",
+          "text": "de",
+          "start": 7.839,
+          "end": 7.937
+        },
+        {
+          "id": "w16",
+          "text": "velocidade.",
+          "start": 7.957,
+          "end": 8.671
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "path": "assets/voice/04.wav",
+      "duration_s": 7.746,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Tráfego",
+          "start": 0.038,
+          "end": 0.537
+        },
+        {
+          "id": "w1",
+          "text": "Histórico:",
+          "start": 0.557,
+          "end": 1.336
+        },
+        {
+          "id": "w2",
+          "text": "série",
+          "start": 1.356,
+          "end": 1.704
+        },
+        {
+          "id": "w3",
+          "text": "histórica",
+          "start": 1.724,
+          "end": 2.269
+        },
+        {
+          "id": "w4",
+          "text": "de",
+          "start": 2.289,
+          "end": 2.382
+        },
+        {
+          "id": "w5",
+          "text": "volume,",
+          "start": 2.402,
+          "end": 3.038
+        },
+        {
+          "id": "w6",
+          "text": "velocidade",
+          "start": 3.058,
+          "end": 3.816
+        },
+        {
+          "id": "w7",
+          "text": "e",
+          "start": 3.836,
+          "end": 3.89
+        },
+        {
+          "id": "w8",
+          "text": "leitura",
+          "start": 3.91,
+          "end": 4.335
+        },
+        {
+          "id": "w9",
+          "text": "de",
+          "start": 4.355,
+          "end": 4.455
+        },
+        {
+          "id": "w10",
+          "text": "placas,",
+          "start": 4.475,
+          "end": 5.204
+        },
+        {
+          "id": "w11",
+          "text": "com",
+          "start": 5.224,
+          "end": 5.396
+        },
+        {
+          "id": "w12",
+          "text": "a",
+          "start": 5.416,
+          "end": 5.466
+        },
+        {
+          "id": "w13",
+          "text": "composição",
+          "start": 5.474,
+          "end": 6.138
+        },
+        {
+          "id": "w14",
+          "text": "da",
+          "start": 6.158,
+          "end": 6.242
+        },
+        {
+          "id": "w15",
+          "text": "frota",
+          "start": 6.262,
+          "end": 6.679
+        },
+        {
+          "id": "w16",
+          "text": "por",
+          "start": 6.699,
+          "end": 6.844
+        },
+        {
+          "id": "w17",
+          "text": "equipamento.",
+          "start": 6.864,
+          "end": 7.65
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "path": "assets/voice/05.wav",
+      "duration_s": 7.191,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Mobilidade",
+          "start": 0,
+          "end": 0.597
+        },
+        {
+          "id": "w1",
+          "text": "Urbana:",
+          "start": 0.617,
+          "end": 1.297
+        },
+        {
+          "id": "w2",
+          "text": "ocorrências",
+          "start": 1.317,
+          "end": 1.969
+        },
+        {
+          "id": "w3",
+          "text": "de",
+          "start": 1.989,
+          "end": 2.095
+        },
+        {
+          "id": "w4",
+          "text": "trânsito",
+          "start": 2.115,
+          "end": 2.632
+        },
+        {
+          "id": "w5",
+          "text": "reportadas",
+          "start": 2.652,
+          "end": 3.272
+        },
+        {
+          "id": "w6",
+          "text": "no",
+          "start": 3.292,
+          "end": 3.387
+        },
+        {
+          "id": "w7",
+          "text": "Waze,",
+          "start": 3.407,
+          "end": 3.884
+        },
+        {
+          "id": "w8",
+          "text": "no",
+          "start": 3.904,
+          "end": 3.996
+        },
+        {
+          "id": "w9",
+          "text": "mapa",
+          "start": 4.016,
+          "end": 4.341
+        },
+        {
+          "id": "w10",
+          "text": "de",
+          "start": 4.361,
+          "end": 4.451
+        },
+        {
+          "id": "w11",
+          "text": "Salvador,",
+          "start": 4.471,
+          "end": 5.277
+        },
+        {
+          "id": "w12",
+          "text": "por",
+          "start": 5.297,
+          "end": 5.479
+        },
+        {
+          "id": "w13",
+          "text": "tipo,",
+          "start": 5.499,
+          "end": 6.112
+        },
+        {
+          "id": "w14",
+          "text": "via",
+          "start": 6.132,
+          "end": 6.391
+        },
+        {
+          "id": "w15",
+          "text": "e",
+          "start": 6.411,
+          "end": 6.461
+        },
+        {
+          "id": "w16",
+          "text": "horário.",
+          "start": 6.469,
+          "end": 6.969
+        }
+      ]
+    },
+    {
+      "frame": 6,
+      "path": "assets/voice/06.wav",
+      "duration_s": 8.334,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Alertas",
+          "start": 0,
+          "end": 0.483
+        },
+        {
+          "id": "w1",
+          "text": "de",
+          "start": 0.503,
+          "end": 0.6
+        },
+        {
+          "id": "w2",
+          "text": "Veículos",
+          "start": 0.62,
+          "end": 1.14
+        },
+        {
+          "id": "w3",
+          "text": "de",
+          "start": 1.16,
+          "end": 1.273
+        },
+        {
+          "id": "w4",
+          "text": "Interesse:",
+          "start": 1.293,
+          "end": 2.083
+        },
+        {
+          "id": "w5",
+          "text": "veículos",
+          "start": 2.103,
+          "end": 2.617
+        },
+        {
+          "id": "w6",
+          "text": "monitorados,",
+          "start": 2.637,
+          "end": 3.662
+        },
+        {
+          "id": "w7",
+          "text": "furtados,",
+          "start": 3.682,
+          "end": 4.563
+        },
+        {
+          "id": "w8",
+          "text": "roubados",
+          "start": 4.583,
+          "end": 5.227
+        },
+        {
+          "id": "w9",
+          "text": "e",
+          "start": 5.247,
+          "end": 5.311
+        },
+        {
+          "id": "w10",
+          "text": "clonados,",
+          "start": 5.331,
+          "end": 6.099
+        },
+        {
+          "id": "w11",
+          "text": "por",
+          "start": 6.119,
+          "end": 6.307
+        },
+        {
+          "id": "w12",
+          "text": "tipo,",
+          "start": 6.327,
+          "end": 6.963
+        },
+        {
+          "id": "w13",
+          "text": "criticidade",
+          "start": 6.983,
+          "end": 7.731
+        },
+        {
+          "id": "w14",
+          "text": "e",
+          "start": 7.751,
+          "end": 7.801
+        },
+        {
+          "id": "w15",
+          "text": "status.",
+          "start": 7.804,
+          "end": 8.233
+        }
+      ]
+    },
+    {
+      "frame": 7,
+      "path": "assets/voice/07.wav",
+      "duration_s": 9.383,
+      "words": [
+        {
+          "id": "w0",
+          "text": "KPIs",
+          "start": 0.038,
+          "end": 0.535
+        },
+        {
+          "id": "w1",
+          "text": "Operacionais:",
+          "start": 0.555,
+          "end": 1.589
+        },
+        {
+          "id": "w2",
+          "text": "passagens,",
+          "start": 1.609,
+          "end": 2.578
+        },
+        {
+          "id": "w3",
+          "text": "infrações,",
+          "start": 2.598,
+          "end": 3.539
+        },
+        {
+          "id": "w4",
+          "text": "alertas,",
+          "start": 3.559,
+          "end": 4.386
+        },
+        {
+          "id": "w5",
+          "text": "disponibilidade,",
+          "start": 4.406,
+          "end": 5.622
+        },
+        {
+          "id": "w6",
+          "text": "SLA",
+          "start": 5.642,
+          "end": 6.255
+        },
+        {
+          "id": "w7",
+          "text": "de",
+          "start": 6.275,
+          "end": 6.37
+        },
+        {
+          "id": "w8",
+          "text": "latência",
+          "start": 6.39,
+          "end": 7.001
+        },
+        {
+          "id": "w9",
+          "text": "e",
+          "start": 7.021,
+          "end": 7.081
+        },
+        {
+          "id": "w10",
+          "text": "assertividade,",
+          "start": 7.101,
+          "end": 8.069
+        },
+        {
+          "id": "w11",
+          "text": "com",
+          "start": 8.089,
+          "end": 8.271
+        },
+        {
+          "id": "w12",
+          "text": "a",
+          "start": 8.291,
+          "end": 8.341
+        },
+        {
+          "id": "w13",
+          "text": "evolução",
+          "start": 8.351,
+          "end": 8.853
+        },
+        {
+          "id": "w14",
+          "text": "mensal.",
+          "start": 8.873,
+          "end": 9.302
+        }
+      ]
+    },
+    {
+      "frame": 8,
+      "path": "assets/voice/08.wav",
+      "duration_s": 7.99,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Assertividade",
+          "start": 0,
+          "end": 0.708
+        },
+        {
+          "id": "w1",
+          "text": "da",
+          "start": 0.728,
+          "end": 0.842
+        },
+        {
+          "id": "w2",
+          "text": "Dupla",
+          "start": 0.862,
+          "end": 1.22
+        },
+        {
+          "id": "w3",
+          "text": "Análise:",
+          "start": 1.24,
+          "end": 1.983
+        },
+        {
+          "id": "w4",
+          "text": "concordância",
+          "start": 2.003,
+          "end": 2.791
+        },
+        {
+          "id": "w5",
+          "text": "entre",
+          "start": 2.811,
+          "end": 3.064
+        },
+        {
+          "id": "w6",
+          "text": "a",
+          "start": 3.084,
+          "end": 3.134
+        },
+        {
+          "id": "w7",
+          "text": "pré-classificação",
+          "start": 3.153,
+          "end": 4.245
+        },
+        {
+          "id": "w8",
+          "text": "e",
+          "start": 4.265,
+          "end": 4.351
+        },
+        {
+          "id": "w9",
+          "text": "a",
+          "start": 4.371,
+          "end": 4.421
+        },
+        {
+          "id": "w10",
+          "text": "validação,",
+          "start": 4.429,
+          "end": 5.269
+        },
+        {
+          "id": "w11",
+          "text": "com",
+          "start": 5.289,
+          "end": 5.466
+        },
+        {
+          "id": "w12",
+          "text": "aprovadas,",
+          "start": 5.486,
+          "end": 6.398
+        },
+        {
+          "id": "w13",
+          "text": "reprovadas",
+          "start": 6.418,
+          "end": 7.084
+        },
+        {
+          "id": "w14",
+          "text": "e",
+          "start": 7.104,
+          "end": 7.162
+        },
+        {
+          "id": "w15",
+          "text": "desempates.",
+          "start": 7.182,
+          "end": 7.896
+        }
+      ]
+    },
+    {
+      "frame": 9,
+      "path": "assets/voice/09.wav",
+      "duration_s": 7.167,
+      "words": [
+        {
+          "id": "w0",
+          "text": "SLA",
+          "start": 0,
+          "end": 0.608
+        },
+        {
+          "id": "w1",
+          "text": "de",
+          "start": 0.628,
+          "end": 0.726
+        },
+        {
+          "id": "w2",
+          "text": "Latência:",
+          "start": 0.746,
+          "end": 1.541
+        },
+        {
+          "id": "w3",
+          "text": "percentual",
+          "start": 1.561,
+          "end": 2.253
+        },
+        {
+          "id": "w4",
+          "text": "de",
+          "start": 2.273,
+          "end": 2.366
+        },
+        {
+          "id": "w5",
+          "text": "janelas",
+          "start": 2.386,
+          "end": 2.903
+        },
+        {
+          "id": "w6",
+          "text": "no",
+          "start": 2.923,
+          "end": 3.023
+        },
+        {
+          "id": "w7",
+          "text": "prazo,",
+          "start": 3.043,
+          "end": 3.725
+        },
+        {
+          "id": "w8",
+          "text": "latência",
+          "start": 3.745,
+          "end": 4.283
+        },
+        {
+          "id": "w9",
+          "text": "diária",
+          "start": 4.303,
+          "end": 4.772
+        },
+        {
+          "id": "w10",
+          "text": "e",
+          "start": 4.792,
+          "end": 4.856
+        },
+        {
+          "id": "w11",
+          "text": "as",
+          "start": 4.876,
+          "end": 4.99
+        },
+        {
+          "id": "w12",
+          "text": "violações",
+          "start": 5.01,
+          "end": 5.638
+        },
+        {
+          "id": "w13",
+          "text": "do",
+          "start": 5.658,
+          "end": 5.741
+        },
+        {
+          "id": "w14",
+          "text": "limite.",
+          "start": 5.761,
+          "end": 6.189
+        }
+      ]
+    },
+    {
+      "frame": 10,
+      "path": "assets/voice/10.wav",
+      "duration_s": 7.177,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Disponibilidade",
+          "start": 0,
+          "end": 0.929
+        },
+        {
+          "id": "w1",
+          "text": "de",
+          "start": 0.949,
+          "end": 1.063
+        },
+        {
+          "id": "w2",
+          "text": "Equipamentos:",
+          "start": 1.083,
+          "end": 2.103
+        },
+        {
+          "id": "w3",
+          "text": "horas",
+          "start": 2.123,
+          "end": 2.449
+        },
+        {
+          "id": "w4",
+          "text": "com",
+          "start": 2.469,
+          "end": 2.622
+        },
+        {
+          "id": "w5",
+          "text": "captura,",
+          "start": 2.642,
+          "end": 3.358
+        },
+        {
+          "id": "w6",
+          "text": "dias",
+          "start": 3.378,
+          "end": 3.729
+        },
+        {
+          "id": "w7",
+          "text": "sem",
+          "start": 3.749,
+          "end": 3.931
+        },
+        {
+          "id": "w8",
+          "text": "captura",
+          "start": 3.951,
+          "end": 4.451
+        },
+        {
+          "id": "w9",
+          "text": "e",
+          "start": 4.471,
+          "end": 4.529
+        },
+        {
+          "id": "w10",
+          "text": "o",
+          "start": 4.549,
+          "end": 4.599
+        },
+        {
+          "id": "w11",
+          "text": "ranking",
+          "start": 4.606,
+          "end": 5.024
+        },
+        {
+          "id": "w12",
+          "text": "dos",
+          "start": 5.044,
+          "end": 5.215
+        },
+        {
+          "id": "w13",
+          "text": "equipamentos.",
+          "start": 5.235,
+          "end": 6.092
+        }
+      ]
+    },
+    {
+      "frame": 11,
+      "path": "assets/voice/11.wav",
+      "duration_s": 8.887,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Pré-processamento",
+          "start": 0.038,
+          "end": 1.017
+        },
+        {
+          "id": "w1",
+          "text": "de",
+          "start": 1.037,
+          "end": 1.146
+        },
+        {
+          "id": "w2",
+          "text": "Imagens:",
+          "start": 1.166,
+          "end": 1.975
+        },
+        {
+          "id": "w3",
+          "text": "recebidas,",
+          "start": 1.995,
+          "end": 2.957
+        },
+        {
+          "id": "w4",
+          "text": "disponibilizadas,",
+          "start": 2.977,
+          "end": 4.221
+        },
+        {
+          "id": "w5",
+          "text": "aproveitamento,",
+          "start": 4.241,
+          "end": 5.377
+        },
+        {
+          "id": "w6",
+          "text": "prazo",
+          "start": 5.397,
+          "end": 5.797
+        },
+        {
+          "id": "w7",
+          "text": "de",
+          "start": 5.817,
+          "end": 5.918
+        },
+        {
+          "id": "w8",
+          "text": "72",
+          "start": 5.938,
+          "end": 6.368
+        },
+        {
+          "id": "w9",
+          "text": "horas",
+          "start": 6.388,
+          "end": 7.12
+        },
+        {
+          "id": "w10",
+          "text": "e",
+          "start": 7.14,
+          "end": 7.195
+        },
+        {
+          "id": "w11",
+          "text": "produtividade",
+          "start": 7.215,
+          "end": 8.048
+        },
+        {
+          "id": "w12",
+          "text": "por",
+          "start": 8.068,
+          "end": 8.215
+        },
+        {
+          "id": "w13",
+          "text": "operador.",
+          "start": 8.235,
+          "end": 8.806
+        }
+      ]
+    },
+    {
+      "frame": 12,
+      "path": "assets/voice/12.wav",
+      "duration_s": 7.159,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Alertas:",
+          "start": 0,
+          "end": 0.837
+        },
+        {
+          "id": "w1",
+          "text": "total,",
+          "start": 0.857,
+          "end": 1.535
+        },
+        {
+          "id": "w2",
+          "text": "críticos",
+          "start": 1.555,
+          "end": 2.148
+        },
+        {
+          "id": "w3",
+          "text": "e",
+          "start": 2.168,
+          "end": 2.227
+        },
+        {
+          "id": "w4",
+          "text": "pendentes,",
+          "start": 2.247,
+          "end": 3.134
+        },
+        {
+          "id": "w5",
+          "text": "a",
+          "start": 3.154,
+          "end": 3.217
+        },
+        {
+          "id": "w6",
+          "text": "evolução",
+          "start": 3.237,
+          "end": 3.801
+        },
+        {
+          "id": "w7",
+          "text": "por",
+          "start": 3.821,
+          "end": 3.986
+        },
+        {
+          "id": "w8",
+          "text": "tipo",
+          "start": 4.006,
+          "end": 4.395
+        },
+        {
+          "id": "w9",
+          "text": "e",
+          "start": 4.415,
+          "end": 4.506
+        },
+        {
+          "id": "w10",
+          "text": "o",
+          "start": 4.526,
+          "end": 4.576
+        },
+        {
+          "id": "w11",
+          "text": "percentual",
+          "start": 4.593,
+          "end": 5.245
+        },
+        {
+          "id": "w12",
+          "text": "tratado.",
+          "start": 5.265,
+          "end": 5.765
+        }
+      ]
+    },
+    {
+      "frame": 13,
+      "path": "assets/voice/13.wav",
+      "duration_s": 7.164,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Infrações:",
+          "start": 0,
+          "end": 0.939
+        },
+        {
+          "id": "w1",
+          "text": "total,",
+          "start": 0.959,
+          "end": 1.629
+        },
+        {
+          "id": "w2",
+          "text": "excesso",
+          "start": 1.649,
+          "end": 2.124
+        },
+        {
+          "id": "w3",
+          "text": "médio",
+          "start": 2.144,
+          "end": 2.486
+        },
+        {
+          "id": "w4",
+          "text": "de",
+          "start": 2.506,
+          "end": 2.608
+        },
+        {
+          "id": "w5",
+          "text": "velocidade,",
+          "start": 2.628,
+          "end": 3.61
+        },
+        {
+          "id": "w6",
+          "text": "enquadramentos",
+          "start": 3.63,
+          "end": 4.467
+        },
+        {
+          "id": "w7",
+          "text": "e",
+          "start": 4.487,
+          "end": 4.544
+        },
+        {
+          "id": "w8",
+          "text": "o",
+          "start": 4.564,
+          "end": 4.614
+        },
+        {
+          "id": "w9",
+          "text": "ranking",
+          "start": 4.629,
+          "end": 5.05
+        },
+        {
+          "id": "w10",
+          "text": "de",
+          "start": 5.07,
+          "end": 5.178
+        },
+        {
+          "id": "w11",
+          "text": "equipamentos.",
+          "start": 5.198,
+          "end": 6.055
+        }
+      ]
+    },
+    {
+      "frame": 14,
+      "path": "assets/voice/14.wav",
+      "duration_s": 7.187,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Passagens",
+          "start": 0.038,
+          "end": 0.654
+        },
+        {
+          "id": "w1",
+          "text": "Veiculares:",
+          "start": 0.674,
+          "end": 1.488
+        },
+        {
+          "id": "w2",
+          "text": "passagens",
+          "start": 1.508,
+          "end": 2.201
+        },
+        {
+          "id": "w3",
+          "text": "por",
+          "start": 2.221,
+          "end": 2.371
+        },
+        {
+          "id": "w4",
+          "text": "hora",
+          "start": 2.391,
+          "end": 2.585
+        },
+        {
+          "id": "w5",
+          "text": "do",
+          "start": 2.605,
+          "end": 2.7
+        },
+        {
+          "id": "w6",
+          "text": "dia,",
+          "start": 2.72,
+          "end": 3.23
+        },
+        {
+          "id": "w7",
+          "text": "por",
+          "start": 3.25,
+          "end": 3.422
+        },
+        {
+          "id": "w8",
+          "text": "faixa",
+          "start": 3.442,
+          "end": 3.89
+        },
+        {
+          "id": "w9",
+          "text": "e",
+          "start": 3.91,
+          "end": 3.967
+        },
+        {
+          "id": "w10",
+          "text": "por",
+          "start": 3.987,
+          "end": 4.14
+        },
+        {
+          "id": "w11",
+          "text": "classificação,",
+          "start": 4.16,
+          "end": 5.221
+        },
+        {
+          "id": "w12",
+          "text": "com",
+          "start": 5.241,
+          "end": 5.42
+        },
+        {
+          "id": "w13",
+          "text": "o",
+          "start": 5.44,
+          "end": 5.49
+        },
+        {
+          "id": "w14",
+          "text": "ranking",
+          "start": 5.504,
+          "end": 5.902
+        },
+        {
+          "id": "w15",
+          "text": "de",
+          "start": 5.922,
+          "end": 6.029
+        },
+        {
+          "id": "w16",
+          "text": "equipamentos.",
+          "start": 6.049,
+          "end": 6.906
+        }
+      ]
+    },
+    {
+      "frame": 15,
+      "path": "assets/voice/15.wav",
+      "duration_s": 7.174,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Mapa:",
+          "start": 0,
+          "end": 0.563
+        },
+        {
+          "id": "w1",
+          "text": "equipamentos",
+          "start": 0.583,
+          "end": 1.322
+        },
+        {
+          "id": "w2",
+          "text": "cadastrados,",
+          "start": 1.342,
+          "end": 2.275
+        },
+        {
+          "id": "w3",
+          "text": "áreas",
+          "start": 2.295,
+          "end": 2.61
+        },
+        {
+          "id": "w4",
+          "text": "monitoradas,",
+          "start": 2.63,
+          "end": 3.551
+        },
+        {
+          "id": "w5",
+          "text": "passagens",
+          "start": 3.571,
+          "end": 4.306
+        },
+        {
+          "id": "w6",
+          "text": "e",
+          "start": 4.326,
+          "end": 4.384
+        },
+        {
+          "id": "w7",
+          "text": "infrações",
+          "start": 4.404,
+          "end": 5.078
+        },
+        {
+          "id": "w8",
+          "text": "por",
+          "start": 5.098,
+          "end": 5.254
+        },
+        {
+          "id": "w9",
+          "text": "equipamento.",
+          "start": 5.274,
+          "end": 6.059
+        }
+      ]
+    },
+    {
+      "frame": 16,
+      "path": "assets/voice/16.wav",
+      "duration_s": 7.377,
+      "words": [
+        {
+          "id": "w0",
+          "text": "São",
+          "start": 0,
+          "end": 0.232
+        },
+        {
+          "id": "w1",
+          "text": "14",
+          "start": 0.252,
+          "end": 0.574
+        },
+        {
+          "id": "w2",
+          "text": "painéis",
+          "start": 0.594,
+          "end": 1.373
+        },
+        {
+          "id": "w3",
+          "text": "interativos,",
+          "start": 1.393,
+          "end": 2.429
+        },
+        {
+          "id": "w4",
+          "text": "com",
+          "start": 2.449,
+          "end": 2.62
+        },
+        {
+          "id": "w5",
+          "text": "filtros",
+          "start": 2.64,
+          "end": 3.198
+        },
+        {
+          "id": "w6",
+          "text": "e",
+          "start": 3.218,
+          "end": 3.28
+        },
+        {
+          "id": "w7",
+          "text": "filtro",
+          "start": 3.3,
+          "end": 3.776
+        },
+        {
+          "id": "w8",
+          "text": "cruzado:",
+          "start": 3.796,
+          "end": 4.558
+        },
+        {
+          "id": "w9",
+          "text": "clique",
+          "start": 4.578,
+          "end": 4.904
+        },
+        {
+          "id": "w10",
+          "text": "em",
+          "start": 4.924,
+          "end": 5.01
+        },
+        {
+          "id": "w11",
+          "text": "um",
+          "start": 5.03,
+          "end": 5.125
+        },
+        {
+          "id": "w12",
+          "text": "gráfico",
+          "start": 5.145,
+          "end": 5.648
+        },
+        {
+          "id": "w13",
+          "text": "para",
+          "start": 5.668,
+          "end": 5.857
+        },
+        {
+          "id": "w14",
+          "text": "filtrar",
+          "start": 5.877,
+          "end": 6.315
+        },
+        {
+          "id": "w15",
+          "text": "o",
+          "start": 6.335,
+          "end": 6.385
+        },
+        {
+          "id": "w16",
+          "text": "painel",
+          "start": 6.398,
+          "end": 6.757
+        },
+        {
+          "id": "w17",
+          "text": "inteiro.",
+          "start": 6.777,
+          "end": 7.277
+        }
+      ]
+    }
+  ],
+  "sfx": []
+}

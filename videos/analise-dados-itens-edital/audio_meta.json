@@ -1,0 +1,311 @@
+{
+  "bgm": {
+    "path": "assets/bgm/track.mp3",
+    "volume": 0.18,
+    "query": "calm confident corporate tech underscore, light",
+    "duration_s": 90
+  },
+  "bgm_pending": false,
+  "voices": [
+    {
+      "frame": 1,
+      "path": "assets/voice/01.wav",
+      "duration_s": 4.629,
+      "words": [
+        {
+          "id": "w0",
+          "text": "No",
+          "start": 0,
+          "end": 0.088
+        },
+        {
+          "id": "w1",
+          "text": "Módulo",
+          "start": 0.108,
+          "end": 0.526
+        },
+        {
+          "id": "w2",
+          "text": "de",
+          "start": 0.546,
+          "end": 0.657
+        },
+        {
+          "id": "w3",
+          "text": "Análise",
+          "start": 0.677,
+          "end": 1.179
+        },
+        {
+          "id": "w4",
+          "text": "de",
+          "start": 1.199,
+          "end": 1.316
+        },
+        {
+          "id": "w5",
+          "text": "Dados,",
+          "start": 1.336,
+          "end": 2.014
+        },
+        {
+          "id": "w6",
+          "text": "o",
+          "start": 2.034,
+          "end": 2.1
+        },
+        {
+          "id": "w7",
+          "text": "asterisco",
+          "start": 2.12,
+          "end": 2.755
+        },
+        {
+          "id": "w8",
+          "text": "vermelho",
+          "start": 2.775,
+          "end": 3.206
+        },
+        {
+          "id": "w9",
+          "text": "marca",
+          "start": 3.226,
+          "end": 3.627
+        },
+        {
+          "id": "w10",
+          "text": "itens",
+          "start": 3.647,
+          "end": 3.993
+        },
+        {
+          "id": "w11",
+          "text": "do",
+          "start": 4.013,
+          "end": 4.109
+        },
+        {
+          "id": "w12",
+          "text": "edital.",
+          "start": 4.129,
+          "end": 4.558
+        }
+      ]
+    },
+    {
+      "frame": 2,
+      "path": "assets/voice/02.wav",
+      "duration_s": 4.099,
+      "words": [
+        {
+          "id": "w0",
+          "text": "SLA",
+          "start": 0,
+          "end": 0.649
+        },
+        {
+          "id": "w1",
+          "text": "de",
+          "start": 0.669,
+          "end": 0.785
+        },
+        {
+          "id": "w2",
+          "text": "latência,",
+          "start": 0.805,
+          "end": 1.642
+        },
+        {
+          "id": "w3",
+          "text": "assertividade",
+          "start": 1.662,
+          "end": 2.486
+        },
+        {
+          "id": "w4",
+          "text": "e",
+          "start": 2.506,
+          "end": 2.571
+        },
+        {
+          "id": "w5",
+          "text": "prazo",
+          "start": 2.591,
+          "end": 3.012
+        },
+        {
+          "id": "w6",
+          "text": "do",
+          "start": 3.032,
+          "end": 3.131
+        },
+        {
+          "id": "w7",
+          "text": "pré-processamento.",
+          "start": 3.151,
+          "end": 4.008
+        }
+      ]
+    },
+    {
+      "frame": 3,
+      "path": "assets/voice/03.wav",
+      "duration_s": 3.796,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Disponibilidade,",
+          "start": 0,
+          "end": 1.347
+        },
+        {
+          "id": "w1",
+          "text": "time-lapse",
+          "start": 1.367,
+          "end": 2.097
+        },
+        {
+          "id": "w2",
+          "text": "e",
+          "start": 2.117,
+          "end": 2.211
+        },
+        {
+          "id": "w3",
+          "text": "integridade",
+          "start": 2.231,
+          "end": 2.982
+        },
+        {
+          "id": "w4",
+          "text": "das",
+          "start": 3.002,
+          "end": 3.198
+        },
+        {
+          "id": "w5",
+          "text": "imagens.",
+          "start": 3.218,
+          "end": 3.718
+        }
+      ]
+    },
+    {
+      "frame": 4,
+      "path": "assets/voice/04.wav",
+      "duration_s": 5.024,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Auditoria,",
+          "start": 0,
+          "end": 0.91
+        },
+        {
+          "id": "w1",
+          "text": "logs",
+          "start": 0.93,
+          "end": 1.231
+        },
+        {
+          "id": "w2",
+          "text": "técnicos,",
+          "start": 1.251,
+          "end": 2.077
+        },
+        {
+          "id": "w3",
+          "text": "alertas,",
+          "start": 2.097,
+          "end": 2.955
+        },
+        {
+          "id": "w4",
+          "text": "relatórios",
+          "start": 2.975,
+          "end": 3.661
+        },
+        {
+          "id": "w5",
+          "text": "gerenciais",
+          "start": 3.681,
+          "end": 4.27
+        },
+        {
+          "id": "w6",
+          "text": "e",
+          "start": 4.29,
+          "end": 4.352
+        },
+        {
+          "id": "w7",
+          "text": "análises.",
+          "start": 4.372,
+          "end": 4.944
+        }
+      ]
+    },
+    {
+      "frame": 5,
+      "path": "assets/voice/05.wav",
+      "duration_s": 2.499,
+      "words": [
+        {
+          "id": "w0",
+          "text": "Passe",
+          "start": 0.038,
+          "end": 0.402
+        },
+        {
+          "id": "w1",
+          "text": "o",
+          "start": 0.422,
+          "end": 0.453
+        },
+        {
+          "id": "w2",
+          "text": "mouse",
+          "start": 0.473,
+          "end": 0.823
+        },
+        {
+          "id": "w3",
+          "text": "no",
+          "start": 0.843,
+          "end": 0.937
+        },
+        {
+          "id": "w4",
+          "text": "asterisco",
+          "start": 0.957,
+          "end": 1.589
+        },
+        {
+          "id": "w5",
+          "text": "para",
+          "start": 1.609,
+          "end": 1.826
+        },
+        {
+          "id": "w6",
+          "text": "ver",
+          "start": 1.846,
+          "end": 2.021
+        },
+        {
+          "id": "w7",
+          "text": "o",
+          "start": 2.041,
+          "end": 2.094
+        },
+        {
+          "id": "w8",
+          "text": "item.",
+          "start": 2.114,
+          "end": 2.4
+        }
+      ]
+    }
+  ],
+  "sfx": []
+}

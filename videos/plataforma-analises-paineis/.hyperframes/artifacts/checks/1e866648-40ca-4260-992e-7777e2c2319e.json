@@ -1,0 +1,1148 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 2,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "composition_file_too_large",
+        "severity": "warning",
+        "message": "This HTML composition file has 358 lines. Smaller sub-compositions are easier to read, iterate on, and diff.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\plataforma-analises-paineis\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Split coherent scenes or layers into separate .html files under compositions/, then mount them from the parent with data-composition-src so each file stays small enough to inspect, revise, and validate independently."
+      },
+      {
+        "code": "caption_track_kind_missing",
+        "severity": "warning",
+        "message": "<div id=\"el-captions\"> looks like captions but is not marked as such, so the timeline cannot group it on the caption track.",
+        "selector": "#el-captions",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\plataforma-analises-paineis\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add data-track-kind=\"captions\" to <div id=\"el-captions\">."
+      }
+    ],
+    "filesScanned": 18
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 31,
+    "findings": [
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 9.062,
+        "selector": "#m01-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 196,
+          "right": 458.75,
+          "bottom": 224,
+          "width": 362.75,
+          "height": 28
+        },
+        "containerSelector": "#p02-eyebrow",
+        "text": "ANÁLISE DE DADOS · TR 5.4.2.1",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-plataforma-analises.html",
+        "bbox": {
+          "x": 96,
+          "y": 196,
+          "width": 362.75,
+          "height": 28
+        },
+        "firstSeen": 9.062,
+        "lastSeen": 9.062,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          9.062
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 21.039,
+        "selector": "#p03-shot",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": 661,
+          "top": 138.82,
+          "right": 1824.9,
+          "bottom": 1313.03,
+          "width": 1163.9,
+          "height": 1174.21
+        },
+        "containerSelector": "div.p03-vp",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 661,
+          "top": 145,
+          "right": 1825,
+          "bottom": 873,
+          "width": 1164,
+          "height": 728
+        },
+        "overflow": {
+          "top": 6.18,
+          "bottom": 440.03
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-demo-infracoes.html",
+        "bbox": {
+          "x": 661,
+          "y": 138.82,
+          "width": 1163.9,
+          "height": 1174.21
+        },
+        "firstSeen": 21.039,
+        "lastSeen": 21.039,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          21.039
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 26.554,
+        "selector": "#p03-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 527.2,
+          "bottom": 204,
+          "width": 431.2,
+          "height": 28
+        },
+        "containerSelector": "#p04-eyebrow",
+        "text": "DEMONSTRAÇÃO · DADOS REAIS · 2/5",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-demo-infracoes.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 431.2,
+          "height": 28
+        },
+        "firstSeen": 26.554,
+        "lastSeen": 26.554,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          26.554
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 26.554,
+        "selector": "div.p03-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1073.64,
+          "bottom": 132,
+          "width": 309.64,
+          "height": 23
+        },
+        "containerSelector": "div.p04-bar > span:nth-of-type(1)",
+        "text": "Análises · Fiscalização e Infrações",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-demo-infracoes.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 309.64,
+          "height": 23
+        },
+        "firstSeen": 26.554,
+        "lastSeen": 26.554,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          26.554
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 34.351,
+        "selector": "#p04-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 527.52,
+          "bottom": 204,
+          "width": 431.52,
+          "height": 28
+        },
+        "containerSelector": "#p05-eyebrow",
+        "text": "DEMONSTRAÇÃO · DADOS REAIS · 3/5",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-demo-trafego-historico.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 431.52,
+          "height": 28
+        },
+        "firstSeen": 34.351,
+        "lastSeen": 34.351,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          34.351
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 34.351,
+        "selector": "#p04-title",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 223,
+          "right": 573.19,
+          "bottom": 300,
+          "width": 477.19,
+          "height": 77
+        },
+        "containerSelector": "#p05-title",
+        "text": "Tráfego Histórico",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-demo-trafego-historico.html",
+        "bbox": {
+          "x": 96,
+          "y": 223,
+          "width": 477.19,
+          "height": 77
+        },
+        "firstSeen": 34.351,
+        "lastSeen": 34.351,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          34.351
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 34.351,
+        "selector": "#p04-desc",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 324.59,
+          "right": 572.98,
+          "bottom": 447.59,
+          "width": 476.98,
+          "height": 123
+        },
+        "containerSelector": "#p05-title",
+        "text": "Série histórica de volume, velocidade e leitura de placas por equipamento.",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-demo-trafego-historico.html",
+        "bbox": {
+          "x": 96,
+          "y": 324.59,
+          "width": 476.98,
+          "height": 123
+        },
+        "firstSeen": 34.351,
+        "lastSeen": 34.351,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          34.351
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 34.351,
+        "selector": "div.p04-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1012.84,
+          "bottom": 132,
+          "width": 248.84,
+          "height": 23
+        },
+        "containerSelector": "div.p05-bar > span:nth-of-type(1)",
+        "text": "Análises · Tráfego Histórico",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-demo-trafego-historico.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 248.84,
+          "height": 23
+        },
+        "firstSeen": 34.351,
+        "lastSeen": 34.351,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          34.351
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 41.516,
+        "selector": "#p05-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 528.13,
+          "bottom": 204,
+          "width": 432.13,
+          "height": 28
+        },
+        "containerSelector": "#p06-eyebrow",
+        "text": "DEMONSTRAÇÃO · DADOS REAIS · 4/5",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-demo-mobilidade-waze.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 432.13,
+          "height": 28
+        },
+        "firstSeen": 41.516,
+        "lastSeen": 41.516,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          41.516
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 41.516,
+        "selector": "#p05-title",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 223,
+          "right": 503.83,
+          "bottom": 363.59,
+          "width": 407.83,
+          "height": 140.59
+        },
+        "containerSelector": "#p06-title",
+        "text": "Mobilidade Urbana (Waze)",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-demo-mobilidade-waze.html",
+        "bbox": {
+          "x": 96,
+          "y": 223,
+          "width": 407.83,
+          "height": 140.59
+        },
+        "firstSeen": 41.516,
+        "lastSeen": 41.516,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          41.516
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 41.516,
+        "selector": "#p05-desc",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 388.19,
+          "right": 591.73,
+          "bottom": 467.69,
+          "width": 495.73,
+          "height": 79.5
+        },
+        "containerSelector": "#p06-title",
+        "text": "Ocorrências de trânsito reportadas por usuários do Waze.",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-demo-mobilidade-waze.html",
+        "bbox": {
+          "x": 96,
+          "y": 388.19,
+          "width": 495.73,
+          "height": 79.5
+        },
+        "firstSeen": 41.516,
+        "lastSeen": 41.516,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          41.516
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 41.516,
+        "selector": "div.p05-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1096.56,
+          "bottom": 132,
+          "width": 332.56,
+          "height": 23
+        },
+        "containerSelector": "div.p06-bar > span:nth-of-type(1)",
+        "text": "Análises · Mobilidade Urbana (Waze)",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-demo-mobilidade-waze.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 332.56,
+          "height": 23
+        },
+        "firstSeen": 41.516,
+        "lastSeen": 41.516,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          41.516
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 59.219,
+        "selector": "#p07-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 404.8,
+          "bottom": 204,
+          "width": 308.8,
+          "height": 28
+        },
+        "containerSelector": "#p08-eyebrow",
+        "text": "PAINEL OPERACIONAL · 1/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/07-kpis-operacionais.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 308.8,
+          "height": 28
+        },
+        "firstSeen": 59.219,
+        "lastSeen": 59.219,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          59.219
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 59.219,
+        "selector": "div.p07-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1020.55,
+          "bottom": 132,
+          "width": 256.55,
+          "height": 23
+        },
+        "containerSelector": "div.p08-bar > span:nth-of-type(1)",
+        "text": "Análises · KPIs Operacionais",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/07-kpis-operacionais.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 256.55,
+          "height": 23
+        },
+        "firstSeen": 59.219,
+        "lastSeen": 59.219,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          59.219
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 67.227,
+        "selector": "#p08-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 407.92,
+          "bottom": 204,
+          "width": 311.92,
+          "height": 28
+        },
+        "containerSelector": "#p09-eyebrow",
+        "text": "PAINEL OPERACIONAL · 2/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-assertividade-dupla-analise.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 311.92,
+          "height": 28
+        },
+        "firstSeen": 67.227,
+        "lastSeen": 67.227,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          67.227
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 67.227,
+        "selector": "#p08-title",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 223,
+          "right": 540.13,
+          "bottom": 363.59,
+          "width": 444.13,
+          "height": 140.59
+        },
+        "containerSelector": "#p09-title",
+        "text": "Assertividade — Dupla Análise",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-assertividade-dupla-analise.html",
+        "bbox": {
+          "x": 96,
+          "y": 223,
+          "width": 444.13,
+          "height": 140.59
+        },
+        "firstSeen": 67.227,
+        "lastSeen": 67.227,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          67.227
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 67.227,
+        "selector": "div.p08-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1134.22,
+          "bottom": 132,
+          "width": 370.22,
+          "height": 23
+        },
+        "containerSelector": "div.p09-bar > span:nth-of-type(1)",
+        "text": "Análises · Assertividade — Dupla Análise",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/08-assertividade-dupla-analise.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 370.22,
+          "height": 23
+        },
+        "firstSeen": 67.227,
+        "lastSeen": 67.227,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          67.227
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 74.392,
+        "selector": "#p09-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 408.23,
+          "bottom": 204,
+          "width": 312.23,
+          "height": 28
+        },
+        "containerSelector": "#p10-eyebrow",
+        "text": "PAINEL OPERACIONAL · 3/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/09-sla-latencia.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 312.23,
+          "height": 28
+        },
+        "firstSeen": 74.392,
+        "lastSeen": 74.392,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          74.392
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 74.392,
+        "selector": "#p09-title",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 223,
+          "right": 536.28,
+          "bottom": 300,
+          "width": 440.28,
+          "height": 77
+        },
+        "containerSelector": "#p10-title",
+        "text": "SLA de Latência",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/09-sla-latencia.html",
+        "bbox": {
+          "x": 96,
+          "y": 223,
+          "width": 440.28,
+          "height": 77
+        },
+        "firstSeen": 74.392,
+        "lastSeen": 74.392,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          74.392
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 74.392,
+        "selector": "#p09-desc",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 324.59,
+          "right": 506.55,
+          "bottom": 447.59,
+          "width": 410.55,
+          "height": 123
+        },
+        "containerSelector": "#p10-title",
+        "text": "Cumprimento do SLA entre a passagem e a chegada ao servidor.",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/09-sla-latencia.html",
+        "bbox": {
+          "x": 96,
+          "y": 324.59,
+          "width": 410.55,
+          "height": 123
+        },
+        "firstSeen": 74.392,
+        "lastSeen": 74.392,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          74.392
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 74.392,
+        "selector": "div.p09-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1003.28,
+          "bottom": 132,
+          "width": 239.28,
+          "height": 23
+        },
+        "containerSelector": "div.p10-bar > span:nth-of-type(1)",
+        "text": "Análises · SLA de Latência",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/09-sla-latencia.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 239.28,
+          "height": 23
+        },
+        "firstSeen": 74.392,
+        "lastSeen": 74.392,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          74.392
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 81.558,
+        "selector": "#p10-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 408.84,
+          "bottom": 204,
+          "width": 312.84,
+          "height": 28
+        },
+        "containerSelector": "#p11-eyebrow",
+        "text": "PAINEL OPERACIONAL · 4/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/10-disponibilidade-equipamentos.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 312.84,
+          "height": 28
+        },
+        "firstSeen": 81.558,
+        "lastSeen": 81.558,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          81.558
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 81.558,
+        "selector": "div.p10-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1158.34,
+          "bottom": 132,
+          "width": 394.34,
+          "height": 23
+        },
+        "containerSelector": "div.p11-bar > span:nth-of-type(1)",
+        "text": "Análises · Disponibilidade de Equipamentos",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/10-disponibilidade-equipamentos.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 394.34,
+          "height": 23
+        },
+        "firstSeen": 81.558,
+        "lastSeen": 81.558,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          81.558
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 90.409,
+        "selector": "#p11-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 408.06,
+          "bottom": 204,
+          "width": 312.06,
+          "height": 28
+        },
+        "containerSelector": "#p12-eyebrow",
+        "text": "PAINEL OPERACIONAL · 5/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/11-preprocessamento-imagens.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 312.06,
+          "height": 28
+        },
+        "firstSeen": 90.409,
+        "lastSeen": 90.409,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          90.409
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 90.409,
+        "selector": "div.p11-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1146.09,
+          "bottom": 132,
+          "width": 382.09,
+          "height": 23
+        },
+        "containerSelector": "div.p12-bar > span:nth-of-type(1)",
+        "text": "Análises · Pré-processamento de Imagens",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/11-preprocessamento-imagens.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 382.09,
+          "height": 23
+        },
+        "firstSeen": 90.409,
+        "lastSeen": 90.409,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          90.409
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 97.574,
+        "selector": "#p12-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 408.45,
+          "bottom": 204,
+          "width": 312.45,
+          "height": 28
+        },
+        "containerSelector": "#p13-eyebrow",
+        "text": "PAINEL OPERACIONAL · 6/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-alertas.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 312.45,
+          "height": 28
+        },
+        "firstSeen": 97.574,
+        "lastSeen": 97.574,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          97.574
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 97.574,
+        "selector": "div.p12-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 921.05,
+          "bottom": 132,
+          "width": 157.05,
+          "height": 23
+        },
+        "containerSelector": "div.p13-bar > span:nth-of-type(1)",
+        "text": "Análises · Alertas",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/12-alertas.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 157.05,
+          "height": 23
+        },
+        "firstSeen": 97.574,
+        "lastSeen": 97.574,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          97.574
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 104.739,
+        "selector": "#p13-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 407.05,
+          "bottom": 204,
+          "width": 311.05,
+          "height": 28
+        },
+        "containerSelector": "#p14-eyebrow",
+        "text": "PAINEL OPERACIONAL · 7/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/13-infracoes.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 311.05,
+          "height": 28
+        },
+        "firstSeen": 104.739,
+        "lastSeen": 104.739,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          104.739
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 104.739,
+        "selector": "div.p13-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 940.97,
+          "bottom": 132,
+          "width": 176.97,
+          "height": 23
+        },
+        "containerSelector": "div.p14-bar > span:nth-of-type(1)",
+        "text": "Análises · Infrações",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/13-infracoes.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 176.97,
+          "height": 23
+        },
+        "firstSeen": 104.739,
+        "lastSeen": 104.739,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          104.739
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 111.904,
+        "selector": "#p14-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 176,
+          "right": 408.06,
+          "bottom": 204,
+          "width": 312.06,
+          "height": 28
+        },
+        "containerSelector": "#p15-eyebrow",
+        "text": "PAINEL OPERACIONAL · 8/9",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/14-passagens-veiculares.html",
+        "bbox": {
+          "x": 96,
+          "y": 176,
+          "width": 312.06,
+          "height": 28
+        },
+        "firstSeen": 111.904,
+        "lastSeen": 111.904,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          111.904
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 111.904,
+        "selector": "div.p14-bar > span:nth-of-type(1)",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 764,
+          "top": 109,
+          "right": 1053.44,
+          "bottom": 132,
+          "width": 289.44,
+          "height": 23
+        },
+        "containerSelector": "div.p15-bar > span:nth-of-type(1)",
+        "text": "Análises · Passagens Veiculares",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/14-passagens-veiculares.html",
+        "bbox": {
+          "x": 764,
+          "y": 109,
+          "width": 289.44,
+          "height": 23
+        },
+        "firstSeen": 111.904,
+        "lastSeen": 111.904,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          111.904
+        ]
+      }
+    ],
+    "duration": 126.235,
+    "samples": [
+      7.013,
+      21.039,
+      35.065,
+      49.091,
+      63.118,
+      77.144,
+      91.17,
+      105.196,
+      119.222
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 31,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": true,
+    "samples": [
+      7.013,
+      35.065,
+      63.118,
+      91.17,
+      119.222
+    ],
+    "checked": 40,
+    "passed": 40
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

@@ -1,0 +1,336 @@
+<template id="04-gestao-rastreabilidade-template">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+
+  #root {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    container-type: size;
+    font-family: 'Inter', sans-serif;
+  }
+  #root * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .gr04-bg {
+    position: absolute;
+    inset: 0;
+    background: #fdfae7;
+  }
+
+  /* slide-header */
+  .gr04-header {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    top: 84px;
+    height: 64px;
+  }
+  .gr04-eyebrow-wrap {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .gr04-accent-line {
+    width: 60px;
+    height: 4px;
+    border-radius: 2px;
+    background: #0d75bf;
+    margin-bottom: 18px;
+    transform-origin: left center;
+  }
+  .gr04-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 30px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0d75bf;
+    line-height: 1;
+  }
+  .gr04-count {
+    position: absolute;
+    right: 0;
+    top: 2px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 60px;
+    padding: 0 30px 0 22px;
+    border-radius: 100px;
+    background: rgba(13, 117, 191, 0.08);
+    border: 1.5px solid rgba(13, 117, 191, 0.2);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    color: #0d75bf;
+    white-space: nowrap;
+  }
+  .gr04-count-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #0d75bf;
+    color: #fdfae7;
+    font-weight: 700;
+    font-size: 22px;
+  }
+
+  /* list */
+  .gr04-list {
+    position: absolute;
+    left: 96px;
+    right: 96px;
+    top: 196px;
+    height: 670px;
+    transform-origin: 50% 0%;
+  }
+  .gr04-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 118px;
+    display: flex;
+    align-items: center;
+    padding: 0 36px 0 28px;
+    background: rgba(13, 117, 191, 0.04);
+    border: 1.5px solid rgba(13, 117, 191, 0.2);
+    border-radius: 14px;
+  }
+  .gr04-row:nth-child(1) { top: 0px; }
+  .gr04-row:nth-child(2) { top: 138px; }
+  .gr04-row:nth-child(3) { top: 276px; }
+  .gr04-row:nth-child(4) { top: 414px; }
+  .gr04-row:nth-child(5) { top: 552px; }
+
+  .gr04-idx {
+    width: 44px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: #6f6f6f;
+  }
+  .gr04-icon {
+    flex: 0 0 auto;
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: rgba(13, 117, 191, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 32px;
+  }
+  .gr04-icon svg {
+    width: 42px;
+    height: 42px;
+    overflow: visible;
+  }
+  .gr04-icon svg path,
+  .gr04-icon svg rect,
+  .gr04-icon svg circle,
+  .gr04-icon svg polyline,
+  .gr04-icon svg line {
+    fill: none;
+    stroke: #0d75bf;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+  }
+  .gr04-name {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: flex-start;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 46px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #111111;
+    white-space: nowrap;
+  }
+  .gr04-ast {
+    display: inline-block;
+    margin-left: 8px;
+    margin-top: -4px;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1;
+  }
+  .gr04-pill {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 56px;
+    padding: 0 28px;
+    border-radius: 100px;
+    background: rgba(13, 117, 191, 0.08);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    color: #0d75bf;
+    white-space: nowrap;
+  }
+  .gr04-pill-label {
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    color: #6b6b6b;
+  }
+</style>
+
+<div data-hf-id="hf-4ig4"
+  id="root"
+  data-composition-id="04-gestao-rastreabilidade"
+  data-start="0"
+  data-duration="5.524"
+  data-width="1920"
+  data-height="1080"
+>
+  <div data-hf-id="hf-07ct" class="gr04-bg clip" data-start="0" data-duration="5.524" data-track-index="0"></div>
+
+  <div data-hf-id="hf-7vgm" class="gr04-header clip" data-start="0" data-duration="5.524" data-track-index="1">
+    <div data-hf-id="hf-y5mm" class="gr04-eyebrow-wrap">
+      <div data-hf-id="hf-4clb" class="gr04-accent-line" id="gr04-accent"></div>
+      <div data-hf-id="hf-g7qg" class="gr04-eyebrow" id="gr04-eyebrow">Gestão e rastreabilidade</div>
+    </div>
+    <div data-hf-id="hf-lpdy" class="gr04-count" id="gr04-count">
+      <span data-hf-id="hf-ojto" class="gr04-count-num">12</span>
+      <span data-hf-id="hf-9gh2">itens do edital</span>
+    </div>
+  </div>
+
+  <div data-hf-id="hf-g9si" class="gr04-list clip" id="gr04-list" data-start="0" data-duration="5.524" data-track-index="2">
+    <!-- 1 · Log de Auditoria -->
+    <div data-hf-id="hf-rlxb" class="gr04-row" id="gr04-row1">
+      <div data-hf-id="hf-8je6" class="gr04-idx">01</div>
+      <div data-hf-id="hf-cvu0" class="gr04-icon" id="gr04-ic1">
+        <svg data-hf-id="hf-ulu9" viewBox="0 0 24 24">
+          <rect data-hf-id="hf-vfle" x="5" y="4" width="14" height="17" rx="2" pathLength="1"></rect>
+          <path data-hf-id="hf-xck5" d="M9 4.2V3h6v1.2" pathLength="1"></path>
+          <polyline data-hf-id="hf-c4zu" points="8.5,12.5 11,15 15.5,10" pathLength="1"></polyline>
+        </svg>
+      </div>
+      <div data-hf-id="hf-rkks" class="gr04-name">Log de Auditoria<span data-hf-id="hf-ry5d" class="gr04-ast">*</span></div>
+      <div data-hf-id="hf-s2es" class="gr04-pill" id="gr04-pill1"><span data-hf-id="hf-p7wh" class="gr04-pill-label">TR</span>5.1.10</div>
+    </div>
+
+    <!-- 2 · Logs Técnicos -->
+    <div data-hf-id="hf-iy1g" class="gr04-row" id="gr04-row2">
+      <div data-hf-id="hf-8xp7" class="gr04-idx">02</div>
+      <div data-hf-id="hf-ljpv" class="gr04-icon" id="gr04-ic2">
+        <svg data-hf-id="hf-1tol" viewBox="0 0 24 24">
+          <rect data-hf-id="hf-g0e1" x="3" y="4.5" width="18" height="15" rx="2" pathLength="1"></rect>
+          <polyline data-hf-id="hf-4a9b" points="7,10 10,12.5 7,15" pathLength="1"></polyline>
+          <line data-hf-id="hf-xt7u" x1="12" y1="15.5" x2="17" y2="15.5" pathLength="1"></line>
+        </svg>
+      </div>
+      <div data-hf-id="hf-y936" class="gr04-name">Logs Técnicos<span data-hf-id="hf-rqnp" class="gr04-ast">*</span></div>
+      <div data-hf-id="hf-srmh" class="gr04-pill" id="gr04-pill2"><span data-hf-id="hf-ccph" class="gr04-pill-label">TR</span>5.4.7.1</div>
+    </div>
+
+    <!-- 3 · Tipos de Alerta -->
+    <div data-hf-id="hf-jpp9" class="gr04-row" id="gr04-row3">
+      <div data-hf-id="hf-9c08" class="gr04-idx">03</div>
+      <div data-hf-id="hf-hllu" class="gr04-icon" id="gr04-ic3">
+        <svg data-hf-id="hf-30lo" viewBox="0 0 24 24">
+          <path data-hf-id="hf-587w" d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z" pathLength="1"></path>
+          <path data-hf-id="hf-i0zb" d="M10 20.5a2 2 0 0 0 4 0" pathLength="1"></path>
+          <line data-hf-id="hf-xxz1" x1="12" y1="2.5" x2="12" y2="5" pathLength="1"></line>
+        </svg>
+      </div>
+      <div data-hf-id="hf-ghm8" class="gr04-name">Tipos de Alerta<span data-hf-id="hf-sxks" class="gr04-ast">*</span></div>
+      <div data-hf-id="hf-9tkv" class="gr04-pill" id="gr04-pill3"><span data-hf-id="hf-djmk" class="gr04-pill-label">TR</span>5.3.1.3</div>
+    </div>
+
+    <!-- 4 · Relatórios Gerenciais -->
+    <div data-hf-id="hf-2hey" class="gr04-row" id="gr04-row4">
+      <div data-hf-id="hf-6jv1" class="gr04-idx">04</div>
+      <div data-hf-id="hf-11hx" class="gr04-icon" id="gr04-ic4">
+        <svg data-hf-id="hf-2man" viewBox="0 0 24 24">
+          <path data-hf-id="hf-kd5x" d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8z" pathLength="1"></path>
+          <path data-hf-id="hf-8dpi" d="M14 3v5h5" pathLength="1"></path>
+          <line data-hf-id="hf-wtxj" x1="9" y1="17.5" x2="9" y2="14" pathLength="1"></line>
+          <line data-hf-id="hf-uazl" x1="12" y1="17.5" x2="12" y2="11.5" pathLength="1"></line>
+          <line data-hf-id="hf-cwoo" x1="15" y1="17.5" x2="15" y2="13" pathLength="1"></line>
+        </svg>
+      </div>
+      <div data-hf-id="hf-lnd7" class="gr04-name">Relatórios Gerenciais<span data-hf-id="hf-sj9r" class="gr04-ast">*</span></div>
+      <div data-hf-id="hf-yu2l" class="gr04-pill" id="gr04-pill4"><span data-hf-id="hf-d5bj" class="gr04-pill-label">TR</span>5.4.3.7</div>
+    </div>
+
+    <!-- 5 · Análises (Superset) -->
+    <div data-hf-id="hf-6fiz" class="gr04-row" id="gr04-row5">
+      <div data-hf-id="hf-6y62" class="gr04-idx">05</div>
+      <div data-hf-id="hf-y28c" class="gr04-icon" id="gr04-ic5">
+        <svg data-hf-id="hf-3t7q" viewBox="0 0 24 24">
+          <path data-hf-id="hf-z6jo" d="M3.5 3.5v17h17" pathLength="1"></path>
+          <polyline data-hf-id="hf-y6cj" points="7,15 10.5,11 13.5,13.5 19,7" pathLength="1"></polyline>
+          <circle data-hf-id="hf-8uxv" cx="19" cy="7" r="1.4" pathLength="1"></circle>
+        </svg>
+      </div>
+      <div data-hf-id="hf-vzpt" class="gr04-name">Análises (Superset)<span data-hf-id="hf-tq6u" class="gr04-ast">*</span></div>
+      <div data-hf-id="hf-wjx7" class="gr04-pill" id="gr04-pill5"><span data-hf-id="hf-ec8m" class="gr04-pill-label">TR</span>5.4.2.1</div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var FID = "04-gestao-rastreabilidade";
+    var DUR = 5.024;
+    var tl = gsap.timeline({ paused: true });
+
+    // Scene 1 — slide-header: accent line draws, eyebrow fades in from the left
+    tl.fromTo("#gr04-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0);
+    tl.fromTo("#gr04-eyebrow", { opacity: 0, x: -24 }, { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0.05);
+
+    // Slow camera push-in under the whole shot (steady-push phase)
+    tl.fromTo("#gr04-list", { scale: 0.985 }, { scale: 1.015, duration: DUR, ease: "none" }, 0);
+
+    // Accumulating cascade — each row lands on its voiceover cue
+    var cues = [0.0, 0.93, 2.10, 2.98, 4.37];
+    cues.forEach(function (t, i) {
+      var n = i + 1;
+      var row = "#gr04-row" + n;
+      var fast = n === 5; // last row arrives late — tighten so it settles before the end
+      var d = fast ? 0.38 : 0.55;
+
+      // row slides a short distance from the left into its slot
+      tl.fromTo(row, { opacity: 0, x: -90 }, { opacity: 1, x: 0, duration: d, ease: "power3.out" }, t);
+
+      // icon marker spring-pop
+      tl.fromTo("#gr04-ic" + n, { scale: 0.4 }, { scale: 1, duration: fast ? 0.34 : 0.5, ease: "back.out(2.2)" }, t + 0.06);
+
+      // icon line-art draws in
+      tl.fromTo(row + " .gr04-icon svg > *", { strokeDashoffset: 1 },
+        { strokeDashoffset: 0, duration: fast ? 0.34 : 0.55, ease: "power2.out", stagger: 0.05 }, t + 0.1);
+
+      // red asterisk pops
+      tl.fromTo(row + " .gr04-ast", { opacity: 0, scale: 0.2, rotation: -90 },
+        { opacity: 1, scale: 1, rotation: 0, duration: fast ? 0.28 : 0.4, ease: "back.out(2.5)" }, t + (fast ? 0.14 : 0.22));
+
+      // TR pill mask-wipe left -> right
+      tl.fromTo("#gr04-pill" + n, { clipPath: "inset(0% 100% 0% 0% round 100px)" },
+        { clipPath: "inset(0% 0% 0% 0% round 100px)", duration: fast ? 0.3 : 0.45, ease: "power2.inOut" }, t + (fast ? 0.12 : 0.2));
+    });
+
+    // Scene 3 — count pill springs in at top-right
+    tl.fromTo("#gr04-count", { opacity: 0, scale: 0.6, y: -10 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.36, ease: "back.out(2)" }, 4.6);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines[FID] = tl;
+  })();
+</script>
+</template>

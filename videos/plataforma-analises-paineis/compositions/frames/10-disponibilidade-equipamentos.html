@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-6odm" id="root" data-composition-id="10-disponibilidade-equipamentos" data-start="0" data-duration="7.677" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p10-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p10-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p10-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p10-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p10-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p10-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p10-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p10-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p10-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p10-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p10-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p10-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p10-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1113px; transform-origin: 0 0; }
+      .p10-shot img { display: block; width: 1920px; height: 1113px; }
+    </style>
+
+    <div data-hf-id="hf-mi6p" class="p10-bg clip" id="p10-bgclip" data-start="0" data-duration="7.677" data-track-index="0"></div>
+    <div data-hf-id="hf-72xj" class="clip" id="p10-main" data-start="0" data-duration="7.677" data-track-index="1">
+      <div data-hf-id="hf-khpu" class="p10-col">
+        <div data-hf-id="hf-gi4i" class="p10-accent" id="p10-accent"></div>
+        <div data-hf-id="hf-uba7" class="p10-eyebrow" id="p10-eyebrow">PAINEL OPERACIONAL · 4/9</div>
+        <div data-hf-id="hf-8c2w" class="p10-title" id="p10-title">Disponibilidade de Equipamentos</div>
+        <div data-hf-id="hf-p3w5" class="p10-desc" id="p10-desc">Disponibilidade medida pelas horas com captura.</div>
+        <div data-hf-id="hf-onbp" class="p10-chip" id="p10-chip">7 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-3gcy" class="p10-win" id="p10-win">
+        <div data-hf-id="hf-58rf" class="p10-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-m7qs">Análises · Disponibilidade de Equipamentos</span></div>
+        <div data-hf-id="hf-ji5q" class="p10-vp">
+          <div data-hf-id="hf-pn0e" class="p10-shot" id="p10-shot"><img data-hf-id="hf-fvpq" src="assets/disponibilidade-equipamentos.png" alt="Painel Disponibilidade de Equipamentos"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 7.177;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p10-shot", { scale: 0.6062, x: 0.0, y: 26.6 }, { scale: 0.6062, x: 0.0, y: 26.6, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p10-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p10-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p10-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p10-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p10-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p10-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p10-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p10-shot", { y: 0.0, duration: 2.38, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p10-shot", { scale: 0.6062, x: 0.0, y: 26.6, duration: 0.90, ease: "power3.inOut" }, 5.58);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["10-disponibilidade-equipamentos"] = tl;
+      })();
+    </script>
+  </div>
+</template>

@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-z2pq" id="root" data-composition-id="08-assertividade-dupla-analise" data-start="0" data-duration="8.49" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p08-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p08-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p08-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p08-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p08-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p08-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p08-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p08-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p08-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p08-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p08-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p08-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p08-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 777px; transform-origin: 0 0; }
+      .p08-shot img { display: block; width: 1920px; height: 777px; }
+    </style>
+
+    <div data-hf-id="hf-u9u1" class="p08-bg clip" id="p08-bgclip" data-start="0" data-duration="8.49" data-track-index="0"></div>
+    <div data-hf-id="hf-zyfg" class="clip" id="p08-main" data-start="0" data-duration="8.49" data-track-index="1">
+      <div data-hf-id="hf-iq99" class="p08-col">
+        <div data-hf-id="hf-tm3q" class="p08-accent" id="p08-accent"></div>
+        <div data-hf-id="hf-m96j" class="p08-eyebrow" id="p08-eyebrow">PAINEL OPERACIONAL · 2/9</div>
+        <div data-hf-id="hf-by8n" class="p08-title" id="p08-title">Assertividade — Dupla Análise</div>
+        <div data-hf-id="hf-xr27" class="p08-desc" id="p08-desc">Concordância entre a pré-classificação e a validação dos operadores.</div>
+        <div data-hf-id="hf-73vq" class="p08-chip" id="p08-chip">6 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-at7k" class="p08-win" id="p08-win">
+        <div data-hf-id="hf-d30w" class="p08-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-9q89">Análises · Assertividade — Dupla Análise</span></div>
+        <div data-hf-id="hf-e9c3" class="p08-vp">
+          <div data-hf-id="hf-plze" class="p08-shot" id="p08-shot"><img data-hf-id="hf-fe8s" src="assets/assertividade-dupla-analise.png" alt="Painel Assertividade — Dupla Análise"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 7.99;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p08-shot", { scale: 0.6062, x: 0.0, y: 128.5 }, { scale: 0.6062, x: 0.0, y: 128.5, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p08-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p08-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p08-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p08-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p08-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p08-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p08-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p08-shot", { y: 0.0, duration: 3.19, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p08-shot", { scale: 0.6062, x: 0.0, y: 128.5, duration: 0.90, ease: "power3.inOut" }, 6.39);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["08-assertividade-dupla-analise"] = tl;
+      })();
+    </script>
+  </div>
+</template>

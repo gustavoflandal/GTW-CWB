@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-rkqd" id="root" data-composition-id="04-demo-trafego-historico" data-start="0" data-duration="8.246" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p04-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p04-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p04-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p04-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p04-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p04-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p04-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p04-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p04-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p04-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p04-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p04-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p04-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1977px; transform-origin: 0 0; }
+      .p04-shot img { display: block; width: 1920px; height: 1977px; }
+    </style>
+
+    <div data-hf-id="hf-tzmw" class="p04-bg clip" id="p04-bgclip" data-start="0" data-duration="8.246" data-track-index="0"></div>
+    <div data-hf-id="hf-ciep" class="clip" id="p04-main" data-start="0" data-duration="8.246" data-track-index="1">
+      <div data-hf-id="hf-xysx" class="p04-col">
+        <div data-hf-id="hf-onny" class="p04-accent" id="p04-accent"></div>
+        <div data-hf-id="hf-raso" class="p04-eyebrow" id="p04-eyebrow">DEMONSTRAÇÃO · DADOS REAIS · 3/5</div>
+        <div data-hf-id="hf-infk" class="p04-title" id="p04-title">Tráfego Histórico</div>
+        <div data-hf-id="hf-995s" class="p04-desc" id="p04-desc">Série histórica de volume, velocidade e leitura de placas por equipamento.</div>
+        <div data-hf-id="hf-riyq" class="p04-chip" id="p04-chip">11 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-y0wg" class="p04-win" id="p04-win">
+        <div data-hf-id="hf-zplg" class="p04-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-tdgm">Análises · Tráfego Histórico</span></div>
+        <div data-hf-id="hf-wciv" class="p04-vp">
+          <div data-hf-id="hf-k6uq" class="p04-shot" id="p04-shot"><img data-hf-id="hf-qzrd" src="assets/demo-trafego-historico.png" alt="Painel Tráfego Histórico"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 7.746;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p04-shot", { scale: 0.3682, x: 228.5, y: 0.0 }, { scale: 0.3682, x: 228.5, y: 0.0, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p04-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p04-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p04-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p04-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p04-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p04-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p04-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p04-shot", { y: -470.6, duration: 2.95, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p04-shot", { scale: 0.3682, x: 228.5, y: 0.0, duration: 0.90, ease: "power3.inOut" }, 6.15);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["04-demo-trafego-historico"] = tl;
+      })();
+    </script>
+  </div>
+</template>

@@ -1,0 +1,265 @@
+<template id="f02-qualidade-prazos-template">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+
+  #root {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+  .f02-qualidade-prazos-bg {
+    position: absolute;
+    inset: 0;
+    background-color: #fdfae7;
+    background-image:
+      linear-gradient(rgba(13, 117, 191, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(13, 117, 191, 0.06) 1px, transparent 1px);
+    background-size: 96px 96px;
+    background-position: 0 0;
+    container-type: size;
+  }
+  .f02-qualidade-prazos-stage {
+    position: absolute;
+    inset: 0;
+  }
+  .f02-qualidade-prazos-header {
+    position: absolute;
+    left: 96px;
+    top: 84px;
+  }
+  .f02-qualidade-prazos-accent {
+    width: 60px;
+    height: 4px;
+    border-radius: 2px;
+    background: #0d75bf;
+    margin-bottom: 18px;
+  }
+  .f02-qualidade-prazos-eyebrow {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #0d75bf;
+  }
+  .f02-qualidade-prazos-grid {
+    position: absolute;
+    left: 96px;
+    top: 196px;
+    width: 1728px;
+    height: 676px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 28px;
+  }
+  .f02-qualidade-prazos-card {
+    position: relative;
+    background: rgba(13, 117, 191, 0.04);
+    border: 1.5px solid rgba(13, 117, 191, 0.2);
+    border-radius: 14px;
+    padding: 40px 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .f02-qualidade-prazos-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .f02-qualidade-prazos-icon {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: rgba(13, 117, 191, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .f02-qualidade-prazos-icon svg {
+    width: 48px;
+    height: 48px;
+    fill: none;
+    stroke: #0d75bf;
+    stroke-width: 2.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .f02-qualidade-prazos-tr {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 26px;
+    letter-spacing: 0.04em;
+    color: #0d75bf;
+    background: rgba(13, 117, 191, 0.08);
+    border-radius: 100px;
+    padding: 10px 24px;
+  }
+  .f02-qualidade-prazos-name {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 52px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: #111111;
+    white-space: nowrap;
+  }
+  .f02-qualidade-prazos-ast {
+    display: inline-block;
+    color: #dc2626;
+    font-weight: 700;
+    margin-left: 6px;
+    transform-origin: 50% 60%;
+  }
+  .f02-qualidade-prazos-sub {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 1.4;
+    color: #6b6b6b;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .f02-qualidade-prazos-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 34px;
+    color: #0d75bf;
+    background: rgba(13, 117, 191, 0.15);
+    border-radius: 100px;
+    padding: 4px 22px;
+  }
+  .f02-qualidade-prazos-num {
+    display: inline-block;
+    min-width: 1.3em;
+    text-align: right;
+  }
+</style>
+
+<div data-hf-id="hf-r2pr" id="root" data-composition-id="02-qualidade-prazos" data-start="0" data-duration="4.599" data-width="1920" data-height="1080">
+  <div data-hf-id="hf-c7i6" class="clip f02-qualidade-prazos-bg" data-start="0" data-duration="4.599" data-track-index="0"></div>
+
+  <div data-hf-id="hf-e0ok" id="f02-qualidade-prazos-stage" class="clip f02-qualidade-prazos-stage" data-start="0" data-duration="4.599" data-track-index="1">
+    <div data-hf-id="hf-bv34" id="f02-qualidade-prazos-header" class="f02-qualidade-prazos-header">
+      <div data-hf-id="hf-mz36" id="f02-qualidade-prazos-accent" class="f02-qualidade-prazos-accent"></div>
+      <div data-hf-id="hf-u0d1" class="f02-qualidade-prazos-eyebrow">Qualidade e prazos</div>
+    </div>
+
+    <div data-hf-id="hf-ls3u" id="f02-qualidade-prazos-grid" class="f02-qualidade-prazos-grid">
+      <!-- Card 1 -->
+      <div data-hf-id="hf-b7yf" id="f02-qualidade-prazos-card1" class="f02-qualidade-prazos-card">
+        <div data-hf-id="hf-5e4w" class="f02-qualidade-prazos-row">
+          <div data-hf-id="hf-7jwt" id="f02-qualidade-prazos-icon1" class="f02-qualidade-prazos-icon">
+            <svg data-hf-id="hf-e7ft" viewBox="0 0 48 48"><circle data-hf-id="hf-e3bd" cx="24" cy="27" r="15"/><path data-hf-id="hf-rvxj" d="M24 27v-8"/><path data-hf-id="hf-8tin" d="M19 5h10"/><path data-hf-id="hf-16gd" d="M24 5v7"/><path data-hf-id="hf-0yp0" d="M36 14l3-3"/></svg>
+          </div>
+          <div data-hf-id="hf-1u0k" class="f02-qualidade-prazos-tr">TR 5.6.2.3</div>
+        </div>
+        <div data-hf-id="hf-yeow">
+          <div data-hf-id="hf-2iyw" class="f02-qualidade-prazos-name">SLA de Latência<span data-hf-id="hf-h0fq" id="f02-qualidade-prazos-ast1" class="f02-qualidade-prazos-ast">*</span></div>
+          <div data-hf-id="hf-hz9b" class="f02-qualidade-prazos-sub">recepção em até 4 s</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div data-hf-id="hf-2k2k" id="f02-qualidade-prazos-card2" class="f02-qualidade-prazos-card">
+        <div data-hf-id="hf-aco8" class="f02-qualidade-prazos-row">
+          <div data-hf-id="hf-bi0u" id="f02-qualidade-prazos-icon2" class="f02-qualidade-prazos-icon">
+            <svg data-hf-id="hf-7bj1" viewBox="0 0 48 48"><circle data-hf-id="hf-ez36" cx="24" cy="24" r="17"/><circle data-hf-id="hf-0h2e" cx="24" cy="24" r="10.5"/><circle data-hf-id="hf-52lm" cx="24" cy="24" r="4"/></svg>
+          </div>
+          <div data-hf-id="hf-9y9z" class="f02-qualidade-prazos-tr">TR 5.2.2.6</div>
+        </div>
+        <div data-hf-id="hf-y7yw">
+          <div data-hf-id="hf-l4nz" class="f02-qualidade-prazos-name">Assertividade<span data-hf-id="hf-7zgr" id="f02-qualidade-prazos-ast2" class="f02-qualidade-prazos-ast">*</span></div>
+          <div data-hf-id="hf-44dv" class="f02-qualidade-prazos-sub">meta de 80% de concordância</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div data-hf-id="hf-3bqd" id="f02-qualidade-prazos-card3" class="f02-qualidade-prazos-card">
+        <div data-hf-id="hf-95r5" class="f02-qualidade-prazos-row">
+          <div data-hf-id="hf-fg4v" id="f02-qualidade-prazos-icon3" class="f02-qualidade-prazos-icon">
+            <svg data-hf-id="hf-8ig4" viewBox="0 0 48 48"><path data-hf-id="hf-9bzs" d="M14 6h20"/><path data-hf-id="hf-vexc" d="M14 42h20"/><path data-hf-id="hf-8673" d="M17 6c0 9 14 11 14 18s-14 9-14 18"/><path data-hf-id="hf-eixn" d="M31 6c0 9-14 11-14 18s14 9 14 18"/></svg>
+          </div>
+          <div data-hf-id="hf-p8jr" class="f02-qualidade-prazos-tr">TR 5.5.2.1</div>
+        </div>
+        <div data-hf-id="hf-x11t">
+          <div data-hf-id="hf-6tsl" class="f02-qualidade-prazos-name">SLA de Pré-processamento<span data-hf-id="hf-yu7c" id="f02-qualidade-prazos-ast3" class="f02-qualidade-prazos-ast">*</span></div>
+          <div data-hf-id="hf-vx8z" class="f02-qualidade-prazos-sub">prazo de <span data-hf-id="hf-c6wp" id="f02-qualidade-prazos-pill" class="f02-qualidade-prazos-pill"><span data-hf-id="hf-fwki" id="f02-qualidade-prazos-num" class="f02-qualidade-prazos-num">72</span><span data-hf-id="hf-vx7v">h</span></span></div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div data-hf-id="hf-jvua" id="f02-qualidade-prazos-card4" class="f02-qualidade-prazos-card">
+        <div data-hf-id="hf-9k26" class="f02-qualidade-prazos-row">
+          <div data-hf-id="hf-je8w" id="f02-qualidade-prazos-icon4" class="f02-qualidade-prazos-icon">
+            <svg data-hf-id="hf-8453" viewBox="0 0 48 48"><path data-hf-id="hf-jsw3" d="M7 9h34L28 25v12l-8 5V25z"/></svg>
+          </div>
+          <div data-hf-id="hf-253c" class="f02-qualidade-prazos-tr">TR 5.5.3.1</div>
+        </div>
+        <div data-hf-id="hf-xfcu">
+          <div data-hf-id="hf-vaiq" class="f02-qualidade-prazos-name">Pré-Processamento<span data-hf-id="hf-w4xp" id="f02-qualidade-prazos-ast4" class="f02-qualidade-prazos-ast">*</span></div>
+          <div data-hf-id="hf-iwoh" class="f02-qualidade-prazos-sub">indicadores do pré-processamento</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var P = "#f02-qualidade-prazos-";
+    var tl = gsap.timeline({ paused: true });
+
+    // Macro: slow camera push-in under the whole shot
+    tl.fromTo(P + "grid", { scale: 1, transformOrigin: "50% 45%" },
+      { scale: 1.02, duration: 4.099, ease: "none" }, 0);
+
+    // Scene 1 — eyebrow + card 1 on "SLA de latência"
+    tl.fromTo(P + "accent", { scaleX: 0, transformOrigin: "0% 50%" },
+      { scaleX: 1, duration: 0.45, ease: "power3.out" }, 0);
+    tl.fromTo(P + "header .f02-qualidade-prazos-eyebrow", { opacity: 0, x: -24 },
+      { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" }, 0.05);
+
+    var cues = [0.05, 1.66, 2.59, 3.15];
+    cues.forEach(function (t, i) {
+      var n = i + 1;
+      tl.fromTo(P + "card" + n, { opacity: 0, y: 44, scale: 0.97 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power3.out" }, t);
+      tl.fromTo(P + "icon" + n, { scale: 0.6, rotation: -12 },
+        { scale: 1, rotation: 0, duration: 0.5, ease: "back.out(2)" }, t + 0.08);
+      // Asterisk spring-pop
+      tl.fromTo(P + "ast" + n, { scale: 0, rotation: -90, opacity: 0 },
+        { scale: 1, rotation: 0, opacity: 1, duration: n === 4 ? 0.4 : 0.45, ease: "back.out(3)" }, t + (n === 4 ? 0.12 : 0.22));
+    });
+
+    // Scene 3 — "72 h" count-up in card 3's pill
+    var numEl = document.querySelector(P + "num");
+    var counter = { v: 0 };
+    tl.fromTo(counter, { v: 0 }, {
+      v: 72, duration: 0.8, ease: "power2.out",
+      onUpdate: function () { numEl.textContent = String(Math.round(counter.v)); }
+    }, 2.75);
+    tl.fromTo(P + "pill", { scale: 0.85 },
+      { scale: 1, duration: 0.4, ease: "back.out(2.5)" }, 2.75);
+
+    // Scene 4 — one synchronized pulse of all four asterisks
+    var asts = [P + "ast1", P + "ast2", P + "ast3", P + "ast4"].join(",");
+    tl.to(asts, { scale: 1.45, duration: 0.13, ease: "power2.out" }, 3.74);
+    tl.to(asts, { scale: 1, duration: 0.2, ease: "power2.inOut" }, 3.87);
+
+    window.__timelines = window.__timelines || {};
+    window.__timelines["02-qualidade-prazos"] = tl;
+  })();
+</script>
+</template>

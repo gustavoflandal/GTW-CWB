@@ -1,0 +1,20 @@
+{
+  "01": { "spoken": "Na tela de Análise de Dados, a Plataforma de Análises reúne 14 dashboards interativos: 5 de demonstração e 9 operacionais." },
+  "02": { "spoken": "Fluxo Veicular: passagens capturadas pelos equipamentos, por hora, com velocidade média, placas Mercosul e mapa de calor semanal." },
+  "03": { "spoken": "Fiscalização e Infrações: infrações da fiscalização eletrônica por categoria, tipo, equipamento e faixa de excesso de velocidade." },
+  "04": { "spoken": "Tráfego Histórico: série histórica de volume, velocidade e leitura de placas, com a composição da frota por equipamento." },
+  "05": { "spoken": "Mobilidade Urbana: ocorrências de trânsito reportadas no Waze, no mapa de Salvador, por tipo, via e horário." },
+  "06": { "spoken": "Alertas de Veículos de Interesse: veículos monitorados, furtados, roubados e clonados, por tipo, criticidade e status." },
+  "07": { "spoken": "KPIs Operacionais: passagens, infrações, alertas, disponibilidade, S.L.A. de latência e assertividade, com a evolução mensal.",
+          "display": "KPIs Operacionais: passagens, infrações, alertas, disponibilidade, SLA de latência e assertividade, com a evolução mensal." },
+  "08": { "spoken": "Assertividade da Dupla Análise: concordância entre a pré-classificação e a validação, com aprovadas, reprovadas e desempates." },
+  "09": { "spoken": "S.L.A. de Latência: percentual de janelas no prazo, latência diária e as violações do limite.",
+          "display": "SLA de Latência: percentual de janelas no prazo, latência diária e as violações do limite." },
+  "10": { "spoken": "Disponibilidade de Equipamentos: horas com captura, dias sem captura e o ranking dos equipamentos." },
+  "11": { "spoken": "Pré-processamento de Imagens: recebidas, disponibilizadas, aproveitamento, prazo de 72 horas e produtividade por operador." },
+  "12": { "spoken": "Alertas: total, críticos e pendentes, a evolução por tipo e o percentual tratado." },
+  "13": { "spoken": "Infrações: total, excesso médio de velocidade, enquadramentos e o ranking de equipamentos." },
+  "14": { "spoken": "Passagens Veiculares: passagens por hora do dia, por faixa e por classificação, com o ranking de equipamentos." },
+  "15": { "spoken": "Mapa: equipamentos cadastrados, áreas monitoradas, passagens e infrações por equipamento." },
+  "16": { "spoken": "São 14 painéis interativos, com filtros e filtro cruzado: clique em um gráfico para filtrar o painel inteiro." }
+}
