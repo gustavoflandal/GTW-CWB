@@ -1,0 +1,33 @@
+{
+  "provider": "auto",
+  "speed": "1.0",
+  "lines": [
+    {
+      "id": "01",
+      "text": "No Módulo de Análise de Dados, o asterisco vermelho marca itens do edital."
+    },
+    {
+      "id": "02",
+      "text": "SLA de Latência, Assertividade e o prazo de setenta e duas horas do pré-processamento."
+    },
+    {
+      "id": "03",
+      "text": "Disponibilidade, Time-lapse e integridade das imagens."
+    },
+    {
+      "id": "04",
+      "text": "Auditoria, logs técnicos, tipos de alerta, relatórios gerenciais e análises."
+    },
+    {
+      "id": "05",
+      "text": "Passe o mouse no asterisco para ver o item."
+    }
+  ],
+  "bgm": {
+    "mode": "retrieve",
+    "query": "calm confident corporate tech underscore, light",
+    "blob": "No Módulo de Análise de Dados, o asterisco vermelho marca as funcionalidades que atendem itens do edital",
+    "arc": "listicle — Hook → 3 grupos de itens → CTA"
+  },
+  "voice": "0edbc867be6f48c5be8ff8b0fbca0802"
+}

@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-0klc" id="root" data-composition-id="07-kpis-operacionais" data-start="0" data-duration="9.883" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p07-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p07-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p07-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p07-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p07-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p07-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p07-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p07-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p07-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p07-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p07-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p07-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p07-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1113px; transform-origin: 0 0; }
+      .p07-shot img { display: block; width: 1920px; height: 1113px; }
+    </style>
+
+    <div data-hf-id="hf-9r6c" class="p07-bg clip" id="p07-bgclip" data-start="0" data-duration="9.883" data-track-index="0"></div>
+    <div data-hf-id="hf-g50e" class="clip" id="p07-main" data-start="0" data-duration="9.883" data-track-index="1">
+      <div data-hf-id="hf-tby6" class="p07-col">
+        <div data-hf-id="hf-xcte" class="p07-accent" id="p07-accent"></div>
+        <div data-hf-id="hf-oqm4" class="p07-eyebrow" id="p07-eyebrow">PAINEL OPERACIONAL · 1/9</div>
+        <div data-hf-id="hf-1cve" class="p07-title" id="p07-title">KPIs Operacionais</div>
+        <div data-hf-id="hf-628h" class="p07-desc" id="p07-desc">Visão consolidada dos principais indicadores operacionais.</div>
+        <div data-hf-id="hf-b475" class="p07-chip" id="p07-chip">10 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-uu3m" class="p07-win" id="p07-win">
+        <div data-hf-id="hf-4yrr" class="p07-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-o42e">Análises · KPIs Operacionais</span></div>
+        <div data-hf-id="hf-buay" class="p07-vp">
+          <div data-hf-id="hf-wdxm" class="p07-shot" id="p07-shot"><img data-hf-id="hf-w1jf" src="assets/kpis-operacionais.png" alt="Painel KPIs Operacionais"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 9.383;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p07-shot", { scale: 0.6062, x: 0.0, y: 26.6 }, { scale: 0.6062, x: 0.0, y: 26.6, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p07-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p07-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p07-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p07-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p07-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p07-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p07-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p07-shot", { y: 0.0, duration: 4.58, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p07-shot", { scale: 0.6062, x: 0.0, y: 26.6, duration: 0.90, ease: "power3.inOut" }, 7.78);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["07-kpis-operacionais"] = tl;
+      })();
+    </script>
+  </div>
+</template>

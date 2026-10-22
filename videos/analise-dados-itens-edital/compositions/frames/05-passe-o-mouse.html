@@ -1,0 +1,190 @@
+<template id="05-passe-o-mouse-template">
+<div data-hf-id="hf-b7vb" id="root" data-composition-id="05-passe-o-mouse" data-start="0" data-duration="2.499" data-width="1920" data-height="1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<style>
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+  @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+
+  #root {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    overflow: hidden;
+    font-family: 'Inter', sans-serif;
+  }
+  #root .clip { position: absolute; }
+
+
+  #root [id="05-passe-o-mouse-bg"] {
+    left: 0; top: 0; width: 1920px; height: 1080px;
+    background: #fdfae7;
+  }
+
+  #root .f05-stage {
+    left: 0; top: 0; width: 1920px; height: 900px;
+  }
+
+  /* card-tinted */
+  #root .f05-card {
+    position: absolute;
+    left: 560px; top: 250px;
+    width: 800px; height: 420px;
+    background: rgba(13, 117, 191, 0.04);
+    border: 1.5px solid rgba(13, 117, 191, 0.2);
+    border-radius: 14px;
+    box-sizing: border-box;
+  }
+  #root .f05-icon {
+    position: absolute;
+    left: 64px; top: 60px;
+    width: 112px; height: 112px;
+    border-radius: 12px;
+    background: rgba(13, 117, 191, 0.08);
+    display: flex; align-items: center; justify-content: center;
+  }
+  #root .f05-title {
+    position: absolute;
+    left: 64px; top: 206px;
+    margin: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 104px;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #111111;
+    white-space: nowrap;
+  }
+  #root .f05-ast-wrap {
+    position: relative;
+    display: inline-block;
+    margin-left: 6px;
+    vertical-align: top;
+  }
+  #root .f05-ast {
+    display: inline-block;
+    color: #dc2626;
+    font-weight: 700;
+    font-size: 96px;
+    line-height: 1;
+  }
+  #root .f05-rows {
+    position: absolute;
+    left: 64px; top: 344px;
+    display: flex; gap: 16px;
+  }
+  #root .f05-row {
+    height: 14px;
+    border-radius: 6px;
+    background: rgba(13, 117, 191, 0.15);
+  }
+
+  /* tooltip escuro */
+  #root .f05-tip {
+    position: absolute;
+    left: 50%;
+    bottom: 100%;
+    margin-bottom: 26px;
+    padding: 20px 34px;
+    border-radius: 12px;
+    background: #111111;
+    color: #fdfae7;
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 44px;
+    line-height: 1;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transform-origin: 50% 100%;
+  }
+  #root .f05-tip::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    margin-left: -14px;
+    border-left: 14px solid transparent;
+    border-right: 14px solid transparent;
+    border-top: 14px solid #111111;
+  }
+  #root .f05-tip-label { color: #9a9a9a; }
+  #root .f05-tip-num { color: #fdfae7; font-weight: 700; }
+
+  /* cursor desenhado — ponta em (0,0) do wrapper */
+  #root .f05-cursor {
+    position: absolute;
+    left: 50%;
+    top: 42%;
+    width: 60px; height: 78px;
+    margin-left: -3px;
+    margin-top: -3px;
+    transform-origin: 3px 3px;
+  }
+  #root .f05-cursor svg { display: block; width: 60px; height: 78px; }
+
+  /* progress-bar */
+  #root .f05-progress {
+    position: absolute;
+    left: 0; top: 894px;
+    width: 1920px; height: 4px;
+    background: #0d75bf;
+    transform-origin: 0 50%;
+  }
+</style>
+
+  <div data-hf-id="hf-6ohu" id="05-passe-o-mouse-bg" class="clip" data-start="0" data-duration="2.499" data-track-index="0"></div>
+
+  <div data-hf-id="hf-bpiw" id="05-passe-o-mouse-stage" class="clip f05-stage" data-start="0" data-duration="2.499" data-track-index="1">
+    <div data-hf-id="hf-ul9n" id="05-passe-o-mouse-card" class="f05-card">
+      <div data-hf-id="hf-xogp" id="05-passe-o-mouse-icon" class="f05-icon">
+        <svg data-hf-id="hf-sw7x" width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+          <path data-hf-id="hf-l4wg" d="M8 6 V56 H58" stroke="#0d75bf" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect data-hf-id="hf-be42" x="16" y="34" width="9" height="16" rx="2" fill="#0d75bf"/>
+          <rect data-hf-id="hf-vbue" x="30" y="24" width="9" height="26" rx="2" fill="#0d75bf"/>
+          <rect data-hf-id="hf-mrt1" x="44" y="14" width="9" height="36" rx="2" fill="#0d75bf"/>
+        </svg>
+      </div>
+      <h1 data-hf-id="hf-nq62" class="f05-title">Análises<span data-hf-id="hf-owhc" class="f05-ast-wrap"><span data-hf-id="hf-s0jc" id="05-passe-o-mouse-ast" class="f05-ast">*</span><span data-hf-id="hf-44iy" id="05-passe-o-mouse-tip" class="f05-tip"><span data-hf-id="hf-wrh9" class="f05-tip-label">Edital ·</span> <span data-hf-id="hf-kiwt" class="f05-tip-num">TR 5.4.2.1</span></span><span data-hf-id="hf-ibkg" id="05-passe-o-mouse-cursor" class="f05-cursor"><svg data-hf-id="hf-hft7" viewBox="0 0 60 78" aria-hidden="true"><path data-hf-id="hf-zkb5" d="M3 3 L3 62 L18 48 L28 72 L39 67 L29 44 L50 44 Z" fill="#111111" stroke="#fdfae7" stroke-width="4" stroke-linejoin="round"/></svg></span></span></h1>
+      <div data-hf-id="hf-kn1n" class="f05-rows">
+        <div data-hf-id="hf-814g" id="05-passe-o-mouse-row1" class="f05-row" style="width:220px"></div>
+        <div data-hf-id="hf-eucm" id="05-passe-o-mouse-row2" class="f05-row" style="width:140px"></div>
+        <div data-hf-id="hf-vezb" id="05-passe-o-mouse-row3" class="f05-row" style="width:180px"></div>
+      </div>
+    </div>
+    <div data-hf-id="hf-b03d" id="05-passe-o-mouse-progress" class="f05-progress"></div>
+  </div>
+
+<script>
+  (function () {
+    window.__timelines = window.__timelines || {};
+    var Q = function (n) { return "[id=\"05-passe-o-mouse-" + n + "\"]"; };
+    var tl = gsap.timeline({ paused: true });
+
+    // Macro: leve push-in do card ao longo do quadro inteiro (assenta e segura)
+    tl.fromTo(Q("card"), { scale: 0.97 }, { scale: 1.02, duration: 2.499, ease: "power2.out" }, 0);
+
+    // Scene 1 (0.0–0.9s): card visível, cursor desliza até o asterisco
+    tl.fromTo(Q("card"), { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0);
+    tl.fromTo(Q("icon"), { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.4, ease: "back.out(2)" }, 0.08);
+    tl.fromTo([Q("row1"), Q("row2"), Q("row3")], { scaleX: 0, transformOrigin: "0% 50%" },
+      { scaleX: 1, duration: 0.45, ease: "power3.out", stagger: 0.06 }, 0.15);
+    tl.fromTo(Q("cursor"), { x: 560, y: 330, opacity: 0 },
+      { x: 0, y: 0, opacity: 1, duration: 0.8, ease: "power3.inOut" }, 0.1);
+
+    // Scene 2 (0.9–1.6s): pouso no asterisco + tooltip spring-pop em "asterisco" (0.96s)
+    tl.fromTo(Q("cursor"), { scale: 1 }, { scale: 0.88, duration: 0.08, ease: "power2.in" }, 0.9);
+    tl.to(Q("cursor"), { scale: 1, duration: 0.18, ease: "power2.out" }, 0.98);
+    tl.fromTo(Q("ast"), { scale: 1 }, { scale: 1.3, duration: 0.1, ease: "power2.out" }, 0.92);
+    tl.to(Q("ast"), { scale: 1, duration: 0.3, ease: "back.out(3)" }, 1.02);
+    tl.fromTo(Q("tip"), { xPercent: -50, y: 18, scale: 0.55, opacity: 0 },
+      { xPercent: -50, y: 0, scale: 1, opacity: 1, duration: 0.5, ease: "back.out(2.4)" }, 0.96);
+
+    // Scene 3 (1.6–2.5s): hold; barra de progresso completa
+    tl.fromTo(Q("progress"), { scaleX: 0.8 }, { scaleX: 1, duration: 0.8, ease: "power2.inOut" }, 1.6);
+
+    window.__timelines["05-passe-o-mouse"] = tl;
+  })();
+</script>
+</div>
+</template>

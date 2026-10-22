@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js" integrity="sha384-sG0Hv1tP1lZCk9KQmrIbY/XNwi+OY84GQqhMscbnsoBFqAz8KNCil1kvfL3Hbbk2" crossorigin="anonymous"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #000;
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #fdfae7;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-tw4f"
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="129"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div data-hf-id="hf-uktu"
+        id="el-01-plataforma-analises"
+        class="scene"
+        data-composition-id="01-plataforma-analises"
+        data-composition-src="compositions/frames/01-plataforma-analises.html"
+        data-start="0"
+        data-duration="9.288"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-ajub"
+        id="el-01-plataforma-analises-voice"
+        src="assets/voice/01.wav"
+        data-start="0"
+        data-duration="8.788"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-ikdr"
+        id="el-02-demo-fluxo-veicular"
+        class="scene"
+        data-composition-id="02-demo-fluxo-veicular"
+        data-composition-src="compositions/frames/02-demo-fluxo-veicular.html"
+        data-start="8.788"
+        data-duration="9.248"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-iv8o"
+        id="el-02-demo-fluxo-veicular-voice"
+        src="assets/voice/02.wav"
+        data-start="8.788"
+        data-duration="8.748"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-hmin"
+        id="el-03-demo-infracoes"
+        class="scene"
+        data-composition-id="03-demo-infracoes"
+        data-composition-src="compositions/frames/03-demo-infracoes.html"
+        data-start="17.536"
+        data-duration="9.263"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-seie"
+        id="el-03-demo-infracoes-voice"
+        src="assets/voice/03.wav"
+        data-start="17.536"
+        data-duration="8.763"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-8bi0"
+        id="el-04-demo-trafego-historico"
+        class="scene"
+        data-composition-id="04-demo-trafego-historico"
+        data-composition-src="compositions/frames/04-demo-trafego-historico.html"
+        data-start="26.299"
+        data-duration="8.246"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-n3cx"
+        id="el-04-demo-trafego-historico-voice"
+        src="assets/voice/04.wav"
+        data-start="26.299"
+        data-duration="7.746"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-414s"
+        id="el-05-demo-mobilidade-waze"
+        class="scene"
+        data-composition-id="05-demo-mobilidade-waze"
+        data-composition-src="compositions/frames/05-demo-mobilidade-waze.html"
+        data-start="34.045"
+        data-duration="7.691"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-6xnu"
+        id="el-05-demo-mobilidade-waze-voice"
+        src="assets/voice/05.wav"
+        data-start="34.045"
+        data-duration="7.191"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-1p6z"
+        id="el-06-demo-alertas-veiculos"
+        class="scene"
+        data-composition-id="06-demo-alertas-veiculos"
+        data-composition-src="compositions/frames/06-demo-alertas-veiculos.html"
+        data-start="41.236000000000004"
+        data-duration="8.834"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-mlj1"
+        id="el-06-demo-alertas-veiculos-voice"
+        src="assets/voice/06.wav"
+        data-start="41.236000000000004"
+        data-duration="8.334"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-xats"
+        id="el-07-kpis-operacionais"
+        class="scene"
+        data-composition-id="07-kpis-operacionais"
+        data-composition-src="compositions/frames/07-kpis-operacionais.html"
+        data-start="49.57000000000001"
+        data-duration="9.883"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-nr1u"
+        id="el-07-kpis-operacionais-voice"
+        src="assets/voice/07.wav"
+        data-start="49.57000000000001"
+        data-duration="9.383"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-q9iv"
+        id="el-08-assertividade-dupla-analise"
+        class="scene"
+        data-composition-id="08-assertividade-dupla-analise"
+        data-composition-src="compositions/frames/08-assertividade-dupla-analise.html"
+        data-start="58.953"
+        data-duration="8.49"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-34by"
+        id="el-08-assertividade-dupla-analise-voice"
+        src="assets/voice/08.wav"
+        data-start="58.953"
+        data-duration="7.99"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-a0ox"
+        id="el-09-sla-latencia"
+        class="scene"
+        data-composition-id="09-sla-latencia"
+        data-composition-src="compositions/frames/09-sla-latencia.html"
+        data-start="66.943"
+        data-duration="7.667"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-es5x"
+        id="el-09-sla-latencia-voice"
+        src="assets/voice/09.wav"
+        data-start="66.943"
+        data-duration="7.167"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-visa"
+        id="el-10-disponibilidade-equipamentos"
+        class="scene"
+        data-composition-id="10-disponibilidade-equipamentos"
+        data-composition-src="compositions/frames/10-disponibilidade-equipamentos.html"
+        data-start="74.11"
+        data-duration="7.677"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-be11"
+        id="el-10-disponibilidade-equipamentos-voice"
+        src="assets/voice/10.wav"
+        data-start="74.11"
+        data-duration="7.177"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-w1fu"
+        id="el-11-preprocessamento-imagens"
+        class="scene"
+        data-composition-id="11-preprocessamento-imagens"
+        data-composition-src="compositions/frames/11-preprocessamento-imagens.html"
+        data-start="81.287"
+        data-duration="9.387"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-dyxq"
+        id="el-11-preprocessamento-imagens-voice"
+        src="assets/voice/11.wav"
+        data-start="81.287"
+        data-duration="8.887"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-0gpg"
+        id="el-12-alertas"
+        class="scene"
+        data-composition-id="12-alertas"
+        data-composition-src="compositions/frames/12-alertas.html"
+        data-start="90.174"
+        data-duration="7.659"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-ci2n"
+        id="el-12-alertas-voice"
+        src="assets/voice/12.wav"
+        data-start="90.174"
+        data-duration="7.159"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-siux"
+        id="el-13-infracoes"
+        class="scene"
+        data-composition-id="13-infracoes"
+        data-composition-src="compositions/frames/13-infracoes.html"
+        data-start="97.33300000000001"
+        data-duration="7.664"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-ajq2"
+        id="el-13-infracoes-voice"
+        src="assets/voice/13.wav"
+        data-start="97.33300000000001"
+        data-duration="7.164"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-mxvh"
+        id="el-14-passagens-veiculares"
+        class="scene"
+        data-composition-id="14-passagens-veiculares"
+        data-composition-src="compositions/frames/14-passagens-veiculares.html"
+        data-start="104.49700000000001"
+        data-duration="7.687"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-eo5w"
+        id="el-14-passagens-veiculares-voice"
+        src="assets/voice/14.wav"
+        data-start="104.49700000000001"
+        data-duration="7.187"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-n8d4"
+        id="el-15-mapa-equipamentos-infracoes"
+        class="scene"
+        data-composition-id="15-mapa-equipamentos-infracoes"
+        data-composition-src="compositions/frames/15-mapa-equipamentos-infracoes.html"
+        data-start="111.68400000000001"
+        data-duration="7.674"
+        data-track-index="0"
+      ></div>
+      <audio data-hf-id="hf-hqw7"
+        id="el-15-mapa-equipamentos-infracoes-voice"
+        src="assets/voice/15.wav"
+        data-start="111.68400000000001"
+        data-duration="7.174"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <div data-hf-id="hf-rwo0"
+        id="el-16-filtro-cruzado"
+        class="scene"
+        data-composition-id="16-filtro-cruzado"
+        data-composition-src="compositions/frames/16-filtro-cruzado.html"
+        data-start="118.85800000000002"
+        data-duration="7.377"
+        data-track-index="1"
+      ></div>
+      <audio data-hf-id="hf-i3gu"
+        id="el-16-filtro-cruzado-voice"
+        src="assets/voice/16.wav"
+        data-start="118.85800000000002"
+        data-duration="7.377"
+        data-track-index="10"
+        data-volume="1"
+      ></audio>
+
+      <!-- captions -->
+      <div data-hf-id="hf-74rk"
+        id="el-captions"
+        class="scene"
+        data-composition-id="captions"
+        data-composition-src="compositions/captions.html"
+        data-start="0"
+        data-duration="129"
+        data-track-index="2"
+       data-playback-start="0"></div>
+
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+      // ── frame transitions (injected by transitions.mjs) ──
+      (function () { var tl = window.__timelines["main"];
+        tl.to("#el-01-plataforma-analises", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 8.788);
+        tl.fromTo("#el-02-demo-fluxo-veicular", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 8.788);
+        tl.to("#el-02-demo-fluxo-veicular", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 17.536);
+        tl.fromTo("#el-03-demo-infracoes", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 17.536);
+        tl.to("#el-03-demo-infracoes", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 26.299);
+        tl.fromTo("#el-04-demo-trafego-historico", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 26.299);
+        tl.to("#el-04-demo-trafego-historico", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 34.045);
+        tl.fromTo("#el-05-demo-mobilidade-waze", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 34.045);
+        tl.to("#el-05-demo-mobilidade-waze", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 41.236);
+        tl.fromTo("#el-06-demo-alertas-veiculos", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 41.236);
+        tl.to("#el-06-demo-alertas-veiculos", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 49.57);
+        tl.fromTo("#el-07-kpis-operacionais", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 49.57);
+        tl.to("#el-07-kpis-operacionais", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 58.953);
+        tl.fromTo("#el-08-assertividade-dupla-analise", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 58.953);
+        tl.to("#el-08-assertividade-dupla-analise", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 66.943);
+        tl.fromTo("#el-09-sla-latencia", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 66.943);
+        tl.to("#el-09-sla-latencia", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 74.11);
+        tl.fromTo("#el-10-disponibilidade-equipamentos", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 74.11);
+        tl.to("#el-10-disponibilidade-equipamentos", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 81.287);
+        tl.fromTo("#el-11-preprocessamento-imagens", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 81.287);
+        tl.to("#el-11-preprocessamento-imagens", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 90.174);
+        tl.fromTo("#el-12-alertas", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 90.174);
+        tl.to("#el-12-alertas", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 97.333);
+        tl.fromTo("#el-13-infracoes", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 97.333);
+        tl.to("#el-13-infracoes", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 104.497);
+        tl.fromTo("#el-14-passagens-veiculares", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 104.497);
+        tl.to("#el-14-passagens-veiculares", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 111.684);
+        tl.fromTo("#el-15-mapa-equipamentos-infracoes", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 111.684);
+        tl.to("#el-15-mapa-equipamentos-infracoes", { opacity: 0, duration: 0.5, ease: "power2.inOut" }, 118.858);
+        tl.fromTo("#el-16-filtro-cruzado", { opacity: 0 }, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, 118.858);
+        tl.to({}, { duration: 126.235 }, 0); // full-span anchor — main.duration() == composition total (Studio master duration)
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,229 @@
+<template id="captions-template" data-composition-id="captions" data-width="1920" data-height="1080">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+
+
+<style data-brand-tokens>
+      @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Space Grotesk'; src: url('assets/fonts/Space_Grotesk_700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: block; }
+      @font-face { font-family: 'Inter'; src: url('assets/fonts/Inter_700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: block; }
+      :root {
+      --bg: #fdfae7;
+      --primary: #0d75bf;
+      --text: #111111;
+      --text-muted: #6b6b6b;
+      --text-light: #9a9a9a;
+      --accent-light: rgba(13, 117, 191,0.08);
+      --accent-medium: rgba(13, 117, 191,0.15);
+      --border: rgba(13, 117, 191,0.2);
+      --card-bg: rgba(13, 117, 191,0.04);
+      --positive: #059669;
+      --negative: #dc2626;
+      --cap-ink: #111111;
+      --cap-canvas: #fdfae7;
+      --cap-accent: #0d75bf;
+      --cap-accent-2: #6b6b6b;
+      --font-display: "Space Grotesk", system-ui, serif;
+      --font-body: "Inter", system-ui, sans-serif;
+      --cap-band-top: 900px;
+      --cap-band-height: 180px;
+      }
+    </style>
+
+<style>
+  #captions-root {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .caption-layer {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    pointer-events: none;
+  }
+  /* the keep-out band, from captionBand(H) — frame content stays above it */
+  .caption-stage {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: var(--cap-band-top, 900px);
+    height: var(--cap-band-height, 180px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .caption-group {
+    /* every group is absolutely stacked over the SAME band — exactly one shown at a
+       time via opacity. Must be absolute: in-flow groups would lay out side-by-side. */
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+  }
+
+  /* THE tinted card — 4% cobalt fill, 1.5px 20%-cobalt border, soft 14px corners,
+     NO shadow (the tinted card does the lift; cast depth is forbidden) */
+  .caption-pill {
+    max-width: 78%;
+    padding: 20px 44px 24px;
+    background: color-mix(in srgb, var(--cap-accent, #0d75bf) 4%, var(--cap-canvas, #fdfae7));
+    border: 1.5px solid color-mix(in srgb, var(--cap-accent, #0d75bf) 20%, transparent);
+    border-radius: 14px;
+  }
+  .caption-line {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.1em 0.34em;
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(40px, 4.4vw, 58px);
+    line-height: 1.16;
+    letter-spacing: -0.02em;
+  }
+
+  /* upcoming — muted gray, no chip */
+  .caption-word {
+    display: inline-block;
+    padding: 0 0.18em;
+    border-radius: 0.32em;
+    color: color-mix(in srgb, var(--cap-ink, #111111) 52%, var(--cap-canvas, #fdfae7));
+  }
+  /* current word — THE solid cobalt chip (the single-accent gesture; pill-rounded
+     fill, NO shadow), cream reading on top */
+  .caption-word.is-active {
+    color: var(--cap-canvas, #fdfae7);
+    background: var(--cap-accent, #0d75bf);
+    box-shadow: none;
+  }
+  /* already spoken — solid near-black ink, chip cleared */
+  .caption-word.is-spoken {
+    color: var(--cap-ink, #111111);
+    background: transparent;
+    box-shadow: none;
+  }
+
+  /* optional per-word accents (dormant until a word-classer tags them) */
+  /* brand / key term — cobalt, the system's one accent on a key word */
+  .caption-word.cap-brand {
+    color: var(--cap-accent, #0d75bf);
+  }
+  /* numerals / data — cobalt 700, the figure voice */
+  .caption-word.cap-num {
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    font-weight: 700;
+    color: var(--cap-accent, #0d75bf);
+  }
+  /* emphasis — a directional-red hairline underline (inline only, never a fill) */
+  .caption-word.cap-cta {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--cap-accent-2, #dc2626);
+    text-underline-offset: 0.1em;
+  }
+
+  @media (max-aspect-ratio: 9/16) {
+    .caption-pill {
+      max-width: 92%;
+    }
+    .caption-line {
+      font-size: clamp(34px, 5.4vw, 48px);
+    }
+  }
+</style>
+
+<div data-hf-id="hf-ordl"
+  id="captions-root"
+  data-composition-id="captions"
+  data-timeline-locked
+  data-start="0"
+  data-duration="20.047"
+  data-fps="30"
+  data-width="1920"
+  data-height="1080"
+>
+  <div data-hf-id="hf-9flp" class="caption-layer" aria-hidden="true">
+    <div data-hf-id="hf-ajrg" id="caption-stage" class="caption-stage"></div>
+  </div>
+</div>
+
+<script>
+  // captions.mjs injects the engine's scene-aware groups + real duration here.
+  var GROUPS = [{"id":"caption-group-0","frame":1,"start":0,"end":0.546,"text":"No Módulo","words":[{"id":"caption-word-0-0","text":"No","start":0,"end":0.088},{"id":"caption-word-0-1","text":"Módulo","start":0.108,"end":0.526}]},{"id":"caption-group-1","frame":1,"start":0.546,"end":1.199,"text":"de Análise","words":[{"id":"caption-word-1-0","text":"de","start":0.546,"end":0.657},{"id":"caption-word-1-1","text":"Análise","start":0.677,"end":1.179}]},{"id":"caption-group-2","frame":1,"start":1.199,"end":2.034,"text":"de Dados,","words":[{"id":"caption-word-2-0","text":"de","start":1.199,"end":1.316},{"id":"caption-word-2-1","text":"Dados,","start":1.336,"end":2.014}]},{"id":"caption-group-3","frame":1,"start":2.034,"end":3.226,"text":"o asterisco vermelho","words":[{"id":"caption-word-3-0","text":"o","start":2.034,"end":2.1},{"id":"caption-word-3-1","text":"asterisco","start":2.12,"end":2.755},{"id":"caption-word-3-2","text":"vermelho","start":2.775,"end":3.206}]},{"id":"caption-group-4","frame":1,"start":3.226,"end":4.013,"text":"marca itens","words":[{"id":"caption-word-4-0","text":"marca","start":3.226,"end":3.627},{"id":"caption-word-4-1","text":"itens","start":3.647,"end":3.993}]},{"id":"caption-group-5","frame":1,"start":4.013,"end":4.629,"text":"do edital.","words":[{"id":"caption-word-5-0","text":"do","start":4.013,"end":4.109},{"id":"caption-word-5-1","text":"edital.","start":4.129,"end":4.558}]},{"id":"caption-group-6","frame":2,"start":4.629,"end":6.291,"text":"SLA de latência,","words":[{"id":"caption-word-6-0","text":"SLA","start":4.629,"end":5.278},{"id":"caption-word-6-1","text":"de","start":5.298,"end":5.414},{"id":"caption-word-6-2","text":"latência,","start":5.434,"end":6.271}]},{"id":"caption-group-7","frame":2,"start":6.291,"end":7.661,"text":"assertividade e prazo","words":[{"id":"caption-word-7-0","text":"assertividade","start":6.291,"end":7.115},{"id":"caption-word-7-1","text":"e","start":7.135,"end":7.2},{"id":"caption-word-7-2","text":"prazo","start":7.22,"end":7.641}]},{"id":"caption-group-8","frame":2,"start":7.661,"end":8.728,"text":"do pré-processamento.","words":[{"id":"caption-word-8-0","text":"do","start":7.661,"end":7.76},{"id":"caption-word-8-1","text":"pré-processamento.","start":7.78,"end":8.637}]},{"id":"caption-group-9","frame":3,"start":8.728,"end":10.095,"text":"Disponibilidade,","words":[{"id":"caption-word-9-0","text":"Disponibilidade,","start":8.728,"end":10.075}]},{"id":"caption-group-10","frame":3,"start":10.095,"end":11.73,"text":"time-lapse e integridade","words":[{"id":"caption-word-10-0","text":"time-lapse","start":10.095,"end":10.825},{"id":"caption-word-10-1","text":"e","start":10.845,"end":10.939},{"id":"caption-word-10-2","text":"integridade","start":10.959,"end":11.71}]},{"id":"caption-group-11","frame":3,"start":11.73,"end":12.524,"text":"das imagens.","words":[{"id":"caption-word-11-0","text":"das","start":11.73,"end":11.926},{"id":"caption-word-11-1","text":"imagens.","start":11.946,"end":12.446}]},{"id":"caption-group-12","frame":4,"start":12.524,"end":13.454,"text":"Auditoria,","words":[{"id":"caption-word-12-0","text":"Auditoria,","start":12.524,"end":13.434}]},{"id":"caption-group-13","frame":4,"start":13.454,"end":14.621,"text":"logs técnicos,","words":[{"id":"caption-word-13-0","text":"logs","start":13.454,"end":13.755},{"id":"caption-word-13-1","text":"técnicos,","start":13.775,"end":14.601}]},{"id":"caption-group-14","frame":4,"start":14.621,"end":15.499,"text":"alertas,","words":[{"id":"caption-word-14-0","text":"alertas,","start":14.621,"end":15.479}]},{"id":"caption-group-15","frame":4,"start":15.499,"end":17.586,"text":"relatórios gerenciais e análises.","words":[{"id":"caption-word-15-0","text":"relatórios","start":15.499,"end":16.185},{"id":"caption-word-15-1","text":"gerenciais","start":16.205,"end":16.794},{"id":"caption-word-15-2","text":"e","start":16.814,"end":16.876},{"id":"caption-word-15-3","text":"análises.","start":16.896,"end":17.468}]},{"id":"caption-group-16","frame":5,"start":17.586,"end":18.021,"text":"Passe o","words":[{"id":"caption-word-16-0","text":"Passe","start":17.586,"end":17.95},{"id":"caption-word-16-1","text":"o","start":17.97,"end":18.001}]},{"id":"caption-group-17","frame":5,"start":18.021,"end":19.157,"text":"mouse no asterisco","words":[{"id":"caption-word-17-0","text":"mouse","start":18.021,"end":18.371},{"id":"caption-word-17-1","text":"no","start":18.391,"end":18.485},{"id":"caption-word-17-2","text":"asterisco","start":18.505,"end":19.137}]},{"id":"caption-group-18","frame":5,"start":19.157,"end":19.589,"text":"para ver","words":[{"id":"caption-word-18-0","text":"para","start":19.157,"end":19.374},{"id":"caption-word-18-1","text":"ver","start":19.394,"end":19.569}]},{"id":"caption-group-19","frame":5,"start":19.589,"end":20.068,"text":"o item.","words":[{"id":"caption-word-19-0","text":"o","start":19.589,"end":19.642},{"id":"caption-word-19-1","text":"item.","start":19.662,"end":19.948}]}];
+  var DURATION = 20.047;
+
+  (function () {
+    var stage = document.getElementById("caption-stage");
+
+    // build DOM: one .caption-group per group, .caption-word per word
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.createElement("div");
+      groupEl.className = "caption-group";
+      groupEl.id = "caption-group-" + g;
+      var pill = document.createElement("div");
+      pill.className = "caption-pill";
+      var line = document.createElement("div");
+      line.className = "caption-line";
+      (group.words || []).forEach(function (w, i) {
+        var span = document.createElement("span");
+        span.className = "caption-word";
+        span.id = "caption-word-" + g + "-" + i;
+        span.textContent = String(w.text);
+        line.appendChild(span);
+      });
+      pill.appendChild(line);
+      groupEl.appendChild(pill);
+      stage.appendChild(groupEl);
+    });
+
+    window.__timelines = window.__timelines || {};
+    var tl = gsap.timeline({ paused: true });
+
+    GROUPS.forEach(function (group, g) {
+      var groupEl = document.getElementById("caption-group-" + g);
+      var words = group.words || [];
+      var next = GROUPS[g + 1];
+      var isLast = g === GROUPS.length - 1;
+      var start = Math.max(0, Number(group.start));
+      var end = isLast ? DURATION : Math.min(Number(next.start), Number(group.end) + 0.3);
+      if (end <= start) end = start + 0.01;
+
+      // group on/off — exactly one group visible at a time
+      tl.set(groupEl, { opacity: 1 }, start);
+      tl.set(groupEl, { opacity: 0 }, end);
+
+      // 3-state karaoke via className SETS — seek-safe (gsap.set applies on the
+      // engine's frame-by-frame seek; .call callbacks would NOT fire).
+      words.forEach(function (w, i) {
+        var el = document.getElementById("caption-word-" + g + "-" + i);
+        var at = Math.max(start, Number(w.start));
+        tl.set(el, { className: "caption-word" }, start); // upcoming (also resets on reverse-seek)
+        tl.set(el, { className: "caption-word is-active" }, at); // current
+        tl.fromTo(el, { scale: 0.985 }, { scale: 1, duration: 0.18, ease: "power1.out" }, at);
+        if (i + 1 < words.length) {
+          var nextAt = Math.max(start, Number(words[i + 1].start));
+          tl.set(el, { className: "caption-word is-spoken" }, nextAt); // demote when next activates
+        }
+      });
+      if (words.length) {
+        var lastEl = document.getElementById("caption-word-" + g + "-" + (words.length - 1));
+        var lastSpoken = Math.min(end, Number(words[words.length - 1].end) + 0.1);
+        tl.set(lastEl, { className: "caption-word is-spoken" }, lastSpoken);
+      }
+    });
+
+    // full-span anchor so the sub-comp timeline spans the whole video
+    tl.to({}, { duration: DURATION }, 0);
+    window.__timelines["captions"] = tl;
+  })();
+</script>
+
+<style>
+  .caption-line { line-height: 1.1 !important; }
+</style>
+</template>

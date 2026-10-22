@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-ed9g" id="root" data-composition-id="06-demo-alertas-veiculos" data-start="0" data-duration="8.834" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p06-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p06-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p06-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p06-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p06-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p06-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p06-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p06-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p06-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p06-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p06-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p06-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p06-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1561px; transform-origin: 0 0; }
+      .p06-shot img { display: block; width: 1920px; height: 1561px; }
+    </style>
+
+    <div data-hf-id="hf-ajth" class="p06-bg clip" id="p06-bgclip" data-start="0" data-duration="8.834" data-track-index="0"></div>
+    <div data-hf-id="hf-ptji" class="clip" id="p06-main" data-start="0" data-duration="8.834" data-track-index="1">
+      <div data-hf-id="hf-pogz" class="p06-col">
+        <div data-hf-id="hf-rcau" class="p06-accent" id="p06-accent"></div>
+        <div data-hf-id="hf-drru" class="p06-eyebrow" id="p06-eyebrow">DEMONSTRAÇÃO · DADOS REAIS · 5/5</div>
+        <div data-hf-id="hf-vrnq" class="p06-title" id="p06-title">Alertas de Veículos de Interesse</div>
+        <div data-hf-id="hf-6908" class="p06-desc" id="p06-desc">Alertas para veículos monitorados, furtados, roubados e clonados.</div>
+        <div data-hf-id="hf-11q9" class="p06-chip" id="p06-chip">10 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-skrg" class="p06-win" id="p06-win">
+        <div data-hf-id="hf-2jwe" class="p06-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-73wg">Análises · Alertas de Veículos de Interesse</span></div>
+        <div data-hf-id="hf-tdjl" class="p06-vp">
+          <div data-hf-id="hf-ell6" class="p06-shot" id="p06-shot"><img data-hf-id="hf-gusv" src="assets/demo-alertas-veiculos.png" alt="Painel Alertas de Veículos de Interesse"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 8.334;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p06-shot", { scale: 0.4664, x: 134.3, y: 0.0 }, { scale: 0.4664, x: 134.3, y: 0.0, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p06-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p06-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p06-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p06-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p06-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p06-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p06-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p06-shot", { y: -218.4, duration: 3.53, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p06-shot", { scale: 0.4664, x: 134.3, y: 0.0, duration: 0.90, ease: "power3.inOut" }, 6.73);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["06-demo-alertas-veiculos"] = tl;
+      })();
+    </script>
+  </div>
+</template>

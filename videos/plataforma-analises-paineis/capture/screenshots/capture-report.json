@@ -1,0 +1,100 @@
+[
+  {
+    "slug": "demo-fluxo-veicular",
+    "h": 1937,
+    "charts": 12,
+    "errors": 0,
+    "seconds": 15
+  },
+  {
+    "slug": "demo-infracoes",
+    "h": 1937,
+    "charts": 12,
+    "errors": 0,
+    "seconds": 15
+  },
+  {
+    "slug": "demo-trafego-historico",
+    "h": 1977,
+    "charts": 12,
+    "errors": 0,
+    "seconds": 16
+  },
+  {
+    "slug": "demo-mobilidade-waze",
+    "h": 2137,
+    "charts": 12,
+    "errors": 0,
+    "seconds": 43
+  },
+  {
+    "slug": "demo-alertas-veiculos",
+    "h": 1561,
+    "charts": 11,
+    "errors": 0,
+    "seconds": 17
+  },
+  {
+    "slug": "kpis-operacionais",
+    "h": 1113,
+    "charts": 11,
+    "errors": 0,
+    "seconds": 15
+  },
+  {
+    "slug": "assertividade-dupla-analise",
+    "h": 777,
+    "charts": 7,
+    "errors": 0,
+    "seconds": 13
+  },
+  {
+    "slug": "sla-latencia",
+    "h": 1113,
+    "charts": 8,
+    "errors": 0,
+    "seconds": 13
+  },
+  {
+    "slug": "disponibilidade-equipamentos",
+    "h": 1113,
+    "charts": 8,
+    "errors": 0,
+    "seconds": 13
+  },
+  {
+    "slug": "preprocessamento-imagens",
+    "h": 1449,
+    "charts": 10,
+    "errors": 0,
+    "seconds": 17
+  },
+  {
+    "slug": "alertas",
+    "h": 1153,
+    "charts": 9,
+    "errors": 0,
+    "seconds": 13
+  },
+  {
+    "slug": "infracoes",
+    "h": 1073,
+    "charts": 9,
+    "errors": 0,
+    "seconds": 16
+  },
+  {
+    "slug": "passagens-veiculares",
+    "h": 1113,
+    "charts": 9,
+    "errors": 0,
+    "seconds": 13
+  },
+  {
+    "slug": "mapa-equipamentos-infracoes",
+    "h": 1497,
+    "charts": 6,
+    "errors": 0,
+    "seconds": 13
+  }
+]

@@ -1,0 +1,2488 @@
+{
+  "total_duration_s": 126.235,
+  "width": 1920,
+  "height": 1080,
+  "groups": [
+    {
+      "id": "caption-group-0",
+      "frame": 1,
+      "start": 0,
+      "end": 0.5,
+      "text": "Na tela",
+      "words": [
+        {
+          "id": "caption-word-0-0",
+          "text": "Na",
+          "start": 0,
+          "end": 0.122
+        },
+        {
+          "id": "caption-word-0-1",
+          "text": "tela",
+          "start": 0.142,
+          "end": 0.48
+        }
+      ]
+    },
+    {
+      "id": "caption-group-1",
+      "frame": 1,
+      "start": 0.5,
+      "end": 1.167,
+      "text": "de Análise",
+      "words": [
+        {
+          "id": "caption-word-1-0",
+          "text": "de",
+          "start": 0.5,
+          "end": 0.615
+        },
+        {
+          "id": "caption-word-1-1",
+          "text": "Análise",
+          "start": 0.635,
+          "end": 1.147
+        }
+      ]
+    },
+    {
+      "id": "caption-group-2",
+      "frame": 1,
+      "start": 1.167,
+      "end": 2.004,
+      "text": "de Dados,",
+      "words": [
+        {
+          "id": "caption-word-2-0",
+          "text": "de",
+          "start": 1.167,
+          "end": 1.28
+        },
+        {
+          "id": "caption-word-2-1",
+          "text": "Dados,",
+          "start": 1.3,
+          "end": 1.984
+        }
+      ]
+    },
+    {
+      "id": "caption-group-3",
+      "frame": 1,
+      "start": 2.004,
+      "end": 3.01,
+      "text": "a Plataforma de",
+      "words": [
+        {
+          "id": "caption-word-3-0",
+          "text": "a",
+          "start": 2.004,
+          "end": 2.062
+        },
+        {
+          "id": "caption-word-3-1",
+          "text": "Plataforma",
+          "start": 2.082,
+          "end": 2.856
+        },
+        {
+          "id": "caption-word-3-2",
+          "text": "de",
+          "start": 2.876,
+          "end": 2.99
+        }
+      ]
+    },
+    {
+      "id": "caption-group-4",
+      "frame": 1,
+      "start": 3.01,
+      "end": 4.653,
+      "text": "Análises reúne 14",
+      "words": [
+        {
+          "id": "caption-word-4-0",
+          "text": "Análises",
+          "start": 3.01,
+          "end": 3.605
+        },
+        {
+          "id": "caption-word-4-1",
+          "text": "reúne",
+          "start": 3.625,
+          "end": 3.959
+        },
+        {
+          "id": "caption-word-4-2",
+          "text": "14",
+          "start": 3.979,
+          "end": 4.633
+        }
+      ]
+    },
+    {
+      "id": "caption-group-5",
+      "frame": 1,
+      "start": 4.653,
+      "end": 6.379,
+      "text": "dashboards interativos:",
+      "words": [
+        {
+          "id": "caption-word-5-0",
+          "text": "dashboards",
+          "start": 4.653,
+          "end": 5.219
+        },
+        {
+          "id": "caption-word-5-1",
+          "text": "interativos:",
+          "start": 5.239,
+          "end": 6.359
+        }
+      ]
+    },
+    {
+      "id": "caption-group-6",
+      "frame": 1,
+      "start": 6.379,
+      "end": 7.777,
+      "text": "5 de demonstração",
+      "words": [
+        {
+          "id": "caption-word-6-0",
+          "text": "5",
+          "start": 6.379,
+          "end": 6.63
+        },
+        {
+          "id": "caption-word-6-1",
+          "text": "de",
+          "start": 6.65,
+          "end": 6.902
+        },
+        {
+          "id": "caption-word-6-2",
+          "text": "demonstração",
+          "start": 6.922,
+          "end": 7.757
+        }
+      ]
+    },
+    {
+      "id": "caption-group-7",
+      "frame": 1,
+      "start": 7.777,
+      "end": 8.826,
+      "text": "e 9 operacionais.",
+      "words": [
+        {
+          "id": "caption-word-7-0",
+          "text": "e",
+          "start": 7.777,
+          "end": 7.83
+        },
+        {
+          "id": "caption-word-7-1",
+          "text": "9",
+          "start": 7.85,
+          "end": 7.952
+        },
+        {
+          "id": "caption-word-7-2",
+          "text": "operacionais.",
+          "start": 7.972,
+          "end": 8.707
+        }
+      ]
+    },
+    {
+      "id": "caption-group-8",
+      "frame": 2,
+      "start": 8.826,
+      "end": 10.141,
+      "text": "Fluxo Veicular:",
+      "words": [
+        {
+          "id": "caption-word-8-0",
+          "text": "Fluxo",
+          "start": 8.826,
+          "end": 9.332
+        },
+        {
+          "id": "caption-word-8-1",
+          "text": "Veicular:",
+          "start": 9.352,
+          "end": 10.121
+        }
+      ]
+    },
+    {
+      "id": "caption-group-9",
+      "frame": 2,
+      "start": 10.141,
+      "end": 12.782,
+      "text": "passagens capturadas pelos equipamentos,",
+      "words": [
+        {
+          "id": "caption-word-9-0",
+          "text": "passagens",
+          "start": 10.141,
+          "end": 10.807
+        },
+        {
+          "id": "caption-word-9-1",
+          "text": "capturadas",
+          "start": 10.827,
+          "end": 11.427
+        },
+        {
+          "id": "caption-word-9-2",
+          "text": "pelos",
+          "start": 11.447,
+          "end": 11.741
+        },
+        {
+          "id": "caption-word-9-3",
+          "text": "equipamentos,",
+          "start": 11.761,
+          "end": 12.762
+        }
+      ]
+    },
+    {
+      "id": "caption-group-10",
+      "frame": 2,
+      "start": 12.782,
+      "end": 13.452,
+      "text": "por hora,",
+      "words": [
+        {
+          "id": "caption-word-10-0",
+          "text": "por",
+          "start": 12.782,
+          "end": 12.947
+        },
+        {
+          "id": "caption-word-10-1",
+          "text": "hora,",
+          "start": 12.967,
+          "end": 13.432
+        }
+      ]
+    },
+    {
+      "id": "caption-group-11",
+      "frame": 2,
+      "start": 13.452,
+      "end": 14.977,
+      "text": "com velocidade média,",
+      "words": [
+        {
+          "id": "caption-word-11-0",
+          "text": "com",
+          "start": 13.452,
+          "end": 13.638
+        },
+        {
+          "id": "caption-word-11-1",
+          "text": "velocidade",
+          "start": 13.658,
+          "end": 14.34
+        },
+        {
+          "id": "caption-word-11-2",
+          "text": "média,",
+          "start": 14.36,
+          "end": 14.957
+        }
+      ]
+    },
+    {
+      "id": "caption-group-12",
+      "frame": 2,
+      "start": 14.977,
+      "end": 16.481,
+      "text": "placas Mercosul e mapa",
+      "words": [
+        {
+          "id": "caption-word-12-0",
+          "text": "placas",
+          "start": 14.977,
+          "end": 15.453
+        },
+        {
+          "id": "caption-word-12-1",
+          "text": "Mercosul",
+          "start": 15.473,
+          "end": 16.019
+        },
+        {
+          "id": "caption-word-12-2",
+          "text": "e",
+          "start": 16.039,
+          "end": 16.096
+        },
+        {
+          "id": "caption-word-12-3",
+          "text": "mapa",
+          "start": 16.116,
+          "end": 16.461
+        }
+      ]
+    },
+    {
+      "id": "caption-group-13",
+      "frame": 2,
+      "start": 16.481,
+      "end": 17.562,
+      "text": "de calor semanal.",
+      "words": [
+        {
+          "id": "caption-word-13-0",
+          "text": "de",
+          "start": 16.481,
+          "end": 16.586
+        },
+        {
+          "id": "caption-word-13-1",
+          "text": "calor",
+          "start": 16.606,
+          "end": 16.922
+        },
+        {
+          "id": "caption-word-13-2",
+          "text": "semanal.",
+          "start": 16.942,
+          "end": 17.442
+        }
+      ]
+    },
+    {
+      "id": "caption-group-14",
+      "frame": 3,
+      "start": 17.574,
+      "end": 19.521,
+      "text": "Fiscalização e Infrações:",
+      "words": [
+        {
+          "id": "caption-word-14-0",
+          "text": "Fiscalização",
+          "start": 17.574,
+          "end": 18.438
+        },
+        {
+          "id": "caption-word-14-1",
+          "text": "e",
+          "start": 18.458,
+          "end": 18.539
+        },
+        {
+          "id": "caption-word-14-2",
+          "text": "Infrações:",
+          "start": 18.559,
+          "end": 19.501
+        }
+      ]
+    },
+    {
+      "id": "caption-group-15",
+      "frame": 3,
+      "start": 19.521,
+      "end": 21.139,
+      "text": "infrações da fiscalização",
+      "words": [
+        {
+          "id": "caption-word-15-0",
+          "text": "infrações",
+          "start": 19.521,
+          "end": 20.157
+        },
+        {
+          "id": "caption-word-15-1",
+          "text": "da",
+          "start": 20.177,
+          "end": 20.268
+        },
+        {
+          "id": "caption-word-15-2",
+          "text": "fiscalização",
+          "start": 20.288,
+          "end": 21.119
+        }
+      ]
+    },
+    {
+      "id": "caption-group-16",
+      "frame": 3,
+      "start": 21.139,
+      "end": 22.864,
+      "text": "eletrônica por categoria,",
+      "words": [
+        {
+          "id": "caption-word-16-0",
+          "text": "eletrônica",
+          "start": 21.139,
+          "end": 21.79
+        },
+        {
+          "id": "caption-word-16-1",
+          "text": "por",
+          "start": 21.81,
+          "end": 21.965
+        },
+        {
+          "id": "caption-word-16-2",
+          "text": "categoria,",
+          "start": 21.985,
+          "end": 22.844
+        }
+      ]
+    },
+    {
+      "id": "caption-group-17",
+      "frame": 3,
+      "start": 22.864,
+      "end": 23.495,
+      "text": "tipo,",
+      "words": [
+        {
+          "id": "caption-word-17-0",
+          "text": "tipo,",
+          "start": 22.864,
+          "end": 23.475
+        }
+      ]
+    },
+    {
+      "id": "caption-group-18",
+      "frame": 3,
+      "start": 23.495,
+      "end": 24.753,
+      "text": "equipamento e faixa",
+      "words": [
+        {
+          "id": "caption-word-18-0",
+          "text": "equipamento",
+          "start": 23.495,
+          "end": 24.205
+        },
+        {
+          "id": "caption-word-18-1",
+          "text": "e",
+          "start": 24.225,
+          "end": 24.287
+        },
+        {
+          "id": "caption-word-18-2",
+          "text": "faixa",
+          "start": 24.307,
+          "end": 24.733
+        }
+      ]
+    },
+    {
+      "id": "caption-group-19",
+      "frame": 3,
+      "start": 24.753,
+      "end": 25.375,
+      "text": "de excesso",
+      "words": [
+        {
+          "id": "caption-word-19-0",
+          "text": "de",
+          "start": 24.753,
+          "end": 24.861
+        },
+        {
+          "id": "caption-word-19-1",
+          "text": "excesso",
+          "start": 24.881,
+          "end": 25.355
+        }
+      ]
+    },
+    {
+      "id": "caption-group-20",
+      "frame": 3,
+      "start": 25.375,
+      "end": 26.327,
+      "text": "de velocidade.",
+      "words": [
+        {
+          "id": "caption-word-20-0",
+          "text": "de",
+          "start": 25.375,
+          "end": 25.473
+        },
+        {
+          "id": "caption-word-20-1",
+          "text": "velocidade.",
+          "start": 25.493,
+          "end": 26.207
+        }
+      ]
+    },
+    {
+      "id": "caption-group-21",
+      "frame": 4,
+      "start": 26.337,
+      "end": 27.655,
+      "text": "Tráfego Histórico:",
+      "words": [
+        {
+          "id": "caption-word-21-0",
+          "text": "Tráfego",
+          "start": 26.337,
+          "end": 26.836
+        },
+        {
+          "id": "caption-word-21-1",
+          "text": "Histórico:",
+          "start": 26.856,
+          "end": 27.635
+        }
+      ]
+    },
+    {
+      "id": "caption-group-22",
+      "frame": 4,
+      "start": 27.655,
+      "end": 28.701,
+      "text": "série histórica de",
+      "words": [
+        {
+          "id": "caption-word-22-0",
+          "text": "série",
+          "start": 27.655,
+          "end": 28.003
+        },
+        {
+          "id": "caption-word-22-1",
+          "text": "histórica",
+          "start": 28.023,
+          "end": 28.568
+        },
+        {
+          "id": "caption-word-22-2",
+          "text": "de",
+          "start": 28.588,
+          "end": 28.681
+        }
+      ]
+    },
+    {
+      "id": "caption-group-23",
+      "frame": 4,
+      "start": 28.701,
+      "end": 29.357,
+      "text": "volume,",
+      "words": [
+        {
+          "id": "caption-word-23-0",
+          "text": "volume,",
+          "start": 28.701,
+          "end": 29.337
+        }
+      ]
+    },
+    {
+      "id": "caption-group-24",
+      "frame": 4,
+      "start": 29.357,
+      "end": 30.654,
+      "text": "velocidade e leitura",
+      "words": [
+        {
+          "id": "caption-word-24-0",
+          "text": "velocidade",
+          "start": 29.357,
+          "end": 30.115
+        },
+        {
+          "id": "caption-word-24-1",
+          "text": "e",
+          "start": 30.135,
+          "end": 30.189
+        },
+        {
+          "id": "caption-word-24-2",
+          "text": "leitura",
+          "start": 30.209,
+          "end": 30.634
+        }
+      ]
+    },
+    {
+      "id": "caption-group-25",
+      "frame": 4,
+      "start": 30.654,
+      "end": 31.523,
+      "text": "de placas,",
+      "words": [
+        {
+          "id": "caption-word-25-0",
+          "text": "de",
+          "start": 30.654,
+          "end": 30.754
+        },
+        {
+          "id": "caption-word-25-1",
+          "text": "placas,",
+          "start": 30.774,
+          "end": 31.503
+        }
+      ]
+    },
+    {
+      "id": "caption-group-26",
+      "frame": 4,
+      "start": 31.523,
+      "end": 31.773,
+      "text": "com a",
+      "words": [
+        {
+          "id": "caption-word-26-0",
+          "text": "com",
+          "start": 31.523,
+          "end": 31.695
+        },
+        {
+          "id": "caption-word-26-1",
+          "text": "a",
+          "start": 31.715,
+          "end": 31.765
+        }
+      ]
+    },
+    {
+      "id": "caption-group-27",
+      "frame": 4,
+      "start": 31.773,
+      "end": 32.998,
+      "text": "composição da frota",
+      "words": [
+        {
+          "id": "caption-word-27-0",
+          "text": "composição",
+          "start": 31.773,
+          "end": 32.437
+        },
+        {
+          "id": "caption-word-27-1",
+          "text": "da",
+          "start": 32.457,
+          "end": 32.541
+        },
+        {
+          "id": "caption-word-27-2",
+          "text": "frota",
+          "start": 32.561,
+          "end": 32.978
+        }
+      ]
+    },
+    {
+      "id": "caption-group-28",
+      "frame": 4,
+      "start": 32.998,
+      "end": 34.045,
+      "text": "por equipamento.",
+      "words": [
+        {
+          "id": "caption-word-28-0",
+          "text": "por",
+          "start": 32.998,
+          "end": 33.143
+        },
+        {
+          "id": "caption-word-28-1",
+          "text": "equipamento.",
+          "start": 33.163,
+          "end": 33.949
+        }
+      ]
+    },
+    {
+      "id": "caption-group-29",
+      "frame": 5,
+      "start": 34.045,
+      "end": 35.362,
+      "text": "Mobilidade Urbana:",
+      "words": [
+        {
+          "id": "caption-word-29-0",
+          "text": "Mobilidade",
+          "start": 34.045,
+          "end": 34.642
+        },
+        {
+          "id": "caption-word-29-1",
+          "text": "Urbana:",
+          "start": 34.662,
+          "end": 35.342
+        }
+      ]
+    },
+    {
+      "id": "caption-group-30",
+      "frame": 5,
+      "start": 35.362,
+      "end": 36.697,
+      "text": "ocorrências de trânsito",
+      "words": [
+        {
+          "id": "caption-word-30-0",
+          "text": "ocorrências",
+          "start": 35.362,
+          "end": 36.014
+        },
+        {
+          "id": "caption-word-30-1",
+          "text": "de",
+          "start": 36.034,
+          "end": 36.14
+        },
+        {
+          "id": "caption-word-30-2",
+          "text": "trânsito",
+          "start": 36.16,
+          "end": 36.677
+        }
+      ]
+    },
+    {
+      "id": "caption-group-31",
+      "frame": 5,
+      "start": 36.697,
+      "end": 37.949,
+      "text": "reportadas no Waze,",
+      "words": [
+        {
+          "id": "caption-word-31-0",
+          "text": "reportadas",
+          "start": 36.697,
+          "end": 37.317
+        },
+        {
+          "id": "caption-word-31-1",
+          "text": "no",
+          "start": 37.337,
+          "end": 37.432
+        },
+        {
+          "id": "caption-word-31-2",
+          "text": "Waze,",
+          "start": 37.452,
+          "end": 37.929
+        }
+      ]
+    },
+    {
+      "id": "caption-group-32",
+      "frame": 5,
+      "start": 37.949,
+      "end": 38.406,
+      "text": "no mapa",
+      "words": [
+        {
+          "id": "caption-word-32-0",
+          "text": "no",
+          "start": 37.949,
+          "end": 38.041
+        },
+        {
+          "id": "caption-word-32-1",
+          "text": "mapa",
+          "start": 38.061,
+          "end": 38.386
+        }
+      ]
+    },
+    {
+      "id": "caption-group-33",
+      "frame": 5,
+      "start": 38.406,
+      "end": 39.342,
+      "text": "de Salvador,",
+      "words": [
+        {
+          "id": "caption-word-33-0",
+          "text": "de",
+          "start": 38.406,
+          "end": 38.496
+        },
+        {
+          "id": "caption-word-33-1",
+          "text": "Salvador,",
+          "start": 38.516,
+          "end": 39.322
+        }
+      ]
+    },
+    {
+      "id": "caption-group-34",
+      "frame": 5,
+      "start": 39.342,
+      "end": 40.177,
+      "text": "por tipo,",
+      "words": [
+        {
+          "id": "caption-word-34-0",
+          "text": "por",
+          "start": 39.342,
+          "end": 39.524
+        },
+        {
+          "id": "caption-word-34-1",
+          "text": "tipo,",
+          "start": 39.544,
+          "end": 40.157
+        }
+      ]
+    },
+    {
+      "id": "caption-group-35",
+      "frame": 5,
+      "start": 40.177,
+      "end": 41.134,
+      "text": "via e horário.",
+      "words": [
+        {
+          "id": "caption-word-35-0",
+          "text": "via",
+          "start": 40.177,
+          "end": 40.436
+        },
+        {
+          "id": "caption-word-35-1",
+          "text": "e",
+          "start": 40.456,
+          "end": 40.506
+        },
+        {
+          "id": "caption-word-35-2",
+          "text": "horário.",
+          "start": 40.514,
+          "end": 41.014
+        }
+      ]
+    },
+    {
+      "id": "caption-group-36",
+      "frame": 6,
+      "start": 41.236,
+      "end": 42.396,
+      "text": "Alertas de Veículos",
+      "words": [
+        {
+          "id": "caption-word-36-0",
+          "text": "Alertas",
+          "start": 41.236,
+          "end": 41.719
+        },
+        {
+          "id": "caption-word-36-1",
+          "text": "de",
+          "start": 41.739,
+          "end": 41.836
+        },
+        {
+          "id": "caption-word-36-2",
+          "text": "Veículos",
+          "start": 41.856,
+          "end": 42.376
+        }
+      ]
+    },
+    {
+      "id": "caption-group-37",
+      "frame": 6,
+      "start": 42.396,
+      "end": 43.339,
+      "text": "de Interesse:",
+      "words": [
+        {
+          "id": "caption-word-37-0",
+          "text": "de",
+          "start": 42.396,
+          "end": 42.509
+        },
+        {
+          "id": "caption-word-37-1",
+          "text": "Interesse:",
+          "start": 42.529,
+          "end": 43.319
+        }
+      ]
+    },
+    {
+      "id": "caption-group-38",
+      "frame": 6,
+      "start": 43.339,
+      "end": 44.918,
+      "text": "veículos monitorados,",
+      "words": [
+        {
+          "id": "caption-word-38-0",
+          "text": "veículos",
+          "start": 43.339,
+          "end": 43.853
+        },
+        {
+          "id": "caption-word-38-1",
+          "text": "monitorados,",
+          "start": 43.873,
+          "end": 44.898
+        }
+      ]
+    },
+    {
+      "id": "caption-group-39",
+      "frame": 6,
+      "start": 44.918,
+      "end": 45.819,
+      "text": "furtados,",
+      "words": [
+        {
+          "id": "caption-word-39-0",
+          "text": "furtados,",
+          "start": 44.918,
+          "end": 45.799
+        }
+      ]
+    },
+    {
+      "id": "caption-group-40",
+      "frame": 6,
+      "start": 45.819,
+      "end": 47.355,
+      "text": "roubados e clonados,",
+      "words": [
+        {
+          "id": "caption-word-40-0",
+          "text": "roubados",
+          "start": 45.819,
+          "end": 46.463
+        },
+        {
+          "id": "caption-word-40-1",
+          "text": "e",
+          "start": 46.483,
+          "end": 46.547
+        },
+        {
+          "id": "caption-word-40-2",
+          "text": "clonados,",
+          "start": 46.567,
+          "end": 47.335
+        }
+      ]
+    },
+    {
+      "id": "caption-group-41",
+      "frame": 6,
+      "start": 47.355,
+      "end": 48.219,
+      "text": "por tipo,",
+      "words": [
+        {
+          "id": "caption-word-41-0",
+          "text": "por",
+          "start": 47.355,
+          "end": 47.543
+        },
+        {
+          "id": "caption-word-41-1",
+          "text": "tipo,",
+          "start": 47.563,
+          "end": 48.199
+        }
+      ]
+    },
+    {
+      "id": "caption-group-42",
+      "frame": 6,
+      "start": 48.219,
+      "end": 49.589,
+      "text": "criticidade e status.",
+      "words": [
+        {
+          "id": "caption-word-42-0",
+          "text": "criticidade",
+          "start": 48.219,
+          "end": 48.967
+        },
+        {
+          "id": "caption-word-42-1",
+          "text": "e",
+          "start": 48.987,
+          "end": 49.037
+        },
+        {
+          "id": "caption-word-42-2",
+          "text": "status.",
+          "start": 49.04,
+          "end": 49.469
+        }
+      ]
+    },
+    {
+      "id": "caption-group-43",
+      "frame": 7,
+      "start": 49.608,
+      "end": 51.179,
+      "text": "KPIs Operacionais:",
+      "words": [
+        {
+          "id": "caption-word-43-0",
+          "text": "KPIs",
+          "start": 49.608,
+          "end": 50.105
+        },
+        {
+          "id": "caption-word-43-1",
+          "text": "Operacionais:",
+          "start": 50.125,
+          "end": 51.159
+        }
+      ]
+    },
+    {
+      "id": "caption-group-44",
+      "frame": 7,
+      "start": 51.179,
+      "end": 52.168,
+      "text": "passagens,",
+      "words": [
+        {
+          "id": "caption-word-44-0",
+          "text": "passagens,",
+          "start": 51.179,
+          "end": 52.148
+        }
+      ]
+    },
+    {
+      "id": "caption-group-45",
+      "frame": 7,
+      "start": 52.168,
+      "end": 53.129,
+      "text": "infrações,",
+      "words": [
+        {
+          "id": "caption-word-45-0",
+          "text": "infrações,",
+          "start": 52.168,
+          "end": 53.109
+        }
+      ]
+    },
+    {
+      "id": "caption-group-46",
+      "frame": 7,
+      "start": 53.129,
+      "end": 53.976,
+      "text": "alertas,",
+      "words": [
+        {
+          "id": "caption-word-46-0",
+          "text": "alertas,",
+          "start": 53.129,
+          "end": 53.956
+        }
+      ]
+    },
+    {
+      "id": "caption-group-47",
+      "frame": 7,
+      "start": 53.976,
+      "end": 55.212,
+      "text": "disponibilidade,",
+      "words": [
+        {
+          "id": "caption-word-47-0",
+          "text": "disponibilidade,",
+          "start": 53.976,
+          "end": 55.192
+        }
+      ]
+    },
+    {
+      "id": "caption-group-48",
+      "frame": 7,
+      "start": 55.212,
+      "end": 56.591,
+      "text": "SLA de latência",
+      "words": [
+        {
+          "id": "caption-word-48-0",
+          "text": "SLA",
+          "start": 55.212,
+          "end": 55.825
+        },
+        {
+          "id": "caption-word-48-1",
+          "text": "de",
+          "start": 55.845,
+          "end": 55.94
+        },
+        {
+          "id": "caption-word-48-2",
+          "text": "latência",
+          "start": 55.96,
+          "end": 56.571
+        }
+      ]
+    },
+    {
+      "id": "caption-group-49",
+      "frame": 7,
+      "start": 56.591,
+      "end": 57.659,
+      "text": "e assertividade,",
+      "words": [
+        {
+          "id": "caption-word-49-0",
+          "text": "e",
+          "start": 56.591,
+          "end": 56.651
+        },
+        {
+          "id": "caption-word-49-1",
+          "text": "assertividade,",
+          "start": 56.671,
+          "end": 57.639
+        }
+      ]
+    },
+    {
+      "id": "caption-group-50",
+      "frame": 7,
+      "start": 57.659,
+      "end": 57.921,
+      "text": "com a",
+      "words": [
+        {
+          "id": "caption-word-50-0",
+          "text": "com",
+          "start": 57.659,
+          "end": 57.841
+        },
+        {
+          "id": "caption-word-50-1",
+          "text": "a",
+          "start": 57.861,
+          "end": 57.911
+        }
+      ]
+    },
+    {
+      "id": "caption-group-51",
+      "frame": 7,
+      "start": 57.921,
+      "end": 58.953,
+      "text": "evolução mensal.",
+      "words": [
+        {
+          "id": "caption-word-51-0",
+          "text": "evolução",
+          "start": 57.921,
+          "end": 58.423
+        },
+        {
+          "id": "caption-word-51-1",
+          "text": "mensal.",
+          "start": 58.443,
+          "end": 58.872
+        }
+      ]
+    },
+    {
+      "id": "caption-group-52",
+      "frame": 8,
+      "start": 58.953,
+      "end": 60.193,
+      "text": "Assertividade da Dupla",
+      "words": [
+        {
+          "id": "caption-word-52-0",
+          "text": "Assertividade",
+          "start": 58.953,
+          "end": 59.661
+        },
+        {
+          "id": "caption-word-52-1",
+          "text": "da",
+          "start": 59.681,
+          "end": 59.795
+        },
+        {
+          "id": "caption-word-52-2",
+          "text": "Dupla",
+          "start": 59.815,
+          "end": 60.173
+        }
+      ]
+    },
+    {
+      "id": "caption-group-53",
+      "frame": 8,
+      "start": 60.193,
+      "end": 60.956,
+      "text": "Análise:",
+      "words": [
+        {
+          "id": "caption-word-53-0",
+          "text": "Análise:",
+          "start": 60.193,
+          "end": 60.936
+        }
+      ]
+    },
+    {
+      "id": "caption-group-54",
+      "frame": 8,
+      "start": 60.956,
+      "end": 63.218,
+      "text": "concordância entre a pré-classificação",
+      "words": [
+        {
+          "id": "caption-word-54-0",
+          "text": "concordância",
+          "start": 60.956,
+          "end": 61.744
+        },
+        {
+          "id": "caption-word-54-1",
+          "text": "entre",
+          "start": 61.764,
+          "end": 62.017
+        },
+        {
+          "id": "caption-word-54-2",
+          "text": "a",
+          "start": 62.037,
+          "end": 62.087
+        },
+        {
+          "id": "caption-word-54-3",
+          "text": "pré-classificação",
+          "start": 62.106,
+          "end": 63.198
+        }
+      ]
+    },
+    {
+      "id": "caption-group-55",
+      "frame": 8,
+      "start": 63.218,
+      "end": 64.242,
+      "text": "e a validação,",
+      "words": [
+        {
+          "id": "caption-word-55-0",
+          "text": "e",
+          "start": 63.218,
+          "end": 63.304
+        },
+        {
+          "id": "caption-word-55-1",
+          "text": "a",
+          "start": 63.324,
+          "end": 63.374
+        },
+        {
+          "id": "caption-word-55-2",
+          "text": "validação,",
+          "start": 63.382,
+          "end": 64.222
+        }
+      ]
+    },
+    {
+      "id": "caption-group-56",
+      "frame": 8,
+      "start": 64.242,
+      "end": 65.371,
+      "text": "com aprovadas,",
+      "words": [
+        {
+          "id": "caption-word-56-0",
+          "text": "com",
+          "start": 64.242,
+          "end": 64.419
+        },
+        {
+          "id": "caption-word-56-1",
+          "text": "aprovadas,",
+          "start": 64.439,
+          "end": 65.351
+        }
+      ]
+    },
+    {
+      "id": "caption-group-57",
+      "frame": 8,
+      "start": 65.371,
+      "end": 66.943,
+      "text": "reprovadas e desempates.",
+      "words": [
+        {
+          "id": "caption-word-57-0",
+          "text": "reprovadas",
+          "start": 65.371,
+          "end": 66.037
+        },
+        {
+          "id": "caption-word-57-1",
+          "text": "e",
+          "start": 66.057,
+          "end": 66.115
+        },
+        {
+          "id": "caption-word-57-2",
+          "text": "desempates.",
+          "start": 66.135,
+          "end": 66.849
+        }
+      ]
+    },
+    {
+      "id": "caption-group-58",
+      "frame": 9,
+      "start": 66.943,
+      "end": 68.504,
+      "text": "SLA de Latência:",
+      "words": [
+        {
+          "id": "caption-word-58-0",
+          "text": "SLA",
+          "start": 66.943,
+          "end": 67.551
+        },
+        {
+          "id": "caption-word-58-1",
+          "text": "de",
+          "start": 67.571,
+          "end": 67.669
+        },
+        {
+          "id": "caption-word-58-2",
+          "text": "Latência:",
+          "start": 67.689,
+          "end": 68.484
+        }
+      ]
+    },
+    {
+      "id": "caption-group-59",
+      "frame": 9,
+      "start": 68.504,
+      "end": 69.866,
+      "text": "percentual de janelas",
+      "words": [
+        {
+          "id": "caption-word-59-0",
+          "text": "percentual",
+          "start": 68.504,
+          "end": 69.196
+        },
+        {
+          "id": "caption-word-59-1",
+          "text": "de",
+          "start": 69.216,
+          "end": 69.309
+        },
+        {
+          "id": "caption-word-59-2",
+          "text": "janelas",
+          "start": 69.329,
+          "end": 69.846
+        }
+      ]
+    },
+    {
+      "id": "caption-group-60",
+      "frame": 9,
+      "start": 69.866,
+      "end": 70.688,
+      "text": "no prazo,",
+      "words": [
+        {
+          "id": "caption-word-60-0",
+          "text": "no",
+          "start": 69.866,
+          "end": 69.966
+        },
+        {
+          "id": "caption-word-60-1",
+          "text": "prazo,",
+          "start": 69.986,
+          "end": 70.668
+        }
+      ]
+    },
+    {
+      "id": "caption-group-61",
+      "frame": 9,
+      "start": 70.688,
+      "end": 71.953,
+      "text": "latência diária e as",
+      "words": [
+        {
+          "id": "caption-word-61-0",
+          "text": "latência",
+          "start": 70.688,
+          "end": 71.226
+        },
+        {
+          "id": "caption-word-61-1",
+          "text": "diária",
+          "start": 71.246,
+          "end": 71.715
+        },
+        {
+          "id": "caption-word-61-2",
+          "text": "e",
+          "start": 71.735,
+          "end": 71.799
+        },
+        {
+          "id": "caption-word-61-3",
+          "text": "as",
+          "start": 71.819,
+          "end": 71.933
+        }
+      ]
+    },
+    {
+      "id": "caption-group-62",
+      "frame": 9,
+      "start": 71.953,
+      "end": 73.252,
+      "text": "violações do limite.",
+      "words": [
+        {
+          "id": "caption-word-62-0",
+          "text": "violações",
+          "start": 71.953,
+          "end": 72.581
+        },
+        {
+          "id": "caption-word-62-1",
+          "text": "do",
+          "start": 72.601,
+          "end": 72.684
+        },
+        {
+          "id": "caption-word-62-2",
+          "text": "limite.",
+          "start": 72.704,
+          "end": 73.132
+        }
+      ]
+    },
+    {
+      "id": "caption-group-63",
+      "frame": 10,
+      "start": 74.11,
+      "end": 76.233,
+      "text": "Disponibilidade de Equipamentos:",
+      "words": [
+        {
+          "id": "caption-word-63-0",
+          "text": "Disponibilidade",
+          "start": 74.11,
+          "end": 75.039
+        },
+        {
+          "id": "caption-word-63-1",
+          "text": "de",
+          "start": 75.059,
+          "end": 75.173
+        },
+        {
+          "id": "caption-word-63-2",
+          "text": "Equipamentos:",
+          "start": 75.193,
+          "end": 76.213
+        }
+      ]
+    },
+    {
+      "id": "caption-group-64",
+      "frame": 10,
+      "start": 76.233,
+      "end": 77.488,
+      "text": "horas com captura,",
+      "words": [
+        {
+          "id": "caption-word-64-0",
+          "text": "horas",
+          "start": 76.233,
+          "end": 76.559
+        },
+        {
+          "id": "caption-word-64-1",
+          "text": "com",
+          "start": 76.579,
+          "end": 76.732
+        },
+        {
+          "id": "caption-word-64-2",
+          "text": "captura,",
+          "start": 76.752,
+          "end": 77.468
+        }
+      ]
+    },
+    {
+      "id": "caption-group-65",
+      "frame": 10,
+      "start": 77.488,
+      "end": 78.581,
+      "text": "dias sem captura",
+      "words": [
+        {
+          "id": "caption-word-65-0",
+          "text": "dias",
+          "start": 77.488,
+          "end": 77.839
+        },
+        {
+          "id": "caption-word-65-1",
+          "text": "sem",
+          "start": 77.859,
+          "end": 78.041
+        },
+        {
+          "id": "caption-word-65-2",
+          "text": "captura",
+          "start": 78.061,
+          "end": 78.561
+        }
+      ]
+    },
+    {
+      "id": "caption-group-66",
+      "frame": 10,
+      "start": 78.581,
+      "end": 78.716,
+      "text": "e o",
+      "words": [
+        {
+          "id": "caption-word-66-0",
+          "text": "e",
+          "start": 78.581,
+          "end": 78.639
+        },
+        {
+          "id": "caption-word-66-1",
+          "text": "o",
+          "start": 78.659,
+          "end": 78.709
+        }
+      ]
+    },
+    {
+      "id": "caption-group-67",
+      "frame": 10,
+      "start": 78.716,
+      "end": 80.322,
+      "text": "ranking dos equipamentos.",
+      "words": [
+        {
+          "id": "caption-word-67-0",
+          "text": "ranking",
+          "start": 78.716,
+          "end": 79.134
+        },
+        {
+          "id": "caption-word-67-1",
+          "text": "dos",
+          "start": 79.154,
+          "end": 79.325
+        },
+        {
+          "id": "caption-word-67-2",
+          "text": "equipamentos.",
+          "start": 79.345,
+          "end": 80.202
+        }
+      ]
+    },
+    {
+      "id": "caption-group-68",
+      "frame": 11,
+      "start": 81.325,
+      "end": 83.282,
+      "text": "Pré-processamento de Imagens:",
+      "words": [
+        {
+          "id": "caption-word-68-0",
+          "text": "Pré-processamento",
+          "start": 81.325,
+          "end": 82.304
+        },
+        {
+          "id": "caption-word-68-1",
+          "text": "de",
+          "start": 82.324,
+          "end": 82.433
+        },
+        {
+          "id": "caption-word-68-2",
+          "text": "Imagens:",
+          "start": 82.453,
+          "end": 83.262
+        }
+      ]
+    },
+    {
+      "id": "caption-group-69",
+      "frame": 11,
+      "start": 83.282,
+      "end": 84.264,
+      "text": "recebidas,",
+      "words": [
+        {
+          "id": "caption-word-69-0",
+          "text": "recebidas,",
+          "start": 83.282,
+          "end": 84.244
+        }
+      ]
+    },
+    {
+      "id": "caption-group-70",
+      "frame": 11,
+      "start": 84.264,
+      "end": 85.528,
+      "text": "disponibilizadas,",
+      "words": [
+        {
+          "id": "caption-word-70-0",
+          "text": "disponibilizadas,",
+          "start": 84.264,
+          "end": 85.508
+        }
+      ]
+    },
+    {
+      "id": "caption-group-71",
+      "frame": 11,
+      "start": 85.528,
+      "end": 86.684,
+      "text": "aproveitamento,",
+      "words": [
+        {
+          "id": "caption-word-71-0",
+          "text": "aproveitamento,",
+          "start": 85.528,
+          "end": 86.664
+        }
+      ]
+    },
+    {
+      "id": "caption-group-72",
+      "frame": 11,
+      "start": 86.684,
+      "end": 87.225,
+      "text": "prazo de",
+      "words": [
+        {
+          "id": "caption-word-72-0",
+          "text": "prazo",
+          "start": 86.684,
+          "end": 87.084
+        },
+        {
+          "id": "caption-word-72-1",
+          "text": "de",
+          "start": 87.104,
+          "end": 87.205
+        }
+      ]
+    },
+    {
+      "id": "caption-group-73",
+      "frame": 11,
+      "start": 87.225,
+      "end": 89.355,
+      "text": "72 horas e produtividade",
+      "words": [
+        {
+          "id": "caption-word-73-0",
+          "text": "72",
+          "start": 87.225,
+          "end": 87.655
+        },
+        {
+          "id": "caption-word-73-1",
+          "text": "horas",
+          "start": 87.675,
+          "end": 88.407
+        },
+        {
+          "id": "caption-word-73-2",
+          "text": "e",
+          "start": 88.427,
+          "end": 88.482
+        },
+        {
+          "id": "caption-word-73-3",
+          "text": "produtividade",
+          "start": 88.502,
+          "end": 89.335
+        }
+      ]
+    },
+    {
+      "id": "caption-group-74",
+      "frame": 11,
+      "start": 89.355,
+      "end": 90.174,
+      "text": "por operador.",
+      "words": [
+        {
+          "id": "caption-word-74-0",
+          "text": "por",
+          "start": 89.355,
+          "end": 89.502
+        },
+        {
+          "id": "caption-word-74-1",
+          "text": "operador.",
+          "start": 89.522,
+          "end": 90.093
+        }
+      ]
+    },
+    {
+      "id": "caption-group-75",
+      "frame": 12,
+      "start": 90.174,
+      "end": 91.031,
+      "text": "Alertas:",
+      "words": [
+        {
+          "id": "caption-word-75-0",
+          "text": "Alertas:",
+          "start": 90.174,
+          "end": 91.011
+        }
+      ]
+    },
+    {
+      "id": "caption-group-76",
+      "frame": 12,
+      "start": 91.031,
+      "end": 91.729,
+      "text": "total,",
+      "words": [
+        {
+          "id": "caption-word-76-0",
+          "text": "total,",
+          "start": 91.031,
+          "end": 91.709
+        }
+      ]
+    },
+    {
+      "id": "caption-group-77",
+      "frame": 12,
+      "start": 91.729,
+      "end": 93.328,
+      "text": "críticos e pendentes,",
+      "words": [
+        {
+          "id": "caption-word-77-0",
+          "text": "críticos",
+          "start": 91.729,
+          "end": 92.322
+        },
+        {
+          "id": "caption-word-77-1",
+          "text": "e",
+          "start": 92.342,
+          "end": 92.401
+        },
+        {
+          "id": "caption-word-77-2",
+          "text": "pendentes,",
+          "start": 92.421,
+          "end": 93.308
+        }
+      ]
+    },
+    {
+      "id": "caption-group-78",
+      "frame": 12,
+      "start": 93.328,
+      "end": 93.995,
+      "text": "a evolução",
+      "words": [
+        {
+          "id": "caption-word-78-0",
+          "text": "a",
+          "start": 93.328,
+          "end": 93.391
+        },
+        {
+          "id": "caption-word-78-1",
+          "text": "evolução",
+          "start": 93.411,
+          "end": 93.975
+        }
+      ]
+    },
+    {
+      "id": "caption-group-79",
+      "frame": 12,
+      "start": 93.995,
+      "end": 94.589,
+      "text": "por tipo",
+      "words": [
+        {
+          "id": "caption-word-79-0",
+          "text": "por",
+          "start": 93.995,
+          "end": 94.16
+        },
+        {
+          "id": "caption-word-79-1",
+          "text": "tipo",
+          "start": 94.18,
+          "end": 94.569
+        }
+      ]
+    },
+    {
+      "id": "caption-group-80",
+      "frame": 12,
+      "start": 94.589,
+      "end": 94.767,
+      "text": "e o",
+      "words": [
+        {
+          "id": "caption-word-80-0",
+          "text": "e",
+          "start": 94.589,
+          "end": 94.68
+        },
+        {
+          "id": "caption-word-80-1",
+          "text": "o",
+          "start": 94.7,
+          "end": 94.75
+        }
+      ]
+    },
+    {
+      "id": "caption-group-81",
+      "frame": 12,
+      "start": 94.767,
+      "end": 96.059,
+      "text": "percentual tratado.",
+      "words": [
+        {
+          "id": "caption-word-81-0",
+          "text": "percentual",
+          "start": 94.767,
+          "end": 95.419
+        },
+        {
+          "id": "caption-word-81-1",
+          "text": "tratado.",
+          "start": 95.439,
+          "end": 95.939
+        }
+      ]
+    },
+    {
+      "id": "caption-group-82",
+      "frame": 13,
+      "start": 97.333,
+      "end": 98.292,
+      "text": "Infrações:",
+      "words": [
+        {
+          "id": "caption-word-82-0",
+          "text": "Infrações:",
+          "start": 97.333,
+          "end": 98.272
+        }
+      ]
+    },
+    {
+      "id": "caption-group-83",
+      "frame": 13,
+      "start": 98.292,
+      "end": 98.982,
+      "text": "total,",
+      "words": [
+        {
+          "id": "caption-word-83-0",
+          "text": "total,",
+          "start": 98.292,
+          "end": 98.962
+        }
+      ]
+    },
+    {
+      "id": "caption-group-84",
+      "frame": 13,
+      "start": 98.982,
+      "end": 99.839,
+      "text": "excesso médio",
+      "words": [
+        {
+          "id": "caption-word-84-0",
+          "text": "excesso",
+          "start": 98.982,
+          "end": 99.457
+        },
+        {
+          "id": "caption-word-84-1",
+          "text": "médio",
+          "start": 99.477,
+          "end": 99.819
+        }
+      ]
+    },
+    {
+      "id": "caption-group-85",
+      "frame": 13,
+      "start": 99.839,
+      "end": 100.963,
+      "text": "de velocidade,",
+      "words": [
+        {
+          "id": "caption-word-85-0",
+          "text": "de",
+          "start": 99.839,
+          "end": 99.941
+        },
+        {
+          "id": "caption-word-85-1",
+          "text": "velocidade,",
+          "start": 99.961,
+          "end": 100.943
+        }
+      ]
+    },
+    {
+      "id": "caption-group-86",
+      "frame": 13,
+      "start": 100.963,
+      "end": 101.897,
+      "text": "enquadramentos e",
+      "words": [
+        {
+          "id": "caption-word-86-0",
+          "text": "enquadramentos",
+          "start": 100.963,
+          "end": 101.8
+        },
+        {
+          "id": "caption-word-86-1",
+          "text": "e",
+          "start": 101.82,
+          "end": 101.877
+        }
+      ]
+    },
+    {
+      "id": "caption-group-87",
+      "frame": 13,
+      "start": 101.897,
+      "end": 102.403,
+      "text": "o ranking",
+      "words": [
+        {
+          "id": "caption-word-87-0",
+          "text": "o",
+          "start": 101.897,
+          "end": 101.947
+        },
+        {
+          "id": "caption-word-87-1",
+          "text": "ranking",
+          "start": 101.962,
+          "end": 102.383
+        }
+      ]
+    },
+    {
+      "id": "caption-group-88",
+      "frame": 13,
+      "start": 102.403,
+      "end": 103.508,
+      "text": "de equipamentos.",
+      "words": [
+        {
+          "id": "caption-word-88-0",
+          "text": "de",
+          "start": 102.403,
+          "end": 102.511
+        },
+        {
+          "id": "caption-word-88-1",
+          "text": "equipamentos.",
+          "start": 102.531,
+          "end": 103.388
+        }
+      ]
+    },
+    {
+      "id": "caption-group-89",
+      "frame": 14,
+      "start": 104.535,
+      "end": 106.005,
+      "text": "Passagens Veiculares:",
+      "words": [
+        {
+          "id": "caption-word-89-0",
+          "text": "Passagens",
+          "start": 104.535,
+          "end": 105.151
+        },
+        {
+          "id": "caption-word-89-1",
+          "text": "Veiculares:",
+          "start": 105.171,
+          "end": 105.985
+        }
+      ]
+    },
+    {
+      "id": "caption-group-90",
+      "frame": 14,
+      "start": 106.005,
+      "end": 107.102,
+      "text": "passagens por hora",
+      "words": [
+        {
+          "id": "caption-word-90-0",
+          "text": "passagens",
+          "start": 106.005,
+          "end": 106.698
+        },
+        {
+          "id": "caption-word-90-1",
+          "text": "por",
+          "start": 106.718,
+          "end": 106.868
+        },
+        {
+          "id": "caption-word-90-2",
+          "text": "hora",
+          "start": 106.888,
+          "end": 107.082
+        }
+      ]
+    },
+    {
+      "id": "caption-group-91",
+      "frame": 14,
+      "start": 107.102,
+      "end": 107.747,
+      "text": "do dia,",
+      "words": [
+        {
+          "id": "caption-word-91-0",
+          "text": "do",
+          "start": 107.102,
+          "end": 107.197
+        },
+        {
+          "id": "caption-word-91-1",
+          "text": "dia,",
+          "start": 107.217,
+          "end": 107.727
+        }
+      ]
+    },
+    {
+      "id": "caption-group-92",
+      "frame": 14,
+      "start": 107.747,
+      "end": 108.407,
+      "text": "por faixa",
+      "words": [
+        {
+          "id": "caption-word-92-0",
+          "text": "por",
+          "start": 107.747,
+          "end": 107.919
+        },
+        {
+          "id": "caption-word-92-1",
+          "text": "faixa",
+          "start": 107.939,
+          "end": 108.387
+        }
+      ]
+    },
+    {
+      "id": "caption-group-93",
+      "frame": 14,
+      "start": 108.407,
+      "end": 109.738,
+      "text": "e por classificação,",
+      "words": [
+        {
+          "id": "caption-word-93-0",
+          "text": "e",
+          "start": 108.407,
+          "end": 108.464
+        },
+        {
+          "id": "caption-word-93-1",
+          "text": "por",
+          "start": 108.484,
+          "end": 108.637
+        },
+        {
+          "id": "caption-word-93-2",
+          "text": "classificação,",
+          "start": 108.657,
+          "end": 109.718
+        }
+      ]
+    },
+    {
+      "id": "caption-group-94",
+      "frame": 14,
+      "start": 109.738,
+      "end": 110.001,
+      "text": "com o",
+      "words": [
+        {
+          "id": "caption-word-94-0",
+          "text": "com",
+          "start": 109.738,
+          "end": 109.917
+        },
+        {
+          "id": "caption-word-94-1",
+          "text": "o",
+          "start": 109.937,
+          "end": 109.987
+        }
+      ]
+    },
+    {
+      "id": "caption-group-95",
+      "frame": 14,
+      "start": 110.001,
+      "end": 111.523,
+      "text": "ranking de equipamentos.",
+      "words": [
+        {
+          "id": "caption-word-95-0",
+          "text": "ranking",
+          "start": 110.001,
+          "end": 110.399
+        },
+        {
+          "id": "caption-word-95-1",
+          "text": "de",
+          "start": 110.419,
+          "end": 110.526
+        },
+        {
+          "id": "caption-word-95-2",
+          "text": "equipamentos.",
+          "start": 110.546,
+          "end": 111.403
+        }
+      ]
+    },
+    {
+      "id": "caption-group-96",
+      "frame": 15,
+      "start": 111.684,
+      "end": 112.267,
+      "text": "Mapa:",
+      "words": [
+        {
+          "id": "caption-word-96-0",
+          "text": "Mapa:",
+          "start": 111.684,
+          "end": 112.247
+        }
+      ]
+    },
+    {
+      "id": "caption-group-97",
+      "frame": 15,
+      "start": 112.267,
+      "end": 113.979,
+      "text": "equipamentos cadastrados,",
+      "words": [
+        {
+          "id": "caption-word-97-0",
+          "text": "equipamentos",
+          "start": 112.267,
+          "end": 113.006
+        },
+        {
+          "id": "caption-word-97-1",
+          "text": "cadastrados,",
+          "start": 113.026,
+          "end": 113.959
+        }
+      ]
+    },
+    {
+      "id": "caption-group-98",
+      "frame": 15,
+      "start": 113.979,
+      "end": 115.255,
+      "text": "áreas monitoradas,",
+      "words": [
+        {
+          "id": "caption-word-98-0",
+          "text": "áreas",
+          "start": 113.979,
+          "end": 114.294
+        },
+        {
+          "id": "caption-word-98-1",
+          "text": "monitoradas,",
+          "start": 114.314,
+          "end": 115.235
+        }
+      ]
+    },
+    {
+      "id": "caption-group-99",
+      "frame": 15,
+      "start": 115.255,
+      "end": 116.782,
+      "text": "passagens e infrações",
+      "words": [
+        {
+          "id": "caption-word-99-0",
+          "text": "passagens",
+          "start": 115.255,
+          "end": 115.99
+        },
+        {
+          "id": "caption-word-99-1",
+          "text": "e",
+          "start": 116.01,
+          "end": 116.068
+        },
+        {
+          "id": "caption-word-99-2",
+          "text": "infrações",
+          "start": 116.088,
+          "end": 116.762
+        }
+      ]
+    },
+    {
+      "id": "caption-group-100",
+      "frame": 15,
+      "start": 116.782,
+      "end": 117.863,
+      "text": "por equipamento.",
+      "words": [
+        {
+          "id": "caption-word-100-0",
+          "text": "por",
+          "start": 116.782,
+          "end": 116.938
+        },
+        {
+          "id": "caption-word-100-1",
+          "text": "equipamento.",
+          "start": 116.958,
+          "end": 117.743
+        }
+      ]
+    },
+    {
+      "id": "caption-group-101",
+      "frame": 16,
+      "start": 118.858,
+      "end": 120.251,
+      "text": "São 14 painéis",
+      "words": [
+        {
+          "id": "caption-word-101-0",
+          "text": "São",
+          "start": 118.858,
+          "end": 119.09
+        },
+        {
+          "id": "caption-word-101-1",
+          "text": "14",
+          "start": 119.11,
+          "end": 119.432
+        },
+        {
+          "id": "caption-word-101-2",
+          "text": "painéis",
+          "start": 119.452,
+          "end": 120.231
+        }
+      ]
+    },
+    {
+      "id": "caption-group-102",
+      "frame": 16,
+      "start": 120.251,
+      "end": 121.307,
+      "text": "interativos,",
+      "words": [
+        {
+          "id": "caption-word-102-0",
+          "text": "interativos,",
+          "start": 120.251,
+          "end": 121.287
+        }
+      ]
+    },
+    {
+      "id": "caption-group-103",
+      "frame": 16,
+      "start": 121.307,
+      "end": 122.076,
+      "text": "com filtros",
+      "words": [
+        {
+          "id": "caption-word-103-0",
+          "text": "com",
+          "start": 121.307,
+          "end": 121.478
+        },
+        {
+          "id": "caption-word-103-1",
+          "text": "filtros",
+          "start": 121.498,
+          "end": 122.056
+        }
+      ]
+    },
+    {
+      "id": "caption-group-104",
+      "frame": 16,
+      "start": 122.076,
+      "end": 123.436,
+      "text": "e filtro cruzado:",
+      "words": [
+        {
+          "id": "caption-word-104-0",
+          "text": "e",
+          "start": 122.076,
+          "end": 122.138
+        },
+        {
+          "id": "caption-word-104-1",
+          "text": "filtro",
+          "start": 122.158,
+          "end": 122.634
+        },
+        {
+          "id": "caption-word-104-2",
+          "text": "cruzado:",
+          "start": 122.654,
+          "end": 123.416
+        }
+      ]
+    },
+    {
+      "id": "caption-group-105",
+      "frame": 16,
+      "start": 123.436,
+      "end": 123.888,
+      "text": "clique em",
+      "words": [
+        {
+          "id": "caption-word-105-0",
+          "text": "clique",
+          "start": 123.436,
+          "end": 123.762
+        },
+        {
+          "id": "caption-word-105-1",
+          "text": "em",
+          "start": 123.782,
+          "end": 123.868
+        }
+      ]
+    },
+    {
+      "id": "caption-group-106",
+      "frame": 16,
+      "start": 123.888,
+      "end": 124.526,
+      "text": "um gráfico",
+      "words": [
+        {
+          "id": "caption-word-106-0",
+          "text": "um",
+          "start": 123.888,
+          "end": 123.983
+        },
+        {
+          "id": "caption-word-106-1",
+          "text": "gráfico",
+          "start": 124.003,
+          "end": 124.506
+        }
+      ]
+    },
+    {
+      "id": "caption-group-107",
+      "frame": 16,
+      "start": 124.526,
+      "end": 125.193,
+      "text": "para filtrar",
+      "words": [
+        {
+          "id": "caption-word-107-0",
+          "text": "para",
+          "start": 124.526,
+          "end": 124.715
+        },
+        {
+          "id": "caption-word-107-1",
+          "text": "filtrar",
+          "start": 124.735,
+          "end": 125.173
+        }
+      ]
+    },
+    {
+      "id": "caption-group-108",
+      "frame": 16,
+      "start": 125.193,
+      "end": 126.255,
+      "text": "o painel inteiro.",
+      "words": [
+        {
+          "id": "caption-word-108-0",
+          "text": "o",
+          "start": 125.193,
+          "end": 125.243
+        },
+        {
+          "id": "caption-word-108-1",
+          "text": "painel",
+          "start": 125.256,
+          "end": 125.615
+        },
+        {
+          "id": "caption-word-108-2",
+          "text": "inteiro.",
+          "start": 125.635,
+          "end": 126.135
+        }
+      ]
+    }
+  ]
+}

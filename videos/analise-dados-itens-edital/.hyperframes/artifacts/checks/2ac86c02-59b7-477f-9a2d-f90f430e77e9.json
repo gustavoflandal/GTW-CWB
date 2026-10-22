@@ -1,0 +1,640 @@
+{
+  "ok": true,
+  "strict": false,
+  "browserSkipped": false,
+  "lint": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 18,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "caption_track_kind_missing",
+        "severity": "warning",
+        "message": "<div id=\"el-captions\"> looks like captions but is not marked as such, so the timeline cannot group it on the caption track.",
+        "selector": "#el-captions",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\index.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add data-track-kind=\"captions\" to <div id=\"el-captions\">."
+      },
+      {
+        "code": "overlapping_gsap_tweens",
+        "severity": "warning",
+        "message": "GSAP tweens overlap on \"#a01-glow\" for scale between 2.78s and 3.10s.",
+        "selector": "#a01-glow",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\01-asterisco-edital.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Shorten the earlier tween, move the later tween, or add `overwrite: \"auto\"`."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"f02-qualidade-prazos-bg\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\02-qualidade-prazos.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"e03-bg\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\03-equipamentos-imagens.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"gr04-bg\" data-start=\"0\" data-track-index=\"0\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\04-gestao-rastreabilidade.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "studio_missing_editable_id",
+        "severity": "warning",
+        "message": "<div class=\"gr04-header\" data-start=\"0\" data-track-index=\"1\"> has no id, so Studio cannot use a stable edit target for its timeline and canvas controls.",
+        "selector": "[data-composition-id]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\04-gestao-rastreabilidade.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Add a stable, human-readable id such as id=\"hero-title\" or id=\"scene-1-card\" to every timeline-visible element you want agents or Studio to edit."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-bg\" starts with a digit, so the common selector `#05-passe-o-mouse-bg` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-bg",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-stage\" starts with a digit, so the common selector `#05-passe-o-mouse-stage` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-stage",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-card\" starts with a digit, so the common selector `#05-passe-o-mouse-card` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-card",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-icon\" starts with a digit, so the common selector `#05-passe-o-mouse-icon` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-icon",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-ast\" starts with a digit, so the common selector `#05-passe-o-mouse-ast` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-ast",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-tip\" starts with a digit, so the common selector `#05-passe-o-mouse-tip` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-tip",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-cursor\" starts with a digit, so the common selector `#05-passe-o-mouse-cursor` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-cursor",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-row1\" starts with a digit, so the common selector `#05-passe-o-mouse-row1` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-row1",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-row2\" starts with a digit, so the common selector `#05-passe-o-mouse-row2` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-row2",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-row3\" starts with a digit, so the common selector `#05-passe-o-mouse-row3` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-row3",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_requires_css_escape",
+        "severity": "warning",
+        "message": "id=\"05-passe-o-mouse-progress\" starts with a digit, so the common selector `#05-passe-o-mouse-progress` throws a SyntaxError in querySelector().",
+        "selector": "#05-passe-o-mouse-progress",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Rename the id to start with a letter (recommended), or build selectors with `#${CSS.escape(id)}` at runtime."
+      },
+      {
+        "code": "id_override_reduced_specificity",
+        "severity": "warning",
+        "message": "Selector \"#root [id=\"05-passe-o-mouse-bg\"]\" sets left/top through [id=...] or :where(#id), which has class-level or zero specificity, so a compound class rule (e.g. \".parent .row\") on the same element can silently win over this override.",
+        "selector": "#root [id=\"05-passe-o-mouse-bg\"]",
+        "dataAttributes": {},
+        "sourceFile": "D:\\GTW-CWB\\videos\\analise-dados-itens-edital\\compositions\\frames\\05-passe-o-mouse.html",
+        "bbox": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "time": 0,
+        "fixHint": "Use `#\\30 5-passe-o-mouse-bg` instead; id specificity beats any selector built only from classes."
+      }
+    ],
+    "filesScanned": 7
+  },
+  "runtime": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": []
+  },
+  "layout": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 5,
+    "findings": [
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 4.856,
+        "selector": "#a01-w4",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 298.44,
+          "top": 407.73,
+          "right": 418.69,
+          "bottom": 537.91,
+          "width": 120.25,
+          "height": 130.18
+        },
+        "containerSelector": "#f02-qualidade-prazos-card1 > div:nth-of-type(2) > div:nth-of-type(2)",
+        "text": "de",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/01-asterisco-edital.html",
+        "bbox": {
+          "x": 298.44,
+          "y": 407.73,
+          "width": 120.25,
+          "height": 130.18
+        },
+        "firstSeen": 4.856,
+        "lastSeen": 4.856,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          4.856
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 8.965,
+        "selector": "div.f02-qualidade-prazos-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 96,
+          "top": 106,
+          "right": 418.28,
+          "bottom": 142,
+          "width": 322.28,
+          "height": 36
+        },
+        "containerSelector": "#e03-eyebrow",
+        "text": "QUALIDADE E PRAZOS",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/02-qualidade-prazos.html",
+        "bbox": {
+          "x": 96,
+          "y": 106,
+          "width": 322.28,
+          "height": 36
+        },
+        "firstSeen": 8.965,
+        "lastSeen": 8.965,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          8.965
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 10.024,
+        "selector": "#e03-cam",
+        "message": "Element extends outside a clipping layout container.",
+        "rect": {
+          "left": -8.06,
+          "top": -3.81,
+          "right": 1928.06,
+          "bottom": 1085.26,
+          "width": 1936.13,
+          "height": 1089.07
+        },
+        "containerSelector": "#el-03-equipamentos-imagens > div:nth-of-type(1)",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 0,
+          "top": 0,
+          "right": 1920,
+          "bottom": 1080,
+          "width": 1920,
+          "height": 1080
+        },
+        "overflow": {
+          "left": 8.06,
+          "right": 8.06,
+          "top": 3.81,
+          "bottom": 5.26
+        },
+        "dataAttributes": {
+          "data-start": "0",
+          "data-duration": "4.296",
+          "data-track-index": "1"
+        },
+        "sourceFile": "compositions/frames/03-equipamentos-imagens.html",
+        "bbox": {
+          "x": -8.06,
+          "y": -3.81,
+          "width": 1936.13,
+          "height": 1089.07
+        },
+        "firstSeen": 10.024,
+        "lastSeen": 12.251,
+        "occurrences": 2,
+        "heldMs": 0,
+        "times": [
+          10.024,
+          12.251
+        ]
+      },
+      {
+        "code": "content_overlap",
+        "severity": "info",
+        "time": 12.825,
+        "selector": "#e03-eyebrow",
+        "message": "Two text blocks overlap and may render unreadable.",
+        "rect": {
+          "left": 74.4,
+          "top": 109.61,
+          "right": 457.8,
+          "bottom": 144.46,
+          "width": 383.4,
+          "height": 34.85
+        },
+        "containerSelector": "#gr04-eyebrow",
+        "text": "EQUIPAMENTOS E IMAGENS",
+        "fixHint": "Give each block its own zone, or put data-layout-allow-overlap on the text or on a container inside the scene. A marker on the scene root does not apply.",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-equipamentos-imagens.html",
+        "bbox": {
+          "x": 74.4,
+          "y": 109.61,
+          "width": 383.4,
+          "height": 34.85
+        },
+        "firstSeen": 12.825,
+        "lastSeen": 12.825,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          12.825
+        ]
+      },
+      {
+        "code": "container_overflow",
+        "severity": "info",
+        "time": 18.933,
+        "selector": "#\\30 5-passe-o-mouse-tip",
+        "message": "Nowrap text is wider than its container.",
+        "rect": {
+          "left": 837.52,
+          "top": 340.88,
+          "right": 1272.7,
+          "bottom": 429.14,
+          "width": 435.18,
+          "height": 88.26
+        },
+        "containerSelector": "span.f05-ast-wrap",
+        "fixHint": "Resize/reposition the child or container, or mark intentional overflow with data-layout-allow-overflow.",
+        "containerRect": {
+          "left": 1029.86,
+          "top": 456.95,
+          "right": 1080.38,
+          "bottom": 562.54,
+          "width": 50.52,
+          "height": 105.58
+        },
+        "overflow": {
+          "left": 192.34,
+          "right": 192.32
+        },
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/05-passe-o-mouse.html",
+        "bbox": {
+          "x": 837.52,
+          "y": 340.88,
+          "width": 435.18,
+          "height": 88.26
+        },
+        "firstSeen": 18.933,
+        "lastSeen": 18.933,
+        "occurrences": 1,
+        "heldMs": 0,
+        "times": [
+          18.933
+        ]
+      }
+    ],
+    "duration": 20.047,
+    "samples": [
+      1.114,
+      3.341,
+      5.569,
+      7.796,
+      10.024,
+      12.251,
+      14.478,
+      16.706,
+      18.933
+    ],
+    "transitionSamples": [],
+    "transitionSamplesDropped": 0,
+    "tolerance": 2,
+    "totalIssueCount": 5,
+    "truncated": false
+  },
+  "motion": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 0,
+    "infoCount": 0,
+    "findings": [],
+    "enabled": false,
+    "samples": 0
+  },
+  "contrast": {
+    "ok": true,
+    "errorCount": 0,
+    "warningCount": 3,
+    "infoCount": 0,
+    "findings": [
+      {
+        "code": "contrast_aa_failure",
+        "severity": "warning",
+        "message": "Contrast is 4.02:1; WCAG AA requires 4.5:1.",
+        "text": "TR 5.2.7.1*",
+        "fg": "rgb(13,117,191)",
+        "bg": "rgb(226,236,226)",
+        "ratio": 4.02,
+        "requiredRatio": 4.5,
+        "suggestedColor": "rgb(12,109,178)",
+        "large": false,
+        "selector": "div > div:nth-of-type(3) > div > div:nth-of-type(2) > div:nth-of-type(2) > div:nth-of-type(1) > div:nth-of-type(2)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/03-equipamentos-imagens.html",
+        "bbox": {
+          "x": 138.15402221679688,
+          "y": 448.96136474609375,
+          "width": 162.54147338867188,
+          "height": 44.369598388671875
+        },
+        "time": 10.024,
+        "times": [
+          10.024
+        ]
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "warning",
+        "message": "Contrast is 2.55:1; WCAG AA requires 4.5:1.",
+        "text": "01",
+        "fg": "rgb(154,154,154)",
+        "bg": "rgb(244,245,229)",
+        "ratio": 2.55,
+        "requiredRatio": 4.5,
+        "suggestedColor": "rgb(111,111,111)",
+        "large": false,
+        "selector": "div > div:nth-of-type(4) > div > div:nth-of-type(3) > div:nth-of-type(1) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-gestao-rastreabilidade.html",
+        "bbox": {
+          "x": 127.83901977539062,
+          "y": 240.8470001220703,
+          "width": 43.85040283203125,
+          "height": 27.904800415039062
+        },
+        "time": 14.478,
+        "times": [
+          14.478
+        ]
+      },
+      {
+        "code": "contrast_aa_failure",
+        "severity": "warning",
+        "message": "Contrast is 2.55:1; WCAG AA requires 4.5:1.",
+        "text": "02",
+        "fg": "rgb(154,154,154)",
+        "bg": "rgb(244,245,229)",
+        "ratio": 2.55,
+        "requiredRatio": 4.5,
+        "suggestedColor": "rgb(111,111,111)",
+        "large": false,
+        "selector": "div > div:nth-of-type(4) > div > div:nth-of-type(3) > div:nth-of-type(2) > div:nth-of-type(1)",
+        "dataAttributes": {},
+        "sourceFile": "compositions/frames/04-gestao-rastreabilidade.html",
+        "bbox": {
+          "x": 127.83901977539062,
+          "y": 378.3778076171875,
+          "width": 43.85040283203125,
+          "height": 27.90478515625
+        },
+        "time": 14.478,
+        "times": [
+          14.478
+        ]
+      }
+    ],
+    "enabled": true,
+    "samples": [
+      1.114,
+      5.569,
+      10.024,
+      14.478,
+      18.933
+    ],
+    "checked": 38,
+    "passed": 35
+  },
+  "hdr": {
+    "autoPromotion": null,
+    "inspection": "available"
+  },
+  "snapshots": {
+    "enabled": false,
+    "files": [],
+    "times": [],
+    "findingFiles": []
+  }
+}

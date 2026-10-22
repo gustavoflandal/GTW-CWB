@@ -1,0 +1,22 @@
+{
+  "tts_provider": "heygen",
+  "voice_id": "0edbc867be6f48c5be8ff8b0fbca0802",
+  "bgm": {
+    "path": "assets/bgm/track.mp3",
+    "volume": 0.9,
+    "query": "calm confident corporate tech underscore, light",
+    "mode": "retrieve",
+    "duration_s": 90
+  },
+  "bgm_pending": false,
+  "bgm_provider": "heygen",
+  "bgm_pid": null,
+  "bgm_log": null,
+  "bgm_mode": "retrieve",
+  "bgm_target_duration_s": null,
+  "bgm_seed_duration_s": null,
+  "bgm_loop_count": null,
+  "voices": [],
+  "sfx": [],
+  "total_duration_s": 0
+}

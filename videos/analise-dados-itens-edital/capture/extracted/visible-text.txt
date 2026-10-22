@@ -1,0 +1,16 @@
+Tela: Módulo de Análise de Dados (Tela Inicial → Análise de Dados), 14 cards.
+Cards com asterisco vermelho (atendem item específico do edital / TR TRANSALVADOR), com o item do TR:
+- SLA de Latência — 5.6.2.3 — recepção em até 4 segundos; latência média/máxima, P95, violações.
+- Assertividade — 5.2.2.6 — painel de controle operacional; concordância pré-classificação x validação, meta 80%.
+- SLA de Pré-processamento (72h) — 5.5.2.1 — prazo de 72 horas entre captura e pré-classificação.
+- Pré-Processamento — 5.5.3.1 — indicadores do pré-processamento.
+- Time-lapse — 5.7.7.1 — vídeos operacionais sintéticos a partir das passagens de um equipamento.
+- Disponibilidade — 5.2.7.1 — monitoramento do estado dos equipamentos (online/offline, uptime 24h).
+- Integridade das Imagens — 5.2.1.2, 5.2.1.3 — SHA-256; recebidas, íntegras e rejeitadas.
+- Log de Auditoria — 5.1.10 — consulta dos logs de ações dos usuários com filtros e exportação.
+- Logs Técnicos — 5.4.7.1, 5.4.7.6 — repositório de logs e histórico de parâmetros.
+- Tipos de Alerta — 5.3.1.3, 5.3.3.4, 5.3.7.6 — tratamentos, destaque dos críticos, parametrização.
+- Relatórios Gerenciais — 5.4.3.7, 5.5.3.3 — relatório gerencial periódico e consolidado mensal.
+- Análises (Plataforma de Análises / Superset) — 5.4.2.1 — dashboards analíticos interativos.
+Sem asterisco: Perfil Comportamental, Análise de Correlacionamentos.
+Passar o mouse sobre o asterisco mostra o item do edital.

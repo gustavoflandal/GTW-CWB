@@ -1,0 +1,66 @@
+<template>
+  <div data-hf-id="hf-cr42" id="root" data-composition-id="15-mapa-equipamentos-infracoes" data-start="0" data-duration="7.674" data-width="1920" data-height="1080">
+    <style>
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_500.woff2") format("woff2"); font-weight: 500; }
+      @font-face { font-family: "Space Grotesk"; src: url("assets/fonts/Space_Grotesk_700.woff2") format("woff2"); font-weight: 700; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_400.woff2") format("woff2"); font-weight: 400; }
+      @font-face { font-family: "Inter"; src: url("assets/fonts/Inter_500.woff2") format("woff2"); font-weight: 500; }
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; font-family: "Inter", sans-serif; }
+
+      .p15-bg { position: absolute; inset: 0; background-color: #fdfae7; background-image: linear-gradient(rgba(13,117,191,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(13,117,191,0.06) 1px, transparent 1px); background-size: 48px 48px; }
+      .p15-col { position: absolute; left: 96px; top: 150px; width: 500px; }
+      .p15-accent { width: 60px; height: 4px; border-radius: 2px; background: #0d75bf; transform-origin: 0 50%; }
+      .p15-eyebrow { margin-top: 22px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 22px; letter-spacing: 0.08em; text-transform: uppercase; color: #0b66a8; }
+      .p15-title { margin-top: 26px; font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 60px; line-height: 1.06; letter-spacing: -0.02em; color: #111111; }
+      .p15-desc { margin-top: 28px; font-size: 30px; line-height: 1.45; color: #555555; }
+      .p15-chip { margin-top: 36px; display: inline-block; font-family: "Space Grotesk", sans-serif; font-weight: 500; font-size: 22px; color: #0b66a8; background: rgba(13,117,191,0.08); border: 1.5px solid rgba(13,117,191,0.2); padding: 10px 22px; border-radius: 100px; }
+      .p15-win { position: absolute; left: 660px; top: 96px; width: 1164px; height: 776px; border-radius: 14px; background: #ffffff; border: 1.5px solid rgba(13,117,191,0.25); overflow: hidden; }
+      .p15-bar { position: absolute; left: 0; top: 0; right: 0; height: 48px; background: rgba(13,117,191,0.06); border-bottom: 1.5px solid rgba(13,117,191,0.15); display: flex; align-items: center; gap: 10px; padding: 0 20px; }
+      .p15-bar i { width: 13px; height: 13px; border-radius: 50%; background: rgba(13,117,191,0.25); display: block; }
+      .p15-bar span { margin-left: 14px; font-size: 19px; font-weight: 500; color: #555555; white-space: nowrap; }
+      .p15-vp { position: absolute; left: 0; top: 48px; width: 1164px; height: 728px; overflow: hidden; background: #f4f6f8; }
+      .p15-shot { position: absolute; left: 0; top: 0; width: 1920px; height: 1497px; transform-origin: 0 0; }
+      .p15-shot img { display: block; width: 1920px; height: 1497px; }
+    </style>
+
+    <div data-hf-id="hf-e0oo" class="p15-bg clip" id="p15-bgclip" data-start="0" data-duration="7.674" data-track-index="0"></div>
+    <div data-hf-id="hf-6xhz" class="clip" id="p15-main" data-start="0" data-duration="7.674" data-track-index="1">
+      <div data-hf-id="hf-e3lf" class="p15-col">
+        <div data-hf-id="hf-a23e" class="p15-accent" id="p15-accent"></div>
+        <div data-hf-id="hf-f796" class="p15-eyebrow" id="p15-eyebrow">PAINEL OPERACIONAL · 9/9</div>
+        <div data-hf-id="hf-glex" class="p15-title" id="p15-title">Mapa — Equipamentos, Áreas e Infrações</div>
+        <div data-hf-id="hf-c0iw" class="p15-desc" id="p15-desc">Equipamentos, áreas monitoradas, passagens e infrações no mapa.</div>
+        <div data-hf-id="hf-h78j" class="p15-chip" id="p15-chip">5 gráficos · interativo</div>
+      </div>
+      <div data-hf-id="hf-g6rg" class="p15-win" id="p15-win">
+        <div data-hf-id="hf-7u7i" class="p15-bar"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><span data-hf-id="hf-e543">Análises · Mapa — Equipamentos, Áreas e Infrações</span></div>
+        <div data-hf-id="hf-52m9" class="p15-vp">
+          <div data-hf-id="hf-zg6i" class="p15-shot" id="p15-shot"><img data-hf-id="hf-qgzf" src="assets/mapa-equipamentos-infracoes.png" alt="Painel Mapa — Equipamentos, Áreas e Infrações"></div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <script>
+      (function () {
+        const D = 7.174;
+        const tl = gsap.timeline({ paused: true });
+
+        // Scene 1: window enters with the WHOLE dashboard visible; text column builds
+        tl.fromTo("#p15-shot", { scale: 0.4863, x: 115.1, y: 0.0 }, { scale: 0.4863, x: 115.1, y: 0.0, duration: 0.01, ease: "none" }, 0);
+        tl.fromTo("#p15-win", { opacity: 0, y: 40 }, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" }, 0);
+        tl.fromTo("#p15-accent", { scaleX: 0 }, { scaleX: 1, duration: 0.4, ease: "power3.out" }, 0.05);
+        tl.fromTo("#p15-eyebrow", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 0.1);
+        tl.fromTo("#p15-title", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.2);
+        tl.fromTo("#p15-desc", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" }, 0.75);
+        tl.fromTo("#p15-chip", { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: 0.4, ease: "power3.out" }, 1.2);
+        // Scene 2: push in to reading scale at the top, then one continuous pan down
+        tl.to("#p15-shot", { scale: 0.6062, x: 0, y: 0, duration: 0.90, ease: "power3.inOut" }, 2.3);
+        tl.to("#p15-shot", { y: -179.6, duration: 2.37, ease: "sine.inOut" }, 3.2);
+        // Scene 3: pull back to the whole dashboard and hold
+        tl.to("#p15-shot", { scale: 0.4863, x: 115.1, y: 0.0, duration: 0.90, ease: "power3.inOut" }, 5.57);
+        window.__timelines = window.__timelines || {};
+        window.__timelines["15-mapa-equipamentos-infracoes"] = tl;
+      })();
+    </script>
+  </div>
+</template>
