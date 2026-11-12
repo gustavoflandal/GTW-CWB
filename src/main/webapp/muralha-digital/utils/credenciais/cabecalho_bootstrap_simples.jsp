@@ -44,6 +44,7 @@
 		<script type="text/javascript" src="/muralha-digital/assets/datepicker/js/tempus-dominus-6.7.7.js"></script>
 		<script type="text/javascript" src="/muralha-digital/assets/js/modo-escuro.js"></script>
 		<script type="text/javascript" src="/muralha-digital/assets/js/ajuda-contexto.js"></script>
+		<script type="text/javascript" src="/muralha-digital/assets/js/auditoria/impressao-captura.js"></script>
 
 	</head>
 	
