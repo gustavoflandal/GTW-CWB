@@ -140,7 +140,36 @@ public class Conexao implements Serializable {
 	private static Logger logger = Logger.getLogger(Conexao.class); 
 
 	static final String MSG_CONN = "Conexão %1$s do pool. hashCode = [0x%2$X] active=[%3$d] idle=[%4$d] maxActive=[%5$d]";
-	
+
+	/**
+	 * REGRA ABSOLUTA: garante que o host do banco seja localhost (loopback).
+	 * Lança ConfiguracaoException para qualquer host remoto, impedindo o sistema
+	 * de se conectar a um banco que não esteja em localhost. Aceita formas com
+	 * porta ou instância (ex.: "localhost\\SQLEXPRESS", "127.0.0.1,1433").
+	 */
+	private static void validarHostLocal(String host) throws ConfiguracaoException {
+		String base = host == null ? "" : host.trim().toLowerCase();
+		int corte = -1;
+		for (int i = 0; i < base.length(); i++) {
+			char c = base.charAt(i);
+			if (c == '\\' || c == ',' || c == ':') { corte = i; break; }
+		}
+		if (corte >= 0) base = base.substring(0, corte).trim();
+		boolean local =
+			base.isEmpty()
+			|| base.equals("localhost")
+			|| base.equals("127.0.0.1")
+			|| base.startsWith("127.")
+			|| base.equals("::1")
+			|| base.equals("[::1]")
+			|| base.equals(".")
+			|| base.equals("(local)");
+		if (!local) {
+			throw new ConfiguracaoException(
+				"Conexão bloqueada: o sistema só pode usar banco em localhost (host configurado: '" + host + "').");
+		}
+	}
+
 	/**
 	 * Construtor do objeto.
 	 */
@@ -156,6 +185,9 @@ public class Conexao implements Serializable {
 			if (host == null || host.length() == 0)
 				throw new ConfiguracaoException("Erro de configuração: não existe host definido.");
 
+			// REGRA ABSOLUTA: o sistema só pode usar banco em localhost (loopback).
+			// Qualquer outro host é recusado, mesmo que configurado no confGTW.xml.
+			validarHostLocal(host);
 
 			// Configurações para o pool.
 			// http://commons.apache.org/dbcp/configuration.html

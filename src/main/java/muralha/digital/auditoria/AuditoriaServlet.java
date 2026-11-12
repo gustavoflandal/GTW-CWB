@@ -39,6 +39,9 @@ public class AuditoriaServlet extends HttpServlet {
             out.print(consultar(req));
         } else if ("listarFiltros".equals(acao)) {
             out.print(listarFiltros());
+        } else if ("verificarIntegridade".equals(acao)) {
+            out.print(gson.toJson(SeloService.verificarIntegridade(
+                    req.getParameter("dtInicio"), req.getParameter("dtFim"))));
         } else {
             resp.sendError(400, "acao invalida");
         }
@@ -52,6 +55,8 @@ public class AuditoriaServlet extends HttpServlet {
             result.add("logins", buscarDistintos(conn, "login"));
             result.add("funcionalidades", buscarDistintos(conn, "funcionalidade"));
             result.add("operacoes", buscarDistintos(conn, "operacao"));
+            result.add("niveis", buscarDistintos(conn, "nivel"));
+            result.add("tipos", buscarDistintos(conn, "tipo_captura"));
             result.add("perfis", buscarPerfis(conn));
             result.add("equipamentos", buscarEquipamentos(conn));
             result.addProperty("ok", true);
@@ -123,6 +128,8 @@ public class AuditoriaServlet extends HttpServlet {
         String dtFim     = req.getParameter("dtFim");
         String perfil    = req.getParameter("perfil");
         String equip     = req.getParameter("equipamento");
+        String nivel     = req.getParameter("nivel");
+        String tipo      = req.getParameter("tipo");
         String pagStr    = req.getParameter("pagina");
         int pagina       = pagStr != null ? Integer.parseInt(pagStr) : 1;
         int tamPag       = 50;
@@ -132,7 +139,8 @@ public class AuditoriaServlet extends HttpServlet {
 
         StringBuilder sql = new StringBuilder(
             "SELECT la.id, la.id_usuario, la.login, la.dt_operacao, la.ip_terminal, " +
-            "la.funcionalidade, la.operacao, la.id_registro, la.descricao");
+            "la.funcionalidade, la.operacao, la.id_registro, la.descricao, " +
+            "la.metodo, la.rota, la.status_http, la.duracao_ms, la.nivel, la.tipo_captura, la.hash_evento, la.dados_extra");
         if (temPerfil) {
             sql.append(", RTRIM(sg.descricao) AS perfil_grupo");
         }
@@ -152,6 +160,8 @@ public class AuditoriaServlet extends HttpServlet {
         if (operacao  != null && !operacao.isEmpty())  sql.append("AND la.operacao = ? ");
         if (dtInicio  != null && !dtInicio.isEmpty())  sql.append("AND la.dt_operacao >= ? ");
         if (dtFim     != null && !dtFim.isEmpty())     sql.append("AND la.dt_operacao < DATEADD(day,1,?) ");
+        if (nivel     != null && !nivel.isEmpty())     sql.append("AND la.nivel = ? ");
+        if (tipo      != null && !tipo.isEmpty())      sql.append("AND la.tipo_captura = ? ");
         if (temPerfil)                                 sql.append("AND sg.id_grupo = ? ");
         if (temEquip)                                  sql.append("AND la.descricao LIKE ? ");
         sql.append("ORDER BY la.dt_operacao DESC OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");
@@ -168,6 +178,8 @@ public class AuditoriaServlet extends HttpServlet {
                 if (operacao  != null && !operacao.isEmpty())  ps.setString(i++, operacao);
                 if (dtInicio  != null && !dtInicio.isEmpty())  ps.setString(i++, dtInicio);
                 if (dtFim     != null && !dtFim.isEmpty())     ps.setString(i++, dtFim);
+                if (nivel     != null && !nivel.isEmpty())     ps.setString(i++, nivel);
+                if (tipo      != null && !tipo.isEmpty())      ps.setString(i++, tipo);
                 if (temPerfil)                                 ps.setInt(i++, Integer.parseInt(perfil));
                 if (temEquip)                                  ps.setString(i++, "%" + equip + "%");
                 ps.setInt(i++, (pagina - 1) * tamPag);
@@ -183,6 +195,15 @@ public class AuditoriaServlet extends HttpServlet {
                         row.addProperty("operacao",    rs.getString("operacao"));
                         row.addProperty("idRegistro",  rs.getString("id_registro"));
                         row.addProperty("descricao",   rs.getString("descricao"));
+                        row.addProperty("metodo",      rs.getString("metodo"));
+                        row.addProperty("rota",        rs.getString("rota"));
+                        row.addProperty("status",      (Integer) rs.getObject("status_http"));
+                        row.addProperty("duracao",     (Integer) rs.getObject("duracao_ms"));
+                        row.addProperty("nivel",       rs.getString("nivel"));
+                        row.addProperty("tipo",        rs.getString("tipo_captura"));
+                        String h = rs.getString("hash_evento");
+                        row.addProperty("hash",        h != null && h.length() > 12 ? h.substring(0, 12) : h);
+                        row.addProperty("dadosExtra",  rs.getString("dados_extra"));
                         if (temPerfil) {
                             row.addProperty("perfil",  rs.getString("perfil_grupo"));
                         }
