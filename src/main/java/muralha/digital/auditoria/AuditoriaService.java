@@ -177,6 +177,14 @@ public final class AuditoriaService {
                 }
             }
 
+            // Impressão (ex.: PDF): registra formato, documento e tela de origem.
+            if ("IMPRESSAO".equals(ev.nivel)) {
+                String formato = derivarFormato((response != null) ? response.getContentType() : null);
+                String telaOrigem = derivarTelaOrigem(
+                        (request != null) ? request.getHeader("Referer") : null, rota);
+                ev.dadosExtra = montarDadosImpressao(formato, ev.funcionalidade, telaOrigem);
+            }
+
             boolean garantido = (regra != null) && regra.isGarantido();
             enfileirar(ev, garantido);
 
@@ -422,6 +430,27 @@ public final class AuditoriaService {
     /** Formato do documento imprimivel: "PDF" ou null. */
     static String derivarFormato(String contentType) {
         return ehPdf(contentType) ? "PDF" : null;
+    }
+
+    /** JSON {formato, documento, telaOrigem} de um evento de impressão; chaves nulas omitidas. */
+    static String montarDadosImpressao(String formato, String documento, String telaOrigem) {
+        JsonObject o = new JsonObject();
+        if (formato != null) o.addProperty("formato", formato);
+        if (documento != null) o.addProperty("documento", documento);
+        if (telaOrigem != null) o.addProperty("telaOrigem", telaOrigem);
+        return truncar(o.toString(), 4000);
+    }
+
+    /** Caminho do Referer (sem esquema, host e query); sem Referer, usa a rota de fallback. */
+    static String derivarTelaOrigem(String referer, String rotaFallback) {
+        if (referer == null || referer.trim().isEmpty()) return rotaFallback;
+        try {
+            String path = new java.net.URI(referer.trim()).getPath();
+            if (path != null && !path.isEmpty()) return truncar(path, 400);
+        } catch (Exception ignorada) {
+            // Referer malformado: cai no fallback.
+        }
+        return rotaFallback;
     }
 
     private static boolean contemAlgum(String texto, String... termos) {
