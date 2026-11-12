@@ -19,7 +19,7 @@ Ficam fora desta entrega: captura do conteúdo impresso, bloqueio de impressão,
 
 - Novo código `IMPRESSAO` em `dbo.sis_log_tipo_evento`, com liga/desliga global na tela de tipos.
 - `AuditoriaService.derivarNivel` passou a reconhecer o nível `IMPRESSAO`.
-- A retenção herda a política padrão do motor, sem política própria em `sis_log_retencao` (decisão do cliente, §9.3 do desenho).
+- A retenção herda a política padrão do motor, sem política própria em `sis_log_retencao` (decisão do cliente, §9, item 3 do desenho).
 
 ### 2. Caminho 1: documentos gerados no servidor (PDF)
 
@@ -34,7 +34,7 @@ Ficam fora desta entrega: captura do conteúdo impresso, bloqueio de impressão,
 
 - Script compartilhado `impressao-captura.js`: escuta o evento `beforeprint`, que dispara em Ctrl+P e no menu do navegador. Envia `telaOrigem` (caminho da URL + título da página) e `formato` (`Impressao de tela`) por `navigator.sendBeacon`, com fallback para `fetch` com `keepalive`. Há um intervalo de 1 segundo para evitar registro duplicado.
 - O gancho é incluído no cabeçalho comum das telas novas (`cabecalho_bootstrap_simples.jsp`).
-- Endpoint `POST /MuralhaDigital/Impressao` (`ImpressaoServlet`): registra apenas com usuário autenticado na sessão e sempre responde 204. Não usa `ControleAcesso` estrito nem `sis_menu`, por ser endpoint de registro e não tela.
+- Endpoint `POST /MuralhaDigital/Impressao` (`ImpressaoServlet`): registra apenas com usuário autenticado na sessão e sempre responde 204. Não usa `ControleAcesso` estrito nem `sis_menu`. Essa é uma exceção decidida e registrada no desenho (design §6.6, "Acesso"): o endpoint é um registro interno de log, exige sessão autenticada, não expõe dados e não é uma tela, por isso fica fora do `ControleAcesso` estrito e do `sis_menu` do Plano 35.
 - Como é uma rota, o endpoint também fica sujeito às regras de `sis_log_regra`. A migração semeia a regra `/MuralhaDigital/Impressao` (POST, nível `IMPRESSAO`).
 
 ### 4. Formato de `dados_extra`
@@ -55,7 +55,7 @@ O campo `dados_extra` já entra no hash encadeado de integridade, então os novo
 ### 6. Exibição na consulta
 
 - `consulta-log.js` mostra os campos formato, documento e tela de origem no detalhe do evento `IMPRESSAO`.
-- Não há nova coluna nem filtro na grade (decisão do cliente, §9.2 do desenho).
+- Não há nova coluna nem filtro na grade (decisão do cliente, §9, item 2 do desenho).
 
 ## Arquivos
 
