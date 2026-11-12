@@ -10,11 +10,23 @@ $(function() {
 function escaparHtml(v) { var d = document.createElement('div'); d.textContent = v == null ? '' : String(v); return d.innerHTML.replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
 
 function badgeNivel(n) {
-    var map = { 'ACESSO': 'bg-info text-dark', 'VISUALIZACAO': 'bg-secondary', 'LEITURA': 'bg-secondary',
-                'CADASTRO': 'bg-success', 'ALTERACAO': 'bg-warning text-dark', 'EXCLUSAO': 'bg-danger',
-                'EXPORTACAO': 'bg-primary', 'IMPRESSAO': 'bg-primary','ERRO': 'bg-danger', 'SISTEMA': 'bg-dark' };
-    var cls = map[n] || 'bg-light text-dark';
-    return '<span class="badge ' + cls + '">' + escaparHtml(n || '-') + '</span>';
+    // Cada nivel com uma cor propria e distinta, para leitura rapida na grade.
+    var cores = {
+        'ACESSO':       { bg: '#0dcaf0', dark: true  }, // ciano
+        'VISUALIZACAO': { bg: '#6c757d', dark: false }, // cinza
+        'LEITURA':      { bg: '#6c757d', dark: false }, // cinza
+        'CADASTRO':     { bg: '#198754', dark: false }, // verde
+        'ALTERACAO':    { bg: '#fd7e14', dark: true  }, // laranja
+        'EXCLUSAO':     { bg: '#dc3545', dark: false }, // vermelho
+        'EXPORTACAO':   { bg: '#0d6efd', dark: false }, // azul
+        'IMPRESSAO':    { bg: '#6f42c1', dark: false }, // roxo
+        'ERRO':         { bg: '#212529', dark: false }, // preto
+        'SISTEMA':      { bg: '#20c997', dark: true  }  // verde-agua
+    };
+    var c  = cores[n] || { bg: '#adb5bd', dark: true }; // fallback cinza claro
+    var fg = c.dark ? '#212529' : '#ffffff';
+    return '<span class="badge" style="background-color:' + c.bg + ';color:' + fg + ';">'
+         + escaparHtml(n || '-') + '</span>';
 }
 
 function carregarFiltros() {

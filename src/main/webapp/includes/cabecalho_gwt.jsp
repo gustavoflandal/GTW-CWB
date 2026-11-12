@@ -18,6 +18,7 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="gwt:property" content="locale=pt_BR">
 		<title>GTW</title>
+		<script type="text/javascript" src="/muralha-digital/assets/js/auditoria/impressao-captura.js?v=5"></script>
 		<link rel="stylesheet" href="/css/gtw.css" media="screen" type="text/css">
 		<script type="text/javascript" language="javascript" src="/GtwWidgets/GtwWidgets.nocache.js"></script>
 		<link rel="stylesheet" href="/css/GtwWidgets.css" media="screen" type="text/css">

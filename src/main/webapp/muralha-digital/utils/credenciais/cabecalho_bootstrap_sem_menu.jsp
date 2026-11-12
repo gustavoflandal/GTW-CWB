@@ -15,6 +15,7 @@
 <html lang="en" data-bs-theme="light">
 	<head>
 	  <title>GTW</title>
+		<script type="text/javascript" src="/muralha-digital/assets/js/auditoria/impressao-captura.js?v=5"></script>
 	
 	  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	  <meta http-equiv="x-ua-compatible" content="ie=edge">

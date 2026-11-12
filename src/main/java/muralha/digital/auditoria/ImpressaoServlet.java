@@ -21,6 +21,11 @@ public class ImpressaoServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // Marca a requisicao para o CapturaLogFilter NUNCA registrar este endpoint
+        // de forma generica (evita eventos vagos "HTTP 204 /MuralhaDigital/Impressao"
+        // sem origem quando nao ha sessao). O registro real, com a tela de origem,
+        // e feito abaixo por registrarEventoCliente quando ha usuario autenticado.
+        try { request.setAttribute(AuditoriaService.ATTR_LOG_MANUAL, Boolean.TRUE); } catch (Exception ignore) {}
         try {
             request.setCharacterEncoding("UTF-8");
             if (origemCruzada(request)) {
@@ -28,8 +33,9 @@ public class ImpressaoServlet extends HttpServlet {
                 return; // cross-origin forjado: nao registra
             }
             if (AuditoriaService.temUsuarioAutenticado(request)) {
-                AuditoriaService.registrarImpressao(request,
-                        AuditoriaService.formatoOuPadrao(request.getParameter("formato")),
+                AuditoriaService.registrarEventoCliente(request,
+                        request.getParameter("nivel"),
+                        request.getParameter("formato"),
                         request.getParameter("telaOrigem"));
             }
         } catch (Exception e) {

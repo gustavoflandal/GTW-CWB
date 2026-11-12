@@ -8,6 +8,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>GTW</title>
+<script type="text/javascript" src="/muralha-digital/assets/js/auditoria/impressao-captura.js?v=5"></script>
 <link rel="stylesheet" href="/css/gtw.css" media="screen" type="text/css">
 </head>
 <body onunload="if (window.aoFechar) aoFechar();" onload="if (window.aoAbrir) aoAbrir();">

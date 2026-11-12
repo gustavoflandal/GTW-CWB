@@ -113,4 +113,4 @@
   </div>
 </div>
 
-<script src="/muralha-digital/assets/js/auditoria/consulta-log.js?v=8"></script>
+<script src="/muralha-digital/assets/js/auditoria/consulta-log.js?v=9"></script>
