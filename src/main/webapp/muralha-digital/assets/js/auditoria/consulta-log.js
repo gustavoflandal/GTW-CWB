@@ -109,8 +109,8 @@ function buscar(pag) {
 function verDetalhe(i) {
     var r = ultimaResposta[i];
     if (!r) return;
-    var ehEscrita = (r.metodo && r.metodo.toUpperCase() !== 'GET')
-                 || ['CADASTRO', 'ALTERACAO', 'EXCLUSAO'].indexOf(r.nivel) >= 0;
+    var ehEscrita = r.nivel !== 'IMPRESSAO' && ((r.metodo && r.metodo.toUpperCase() !== 'GET')
+                 || ['CADASTRO', 'ALTERACAO', 'EXCLUSAO'].indexOf(r.nivel) >= 0);
 
     var html = '<table class="table table-sm"><tbody>' +
         linhaDet('Data/Hora', r.dtOperacao) + linhaDet('Usuário', r.login) + linhaDet('IP', r.ip) +

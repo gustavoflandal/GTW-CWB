@@ -23,6 +23,10 @@ public class ImpressaoServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         try {
             request.setCharacterEncoding("UTF-8");
+            if (origemCruzada(request)) {
+                response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+                return; // cross-origin forjado: nao registra
+            }
             if (AuditoriaService.temUsuarioAutenticado(request)) {
                 AuditoriaService.registrarImpressao(request,
                         AuditoriaService.formatoOuPadrao(request.getParameter("formato")),
@@ -32,5 +36,18 @@ public class ImpressaoServlet extends HttpServlet {
             log.log(Level.WARNING, "[MotorLogs] Falha no endpoint de impressao", e);
         }
         response.setStatus(HttpServletResponse.SC_NO_CONTENT);
+    }
+
+    /** True somente se houver Origin de outra authority que o Host; Origin ausente/malformado nao bloqueia. */
+    private static boolean origemCruzada(HttpServletRequest request) {
+        try {
+            String origin = request.getHeader("Origin");
+            if (origin != null && !origin.isEmpty()) {
+                String oHost = new java.net.URI(origin).getAuthority();
+                String host = request.getHeader("Host");
+                return oHost != null && host != null && !oHost.equalsIgnoreCase(host);
+            }
+        } catch (Exception ignore) { /* Origin malformado: nao bloqueia */ }
+        return false;
     }
 }
