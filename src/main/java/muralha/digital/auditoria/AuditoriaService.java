@@ -110,6 +110,9 @@ public final class AuditoriaService {
     public static void registrarImpressao(HttpServletRequest request, String formato, String telaOrigem) {
         try {
             if (request != null) request.setAttribute(ATTR_LOG_MANUAL, Boolean.TRUE);
+            if (!TiposEvento.capturaAtivo("IMPRESSAO")) return; // liga/desliga global do tipo
+            RegraCaptura regra = MotorRegras.avaliar("/MuralhaDigital/Impressao", "POST");
+            if (regra != null && !regra.isCapturar()) return; // regra da rota com capturar=0
             String tela = derivarTelaOrigem(null, truncar(telaOrigem, 400));
             Evento ev = new Evento();
             preencherUsuario(ev, request);
@@ -460,7 +463,7 @@ public final class AuditoriaService {
     /** True se o Content-Type indica PDF (ignora caixa e espacos a esquerda). */
     static boolean ehPdf(String contentType) {
         if (contentType == null) return false;
-        return contentType.trim().toLowerCase().startsWith("application/pdf");
+        return contentType.trim().toLowerCase(java.util.Locale.ROOT).startsWith("application/pdf");
     }
 
     /** Formato do documento imprimivel: "PDF" ou null. */

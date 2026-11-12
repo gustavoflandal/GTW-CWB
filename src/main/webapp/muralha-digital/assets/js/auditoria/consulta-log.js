@@ -12,7 +12,7 @@ function escaparHtml(v) { var d = document.createElement('div'); d.textContent =
 function badgeNivel(n) {
     var map = { 'ACESSO': 'bg-info text-dark', 'VISUALIZACAO': 'bg-secondary', 'LEITURA': 'bg-secondary',
                 'CADASTRO': 'bg-success', 'ALTERACAO': 'bg-warning text-dark', 'EXCLUSAO': 'bg-danger',
-                'EXPORTACAO': 'bg-primary', 'ERRO': 'bg-danger', 'SISTEMA': 'bg-dark' };
+                'EXPORTACAO': 'bg-primary', 'IMPRESSAO': 'bg-primary','ERRO': 'bg-danger', 'SISTEMA': 'bg-dark' };
     var cls = map[n] || 'bg-light text-dark';
     return '<span class="badge ' + cls + '">' + escaparHtml(n || '-') + '</span>';
 }

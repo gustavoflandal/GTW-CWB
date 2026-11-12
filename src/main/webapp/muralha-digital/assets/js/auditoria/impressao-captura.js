@@ -16,7 +16,7 @@
             var raiz = (typeof urlRoot !== 'undefined' && urlRoot) ? urlRoot : '/';
             var url = raiz + 'MuralhaDigital/Impressao';
             var params = new URLSearchParams();
-            params.set('telaOrigem', location.pathname + ' | ' + document.title);
+            params.set('telaOrigem', location.pathname);
             params.set('formato', 'Impressao de tela');
 
             if (navigator.sendBeacon) {
