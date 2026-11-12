@@ -106,26 +106,40 @@ public final class AuditoriaService {
         }
     }
 
-    /** Registra a impressão de uma tela pelo navegador (evento IMPRESSAO, captura NAVEGADOR). */
-    public static void registrarImpressao(HttpServletRequest request, String formato, String telaOrigem) {
+    /**
+     * Registra impressão/exportação disparada no CLIENTE (navegador): Ctrl+P, geração
+     * de PDF por jsPDF, ou exportação de planilha/CSV. {@code nivel} = IMPRESSAO (padrão)
+     * ou EXPORTACAO; cada um respeita seu liga/desliga em sis_log_tipo_evento e a regra
+     * da rota do endpoint. Captura NAVEGADOR.
+     */
+    public static void registrarEventoCliente(HttpServletRequest request, String nivel,
+                                              String formato, String telaOrigem) {
         try {
             if (request != null) request.setAttribute(ATTR_LOG_MANUAL, Boolean.TRUE);
-            if (!TiposEvento.capturaAtivo("IMPRESSAO")) return; // liga/desliga global do tipo
+            String n = "EXPORTACAO".equalsIgnoreCase(nivel) ? "EXPORTACAO" : "IMPRESSAO";
+            if (!TiposEvento.capturaAtivo(n)) return; // liga/desliga global do tipo
             RegraCaptura regra = MotorRegras.avaliar("/MuralhaDigital/Impressao", "POST");
             if (regra != null && !regra.isCapturar()) return; // regra da rota com capturar=0
             String tela = derivarTelaOrigem(null, truncar(telaOrigem, 400));
+            String fmt  = formatoOuPadrao(formato);
             Evento ev = new Evento();
             preencherUsuario(ev, request);
             ev.tipoCaptura    = "NAVEGADOR";
-            ev.nivel          = "IMPRESSAO";
+            ev.nivel          = n;
             ev.funcionalidade = truncar(derivarFuncionalidade(tela), 100);
-            ev.operacao       = "IMPRESSAO";
-            ev.descricao      = truncar("Impressao de " + ev.funcionalidade, 500);
-            ev.dadosExtra     = montarDadosImpressao(formatoOuPadrao(formato), ev.funcionalidade, tela);
+            ev.operacao       = n;
+            ev.descricao      = truncar(("IMPRESSAO".equals(n) ? "Impressao de " : "Exportacao de ")
+                                        + ev.funcionalidade + " (" + fmt + ")", 500);
+            ev.dadosExtra     = montarDadosImpressao(fmt, ev.funcionalidade, tela);
             enfileirar(ev, false);
         } catch (Exception e) {
-            log.log(Level.WARNING, "[MotorLogs] Falha ao registrar impressao", e);
+            log.log(Level.WARNING, "[MotorLogs] Falha ao registrar evento cliente", e);
         }
+    }
+
+    /** Registra a impressão de uma tela pelo navegador (evento IMPRESSAO, captura NAVEGADOR). */
+    public static void registrarImpressao(HttpServletRequest request, String formato, String telaOrigem) {
+        registrarEventoCliente(request, "IMPRESSAO", formato, telaOrigem);
     }
 
     /** Registro por processo automático (job), sem requisição HTTP. */
