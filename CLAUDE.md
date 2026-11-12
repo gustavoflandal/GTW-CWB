@@ -9,6 +9,7 @@ Sistema legado Java/JSP (Tomcat, SQL Server) da Consilux: **GTW clássico** + **
 - **Sem segredos no git.** `confGTW.xml` e `muralha-digital-config.xml` (WEB-INF) são locais e ignorados; use os `.example`. Chaves via variáveis de ambiente (`docs/requisitos/07-configuracao-e-segredos.md`).
 - **Banco** `GTW_MURALHA_DEV` (10.0.0.200): somente leitura sem autorização; DDL/DML só como script em `docs/banco-de-dados/migracoes/`.
 - Código novo: sessão + permissão (`docs/requisitos/06-padroes-de-codigo.md` §1.1; nos módulos novos via `muralha.digital.acessos.ControleAcesso`, verificação estrita — URL nova exige registro em `sis_menu`, ver Plano 35), SQL parametrizado, recursos fechados, UTF-8, PT-BR.
+- **Selo de versão (obrigatório):** a tela principal (`login/muralha_principal.jsp`) deve **sempre** exibir, no **canto inferior direito**, a **versão compilada em execução**, incluindo `/includes/version-badge.jsp`. Esse include resolve a versão em runtime por várias fontes (MANIFEST do WAR → nome da pasta versionada `gtw-<ver>-r<sha>` → commit do `.git` em desenvolvimento) e é blindado. Ao mexer na tela principal, manter o include.
 
 ## Comandos (a partir de `D:\GTW-CWB`)
 ```powershell
