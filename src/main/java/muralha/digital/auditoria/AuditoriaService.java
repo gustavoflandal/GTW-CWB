@@ -89,6 +89,42 @@ public final class AuditoriaService {
         enfileirar(ev, false);
     }
 
+    /** Formato padrão de uma impressão de navegador sem formato informado. */
+    static String formatoOuPadrao(String formato) {
+        return (formato == null || formato.trim().isEmpty()) ? "Impressao de tela" : formato;
+    }
+
+    /** Há sessão com usuário autenticado (mesmos atributos que preencherUsuario consulta). */
+    static boolean temUsuarioAutenticado(HttpServletRequest request) {
+        try {
+            HttpSession sess = (request != null) ? request.getSession(false) : null;
+            if (sess == null) return false;
+            return sess.getAttribute(SessaoConstantes.SESSAO_USUARIO) != null
+                    || sess.getAttribute("objUsuario") != null;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /** Registra a impressão de uma tela pelo navegador (evento IMPRESSAO, captura NAVEGADOR). */
+    public static void registrarImpressao(HttpServletRequest request, String formato, String telaOrigem) {
+        try {
+            if (request != null) request.setAttribute(ATTR_LOG_MANUAL, Boolean.TRUE);
+            String tela = derivarTelaOrigem(null, truncar(telaOrigem, 400));
+            Evento ev = new Evento();
+            preencherUsuario(ev, request);
+            ev.tipoCaptura    = "NAVEGADOR";
+            ev.nivel          = "IMPRESSAO";
+            ev.funcionalidade = truncar(derivarFuncionalidade(tela), 100);
+            ev.operacao       = "IMPRESSAO";
+            ev.descricao      = truncar("Impressao de " + ev.funcionalidade, 500);
+            ev.dadosExtra     = montarDadosImpressao(formatoOuPadrao(formato), ev.funcionalidade, tela);
+            enfileirar(ev, false);
+        } catch (Exception e) {
+            log.log(Level.WARNING, "[MotorLogs] Falha ao registrar impressao", e);
+        }
+    }
+
     /** Registro por processo automático (job), sem requisição HTTP. */
     public static void registrarSistema(String funcionalidade, String operacao,
                                          String idRegistro, String descricao) {
